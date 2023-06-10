@@ -1,0 +1,63 @@
+could run locally or in kubernetes
+
+
+
+
+
+I have 5 category for my e-commerece
+- product management system
+- content management system
+- sales management system
+- order management system
+- user management system
+
+and my e-comemrece site have two part
+one is called app which responsible for all the business
+and the other part is called admin that similar to app but with more admin specificed feature.
+
+and a search part that is separate from app and admin.
+
+how should I change these 3 from mononith to microservices?
+
+separate them by the 5 category?
+
+
+
+
+
+so have something like
+
+App (aggreated all the small services)
+- product management system service
+	- controller/service/connect to database
+- content management system service
+	- controller/service/connect to database
+- sales management system service
+	- controller/service/connect to database
+- order management system service
+	- controller/service/connect to database
+- user management system service
+	- controller/service/connect to database
+
+Admin (aggreated all the small services) with more function
+- product management system service
+	- controller/service/connect to database
+- content management system service
+	- controller/service/connect to database
+- sales management system service
+	- controller/service/connect to database
+- order management system service
+	- controller/service/connect to database
+- user management system service
+	- controller/service/connect to database
+
+
+Search
+- just responsible for search
+
+
+central configuration
+
+helm for kubernetes deployment
+
+auth-server
