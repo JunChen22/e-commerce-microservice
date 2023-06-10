@@ -1,68 +1,42 @@
 #### Spring E-Commerce microservice
 
-[![Java CI with Maven](https://github.com/JunChen22/E-commerce/actions/workflows/maven.yml/badge.svg)](https://github.com/JunChen22/E-commerce/actions/workflows/maven.yml) <a href="https://github.com/JunChen22/E-commerce-React"><img src="https://img.shields.io/badge/Frontend-React-green"></a> <a href="https://github.com/JunChen22/E-commerce-microservice"><img src="https://img.shields.io/badge/Miscroservice-version-green"></a> <a href="TBD"><img src="https://img.shields.io/badge/Demo-running-green"></a>
+[![Java CI with Maven](https://github.com/JunChen22/E-commerce/actions/workflows/maven.yml/badge.svg)](https://github.com/JunChen22/E-commerce/actions/workflows/maven.yml) <a href="https://github.com/JunChen22/E-commerce-React"><img src="https://img.shields.io/badge/Frontend-React-green"></a> <a href="https://github.com/JunChen22/E-commerce"><img src="https://img.shields.io/badge/Mononith-version-green"></a> <a href="TBD"><img src="https://img.shields.io/badge/Demo-running-green"></a>
 
-E-commerce for small to medium business. The microservice version have vendor.
+E-commerce for medium to large business. The microservice version is multi-vendor platforms.
 
 ``` lua
 E-commerece 
-├── E-commerece-admin    -- the admin(owner) used to manage the e-commerece and users
-├── E-commerece-app      -- main application, process the requests.
-├── E-commerece-search   -- searching related module, in-memory imported in data for fast search
-├── E-commerece-common   -- shared common module     -- not being used, idk why intelliJ kept giving me problem when separated.
-├── E-commerece-mbg      -- shared mybatist module   -- not being used, idk why intelliJ kept giving me problem when separated.
-└── E-commerece-security -- shared security module   -- not being used, idk why intelliJ kept giving me problem when separated.
+├── Authuthorization server  -- could replace it with OAuth2 but not implement here
+├── config-repo  -- centralized config
+├── gateway  -- gateway for connection / not needed in kubernetes
+├── eureka   -- service registration and discovery capabilities / not needed in kubernetes
+├── E-commerece-mbg  --  Shared MyBatis generator geneated boiler plate
+├── E-commerece-util  -- Shared util like exception 
+├── kubernetes
+│   ├── Helm     -- package manager for Kubernetes that simplifies the deployment and management of microservices.
+│   │    ├── common  -- base/boiler plates
+│   │    ├── components  -- each services
+│   │    └── environment  -- different environment, devolopment vs production 
+│   │            └── istio  -- service mesh 
+│   └── monitor    -- grafana prometheus - performance metric monitor/visualizer
+├── E-commerece-admin  -- role based 
+│   ├── User mangament system/service
+│   ├── Product management system/service
+│   ├── Content management system/service
+│   ├── Sales mangement system/service
+│   └── Order management system/service
+├── E-commerece-app   
+│   ├── User mangament system/service
+│   ├── Product management system/service
+│   ├── Content management system/service
+│   ├── Sales mangement system/service
+│   └── Order management system/service
+└── E-commerece-search   -- searching related module, in-memory imported in data for fast search
+
+Two way of deploying. One with Docker and one with Kubernetes.
+Docker by default will be smaller than deploying in Kubernetes. And Kuberentes will have features same as Spring Cloud
+like service discovery and load balance (Eureka), central config, Distributed Tracing and circuit breaker.
 The .env file stores login infos for easier change. Gets read in during run time by docker.
-
-ECom-app 
-├── component   
-├── config                 - MyBatis configuration and other configuration.
-├── controller              
-├── domain model           - custom data object, provide more complex funtionality with custom DAO and xml. Internal use.
-├── dao                    - custom data access object(DAO) interface to interact with Postgres. Definitition impltemented in resources.
-├── dto                    - data transfer object, custom object to return or received from backend to frontend. keep it small for effiency.
-├── mbg     
-│   ├── mapper             - Mybatis generated, interfaces for generic function to interact with Postgres
-│   └── model              - Mybatis generated, turn Postgres table into model, basic function, getting setter for colum.  
-├── mongodb                - not being used yet. But for storing member's search and view history.
-├── security               - no security will be added untill admin's is complete.
-├── service
-└── resources
-    ├── mapper             - Mybatis generated, generic definition for the generated mapper interfaces. 
-    ├── dao                - custom SQL in xml file
-    ├── application.yml
-    └── generatorConfig.xml - MyBatisGenerator setting.
-
-ECom-admin is similar structure and provide similar basic functions. But ECom-admin provides more unique ones.
-Will have role and permission based.
-ECom-admin 
-├── config                 - MyBatis configuration and other configuration.
-├── controller              
-├── dao                    - custom data access object(DAO) interface to interact with Postgres. Definitition impltemented in resources.
-├── dto                    - data transfer object, custom object to return or received from backend to frontend. keep it small for effiency.
-├── mbg     
-│   ├── mapper             - Mybatis generated, interfaces for generic function to interact with Postgres
-│   └── model              - Mybatis generated, turn Postgres table into model, basic function, getting setter for colum.  
-├── security               
-├── service
-└── resources
-    ├── mapper             - Mybatis generated, generic definition for the generated mapper interfaces. 
-    ├── dao                - custom SQL in xml file
-    ├── application.yml
-    └── generatorConfig.xml - MyBatisGenerator setting.
-
-ECom-search is more of a standalone part of the E-commerece
-ECom-search
-├── config                 - MyBatis configuration and other configuration.
-├── controller              
-├── dao                    - custom data access object(DAO) interface to interact with Postgres. Definitition impltemented in resources.
-├── elastic search     
-│   ├── document
-│   └── repository
-├── service
-└── resources
-    ├── dao                - custom SQL in xml file
-    └── application.yml
 
 ```
 
@@ -92,8 +66,14 @@ Database and mybatis generator
 
   Start whole landscape
  $ mvn package
+ 
+ To deploy 
  $ docker-compose build
  $ docker-compose up
+
+* can not deploy locally(IDE) only Docker or Kubernetes
+ 
+
  
   Import data into elastic search
  $  curl -X POST http://localhost:8080/esProduct/importAll   // should return number of items imported
@@ -114,7 +94,6 @@ Database and mybatis generator
 | [Elasticsearch](https://github.com/elastic/elasticsearch)       | Search engine                         |         | imported data from PostgreSQL for fast search   |
 | [LogStash](https://github.com/elastic/logstash)                 | Logging Service                       |         |                                                 |
 | [Kibana](https://github.com/elastic/kibana)                     | Elasticsearch LogStash visualization  |         |                                                 |
-| [Nginx](https://www.nginx.com/)                                 | Webserver                             |         |                                                 |
 | [Docker](https://www.docker.com)                                | Containerization                      |         | Easier deployment                               |
 | [Kubernetes](https://kubernetes.io/)                            | Container Orchestration               |         |                                                 |
 | [JWT](https://github.com/jwtk/jjwt)                             | Encryption tool                       |         |                                                 |
@@ -126,6 +105,8 @@ Database and mybatis generator
 | [Google Pay](https://developers.google.com/pay/api)             | Payment Gateway                       |         |                                                 |
 | [Ubuntu](https://ubuntu.com/)                                   | OS                                    |         |                                                 |
 | AWS S3                                                          | File storage                          |         |                                                 |
+kubectl
+minikube
 
 
 IntelliJ plugin

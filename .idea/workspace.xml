@@ -5,95 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d6589b7-fc2f-4789-960b-08580ca00a9c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/templates/_configmap_from_file.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/templates/_deployment.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/templates/_helpers.tpl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/templates/_istio_base.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/templates/_istio_dr_mutual_tls.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/templates/_istio_vs_green_blue_deploy.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/templates/_secrets.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/templates/_service.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/common/values.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/.helmignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/Chart.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/charts/common-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/config-repo/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/config-repo/auth-server.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/templates/configmap_from_file.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/templates/deployment.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/templates/service.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/auth-server/values.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/mongodb/.helmignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/mongodb/Chart.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/mongodb/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/mongodb/charts/common-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/mongodb/templates/deployment.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/mongodb/templates/service.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/mongodb/values.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/postgres/Chart.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/postgres/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/postgres/charts/common-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/postgres/templates/deployment.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/postgres/templates/service.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/postgres/values.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/rabbitmq/.helmignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/rabbitmq/Chart.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/rabbitmq/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/rabbitmq/charts/common-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/rabbitmq/templates/deployment.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/rabbitmq/templates/service.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/components/rabbitmq/values.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/.helmignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/Chart.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/auth-server-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/common-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/mongodb-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/postgres-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/product-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/product-composite-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/rabbitmq-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/recommendation-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/charts/review-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/templates/istio_base.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/templates/istio_dr_mutual_tls.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/templates/secrets.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/dev-env/values.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/templates/expose-grafana.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/templates/expose-kiali.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/templates/expose-mail.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/templates/expose-prometheus.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/templates/expose-tracing.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/templates/hands-on-certificate.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/templates/selfsigned-issuer.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/istio-system/values.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/logging/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/logging/templates/elasticsearch.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/logging/templates/expose-elasticsearch.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/logging/templates/expose-kibana.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/logging/templates/kibana.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/logging/values.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/.helmignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/Chart.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/Chart.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/auth-server-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/common-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/product-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/product-composite-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/product-green-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/recommendation-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/recommendation-green-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/review-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/charts/review-green-1.0.0.tgz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/templates/istio_base.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/templates/istio_dr_mutual_tls.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/templates/istio_vs_green_blue_deploy.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/templates/secrets.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kubernetes/helm/environments/prod-env/values.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/src/main/java/jun/chen/springcloud/eurekaserver/EurekaserverApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/src/main/java/jun/chen/springcloud/eurekaserver/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/src/test/java/jun/chen/springcloud/eurekaserver/EurekaserverApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eureka-server/src/test/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-common/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-common/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-mbg/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-mbg/pom.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,15 +47,54 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "corretto-11",
-    "last_opened_file_path": "/home/jun/Desktop/E-commerce-microservice/kubernetes/helm/components"
+    "last_opened_file_path": "/home/jun/Desktop/E-commerce-microservice"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/kubernetes/helm/components" />
       <recent name="$PROJECT_DIR$/kubernetes/helm/environments" />
       <recent name="$PROJECT_DIR$/kubernetes/helm/common" />
     </key>
+  </component>
+  <component name="RunManager" selected="Docker.docker-compose.yml.eureka: Compose Deployment">
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml" />
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.elasticsearch: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="elasticsearch" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.eureka: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="eureka" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.docker-compose.yml.eureka: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
