@@ -1,6 +1,15 @@
 could run locally or in kubernetes
 
 
+- change monoith to microservice
+- deploy it in docker
+
+- deploy it to kubernete
+- change from single to multi vendor e-commerece
+
+
+admin and search will not be split into smaller yet
+just app will be split into 5
 
 
 
@@ -61,3 +70,10 @@ central configuration
 helm for kubernetes deployment
 
 auth-server
+
+
+
+
+
+
+change from single vendor to multi-vendor after the services is up

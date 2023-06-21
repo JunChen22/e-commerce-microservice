@@ -4,19 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.itsthatjun.ecommerce-microservice</groupId>
-    <artifactId>spring-ecommerce</artifactId>
+    <artifactId>spring-ecommerce-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>spring-ecommerce</name>
-    <description> E-commerce backend using Spring Boot</description>
+    <name>spring-ecommerce-microservice</name>
+    <description> E-commerce microservice backend using Spring Boot</description>
 
     <modules>
         <module>ECom-app</module>               <!-- main app -->
         <module>ECom-admin</module>             <!-- admin used to interact with main app module -->
         <module>ECom-search</module>            <!-- searching module -->
-        <module>ECom-mbg</module>               <!-- shared module -->
-        <module>ECom-common</module>            <!-- shared module -->
         <module>authorization-server</module>
         <module>gateway</module>
         <module>eureka-server</module>
@@ -49,21 +47,6 @@
 
     <dependencyManagement>  <!-- optional dependencies that child module can choose -->
         <dependencies>
-            <dependency>
-                <groupId>com.itsthatjun.ecommerce</groupId>
-                <artifactId>ECom-common</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.itsthatjun.ecommerce</groupId>
-                <artifactId>ECom-mbg</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.itsthatjun.ecommerce</groupId>
-                <artifactId>ECom-security</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>

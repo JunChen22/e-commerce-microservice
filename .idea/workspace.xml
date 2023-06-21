@@ -5,24 +5,200 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d6589b7-fc2f-4789-960b-08580ca00a9c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/eureka-server/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/src/main/java/jun/chen/springcloud/eurekaserver/EurekaserverApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/src/main/java/jun/chen/springcloud/eurekaserver/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/src/test/java/jun/chen/springcloud/eurekaserver/EurekaserverApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/src/test/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/E-commerce-microservice.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ECom-admin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ECom-common/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ECom-common/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ECom-mbg/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ECom-mbg/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/CMS/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/CMS/ArticleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/OMS/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/OMS/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/OMS/OrderReturnController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/OMS/OrderReturnController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/PMS/BrandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/PMS/BrandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/PMS/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/PMS/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/PMS/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/PMS/ReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/SMS/CouponController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/SMS/CouponController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/SMS/CouponHistoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/SMS/CouponHistoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/TestProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/controller/TestProductController2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/dao/CMS/ArticleDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/dao/CMS/ArticleDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/dto/OrderParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/dto/OrderParam.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/dto/QueueEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/dto/QueueEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/AdminExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/AdminExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CartItemExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CartItemExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Coupon.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Coupon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponHistoryExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponHistoryExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/MemberExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/MemberExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderChangeHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderChangeHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderChangeHistoryExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderChangeHistoryExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderItemExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderItemExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderReturnApply.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderReturnApply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderReturnApplyExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderReturnApplyExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Orders.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Orders.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrdersExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrdersExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Permission.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Permission.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/PermissionExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/PermissionExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductAttribute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductAttributeExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductAttributeExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductCategoryExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductCategoryExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReceiveAddress.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReceiveAddress.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReceiveAddressExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReceiveAddressExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Review.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReviewExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReviewExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Roles.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/Roles.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/RolesExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/mbg/model/RolesExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/CMS/ArticleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/CMS/ArticleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/CMS/implementation/ArticleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/CMS/implementation/ArticleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/OMS/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/OMS/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/OMS/ReturnOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/OMS/ReturnOrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/OMS/implementation/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/OMS/implementation/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/OMS/implementation/ReturnOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/OMS/implementation/ReturnOrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/PMS/BrandService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/PMS/BrandService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/PMS/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/PMS/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/PMS/implementation/BrandServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/PMS/implementation/BrandServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/PMS/implementation/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/PMS/implementation/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/SMS/CouponService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/SMS/CouponService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/SMS/implementation/CouponHistoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/SMS/implementation/CouponHistoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/SMS/implementation/CouponServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/SMS/implementation/CouponServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/UMS/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/UMS/MemberService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/UMS/implementation/AdminServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/java/com/itsthatjun/ecommerce/service/UMS/implementation/AdminServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/AdminMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/AdminMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CartItemMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CartItemMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CouponHistoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CouponHistoryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CouponMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CouponMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/MemberMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/MemberMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderChangeHistoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderChangeHistoryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderItemMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderItemMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderReturnApplyMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderReturnApplyMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrdersMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrdersMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/PermissionMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/PermissionMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductAttributeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductAttributeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductCategoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductCategoryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ReceiveAddressMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ReceiveAddressMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ReviewMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ReviewMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/RolesMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/RolesMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/dao/ArticleDao.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/dao/ArticleDao.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/dao/OrderDao.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/dao/OrderDao.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-admin/src/main/resources/generatorConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-admin/src/main/resources/generatorConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/component/CancelOrderReceiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/component/CancelOrderSender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/component/OrderTimeoutCancelTask.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/CMS/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/CMS/ArticleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/OMS/CartItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/OMS/CartItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/OMS/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/OMS/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/OMS/OrderReturnController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/OMS/OrderReturnController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/PMS/BrandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/PMS/BrandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/PMS/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/PMS/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/SMS/SalesController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/TestProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/controller/UMS/MemberController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/dao/OrderDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/dao/ProductDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/domainmodel/OrderDetail.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/domainmodel/OrderParam.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/dto/OrderParam.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/mapper/CommentMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/AdminExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/AdminExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CartItemExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CartItemExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Comment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CommentExample.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Coupon.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Coupon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponHistoryExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/CouponHistoryExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/MemberExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/MemberExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderChangeHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderChangeHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderChangeHistoryExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderChangeHistoryExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderItemExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderItemExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderReturnApply.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderReturnApply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderReturnApplyExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrderReturnApplyExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Orders.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Orders.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrdersExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/OrdersExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Permission.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Permission.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/PermissionExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/PermissionExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductAttribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductAttribute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductAttributeExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductAttributeExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductCategoryExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductCategoryExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ProductExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReceiveAddress.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReceiveAddress.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReceiveAddressExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReceiveAddressExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Review.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReviewExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/ReviewExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Roles.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/Roles.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/RolesExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mbg/model/RolesExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mongodb/Document/MemberReadHistory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mongodb/Document/MemberSearchHistory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mongodb/Repository/MemberReadHistoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/mongodb/Repository/MemberSearchHistoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/BrandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/MemberReadHistoryService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/MemberService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/OrderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/ProductService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/impl/BrandServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/impl/MemberReadHistoryImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/impl/OrderServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/impl/ProductServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/java/com/itsthatjun/ecommerce/service/impl/RedisServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/AdminMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/AdminMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CartItemMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CartItemMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CouponHistoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CouponHistoryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CouponMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/CouponMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/MemberMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/MemberMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderChangeHistoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderChangeHistoryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderItemMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderItemMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderReturnApplyMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrderReturnApplyMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrdersMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/OrdersMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/PermissionMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/PermissionMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductAttributeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductAttributeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductCategoryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductCategoryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ProductMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ReceiveAddressMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ReceiveAddressMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ReviewMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/ReviewMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/RolesMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/com/itsthatjun/ecommerce/mbg/mapper/RolesMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/dao/OrderDao.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/dao/OrderDao.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/dao/ProductDao.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/dao/ProductDao.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-app/src/main/resources/generatorConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-app/src/main/resources/generatorConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-search/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-search/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/config/MyBatisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/config/MyBatisConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/controller/ESController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/controller/ESController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/elasticsearch/repository/EsProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/elasticsearch/repository/EsProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/service/EsProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/service/EsProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/service/impl/EsProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-search/src/main/java/com/itsthatjun/ecommerce/service/impl/EsProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-search/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-search/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ECom-search/src/main/resources/dao/EsProductDao.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ECom-search/src/main/resources/dao/EsProductDao.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/authorization-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/authorization-server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/document/API_calls.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/document/E-commerece.postman_collection.json" beforeDir="false" afterPath="$PROJECT_DIR$/document/E-commerece.postman_collection.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/document/Entity relation Diagram" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/document/category.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/document/data-backup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/document/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/document/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/document/problem_encounter.txt" beforeDir="false" afterPath="$PROJECT_DIR$/document/problem_encounter.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-server/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,20 +212,27 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="ProjectId" id="2LQIq0ks34StJh68y0he3F72EFD" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "jdk.selected.JAVA_MODULE": "corretto-11",
-    "last_opened_file_path": "/home/jun/Desktop/E-commerce-microservice"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-11&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/jun/Desktop/E-commerce-microservice&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -59,8 +242,23 @@
     </key>
   </component>
   <component name="RunManager" selected="Docker.docker-compose.yml.eureka: Compose Deployment">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="eureka-server" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="eureka-server" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
-      <deployment type="docker-compose.yml" />
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
       <method v="2" />
     </configuration>
     <configuration name="docker-compose.yml.elasticsearch: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">

@@ -4,8 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.itsthatjun.microservices</groupId>
-		<artifactId>spring-boot-microservice</artifactId>
+		<groupId>com.itsthatjun.ecommerce-microservice</groupId>
+		<artifactId>spring-ecommerce</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>

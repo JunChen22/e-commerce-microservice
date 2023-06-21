@@ -37,8 +37,6 @@ public class OrderItem {
 
     private BigDecimal realAmount;
 
-    private String productAttr;
-
     public Integer getId() {
         return id;
     }
@@ -173,13 +171,5 @@ public class OrderItem {
 
     public void setRealAmount(BigDecimal realAmount) {
         this.realAmount = realAmount;
-    }
-
-    public String getProductAttr() {
-        return productAttr;
-    }
-
-    public void setProductAttr(String productAttr) {
-        this.productAttr = productAttr;
     }
 }

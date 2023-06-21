@@ -45,11 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*","/swagger-resources/**","/v2/api-docs/**").permitAll()
-                //.antMatchers(HttpMethod.POST,"/admin/login").permitAll()
+                .antMatchers(HttpMethod.POST,"/admin/login").permitAll()
                 .antMatchers("/**").permitAll()  // TODO: for testing purposes. All endpoints are open. Remove when needed.
                 .anyRequest()
                 .authenticated();
 
+        // TODO: remove comment when security needed
         // authenticate the JWT token before Spring Security if you have a token.
         // httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

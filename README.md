@@ -39,6 +39,12 @@ like service discovery and load balance (Eureka), central config, Distributed Tr
 The .env file stores login infos for easier change. Gets read in during run time by docker.
 
 ```
+First split ECom-app into 5 parts with rabbit mq, gateway and eureka in docker.
+
+![alt text](./document/Untitled%20Diagram.drawio.png)
+
+Then to kuberente.
+
 
 Hibernate is an ORM framework that provides a high-level, declarative way to define your data model in Java and have
 Hibernate generate the database schema for you, while MyBatis is a SQL mapper framework that provides a low-level,

@@ -1,0 +1,12 @@
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/config/SwaggerConfig.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/elasticsearch/document/EsProductAttribute.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/service/impl/EsProductServiceImpl.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/mongo/SearchEntity.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/config/MyBatisConfig.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/EComSearchApplication.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/elasticsearch/document/EsProduct.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/controller/ESController.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/service/EsProductService.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/dao/EsProductDao.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/mongo/SearchRepository.java
+/home/jun/Desktop/E-commerce/ECom-search/src/main/java/com/itsthatjun/ecommerce/elasticsearch/repository/EsProductRepository.java

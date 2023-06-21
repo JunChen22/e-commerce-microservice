@@ -44,7 +44,7 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
 
     @Override
     public String register(Admin newAdmin) {
-        newAdmin.setCreateTime(new Date());
+        newAdmin.setCreatedAt(new Date());
         newAdmin.setStatus("active");
         AdminExample example = new AdminExample();
         example.createCriteria().andUsernameEqualTo(newAdmin.getUsername());
@@ -67,7 +67,6 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
             UserDetails userDetails = loadUserByUsername(username);
             // decode password to compare
             if(!passwordEncoder().matches(password, userDetails.getPassword())){
-                System.out.println("wrong password");
                 throw new BadCredentialsException("incorrect password");
             }
 

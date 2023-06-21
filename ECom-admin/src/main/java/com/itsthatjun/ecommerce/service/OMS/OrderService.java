@@ -6,12 +6,17 @@ import java.util.List;
 
 public interface OrderService {
 
-    // TODO: add more get orders based on status
     //  waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
+    List<Orders> getAllWaitingForPayment();
+
     List<Orders> getAllFulfulling();
 
+    List<Orders> getAllInSend();
+
+    List<Orders> getAllCompleteOrder();
+
     // get by order number
-    Orders getOrderByOrderNumber(int orderSerialNumber);
+    Orders getOrderByOrderNumber(String orderSerialNumber);
 
     // get all orders from user
     List<Orders> getUserOrders(int memberId);
@@ -23,5 +28,5 @@ public interface OrderService {
     Orders updateOrder(Orders updateOrder);
 
     // delete an order
-    void deleteOrder(int orderSerialNumber);
+    void deleteOrder(String orderSerialNumber);
 }
