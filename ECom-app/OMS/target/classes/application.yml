@@ -1,0 +1,81 @@
+server:
+  port: 8082
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5434/orderdb
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+  redis:
+    host: localhost
+    database: 0
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    timeout: 3000ms
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
+
+# tells spring mybatis mapper's xml(sql) located
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath:dao/*.xml
+
+# if you running it local/ide
+#paypal:
+#  mode: YOUR_MODE
+#  client:
+#    id: YOUR_CLIENT_ID
+#    secret: YOUR_CLIENT_SECRET
+
+paypal:
+  mode: sandbox
+  client:
+    id: AUAF9hnJVUtLJt-XjfVJVZXh_04BVZ--moZddXHFcw0lStpMoR0NpmIaClMy6y8LT0S-nlVvzb01ERRG
+    secret: EPDCoTUpaJAiWF6o8donTACecsB_r3NpQ-LL1T7SeZe5zbp7Dx9ZJMYyusTvaYaQ_jqfUlfXOfQL2GwU
+
+logging:
+  level:
+    #root: ERROR
+    org:
+      springframework:
+        security: DEBUG
+    com:
+      itsthatjun:
+        ecommerce: DEBUG
+---
+
+spring.config.activate.on-profile: docker
+
+server.port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://OMS-db:5432/orderdb
+  redis:
+    host: redis
+    port: 6379
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    virtual-host: /
+    addresses: rabbitmq:5672
+paypal:
+  mode: ${PAYPAL_MODE}
+  client:
+    id: ${PAYPAL_CLIENT_ID}
+    secret: ${PAYPAL_CLIENT_SECRET}
