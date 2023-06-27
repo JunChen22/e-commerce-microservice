@@ -10,8 +10,6 @@ E-commerece
 ├── config-repo  -- centralized config
 ├── gateway  -- gateway for connection / not needed in kubernetes
 ├── eureka   -- service registration and discovery capabilities / not needed in kubernetes
-├── E-commerece-mbg  --  Shared MyBatis generator geneated boiler plate
-├── E-commerece-util  -- Shared util like exception 
 ├── kubernetes
 │   ├── Helm     -- package manager for Kubernetes that simplifies the deployment and management of microservices.
 │   │    ├── common  -- base/boiler plates
@@ -19,13 +17,14 @@ E-commerece
 │   │    └── environment  -- different environment, devolopment vs production 
 │   │            └── istio  -- service mesh 
 │   └── monitor    -- grafana prometheus - performance metric monitor/visualizer
-├── E-commerece-admin  -- role based 
-│   ├── User mangament system/service
-│   ├── Product management system/service
-│   ├── Content management system/service
-│   ├── Sales mangement system/service
-│   └── Order management system/service
-├── E-commerece-app   
+├── E-commerece-admin  -- role based , keep it monolith first for single vendor
+│   ├── User mangament system
+│   ├── Product management system
+│   ├── Content management system
+│   ├── Sales mangement system
+│   └── Order management system
+├── E-commerece-app
+│   ├── App - aggregated service 
 │   ├── User mangament system/service
 │   ├── Product management system/service
 │   ├── Content management system/service
@@ -43,8 +42,7 @@ First split ECom-app into 5 parts with rabbit mq, gateway and eureka in docker.
 
 ![alt text](./document/Untitled%20Diagram.drawio.png)
 
-Then to kuberente.
-
+Then to kubernetes.
 
 Hibernate is an ORM framework that provides a high-level, declarative way to define your data model in Java and have
 Hibernate generate the database schema for you, while MyBatis is a SQL mapper framework that provides a low-level,
@@ -79,38 +77,38 @@ Database and mybatis generator
 
 * can not deploy locally(IDE) only Docker or Kubernetes
  
-
  
   Import data into elastic search
  $  curl -X POST http://localhost:8080/esProduct/importAll   // should return number of items imported
  
 ```
-
 ### Tech stack
-| Tech                                                            | role                                  | version | How is it being used here                       |
-|-----------------------------------------------------------------|---------------------------------------|---------|-------------------------------------------------|
-| [SpringBoot](https://spring.io/projects/spring-boot)            | MVC framework                         |         |                                                 |
-| [SpringSecurity](https://spring.io/projects/spring-security)    | Security                              |         |                                                 |
-| [PostgreSQL](https://www.postgresql.org/)                       | SQL database                          |         | store all product and user related data         |
-| [MyBatis](http://www.mybatis.org/mybatis-3/zh/index.html)       | ORM framework                         |         |                                                 |
-| [MyBatisGenerator](http://www.mybatis.org/generator/index.html) | Sourcecode generator                  |         | Generate basic functionality(CRUD) to database  |
-| [RabbitMQ](https://www.rabbitmq.com/)                           | Message queue                         |         |                                                 |
-| [Redis](https://redis.io/)                                      | Cache mechanism                       |         | used like a scheduler here, emails verification |
-| [MongoDB](https://www.mongodb.com)                              | NoSql database(search & read history) |         | store user search & view history                |
-| [Elasticsearch](https://github.com/elastic/elasticsearch)       | Search engine                         |         | imported data from PostgreSQL for fast search   |
-| [LogStash](https://github.com/elastic/logstash)                 | Logging Service                       |         |                                                 |
-| [Kibana](https://github.com/elastic/kibana)                     | Elasticsearch LogStash visualization  |         |                                                 |
-| [Docker](https://www.docker.com)                                | Containerization                      |         | Easier deployment                               |
-| [Kubernetes](https://kubernetes.io/)                            | Container Orchestration               |         |                                                 |
-| [JWT](https://github.com/jwtk/jjwt)                             | Encryption tool                       |         |                                                 |
-| [Lombok](https://github.com/rzwitserloot/lombok)                | minimize boilerplate                  |         |                                                 |
-| [PageHelper](http://git.oschina.net/free/Mybatis_PageHelper)    | MyBatis pagination helper             |         |                                                 |
-| [Swagger-UI](https://github.com/swagger-api/swagger-ui)         | Documentation tool                    |         |                                                 |
-| [Hibernate-Validator](http://hibernate.org/validator)           | Validation                            |         |                                                 |
-| [PayPal](https://developer.paypal.com/home)                     | Payment Gateway                       | 1.4.1   |                                                 |
-| [Google Pay](https://developers.google.com/pay/api)             | Payment Gateway                       |         |                                                 |
-| [Ubuntu](https://ubuntu.com/)                                   | OS                                    |         |                                                 |
-| AWS S3                                                          | File storage                          |         |                                                 |
+| Tech                                                                 | role                                  | version | How is it being used here                               |
+|----------------------------------------------------------------------|---------------------------------------|---------|---------------------------------------------------------|
+| [Spring Boot](https://spring.io/projects/spring-boot)                | MVC framework                         | 2.5.2   |                                                         |
+| [Spring WebFlux](https://docs.spring.io/spring-framework/reference/) | Reactive                              |         | Non-blocking APIs and event driven asynchronous service |
+| [SpringSecurity](https://spring.io/projects/spring-security)         | Security                              | 2.5.2   |                                                         |
+| [PostgreSQL](https://www.postgresql.org/)                            | SQL database                          | 9.6.10  | store all product and user related data                 |
+| [MyBatis](http://www.mybatis.org/mybatis-3/zh/index.html)            | ORM framework                         | 2.3.0   | ORM(object relation mapping), middle ware               |
+| [MyBatisGenerator](http://www.mybatis.org/generator/index.html)      | Sourcecode generator                  | 1.4.0   | Generate basic functionality(CRUD) to database          |
+| [RabbitMQ](https://www.rabbitmq.com/)                                | Message queue                         |         |                                                         |
+| [Redis](https://redis.io/)                                           | Cache mechanism                       |         | used like a scheduler here, emails verification         |
+| [MongoDB](https://www.mongodb.com)                                   | NoSql database(search & read history) | 5.0.0   | store user search & view history                        |
+| [Elasticsearch](https://github.com/elastic/elasticsearch)            | Search engine                         | 7,12.0  | imported data from PostgreSQL for fast search           |
+| [LogStash](https://github.com/elastic/logstash)                      | Logging Service                       | 7,12.0  |                                                         |
+| [Kibana](https://github.com/elastic/kibana)                          | Elasticsearch LogStash visualization  | 7,12.0  |                                                         |
+| [Nginx](https://www.nginx.com/)                                      | Webserver / Load balancing            |         |                                                         |
+| [Docker](https://www.docker.com)                                     | Containerization                      |         | Easier deployment                                       |
+| [JWT](https://github.com/jwtk/jjwt)                                  | Encryption tool                       |         |                                                         |
+| [Lombok](https://github.com/rzwitserloot/lombok)                     | minimize boilerplate                  |         |                                                         |
+| [PageHelper](http://git.oschina.net/free/Mybatis_PageHelper)         | MyBatis pagination helper             |         |                                                         |
+| [Swagger-UI](https://github.com/swagger-api/swagger-ui)              | Documentation tool                    |         |                                                         |
+| [Hibernate-Validator](http://hibernate.org/validator)                | Validation                            |         |                                                         |
+| [PayPal](https://developer.paypal.com/home)                          | Payment Gateway                       | 1.14.0  | Third party payment processor                           |
+| [Ubuntu](https://ubuntu.com/)                                        | OS                                    |         |                                                         |
+| AWS S3                                                               | File storage                          |         | store images, videos                                    |
+
+
 kubectl
 minikube
 
@@ -156,6 +154,26 @@ User management system(UMS) - manage user accounts and permissions, including au
 - admin
 
 
+
+
+### Order process flow
+
+1. add product -> cart,cart items
+
+2. cart items -> checkout -> generate cconfirmed order
+
+3. (will ask for login if your e-commerce requires, this ECom requires)
+
+4. geneated (actual) order ->
+   calculate final price(coupon, promotion, sale), check stock, lock in stock, shipping
+   -> send price to PayPal -> PayPal send customer to their paypal page -> (this part not done by us)
+   they choose their payment and agreed amount to pay to PayPal -> PayPal send us pay proof they paid to PayPal,
+   and redirect user to success page
+   -> use said proof to get the payment to us -> finish post payment work like update stock, generate order
+   serial number, create order to our database, delete user shopping cart
+
+
+![alt text](./document/paypal%20checkout%20workflow.png)
 
 
 

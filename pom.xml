@@ -12,12 +12,16 @@
     <description> E-commerce microservice backend using Spring Boot</description>
 
     <modules>
-        <module>ECom-app</module>               <!-- main app -->
-        <module>ECom-admin</module>             <!-- admin used to interact with main app module -->
-        <module>ECom-search</module>            <!-- searching module -->
-        <module>authorization-server</module>
         <module>gateway</module>
         <module>eureka-server</module>
+        <module>ECom-admin</module>
+        <module>ECom-search</module>
+        <module>ECom-app/App</module>           <!-- aggregated service -->
+        <module>ECom-app/CMS</module>
+        <module>ECom-app/OMS</module>
+        <module>ECom-app/PMS</module>
+        <module>ECom-app/SMS</module>
+        <module>ECom-app/UMS</module>
     </modules>
 
     <parent>

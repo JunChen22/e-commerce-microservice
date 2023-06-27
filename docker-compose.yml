@@ -10,18 +10,99 @@ services:
       POSTGRES_DB: springecommerece
     ports:
       - 5432:5432
-      #volumes:
-      # - /home/jun/Desktop/data/db/pg:/var/lib/postgresql/data # data file
-      # - /home/jun/Desktop/data/db/log:/var/log/postgresql # log files
-      # - /mydata/mysql/data/conf:/etc/mysql/conf.d # config files
-      # use docker-entrypoint-initdb.d to read sql file
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
+
+  CMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: contentdb
+    ports:
+      - 5433:5432
+    volumes:
+      - CMS-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       retries: 5
+
+  OMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: orderdb
+    ports:
+      - 5434:5432
+    volumes:
+      - OMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
+  PMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: productdb
+    ports:
+      - 5435:5432
+    volumes:
+      - PMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
+  SMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: salesdb
+    ports:
+      - 5436:5432
+    volumes:
+      - SMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
+  UMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: userdb
+    ports:
+      - 5437:5432
+    volumes:
+      - UMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
 
   mongodb:
     image: mongo:5.0.0
@@ -100,7 +181,7 @@ services:
       - 80:80
 
   app:
-    build: ECom-app
+    build: ECom-app/App
     container_name: ECom-app
     ports:
       - 8080:8080
@@ -110,11 +191,96 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
       - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
       - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_USERNAME=${MONGODB_USR}
-      - SPRING_DATA_MONGODB_PASSWORD=${MONGODB_PWD}
     depends_on:
-      postgres:
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  cms:
+    build: ECom-app/CMS
+    container_name: ECom-app-cms
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
+    depends_on:
+      CMS-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  oms:
+    build: ECom-app/OMS
+    container_name: ECom-app-oms
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
+      - PAYPAL_MODE=${paypal_mode}
+      - PAYPAL_CLIENT_ID=${paypal_client_id}
+      - PAYPAL_CLIENT_SECRET=${paypal_client_secret}
+    depends_on:
+      OMS-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  pms:
+    build: ECom-app/PMS
+    container_name: ECom-app-pms
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
+    depends_on:
+      PMS-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  sms:
+    build: ECom-app/SMS
+    container_name: ECom-app-sms
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
+    depends_on:
+      SMS-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  ums:
+    build: ECom-app/UMS
+    container_name: ECom-app-ums
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
+    depends_on:
+      UMS-db:
         condition: service_healthy
       mongodb:
         condition: service_healthy
@@ -136,7 +302,7 @@ services:
       - kibana
       - logstash
       - elasticsearch
-      - postgres
+      - PMS-db
 
   admin:
     build: ECom-admin
@@ -148,49 +314,40 @@ services:
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
     depends_on:
-      postgres:
+      CMS-db:
+        condition: service_healthy
+      OMS-db:
+        condition: service_healthy
+      PMS-db:
+        condition: service_healthy
+      SMS-db:
+        condition: service_healthy
+      UMS-db:
         condition: service_healthy
 
   gateway:
-    build: gateway-server
-    image: hands-on/gateway
+    build: gateway
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/gateway.yml
-      - SERVER_SSL_KEY_STORE_PASSWORD=${GATEWAY_TLS_PWD}
       - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
       - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     ports:
       - "8443:8443"
-    depends_on:
-      auth-server:
-        condition: service_healthy
 
   eureka:
     build: eureka-server
+    mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - CONFIG_SERVER_USR=${CONFIG_SERVER_USR}
-      - CONFIG_SERVER_PWD=${CONFIG_SERVER_PWD}
-
-  auth-server:
-    build: spring-cloud/authorization-server
-    image: hands-on/auth-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
-    volumes:
-      - $PWD/config-repo:/config-repo
-    healthcheck:
-      test: ["CMD", "curl", "-fs", "http://localhost:4004/actuator/health"]
-      interval: 5s
-      timeout: 2s
-      retries: 60
-
+    ports:
+      - "8761:8761"
 
 volumes:
   db-data:
+  CMS-data:
+  OMS-data:
+  PMS-data:
+  SMS-data:
+  UMS-data:
