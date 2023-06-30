@@ -17,7 +17,7 @@
 
         <!--  database driver-->
         <jdbcConnection driverClass="org.postgresql.Driver"
-                    connectionURL="jdbc:postgresql://localhost:/springecommerece"
+                    connectionURL="jdbc:postgresql://localhost/springecommerece"
                     userId="postgres"
                     password="password">
         </jdbcConnection>
@@ -25,15 +25,6 @@
         <!-- location of model and mapper will be generated -->
         <javaModelGenerator targetPackage="com.itsthatjun.ecommerce.mbg.model"
                             targetProject="src/main/java"/>
-
-        <!-- Generated XML mappers -->
-        <sqlMapGenerator targetPackage="com.itsthatjun.ecommerce.mbg.mapper"
-                         targetProject="src/main/resources"/>
-
-        <!-- Generated Java mapper interfaces -->
-        <javaClientGenerator targetPackage="com.itsthatjun.ecommerce.mbg.mapper"
-                         targetProject="src/main/java"
-                         type="XMLMAPPER"/>
 
         <!-- generate the table needed -->
         <!-- change long to integer for PostgreSQL serial id, default mybatis generator is long data type  -->
