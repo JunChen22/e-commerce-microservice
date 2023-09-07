@@ -116,8 +116,17 @@
 								},
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderProductSku\": {\n        \"IP12-RED\": 1,\n        \"IPSE-BLUE\": 2,\n        \"GS21\": 3\n    },\n    \"payType\": \"paypal\",\n    \"coupon\": \"50OFFAPPLE\",\n    \"discountAmount\": 10.5,\n    \"amount\": 5099.94,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "localhost:8080/order/generateOrder",
+									"raw": "localhost:8080/order/generateOrder?userId=2",
 									"host": [
 										"localhost"
 									],
@@ -125,6 +134,12 @@
 									"path": [
 										"order",
 										"generateOrder"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "2"
+										}
 									]
 								}
 							},
@@ -332,7 +347,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/cart/list",
+									"raw": "localhost:8080/cart/list?userId=2",
 									"host": [
 										"localhost"
 									],
@@ -340,6 +355,12 @@
 									"path": [
 										"cart",
 										"list"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "2"
+										}
 									]
 								}
 							},
@@ -362,7 +383,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"productId\": 6,\n    \"productName\": \"t-shirt\",\n    \"productSku\": \"Size: XXL, Color: White\",\n    \"productPic\": \"https://example.com/product3.jpg\",\n    \"quantity\": 1,\n    \"price\": 20.00\n}\n\n\n",
+									"raw": "{\n    \"productId\": 6,\n    \"productName\": \"69 t-shirt\",\n    \"productSku\": \"Size: XXL, Color: White\",\n    \"productPic\": \"https://example.com/product3.jpg\",\n    \"quantity\": 1,\n    \"price\": 20.00\n}\n\n\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -370,7 +391,7 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8080/cart/add",
+									"raw": "localhost:8080/cart/add?userId=2",
 									"host": [
 										"localhost"
 									],
@@ -378,6 +399,12 @@
 									"path": [
 										"cart",
 										"add"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "2"
+										}
 									]
 								}
 							},
@@ -408,7 +435,7 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8080/cart/add/all",
+									"raw": "localhost:8080/cart/add/all?userId=2",
 									"host": [
 										"localhost"
 									],
@@ -417,6 +444,12 @@
 										"cart",
 										"add",
 										"all"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "2"
+										}
 									]
 								}
 							},
@@ -438,7 +471,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/cart/update/quantity?cartItemId=1&quantity=2",
+									"raw": "localhost:8080/cart/update/quantity?cartItemId=1&quantity=2&userId=2",
 									"host": [
 										"localhost"
 									],
@@ -455,6 +488,10 @@
 										},
 										{
 											"key": "quantity",
+											"value": "2"
+										},
+										{
+											"key": "userId",
 											"value": "2"
 										}
 									]
@@ -478,7 +515,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/cart/delete/7",
+									"raw": "localhost:8080/cart/delete/7?userId=2",
 									"host": [
 										"localhost"
 									],
@@ -487,6 +524,12 @@
 										"cart",
 										"delete",
 										"7"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "2"
+										}
 									]
 								}
 							},
@@ -508,7 +551,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/cart/clear",
+									"raw": "localhost:8080/cart/clear?userId=2",
 									"host": [
 										"localhost"
 									],
@@ -516,6 +559,12 @@
 									"path": [
 										"cart",
 										"clear"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "2"
+										}
 									]
 								}
 							},
