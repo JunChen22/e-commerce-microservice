@@ -26,7 +26,8 @@ public class PaypalService {
             PaypalPaymentIntent intent,
             String description,
             String cancelUrl,
-            String successUrl) throws PayPalRESTException {
+            String successUrl,
+            String orderSn) throws PayPalRESTException {
         Amount amount = new Amount();
         amount.setCurrency(currency);
         total = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
@@ -35,6 +36,7 @@ public class PaypalService {
         Transaction transaction = new Transaction();
         transaction.setDescription(description);
         transaction.setAmount(amount);
+        transaction.setCustom(orderSn);     // order serial number
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);

@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
+import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +40,7 @@ public class ProductAggregate {
         return result;
     }
 
+
     @GetMapping("/{id}")
     @ApiOperation(value = "Get product by id")
     public Product listProduct(@PathVariable int id){
@@ -46,4 +48,40 @@ public class ProductAggregate {
         System.out.println(url);
         return restTemplate.getForObject(url, Product.class);
     }
+
+    /*
+
+    @GetMapping("/list")
+    @ApiOperation(value = "Get product with page and size")
+    public List<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+                                        @RequestParam(value = "size", defaultValue = "5") int pageSize){
+        return productService.listProduct(pageNum, pageSize);
+    }
+
+
+    @GetMapping("/listAll")
+    @ApiOperation(value = "Get all brands")
+    public List<Brand> getAllBrand(){
+        return brandService.listAllBrand();
+    }
+
+    @GetMapping("/list")
+    @ApiOperation(value = "Get brands with page and size")
+    public List<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+                                   @RequestParam(value = "size", defaultValue = "3") int pageSize){
+        return brandService.listBrand(pageNum, pageSize);
+    }
+
+    @GetMapping("/product/{brandId}")
+    @ApiOperation(value = "Get all product of this brand")
+    public List<Product> getBrandProduct(@PathVariable int brandId){
+        return brandService.listAllBrandProduct(brandId);
+    }
+
+    @GetMapping("/{brandId}")
+    @ApiOperation(value = "Get brand info")
+    public Brand getBrand(@PathVariable int brandId){
+        return brandService.getBrand(brandId);
+    }
+     */
 }

@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.service.impl;
 
+import com.itsthatjun.ecommerce.exceptions.ProductException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.CouponService;
@@ -33,16 +34,17 @@ public class CouponServiceImpl implements CouponService {
         CouponExample couponExample = new CouponExample();
         couponExample.createCriteria().andCodeEqualTo(couponCode);
         List<Coupon> result = couponMapper.selectByExample(couponExample);
-        if (result.size() == 0)
+        if (result.isEmpty())
             return null;
         System.out.println(result.get(0).getName());
         return result.get(0);
     }
 
+
     // -- discount on 0-> all, 1 -> specific brand, 2-> specific item
     @Override
     public List<Coupon> getCouponForProduct(int productId) {
-        /* TODO: change this to loose coupling
+         //TODO: change this to loose coupling
         Product product = productMapper.selectByPrimaryKey(productId);
         if (product == null)
             throw new ProductException("Can't find product : " + productId);
@@ -57,9 +59,6 @@ public class CouponServiceImpl implements CouponService {
         example.or().andNameLike("%" + "all product" + "%");
         example.or().andCouponTypeEqualTo(0);
         return couponMapper.selectByExample(example);
-
-         */
-        return null;
     }
 
     @Override

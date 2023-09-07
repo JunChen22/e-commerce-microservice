@@ -39,27 +39,12 @@
         <!-- change long to integer for PostgreSQL serial id, default mybatis generator is long data type  -->
         <!-- without <columnOverride column="id" javaType="java.lang.Integer" /> -->
 
-
-        <table tableName="orders">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="member_id" javaType="java.lang.Integer" />
-            <columnOverride column="coupon_id" javaType="java.lang.Integer" />
-        </table>
-
-        <table tableName= "review">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="product_id" javaType="java.lang.Integer" />
-            <columnOverride column="member_id" javaType="java.lang.Integer" />
-        </table>
-
         <!--  UMS -->
         <table tableName= "member">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
         </table>
-        <table tableName= "receive_address">
+        <table tableName= "address">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />

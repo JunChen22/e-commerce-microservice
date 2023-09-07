@@ -1,6 +1,11 @@
 server:
   port: 8082
 
+app:
+  SMS-service:
+    host: localhost
+    port: 8084
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5434/orderdb
@@ -20,13 +25,6 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 3000ms
-  rabbitmq:
-    host: localhost
-    port: 5672
-    virtual-host: /
-    username: guest
-    password: guest
-    publisher-confirms: true
 
 # tells spring mybatis mapper's xml(sql) located
 mybatis:
@@ -41,6 +39,49 @@ paypal:
     id: YOUR_PAYPAL_CLIENT_ID
     secret: YOUR_PAYPAL_CLIENT_SECRET
 
+# message queue related
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+  virtual-host: /
+  username: guest
+  password: guest
+  publisher-confirms: true
+
+spring.cloud:
+  function:
+    # can't have space between, tells spring which to use
+    definition: orderMessageProcessor;orderCompleteMessageProcessor;cartMessageProcessor;returnMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      orderMessageProcessor-in-0:
+        destination: order
+        group: orderGroup
+      orderCompleteMessageProcessor-in-0:
+        destination: orderComplete
+        group: orderGroup
+      cartMessageProcessor-in-0:
+        destination: cart
+        group: cartGroup
+      returnMessageProcessor-in-0:
+        destination: return
+        group: returnGroup
+      orderCompletion-out-0:         # for returned url when PayPal payment success or failure.
+        destination: orderComplete
+        producer:
+          required-groups: orderCompleteGroup
+      coupon-out-0:
+        destination: coupon
+        producer:
+          required-groups: couponGroup
+      product-out-0:
+        destination: product
+        producer:
+          required-groups: productGroup
+
+
 logging:
   level:
     #root: ERROR
@@ -50,6 +91,10 @@ logging:
     com:
       itsthatjun:
         ecommerce: DEBUG
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
 ---
 
 spring.config.activate.on-profile: docker
@@ -59,16 +104,13 @@ server.port: 8080
 spring:
   datasource:
     url: jdbc:postgresql://OMS-db:5432/orderdb
-  redis:
-    host: redis
-    port: 6379
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    virtual-host: /
-    addresses: rabbitmq:5672
+
 paypal:
   mode: ${PAYPAL_MODE}
   client:
     id: ${PAYPAL_CLIENT_ID}
     secret: ${PAYPAL_CLIENT_SECRET}
+
+spring.rabbitmq.host: rabbitmq
+
+spring.cloud.stream.kafka.binder.brokers: kafka

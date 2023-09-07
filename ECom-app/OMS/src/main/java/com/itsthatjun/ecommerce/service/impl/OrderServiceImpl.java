@@ -4,6 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.itsthatjun.ecommerce.config.PaypalPaymentIntent;
 import com.itsthatjun.ecommerce.config.PaypalPaymentMethod;
 import com.itsthatjun.ecommerce.dto.ConfirmOrderResult;
+import com.itsthatjun.ecommerce.dto.Event.PmsEvent;
+import com.itsthatjun.ecommerce.dto.Event.SmsEvent;
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.exceptions.OrderException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
@@ -16,184 +18,297 @@ import com.paypal.base.rest.PayPalRESTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.itsthatjun.ecommerce.dto.Event.PmsEvent.Type.*;
+import static com.itsthatjun.ecommerce.dto.Event.SmsEvent.Type.*;
+
 @Service
 public class OrderServiceImpl implements OrderService {
-    /*
 
-    private Logger log = LoggerFactory.getLogger(getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
 
-    @Autowired
-    private MemberService memberService;
+    private final double SHIPPING_COST = 15;  // default shipping cost for order less than 50
 
-    @Autowired
-    private CouponServiceImpl couponService;
+    private final WebClient webClient;
 
-    @Autowired
+    private final StreamBridge streamBridge;
+
     private PaypalService paypalService;
 
-    @Autowired
-    private CouponMapper couponMapper;
-
-    @Autowired
-    private ReceiveAddressMapper addressMapper;
-
-    @Autowired
     private OrdersMapper ordersMapper;
 
-    @Autowired
     private CartItemServiceImpl cartItemService;
 
-    @Autowired
     private OrderItemMapper orderItemMapper;
 
-    @Autowired
     private ProductSkuStockMapper stockMapper;
 
-    @Autowired
-    private ShoppingCartMapper shoppingCartMapper;
-
-    @Autowired
     private ProductMapper productMapper;
 
-    @Override
-    public ConfirmOrderResult generateCartItem(List<CartItem> cartItems, String couponCode) {
-        Member currMember = memberService.getCurrentUser();
-        ConfirmOrderResult result = new ConfirmOrderResult();
-        result.setCartItemList(cartItems);
+    @Value("${app.SMS-service.host}")
+    String couponServiceURL;
+    @Value("${app.SMS-service.port}")
+    int smsPort;
 
-        List<Integer> cartItemIds = new ArrayList<>();
-        double totalPrice = 0;
-        for (CartItem item : cartItems) {
-            cartItemIds.add(item.getProductId());
-            totalPrice += item.getPrice().doubleValue();
-        }
-
-        result.setTotalPrice(totalPrice);
-
-        if (couponService.checkCoupon(couponCode) != null){
-            result.setCoupon(couponCode);
-        }
-
-        double discountedAmount = calculateCouponDiscount(cartItemIds, couponCode);
-        result.setCouponDiscount(discountedAmount);
-
-        // check shipping cost, $50 or more get free shipping or $15
-        ReceiveAddressExample addressExample = new ReceiveAddressExample();
-        addressExample.createCriteria().andMemberIdEqualTo(currMember.getId());
-        ReceiveAddress address = addressMapper.selectByExample(addressExample).get(0);
-        // TODO: calculate shipping cost from UPS API, currently just fixed rate
-        result.setAddress(address);
-        double shippingCost = 15;  // default shipping cost before UPS check
-        if (result.getTotalPrice() > 50) {
-            shippingCost = 0;
-        }
-
-        result.setPayAmount(totalPrice - discountedAmount + shippingCost);
-
-        return result;
-    }
-
-    // TODO: change if these coupons are for one time or all that fits, like $15 off twice
-    // TODO: and check if coupon is active/status
-    private double calculateCouponDiscount(List<Integer> productIds, String couponCode) {
-        double discountAmount = 0;
-        Coupon coupon = couponService.checkCoupon(couponCode);
-        if (coupon == null) return discountAmount;
-
-        // TODO: fix the discount amount with different coupon like for all item, brand, total off and etc
-        // TODO: to check fixed amount of coupon available
-        for (int productId : productIds) {
-            List<Coupon> couponList = couponService.getCouponForProduct(productId);
-            for (Coupon c : couponList) {
-                if (c.getCode().equals(coupon.getCode())) {
-                    discountAmount += coupon.getAmount().doubleValue();
-                }
-            }
-        }
-        return discountAmount;
+    @Autowired
+    public OrderServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge, PaypalService paypalService, OrdersMapper ordersMapper,
+                            CartItemServiceImpl cartItemService, OrderItemMapper orderItemMapper, ProductSkuStockMapper stockMapper,
+                            ProductMapper productMapper) {
+        this.webClient = webClient.build();
+        this.streamBridge = streamBridge;
+        this.paypalService = paypalService;
+        this.ordersMapper = ordersMapper;
+        this.cartItemService = cartItemService;
+        this.orderItemMapper = orderItemMapper;
+        this.stockMapper = stockMapper;
+        this.productMapper = productMapper;
     }
 
     @Override
-    public Map<String, Object> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl) {
-        // get user from JWT token context
-        Member currentMember = memberService.getCurrentUser();
+    public Mono<Orders> detail(String orderSN) {
+        OrdersExample ordersExample = new OrdersExample();
+        ordersExample.createCriteria().andOrderSnEqualTo(orderSN);
+        if (ordersMapper.selectByExample(ordersExample).isEmpty())
+            return Mono.empty();
+        return Mono.fromCallable(() -> ordersMapper.selectByExample(ordersExample).get(0));
+    }
 
-        List<OrderItem> orderItemList = new ArrayList<>();
+    @Override
+    public Flux<Orders> list(int status, int pageNum, int pageSize, int userId) {
+        PageHelper.startPage(pageNum, pageSize);
+        OrdersExample ordersExample = new OrdersExample();
+        // TODO: the status code. currently just return all
+        ordersExample.createCriteria().andMemberIdEqualTo(userId);
+
+        List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+        return Flux.fromIterable(ordersList);
+    }
+
+    @Override
+    public Mono<ConfirmOrderResult> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId) {
+
+        String orderSn = generateOrderSn();
         String couponCode = orderParam.getCoupon();
-        ReceiveAddress receiveAddress = orderParam.getAddress();
-        double price = 0;
-        double couponDiscount = 0;
-        double shippingCost = 15;  // default shipping cost before UPS check
 
-        for (CartItem item : orderParam.getCartItemList()) {
-            // generate order item information
+        Orders newOrder = new Orders();
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        Map<String, Integer> skuQuantity = orderParam.getOrderProductSku(); // sku and quantity for order
+
+        double orderTotal = 0;
+        double couponDiscount = orderParam.getDiscountAmount();
+
+        // verify the price again
+        for (String productSku: skuQuantity.keySet()) {
+
+            int quantity = orderParam.getOrderProductSku().get(productSku);
+
+            // find the sku and product
+            ProductSkuStockExample productSkuExample = new ProductSkuStockExample();
+            productSkuExample.createCriteria().andSkuCodeEqualTo(productSku);
+            ProductSkuStock productSkuStock = stockMapper.selectByExample(productSkuExample).get(0);
+
+            ProductExample productExample = new ProductExample();
+            productExample.createCriteria().andIdEqualTo(productSkuStock.getProductId());
+            Product product = productMapper.selectByExample(productExample).get(0);
+
             OrderItem orderItem = new OrderItem();
-            orderItem.setProductId(item.getProductId());
-            orderItem.setProductName(item.getProductName());
-            orderItem.setProductQuantity(item.getQuantity());
-            orderItem.setProductSkuCode(item.getProductSku());
+            orderItem.setProductId(product.getId());
+            orderItem.setProductName(product.getName());
+            orderItem.setProductQuantity(orderParam.getOrderProductSku().get(productSku));
+            orderItem.setProductSkuCode(productSku);
 
-            ProductSkuStockExample skuStockExample = new ProductSkuStockExample();
-            skuStockExample.createCriteria().andProductIdEqualTo(orderItem.getProductId())
-                                            .andSkuCodeEqualTo(orderItem.getProductSkuCode());
-            price += stockMapper.selectByExample(skuStockExample).get(0).getPromotionPrice().doubleValue() * item.getQuantity();
-
+            orderTotal += productSkuStock.getPromotionPrice().doubleValue() * quantity;
             orderItemList.add(orderItem);
         }
 
         if (!hasStock(orderItemList)) {
             throw new OrderException("Not enough stock, Unable to order");
         }
-        lockStock(orderItemList);
 
-        CouponExample couponExample = new CouponExample();
-        couponExample.createCriteria().andCodeEqualTo(couponCode);
-        Coupon foundCoupon = couponMapper.selectByExample(couponExample).size() > 0 ?
-                                                couponMapper.selectByExample(couponExample).get(0) : null ;
+        orderTotal = Math.round(orderTotal * 100.0) / 100.0;  // TODO: change back double to big decimal for more accuracy
+        // and use.setScale(2, RoundingMode.CEILING);
 
-        // whole order discount
-        if (foundCoupon != null && foundCoupon.getCouponType() == 0) {
-            if (foundCoupon.getDiscountType() == 0) {
-                couponDiscount = foundCoupon.getAmount().doubleValue();
-            } else {
-                couponDiscount = (price * foundCoupon.getAmount().doubleValue())/100;
-            }
-        } else if (foundCoupon != null){
-            // discount from product discount
-            couponDiscount = couponService.getDiscountAmount(orderItemList, orderParam.getCoupon());
+        // verify price difference
+        if (orderTotal != orderParam.getAmount()) {
+            throw new OrderException("Pricing error");
         }
 
-        // calculate order price, shipping, promotion, coupon
+        lockStock(orderItemList);
+
+        // TODO: it's synchronous call to coupon service, assume the accepted discount amount is correct.
+        // couponDiscount = couponDiscount == couponservice.checkcoupon(coupon)? couponDiscount : 0;
+
         // check shipping cost, $50 or more get free shipping or $15
         // TODO: calculate shipping cost from UPS API, currently just fixed rate
+        if (orderTotal < 50) orderTotal += SHIPPING_COST;
 
-        if (price > 50) shippingCost = 0;;
+        orderTotal = orderTotal - couponDiscount;
 
-        price = price - couponDiscount + shippingCost;
+        newOrder.setOrderSn(orderSn);
+        newOrder.setStatus(0);   // waiting for payment
+        newOrder.setTotalAmount(BigDecimal.valueOf(orderTotal));
+        ordersMapper.insert(newOrder);
+
+        int newOrderId = newOrder.getId();
+
+        for (OrderItem item : orderItemList) {
+            item.setOrderSn(orderSn);
+            item.setOrderId(newOrderId);
+            orderItemMapper.insert(item);
+        }
+
+        // update locked stock,
+        sendStockUpdateMessage("product-out-0",new PmsEvent(UPDATE_PURCHASE, orderSn, skuQuantity));
+        // update sale stock.
+        sendCouponUpdateMessage("coupon-out-0", new SmsEvent(UPDATE_SALES_LOCK_STOCK, orderSn, newOrderId, skuQuantity));
+
+        if (!couponCode.equals("")) {
+            sendCouponUpdateMessage("coupon-out-0", new SmsEvent(UPDATE_COUPON_USAGE, orderSn, couponCode, userId, newOrderId));
+        }
+
+        // clear cart
+        cartItemService.clearCartItem(userId);
 
         try {
-            Payment payment = paypalService.createPayment(price, "USD", PaypalPaymentMethod.paypal,
-                    PaypalPaymentIntent.sale, "payment description", cancelUrl,
-                    successUrl);
+            Payment payment = paypalService.createPayment(orderTotal, "USD", PaypalPaymentMethod.paypal,
+                    PaypalPaymentIntent.sale, "payment description", cancelUrl ,
+                    successUrl, orderSn);
             for(Links links : payment.getLinks()){
                 if(links.getRel().equals("approval_url")){
-                    System.out.println( "redirect:" + links.getHref());
+                    System.out.println("redirect:" + links.getHref());
                 }
             }
         } catch (PayPalRESTException e) {
-            log.error(e.getMessage());
+            LOG.error(e.getMessage());
         }
-        return null;
+
+        return Mono.empty();
+    }
+
+    @Override
+    public Mono<Orders> paySuccess(String orderSn, String paymentId, String payerId) {
+
+        try {
+            Payment payment = paypalService.executePayment(paymentId, payerId);
+            if(payment.getState().equals("approved")){
+                System.out.println("successful payment");
+
+                // find and update the order, status, payment info
+                OrdersExample ordersExample = new OrdersExample();
+                ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
+                Orders foundOrder = ordersMapper.selectByExample(ordersExample).get(0);
+
+                foundOrder.setStatus(1);  // waiting for payment 0 , fulfilling 1,
+                foundOrder.setPaymentId(paymentId);
+                foundOrder.setPayerId(payerId);
+                foundOrder.setPayAmount(foundOrder.getTotalAmount());
+
+                Date currentDate = new Date();
+                foundOrder.setPaymentTime(currentDate);
+                foundOrder.setUpdatedAt(currentDate);
+
+                ordersMapper.updateByPrimaryKey(foundOrder);
+
+                OrderItemExample orderItemExample = new OrderItemExample();
+                orderItemExample.createCriteria().andOrderSnEqualTo(orderSn);
+                List<OrderItem> orderItemList = orderItemMapper.selectByExample(orderItemExample);
+
+                Map<String, Integer> itemOrderQuantity = new HashMap<>();
+
+                // update stock and free up locked stock
+                for (OrderItem item: orderItemList) {
+                    int quantityOrdered = item.getProductQuantity();;
+
+                    // find product and get current stock and update it
+                    ProductExample productExample = new ProductExample();
+                    productExample.createCriteria().andIdEqualTo(item.getProductId());
+                    Product product = productMapper.selectByExample(productExample).get(0);
+
+                    int currentStock = product.getStock();
+                    product.setStock(currentStock - quantityOrdered);
+                    productMapper.updateByPrimaryKey(product);
+
+                    // update sku stock and free lock stock
+                    ProductSkuStockExample productSkuStockExample = new ProductSkuStockExample();
+                    productSkuStockExample.createCriteria().andSkuCodeEqualTo(item.getProductSkuCode()).andProductIdEqualTo(product.getId());
+                    ProductSkuStock producutSku = stockMapper.selectByExample(productSkuStockExample).get(0);
+
+                    currentStock = producutSku.getStock();
+                    producutSku.setStock(currentStock - quantityOrdered);
+                    producutSku.setLockStock(producutSku.getLockStock() - quantityOrdered);
+                    stockMapper.updateByPrimaryKey(producutSku);
+                }
+                // update stock and free locked stock. and update sales stock
+                sendStockUpdateMessage("product-out-0",new PmsEvent(UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
+                sendCouponUpdateMessage("coupon-out-0", new SmsEvent(UPDATE_SALES_STOCK, orderSn, foundOrder.getId(), itemOrderQuantity));
+
+                return Mono.just(foundOrder);
+            }
+        } catch (PayPalRESTException e) {
+            LOG.error(e.getMessage());
+        }
+        return Mono.empty();
+    }
+
+    @Override
+    public void payFail(String orderSn) {
+
+        OrdersExample ordersExample = new OrdersExample();
+        ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
+        Orders newOrder = ordersMapper.selectByExample(ordersExample).get(0);
+
+        int orderId = newOrder.getId();
+
+        OrderItemExample orderItemExample = new OrderItemExample();
+        orderItemExample.createCriteria().andOrderSnEqualTo(orderSn).andOrderIdEqualTo(orderId);
+        List<OrderItem> orderItemList = orderItemMapper.selectByExample(orderItemExample);
+
+        Map<String, Integer> itemOrderQuantity = new HashMap<>();
+
+        // free up locked stock
+        for (OrderItem item : orderItemList) {
+            int productId = item.getProductId();
+            String skuCode = item.getProductSkuCode();
+            int quantityNeeded = item.getProductQuantity();
+
+            ProductSkuStockExample example = new ProductSkuStockExample();
+            example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
+            ProductSkuStock skuStock = stockMapper.selectByExample(example).get(0);
+
+            int itemStockLockNow = skuStock.getLockStock();
+            skuStock.setLockStock(itemStockLockNow - quantityNeeded);
+            stockMapper.updateByPrimaryKey(skuStock);
+
+            itemOrderQuantity.put(skuCode, quantityNeeded);
+        }
+        // update locked stock,
+        sendStockUpdateMessage("product-out-0",new PmsEvent(UPDATE_RETURN, orderSn, itemOrderQuantity));
+        // update sale stock. coupon usage won't go down even payment fail.
+        sendCouponUpdateMessage("coupon-out-0", new SmsEvent(RETURN_SALES_STOCK, orderSn, orderId, itemOrderQuantity));
+    }
+
+    @Override
+    public Mono<Orders> update() {
+        return Mono.empty();
     }
 
     @Override
     public String cancelOrder(String orderSN) {
+        /*
         //todo: cancel order
         Orders foundOrder = detail(orderSN);
 
@@ -210,30 +325,9 @@ public class OrderServiceImpl implements OrderService {
 
         ordersMapper.updateByPrimaryKeySelective(foundOrder);
 
+
+         */
         return "order cancelled: " + orderSN;
-    }
-
-    @Override
-    public List<Orders> list(int status, int pageNum, int pageSize) {
-        Member currentMember = memberService.getCurrentUser();
-
-        PageHelper.startPage(pageNum, pageSize);
-        OrdersExample ordersExample = new OrdersExample();
-        // TODO: the status code. currently just return all
-        ordersExample.createCriteria().andMemberIdEqualTo(currentMember.getId());
-
-        List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
-
-        return ordersList;
-    }
-
-    @Override
-    public Orders detail(String orderSN) {
-        OrdersExample ordersExample = new OrdersExample();
-        ordersExample.createCriteria().andOrderSnEqualTo(orderSN);
-        if (ordersMapper.selectByExample(ordersExample).size() > 0)
-            return ordersMapper.selectByExample(ordersExample).get(0);
-        return null;
     }
 
     // TODO: use a better way to generate order serial number
@@ -261,6 +355,7 @@ public class OrderServiceImpl implements OrderService {
             int productId = item.getProductId();
             String skuCode = item.getProductSkuCode();
             int quantityNeeded = item.getProductQuantity();
+
             ProductSkuStockExample example = new ProductSkuStockExample();
             example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
             ProductSkuStock itemStock = stockMapper.selectByExample(example).get(0);
@@ -268,26 +363,6 @@ public class OrderServiceImpl implements OrderService {
             int itemStockNow = itemStock.getLockStock();
 
             itemStock.setLockStock(itemStockNow + quantityNeeded);
-            stockMapper.updateByPrimaryKey(itemStock);
-        }
-    }
-
-    private void unlockStock(List<OrderItem> orderItemList) {
-
-        for (OrderItem item : orderItemList) {
-            int productId = item.getProductId();
-            String skuCode = item.getProductSkuCode();
-            int quantityNeeded = item.getProductQuantity();
-            ProductSkuStockExample example = new ProductSkuStockExample();
-            example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
-            ProductSkuStock itemStock = stockMapper.selectByExample(example).get(0);
-
-            int itemStockNow = itemStock.getStock();
-            int itemStockLockNow = itemStock.getLockStock();
-
-
-            itemStock.setStock(itemStockNow - quantityNeeded);
-            itemStock.setLockStock(itemStockLockNow - quantityNeeded);
             stockMapper.updateByPrimaryKey(itemStock);
         }
     }
@@ -303,201 +378,27 @@ public class OrderServiceImpl implements OrderService {
             ProductSkuStock itemStock = stockMapper.selectByExample(example).get(0);
 
             if (itemStock != null && itemStock.getStock() < (itemStock.getLockStock() + quantityNeeded)){
-                return false;
+                return false; // send alert some where here to alert admin about low stock
             }
         }
         return true;
     }
 
-    @Override
-    public Orders paySuccess(String couponCode, ReceiveAddress address) {
-
-        Member currentMember = memberService.getCurrentUser();
-        List<CartItem> cartItemList = cartItemService.getUserCart();
-        List<OrderItem> orderItemList = new ArrayList<>();
-
-        double preDiscount = 0;
-        double price = 0;
-        double couponDiscount = 0;
-        double shippingCost = 15;  // default shipping cost before UPS check
-
-        Orders newOrder = new Orders();
-
-        for (CartItem item : cartItemList) {
-            // generate order item information
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProductId(item.getProductId());
-            orderItem.setProductName(item.getProductName());
-            orderItem.setProductQuantity(item.getQuantity());
-            orderItem.setProductSkuCode(item.getProductSku());
-
-            ProductSkuStockExample skuStockExample = new ProductSkuStockExample();
-            skuStockExample.createCriteria().andProductIdEqualTo(orderItem.getProductId())
-                    .andSkuCodeEqualTo(orderItem.getProductSkuCode());
-
-            ProductSkuStock skuStock = stockMapper.selectByExample(skuStockExample).get(0);
-
-            double skuProductPrice = skuStock.getPromotionPrice().doubleValue();
-            orderItem.setProductPrice(BigDecimal.valueOf(skuProductPrice));
-            price += skuProductPrice * item.getQuantity();
-            preDiscount += skuStock.getPrice().doubleValue() * item.getQuantity();
-            orderItemList.add(orderItem);
-        }
-
-        CouponExample couponExample = new CouponExample();
-        couponExample.createCriteria().andCodeEqualTo(couponCode);
-        Coupon foundCoupon = couponMapper.selectByExample(couponExample).size() > 0 ?
-                couponMapper.selectByExample(couponExample).get(0) : null ;
-
-        // whole order discount
-        if (foundCoupon != null && foundCoupon.getCouponType() == 0) {
-            if (foundCoupon.getDiscountType() == 0) {
-                couponDiscount = foundCoupon.getAmount().doubleValue();
-            } else {
-                couponDiscount = (price * foundCoupon.getAmount().doubleValue())/100;
-            }
-        } else if (foundCoupon != null){
-            // discount from product discount
-            couponDiscount = couponService.getDiscountAmount(orderItemList, couponCode);
-        }
-
-        // calculate order price, shipping, promotion, coupon
-        // check shipping cost, $50 or more get free shipping or $15
-        // TODO: calculate shipping cost from UPS API, currently just fixed rate
-        if (price > 50) shippingCost = 0;;
-
-        price = price - couponDiscount + shippingCost;
-
-        newOrder.setMemberId(currentMember.getId());
-        String serialNumber = generateOrderSn();
-        newOrder.setOrderSn(serialNumber);
-
-        // payment infos
-        newOrder.setTotalAmount(BigDecimal.valueOf(preDiscount));
-        // TODO: add promotion_amount, might get dao, it's little complex for mapper
-        // newOrder.setPromotionAmount();
-        newOrder.setShippingCost(BigDecimal.valueOf(shippingCost));
-        newOrder.setCouponAmount(BigDecimal.valueOf(couponDiscount));
-        newOrder.setDiscountAmount(BigDecimal.valueOf(couponDiscount));
-        //
-        newOrder.setPayAmount(BigDecimal.valueOf(price + shippingCost - couponDiscount));
-
-        newOrder.setStatus(1);
-
-
-        // TODO: get it FROM UPS API
-        newOrder.setDeliveryCompany("UPS");
-        // String trackingNumber = UPSTracking(address);
-        newOrder.setDeliveryTrackingNumber("TRACKING FROM UPS");
-
-        // address/receiver infos
-        newOrder.setReceiverName(address.getReceiverName());
-        newOrder.setReceiverPhone(address.getPhoneNumber());
-        newOrder.setReceiverDetailAddress(address.getDetailAddress());
-        newOrder.setReceiverCity(address.getCity());
-        newOrder.setReceiverState(address.getState());
-        newOrder.setReceiverZipCode(address.getZipCode());
-
-        Date currentTime = new Date();
-        newOrder.setPaymentTime(currentTime);
-        newOrder.setCreatedAt(currentTime);
-
-        // add order to database
-        ordersMapper.insertSelective(newOrder);
-
-        for (OrderItem item: orderItemList) {
-            // find product and get current stock and update it
-            ProductExample productExample = new ProductExample();
-            productExample.createCriteria().andIdEqualTo(item.getProductId());
-            Product updateProduct = productMapper.selectByExample(productExample).get(0);
-
-            int currentStock = updateProduct.getStock();
-            updateProduct.setStock(currentStock - item.getProductQuantity());
-            productMapper.updateByPrimaryKey(updateProduct);
-
-            // insert the order item into database
-            item.setOrderId(newOrder.getId());
-            item.setOrderSn(serialNumber);
-            item.setProductPrice(item.getProductPrice());
-            orderItemMapper.insert(item);
-        }
-
-        // clear cart
-        cartItemService.clearCartItem();
-        // unlock stock
-        unlockStock(orderItemList);
-        // update coupon
-        couponService.updateUsedCoupon(couponCode, newOrder.getId(), currentMember.getId());
-
-        return newOrder;
+    private void sendStockUpdateMessage(String bindingName, PmsEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("partitionKey", event.getOrderSN())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 
-    @Override
-    public void payFail() {
-        Member currentMember = memberService.getCurrentUser();
-        List<CartItem> cartItemList = cartItemService.getUserCart();
-        List<OrderItem> orderItemList = new ArrayList<>();
-
-        // free up locked stock
-        for (CartItem item : cartItemList) {
-            int productId = item.getProductId();
-            String skuCode = item.getProductSku();
-            int quantityNeeded = item.getQuantity();
-            ProductSkuStockExample example = new ProductSkuStockExample();
-            example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
-            ProductSkuStock itemStock = stockMapper.selectByExample(example).get(0);
-
-            int itemStockLockNow = itemStock.getLockStock();
-
-            itemStock.setLockStock(itemStockLockNow - quantityNeeded);
-            stockMapper.updateByPrimaryKey(itemStock);
-        }
-    }
-
-     */
-
-    @Override
-    public ConfirmOrderResult generateCartItem(List<CartItem> cartItems, String coupon) {
-        return null;
-    }
-
-    @Override
-    public Map<String, Object> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl) {
-        return null;
-    }
-
-    @Override
-    public Orders paySuccess(String couponCode, ReceiveAddress address) {
-        return null;
-    }
-
-    @Override
-    public void payFail() {
-
-    }
-
-    @Override
-    public String cancelOrder(String orderSN) {
-        return null;
-    }
-
-    @Autowired
-    private OrdersMapper ordersMapper;
-    @Override
-    public List<Orders> list(int status, int pageNum, int pageSize) {
-
-        PageHelper.startPage(pageNum, pageSize);
-        OrdersExample ordersExample = new OrdersExample();
-        // TODO: the status code. currently just return all
-        ordersExample.createCriteria().andMemberIdEqualTo(1);
-
-        List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
-
-        return ordersList;
-    }
-
-    @Override
-    public Orders detail(String orderSN) {
-        return null;
+    private void sendCouponUpdateMessage(String bindingName, SmsEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType() , bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("partitionKey", event.getOrderSN())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 }

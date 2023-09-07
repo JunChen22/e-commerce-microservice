@@ -18,15 +18,10 @@ E-commerece
 │   │            └── istio  -- service mesh 
 │   └── monitor    -- grafana prometheus - performance metric monitor/visualizer
 ├── E-commerece-admin  -- role based , keep it monolith first for single vendor
-│   ├── User mangament system
-│   ├── Product management system
-│   ├── Content management system
-│   ├── Sales mangement system
-│   └── Order management system
 ├── E-commerece-app
-│   ├── App - aggregated service 
-│   ├── User mangament system/service
-│   ├── Product management system/service
+│   ├── App - aggregated service          non-blocking synchronous API  to 
+│   ├── User mangament system/service              5 event driven asynchronous serivces
+│   ├── Product management system/service                      
 │   ├── Content management system/service
 │   ├── Sales mangement system/service
 │   └── Order management system/service
@@ -36,6 +31,7 @@ Two way of deploying. One with Docker and one with Kubernetes.
 Docker by default will be smaller than deploying in Kubernetes. And Kuberentes will have features same as Spring Cloud
 like service discovery and load balance (Eureka), central config, Distributed Tracing and circuit breaker.
 The .env file stores login infos for easier change. Gets read in during run time by docker.
+
 
 ```
 First split ECom-app into 5 parts with rabbit mq, gateway and eureka in docker.
@@ -48,6 +44,13 @@ Hibernate is an ORM framework that provides a high-level, declarative way to def
 Hibernate generate the database schema for you, while MyBatis is a SQL mapper framework that provides a low-level,
 programmatic way to interact with a database using SQL statements. MyBatis Generator is a tool that generates Java
 code based on an existing database schema to help with building a custom data access layer.
+
+
+Since using Postgres, there's no support for non-blocking programming model, will use thread pool and scheduler to achieve
+psudo non-blocking. Default is 10 threads, but I changed to 2 threads per service due to my 6 core CPU.  Using a thread pool
+for the blocking code avoids draining the available threads in the microservice(avoid affecting the non-blocking processing
+in the microservice).
+
 
 Tried separating mbg to another module but kept having problem with it. Either maven or IntelliJ error. Right now it's 
 kept together and will separate it later.
@@ -64,7 +67,7 @@ Database and mybatis generator
 
   Generate mybatis files
  $ docker-compose up postgres
- $ cd ECom-app
+ $ go to all the directory(Ecom-app App, CMS, OMS, PMS, SMS, UMS, and ECom-admin)
  $ mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true // generate DAO, mapper and java clasees
  $ docker-compose down
 
@@ -83,30 +86,33 @@ Database and mybatis generator
  
 ```
 ### Tech stack
-| Tech                                                                 | role                                  | version | How is it being used here                               |
-|----------------------------------------------------------------------|---------------------------------------|---------|---------------------------------------------------------|
-| [Spring Boot](https://spring.io/projects/spring-boot)                | MVC framework                         | 2.5.2   |                                                         |
-| [Spring WebFlux](https://docs.spring.io/spring-framework/reference/) | Reactive                              |         | Non-blocking APIs and event driven asynchronous service |
-| [SpringSecurity](https://spring.io/projects/spring-security)         | Security                              | 2.5.2   |                                                         |
-| [PostgreSQL](https://www.postgresql.org/)                            | SQL database                          | 9.6.10  | store all product and user related data                 |
-| [MyBatis](http://www.mybatis.org/mybatis-3/zh/index.html)            | ORM framework                         | 2.3.0   | ORM(object relation mapping), middle ware               |
-| [MyBatisGenerator](http://www.mybatis.org/generator/index.html)      | Sourcecode generator                  | 1.4.0   | Generate basic functionality(CRUD) to database          |
-| [RabbitMQ](https://www.rabbitmq.com/)                                | Message queue                         |         |                                                         |
-| [Redis](https://redis.io/)                                           | Cache mechanism                       |         | used like a scheduler here, emails verification         |
-| [MongoDB](https://www.mongodb.com)                                   | NoSql database(search & read history) | 5.0.0   | store user search & view history                        |
-| [Elasticsearch](https://github.com/elastic/elasticsearch)            | Search engine                         | 7,12.0  | imported data from PostgreSQL for fast search           |
-| [LogStash](https://github.com/elastic/logstash)                      | Logging Service                       | 7,12.0  |                                                         |
-| [Kibana](https://github.com/elastic/kibana)                          | Elasticsearch LogStash visualization  | 7,12.0  |                                                         |
-| [Nginx](https://www.nginx.com/)                                      | Webserver / Load balancing            |         |                                                         |
-| [Docker](https://www.docker.com)                                     | Containerization                      |         | Easier deployment                                       |
-| [JWT](https://github.com/jwtk/jjwt)                                  | Encryption tool                       |         |                                                         |
-| [Lombok](https://github.com/rzwitserloot/lombok)                     | minimize boilerplate                  |         |                                                         |
-| [PageHelper](http://git.oschina.net/free/Mybatis_PageHelper)         | MyBatis pagination helper             |         |                                                         |
-| [Swagger-UI](https://github.com/swagger-api/swagger-ui)              | Documentation tool                    |         |                                                         |
-| [Hibernate-Validator](http://hibernate.org/validator)                | Validation                            |         |                                                         |
-| [PayPal](https://developer.paypal.com/home)                          | Payment Gateway                       | 1.14.0  | Third party payment processor                           |
-| [Ubuntu](https://ubuntu.com/)                                        | OS                                    |         |                                                         |
-| AWS S3                                                               | File storage                          |         | store images, videos                                    |
+| Tech                                                                                   | role                                  | version | How is it being used here                               |
+|----------------------------------------------------------------------------------------|---------------------------------------|---------|---------------------------------------------------------|
+| [Spring Boot](https://spring.io/projects/spring-boot)                                  | MVC framework                         | 2.5.2   |                                                         |
+| [Spring WebFlux](https://docs.spring.io/spring-framework/reference/)                   | Reactive                              | 2.5.2   | Non-blocking APIs and event driven asynchronous service |
+| [SpringSecurity](https://spring.io/projects/spring-security)                           | Security                              | 2.5.2   |                                                         |
+| [Eureka](https://cloud.spring.io/spring-cloud-netflix/reference/html/)                 | Spring Cloud - Service Discovery      | 2.5.2   | Service discovery                                       |
+| [Gateway](https://cloud.spring.io/spring-cloud-netflix/reference/html/)                | Spring Cloud - Gateway                | 2.5.2   | Gateway                                                 |
+| [Auth](https://cloud.spring.io/spring-cloud-netflix/reference/html/)                   | Spring Cloud - Auth server            | 2.5.2   | security                                                |
+| [PostgreSQL](https://www.postgresql.org/)                                              | SQL database                          | 9.6.10  | store all product and user related data                 |
+| [MyBatis](http://www.mybatis.org/mybatis-3/zh/index.html)                              | ORM framework                         | 2.3.0   | ORM(object relation mapping), middle ware               |
+| [MyBatisGenerator](http://www.mybatis.org/generator/index.html)                        | Sourcecode generator                  | 1.4.0   | Generate basic functionality(CRUD) to database          |
+| [RabbitMQ](https://www.rabbitmq.com/)                                                  | Message queue                         |         |                                                         |
+| [Redis](https://redis.io/)                                                             | Cache mechanism                       |         | used like a scheduler here, emails verification         |
+| [MongoDB](https://www.mongodb.com)                                                     | NoSql database(search & read history) | 5.0.0   | store user search & view history                        |
+| [Elasticsearch](https://github.com/elastic/elasticsearch)                              | Search engine                         | 7,12.0  | imported data from PostgreSQL for fast search           |
+| [LogStash](https://github.com/elastic/logstash)                                        | Logging Service                       | 7,12.0  |                                                         |
+| [Kibana](https://github.com/elastic/kibana)                                            | Elasticsearch LogStash visualization  | 7,12.0  |                                                         |
+| [Nginx](https://www.nginx.com/)                                                        | Webserver / Load balancing            |         |                                                         |
+| [Docker](https://www.docker.com)                                                       | Containerization                      |         | Easier deployment                                       |
+| [JWT](https://github.com/jwtk/jjwt)                                                    | Encryption tool                       |         |                                                         |
+| [Lombok](https://github.com/rzwitserloot/lombok)                                       | minimize boilerplate                  |         |                                                         |
+| [PageHelper](http://git.oschina.net/free/Mybatis_PageHelper)                           | MyBatis pagination helper             |         |                                                         |
+| [Swagger-UI](https://github.com/swagger-api/swagger-ui)                                | Documentation tool                    |         |                                                         |
+| [Hibernate-Validator](http://hibernate.org/validator)                                  | Validation                            |         |                                                         |
+| [PayPal](https://developer.paypal.com/home)                                            | Payment Gateway                       | 1.14.0  | Third party payment processor                           |
+| [Ubuntu](https://ubuntu.com/)                                                          | OS                                    |         |                                                         |
+| AWS S3                                                                                 | File storage                          |         | store images, videos                                    |
 
 
 kubectl

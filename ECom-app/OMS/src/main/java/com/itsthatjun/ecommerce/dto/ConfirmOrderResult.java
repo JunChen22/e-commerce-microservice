@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.dto;
 
+import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.mbg.model.CartItem;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

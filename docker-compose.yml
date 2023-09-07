@@ -109,9 +109,6 @@ services:
     restart: always
     ports:
       - 27017:27017
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USR}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PWD}
     command: mongod
     healthcheck:
       test: "mongo --eval 'db.stats().ok'"
@@ -331,8 +328,6 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
       - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
-    volumes:
-      - $PWD/config-repo:/config-repo
     ports:
       - "8443:8443"
 

@@ -14,7 +14,7 @@ public class OrderReturnApply {
 
     private String orderSn;
 
-    private Long memberId;
+    private Integer memberId;
 
     private BigDecimal returnAmount;
 
@@ -94,11 +94,11 @@ public class OrderReturnApply {
         this.orderSn = orderSn;
     }
 
-    public Long getMemberId() {
+    public Integer getMemberId() {
         return memberId;
     }
 
-    public void setMemberId(Long memberId) {
+    public void setMemberId(Integer memberId) {
         this.memberId = memberId;
     }
 

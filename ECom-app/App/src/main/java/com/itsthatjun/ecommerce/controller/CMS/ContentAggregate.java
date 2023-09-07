@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.controller.CMS;
 
-import com.itsthatjun.ecommerce.DTO.Articles;
+import com.itsthatjun.ecommerce.dto.Articles;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

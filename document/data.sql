@@ -1209,9 +1209,9 @@ CREATE TABLE member
      icon         TEXT
   );
 
-DROP TABLE IF EXISTS receive_address;
+DROP TABLE IF EXISTS address;
 
-CREATE TABLE receive_address
+CREATE TABLE address
   (  id SERIAL PRIMARY KEY,
      member_id    NUMERIC,
      receiver_name TEXT,
@@ -1311,10 +1311,10 @@ INSERT INTO member (username, password, phone_number, status, created_at,icon, l
 INSERT INTO member (username, password, phone_number, status, created_at,icon, last_login)
             VALUES ('user3', '$2a$10$xEbGJ1QHr/CZ.ltRIP4A9.K27Sq3HJ4Dh/sN0ssd5GwkaPbjPRW9S','112-323-1111', 'active', '2020-03-18 04:20:52','','2020-03-20 05:01:02');
 
-INSERT INTO receive_address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (1, 'Jun',  '212-212-2222', '1 1st street 2nd ave', 'Chicago','Illinois','60007','');
-INSERT INTO receive_address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (2, 'John', '111-111-1111', '2 2nd street 3rd ave Apt 4F', 'Dallas','Texas', '75001' ,'please call, door bell broken');
-INSERT INTO receive_address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (3, 'Jane', '212-212-2222', '3 4st street 5nd ave', 'San Francisco','California','94016','');
-INSERT INTO receive_address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (4, 'James', '212-212-2222', '5 6st street 7nd ave', 'Miami','Florida','33101','');
+INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (1, 'Jun',  '212-212-2222', '1 1st street 2nd ave', 'Chicago','Illinois','60007','');
+INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (2, 'John', '111-111-1111', '2 2nd street 3rd ave Apt 4F', 'Dallas','Texas', '75001' ,'please call, door bell broken');
+INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (3, 'Jane', '212-212-2222', '3 4st street 5nd ave', 'San Francisco','California','94016','');
+INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (4, 'James', '212-212-2222', '5 6st street 7nd ave', 'Miami','Florida','33101','');
 
 --- login type ,pc/andriod/IOS   = 0/1/2
 INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (1,'2020-03-18 22:18:40','127.0.0.1','0');
@@ -1531,6 +1531,8 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
    receiver_city VARCHAR(32),
    receiver_state VARCHAR(32),
    receiver_zip_code VARCHAR(32),
+   payment_id VARCHAR(32),
+   payer_id VARCHAR(32),
    payment_time TIMESTAMP,                  --
    delivery_time TIMESTAMP,                 -- TBD by UPS api/label and added in
    receive_time TIMESTAMP DEFAULT NULL,      -- update it after UPS said received, should be using redis to do this

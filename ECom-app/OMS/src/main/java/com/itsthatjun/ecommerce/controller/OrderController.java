@@ -3,9 +3,9 @@ package com.itsthatjun.ecommerce.controller;
 import com.itsthatjun.ecommerce.config.URLUtils;
 import com.itsthatjun.ecommerce.dto.ConfirmOrderResult;
 import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.mbg.model.CartItem;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
-import com.itsthatjun.ecommerce.mbg.model.ReceiveAddress;
 import com.itsthatjun.ecommerce.service.impl.OrderServiceImpl;
 import com.itsthatjun.ecommerce.service.PaypalService;
 import com.paypal.api.payments.Payment;
@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,7 +31,7 @@ public class OrderController {
     public static final String PAYPAL_SUCCESS_URL = "order/success";
     public static final String PAYPAL_CANCEL_URL = "order/cancel";
 
-    private Logger log = LoggerFactory.getLogger(getClass());
+    private final static Logger LOG = LoggerFactory.getLogger(OrderController.class);
 
     private final OrderServiceImpl orderService;
 
@@ -41,66 +43,47 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @ApiOperation("Generate confirm order, list of product with prices calculated")
-    @PostMapping("/generateConfirmOrder")
-    public ConfirmOrderResult generateConfirmOrder(@RequestBody List<CartItem> cartItems,
-                                                   @RequestParam(required = false, defaultValue = "") String coupon) {
-        return orderService.generateCartItem(cartItems, coupon);
+    @ApiOperation("Get member order based on status code and page size")
+    @ApiImplicitParam(name = "status", value = "Order status：-1->All；0->wait for payment；1-> fulfilling；2->send；3->complete；4->closed",
+            defaultValue = "-1", allowableValues = "-1,0,1,2,3,4", paramType = "query", dataType = "int")
+    @GetMapping("/list")
+    public Flux<Orders> list(@RequestParam(required = false, defaultValue = "-1")  int status,
+                             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                             @RequestParam(required = false, defaultValue = "5") Integer pageSize,
+                             @RequestParam int userId) {
+        return orderService.list(status,pageNum,pageSize, userId);
+    }
+
+    @ApiOperation("Get Order Detail by serial number")
+    @GetMapping("/detail/{orderSn}")
+    public Mono<Orders> detail(@PathVariable String orderSn) {
+        return orderService.detail(orderSn);
     }
 
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
-    public Map<String, Object> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request, HttpSession session){
+    public Mono<ConfirmOrderResult> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request, HttpSession session, @RequestParam int userId){
         session.setAttribute("shippingAddress", orderParam.getAddress());
         session.setAttribute("couponCode", orderParam.getCoupon());
 
         String cancelUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_CANCEL_URL;
         String successUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_SUCCESS_URL;
-        return orderService.generateOrder(orderParam, successUrl, cancelUrl);
+
+        return orderService.generateOrder(orderParam, successUrl, cancelUrl, userId);
     }
 
     @GetMapping("/success")
     @ApiOperation("after success paypal payment, actual processing the order , unlock stocks and update info's like coupon and stocks")
-    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, HttpSession session){
-        try {
-            Payment payment = paypalService.executePayment(paymentId, payerId);
-
-            if(payment.getState().equals("approved")){
-                System.out.println("successful payment");
-                String couponCode = session.getAttribute("couponCode").toString();
-                ReceiveAddress address = (ReceiveAddress) session.getAttribute("shippingAddress");
-                orderService.paySuccess(couponCode, address);
-                return "success";
-            }
-
-        } catch (PayPalRESTException e) {
-            log.error(e.getMessage());
-        }
-        System.out.println("error payment");
+    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam String orderSn){
+        orderService.paySuccess(orderSn, paymentId, payerId);
         return "redirect:/";
     }
 
     @ApiOperation("Payment failure feedback")
     @GetMapping("/cancel")
-    public String payFail() {
-        orderService.payFail();
+    public String payFail(@RequestParam String orderSn) {
+        orderService.payFail(orderSn);
         return null;
-    }
-
-    @ApiOperation("Get member order based on status code and page size")
-    @ApiImplicitParam(name = "status", value = "Order status：-1->All；0->wait for payment；1-> fulfilling；2->send；3->complete；4->closed",
-            defaultValue = "-1", allowableValues = "-1,0,1,2,3,4", paramType = "query", dataType = "int")
-    @GetMapping("/list")
-    public List<Orders> list(@RequestParam(required = false, defaultValue = "-1")  int status,
-                             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                             @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
-        return orderService.list(status,pageNum,pageSize);
-    }
-
-    @ApiOperation("Get Order Detail by serial number")
-    @GetMapping("/detail/{orderSn}")
-    public Orders detail(@PathVariable String orderSn) {
-        return orderService.detail(orderSn);
     }
 
     @ApiOperation("Cancel order")

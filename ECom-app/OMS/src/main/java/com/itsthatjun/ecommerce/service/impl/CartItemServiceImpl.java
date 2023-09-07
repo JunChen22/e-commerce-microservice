@@ -1,12 +1,18 @@
 package com.itsthatjun.ecommerce.service.impl;
 
+import com.itsthatjun.ecommerce.dto.ConfirmOrderResult;
 import com.itsthatjun.ecommerce.mbg.mapper.CartItemMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ShoppingCartMapper;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,7 +22,6 @@ public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemMapper cartItemMapper;
 
-
     @Autowired
     public CartItemServiceImpl(ShoppingCartMapper shoppingCartMapper, CartItemMapper cartItemMapper) {
         this.shoppingCartMapper = shoppingCartMapper;
@@ -24,78 +29,86 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public List<CartItem> addItem(CartItem item) {
-        /*
-        Member currUser = memberService.getCurrentUser();
+    public Flux<CartItem> getUserCart(int userId) {
 
         ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
-        shoppingCartExample.createCriteria().andMemberIdEqualTo(currUser.getId());
-
+        shoppingCartExample.createCriteria().andMemberIdEqualTo(userId);
 
         List<ShoppingCart> shoppingCarts = shoppingCartMapper.selectByExample(shoppingCartExample);
 
-        // doesn't have shopping cart in database yet
-        if (shoppingCarts == null) {
-            ShoppingCart newCart = new ShoppingCart();
-            newCart.setMemberId(currUser.getId());
-            shoppingCartMapper.insert(newCart);
+        if (shoppingCarts.isEmpty()) {
+            // Return an empty cart representation
+            return Flux.fromIterable(Collections.emptyList());
         }
 
-
-
-        ShoppingCart currShopingCart = shoppingCartMapper.selectByExample(shoppingCartExample).get(0);
-
-        // TODO: if exist then increase quantity but sku might be different
-
-        item.setCartId(currShopingCart.getId());
-        cartItemMapper.insert(item);
-
-        CartItemExample cartItemExample = new CartItemExample();
-        cartItemExample.createCriteria().andCartIdEqualTo(currShopingCart.getId());
-        List<CartItem> itemList = cartItemMapper.selectByExample(cartItemExample);
-         */
-        //return itemList;
-        return null;
-    }
-
-    @Override
-    public List<CartItem> addAllItem(List<CartItem> itemList) {
-        for (CartItem item : itemList) {
-            addItem(item);
-        }
-        return itemList;
-    }
-
-    @Override
-    public List<CartItem> getUserCart() {
-
-        /*
-        Member currUser = memberService.getCurrentUser();
-
-
-        ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
-        shoppingCartExample.createCriteria().andMemberIdEqualTo(currUser.getId());
-        ShoppingCart cart = shoppingCartMapper.selectByExample(shoppingCartExample).size() > 0 ?
-                shoppingCartMapper.selectByExample(shoppingCartExample).get(0) : null;
-        if (cart == null) throw new RuntimeException("error getting user shopping cart");
-
+        ShoppingCart cart = shoppingCarts.get(0);
         CartItemExample example = new CartItemExample();
         example.createCriteria().andCartIdEqualTo(cart.getId());
         List<CartItem> shoppingCartItemList = cartItemMapper.selectByExample(example);
 
-        return shoppingCartItemList;
+        return Flux.fromIterable(shoppingCartItemList);
+    }
 
-         */
-        return null;
+
+    @Override
+    public Flux<CartItem> addItem(CartItem item, int userId) {
+
+        ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
+        shoppingCartExample.createCriteria().andMemberIdEqualTo(userId);
+
+        List<ShoppingCart> shoppingCarts = shoppingCartMapper.selectByExample(shoppingCartExample);
+        ShoppingCart currentShoppingCart;
+
+        // doesn't have shopping cart in database yet
+        if (shoppingCarts.isEmpty()) {
+            ShoppingCart newCart = new ShoppingCart();
+            newCart.setMemberId(userId);
+            shoppingCartMapper.insert(newCart);
+            currentShoppingCart = newCart;
+        } else {
+            currentShoppingCart = shoppingCarts.get(0);
+        }
+
+        // TODO: if exist then increase quantity but sku might be different
+
+        item.setCartId(currentShoppingCart.getId());
+        item.setCreatedAt(new Date());
+        cartItemMapper.insert(item);
+
+        CartItemExample cartItemExample = new CartItemExample();
+        cartItemExample.createCriteria().andCartIdEqualTo(currentShoppingCart.getId());
+
+        return Mono.fromCallable(() -> cartItemMapper.selectByExample(cartItemExample))
+                .flatMapMany(Flux::fromIterable)
+                .onErrorResume(e -> Flux.empty()); // Handle errors gracefully;
     }
 
     @Override
-    public List<CartItem> updateQuantity(int cartItemId, int quantity) {
-        /*
-        Member currUser = memberService.getCurrentUser();
+    public Flux<CartItem> addAllItem(List<CartItem> itemList, int userId) {
+
+        for(CartItem item: itemList) {
+            addItem(item, userId);
+        }
 
         ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
-        shoppingCartExample.createCriteria().andMemberIdEqualTo(currUser.getId());
+        shoppingCartExample.createCriteria().andMemberIdEqualTo(userId);
+
+        ShoppingCart currentShoppingCart  = shoppingCartMapper.selectByExample(shoppingCartExample).get(0);
+
+        CartItemExample cartItemExample = new CartItemExample();
+        cartItemExample.createCriteria().andCartIdEqualTo(currentShoppingCart.getId());
+
+        return Mono.fromCallable(() -> cartItemMapper.selectByExample(cartItemExample))
+                .flatMapMany(Flux::fromIterable)
+                .onErrorResume(e -> Flux.empty());
+    }
+
+
+    @Override
+    public Flux<CartItem> updateQuantity(int cartItemId, int quantity, int userId) {
+
+        ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
+        shoppingCartExample.createCriteria().andMemberIdEqualTo(userId);
         ShoppingCart cart = shoppingCartMapper.selectByExample(shoppingCartExample).get(0);
 
         CartItemExample example = new CartItemExample();
@@ -106,41 +119,31 @@ public class CartItemServiceImpl implements CartItemService {
 
         example.clear();
         example.createCriteria().andCartIdEqualTo(cart.getId());
-        return cartItemMapper.selectByExample(example);
 
-         */
-        return null;
+        List<CartItem> updatedCart = cartItemMapper.selectByExample(example);
+
+        return Flux.fromIterable(updatedCart);
     }
 
     @Override
-    public void deleteCartItem(int cartItemId) {
-        /*
-        Member currUser = memberService.getCurrentUser();
-
+    public void deleteCartItem(int cartItemId, int userId) {
         ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
-        shoppingCartExample.createCriteria().andMemberIdEqualTo(currUser.getId());
+        shoppingCartExample.createCriteria().andMemberIdEqualTo(userId);
         ShoppingCart cart = shoppingCartMapper.selectByExample(shoppingCartExample).get(0);
 
         CartItemExample example = new CartItemExample();
         example.createCriteria().andCartIdEqualTo(cart.getId()).andIdEqualTo(cartItemId);
         cartItemMapper.deleteByExample(example);
-
-         */
     }
 
     @Override
-    public void clearCartItem() {
-        /*
-        Member currUser = memberService.getCurrentUser();
-
+    public void clearCartItem(int userId) {
         ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
-        shoppingCartExample.createCriteria().andMemberIdEqualTo(currUser.getId());
+        shoppingCartExample.createCriteria().andMemberIdEqualTo(userId);
         ShoppingCart cart = shoppingCartMapper.selectByExample(shoppingCartExample).get(0);
 
         CartItemExample example = new CartItemExample();
         example.createCriteria().andCartIdEqualTo(cart.getId());
         cartItemMapper.deleteByExample(example);
-
-         */
     }
 }

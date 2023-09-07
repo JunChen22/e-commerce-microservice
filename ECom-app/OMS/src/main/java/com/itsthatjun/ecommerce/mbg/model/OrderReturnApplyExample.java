@@ -426,52 +426,52 @@ public class OrderReturnApplyExample {
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdEqualTo(Long value) {
+        public Criteria andMemberIdEqualTo(Integer value) {
             addCriterion("member_id =", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdNotEqualTo(Long value) {
+        public Criteria andMemberIdNotEqualTo(Integer value) {
             addCriterion("member_id <>", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdGreaterThan(Long value) {
+        public Criteria andMemberIdGreaterThan(Integer value) {
             addCriterion("member_id >", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andMemberIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("member_id >=", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdLessThan(Long value) {
+        public Criteria andMemberIdLessThan(Integer value) {
             addCriterion("member_id <", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdLessThanOrEqualTo(Long value) {
+        public Criteria andMemberIdLessThanOrEqualTo(Integer value) {
             addCriterion("member_id <=", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdIn(List<Long> values) {
+        public Criteria andMemberIdIn(List<Integer> values) {
             addCriterion("member_id in", values, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdNotIn(List<Long> values) {
+        public Criteria andMemberIdNotIn(List<Integer> values) {
             addCriterion("member_id not in", values, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdBetween(Long value1, Long value2) {
+        public Criteria andMemberIdBetween(Integer value1, Integer value2) {
             addCriterion("member_id between", value1, value2, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andMemberIdNotBetween(Long value1, Long value2) {
+        public Criteria andMemberIdNotBetween(Integer value1, Integer value2) {
             addCriterion("member_id not between", value1, value2, "memberId");
             return (Criteria) this;
         }
