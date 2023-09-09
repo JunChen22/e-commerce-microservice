@@ -4,8 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.itsthatjun.ecommerce.config.PaypalPaymentIntent;
 import com.itsthatjun.ecommerce.config.PaypalPaymentMethod;
 import com.itsthatjun.ecommerce.dto.ConfirmOrderResult;
-import com.itsthatjun.ecommerce.dto.Event.PmsEvent;
-import com.itsthatjun.ecommerce.dto.Event.SmsEvent;
+import com.itsthatjun.ecommerce.dto.event.PmsProductEvent;
+import com.itsthatjun.ecommerce.dto.event.SmsCouponEvent;
+import com.itsthatjun.ecommerce.dto.event.SmsSalesStockEvent;
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.exceptions.OrderException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
@@ -31,8 +32,8 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.itsthatjun.ecommerce.dto.Event.PmsEvent.Type.*;
-import static com.itsthatjun.ecommerce.dto.Event.SmsEvent.Type.*;
+import static com.itsthatjun.ecommerce.dto.event.PmsProductEvent.Type.*;
+import static com.itsthatjun.ecommerce.dto.event.SmsCouponEvent.Type.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -40,8 +41,6 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private final double SHIPPING_COST = 15;  // default shipping cost for order less than 50
-
-    private final WebClient webClient;
 
     private final StreamBridge streamBridge;
 
@@ -63,10 +62,9 @@ public class OrderServiceImpl implements OrderService {
     int smsPort;
 
     @Autowired
-    public OrderServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge, PaypalService paypalService, OrdersMapper ordersMapper,
+    public OrderServiceImpl(StreamBridge streamBridge, PaypalService paypalService, OrdersMapper ordersMapper,
                             CartItemServiceImpl cartItemService, OrderItemMapper orderItemMapper, ProductSkuStockMapper stockMapper,
                             ProductMapper productMapper) {
-        this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.paypalService = paypalService;
         this.ordersMapper = ordersMapper;
@@ -171,13 +169,12 @@ public class OrderServiceImpl implements OrderService {
             orderItemMapper.insert(item);
         }
 
-        // update locked stock,
-        sendStockUpdateMessage("product-out-0",new PmsEvent(UPDATE_PURCHASE, orderSn, skuQuantity));
-        // update sale stock.
-        sendCouponUpdateMessage("coupon-out-0", new SmsEvent(UPDATE_SALES_LOCK_STOCK, orderSn, newOrderId, skuQuantity));
+        // Generated order, increase sku lock stock
+        sendProductStockUpdateMessage("product-out-0", new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE, orderSn, newOrderId, userId, skuQuantity));
 
-        if (!couponCode.equals("")) {
-            sendCouponUpdateMessage("coupon-out-0", new SmsEvent(UPDATE_COUPON_USAGE, orderSn, couponCode, userId, newOrderId));
+        if (!couponCode.equals("")) { // update coupon usage, won't go up even return or payment fail
+            sendCouponUpdateMessage("coupon-out-0", new SmsCouponEvent(UPDATE_COUPON_USAGE, couponCode, userId, newOrderId));
         }
 
         // clear cart
@@ -211,6 +208,9 @@ public class OrderServiceImpl implements OrderService {
                 OrdersExample ordersExample = new OrdersExample();
                 ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
                 Orders foundOrder = ordersMapper.selectByExample(ordersExample).get(0);
+
+                int orderId = foundOrder.getId();
+                int userId = foundOrder.getMemberId();
 
                 foundOrder.setStatus(1);  // waiting for payment 0 , fulfilling 1,
                 foundOrder.setPaymentId(paymentId);
@@ -252,9 +252,9 @@ public class OrderServiceImpl implements OrderService {
                     producutSku.setLockStock(producutSku.getLockStock() - quantityOrdered);
                     stockMapper.updateByPrimaryKey(producutSku);
                 }
-                // update stock and free locked stock. and update sales stock
-                sendStockUpdateMessage("product-out-0",new PmsEvent(UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
-                sendCouponUpdateMessage("coupon-out-0", new SmsEvent(UPDATE_SALES_STOCK, orderSn, foundOrder.getId(), itemOrderQuantity));
+                // Generated order and success payment, decrease product stock, decrease sku stock and sku lock stock
+                sendProductStockUpdateMessage("product-out-0",new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity)); // orderSn, newOrderId, userId, skuQuantity)
+                sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, orderId, userId, itemOrderQuantity));
 
                 return Mono.just(foundOrder);
             }
@@ -272,6 +272,7 @@ public class OrderServiceImpl implements OrderService {
         Orders newOrder = ordersMapper.selectByExample(ordersExample).get(0);
 
         int orderId = newOrder.getId();
+        int userId = newOrder.getMemberId();
 
         OrderItemExample orderItemExample = new OrderItemExample();
         orderItemExample.createCriteria().andOrderSnEqualTo(orderSn).andOrderIdEqualTo(orderId);
@@ -295,10 +296,9 @@ public class OrderServiceImpl implements OrderService {
 
             itemOrderQuantity.put(skuCode, quantityNeeded);
         }
-        // update locked stock,
-        sendStockUpdateMessage("product-out-0",new PmsEvent(UPDATE_RETURN, orderSn, itemOrderQuantity));
-        // update sale stock. coupon usage won't go down even payment fail.
-        sendCouponUpdateMessage("coupon-out-0", new SmsEvent(RETURN_SALES_STOCK, orderSn, orderId, itemOrderQuantity));
+        // Generated order and failure payment, decrease sku lock stock
+        sendProductStockUpdateMessage("product-out-0",new PmsProductEvent(PmsProductEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, orderId, userId, itemOrderQuantity));
     }
 
     @Override
@@ -378,13 +378,13 @@ public class OrderServiceImpl implements OrderService {
             ProductSkuStock itemStock = stockMapper.selectByExample(example).get(0);
 
             if (itemStock != null && itemStock.getStock() < (itemStock.getLockStock() + quantityNeeded)){
-                return false; // send alert some where here to alert admin about low stock
+                return false; // send alert somewhere here to alert admin about low stock
             }
         }
         return true;
     }
 
-    private void sendStockUpdateMessage(String bindingName, PmsEvent event) {
+    private void sendProductStockUpdateMessage(String bindingName, PmsProductEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
@@ -393,11 +393,20 @@ public class OrderServiceImpl implements OrderService {
         streamBridge.send(bindingName, message);
     }
 
-    private void sendCouponUpdateMessage(String bindingName, SmsEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType() , bindingName);
+    private void sendSalesStockUpdateMessage(String bindingName, SmsSalesStockEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
                 .setHeader("partitionKey", event.getOrderSN())
+                .build();
+        streamBridge.send(bindingName, message);
+    }
+
+    private void sendCouponUpdateMessage(String bindingName, SmsCouponEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType() , bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("partitionKey", event.getOrderId())
                 .build();
         streamBridge.send(bindingName, message);
     }

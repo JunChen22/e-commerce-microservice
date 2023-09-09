@@ -38,9 +38,4 @@ public class AppApplication {
         LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
         return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
     }
-
-    @Bean
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 }

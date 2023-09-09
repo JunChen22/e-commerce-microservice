@@ -1102,7 +1102,6 @@ VALUES
 (6, 179.99, 179.99, 179.99, 179.99, 250, 250, 'jun');
 
 
-
 DROP TABLE IF EXISTS review;
 CREATE TABLE review
   (
@@ -1116,12 +1115,13 @@ CREATE TABLE review
      updated_at TIMESTAMP DEFAULT NULL,
      tittle      TEXT,
      likes       NUMERIC DEFAULT 1,
+     verified  boolean,
      content     TEXT,
-     album    NUMERIC
+     album_id    NUMERIC
   );
 
 -- TODO: should I just store picture in one review and separation by semi-colon or continue to use album
-INSERT INTO review (product_id, member_id, member_name, member_icon, star, created_at, tittle, likes, content, album)
+INSERT INTO review (product_id, member_id, member_name, member_icon, star, created_at, tittle, likes, content, album_id)
 VALUES
 (1, 1, 'user1', 'icon.jpg', 3.5, '2020-03-18 22:18:40', 'size smaller than expected', 1,'size was smaller than expected', 1),
 (1, 2, 'user1', 'icon.jpg', 1, '2020-03-18 16:18:25','item arrive late', 1,'late', 2),
@@ -1644,7 +1644,7 @@ VALUES
 (2, 'malfunction', 'Item was dead on arrival', 1),
 (3, 'other', 'Received wrong item', 1),
 (4, 'new return', 'Size didn''t fit', 1),
-(5, 'malfunction', 'Item stopped working after 3 days', 0);
+(5, 'malfunction', 'Item stopped working after', 1);
 
 
 DROP TABLE IF EXISTS order_return_reason_pictures;
@@ -1685,7 +1685,6 @@ CREATE TABLE order_return_apply  (
   product_price decimal(10, 2) ,
   reason varchar(200) ,
   description varchar(500) ,
-  proof_pics varchar(1000) ,
   handle_note varchar(500) ,
   handle_operator varchar(100) ,                -- who processed this return
   receive_operator varchar(100) ,               -- who received the return item
@@ -1696,23 +1695,23 @@ CREATE TABLE order_return_apply  (
 
 INSERT INTO order_return_apply (order_id, company_address_id, product_id, order_sn, member_id, return_amount, return_name,
                                 return_phone, status, handle_time, product_name, product_brand, product_sku_code, product_count, product_price,
-                                reason, description, proof_pics, handle_note, handle_operator, receive_operator, receive_time, receive_note)
+                                reason, description, handle_note, handle_operator, receive_operator, receive_time, receive_note)
 VALUES
 
 (1, 1, 1, '1001', 1, 450, 'John Doe', '555-123-4567', 0, '2023-04-03 10:00:00', 'iPhone SE', 'Apple', 'IPSE-RED', 1, 450,
- 'Wrong size', 'Received size L, ordered size M', 1, 'Handled successfully', 'JaneSmith', 'JohnDoe', '2023-04-04 10:00:00', 'Received item in good condition'),
+ 'Wrong size', 'Received size L, ordered size M', 'Handled successfully', 'JaneSmith', 'JohnDoe', '2023-04-04 10:00:00', 'Received item in good condition'),
 
 (2, 1, 2, '1002', 2, 2179.98, 'Jane Smith', '555-987-6543', 0, NULL, 'OnePlus 9 Pro', 'OnePlus', 'OP9P', 2, 2179.98,
-'Defective product', 'Product arrived damaged', 'https://example.com/proof3.jpg', 'Awaiting handling', NULL, NULL, NULL, NULL),
+'Defective product', 'Product arrived damaged', 'Awaiting handling', NULL, NULL, NULL, NULL),
 
 (3, 2, 3, '1003', 1, 1299.99, 'Bob Johnson', '555-555-1212', 1, '2023-04-05 09:30:00', 'XPS 13', 'Dell', 'XPS13', 1,  1299.99,
-'Wrong item', 'Received wrong product', 'https://example.com/proof4.jpg', 'Item rejected', 'MikeBrown', NULL, NULL, NULL),
+'Wrong item', 'Received wrong product', 'Item rejected', 'MikeBrown', NULL, NULL, NULL),
 
 (4, 2, 4, '1004', 2, 129.99, 'Sarah Lee', '555-555-5555', 2, NULL, 'Nike Air Max 270', 'Nike', 'NAM270', 1, 129.99,
-'Changed mind', 'No longer want the product', NULL, 'Awaiting handling', NULL, NULL, NULL, NULL),
+'Changed mind', 'No longer want the product', 'Awaiting handling', NULL, NULL, NULL, NULL),
 
 (5, 3, 5, '1005', 3, 0, 'Mike Brown', '555-123-7890', 3, '2023-04-08 10:00:00',  'MacBook Pro', 'Apple', 'MBP', 10, 80.00,
-'Not as described', 'Product did not match description', 'did not meet our return policy, item opened', 'Admin order', 'JaneSmith', NULL, NULL, NULL);
+'Not as described', 'Product did not match description', 'Admin order', 'JaneSmith', NULL, NULL, NULL);
 
 -- update order status history/logs
 DROP TABLE IF EXISTS order_change_history;

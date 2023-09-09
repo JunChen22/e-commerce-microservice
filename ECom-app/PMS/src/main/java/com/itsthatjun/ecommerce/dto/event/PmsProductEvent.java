@@ -1,19 +1,19 @@
-package com.itsthatjun.ecommerce.dto.Event;
+package com.itsthatjun.ecommerce.dto.event;
 
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.Map;
 
 import static java.time.ZonedDateTime.now;
 
 @Getter
-public class PmsEvent {
+public class PmsProductEvent {
     public enum Type {
-        UPDATE_PURCHASE,  // update stock after order generated, locked stock increase
-        UPDATE_PURCHASE_PAYMENT,  // update after payment,  unlock locked stock and update stock.
-        UPDATE_RETURN    // unlock returned or unpaid orders stock
+        UPDATE_PURCHASE,   // Generated order, increase sku lock stock
+        UPDATE_PURCHASE_PAYMENT, // Generated order and success payment, decrease product stock, decrease sku stock and sku lock stock
+        UPDATE_RETURN,  // Generated order and success payment and return, increase product stock and sku stock
+        UPDATE_FAIL_PAYMENT  // Generated order and failure payment, decrease sku lock stock
     }
 
     private final Type eventType;
@@ -21,14 +21,14 @@ public class PmsEvent {
     private final Map<String, Integer> productMap;   // sku and quantity
     private final ZonedDateTime eventCreatedAt;
 
-    public PmsEvent() {
+    public PmsProductEvent() {
         this.eventType = null;
         this.orderSN = null;
         this.productMap = null;
         this.eventCreatedAt = null;
     }
 
-    public PmsEvent(Type eventType, String orderSN, Map<String, Integer> productMap) {
+    public PmsProductEvent(Type eventType, String orderSN, Map<String, Integer> productMap) {
         this.eventType = eventType;
         this.orderSN = orderSN;
         this.productMap = productMap;

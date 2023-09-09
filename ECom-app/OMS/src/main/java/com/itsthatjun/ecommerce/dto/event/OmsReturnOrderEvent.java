@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.Event;
+package com.itsthatjun.ecommerce.dto.event;
 
 import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
 import com.itsthatjun.ecommerce.mbg.model.OrderReturnReason;

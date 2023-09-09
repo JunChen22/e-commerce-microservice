@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
+import com.itsthatjun.ecommerce.dto.OMS.OrderReturnStatus;
 import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.OMS.implementation.ReturnOrderServiceImpl;
@@ -54,19 +55,13 @@ public class OrderReturnController {
         return returnOrderService.getOrderReturnDetail(serialNumber);
     }
 
-    /* TODO: combine these two update/approve/rejected
-    @PostMapping("/")
-    @ApiOperation(value = "")
-    public OrderReturnApply approvereturn(){
-        // returnOrderService.approveReturnRequest()
-        // returnOrderService.rejectReturnRequest()
-    }
-
     @PostMapping("/update")
-    @ApiOperation(value = "")
+    @ApiOperation(value = "update the status of the return apply")
     public OrderReturnApply updateReturnOrderStatus(@RequestBody OrderReturnApply returnRequest){
+
+        // returnOrderService.approveReturnRequest();
+        // returnOrderService.rejectReturnRequest();
+
         return returnOrderService.updateReturnOrderStatus(returnRequest);
     }
-    */
-
 }

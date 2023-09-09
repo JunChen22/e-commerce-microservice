@@ -76,6 +76,10 @@ spring.cloud:
         destination: coupon
         producer:
           required-groups: couponGroup
+      salesStock-out-0:
+        destination: salesStock
+        producer:
+          required-groups: salesGroup
       product-out-0:
         destination: product
         producer:

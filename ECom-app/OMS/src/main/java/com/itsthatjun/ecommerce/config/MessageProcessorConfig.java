@@ -1,9 +1,9 @@
 package com.itsthatjun.ecommerce.config;
 
-import com.itsthatjun.ecommerce.dto.Event.OmsCartEvent;
-import com.itsthatjun.ecommerce.dto.Event.OmsCompletionEvent;
-import com.itsthatjun.ecommerce.dto.Event.OmsReturnOrderEvent;
-import com.itsthatjun.ecommerce.dto.Event.OmsOrderEvent;
+import com.itsthatjun.ecommerce.dto.event.OmsCartEvent;
+import com.itsthatjun.ecommerce.dto.event.OmsCompletionEvent;
+import com.itsthatjun.ecommerce.dto.event.OmsReturnOrderEvent;
+import com.itsthatjun.ecommerce.dto.event.OmsOrderEvent;
 import com.itsthatjun.ecommerce.mbg.model.CartItem;
 import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
 import com.itsthatjun.ecommerce.mbg.model.OrderReturnReason;
@@ -145,11 +145,11 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case APPLY:
-                    returnOrderService.applyForReturn(returnApply, returnReason, pictures, orderSn, userId);
+                    returnOrderService.applyForReturn(returnApply, pictures, orderSn, userId);
                     break;
 
                 case UPDATE:
-                    returnOrderService.updateReturn(returnApply, returnReason, pictures, orderSn, userId);
+                    returnOrderService.updateReturn(returnApply, pictures, orderSn, userId);
                     break;
 
                 case CANCEL:

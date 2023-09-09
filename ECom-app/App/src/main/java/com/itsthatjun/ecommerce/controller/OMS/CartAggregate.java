@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.Event.OmsCartEvent;
+import com.itsthatjun.ecommerce.dto.event.OmsCartEvent;
 import com.itsthatjun.ecommerce.mbg.model.CartItem;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +21,7 @@ import reactor.core.scheduler.Scheduler;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.itsthatjun.ecommerce.dto.Event.OmsCartEvent.Type.ADD_ONE;
+import static com.itsthatjun.ecommerce.dto.event.OmsCartEvent.Type.ADD_ONE;
 import static java.util.logging.Level.FINE;
 import static reactor.core.publisher.Flux.empty;
 
@@ -83,7 +83,6 @@ public class CartAggregate {
     @ApiOperation("update shopping cart item quantity")
     @PostMapping(value = "/update/quantity")
     public Flux<CartItem> updateQuantity(@RequestParam int cartItemId, @RequestParam int quantity, @RequestParam int userId) {
-        // TODO: need return
         sendMessage("cart-out-0", new OmsCartEvent<>(OmsCartEvent.Type.UPDATE, userId, null, quantity, cartItemId));
         return Flux.empty();
     }
@@ -110,5 +109,4 @@ public class CartAggregate {
                 .build();
         streamBridge.send(bindingName, message);
     }
-
 }

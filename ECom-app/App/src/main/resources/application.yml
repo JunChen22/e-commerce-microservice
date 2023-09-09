@@ -39,8 +39,6 @@ spring.rabbitmq:
 # outputs
 # CMS and SMS does not need message queue, they only have read operations.
 spring.cloud.stream:
-  function:
-    definition: orderCompletion
   bindings:             # only OMS,PMS,UMS have write operations. Read operations don't need to message queue, non-blocking synchronous.
     order-out-0:  # OMS
       destination: order

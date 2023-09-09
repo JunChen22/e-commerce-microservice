@@ -14,10 +14,10 @@ import reactor.core.scheduler.Scheduler;
 
 @RestController
 @Api(tags = "", description = "")
-@RequestMapping("/sale")
-public class SaleAggregate {
+@RequestMapping("/coupon")
+public class CouponAggregate {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SaleAggregate.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CouponAggregate.class);
 
     private final WebClient webClient;
     private final Scheduler publishEventScheduler;
@@ -28,9 +28,8 @@ public class SaleAggregate {
     int port;
 
     @Autowired
-    public SaleAggregate(WebClient.Builder  webClient, @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+    public CouponAggregate(WebClient.Builder  webClient, @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
         this.webClient = webClient.build();
         this.publishEventScheduler = publishEventScheduler;
     }
-
 }

@@ -1,9 +1,10 @@
-package com.itsthatjun.ecommerce.controller.OMS;
+package com.itsthatjun.ecommerce.controller.PMS;
 
-import com.itsthatjun.ecommerce.dto.event.OmsCartEvent;
+import com.itsthatjun.ecommerce.dto.event.PmsReviewEvent;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -16,41 +17,36 @@ import reactor.core.scheduler.Scheduler;
 
 @RestController
 @Api(tags = "", description = "")
-@RequestMapping("/return")
-public class ReturnAggregate {
+@RequestMapping("/review")
+public class ReviewAggregate {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReturnAggregate.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReviewAggregate.class);
 
+    private final String bindingName = "review-out-0";
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.OMS-service.host}")
-    String orderServiceURL;
-    @Value("${app.OMS-service.port}")
+    @Value("${app.PMS-service.host}")
+    String reviewServiceURL;
+    @Value("${app.PMS-service.port}")
     int port;
 
-    public ReturnAggregate(WebClient.Builder  webClient, StreamBridge streamBridge,
-                           @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
+    @Autowired
+    public ReviewAggregate(WebClient.Builder  webClient, StreamBridge streamBridge,
+                          @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }
 
-
-
-
-
-
-
-
-    private void sendMessage(String bindingName, OmsCartEvent event) {
+    private void sendMessage(String bindingName, PmsReviewEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getKey())
+                .setHeader("partitionKey", event.getUserId())
                 .build();
         streamBridge.send(bindingName, message);
     }

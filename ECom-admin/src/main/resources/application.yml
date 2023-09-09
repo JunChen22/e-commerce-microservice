@@ -41,6 +41,46 @@ spring:
         min-idle: 0
     timeout: 3000ms
 
+# outputs
+# CMS does not need message queue, they only have read operations.
+spring.cloud.stream:
+  bindings:             # only OMS,PMS,UMS have write operations. Read operations don't need to message queue, non-blocking synchronous.
+    order-out-0:  # OMS
+      destination: order
+      producer:
+        required-groups: auditGroup
+    cart-out-0:
+      destination: cart
+      producer:
+        required-groups: auditGroup
+    return-out-0:
+      destination: return
+      producer:
+        required-groups: auditGroup
+    review-out-0: # PMS
+      destination: review
+      producer:
+        required-groups: auditGroup
+    product-out-0:
+      destination: product
+      producer:
+        required-groups: productGroup
+    user-out-0:    # UMS
+      destination: user
+      producer:
+        required-groups: auditGroup
+    coupon-out-0:   # SMS
+      destination: coupon
+      producer:
+        required-groups: couponGroup
+    salesStock-out-0:
+      destination: salesStock
+      producer:
+        required-groups: salesGroup
+
+
+
+
 # tells spring mybatis mapper's xml(sql) located
 mybatis:
   mapper-locations:

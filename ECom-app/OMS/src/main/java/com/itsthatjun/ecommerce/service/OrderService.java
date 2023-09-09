@@ -31,7 +31,7 @@ public interface OrderService {
     void payFail(String orderSN);
 
     // TODO: create update method
-    @ApiModelProperty("update on status, or other infomation")
+    @ApiModelProperty("update on status, or other information")
     Mono<Orders> update();
 
     @Transactional

@@ -30,7 +30,7 @@ spring:
 
 spring.cloud:
   function:
-    definition: couponMessageProcessor   # can't have space between, tells spring which to use
+    definition: couponMessageProcessor;salesStockMessageProcessor   # can't have space between, tells spring which to use
   stream:
     default:
       contentType: application/json
@@ -38,6 +38,10 @@ spring.cloud:
       couponMessageProcessor-in-0:
         destination: coupon
         group: couponGroup
+      salesStockMessageProcessor-in-0:
+        destination: salesStock
+        group: salesStockGroup
+
 
 # tells spring mybatis mapper's xml(sql) located
 mybatis:

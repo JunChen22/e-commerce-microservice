@@ -12,8 +12,9 @@
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="tittle" jdbcType="VARCHAR" property="tittle" />
     <result column="likes" jdbcType="NUMERIC" property="likes" />
+    <result column="verified" jdbcType="BIT" property="verified" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="album" jdbcType="NUMERIC" property="album" />
+    <result column="album_id" jdbcType="NUMERIC" property="albumId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, product_id, member_id, member_name, member_icon, star, created_at, updated_at, 
-    tittle, likes, content, album
+    tittle, likes, verified, content, album_id
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewExample" resultMap="BaseResultMap">
     select
@@ -111,11 +112,13 @@
     insert into review (product_id, member_id, member_name, 
       member_icon, star, created_at, 
       updated_at, tittle, likes, 
-      content, album)
+      verified, content, album_id
+      )
     values (#{productId,jdbcType=NUMERIC}, #{memberId,jdbcType=NUMERIC}, #{memberName,jdbcType=VARCHAR}, 
       #{memberIcon,jdbcType=VARCHAR}, #{star,jdbcType=NUMERIC}, #{createdAt,jdbcType=TIMESTAMP}, 
       #{updatedAt,jdbcType=TIMESTAMP}, #{tittle,jdbcType=VARCHAR}, #{likes,jdbcType=NUMERIC}, 
-      #{content,jdbcType=VARCHAR}, #{album,jdbcType=NUMERIC})
+      #{verified,jdbcType=BIT}, #{content,jdbcType=VARCHAR}, #{albumId,jdbcType=NUMERIC}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Review" useGeneratedKeys="true">
     insert into review
@@ -147,11 +150,14 @@
       <if test="likes != null">
         likes,
       </if>
+      <if test="verified != null">
+        verified,
+      </if>
       <if test="content != null">
         content,
       </if>
-      <if test="album != null">
-        album,
+      <if test="albumId != null">
+        album_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -182,11 +188,14 @@
       <if test="likes != null">
         #{likes,jdbcType=NUMERIC},
       </if>
+      <if test="verified != null">
+        #{verified,jdbcType=BIT},
+      </if>
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
       </if>
-      <if test="album != null">
-        #{album,jdbcType=NUMERIC},
+      <if test="albumId != null">
+        #{albumId,jdbcType=NUMERIC},
       </if>
     </trim>
   </insert>
@@ -229,11 +238,14 @@
       <if test="record.likes != null">
         likes = #{record.likes,jdbcType=NUMERIC},
       </if>
+      <if test="record.verified != null">
+        verified = #{record.verified,jdbcType=BIT},
+      </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=VARCHAR},
       </if>
-      <if test="record.album != null">
-        album = #{record.album,jdbcType=NUMERIC},
+      <if test="record.albumId != null">
+        album_id = #{record.albumId,jdbcType=NUMERIC},
       </if>
     </set>
     <if test="_parameter != null">
@@ -252,8 +264,9 @@
       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       tittle = #{record.tittle,jdbcType=VARCHAR},
       likes = #{record.likes,jdbcType=NUMERIC},
+      verified = #{record.verified,jdbcType=BIT},
       content = #{record.content,jdbcType=VARCHAR},
-      album = #{record.album,jdbcType=NUMERIC}
+      album_id = #{record.albumId,jdbcType=NUMERIC}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -288,11 +301,14 @@
       <if test="likes != null">
         likes = #{likes,jdbcType=NUMERIC},
       </if>
+      <if test="verified != null">
+        verified = #{verified,jdbcType=BIT},
+      </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
       </if>
-      <if test="album != null">
-        album = #{album,jdbcType=NUMERIC},
+      <if test="albumId != null">
+        album_id = #{albumId,jdbcType=NUMERIC},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -308,8 +324,9 @@
       updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       tittle = #{tittle,jdbcType=VARCHAR},
       likes = #{likes,jdbcType=NUMERIC},
+      verified = #{verified,jdbcType=BIT},
       content = #{content,jdbcType=VARCHAR},
-      album = #{album,jdbcType=NUMERIC}
+      album_id = #{albumId,jdbcType=NUMERIC}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

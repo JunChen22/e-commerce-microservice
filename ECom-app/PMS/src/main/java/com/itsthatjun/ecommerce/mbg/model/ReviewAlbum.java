@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ReviewAlbum {
@@ -8,7 +7,7 @@ public class ReviewAlbum {
 
     private Integer reviewId;
 
-    private BigDecimal picCount;
+    private Integer picCount;
 
     private Date createdAt;
 
@@ -28,11 +27,11 @@ public class ReviewAlbum {
         this.reviewId = reviewId;
     }
 
-    public BigDecimal getPicCount() {
+    public Integer getPicCount() {
         return picCount;
     }
 
-    public void setPicCount(BigDecimal picCount) {
+    public void setPicCount(Integer picCount) {
         this.picCount = picCount;
     }
 

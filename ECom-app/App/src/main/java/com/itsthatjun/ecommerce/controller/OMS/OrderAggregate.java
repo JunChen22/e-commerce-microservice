@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.Event.OmsCompletionEvent;
-import com.itsthatjun.ecommerce.dto.Event.OmsOrderEvent;
+import com.itsthatjun.ecommerce.dto.event.OmsCompletionEvent;
+import com.itsthatjun.ecommerce.dto.event.OmsOrderEvent;
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.config.URLUtils;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
@@ -25,9 +25,9 @@ import reactor.core.scheduler.Scheduler;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-import static com.itsthatjun.ecommerce.dto.Event.OmsCompletionEvent.Type.PAYMENT_FAILURE;
-import static com.itsthatjun.ecommerce.dto.Event.OmsCompletionEvent.Type.PAYMENT_SUCCESS;
-import static com.itsthatjun.ecommerce.dto.Event.OmsOrderEvent.Type.GENERATE_ORDER;
+import static com.itsthatjun.ecommerce.dto.event.OmsCompletionEvent.Type.PAYMENT_FAILURE;
+import static com.itsthatjun.ecommerce.dto.event.OmsCompletionEvent.Type.PAYMENT_SUCCESS;
+import static com.itsthatjun.ecommerce.dto.event.OmsOrderEvent.Type.GENERATE_ORDER;
 import static java.util.logging.Level.FINE;
 import static reactor.core.publisher.Flux.empty;
 
@@ -36,11 +36,10 @@ import static reactor.core.publisher.Flux.empty;
 @RequestMapping("/order")
 public class OrderAggregate {
 
+    private static final Logger LOG = LoggerFactory.getLogger(OrderAggregate.class);
     public static final String PAYPAL_SUCCESS_URL = "order/success";
 
     public static final String PAYPAL_CANCEL_URL = "order/cancel";
-
-    private static final Logger LOG = LoggerFactory.getLogger(OrderAggregate.class);
 
     private final WebClient webClient;
 

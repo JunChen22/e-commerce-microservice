@@ -7,7 +7,10 @@ import com.itsthatjun.ecommerce.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -36,7 +39,6 @@ public class CouponServiceImpl implements CouponService {
         List<Coupon> result = couponMapper.selectByExample(couponExample);
         if (result.isEmpty())
             return null;
-        System.out.println(result.get(0).getName());
         return result.get(0);
     }
 
@@ -71,7 +73,7 @@ public class CouponServiceImpl implements CouponService {
         CouponExample couponExample = new CouponExample();
         couponExample.createCriteria().andCodeEqualTo(code);
         Coupon usedCoupon = couponMapper.selectByExample(couponExample).get(0);
-        int usedCount = usedCoupon.getUsedCount() - 1;
+        int usedCount = usedCoupon.getUsedCount() + 1;
         usedCoupon.setUsedCount(usedCount);
 
         couponMapper.updateByPrimaryKey(usedCoupon);
@@ -87,41 +89,55 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public double getDiscountAmount(List<OrderItem> items, String couponCode) {
+    public double getDiscountAmount(Map<String, Integer> skuQuantity, String couponCode) {
+
+        if (couponCode == null) return 0;
 
         CouponExample couponExample = new CouponExample();
         couponExample.createCriteria().andCodeEqualTo(couponCode);
         Coupon coupon = couponMapper.selectByExample(couponExample).get(0);
+        if (coupon == null) return 0;
 
         double totalDiscount = 0;
 
-        if (coupon == null) return 0;
+        // check expiration
+        Date startDate = coupon.getStartTime();
+        Date endDate = coupon.getEndTime();
+        Date currentDate = new Date();
+
+        if (!(currentDate.after(startDate) && currentDate.before(endDate))) {
+            return 0;
+        }
+
+        // check usage limit
+        if (coupon.getCount() <= coupon.getUsedCount() && coupon.getUsedCount() >= coupon.getPublishCount()) return 0;
 
         // TODO:  create dao and use SQL for simpler method
+        // Find products affected by this coupon
         CouponProductRelationExample productRelationExample = new CouponProductRelationExample();
         productRelationExample.createCriteria().andCouponIdEqualTo(coupon.getId());
         List<CouponProductRelation> itemAffectedByCouponList = productRelationMapper.selectByExample(productRelationExample);
 
-        for (OrderItem item : items) {
-            String itemSKuCode = item.getProductSkuCode();
-            int itemId = item.getProductId();
+        for (String skuCode : skuQuantity.keySet()) {
+            String itemSKuCode = skuCode;
+            int quantityNeeded = skuQuantity.get(skuCode);
+
+            ProductSkuStockExample productSkuStockExample = new ProductSkuStockExample();
+            productSkuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
+            ProductSkuStock productSkuStock = skuStockMapper.selectByExample(productSkuStockExample).get(0);
+
+            int itemId = productSkuStock.getProductId();
+
             for (CouponProductRelation discountItem: itemAffectedByCouponList) {
                 if (discountItem.getProductSkuCode().equals(itemSKuCode)  && discountItem.getProductId() == itemId) {
-                    ProductSkuStockExample skuStockExample = new ProductSkuStockExample();
-                    skuStockExample.createCriteria().andSkuCodeEqualTo(itemSKuCode).andProductIdEqualTo(itemId);
-                    ProductSkuStock productSku = skuStockMapper.selectByExample(skuStockExample).get(0);
-
                     if (coupon.getDiscountType() == 0) {// discount by amount
-                        totalDiscount = totalDiscount + (coupon.getAmount().doubleValue() * item.getProductQuantity());
+                        totalDiscount = totalDiscount + (coupon.getAmount().doubleValue() * quantityNeeded);
                     } else {   // discount  by percent
-                        totalDiscount = totalDiscount + ((coupon.getAmount().doubleValue() * productSku.getPromotionPrice().doubleValue()) / 100) * item.getProductQuantity();
+                        totalDiscount = totalDiscount + ((coupon.getAmount().doubleValue() * productSkuStock.getPromotionPrice().doubleValue()) / 100) * quantityNeeded;
                     }
                 }
             }
         }
-
-        // TODO: ensure coupon within expiration date and start date
-
         return totalDiscount;
     }
 }

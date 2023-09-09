@@ -13,13 +13,17 @@ public interface ReturnOrderService {
     OrderReturnApply getStatus(String orderSn, int userId);
 
     @ApiModelProperty(value = "apply for return, waiting for admin approve/reject")
-    OrderReturnApply applyForReturn(OrderReturnApply apply, OrderReturnReason returnReason,
-                                    List<OrderReturnReasonPictures> pictures, String orderSn, int userId);
+    OrderReturnApply applyForReturn(OrderReturnApply apply, List<OrderReturnReasonPictures> pictures, String orderSn, int userId);
 
     @ApiModelProperty(value = "update or add in more info for return")
-    OrderReturnApply updateReturn(OrderReturnApply apply, OrderReturnReason returnReason, List<OrderReturnReasonPictures> pictures
-                                    , String orderSn, int userId);
+    OrderReturnApply updateReturn(OrderReturnApply apply, List<OrderReturnReasonPictures> pictures, String orderSn, int userId);
 
     @ApiModelProperty(value = "cancel the return request")
     OrderReturnApply cancelReturn(String orderSn, int userId);
+
+
+    // update service not for user to access, unless set to automatically approve return. this could be in admin instead of app
+    // update the status of the order
+
+    // return item received , update stocks
 }
