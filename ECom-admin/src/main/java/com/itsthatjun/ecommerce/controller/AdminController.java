@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dao.AdminDao;
 import com.itsthatjun.ecommerce.mbg.model.AdminLoginLog;
 import com.itsthatjun.ecommerce.mbg.model.Permission;
 import com.itsthatjun.ecommerce.mbg.model.Roles;
+import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
 import com.itsthatjun.ecommerce.service.UMS.implementation.AdminServiceImpl;
 import com.itsthatjun.ecommerce.mbg.model.Admin;
 import com.itsthatjun.ecommerce.security.LoginRequest;
@@ -16,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -27,18 +30,28 @@ public class AdminController {
 
     private final AdminDao adminDao;
 
+    private final JwtTokenUtil tokenUtil;
+
     @Autowired
-    public AdminController(AdminServiceImpl adminService, AdminDao adminDao) {
+    public AdminController(AdminServiceImpl adminService, AdminDao adminDao, JwtTokenUtil tokenUtil) {
         this.adminService = adminService;
         this.adminDao = adminDao;
+        this.tokenUtil = tokenUtil;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request){
-        String token = adminService.login(request.getUsername(), request.getPassword());
+    @ApiOperation("")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest, HttpServletRequest request){
+        String token = adminService.login(loginrequest.getUsername(), loginrequest.getPassword());
         if(token.isEmpty()){
-            return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED);
         }
+
+        String adminName = tokenUtil.getAdminNameFromToken(token);          // two approach, token = stateless for microservices,
+                                                                            // stateful approach is with session for monolith application.
+        HttpSession session = request.getSession();
+        session.setAttribute("adminName", adminName);
+
         return ResponseEntity.ok(new LoginResponse(true, token));
     }
 

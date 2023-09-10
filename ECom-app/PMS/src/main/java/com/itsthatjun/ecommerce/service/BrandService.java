@@ -2,21 +2,21 @@ package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 
 public interface BrandService {
 
-    @ApiModelProperty(value = "")
+    @ApiOperation(value = "")
     List<Brand> listAllBrand();
 
-    @ApiModelProperty(value = "")
+    @ApiOperation(value = "")
     List<Brand> listBrand(int pageNum, int pageSize);
 
-    @ApiModelProperty(value = "")
+    @ApiOperation(value = "")
     List<Product> listAllBrandProduct(int brandId);
 
-    @ApiModelProperty(value = "")
+    @ApiOperation(value = "")
     Brand getBrand(int id);
 }

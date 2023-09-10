@@ -1,24 +1,22 @@
 package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
-import com.itsthatjun.ecommerce.mbg.model.OrderItem;
-import com.itsthatjun.ecommerce.mbg.model.Product;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 import java.util.Map;
 
 public interface  CouponService {
 
-    @ApiModelProperty("check coupon exist by coupon code")
+    @ApiOperation("check coupon exist by coupon code")
     Coupon checkCoupon(String couponCode);
 
-    @ApiModelProperty("Get All coupons that can apply to a product")
+    @ApiOperation("Get All coupons that can apply to a product")
     List<Coupon> getCouponForProduct(int productId);
 
-    @ApiModelProperty("update used coupon count and history")
+    @ApiOperation("update used coupon count and history")
     void updateUsedCoupon(String code, int orderId, int memberId);
 
-    @ApiModelProperty("Get discounted amount for all the product affected by the coupon")
+    @ApiOperation("Get discounted amount for all the product affected by the coupon")
     double getDiscountAmount(Map<String, Integer> skuQuantity, String couponCode);
 }

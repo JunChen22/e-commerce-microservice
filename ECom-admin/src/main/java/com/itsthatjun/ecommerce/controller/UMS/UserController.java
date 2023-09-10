@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "User related", description = "retrieve user information")
 public class UserController {
 
-    // retrieve user Order
-
     // retrieve user data
 
     // update user account
+
+    // deactivate account
 
     // delete user
 

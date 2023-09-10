@@ -64,7 +64,7 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
     public String login(String username, String password) {
         String token = "";
         try{
-            UserDetails userDetails = loadUserByUsername(username);
+            CustomUserDetail userDetails = loadUserByUsername(username);
             // decode password to compare
             if(!passwordEncoder().matches(password, userDetails.getPassword())){
                 throw new BadCredentialsException("incorrect password");
@@ -72,7 +72,7 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
 
             // Authorities shouldn't be giving during validation
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, Collections.emptyList());
+                    userDetails, null, Collections.emptyList());   // provide empty list and will user userDetail's getAuthorities
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             token = jwtTokenUtil.generateToken(userDetails);
@@ -96,7 +96,7 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
         Admin admin = getAdminByUsername(username);
         if(admin != null){
 

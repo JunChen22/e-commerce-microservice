@@ -1,15 +1,17 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.OMS.OrderReturnStatus;
+import com.itsthatjun.ecommerce.dto.OMS.OrderReturnApplyDecision;
 import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
-import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.OMS.implementation.ReturnOrderServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+
+import static com.itsthatjun.ecommerce.dto.OMS.OrderReturnApplyDecision.Status.*;
 
 @RestController
 @RequestMapping("/order/return")
@@ -57,11 +59,27 @@ public class OrderReturnController {
 
     @PostMapping("/update")
     @ApiOperation(value = "update the status of the return apply")
-    public OrderReturnApply updateReturnOrderStatus(@RequestBody OrderReturnApply returnRequest){
+    public OrderReturnApplyDecision updateReturnOrderStatus(@RequestBody OrderReturnApplyDecision orderReturnApplyDecision, HttpSession session){
+        OrderReturnApply returnApply = orderReturnApplyDecision.getReturnApply();
 
-        // returnOrderService.approveReturnRequest();
-        // returnOrderService.rejectReturnRequest();
+        String adminName = (String) session.getAttribute("adminName");
 
-        return returnOrderService.updateReturnOrderStatus(returnRequest);
+        orderReturnApplyDecision.getReturnApply().setHandleOperator(adminName);
+
+        switch (orderReturnApplyDecision.getStatus()) {
+            case APPROVED:
+                returnOrderService.approveReturnRequest(returnApply);
+                break;
+            case REJECTED:
+                String rejectionReason = orderReturnApplyDecision.getReason();
+                returnOrderService.rejectReturnRequest(returnApply, rejectionReason);
+                break;
+            case COMPLETED_RETURN:
+                returnOrderService.completeReturnRequest(returnApply);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid status");
+        }
+        return orderReturnApplyDecision;
     }
 }

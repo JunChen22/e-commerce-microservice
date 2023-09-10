@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.security;
 import com.itsthatjun.ecommerce.mbg.model.Admin;
 import com.itsthatjun.ecommerce.mbg.model.Permission;
 import com.itsthatjun.ecommerce.mbg.model.Roles;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class CustomUserDetail implements UserDetails {
 
+    @Getter
     private Admin admin;
     private List<Roles> rolesList;
     private List<Permission> permissionList;

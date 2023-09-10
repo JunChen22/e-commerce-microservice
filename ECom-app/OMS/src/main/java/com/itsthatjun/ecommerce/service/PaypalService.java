@@ -5,6 +5,7 @@ import com.itsthatjun.ecommerce.config.PaypalPaymentMethod;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class PaypalService {
     @Autowired
     private APIContext apiContext;
 
+    @ApiOperation(value = "")
     public Payment createPayment(
             Double total,
             String currency,
@@ -59,9 +61,9 @@ public class PaypalService {
         return payment.create(apiContext);
     }
 
-    // The actual transaction part, even though the GUI payment is complete, but they
-    // just return PAYID , PayerID and token. These are saying the buyer and paypal are
-    // agreed to pay the set amount. You take these "receipt" to PayPal and cash out.
+    @ApiOperation(value = "The actual transaction part, even though the GUI payment is complete, but they"
+                        + "just return PaymentId , PayerID and token. These are saying the buyer and PayPal are"
+                        + "agreed to pay the set amount. You take these \"receipt\" to PayPal and cash out.")
     public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException{
         Payment payment = new Payment();
         payment.setId(paymentId);

@@ -63,6 +63,12 @@
             <columnOverride column="product_id" javaType="java.lang.Integer" />
         </table>
 
+        <table tableName="order_change_history">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="order_id" javaType="java.lang.Integer" />
+        </table>
+
         <table tableName="company_address">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
@@ -84,16 +90,21 @@
         <table tableName="order_return_apply">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="companyAddressId" javaType="java.lang.Integer" />
-            <columnOverride column="member_id" javaType="java.lang.Integer" />
             <columnOverride column="order_id" javaType="java.lang.Integer" />
-            <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="company_address_id" javaType="java.lang.Integer" />
+            <columnOverride column="member_id" javaType="java.lang.Integer" />
+            <columnOverride column="return_quantity" javaType="java.lang.Integer" />
+            <columnOverride column="status" javaType="java.lang.Integer" />
         </table>
 
-        <table tableName="order_change_history">
+        <table tableName="order_return_item">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="return_apply_id" javaType="java.lang.Integer" />
+            <columnOverride column="brand_id" javaType="java.lang.Integer" />
             <columnOverride column="order_id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="quantity" javaType="java.lang.Integer" />
         </table>
 
         <table tableName= "product">

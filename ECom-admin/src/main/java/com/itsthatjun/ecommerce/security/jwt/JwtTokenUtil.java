@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.security.jwt;
 
+import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -18,10 +19,12 @@ public class JwtTokenUtil {
     @Value("${jwt.expirationTimeMinute}")
     private int expiration;
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(CustomUserDetail userDetails){
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", userDetails.getUsername());
         claims.put("created", new Date());
+        claims.put("adminId", userDetails.getAdmin().getId());           // used in stateless to get information, using session in monolith.
+        claims.put("adminName", userDetails.getAdmin().getName());
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
@@ -67,6 +70,28 @@ public class JwtTokenUtil {
             username = null;
         }
         return username;
+    }
+
+    public String getAdminNameFromToken(String token){
+        String adminName;
+        try {
+            Claims claims = getClaimsFromToken(token);
+            adminName =  (String) claims.get("adminName");
+        } catch (Exception e) {
+            adminName = null;
+        }
+        return adminName;
+    }
+
+    public int getAdminIdFromToken(String token){
+        Integer adminId;
+        try {
+            Claims claims = getClaimsFromToken(token);
+            adminId = (Integer) claims.get("adminId");
+        } catch (Exception e) {
+            adminId = null;
+        }
+        return (adminId != null) ? adminId.intValue() : 0;
     }
 
     private Claims getClaimsFromToken(String token){

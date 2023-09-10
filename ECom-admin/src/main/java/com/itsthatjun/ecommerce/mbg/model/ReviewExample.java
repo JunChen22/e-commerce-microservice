@@ -736,6 +736,66 @@ public class ReviewExample {
             return (Criteria) this;
         }
 
+        public Criteria andVerifiedIsNull() {
+            addCriterion("verified is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedIsNotNull() {
+            addCriterion("verified is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedEqualTo(Boolean value) {
+            addCriterion("verified =", value, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedNotEqualTo(Boolean value) {
+            addCriterion("verified <>", value, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedGreaterThan(Boolean value) {
+            addCriterion("verified >", value, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("verified >=", value, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedLessThan(Boolean value) {
+            addCriterion("verified <", value, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedLessThanOrEqualTo(Boolean value) {
+            addCriterion("verified <=", value, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedIn(List<Boolean> values) {
+            addCriterion("verified in", values, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedNotIn(List<Boolean> values) {
+            addCriterion("verified not in", values, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedBetween(Boolean value1, Boolean value2) {
+            addCriterion("verified between", value1, value2, "verified");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("verified not between", value1, value2, "verified");
+            return (Criteria) this;
+        }
+
         public Criteria andContentIsNull() {
             addCriterion("content is null");
             return (Criteria) this;
@@ -806,63 +866,63 @@ public class ReviewExample {
             return (Criteria) this;
         }
 
-        public Criteria andAlbumIsNull() {
-            addCriterion("album is null");
+        public Criteria andAlbumIdIsNull() {
+            addCriterion("album_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumIsNotNull() {
-            addCriterion("album is not null");
+        public Criteria andAlbumIdIsNotNull() {
+            addCriterion("album_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumEqualTo(BigDecimal value) {
-            addCriterion("album =", value, "album");
+        public Criteria andAlbumIdEqualTo(BigDecimal value) {
+            addCriterion("album_id =", value, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumNotEqualTo(BigDecimal value) {
-            addCriterion("album <>", value, "album");
+        public Criteria andAlbumIdNotEqualTo(BigDecimal value) {
+            addCriterion("album_id <>", value, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumGreaterThan(BigDecimal value) {
-            addCriterion("album >", value, "album");
+        public Criteria andAlbumIdGreaterThan(BigDecimal value) {
+            addCriterion("album_id >", value, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("album >=", value, "album");
+        public Criteria andAlbumIdGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("album_id >=", value, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumLessThan(BigDecimal value) {
-            addCriterion("album <", value, "album");
+        public Criteria andAlbumIdLessThan(BigDecimal value) {
+            addCriterion("album_id <", value, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("album <=", value, "album");
+        public Criteria andAlbumIdLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("album_id <=", value, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumIn(List<BigDecimal> values) {
-            addCriterion("album in", values, "album");
+        public Criteria andAlbumIdIn(List<BigDecimal> values) {
+            addCriterion("album_id in", values, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumNotIn(List<BigDecimal> values) {
-            addCriterion("album not in", values, "album");
+        public Criteria andAlbumIdNotIn(List<BigDecimal> values) {
+            addCriterion("album_id not in", values, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("album between", value1, value2, "album");
+        public Criteria andAlbumIdBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("album_id between", value1, value2, "albumId");
             return (Criteria) this;
         }
 
-        public Criteria andAlbumNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("album not between", value1, value2, "album");
+        public Criteria andAlbumIdNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("album_id not between", value1, value2, "albumId");
             return (Criteria) this;
         }
     }

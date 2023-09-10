@@ -1607,6 +1607,33 @@ VALUES
   (5, '1005', 13, 'macBookPro.jpg', 'MacBook Pro', 'Apple', 'SN-678', 1999.99, 10, 16, 'MBP', 17, 'All laptop 100 off', 1000, 0, 18999.90);
 
 
+-- update order status history/logs
+DROP TABLE IF EXISTS order_change_history;
+CREATE TABLE order_change_history (
+  id SERIAL PRIMARY KEY,
+  order_id bigint NULL DEFAULT NULL ,
+  change_operator varchar(100) ,                    -- who changed the order,  0-> user   1-> admin/dev  2-> system,automatically
+  created_at timestamp NULL DEFAULT NULL ,
+  order_status int NULL DEFAULT NULL ,              -- waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
+  note varchar(500) NULL DEFAULT NULL
+);
+
+INSERT INTO order_change_history (order_id, change_operator, created_at, order_status, note) VALUES
+(1, '0', '2022-01-01 10:00:00', 0, 'Order created'),
+(1, '2', '2022-01-01 10:02:00', 0, 'Order auto-cancelled due to payment timeout'),
+(2, '0', '2022-01-02 12:00:00', 0, 'Order created'),
+(2, '1', '2022-01-03 09:30:00', 1, 'Order started fulfillment'),
+(3, '0', '2022-01-05 15:00:00', 0, 'Order re-created'),
+(3, '0', '2022-01-05 15:01:00', 1, 'Order started fulfillment'),
+(4, '1', '2022-01-05 16:00:00', 2, 'Order sent for delivery'),
+(4, '0', '2022-01-08 09:00:00', 3, 'Order received'),
+(5, '0', '2022-01-10 10:00:00', 3, 'Order received'),
+(5, '1', '2022-01-12 14:00:00', 4, 'Order closed due to return period expiry'),
+(1, '2', '2022-01-13 11:00:00', 5, 'Order marked as invalid due to product recall');
+
+
+
+
 DROP TABLE IF EXISTS company_address;               -- your(owner) company/warehouses, where product shipping from.
 CREATE TABLE company_address (
   id SERIAL PRIMARY KEY,
@@ -1664,78 +1691,93 @@ VALUES
 (4, 'https://i.imgur.com/UHgW2D8.jpeg'),
 (5, 'https://i.imgur.com/UHgW2D8.jpeg');
 
---- when admin/operator determined if the product can be return
+--- when admin/operator determined if the product can be return, one item(s) return at a time
 DROP TABLE IF EXISTS order_return_apply;
 CREATE TABLE order_return_apply  (
   id SERIAL PRIMARY KEY,
   order_id bigint ,
   company_address_id bigint ,                   -- return to you(owner), return center or warehouse
-  product_id bigint  ,
   order_sn varchar(64) ,
   member_id bigint ,
-  return_amount decimal(10, 2)  ,
+  return_quantity bigint,                       -- number of items to be returned
   return_name varchar(100) ,
   return_phone varchar(100) ,
   status int,                -- return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3
-  handle_time timestamp,                        -- how long did this return took
-  product_name varchar(200) ,
-  product_brand varchar(200) ,
-  product_sku_code varchar(500) ,
-  product_count int,
-  product_price decimal(10, 2) ,
-  reason varchar(200) ,
+  handle_time timestamp,                        -- how long to return this item, e.g 2 weeks to return this or return is voided.
+  refund_amount decimal(10, 2),
+  reason varchar(200) ,                         -- pre-set reasons
   description varchar(500) ,
-  handle_note varchar(500) ,
+  handle_note varchar(500) ,                    -- notes from admin to customer or rejection reason
   handle_operator varchar(100) ,                -- who processed this return
   receive_operator varchar(100) ,               -- who received the return item
   receive_time timestamp,
   receive_note varchar(500),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO order_return_apply (order_id, company_address_id, product_id, order_sn, member_id, return_amount, return_name,
-                                return_phone, status, handle_time, product_name, product_brand, product_sku_code, product_count, product_price,
-                                reason, description, handle_note, handle_operator, receive_operator, receive_time, receive_note)
-VALUES
+INSERT INTO order_return_apply ( order_id, company_address_id, order_sn, member_id, return_quantity, return_name, return_phone, status,
+                                 handle_time, refund_amount, reason, description, handle_note, handle_operator, receive_operator,
+                                 receive_time, receive_note
+) VALUES
+(1001, 1, 'OR123456', 2001, 3, 'John Doe', '555-123-4567', 0,
+ NULL, NULL, 'Item damaged upon arrival', 'Received two damaged items in the package.',
+ NULL, NULL, NULL, NULL, NULL),
+(1002, 2, 'OR789012', 2002, 1, 'Alice Smith', '555-987-6543', 1,
+ NULL, NULL, 'Wrong item received', 'Received a different product than what was ordered.',
+ NULL, NULL, NULL, NULL, NULL),
+(1003, 3, 'OR456789', 2003, 6, 'Mary Johnson', '555-789-1234', 2,
+ '2023-09-09 14:30:00', 75.99, 'Changed my mind', 'Decided not to keep these items.',
+ 'Refund processed successfully.', 'AdminUser123', 'WarehouseStaff456',
+ '2023-09-10 09:15:00', 'Items received in good condition.'),
+(1004, 1, 'OR987654', 2004, 1, 'David Wilson', '555-555-5555', 3,
+ NULL, NULL, 'Item does not match the description', 'The product received is not as described on the website.',
+ 'Rejected due to mismatch.', 'AdminUser789', NULL, NULL, NULL),
+(1005, 2, 'OR555555', 2005, 2, 'Linda Davis', '555-123-7890', 0,
+ NULL, NULL, 'Item arrived late', 'Items arrived after the expected delivery date.',
+ NULL, NULL, NULL, NULL, NULL);
 
-(1, 1, 1, '1001', 1, 450, 'John Doe', '555-123-4567', 0, '2023-04-03 10:00:00', 'iPhone SE', 'Apple', 'IPSE-RED', 1, 450,
- 'Wrong size', 'Received size L, ordered size M', 'Handled successfully', 'JaneSmith', 'JohnDoe', '2023-04-04 10:00:00', 'Received item in good condition'),
 
-(2, 1, 2, '1002', 2, 2179.98, 'Jane Smith', '555-987-6543', 0, NULL, 'OnePlus 9 Pro', 'OnePlus', 'OP9P', 2, 2179.98,
-'Defective product', 'Product arrived damaged', 'Awaiting handling', NULL, NULL, NULL, NULL),
 
-(3, 2, 3, '1003', 1, 1299.99, 'Bob Johnson', '555-555-1212', 1, '2023-04-05 09:30:00', 'XPS 13', 'Dell', 'XPS13', 1,  1299.99,
-'Wrong item', 'Received wrong product', 'Item rejected', 'MikeBrown', NULL, NULL, NULL),
-
-(4, 2, 4, '1004', 2, 129.99, 'Sarah Lee', '555-555-5555', 2, NULL, 'Nike Air Max 270', 'Nike', 'NAM270', 1, 129.99,
-'Changed mind', 'No longer want the product', 'Awaiting handling', NULL, NULL, NULL, NULL),
-
-(5, 3, 5, '1005', 3, 0, 'Mike Brown', '555-123-7890', 3, '2023-04-08 10:00:00',  'MacBook Pro', 'Apple', 'MBP', 10, 80.00,
-'Not as described', 'Product did not match description', 'Admin order', 'JaneSmith', NULL, NULL, NULL);
-
--- update order status history/logs
-DROP TABLE IF EXISTS order_change_history;
-CREATE TABLE order_change_history (
-  id SERIAL PRIMARY KEY,
-  order_id bigint NULL DEFAULT NULL ,
-  change_operator varchar(100) ,                    -- who changed the order,  0-> user   1-> admin/dev  2-> system,automatically
-  created_at timestamp NULL DEFAULT NULL ,
-  order_status int NULL DEFAULT NULL ,              -- waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
-  note varchar(500) NULL DEFAULT NULL
+DROP TABLE IF EXISTS order_return_item;
+CREATE TABLE order_return_item (
+    id SERIAL PRIMARY KEY,
+    return_apply_id bigint,
+    brand_id bigint,
+    order_id bigint,
+    order_sn varchar(64),
+    product_id bigint,
+    product_sku varchar(100),
+    quantity bigint
 );
 
-INSERT INTO order_change_history (order_id, change_operator, created_at, order_status, note) VALUES
-(1, '0', '2022-01-01 10:00:00', 0, 'Order created'),
-(1, '2', '2022-01-01 10:02:00', 0, 'Order auto-cancelled due to payment timeout'),
-(2, '0', '2022-01-02 12:00:00', 0, 'Order created'),
-(2, '1', '2022-01-03 09:30:00', 1, 'Order started fulfillment'),
-(3, '0', '2022-01-05 15:00:00', 0, 'Order re-created'),
-(3, '0', '2022-01-05 15:01:00', 1, 'Order started fulfillment'),
-(4, '1', '2022-01-05 16:00:00', 2, 'Order sent for delivery'),
-(4, '0', '2022-01-08 09:00:00', 3, 'Order received'),
-(5, '0', '2022-01-10 10:00:00', 3, 'Order received'),
-(5, '1', '2022-01-12 14:00:00', 4, 'Order closed due to return period expiry'),
-(1, '2', '2022-01-13 11:00:00', 5, 'Order marked as invalid due to product recall');
+INSERT INTO order_return_item (
+    return_apply_id, brand_id, order_id, order_sn,
+    product_id, product_sku, quantity
+) VALUES
+(1, 100, 1001, 'OR123456', 101, 'SKU001', 1),
+(1, 100, 1001, 'OR123456', 102, 'SKU002', 2),
+(2, 200, 1002, 'OR789012', 201, 'SKU003', 1),
+(3, 100, 1003, 'OR456789', 301, 'SKU004', 3),
+(3, 100, 1003, 'OR456789', 302, 'SKU005', 2),
+(3, 200, 1003, 'OR456789', 303, 'SKU006', 1),
+(4, 200, 1004, 'OR987654', 401, 'SKU007', 1),
+(5, 300, 1005, 'OR555555', 501, 'SKU008', 2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

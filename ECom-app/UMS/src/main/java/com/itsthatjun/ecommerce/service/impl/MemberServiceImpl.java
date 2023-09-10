@@ -26,6 +26,7 @@ import java.util.List;
 @Service
 public class MemberServiceImpl implements MemberService , UserDetailsService {
 
+
     private final MemberMapper memberMapper;
 
     private final JwtTokenUtil jwtTokenUtil;
@@ -58,7 +59,6 @@ public class MemberServiceImpl implements MemberService , UserDetailsService {
                 throw new BadCredentialsException("incorrect password");
             }
 
-            // Authorities shouldn't be giving during validation
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, Collections.emptyList());
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -112,11 +112,8 @@ public class MemberServiceImpl implements MemberService , UserDetailsService {
     }
 
     @Override
-    public Member getCurrentUser() {
-        SecurityContext ctx = SecurityContextHolder.getContext();
-        Authentication auth = ctx.getAuthentication();
-        CustomUserDetail memberDetail = (CustomUserDetail) auth.getPrincipal();
-        return memberDetail.getMember();
+    public void updatePassword() {
+
     }
 
     public PasswordEncoder passwordEncoder() {

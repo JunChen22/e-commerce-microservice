@@ -24,9 +24,11 @@ public class Review {
 
     private BigDecimal likes;
 
+    private Boolean verified;
+
     private String content;
 
-    private BigDecimal album;
+    private BigDecimal albumId;
 
     public Integer getId() {
         return id;
@@ -108,6 +110,14 @@ public class Review {
         this.likes = likes;
     }
 
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
     public String getContent() {
         return content;
     }
@@ -116,11 +126,11 @@ public class Review {
         this.content = content;
     }
 
-    public BigDecimal getAlbum() {
-        return album;
+    public BigDecimal getAlbumId() {
+        return albumId;
     }
 
-    public void setAlbum(BigDecimal album) {
-        this.album = album;
+    public void setAlbumId(BigDecimal albumId) {
+        this.albumId = albumId;
     }
 }

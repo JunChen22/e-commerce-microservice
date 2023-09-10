@@ -8,15 +8,13 @@ public class OrderReturnApply {
 
     private Integer orderId;
 
-    private Long companyAddressId;
-
-    private Integer productId;
+    private Integer companyAddressId;
 
     private String orderSn;
 
-    private Long memberId;
+    private Integer memberId;
 
-    private BigDecimal returnAmount;
+    private Integer returnQuantity;
 
     private String returnName;
 
@@ -26,21 +24,11 @@ public class OrderReturnApply {
 
     private Date handleTime;
 
-    private String productName;
-
-    private String productBrand;
-
-    private String productSkuCode;
-
-    private Integer productCount;
-
-    private BigDecimal productPrice;
+    private BigDecimal refundAmount;
 
     private String reason;
 
     private String description;
-
-    private String proofPics;
 
     private String handleNote;
 
@@ -53,6 +41,8 @@ public class OrderReturnApply {
     private String receiveNote;
 
     private Date createdAt;
+
+    private Date updatedAt;
 
     public Integer getId() {
         return id;
@@ -70,20 +60,12 @@ public class OrderReturnApply {
         this.orderId = orderId;
     }
 
-    public Long getCompanyAddressId() {
+    public Integer getCompanyAddressId() {
         return companyAddressId;
     }
 
-    public void setCompanyAddressId(Long companyAddressId) {
+    public void setCompanyAddressId(Integer companyAddressId) {
         this.companyAddressId = companyAddressId;
-    }
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
     }
 
     public String getOrderSn() {
@@ -94,20 +76,20 @@ public class OrderReturnApply {
         this.orderSn = orderSn;
     }
 
-    public Long getMemberId() {
+    public Integer getMemberId() {
         return memberId;
     }
 
-    public void setMemberId(Long memberId) {
+    public void setMemberId(Integer memberId) {
         this.memberId = memberId;
     }
 
-    public BigDecimal getReturnAmount() {
-        return returnAmount;
+    public Integer getReturnQuantity() {
+        return returnQuantity;
     }
 
-    public void setReturnAmount(BigDecimal returnAmount) {
-        this.returnAmount = returnAmount;
+    public void setReturnQuantity(Integer returnQuantity) {
+        this.returnQuantity = returnQuantity;
     }
 
     public String getReturnName() {
@@ -142,44 +124,12 @@ public class OrderReturnApply {
         this.handleTime = handleTime;
     }
 
-    public String getProductName() {
-        return productName;
+    public BigDecimal getRefundAmount() {
+        return refundAmount;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getProductBrand() {
-        return productBrand;
-    }
-
-    public void setProductBrand(String productBrand) {
-        this.productBrand = productBrand;
-    }
-
-    public String getProductSkuCode() {
-        return productSkuCode;
-    }
-
-    public void setProductSkuCode(String productSkuCode) {
-        this.productSkuCode = productSkuCode;
-    }
-
-    public Integer getProductCount() {
-        return productCount;
-    }
-
-    public void setProductCount(Integer productCount) {
-        this.productCount = productCount;
-    }
-
-    public BigDecimal getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(BigDecimal productPrice) {
-        this.productPrice = productPrice;
+    public void setRefundAmount(BigDecimal refundAmount) {
+        this.refundAmount = refundAmount;
     }
 
     public String getReason() {
@@ -196,14 +146,6 @@ public class OrderReturnApply {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getProofPics() {
-        return proofPics;
-    }
-
-    public void setProofPics(String proofPics) {
-        this.proofPics = proofPics;
     }
 
     public String getHandleNote() {
@@ -252,5 +194,13 @@ public class OrderReturnApply {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
