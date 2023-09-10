@@ -11,7 +11,6 @@ public class SmsCouponEvent {
 
     public enum Type {
         UPDATE_COUPON_USAGE,
-
     }
 
     private final Type eventType;

@@ -171,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
 
         // Generated order, increase sku lock stock
         sendProductStockUpdateMessage("product-out-0", new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
-        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE, orderSn, newOrderId, userId, skuQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
 
         if (!couponCode.equals("")) { // update coupon usage, won't go up even return or payment fail
             sendCouponUpdateMessage("coupon-out-0", new SmsCouponEvent(UPDATE_COUPON_USAGE, couponCode, userId, newOrderId));
@@ -208,9 +208,6 @@ public class OrderServiceImpl implements OrderService {
                 OrdersExample ordersExample = new OrdersExample();
                 ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
                 Orders foundOrder = ordersMapper.selectByExample(ordersExample).get(0);
-
-                int orderId = foundOrder.getId();
-                int userId = foundOrder.getMemberId();
 
                 foundOrder.setStatus(1);  // waiting for payment 0 , fulfilling 1,
                 foundOrder.setPaymentId(paymentId);
@@ -253,8 +250,8 @@ public class OrderServiceImpl implements OrderService {
                     stockMapper.updateByPrimaryKey(producutSku);
                 }
                 // Generated order and success payment, decrease product stock, decrease sku stock and sku lock stock
-                sendProductStockUpdateMessage("product-out-0",new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity)); // orderSn, newOrderId, userId, skuQuantity)
-                sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, orderId, userId, itemOrderQuantity));
+                sendProductStockUpdateMessage("product-out-0",new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
+                sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
 
                 return Mono.just(foundOrder);
             }
@@ -272,7 +269,6 @@ public class OrderServiceImpl implements OrderService {
         Orders newOrder = ordersMapper.selectByExample(ordersExample).get(0);
 
         int orderId = newOrder.getId();
-        int userId = newOrder.getMemberId();
 
         OrderItemExample orderItemExample = new OrderItemExample();
         orderItemExample.createCriteria().andOrderSnEqualTo(orderSn).andOrderIdEqualTo(orderId);
@@ -298,7 +294,7 @@ public class OrderServiceImpl implements OrderService {
         }
         // Generated order and failure payment, decrease sku lock stock
         sendProductStockUpdateMessage("product-out-0",new PmsProductEvent(PmsProductEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
-        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, orderId, userId, itemOrderQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
     }
 
     @Override
@@ -307,27 +303,56 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String cancelOrder(String orderSN) {
-        /*
-        //todo: cancel order
-        Orders foundOrder = detail(orderSN);
+    public String cancelOrder(String orderSn) {
 
-        //  waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
+        OrdersExample ordersExample = new OrdersExample();
+        ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
+        Orders foundOrder = ordersMapper.selectByExample(ordersExample).get(0);
 
-        if (foundOrder == null)
-            return "can't cancel, order serial number don't exist";
-        if (foundOrder.getStatus() >= 2) {
+        if (foundOrder.getOrderSn() == null) {
+            throw new RuntimeException("order not found with order serial number: " + orderSn); // TODO: create OrderNotFoundException
+        }
+
+        //  waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 , invalid 5
+        int currentStatus = foundOrder.getStatus();
+
+        if (currentStatus >= 2) {
             return "Order already send out, can not cancel";
         }
 
         // TODO :might add something like need admin approval after certain hours to cancel order
+        OrderItemExample orderItemExample = new OrderItemExample();
+        orderItemExample.createCriteria().andOrderSnEqualTo(orderSn);
+        List<OrderItem> orderItemList = orderItemMapper.selectByExample(orderItemExample);
+
+        Map<String, Integer> skuQuantity = new HashMap<>();
+
+        // record order sku and quantity, and update OMS stock.
+        for (OrderItem orderItem : orderItemList) {
+            String skuCode = orderItem.getProductSkuCode();
+            int quantity = orderItem.getProductQuantity();
+            skuQuantity.put(skuCode, quantity);
+
+            // update OMS stock, increase product and sku stock. same as return.
+            ProductSkuStockExample skuStockExample = new ProductSkuStockExample();
+            skuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
+            ProductSkuStock skuStock = stockMapper.selectByExample(skuStockExample).get(0);
+
+            int currentStock = skuStock.getStock();
+
+            skuStock.setStock(currentStock + quantity);
+            stockMapper.updateByPrimaryKey(skuStock);
+
+        }
+
+        sendProductStockUpdateMessage("product-out-0", new PmsProductEvent(PmsProductEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
+
         foundOrder.setStatus(5);
 
         ordersMapper.updateByPrimaryKeySelective(foundOrder);
 
-
-         */
-        return "order cancelled: " + orderSN;
+        return "order cancelled: " + orderSn;
     }
 
     // TODO: use a better way to generate order serial number

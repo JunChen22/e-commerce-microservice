@@ -110,8 +110,6 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         returnRequest.setStatus(2);
         returnApplyMapper.updateByPrimaryKey(returnRequest);
 
-        int userId = returnRequest.getMemberId();
-        int orderId = returnRequest.getOrderId();
         String orderSn = returnRequest.getOrderSn();
 
         int returnApplyId = returnRequest.getId();
@@ -129,7 +127,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         }
 
         sendProductStockUpdateMessage("product-out-0", new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
-        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE, orderSn, orderId, userId, skuQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
         return returnRequest;
     }
 

@@ -19,9 +19,7 @@ public class SmsSalesStockEvent {
     }
 
     private final Type eventType;
-    private final String orderSN;             // order serial number associated with this used coupon
-    private final int userId;
-    private final int orderId;
+    private final String orderSN;             // order serial number associated with this sales stock update
     private final Map<String, Integer> productMap;
     private final ZonedDateTime eventCreatedAt;
 
@@ -29,18 +27,14 @@ public class SmsSalesStockEvent {
     public SmsSalesStockEvent() {
         this.eventType = null;
         this.orderSN = null;
-        this.userId = 0;
-        this.orderId = 0;
         this.productMap = null;
         this.eventCreatedAt = null;
     }
 
     // update sales stock
-    public SmsSalesStockEvent(Type eventType, String orderSN, int orderId, int userId, Map<String, Integer> productMap) {
+    public SmsSalesStockEvent(Type eventType, String orderSN, Map<String, Integer> productMap) {
         this.eventType = eventType;
         this.orderSN = orderSN;
-        this.userId = userId ;
-        this.orderId = orderId;
         this.productMap = productMap;
         this.eventCreatedAt = now();
     }
