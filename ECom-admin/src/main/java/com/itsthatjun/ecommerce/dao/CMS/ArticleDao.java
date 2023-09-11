@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.dao.CMS;
 
-import com.itsthatjun.ecommerce.dto.CMS.Articles;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,9 +9,9 @@ import java.util.List;
 public interface ArticleDao {
 
     @ApiModelProperty(value = "get all articles and its media content")
-    List<Articles> getAllArticles();
+    List<ArticleInfo> getAllArticles();
 
     @ApiModelProperty(value = "get one article and its media content")
-    Articles getArticle(@Param("id") int id);
+    ArticleInfo getArticle(@Param("id") int id);
 
 }

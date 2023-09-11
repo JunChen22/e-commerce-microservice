@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dao.PMS;
 
-import com.itsthatjun.ecommerce.dto.PMS.ProductDetail;
+import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.ibatis.annotations.Param;

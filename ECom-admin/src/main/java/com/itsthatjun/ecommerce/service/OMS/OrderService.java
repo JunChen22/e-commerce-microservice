@@ -29,8 +29,9 @@ public interface OrderService {
     List<Orders> getUserOrders(int memberId);
 
     // create order
-    @ApiOperation(value = "")
-    Orders createOrder(Orders newOrder);
+    @ApiOperation(value = "Admin created order for user, to fix mistake on order"
+                        +  " or order a replacement.")
+    Orders createOrder(Orders newOrder, String adminName);
 
     // update an order
     @ApiOperation(value = "")

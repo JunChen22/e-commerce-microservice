@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dao;
 
-import com.itsthatjun.ecommerce.dto.UMS.AdminDetail;
+import com.itsthatjun.ecommerce.dto.ums.AdminDetail;
 import com.itsthatjun.ecommerce.mbg.model.AdminLoginLog;
 import com.itsthatjun.ecommerce.mbg.model.Permission;
 import com.itsthatjun.ecommerce.mbg.model.Roles;

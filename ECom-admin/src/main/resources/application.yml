@@ -40,6 +40,13 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 3000ms
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
 
 # outputs
 # CMS does not need message queue, they only have read operations.
@@ -77,8 +84,10 @@ spring.cloud.stream:
       destination: salesStock
       producer:
         required-groups: salesGroup
-
-
+    article-out-0:
+      destination: article
+      producer:
+        required-groups: articleGroup
 
 
 # tells spring mybatis mapper's xml(sql) located
@@ -131,3 +140,8 @@ spring:
   redis:
     host: redis
     port: 6379
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    virtual-host: /
+    addresses: rabbitmq:5672

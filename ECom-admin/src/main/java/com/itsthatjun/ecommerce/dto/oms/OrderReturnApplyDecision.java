@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.OMS;
+package com.itsthatjun.ecommerce.dto.oms;
 
 import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
 import lombok.Data;

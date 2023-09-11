@@ -2,16 +2,21 @@ package com.itsthatjun.ecommerce.service.OMS.implementation;
 
 import com.itsthatjun.ecommerce.exceptions.OMS.OrderException;
 import com.itsthatjun.ecommerce.mbg.mapper.OrdersMapper;
-import com.itsthatjun.ecommerce.mbg.model.Orders;
-import com.itsthatjun.ecommerce.mbg.model.OrdersExample;
+import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.OMS.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private final OrdersMapper ordersMapper;
 
@@ -73,9 +78,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Orders createOrder(Orders newOrder) {
-        // TODO: replace this simple one to more accurate one
-        //  need to generate order serial number
+    public Orders createOrder(Orders newOrder, String adminName) {
+
+        //  TODO: need to generate order serial number
+        String orderSn = generateOrderSn();
+        newOrder.setOrderSn(orderSn);
+        newOrder.setCreatedAt(new Date());
+
+        OrderChangeHistory changeHistory = new OrderChangeHistory();
+        changeHistory.setChangeOperator(adminName);
+        changeHistory.setCreatedAt(new Date());
+        changeHistory.setOrderStatus(1);
+
         int status = ordersMapper.insert(newOrder);
         return newOrder;
     }
@@ -95,5 +109,24 @@ public class OrderServiceImpl implements OrderService {
         OrdersExample example = new OrdersExample();
         example.createCriteria().andOrderSnEqualTo(orderSerialNumber);
         ordersMapper.deleteByExample(example);
+    }
+
+    // TODO: use a better way to generate order serial number
+    private String generateOrderSn() {
+        StringBuilder sb = new StringBuilder();
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        //String key = REDIS_DATABASE+":"+ REDIS_KEY_ORDER_ID + date;
+        //Long increment = redisService.incr(key, 1);
+        sb.append(date);
+        sb.append("A BETTER WAY TO GENERATE SN");
+        //sb.append(String.format("%02d", order.getSourceType()));
+        //sb.append(String.format("%02d", order.getPayType()));
+        //String incrementStr = increment.toString();
+        //if (incrementStr.length() <= 6) {
+        //    sb.append(String.format("%06d", increment));
+        //} else {
+        //    sb.append(incrementStr);
+        //}
+        return sb.toString();
     }
 }

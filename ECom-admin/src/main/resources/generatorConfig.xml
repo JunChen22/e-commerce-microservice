@@ -123,7 +123,7 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
         </table>
-        <table tableName= "receive_address">
+        <table tableName= "address">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />

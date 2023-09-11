@@ -33,6 +33,19 @@ spring:
     password: guest
     publisher-confirms: true
 
+spring.cloud:
+  function:
+    # can't have space between, tells spring which to use
+    definition: articleMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      articleMessageProcessor-in-0:
+        destination: article
+        group: articleGroup
+
+
 # tells spring mybatis mapper's xml(sql) located
 mybatis:
   mapper-locations:

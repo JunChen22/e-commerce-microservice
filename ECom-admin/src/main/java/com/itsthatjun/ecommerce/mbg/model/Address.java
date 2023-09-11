@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-public class ReceiveAddress {
+public class Address {
     private Integer id;
 
     private Integer memberId;

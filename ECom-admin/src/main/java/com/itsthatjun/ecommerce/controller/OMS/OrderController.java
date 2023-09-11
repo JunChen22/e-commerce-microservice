@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -61,8 +62,9 @@ public class OrderController {
 
     @PostMapping("/create")
     @ApiOperation(value = "create order")
-    public Orders createOrder(@RequestBody Orders newOrder){
-        orderService.createOrder(newOrder);
+    public Orders createOrder(@RequestBody Orders newOrder, HttpSession session){
+        String adminName = (String) session.getAttribute("adminName");
+        orderService.createOrder(newOrder, adminName);
         return newOrder;
     }
 

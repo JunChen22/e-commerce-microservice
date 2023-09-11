@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service;
 
-import com.itsthatjun.ecommerce.dto.Articles;
+import com.itsthatjun.ecommerce.dto.ArticleInfo;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
@@ -8,8 +8,17 @@ import java.util.List;
 public interface ArticleService {
 
     @ApiOperation(value = "get all articles")
-    List<Articles> getAllArticles();
+    List<ArticleInfo> getAllArticles();
 
     @ApiOperation(value = "get article based on id")
-    Articles getArticle(int articleId);
+    ArticleInfo getArticle(int articleId);
+
+    @ApiOperation(value = "create article")
+    ArticleInfo createArticle(ArticleInfo article);
+
+    @ApiOperation(value = "update/add article and its media content")
+    ArticleInfo updateArticle(ArticleInfo article);
+
+    @ApiOperation(value = "delete article and all of its media content")
+    void deleteArticle(int articleId);
 }

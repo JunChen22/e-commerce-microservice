@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.CMS;
+package com.itsthatjun.ecommerce.dto;
 
 
 import com.itsthatjun.ecommerce.mbg.model.Article;
@@ -10,7 +10,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Articles {
+public class ArticleInfo {
     private Article article;
     private List<ArticleQa> QA;
     private List<ArticleImage> images;

@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service.SMS.implementation;
 
-import com.itsthatjun.ecommerce.dto.SMS.OnSaleRequest;
+import com.itsthatjun.ecommerce.dto.sms.OnSaleRequest;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.SMS.SalesService;

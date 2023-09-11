@@ -1,9 +1,8 @@
 package com.itsthatjun.ecommerce.service.SMS;
 
-import com.itsthatjun.ecommerce.dto.SMS.OnSaleRequest;
+import com.itsthatjun.ecommerce.dto.sms.OnSaleRequest;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.PromotionSale;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;

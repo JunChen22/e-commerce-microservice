@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dao.PMS.ProductDao;
-import com.itsthatjun.ecommerce.dto.PMS.ProductDetail;
+import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

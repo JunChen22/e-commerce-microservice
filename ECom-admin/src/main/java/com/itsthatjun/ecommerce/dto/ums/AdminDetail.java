@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.UMS;
+package com.itsthatjun.ecommerce.dto.ums;
 
 import com.itsthatjun.ecommerce.mbg.model.Admin;
 import com.itsthatjun.ecommerce.mbg.model.AdminLoginLog;

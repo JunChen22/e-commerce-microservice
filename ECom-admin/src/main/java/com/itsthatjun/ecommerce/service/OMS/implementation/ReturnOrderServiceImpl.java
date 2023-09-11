@@ -1,7 +1,5 @@
 package com.itsthatjun.ecommerce.service.OMS.implementation;
 
-import com.itsthatjun.ecommerce.dto.OMS.event.PmsProductEvent;
-import com.itsthatjun.ecommerce.dto.OMS.event.SmsSalesStockEvent;
 import com.itsthatjun.ecommerce.exceptions.OMS.OrderReturnApplyException;
 import com.itsthatjun.ecommerce.mbg.mapper.OrderReturnApplyMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.OrderReturnItemMapper;
@@ -13,9 +11,6 @@ import com.itsthatjun.ecommerce.service.OMS.ReturnOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -27,15 +22,12 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReturnOrderServiceImpl.class);
 
-    private final StreamBridge streamBridge;
-
     private final OrderReturnApplyMapper returnApplyMapper;
 
     private final OrderReturnItemMapper returnItemMapper;
 
     @Autowired
-    public ReturnOrderServiceImpl(StreamBridge streamBridge, OrderReturnApplyMapper returnApplyMapper, OrderReturnItemMapper returnItemMapper) {
-        this.streamBridge = streamBridge;
+    public ReturnOrderServiceImpl(OrderReturnApplyMapper returnApplyMapper, OrderReturnItemMapper returnItemMapper) {
         this.returnApplyMapper = returnApplyMapper;
         this.returnItemMapper = returnItemMapper;
     }
@@ -126,26 +118,8 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             skuQuantity.put(skuCode, quantity);
         }
 
-        sendProductStockUpdateMessage("product-out-0", new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
-        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
+        // sendProductStockUpdateMessage("product-out-0", new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
+        // sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
         return returnRequest;
-    }
-
-    private void sendProductStockUpdateMessage(String bindingName, PmsProductEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getOrderSN())
-                .build();
-        streamBridge.send(bindingName, message);
-    }
-
-    private void sendSalesStockUpdateMessage(String bindingName, SmsSalesStockEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getOrderSN())
-                .build();
-        streamBridge.send(bindingName, message);
     }
 }

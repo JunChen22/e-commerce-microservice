@@ -3,14 +3,14 @@ package com.itsthatjun.ecommerce.mbg.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReceiveAddressExample {
+public class AddressExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ReceiveAddressExample() {
+    public AddressExample() {
         oredCriteria = new ArrayList<>();
     }
 

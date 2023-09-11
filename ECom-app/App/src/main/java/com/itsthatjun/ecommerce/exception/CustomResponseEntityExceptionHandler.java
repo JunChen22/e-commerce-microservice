@@ -1,20 +1,16 @@
-package com.itsthatjun.ecommerce.exceptions;
+package com.itsthatjun.ecommerce.exception;
 
-
-
-import com.itsthatjun.ecommerce.exceptions.OMS.OrderException;
-import com.itsthatjun.ecommerce.exceptions.OMS.OrderReturnApplyException;
-import com.itsthatjun.ecommerce.exceptions.PMS.ProductException;
-import com.itsthatjun.ecommerce.exceptions.UMS.MembersException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+    /*
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleArticleIdException(ArticleException ex) {
+        return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -39,4 +35,6 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     public ResponseEntity<String> handleMemberException(MembersException ex) {
         return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+     */
 }

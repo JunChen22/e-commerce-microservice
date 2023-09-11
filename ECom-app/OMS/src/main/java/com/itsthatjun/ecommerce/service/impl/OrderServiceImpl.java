@@ -16,11 +16,13 @@ import com.itsthatjun.ecommerce.service.PaypalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
@@ -298,9 +300,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @ApiOperation("update order status, ")
     public Mono<Orders> update() {
         return Mono.empty();
     }
+
+    @Bean
+    @ApiOperation("comsume message to update stock")
+    public Mono<Orders> updateStock() {
+        return Mono.empty();
+    }
+
 
     @Override
     public String cancelOrder(String orderSn) {

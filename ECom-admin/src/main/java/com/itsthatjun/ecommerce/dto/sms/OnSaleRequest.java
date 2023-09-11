@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.SMS;
+package com.itsthatjun.ecommerce.dto.sms;
 
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import lombok.Data;

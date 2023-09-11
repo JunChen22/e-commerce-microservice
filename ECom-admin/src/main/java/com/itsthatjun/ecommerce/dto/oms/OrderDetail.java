@@ -1,10 +1,9 @@
-package com.itsthatjun.ecommerce.dto.OMS;
+package com.itsthatjun.ecommerce.dto.oms;
 
 import com.itsthatjun.ecommerce.mbg.model.OrderItem;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 

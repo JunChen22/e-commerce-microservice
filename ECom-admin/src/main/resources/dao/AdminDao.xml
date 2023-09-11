@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.dao.AdminDao">
 
-    <resultMap id="AdminDetailResultMap" type="com.itsthatjun.ecommerce.dto.UMS.AdminDetail" autoMapping="true">
+    <resultMap id="AdminDetailResultMap" type="com.itsthatjun.ecommerce.dto.ums.AdminDetail" autoMapping="true">
         <id property="admin.id" column="admin_id"/>
         <result column="admin_name" property="admin.name" />
         <result column="username" property="admin.username"/>
         <result column="email" property="admin.email" />
         <result column="status" property="admin.status"/>
 
-        <collection property="roles" ofType="com.itsthatjun.ecommerce.dto.UMS.RolePermission">
+        <collection property="roles" ofType="com.itsthatjun.ecommerce.dto.ums.RolePermission">
             <result column="role_name" property="roleName"/>
             <result column="permission_category" property="permissionCategory"/>
             <result column="description" property="description"/>

@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.UMS;
+package com.itsthatjun.ecommerce.dto.ums;
 
 import lombok.Data;
 

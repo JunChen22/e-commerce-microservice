@@ -12,7 +12,7 @@
         <result property="originalPrice" column="original_price" />
     </resultMap>
 
-    <resultMap id="productWithAtrributeMap" type="com.itsthatjun.ecommerce.dto.PMS.ProductDetail" autoMapping="true">
+    <resultMap id="productWithAtrributeMap" type="com.itsthatjun.ecommerce.dto.pms.ProductDetail" autoMapping="true">
         <result property="product.id" column="id"/>
         <result property="brand.name" column="brandName"/>
         <result property="product.name" column="name" />
@@ -25,7 +25,7 @@
         </collection>
     </resultMap>
 
-    <resultMap id="productWithListAtrributeMap" type="com.itsthatjun.ecommerce.dto.PMS.ProductDetail" autoMapping="true">
+    <resultMap id="productWithListAtrributeMap" type="com.itsthatjun.ecommerce.dto.pms.ProductDetail" autoMapping="true">
         <result property="product.id" column="id"/>
         <result property="brand.name" column="brandName"/>
         <result property="product.name" column="name" />

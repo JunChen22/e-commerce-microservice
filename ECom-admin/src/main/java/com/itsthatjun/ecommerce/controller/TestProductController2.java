@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.controller;
 
-import com.itsthatjun.ecommerce.dto.CMS.Articles;
 import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.ProductExample;

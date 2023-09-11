@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.OMS.OrderReturnApplyDecision;
+import com.itsthatjun.ecommerce.dto.oms.OrderReturnApplyDecision;
 import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
 import com.itsthatjun.ecommerce.service.OMS.implementation.ReturnOrderServiceImpl;
 import io.swagger.annotations.Api;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-
-import static com.itsthatjun.ecommerce.dto.OMS.OrderReturnApplyDecision.Status.*;
 
 @RestController
 @RequestMapping("/order/return")
