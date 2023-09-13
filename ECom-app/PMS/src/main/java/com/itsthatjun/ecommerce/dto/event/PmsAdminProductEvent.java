@@ -1,38 +1,38 @@
 package com.itsthatjun.ecommerce.dto.event;
 
 import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.ProductSkuStock;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
 
+import static java.time.ZonedDateTime.now;
+
 @Getter
-public class OmsAdminStockEvent {
+public class PmsAdminProductEvent {
 
     public enum Type {
-        NEW_PRODUCT,
-        UPDATE_STOCK,
-        REMOVE_PRODUCT,
-        UPDATE_PRICE
+        CREATE,
+        UPDATE,
+        DELETE
     }
 
     private final Type eventType;
     private final Product product;
-    private final ProductSkuStock skuStock;
+    private final Integer productId;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsAdminStockEvent() {
+    public PmsAdminProductEvent() {
         this.eventType = null;
         this.product = null;
-        this.skuStock = null;
+        this.productId = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsAdminStockEvent(Type eventType, Product product, ProductSkuStock skuStock, ZonedDateTime eventCreatedAt) {
+    public PmsAdminProductEvent(Type eventType, Product product, Integer productId) {
         this.eventType = eventType;
         this.product = product;
-        this.skuStock = skuStock;
-        this.eventCreatedAt = eventCreatedAt;
+        this.productId = productId;
+        this.eventCreatedAt = now();
     }
 }

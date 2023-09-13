@@ -21,7 +21,6 @@ import reactor.core.scheduler.Scheduler;
 
 import static com.itsthatjun.ecommerce.dto.cms.event.CmsAdminArticleEvent.Type.*;
 import static java.util.logging.Level.FINE;
-import static reactor.core.publisher.Flux.empty;
 
 @RestController
 @RequestMapping("/article")
@@ -55,13 +54,14 @@ public class ArticleController {
         String url = "http://" + contentServiceURL + ":" + port + "/article/all";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ArticleInfo.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/{articleId}")
     @ApiOperation(value = "Get a specific article by article id")
     public Mono<ArticleInfo> getArticle(@PathVariable int articleId) {
         String url = "http://" + contentServiceURL + ":" + port + "/article/" + articleId;
+
         return webClient.get().uri(url).retrieve().bodyToMono(ArticleInfo.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }

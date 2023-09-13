@@ -52,42 +52,46 @@ spring:
 # CMS does not need message queue, they only have read operations.
 spring.cloud.stream:
   bindings:             # only OMS,PMS,UMS have write operations. Read operations don't need to message queue, non-blocking synchronous.
+    user-out-0: # UMS
+      destination: adminUser
+      producer:
+        required-groups: adminUserGroup
     order-out-0:  # OMS
-      destination: order
+      destination: adminOrder
       producer:
-        required-groups: auditGroup
+        required-groups: adminOrderGroup
     cart-out-0:
-      destination: cart
+      destination: adminCart
       producer:
-        required-groups: auditGroup
+        required-groups: adminCartGroup
     return-out-0:
-      destination: return
+      destination: adminReturn
       producer:
-        required-groups: auditGroup
+        required-groups: adminReturnGroup
     review-out-0: # PMS
-      destination: review
+      destination: adminReview
       producer:
-        required-groups: auditGroup
+        required-groups: adminReviewGroup
     product-out-0:
-      destination: product
+      destination: adminProduct
       producer:
-        required-groups: productGroup
-    user-out-0:    # UMS
-      destination: user
+        required-groups: adminProductGroup
+    brand-out-0:
+      destination: adminBrand
       producer:
-        required-groups: auditGroup
+        required-groups: adminBrandGroup
     coupon-out-0:   # SMS
-      destination: coupon
+      destination: adminCoupon
       producer:
-        required-groups: couponGroup
-    salesStock-out-0:
-      destination: salesStock
+        required-groups: adminCouponGroup
+    sales-out-0:
+      destination: adminSales
       producer:
-        required-groups: salesGroup
-    article-out-0:
-      destination: article
+        required-groups: adminSalesGroup
+    article-out-0:   # CMS
+      destination: adminArticle
       producer:
-        required-groups: articleGroup
+        required-groups: adminArticleGroup
 
 
 # tells spring mybatis mapper's xml(sql) located
@@ -107,7 +111,7 @@ jwt:
   HEADER_STRING: Authorization
   tokenPrefix: Bearer
   secretKey: JunChen522
-  expirationTimeMinute: 15
+  expirationTimeMinute: 150
 
 app:
   CMS-service:

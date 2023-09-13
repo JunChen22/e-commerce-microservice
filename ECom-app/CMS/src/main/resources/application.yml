@@ -42,8 +42,11 @@ spring.cloud:
       contentType: application/json
     bindings:
       articleMessageProcessor-in-0:
-        destination: article
-        group: articleGroup
+        destination: adminArticle
+        group: adminArticleGroup
+
+
+
 
 
 # tells spring mybatis mapper's xml(sql) located

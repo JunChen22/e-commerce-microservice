@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.service.SMS.implementation;
 
-import com.itsthatjun.ecommerce.exceptions.PMS.ProductException;
 import com.itsthatjun.ecommerce.mbg.mapper.CouponMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
@@ -56,8 +55,8 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<Coupon> getCouponForProduct(int productId) {
         Product product = productMapper.selectByPrimaryKey(productId);
-        if (product == null)
-            throw new ProductException("Can't find product : " + productId);
+        //if (product == null)
+        //    throw new ProductException("Can't find product : " + productId);
 
         String productName = product.getName();
         String brandName = product.getBrandName();

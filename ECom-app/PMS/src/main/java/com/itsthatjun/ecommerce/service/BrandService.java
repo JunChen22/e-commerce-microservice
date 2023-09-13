@@ -3,20 +3,29 @@ package com.itsthatjun.ecommerce.service;
 import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import io.swagger.annotations.ApiOperation;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface BrandService {
 
     @ApiOperation(value = "")
-    List<Brand> listAllBrand();
+    Flux<Brand> listAllBrand();
 
     @ApiOperation(value = "")
-    List<Brand> listBrand(int pageNum, int pageSize);
+    Flux<Brand> listBrand(int pageNum, int pageSize);
 
     @ApiOperation(value = "")
-    List<Product> listAllBrandProduct(int brandId);
+    Flux<Product> listAllBrandProduct(int brandId);
 
     @ApiOperation(value = "")
-    Brand getBrand(int id);
+    Mono<Brand> getBrand(int id);
+
+    @ApiOperation(value = "")
+    boolean createBrand(Brand brand);
+
+    @ApiOperation(value = "")
+    boolean updateBrand(Brand brand);
+
+    @ApiOperation(value = "")
+    boolean deleteBrand(int id);
 }

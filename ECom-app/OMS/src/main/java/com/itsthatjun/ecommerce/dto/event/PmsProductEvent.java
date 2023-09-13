@@ -21,6 +21,7 @@ public class PmsProductEvent {
     private final Map<String, Integer> productMap;        // sku and quantity
     private final ZonedDateTime eventCreatedAt;
 
+    // Jackson needs it, (the library used for JSON serialization/deserialization)
     public PmsProductEvent() {
         this.eventType = null;
         this.orderSN = null;

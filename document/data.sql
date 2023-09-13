@@ -1102,6 +1102,8 @@ VALUES
 (6, 179.99, 179.99, 179.99, 179.99, 250, 250, 'jun');
 
 
+
+
 DROP TABLE IF EXISTS review;
 CREATE TABLE review
   (
@@ -1116,24 +1118,22 @@ CREATE TABLE review
      tittle      TEXT,
      likes       NUMERIC DEFAULT 1,
      verified  boolean,
-     content     TEXT,
-     album_id    NUMERIC
+     content     TEXT
   );
 
 -- TODO: should I just store picture in one review and separation by semi-colon or continue to use album
-INSERT INTO review (product_id, member_id, member_name, member_icon, star, created_at, tittle, likes, content, album_id)
+INSERT INTO review (product_id, member_id, member_name, member_icon, star, created_at, tittle, likes, content)
 VALUES
-(1, 1, 'user1', 'icon.jpg', 3.5, '2020-03-18 22:18:40', 'size smaller than expected', 1,'size was smaller than expected', 1),
-(1, 2, 'user1', 'icon.jpg', 1, '2020-03-18 16:18:25','item arrive late', 1,'late', 2),
-(1, 3, 'user3', 'icon.jpg', 5, '2020-03-18 16:18:25','good',1,'item is good', 3),
-(3, 1, 'user1', 'icon.jpg', 1, '2020-03-18 16:18:25','good',1,'item is good', 4),
-(3, 2, 'user2', 'icon.jpg', 5, '2020-03-18 16:18:25','good',1,'item is good', 5),
-(14, 1, 'user1', 'icon.jpg', 1, '2020-03-18 16:18:25','good',1,'item is good', 6),
-(14, 2, 'user2', 'icon.jpg', 5, '2020-03-18 16:18:25','good',1,'item is good', 7),
-(15, 1, 'user1', 'icon.jpg', 5, '2020-03-18 16:18:25','good',1,'item is good', 8),
-(15, 2, 'user2', 'icon.jpg', 1, '2020-03-18 16:18:25','good',1,'item is good', 9),
-(15, 3, 'user3', 'icon.jpg', 1, '2020-03-18 16:18:25','good',1,'item is good', 10);
-
+(1, 1, 'user1', 'icon.jpg', 3.5, '2020-03-18 22:18:40', 'size smaller than expected', 1,'size was smaller than expected'),
+(1, 2, 'user1', 'icon.jpg', 1, '2020-03-18 16:18:25','item arrive late', 1,'late'),
+(1, 3, 'user3', 'icon.jpg', 5, '2020-03-18 16:18:25','good',1,'item is good'),
+(3, 1, 'user1', 'icon.jpg', 1, '2020-03-18 16:18:25','good',1,'item is good'),
+(3, 2, 'user2', 'icon.jpg', 5, '2020-03-18 16:18:25','good',1,'item is good'),
+(14, 1, 'user1', 'icon.jpg', 1, '2020-03-18 16:18:25','good',1,'item is good'),
+(14, 2, 'user2', 'icon.jpg', 5, '2020-03-18 16:18:25','good',1,'item is good'),
+(15, 1, 'user1', 'icon.jpg', 5, '2020-03-18 16:18:25','good',1,'item is good'),
+(15, 2, 'user2', 'icon.jpg', 1, '2020-03-18 16:18:25','good',1,'item is good'),
+(15, 3, 'user3', 'icon.jpg', 1, '2020-03-18 16:18:25','good',1,'item is good');
 
 DROP TABLE IF EXISTS review_album;
 CREATE TABLE review_album

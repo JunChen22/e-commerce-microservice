@@ -11,8 +11,9 @@ import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -40,24 +41,30 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleInfo> getAllArticles() {
+    public Flux<ArticleInfo> getAllArticles() {
         //  TODO: it works but too much query to database
-        return articleDao.getAllArticles();
+        List<ArticleInfo> articleInfoList =  articleDao.getAllArticles();
+        return Flux.fromIterable(articleInfoList);
     }
 
     @Override
-    public ArticleInfo getArticle(int articleId) {
-        return articleDao.getArticle(articleId);
+    public Mono<ArticleInfo> getArticle(int articleId) {
+        ArticleInfo articleInfo = articleDao.getArticle(articleId);
+        if (articleInfo != null) {
+            return Mono.just(articleInfo);
+        } else {
+            return Mono.error(new ArticleException("Article not found"));
+        }
     }
 
     @Override
-    public ArticleInfo createArticle(ArticleInfo article) {
+    public void createArticle(ArticleInfo article) {
         //TODO: optimize this
         Article exist = articleMapper.selectByPrimaryKey(article.getArticle().getId());
         if(exist != null) {
             System.out.println("existing id");
             // TODO: return exception tobe added in ECom-common
-            return null;
+            return;
         }
 
         Date currentDate = new Date();
@@ -87,47 +94,26 @@ public class ArticleServiceImpl implements ArticleService {
                 videoMapper.insert(video);
             }
         }
-        return article;
     }
 
     @Override
     // TODO: update when deleting one of the element
-    public ArticleInfo updateArticle(ArticleInfo article) {
-        int articleId = article.getArticle().getId();
-        ArticleExample example = new ArticleExample();
-        example.createCriteria().andIdEqualTo(articleId);
+    public void updateArticle(ArticleInfo articleInfo) {
+        int articleId = articleInfo.getArticle().getId();
 
-        List<Article> existingArticles = articleMapper.selectByExample(example);
-        if (existingArticles.isEmpty()) {
-            System.out.println(article.getArticle().getId() + " does not exist");
-            return null;
-        }
+        Article article = articleInfo.getArticle();
+        article.setUpdatedAt(new Date());
 
-        Date currentDate = new Date();
-        Article exitingArticle = existingArticles.get(0);
-        exitingArticle.setUpdatedAt(currentDate);
-
-        articleMapper.updateByPrimaryKey(article.getArticle());
-        updateQA(articleId, article.getQA());
-        updateImage(articleId, article.getImages());
-        updateVideo(articleId, article.getVideos());
-
-        int rowAffected = articleMapper.updateByExample(exitingArticle, example);
-        if (rowAffected > 0) {
-            article.setArticle(exitingArticle);
-            return article;
-        } else {
-            System.out.println("Failed to update Article with ID " + articleId);
-            return null;
-        }
+        articleMapper.updateByPrimaryKey(article);
+        updateQA(articleId, articleInfo.getQA());
+        updateImage(articleId, articleInfo.getImages());
+        updateVideo(articleId, articleInfo.getVideos());
     }
 
-    // TODO: newly created won't have primary key
+    // TODO: newly created won't have primary key, only update existing pic not newly added
     private int updateQA(int articleId, List<ArticleQa> qaList) {
         for (ArticleQa qa: qaList) {
-            LocalDate localDate = LocalDate.now();
-            java.sql.Date date = java.sql.Date.valueOf(localDate);
-            qa.setUpdatedAt(date);
+            qa.setUpdatedAt(new Date());
             qa.setArticleId(articleId);
             qaMapper.updateByPrimaryKey(qa);
         }
@@ -136,9 +122,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private int updateImage(int articleId, List<ArticleImage> imageList){
         for (ArticleImage image: imageList) {
-            LocalDate localDate = LocalDate.now();
-            java.sql.Date date = java.sql.Date.valueOf(localDate);
-            image.setUpdatedAt(date);
+            image.setUpdatedAt(new Date());
             image.setArticleId(articleId);
             imageMapper.updateByPrimaryKey(image);
         }
@@ -147,9 +131,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private int updateVideo(int articleId, List<ArticleVideo> videoList) {
         for (ArticleVideo video: videoList) {
-            LocalDate localDate = LocalDate.now();
-            java.sql.Date date = java.sql.Date.valueOf(localDate);
-            video.setUpdatedAt(date);
+            video.setUpdatedAt(new Date());
             video.setArticleId(articleId);
             videoMapper.updateByPrimaryKey(video);
         }
@@ -163,7 +145,7 @@ public class ArticleServiceImpl implements ArticleService {
             throw new ArticleException("Article not found with ID: " + articleId);
         }
 
-        ArticleInfo article = getArticle(articleId);
+        ArticleInfo article = articleDao.getArticle(articleId);
 
         articleMapper.deleteByPrimaryKey(articleId);
 

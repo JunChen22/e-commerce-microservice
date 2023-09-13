@@ -1,58 +1,101 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
-
+import com.itsthatjun.ecommerce.dto.pms.ProductReview;
+import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminReviewEvent;
 import com.itsthatjun.ecommerce.mbg.model.Review;
-import com.itsthatjun.ecommerce.service.PMS.ReviewService;
-import com.itsthatjun.ecommerce.service.PMS.implementation.ReviewServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
-import java.util.List;
+
+import static com.itsthatjun.ecommerce.dto.pms.event.PmsAdminReviewEvent.Type.*;
+import static java.util.logging.Level.FINE;
 
 @RestController
 @RequestMapping("/reviews")
 @Api(tags = "Product related", description = "CRUD a specific product reviews")
 public class ReviewController {
 
-    private final ReviewServiceImpl reviewService;
+    private static final Logger LOG = LoggerFactory.getLogger(ReviewController.class);
+
+    private final WebClient webClient;
+
+    private final StreamBridge streamBridge;
+
+    private final Scheduler publishEventScheduler;
+
+    @Value("${app.PMS-service.host}")
+    String pmsServiceURL;
+    @Value("${app.PMS-service.port}")
+    int port;
 
     @Autowired
-    public ReviewController(ReviewServiceImpl reviewService) {
-        this.reviewService = reviewService;
+    public ReviewController(WebClient.Builder webClient, StreamBridge streamBridge,
+                            @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.webClient = webClient.build();
+        this.streamBridge = streamBridge;
+        this.publishEventScheduler = publishEventScheduler;
     }
 
     @GetMapping("/getAllProductReview/{productId}")
     @ApiOperation(value = "get all reviews for a product")
-    public List<Review> getProductReviews(@PathVariable int productId) {
-        return reviewService.listProductAllReview(productId);
+    public Flux<ProductReview> getProductReviews(@PathVariable int productId) {
+        String url = "http://" + pmsServiceURL + ":" + port + "/reviews/getAllProductReview/" + productId;
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(ProductReview.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
-    @GetMapping("/getAllReviewByUser/{id}")
+    @GetMapping("/getAllReviewByUser/{useId}")
     @ApiOperation(value = "get all reviews made a user")
-    public List<Review> getProductReviewsByUser(@PathVariable int id) {
-        return reviewService.listAllReviewByUser(id);
+    public Flux<ProductReview> getProductReviewsByUser(@PathVariable int useId) {
+        String url = "http://" + pmsServiceURL + ":" + port + "/reviews/admin/getAllReviewByUser/" + useId;
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(ProductReview.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @PostMapping("/create")
     @ApiOperation(value = "create review for a product")
-    public Review createProductReview(@RequestBody Review review) {
+    public void createProductReview(@RequestBody ProductReview review) {
         // TODO: review created time did not create automatically
-        reviewService.createReview(review);
-        return review;
+        Mono.fromRunnable(() -> sendMessage("review-out-0", new PmsAdminReviewEvent(CREATE, review, null)))
+                .subscribeOn(publishEventScheduler).subscribe();
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "update a review")
-    public Review updateProductReviews(@RequestBody Review updatedreview) {
-        reviewService.updateReview(updatedreview);
-        return updatedreview;
+    public void updateProductReviews(@RequestBody ProductReview updatedReview) {
+        int reviewId = updatedReview.getReview().getId();
+        Mono.fromRunnable(() -> sendMessage("review-out-0", new PmsAdminReviewEvent(UPDATE, updatedReview, reviewId)))
+                .subscribeOn(publishEventScheduler).subscribe();
     }
 
     @DeleteMapping("/delete/{reviewId}")
     @ApiOperation(value = "Get product with page and size")
     public void deleteProductReviews(@PathVariable int reviewId) {
-        reviewService.deleteReview(reviewId);
+        Mono.fromRunnable(() -> sendMessage("review-out-0", new PmsAdminReviewEvent(DELETE, null, reviewId)))
+                .subscribeOn(publishEventScheduler).subscribe();
+    }
+
+    private void sendMessage(String bindingName, PmsAdminReviewEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 }

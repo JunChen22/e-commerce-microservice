@@ -28,8 +28,6 @@ public class Review {
 
     private String content;
 
-    private Integer albumId;
-
     public Integer getId() {
         return id;
     }
@@ -124,13 +122,5 @@ public class Review {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Integer getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(Integer albumId) {
-        this.albumId = albumId;
     }
 }

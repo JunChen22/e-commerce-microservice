@@ -1,70 +1,114 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
+import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminProductEvent;
 import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.service.PMS.implementation.ProductServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
-import java.util.List;
+
+import static com.itsthatjun.ecommerce.dto.pms.event.PmsAdminProductEvent.Type.*;
+import static java.util.logging.Level.FINE;
+import static reactor.core.publisher.Flux.empty;
 
 @RestController
 @RequestMapping("/product")
-@Api(tags = "Product related")
-@CrossOrigin
-//@PreAuthorize("isAuthenticated()")
+@Api(tags = "Product related", description = "product related")
 public class ProductController {
 
-    private final ProductServiceImpl productService;
+    private static final Logger LOG = LoggerFactory.getLogger(ProductController.class);
+
+    private final WebClient webClient;
+
+    private final StreamBridge streamBridge;
+
+    private final Scheduler publishEventScheduler;
+
+    @Value("${app.PMS-service.host}")
+    String pmsServiceURL;
+    @Value("${app.PMS-service.port}")
+    int port;
 
     @Autowired
-    public ProductController(ProductServiceImpl productService) {
-        this.productService = productService;
+    public ProductController(WebClient.Builder webClient, StreamBridge streamBridge,
+                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.webClient = webClient.build();
+        this.streamBridge = streamBridge;
+        this.publishEventScheduler = publishEventScheduler;
     }
 
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all product")
-    public List<Product> listAllProduct(){
-        List<Product> productList = productService.listAllProduct();
-        return productList;
+    public Flux<Product> listAllProduct(){
+        String url = "http://" + pmsServiceURL + ":" + port + "/product/listAll";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
     }
 
     @GetMapping("/list")
     @ApiOperation(value = "Get product with page and size")
-    public List<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+    public Flux<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                         @RequestParam(value = "size", defaultValue = "5") int pageSize){
-        return productService.listProduct(pageNum, pageSize);
+        String url = "http://" + pmsServiceURL + ":" + port + "/product/list?page=" + pageNum + "&size=" + pageSize;
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get product by id")
-    public Product listProduct(@PathVariable int id){
-        return productService.getProduct(id);
+    public Mono<Product> listProduct(@PathVariable int id){
+        String url = "http://" + pmsServiceURL + ":" + port + "/product/" + id;
+
+        return webClient.get().uri(url).retrieve().bodyToMono(Product.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
     @PostMapping("/create")
     @ApiOperation(value = "Create a product")
-    //@PreAuthorize("hasAuthority('product:create')")
-    public Product createProduct(@RequestBody Product product){
-        productService.createProduct(product);
-        return product;
+    @PreAuthorize("hasRole('ROLE_admin-product')")
+    public void createProduct(@RequestBody Product product){
+        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(CREATE, product, null)))
+                .subscribeOn(publishEventScheduler).subscribe();
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "Update a product")
-    //@PreAuthorize("hasAuthority('product:update')")
-    public Product updateProduct(@RequestBody Product product){
-        productService.updateProduct(product);
-        return product;
+    @PreAuthorize("hasRole('ROLE_admin-product')")
+    public void updateProduct(@RequestBody Product product){
+        int productId = product.getId();
+        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE, product, productId)))
+                .subscribeOn(publishEventScheduler).subscribe();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{productId}")
     @ApiOperation(value = "Delete a product")
-    //@PreAuthorize("hasAuthority('product:delete')")
-    public String deleteProduct(@PathVariable int id){
-        productService.deleteProduct(id);
-        return "deleted";
+    @PreAuthorize("hasRole('ROLE_admin-product')")
+    public void deleteProduct(@PathVariable int productId){
+        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(DELETE, null, productId)))
+                .subscribeOn(publishEventScheduler).subscribe();
+    }
+
+    private void sendMessage(String bindingName, PmsAdminProductEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 }

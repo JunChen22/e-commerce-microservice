@@ -332,6 +332,26 @@
 							"response": []
 						},
 						{
+							"name": "OrderReturn - Cancel return apply",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/order/return/cancel",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"order",
+										"return",
+										"cancel"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Shopping cart - list user cart",
 							"request": {
 								"auth": {
@@ -1031,6 +1051,16 @@
 						{
 							"name": "Article - Create one",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NDg0MTg2MjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ0OTMxODZ9.FydUu8LTYUxDZ9G9E402FHDyZXWJ-HtxlUkQuc0XvO65_tT6aNcpLpuGQlokENf7e5YUXBzA8fV3qb5yf8VEYA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1059,6 +1089,16 @@
 						{
 							"name": "Article - Get all",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NDg0MTg2MjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ0OTMxODZ9.FydUu8LTYUxDZ9G9E402FHDyZXWJ-HtxlUkQuc0XvO65_tT6aNcpLpuGQlokENf7e5YUXBzA8fV3qb5yf8VEYA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1078,6 +1118,16 @@
 						{
 							"name": "Article - Get one",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NDg0MTg2MjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ0OTMxODZ9.FydUu8LTYUxDZ9G9E402FHDyZXWJ-HtxlUkQuc0XvO65_tT6aNcpLpuGQlokENf7e5YUXBzA8fV3qb5yf8VEYA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1097,11 +1147,21 @@
 						{
 							"name": "Article - Update one",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0MzkyODk4NzkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTQzOTM3OTh9.HXMJY0mksMr7phrsenKyb2k2Lc30pYbT-24EGt7vFQGr_J6xB4nc7IIQpORSGNg9XdHGYZBZZclTzZFTmBhboQ",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"article\": {\n        \"id\": 1,\n        \"title\": \"update new article\",\n        \"body\": \"update some\"\n    },\n    \"images\": [\n        {\n            \"filename\": \"new.png\"\n        },\n        {\n            \"filename\": \"new2.jpg\"\n        }\n    ],\n    \"videos\": [\n        {\n            \"url\": \"new.mp4\"\n        }\n    ],\n    \"qa\": [\n        {\n            \"question\": \"new\",\n            \"answer\": \"new.\"\n        }\n    ]\n}",
+									"raw": "{\n    \"article\": {\n        \"id\": 5,\n        \"title\": \"update new article\",\n        \"body\": \"update some\"\n    },\n    \"images\": [\n        {\n            \"filename\": \"new.png\"\n        },\n        {\n            \"filename\": \"new2.jpg\"\n        }\n    ],\n    \"videos\": [\n        {\n            \"url\": \"new.mp4\"\n        }\n    ],\n    \"qa\": [\n        {\n            \"question\": \"new\",\n            \"answer\": \"new.\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1125,6 +1185,16 @@
 						{
 							"name": "Article - Delete one",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0MzkyODk4NzkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTQzOTM3OTh9.HXMJY0mksMr7phrsenKyb2k2Lc30pYbT-24EGt7vFQGr_J6xB4nc7IIQpORSGNg9XdHGYZBZZclTzZFTmBhboQ",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -1313,6 +1383,16 @@
 						{
 							"name": "OrderReturn - Get All waiting to process",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0Mjk4ODQ4MzkyLCJhZG1pbklkIjoxLCJleHAiOjE2OTQyOTk3NDh9.LdGi5olZ0oelP5EE7vaA_Ve7bSCCz2D4rGYVQg2c44vM1KiXo3XctPak-CWvEo_rp-uKxHKTk_3R1WlrSJI28w",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1413,17 +1493,37 @@
 						{
 							"name": "OrderReturn - Update return status",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0Mjk5NzUzNTEyLCJhZG1pbklkIjoxLCJleHAiOjE2OTQzMDA2NTN9.j4qYN0lpYQVQaL8jDPQvSCH7EW1cVQJep95guy2Smo-08qT6X3k7jk_NbgLi58IjUaMkHJ90ZBSefTN898kyig",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"status\": \"REJECTED\",\n    \"returnApply\": {\n        \"id\": 1,\n        \"orderId\": 1,\n        \"companyAddressId\": 1,\n        \"productId\": 1,\n        \"orderSn\": \"1001\",\n        \"memberId\": 1,\n        \"returnAmount\": 450.00,\n        \"returnName\": \"John Doe\",\n        \"returnPhone\": \"555-123-4567\",\n        \"status\": 0,\n        \"handleTime\": \"2023-04-03T14:00:00.000+00:00\",\n        \"productName\": \"iPhone SE\",\n        \"productBrand\": \"Apple\",\n        \"productSkuCode\": \"IPSE-RED\",\n        \"productCount\": 1,\n        \"productPrice\": 450.00,\n        \"reason\": \"Wrong size\",\n        \"description\": \"Received size L, ordered size M\",\n        \"handleNote\": \"Handled successfully\",\n        \"handleOperator\": \"JaneSmith\",\n        \"receiveOperator\": \"JohnDoe\",\n        \"receiveTime\": \"2023-04-04T14:00:00.000+00:00\",\n        \"receiveNote\": \"Received item in good condition\",\n        \"createdAt\": \"2023-09-10T02:38:10.547+00:00\"\n    },\n    \"reason\": \"Your reason for the decision\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "localhost:8082/order/",
+									"raw": "localhost:8082/order/return/update",
 									"host": [
 										"localhost"
 									],
 									"port": "8082",
 									"path": [
 										"order",
-										""
+										"return",
+										"update"
 									]
 								}
 							},
@@ -1437,6 +1537,16 @@
 						{
 							"name": "Review - Get all reviews of a product",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTU0MTUxMTQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1NjMxNTF9.La-ZUS4n160JK5gr1bILuBr28vdZnuZ25gdLh5tRI9j4W_8xZPPBapCGQK2T3UAHlG4GzAQl7w0-Fc8dA9A_IA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1457,10 +1567,20 @@
 						{
 							"name": "Review - Get All reviews by User",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTU0MTUxMTQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1NjMxNTF9.La-ZUS4n160JK5gr1bILuBr28vdZnuZ25gdLh5tRI9j4W_8xZPPBapCGQK2T3UAHlG4GzAQl7w0-Fc8dA9A_IA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8082/reviews/getAllReviewByUser/1",
+									"raw": "localhost:8082/reviews/getAllReviewByUser/4",
 									"host": [
 										"localhost"
 									],
@@ -1468,7 +1588,7 @@
 									"path": [
 										"reviews",
 										"getAllReviewByUser",
-										"1"
+										"4"
 									]
 								}
 							},
@@ -1477,11 +1597,21 @@
 						{
 							"name": "Review - Create a review",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTU0MTUxMTQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1NjMxNTF9.La-ZUS4n160JK5gr1bILuBr28vdZnuZ25gdLh5tRI9j4W_8xZPPBapCGQK2T3UAHlG4GzAQl7w0-Fc8dA9A_IA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n   \"productId\": 4,\n   \"memberId\": 1,\n   \"memberName\": \"test1\",\n   \"star\": 1,\n   \"tittle\": \"item arrive late\",\n   \"content\": \"late\",\n   \"pictures\": \"something.jpg\"\n}",
+									"raw": "{\n    \"review\": {\n        \"productId\": 4,\n        \"memberId\": 4,\n        \"memberName\": \"user1\",\n        \"star\": 3.5,\n        \"tittle\": \"new review created\",\n        \"content\": \"size was smaller than expected\"\n    },\n    \"picturesList\": [\n        {\n            \"filename\": \"https://i.imgur.com/rzocQcD.jpeg\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1533,10 +1663,20 @@
 						{
 							"name": "Review - Delete a review",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTU0MTUxMTQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1NjMxNTF9.La-ZUS4n160JK5gr1bILuBr28vdZnuZ25gdLh5tRI9j4W_8xZPPBapCGQK2T3UAHlG4GzAQl7w0-Fc8dA9A_IA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "localhost:8082/reviews/delete/1",
+									"raw": "localhost:8082/reviews/delete/14",
 									"host": [
 										"localhost"
 									],
@@ -1544,7 +1684,7 @@
 									"path": [
 										"reviews",
 										"delete",
-										"1"
+										"14"
 									]
 								}
 							},
@@ -1553,6 +1693,16 @@
 						{
 							"name": "Product - Get All",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1572,6 +1722,16 @@
 						{
 							"name": "Product - Get page of 5 product",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1610,6 +1770,16 @@
 						{
 							"name": "Product - Create a product",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1638,6 +1808,16 @@
 						{
 							"name": "Product - Update product",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1666,6 +1846,16 @@
 						{
 							"name": "Product - Delete product",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -1834,182 +2024,6 @@
 										"12"
 									]
 								}
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product -",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy 2",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy 3",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy 2",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy 3",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy 3",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy 2",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test DAO product - Copy 3",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 3",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 4",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 5",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 5",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 6",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 4",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 5",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 4",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 5",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 6",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 5",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Test Mapper product - Copy 6",
-							"request": {
-								"method": "GET",
-								"header": []
 							},
 							"response": []
 						}
@@ -3004,69 +3018,6 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8082/test/hello",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"test",
-						"hello"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/order/test",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"order",
-						"test"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "New Request",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8082/order/list?status=1",
-					"host": [
-						"localhost"
-					],
-					"port": "8082",
-					"path": [
-						"order",
-						"list"
-					],
-					"query": [
-						{
-							"key": "status",
-							"value": "1"
-						}
-					]
-				}
-			},
-			"response": []
 		}
 	]
 }

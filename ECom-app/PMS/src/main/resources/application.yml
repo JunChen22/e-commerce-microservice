@@ -36,7 +36,7 @@ spring:
 spring.cloud:
   function:
     # can't have space between, tells spring which to use
-    definition: reviewMessageProcessor;productMessageProcessor
+    definition: reviewMessageProcessor;productMessageProcessor;adminBrandMessageProcessor;adminProductMessageProcessor;adminReviewMessageProcessor
   stream:
     default:
       contentType: application/json
@@ -47,6 +47,15 @@ spring.cloud:
       productMessageProcessor-in-0:
         destination: product
         group: productGroup
+      adminBrandMessageProcessor-in-0:
+        destination: adminBrand
+        group: adminBrandGroup
+      adminProductMessageProcessor-in-0:
+        destination: adminProduct
+        group: adminProductGroup
+      adminReviewMessageProcessor-in-0:
+        destination: adminReview
+        group: adminReviewGroup
 
 # tells spring mybatis mapper's xml(sql) located
 mybatis:

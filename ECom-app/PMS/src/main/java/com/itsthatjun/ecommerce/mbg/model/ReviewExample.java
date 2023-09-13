@@ -865,66 +865,6 @@ public class ReviewExample {
             addCriterion("content not between", value1, value2, "content");
             return (Criteria) this;
         }
-
-        public Criteria andAlbumIdIsNull() {
-            addCriterion("album_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdIsNotNull() {
-            addCriterion("album_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdEqualTo(Integer value) {
-            addCriterion("album_id =", value, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdNotEqualTo(Integer value) {
-            addCriterion("album_id <>", value, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdGreaterThan(Integer value) {
-            addCriterion("album_id >", value, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("album_id >=", value, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdLessThan(Integer value) {
-            addCriterion("album_id <", value, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdLessThanOrEqualTo(Integer value) {
-            addCriterion("album_id <=", value, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdIn(List<Integer> values) {
-            addCriterion("album_id in", values, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdNotIn(List<Integer> values) {
-            addCriterion("album_id not in", values, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdBetween(Integer value1, Integer value2) {
-            addCriterion("album_id between", value1, value2, "albumId");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlbumIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("album_id not between", value1, value2, "albumId");
-            return (Criteria) this;
-        }
     }
 
     public static class Criteria extends GeneratedCriteria {

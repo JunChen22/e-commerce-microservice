@@ -1,6 +1,6 @@
-package com.itsthatjun.ecommerce.dto.cms.event;
+package com.itsthatjun.ecommerce.dto.pms.event;
 
-import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
+import com.itsthatjun.ecommerce.mbg.model.Brand;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 import static java.time.ZonedDateTime.now;
 
 @Getter
-public class CmsAdminArticleEvent {
+public class PmsAdminBrandEvent {
 
     public enum Type {
         CREATE,
@@ -17,22 +17,22 @@ public class CmsAdminArticleEvent {
     }
 
     private final Type eventType;
-    private final Integer articleID;
-    private final ArticleInfo articleInfo;
+    private final Brand brand;
+    private final Integer brandId;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public CmsAdminArticleEvent() {
+    public PmsAdminBrandEvent() {
         this.eventType = null;
-        this.articleID = null;
-        this.articleInfo = null;
+        this.brand = null;
+        this.brandId = null;
         this.eventCreatedAt = null;
     }
 
-    public CmsAdminArticleEvent(Type eventType, ArticleInfo articleInfo, Integer articleID) {
+    public PmsAdminBrandEvent(Type eventType, Brand brand, Integer brandId) {
         this.eventType = eventType;
-        this.articleID = articleID;
-        this.articleInfo = articleInfo;
+        this.brand = brand;
+        this.brandId = brandId;
         this.eventCreatedAt = now();
     }
 }

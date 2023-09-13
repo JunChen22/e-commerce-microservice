@@ -5,7 +5,11 @@ import com.itsthatjun.ecommerce.service.impl.ArticleServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import java.util.List;
 
@@ -16,27 +20,31 @@ public class ArticleController {
 
     private final ArticleServiceImpl articleService;
 
+    private final Scheduler scheduler;
+
     @Autowired
-    public ArticleController(ArticleServiceImpl articleService) {
+    public ArticleController(ArticleServiceImpl articleService,
+                             @Qualifier("scheduler") Scheduler scheduler) {
         this.articleService = articleService;
+        this.scheduler = scheduler;
     }
 
     @GetMapping("/all")
     @ApiOperation(value = "get all articles")
-    public List<ArticleInfo> getAllArticle() {
-        return articleService.getAllArticles();
+    public Flux<ArticleInfo> getAllArticle() {
+        return articleService.getAllArticles().subscribeOn(scheduler);
     }
 
     @GetMapping("/{articleId}")
     @ApiOperation(value = "")
-    public ArticleInfo getArticle(@PathVariable int articleId) {
-        return articleService.getArticle(articleId);
+    public Mono<ArticleInfo> getArticle(@PathVariable int articleId) {
+        return articleService.getArticle(articleId).subscribeOn(scheduler);
     }
 
     @PostMapping("/admin/create")
     @ApiOperation(value = "create an article(buyer's guide, comparison, and etc)")
-    public ArticleInfo createArticle(@RequestBody ArticleInfo articles) {
-        return articleService.createArticle(articles);
+    public void createArticle(@RequestBody ArticleInfo articles) {
+        articleService.createArticle(articles);
     }
 
     @PostMapping("/admin/update")
