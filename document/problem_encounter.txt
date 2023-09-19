@@ -190,3 +190,45 @@ A: just add it manually
      but mybatis generator don't offer a generic way to remove it for all the mapper. Only manually remove.
 
 
+Q: it won't update after change is being made in object for dao.xml.  for example, made changes to ProductDetail.java,
+ProductDao.xml, property won't show the changes.
+
+A: I'm using IntelliJ community edition, need to clear out caches. File -> Invalidates Caches... and picked everything and restart
+IntelliJ. It fixed for me. Or Clean and repackage. The Mybatis addon can be funky at times.
+
+
+
+Q: the sending message naming can get confusing. for OMS, PMS, and SMS.
+A:
+
+OMS , PMS and SMS have their own database but share a few tables that are the same.
+Mainly for product and sku table.
+OMS will send message to PMS and SMS for stock update after order is
+1. Generated order, increase sku lock stock
+2. Paid successfully, generated order and success payment, decrease product stock, decrease sku stock and sku lock stock
+3. payment failed, generated order and success payment and return, increase product stock and sku stock
+4. returned order, generated order and failure payment, decrease sku lock stock
+
+and send out coupon update if coupon is used, and it can not be returned.
+
+SMS will send update to PMS and OMS when update occurred from admin or time changed(maybe a cache mechanism like Redis).
+Updates will be sent when operation like
+1. Create sale, price decrease to product and sku
+2. End sale, price increase to product and sku
+3. Update sale, price adjust accordingly to product and sku
+
+sale limit will be limited increasing lock stock. will notify admin when stock is low or ended.
+
+PMS will send update to OMS and SMS to update when new update occurred from admin.
+1. New product, new sku, add product and sku and their stock and pricing
+2. Remove product,
+3. update stock,
+4. update pricing,
+
+PMS will notify admin when stock is low.
+
+ECom-Admin(Admin), will send out all the administrative task to services directly,
+ECom-App is a interface just for user to interact with the service. both are stateless.
+Admin will send event to all 5 services to perform exclusive CRUD operations different than
+ECom-App can do.
+

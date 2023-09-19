@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.dto.event;
 
-import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
-import com.itsthatjun.ecommerce.mbg.model.OrderReturnReason;
+import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -19,23 +18,23 @@ public class OmsReturnOrderEvent {
 
     private final Type eventType;
     private final int userId;
-    private final OrderReturnApply returnApply;
-    private final OrderReturnReason returnReason;
+    private final ReturnRequest returnRequest;
+    private final String returnReason;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public OmsReturnOrderEvent() {
         this.eventType = null;
         this.userId = 0;
-        this.returnApply = null;
+        this.returnRequest = null;
         this.returnReason = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsReturnOrderEvent(Type eventType, int userId, OrderReturnApply returnApply, OrderReturnReason returnReason) {
+    public OmsReturnOrderEvent(Type eventType, int userId, ReturnRequest returnRequest, String returnReason) {
         this.eventType = eventType;
         this.userId = userId;
-        this.returnApply = returnApply;
+        this.returnRequest = returnRequest;
         this.returnReason = returnReason;
         this.eventCreatedAt = now();
     }

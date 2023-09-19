@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.dto.oms.event;
 
-import com.itsthatjun.ecommerce.dto.OrderParam;
+
+import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -17,28 +18,28 @@ public class OmsAdminOrderEvent {
     }
 
     private final Type eventType;
-    private final int userId;
-    private final OrderParam orderParam;  // dto from user to endpoint
-    private final String successUrl;
-    private final String cancelUrl;
+    private final Integer userId;
+    private final OrderDetail orderDetail;
+    private final String reason;
+    private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public OmsAdminOrderEvent() {
         this.eventType = null;
-        this.userId = 0;
-        this.orderParam = null;
-        this.successUrl = null;
-        this.cancelUrl = null;
+        this.userId = null;
+        this.orderDetail = null;
+        this.reason = null;
+        this.operator = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsAdminOrderEvent(Type eventType, int userId, OrderParam orderParam, String successUrl, String cancelUrl) {
+    public OmsAdminOrderEvent(Type eventType, Integer userId, OrderDetail OrderDetail, String reason, String operator) {
         this.eventType = eventType;
         this.userId = userId;
-        this.orderParam = orderParam;
-        this.successUrl = successUrl;
-        this.cancelUrl = cancelUrl;
+        this.orderDetail = OrderDetail;
+        this.reason = reason;
+        this.operator = operator;
         this.eventCreatedAt = now();
     }
 }

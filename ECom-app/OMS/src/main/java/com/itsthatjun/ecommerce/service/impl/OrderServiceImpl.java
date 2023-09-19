@@ -3,10 +3,11 @@ package com.itsthatjun.ecommerce.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.itsthatjun.ecommerce.config.PaypalPaymentIntent;
 import com.itsthatjun.ecommerce.config.PaypalPaymentMethod;
-import com.itsthatjun.ecommerce.dto.ConfirmOrderResult;
-import com.itsthatjun.ecommerce.dto.event.PmsProductEvent;
-import com.itsthatjun.ecommerce.dto.event.SmsCouponEvent;
-import com.itsthatjun.ecommerce.dto.event.SmsSalesStockEvent;
+import com.itsthatjun.ecommerce.dao.OrderDao;
+import com.itsthatjun.ecommerce.dto.OrderDetail;
+import com.itsthatjun.ecommerce.dto.event.outgoing.PmsProductOutEvent;
+import com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent;
+import com.itsthatjun.ecommerce.dto.event.outgoing.SmsSalesStockOutEvent;
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.exceptions.OrderException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
@@ -16,17 +17,14 @@ import com.itsthatjun.ecommerce.service.PaypalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -34,8 +32,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.itsthatjun.ecommerce.dto.event.PmsProductEvent.Type.*;
-import static com.itsthatjun.ecommerce.dto.event.SmsCouponEvent.Type.*;
+import static com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent.Type.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -44,19 +41,23 @@ public class OrderServiceImpl implements OrderService {
 
     private final double SHIPPING_COST = 15;  // default shipping cost for order less than 50
 
+    private final PaypalService paypalService;
+
+    private final OrdersMapper ordersMapper;
+
+    private final CartItemServiceImpl cartItemService;
+
+    private final OrderItemMapper orderItemMapper;
+
+    private final ProductSkuMapper stockMapper;
+
+    private final ProductMapper productMapper;
+
+    private final OrderChangeHistoryMapper changeHistoryMapper;
+
+    private final OrderDao orderDao;
+
     private final StreamBridge streamBridge;
-
-    private PaypalService paypalService;
-
-    private OrdersMapper ordersMapper;
-
-    private CartItemServiceImpl cartItemService;
-
-    private OrderItemMapper orderItemMapper;
-
-    private ProductSkuStockMapper stockMapper;
-
-    private ProductMapper productMapper;
 
     @Value("${app.SMS-service.host}")
     String couponServiceURL;
@@ -64,25 +65,29 @@ public class OrderServiceImpl implements OrderService {
     int smsPort;
 
     @Autowired
-    public OrderServiceImpl(StreamBridge streamBridge, PaypalService paypalService, OrdersMapper ordersMapper,
-                            CartItemServiceImpl cartItemService, OrderItemMapper orderItemMapper, ProductSkuStockMapper stockMapper,
-                            ProductMapper productMapper) {
-        this.streamBridge = streamBridge;
+    public OrderServiceImpl(PaypalService paypalService, OrdersMapper ordersMapper, CartItemServiceImpl cartItemService,
+                            OrderItemMapper orderItemMapper, ProductSkuMapper stockMapper, ProductMapper productMapper,
+                            OrderChangeHistoryMapper changeHistoryMapper, OrderDao orderDao, StreamBridge streamBridge) {
         this.paypalService = paypalService;
         this.ordersMapper = ordersMapper;
         this.cartItemService = cartItemService;
         this.orderItemMapper = orderItemMapper;
         this.stockMapper = stockMapper;
         this.productMapper = productMapper;
+        this.changeHistoryMapper = changeHistoryMapper;
+        this.orderDao = orderDao;
+        this.streamBridge = streamBridge;
     }
 
     @Override
-    public Mono<Orders> detail(String orderSN) {
-        OrdersExample ordersExample = new OrdersExample();
-        ordersExample.createCriteria().andOrderSnEqualTo(orderSN);
-        if (ordersMapper.selectByExample(ordersExample).isEmpty())
-            return Mono.empty();
-        return Mono.fromCallable(() -> ordersMapper.selectByExample(ordersExample).get(0));
+    public Mono<OrderDetail> getOrdeDetail(String orderSn) {
+        OrderDetail orderDetail = orderDao.getDetail(orderSn);
+
+        if (orderDetail == null) {
+            return Mono.just(orderDetail);
+        } else {
+            return Mono.error(new OrderException("Order number does not exist: " + orderSn));
+        }
     }
 
     @Override
@@ -98,10 +103,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<ConfirmOrderResult> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId) {
+    public Mono<Orders> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId) {
 
         String orderSn = generateOrderSn();
         String couponCode = orderParam.getCoupon();
+        Address address = orderParam.getAddress();
+        String payType = orderParam.getPayType();
 
         Orders newOrder = new Orders();
         List<OrderItem> orderItemList = new ArrayList<>();
@@ -117,9 +124,9 @@ public class OrderServiceImpl implements OrderService {
             int quantity = orderParam.getOrderProductSku().get(productSku);
 
             // find the sku and product
-            ProductSkuStockExample productSkuExample = new ProductSkuStockExample();
+            ProductSkuExample productSkuExample = new ProductSkuExample();
             productSkuExample.createCriteria().andSkuCodeEqualTo(productSku);
-            ProductSkuStock productSkuStock = stockMapper.selectByExample(productSkuExample).get(0);
+            ProductSku productSkuStock = stockMapper.selectByExample(productSkuExample).get(0);
 
             ProductExample productExample = new ProductExample();
             productExample.createCriteria().andIdEqualTo(productSkuStock.getProductId());
@@ -128,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
             OrderItem orderItem = new OrderItem();
             orderItem.setProductId(product.getId());
             orderItem.setProductName(product.getName());
-            orderItem.setProductQuantity(orderParam.getOrderProductSku().get(productSku));
+            orderItem.setProductQuantity(quantity);
             orderItem.setProductSkuCode(productSku);
 
             orderTotal += productSkuStock.getPromotionPrice().doubleValue() * quantity;
@@ -158,6 +165,8 @@ public class OrderServiceImpl implements OrderService {
 
         orderTotal = orderTotal - couponDiscount;
 
+        //newOrder.setPayType(payType);  // TODO: change data type to string in database
+
         newOrder.setOrderSn(orderSn);
         newOrder.setStatus(0);   // waiting for payment
         newOrder.setTotalAmount(BigDecimal.valueOf(orderTotal));
@@ -172,15 +181,17 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Generated order, increase sku lock stock
-        sendProductStockUpdateMessage("product-out-0", new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
-        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
+        sendProductStockUpdateMessage("product-out-0", new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
 
         if (!couponCode.equals("")) { // update coupon usage, won't go up even return or payment fail
-            sendCouponUpdateMessage("coupon-out-0", new SmsCouponEvent(UPDATE_COUPON_USAGE, couponCode, userId, newOrderId));
+            sendCouponUpdateMessage("coupon-out-0", new SmsCouponOutEvent(UPDATE_COUPON_USAGE, couponCode, userId, newOrderId));
         }
 
         // clear cart
         cartItemService.clearCartItem(userId);
+
+        updateChangeLog(newOrderId, 0, "generate order","user");
 
         try {
             Payment payment = paypalService.createPayment(orderTotal, "USD", PaypalPaymentMethod.paypal,
@@ -195,7 +206,11 @@ public class OrderServiceImpl implements OrderService {
             LOG.error(e.getMessage());
         }
 
-        return Mono.empty();
+        if (newOrder != null) {
+            return Mono.just(newOrder);
+        } else {
+            return Mono.error(new OrderException("error creating new order"));
+        }
     }
 
     @Override
@@ -216,6 +231,7 @@ public class OrderServiceImpl implements OrderService {
                 foundOrder.setPayerId(payerId);
                 foundOrder.setPayAmount(foundOrder.getTotalAmount());
 
+                int orderId = foundOrder.getId();
                 Date currentDate = new Date();
                 foundOrder.setPaymentTime(currentDate);
                 foundOrder.setUpdatedAt(currentDate);
@@ -242,9 +258,9 @@ public class OrderServiceImpl implements OrderService {
                     productMapper.updateByPrimaryKey(product);
 
                     // update sku stock and free lock stock
-                    ProductSkuStockExample productSkuStockExample = new ProductSkuStockExample();
+                    ProductSkuExample productSkuStockExample = new ProductSkuExample();
                     productSkuStockExample.createCriteria().andSkuCodeEqualTo(item.getProductSkuCode()).andProductIdEqualTo(product.getId());
-                    ProductSkuStock producutSku = stockMapper.selectByExample(productSkuStockExample).get(0);
+                    ProductSku producutSku = stockMapper.selectByExample(productSkuStockExample).get(0);
 
                     currentStock = producutSku.getStock();
                     producutSku.setStock(currentStock - quantityOrdered);
@@ -252,16 +268,19 @@ public class OrderServiceImpl implements OrderService {
                     stockMapper.updateByPrimaryKey(producutSku);
                 }
                 // Generated order and success payment, decrease product stock, decrease sku stock and sku lock stock
-                sendProductStockUpdateMessage("product-out-0",new PmsProductEvent(PmsProductEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
-                sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
+                sendProductStockUpdateMessage("product-out-0",new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
+                sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
+
+                updateChangeLog(orderId, 1, "payment success","user");
 
                 return Mono.just(foundOrder);
             }
         } catch (PayPalRESTException e) {
             LOG.error(e.getMessage());
         }
-        return Mono.empty();
+        return Mono.error(new OrderException("Error payment after success URL"));
     }
+
 
     @Override
     public void payFail(String orderSn) {
@@ -284,9 +303,9 @@ public class OrderServiceImpl implements OrderService {
             String skuCode = item.getProductSkuCode();
             int quantityNeeded = item.getProductQuantity();
 
-            ProductSkuStockExample example = new ProductSkuStockExample();
+            ProductSkuExample example = new ProductSkuExample();
             example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
-            ProductSkuStock skuStock = stockMapper.selectByExample(example).get(0);
+            ProductSku skuStock = stockMapper.selectByExample(example).get(0);
 
             int itemStockLockNow = skuStock.getLockStock();
             skuStock.setLockStock(itemStockLockNow - quantityNeeded);
@@ -295,39 +314,31 @@ public class OrderServiceImpl implements OrderService {
             itemOrderQuantity.put(skuCode, quantityNeeded);
         }
         // Generated order and failure payment, decrease sku lock stock
-        sendProductStockUpdateMessage("product-out-0",new PmsProductEvent(PmsProductEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
-        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
+        sendProductStockUpdateMessage("product-out-0",new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
+
+        updateChangeLog(orderId, 5, "payment fail","user");
     }
 
     @Override
-    @ApiOperation("update order status, ")
-    public Mono<Orders> update() {
-        return Mono.empty();
-    }
-
-    @Bean
-    @ApiOperation("comsume message to update stock")
-    public Mono<Orders> updateStock() {
-        return Mono.empty();
-    }
-
-
-    @Override
-    public String cancelOrder(String orderSn) {
+    public Mono<Orders> cancelOrder(String orderSn) {
 
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
-        Orders foundOrder = ordersMapper.selectByExample(ordersExample).get(0);
+        List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
 
-        if (foundOrder.getOrderSn() == null) {
+        if (ordersList.isEmpty()) {
             throw new RuntimeException("order not found with order serial number: " + orderSn); // TODO: create OrderNotFoundException
         }
+
+        Orders foundOrder = ordersList.get(0);
+        int orderId = foundOrder.getId();
 
         //  waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 , invalid 5
         int currentStatus = foundOrder.getStatus();
 
         if (currentStatus >= 2) {
-            return "Order already send out, can not cancel";
+            throw new OrderException("Order already send out, can not cancel");
         }
 
         // TODO :might add something like need admin approval after certain hours to cancel order
@@ -344,25 +355,29 @@ public class OrderServiceImpl implements OrderService {
             skuQuantity.put(skuCode, quantity);
 
             // update OMS stock, increase product and sku stock. same as return.
-            ProductSkuStockExample skuStockExample = new ProductSkuStockExample();
+            ProductSkuExample skuStockExample = new ProductSkuExample();
             skuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
-            ProductSkuStock skuStock = stockMapper.selectByExample(skuStockExample).get(0);
+            ProductSku skuStock = stockMapper.selectByExample(skuStockExample).get(0);
 
             int currentStock = skuStock.getStock();
 
             skuStock.setStock(currentStock + quantity);
             stockMapper.updateByPrimaryKey(skuStock);
-
         }
 
-        sendProductStockUpdateMessage("product-out-0", new PmsProductEvent(PmsProductEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
-        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockEvent(SmsSalesStockEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
+        sendProductStockUpdateMessage("product-out-0", new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
 
         foundOrder.setStatus(5);
-
         ordersMapper.updateByPrimaryKeySelective(foundOrder);
 
-        return "order cancelled: " + orderSn;
+        updateChangeLog(orderId, 5, "Cancel order","user");
+
+        if (foundOrder != null) {
+            return Mono.just(foundOrder);
+        } else {
+            return Mono.error(new OrderException("unable to cancel order" + orderSn));
+        }
     }
 
     // TODO: use a better way to generate order serial number
@@ -384,6 +399,16 @@ public class OrderServiceImpl implements OrderService {
         return sb.toString();
     }
 
+    private void updateChangeLog(int orderId, int status, String note, String operator) {
+        OrderChangeHistory changeLog = new OrderChangeHistory();
+        changeLog.setOrderId(orderId);
+        changeLog.setOrderStatus(status);
+        changeLog.setChangeOperator(operator);
+        changeLog.setNote(note);
+        changeLog.setCreatedAt(new Date());
+        changeHistoryMapper.insert(changeLog);
+    }
+
     private void lockStock(List<OrderItem> orderItemList) {
 
         for (OrderItem item : orderItemList) {
@@ -391,9 +416,9 @@ public class OrderServiceImpl implements OrderService {
             String skuCode = item.getProductSkuCode();
             int quantityNeeded = item.getProductQuantity();
 
-            ProductSkuStockExample example = new ProductSkuStockExample();
+            ProductSkuExample example = new ProductSkuExample();
             example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
-            ProductSkuStock itemStock = stockMapper.selectByExample(example).get(0);
+            ProductSku itemStock = stockMapper.selectByExample(example).get(0);
 
             int itemStockNow = itemStock.getLockStock();
 
@@ -408,9 +433,9 @@ public class OrderServiceImpl implements OrderService {
             int productId = item.getProductId();
             String skuCode = item.getProductSkuCode();
             int quantityNeeded = item.getProductQuantity();
-            ProductSkuStockExample example = new ProductSkuStockExample();
+            ProductSkuExample example = new ProductSkuExample();
             example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
-            ProductSkuStock itemStock = stockMapper.selectByExample(example).get(0);
+            ProductSku itemStock = stockMapper.selectByExample(example).get(0);
 
             if (itemStock != null && itemStock.getStock() < (itemStock.getLockStock() + quantityNeeded)){
                 return false; // send alert somewhere here to alert admin about low stock
@@ -419,7 +444,7 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
-    private void sendProductStockUpdateMessage(String bindingName, PmsProductEvent event) {
+    private void sendProductStockUpdateMessage(String bindingName, PmsProductOutEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
@@ -428,7 +453,7 @@ public class OrderServiceImpl implements OrderService {
         streamBridge.send(bindingName, message);
     }
 
-    private void sendSalesStockUpdateMessage(String bindingName, SmsSalesStockEvent event) {
+    private void sendSalesStockUpdateMessage(String bindingName, SmsSalesStockOutEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
@@ -437,12 +462,184 @@ public class OrderServiceImpl implements OrderService {
         streamBridge.send(bindingName, message);
     }
 
-    private void sendCouponUpdateMessage(String bindingName, SmsCouponEvent event) {
+    private void sendCouponUpdateMessage(String bindingName, SmsCouponOutEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType() , bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
                 .setHeader("partitionKey", event.getOrderId())
                 .build();
         streamBridge.send(bindingName, message);
+    }
+
+    // TODO: change these based of status code and add 4 and 5 in
+    // waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
+    @Override
+    public Flux<Orders> getAllWaitingForPayment() {
+        OrdersExample example = new OrdersExample();
+        example.createCriteria().andStatusEqualTo(0);
+        List<Orders> orderWaitingForPayment = ordersMapper.selectByExample(example);
+        return Flux.fromIterable(orderWaitingForPayment);
+    }
+
+    @Override
+    public Flux<Orders> getAllFulfulling() {
+        OrdersExample example = new OrdersExample();
+        example.createCriteria().andStatusEqualTo(1);
+        List<Orders> orderWaitingToBeFulfill = ordersMapper.selectByExample(example);
+        return Flux.fromIterable(orderWaitingToBeFulfill);
+    }
+
+    @Override
+    public Flux<Orders> getAllInSend() {
+        OrdersExample example = new OrdersExample();
+        example.createCriteria().andStatusEqualTo(2);
+        List<Orders> orderInTransit = ordersMapper.selectByExample(example);
+        return Flux.fromIterable(orderInTransit);
+    }
+
+    @Override
+    public Flux<Orders> getAllCompleteOrder() {
+        OrdersExample example = new OrdersExample();
+        example.createCriteria().andStatusEqualTo(3);
+        List<Orders> orderCompletedOrder = ordersMapper.selectByExample(example);
+        return Flux.fromIterable(orderCompletedOrder);
+    }
+
+
+    @Override
+    public Flux<Orders> getUserOrders(int memberId) {
+        OrdersExample example = new OrdersExample();
+        example.createCriteria().andMemberIdEqualTo(memberId);
+        List<Orders> ordersList = ordersMapper.selectByExample(example);
+        return Flux.fromIterable(ordersList);
+    }
+
+    @Override
+    public Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, String reason, String operator) {
+
+        // TODO: make it generate order but still need user to pay.
+        //      currently is just replacement parts, free of charge
+        //      admin make orders for user.
+
+        //  TODO: need to generate order serial number
+        String orderSn = generateOrderSn();
+        newOrder.setOrderSn(orderSn);
+        newOrder.setStatus(1);
+        newOrder.setCreatedAt(new Date());
+        newOrder.setAdminNote(reason);
+        newOrder.setPayAmount(new BigDecimal(0));
+
+        // TODO: address in here
+
+        // fill in order item info
+        for (OrderItem item : orderItemList) {
+
+            int quantity = item.getProductQuantity();
+            String productSku = item.getProductSkuCode();
+
+            // find the sku and product
+            ProductSkuExample productSkuExample = new ProductSkuExample();
+            productSkuExample.createCriteria().andSkuCodeEqualTo(productSku);
+            ProductSku productSkuStock = stockMapper.selectByExample(productSkuExample).get(0);
+
+            ProductExample productExample = new ProductExample();
+            productExample.createCriteria().andIdEqualTo(productSkuStock.getProductId());
+            Product product = productMapper.selectByExample(productExample).get(0);
+
+            item.setProductId(product.getId());
+            item.setProductName(product.getName());
+            item.setProductQuantity(quantity);
+        }
+
+        if (!hasStock(orderItemList)) {
+            throw new OrderException("Not enough stock, Unable to order");
+        }
+
+        lockStock(orderItemList);
+        ordersMapper.insert(newOrder);
+
+        int orderId = newOrder.getId();
+        Map<String, Integer> skuQuantity = new HashMap<>();
+
+        for (OrderItem item : orderItemList) {
+            item.setOrderId(orderId);
+            orderItemMapper.insert(item);
+
+            String sku = item.getProductSkuCode();
+            int quantity = item.getProductQuantity();
+            skuQuantity.put(sku, quantity);
+        }
+
+        sendProductStockUpdateMessage("product-out-0", new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
+
+        // free up stock
+        for (OrderItem item: orderItemList) {
+            int quantityOrdered = item.getProductQuantity();;
+
+            // find product and get current stock and update it
+            ProductExample productExample = new ProductExample();
+            productExample.createCriteria().andIdEqualTo(item.getProductId());
+            Product product = productMapper.selectByExample(productExample).get(0);
+
+            int currentStock = product.getStock();
+            product.setStock(currentStock - quantityOrdered);
+            productMapper.updateByPrimaryKey(product);
+
+            // update sku stock and free lock stock
+            ProductSkuExample productSkuStockExample = new ProductSkuExample();
+            productSkuStockExample.createCriteria().andSkuCodeEqualTo(item.getProductSkuCode()).andProductIdEqualTo(product.getId());
+            ProductSku producutSku = stockMapper.selectByExample(productSkuStockExample).get(0);
+
+            currentStock = producutSku.getStock();
+            producutSku.setStock(currentStock - quantityOrdered);
+            producutSku.setLockStock(producutSku.getLockStock() - quantityOrdered);
+            stockMapper.updateByPrimaryKey(producutSku);
+        }
+        sendProductStockUpdateMessage("product-out-0",new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, skuQuantity));
+        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, skuQuantity));
+
+        OrderChangeHistory changelog = new OrderChangeHistory();
+
+        updateChangeLog(orderId, 1, reason,operator);
+
+        if (newOrder != null) {
+            return Mono.just(newOrder);
+        } else {
+            return Mono.error(new OrderException("Error creating order by" + operator));
+        }
+    }
+
+    @Override
+    public Mono<Orders> updateOrder(Orders updateOrder, String reason, String operator) {
+
+        updateOrder.setUpdatedAt(new Date());
+        updateOrder.setAdminNote(reason);
+        ordersMapper.updateByPrimaryKey(updateOrder);
+
+        OrderChangeHistory changelog = new OrderChangeHistory();
+        int orderId = updateOrder.getId();
+        int status = updateOrder.getStatus();
+
+        updateChangeLog(orderId, status, reason,operator);
+
+        if (updateOrder != null) {
+            return Mono.just(updateOrder);
+        } else {
+            return Mono.error(new OrderException("Update order error with order id " + orderId));
+        }
+    }
+
+    @Override
+    public void adminCancelOrder(Orders updateOrder, String reason, String operator) {
+        updateOrder.setComment(reason);
+        updateOrder.setUpdatedAt(new Date());
+        updateOrder.setStatus(4);
+        ordersMapper.updateByPrimaryKey(updateOrder);
+
+        OrderChangeHistory changelog = new OrderChangeHistory();
+        int orderId = updateOrder.getId();
+
+        updateChangeLog(orderId, 4, reason, operator);
     }
 }

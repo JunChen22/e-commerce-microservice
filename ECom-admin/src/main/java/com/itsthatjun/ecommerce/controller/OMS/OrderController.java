@@ -1,83 +1,135 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
+import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
+import com.itsthatjun.ecommerce.dto.oms.OrderParam;
+import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderEvent;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
-import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.service.OMS.implementation.OrderServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
-import javax.servlet.http.HttpSession;
-import java.util.List;
+import static com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderEvent.Type.*;
+import static java.util.logging.Level.FINE;
 
 @RestController
 @RequestMapping("/order")
 @Api(tags = "Order related", description = "retrieve information about an order(s) and change order")
 public class OrderController {
 
-    private final OrderServiceImpl orderService;
+    private static final Logger LOG = LoggerFactory.getLogger(OrderController.class);
+
+    private final WebClient webClient;
+
+    private final StreamBridge streamBridge;
+
+    private final Scheduler publishEventScheduler;
+
+    @Value("${app.OMS-service.host}")
+    String orderServiceURL;
+    @Value("${app.OMS-service.port}")
+    int port;
 
     @Autowired
-    public OrderController(OrderServiceImpl orderService) {
-        this.orderService = orderService;
+    public OrderController(WebClient.Builder webClient, StreamBridge streamBridge,
+                           @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.webClient = webClient.build();
+        this.streamBridge = streamBridge;
+        this.publishEventScheduler = publishEventScheduler;
     }
 
     @GetMapping("/payment")
     @ApiOperation(value = "List all orders that need to be paid")
-    public List<Orders> listAllOrdersWaitForPayment(){
-        return orderService.getAllWaitingForPayment();
+    public Flux<Orders> listAllOrdersWaitForPayment(){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/payment";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/fulfill")
     @ApiOperation(value = "List all orders that need to be fulfill/open")
-    public List<Orders> listAllFulfullingOrders(){
-        return orderService.getAllFulfulling();
+    public Flux<Orders> listAllFulfullingOrders(){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/fulfill";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/send")
     @ApiOperation(value = "List all orders that are send")
-    public List<Orders> listAllSendOrders(){
-        return orderService.getAllInSend();
+    public Flux<Orders> listAllSendOrders(){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/send";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/complete")
     @ApiOperation(value = "List all orders that are delivered")
-    public List<Orders> listAl(){
-        return orderService.getAllCompleteOrder();
+    public Flux<Orders> listAl(){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/complete";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/user/{userId}")
     @ApiOperation(value = "get all orders made by user")
-    public List<Orders> getUserOrders(@PathVariable int id){
-        return orderService.getUserOrders(id);
+    public Flux<Orders> getUserOrders(@PathVariable int userId){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/user/" + userId;
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/{serialNumber}")
     @ApiOperation(value = "look up a order by serial number")
-    public Orders getOrder(@PathVariable String serialNumber){
-        Orders order = orderService.getOrderByOrderNumber(serialNumber);
-        return order;
+    public Mono<Orders> getOrder(@PathVariable String serialNumber){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/" + serialNumber;
+
+        return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
     @PostMapping("/create")
     @ApiOperation(value = "create order")
-    public Orders createOrder(@RequestBody Orders newOrder, HttpSession session){
-        String adminName = (String) session.getAttribute("adminName");
-        orderService.createOrder(newOrder, adminName);
-        return newOrder;
+    public void createOrder(@RequestBody OrderDetail orderDetail, @RequestParam int userId){
+        Mono.fromRunnable(() -> sendMessage("order-out-0", new OmsAdminOrderEvent(GENERATE_ORDER, userId, orderDetail, null, "")))
+                .subscribeOn(publishEventScheduler).subscribe();
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "update a order")
-    public Orders updateOrder(Orders updateOrder){
-        orderService.updateOrder(updateOrder);
-        return updateOrder;
+    public void updateOrder(@RequestBody OrderDetail orderDetail){
+        Mono.fromRunnable(() -> sendMessage("order-out-0", new OmsAdminOrderEvent(UPDATE_ORDER, null, orderDetail, "", "")))
+                .subscribeOn(publishEventScheduler).subscribe();
     }
 
     @DeleteMapping("/delete/{serialNumber}")
     @ApiOperation(value = "delete a order by serial number")
-    public void deleteOrder(@PathVariable String serialNumber){
-        orderService.deleteOrder(serialNumber);
+    public void deleteOrder(@PathVariable String serialNumber, @RequestParam int userId){
+        Mono.fromRunnable(() -> sendMessage("order-out-0", new OmsAdminOrderEvent(CANCEL_ORDER, userId, null, null, "")))
+                .subscribeOn(publishEventScheduler).subscribe();
+    }
+
+    private void sendMessage(String bindingName, OmsAdminOrderEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 }

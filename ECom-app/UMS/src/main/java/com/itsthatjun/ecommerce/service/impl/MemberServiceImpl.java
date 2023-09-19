@@ -119,4 +119,33 @@ public class MemberServiceImpl implements MemberService , UserDetailsService {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+    @Override
+    public Member getUserDetail(String username) {
+        MemberExample example = new MemberExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        List<Member> member = memberMapper.selectByExample(example);
+        return member.get(0);
+    }
+
+    @Override
+    public Member deactivateMember(String username) {
+        MemberExample example = new MemberExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        List<Member> members = memberMapper.selectByExample(example);
+        members.get(0).setStatus("disable");
+        memberMapper.updateByExampleSelective(members.get(0), example);
+        return members.get(0);
+    }
+
+    @Override
+    public Member activateMember(String username) {
+        MemberExample example = new MemberExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        List<Member> members = memberMapper.selectByExample(example);
+        members.get(0).setStatus("active");
+        memberMapper.updateByExampleSelective(members.get(0), example);
+        return members.get(0);
+    }
 }

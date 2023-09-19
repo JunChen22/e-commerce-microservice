@@ -1,5 +1,7 @@
 package com.itsthatjun.ecommerce.service.impl;
 
+import com.itsthatjun.ecommerce.dto.CouponDiscount;
+import com.itsthatjun.ecommerce.exceptions.CouponException;
 import com.itsthatjun.ecommerce.exceptions.ProductException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
@@ -7,29 +9,48 @@ import com.itsthatjun.ecommerce.service.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
 @Service
 public class CouponServiceImpl implements CouponService {
 
     private final CouponMapper couponMapper;
+
     private final ProductMapper productMapper;
+
     private final CouponHistoryMapper couponHistoryMapper;
+
     private final CouponProductRelationMapper productRelationMapper;
-    private final ProductSkuStockMapper skuStockMapper;
+
+    private final ProductSkuMapper productSkuMapper;
 
     @Autowired
     public CouponServiceImpl(CouponMapper couponMapper, ProductMapper productMapper, CouponHistoryMapper couponHistoryMapper,
-                             CouponProductRelationMapper productRelationMapper, ProductSkuStockMapper skuStockMapper) {
+                             CouponProductRelationMapper productRelationMapper, ProductSkuMapper productSkuMapper) {
         this.couponMapper = couponMapper;
         this.productMapper = productMapper;
         this.couponHistoryMapper = couponHistoryMapper;
         this.productRelationMapper = productRelationMapper;
-        this.skuStockMapper = skuStockMapper;
+        this.productSkuMapper = productSkuMapper;
+    }
+
+
+    @Override
+    public CouponDiscount checkDiscount(CouponDiscount couponDiscount) {
+        String couponCode = couponDiscount.getCouponCode();
+        Map<String, Integer> skuQuantity = couponDiscount.getSkuQuantity();
+
+        if (checkCoupon(couponCode) == null) {
+            couponDiscount.setMessage("Coupon does not exist or not work with current items");
+            return couponDiscount;
+        }
+        double discountAmount = getDiscountAmount(skuQuantity, couponCode);
+        couponDiscount.setDiscountAmount(discountAmount);
+        return couponDiscount;
     }
 
     @Override
@@ -41,7 +62,6 @@ public class CouponServiceImpl implements CouponService {
             return null;
         return result.get(0);
     }
-
 
     // -- discount on 0-> all, 1 -> specific brand, 2-> specific item
     @Override
@@ -91,53 +111,184 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public double getDiscountAmount(Map<String, Integer> skuQuantity, String couponCode) {
 
-        if (couponCode == null) return 0;
-
-        CouponExample couponExample = new CouponExample();
-        couponExample.createCriteria().andCodeEqualTo(couponCode);
-        Coupon coupon = couponMapper.selectByExample(couponExample).get(0);
-        if (coupon == null) return 0;
+        Coupon foundCoupon = checkCoupon(couponCode);
+        if (foundCoupon == null) {
+            return 0;
+        }
 
         double totalDiscount = 0;
 
         // check expiration
-        Date startDate = coupon.getStartTime();
-        Date endDate = coupon.getEndTime();
+        Date startDate = foundCoupon.getStartTime();
+        Date endDate = foundCoupon.getEndTime();
         Date currentDate = new Date();
 
         if (!(currentDate.after(startDate) && currentDate.before(endDate))) {
             return 0;
         }
 
+        if (foundCoupon.getStatus() == 0) return 0;  // not active coupon
+
         // check usage limit
-        if (coupon.getCount() <= coupon.getUsedCount() && coupon.getUsedCount() >= coupon.getPublishCount()) return 0;
+        if (foundCoupon.getCount() <= foundCoupon.getUsedCount() && foundCoupon.getUsedCount() >= foundCoupon.getPublishCount()) return 0;
+
+        // discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item
+        if (foundCoupon.getCouponType() == 0) {  // whole order discount
+            totalDiscount = wholeOrderDiscount(skuQuantity, foundCoupon);
+            return totalDiscount;
+        }
 
         // TODO:  create dao and use SQL for simpler method
         // Find products affected by this coupon
         CouponProductRelationExample productRelationExample = new CouponProductRelationExample();
-        productRelationExample.createCriteria().andCouponIdEqualTo(coupon.getId());
+        productRelationExample.createCriteria().andCouponIdEqualTo(foundCoupon.getId());
         List<CouponProductRelation> itemAffectedByCouponList = productRelationMapper.selectByExample(productRelationExample);
 
         for (String skuCode : skuQuantity.keySet()) {
             String itemSKuCode = skuCode;
             int quantityNeeded = skuQuantity.get(skuCode);
 
-            ProductSkuStockExample productSkuStockExample = new ProductSkuStockExample();
+            ProductSkuExample productSkuStockExample = new ProductSkuExample();
             productSkuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
-            ProductSkuStock productSkuStock = skuStockMapper.selectByExample(productSkuStockExample).get(0);
+            ProductSku productSkuStock = productSkuMapper.selectByExample(productSkuStockExample).get(0);
 
             int itemId = productSkuStock.getProductId();
 
             for (CouponProductRelation discountItem: itemAffectedByCouponList) {
                 if (discountItem.getProductSkuCode().equals(itemSKuCode)  && discountItem.getProductId() == itemId) {
-                    if (coupon.getDiscountType() == 0) {// discount by amount
-                        totalDiscount = totalDiscount + (coupon.getAmount().doubleValue() * quantityNeeded);
+                    if (foundCoupon.getDiscountType() == 0) {// discount by amount
+                        totalDiscount = totalDiscount + (foundCoupon.getAmount().doubleValue() * quantityNeeded);
                     } else {   // discount  by percent
-                        totalDiscount = totalDiscount + ((coupon.getAmount().doubleValue() * productSkuStock.getPromotionPrice().doubleValue()) / 100) * quantityNeeded;
+                        totalDiscount = totalDiscount + ((foundCoupon.getAmount().doubleValue() * productSkuStock.getPromotionPrice().doubleValue()) / 100) * quantityNeeded;
                     }
                 }
             }
         }
         return totalDiscount;
+    }
+
+    private double wholeOrderDiscount(Map<String, Integer> skuQuantity, Coupon coupon) {
+        double totalDiscount = 0;
+        double totalPrice = 0;
+        for (String skuCode : skuQuantity.keySet()) {
+            String itemSKuCode = skuCode;
+            int quantityNeeded = skuQuantity.get(skuCode);
+
+            ProductSkuExample productSkuStockExample = new ProductSkuExample();
+            productSkuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
+            ProductSku productSkuStock = productSkuMapper.selectByExample(productSkuStockExample).get(0);
+            totalPrice += productSkuStock.getPromotionPrice().doubleValue() * quantityNeeded;
+        }
+
+        if (coupon.getDiscountType() == 0) {// discount by amount
+            totalDiscount = coupon.getAmount().doubleValue();
+        } else {   // discount  by percent
+            totalDiscount =  ((coupon.getAmount().doubleValue() * totalPrice) / 100);
+        }
+        return totalDiscount;
+    }
+
+    @Override
+    public Coupon createCoupon(Coupon newCoupon, Map<String, Integer> skuMap) {
+
+        String couponCode = newCoupon.getCode();
+        Coupon existingCoupon = checkCoupon(couponCode);
+        if (existingCoupon != null) throw new CouponException("Coupon code already exist");
+
+        int couponType = newCoupon.getCouponType();
+        if (couponType == 0) {  // whole order discount coupon, don't need to add affect item
+            couponMapper.insert(newCoupon);
+            return newCoupon;
+        }
+
+        couponMapper.insert(newCoupon);
+        int couponId = newCoupon.getId();
+
+        // quantity is not needed, could also store product id into value, <Sku code, productId>
+        for (String skuCode : skuMap.keySet()) {
+
+            CouponProductRelation newProduct = new CouponProductRelation();
+
+            ProductSkuExample productSkuExample = new ProductSkuExample();
+            productSkuExample.createCriteria().andSkuCodeEqualTo(skuCode);
+            ProductSku productSku = productSkuMapper.selectByExample(productSkuExample).get(0);
+
+            int productId = productSku.getProductId();
+
+            Product foundProduct = productMapper.selectByPrimaryKey(productId);
+            String productName= foundProduct.getName();
+            String productSn = foundProduct.getSn();
+
+            newProduct.setCouponId(couponId);
+            newProduct.setProductId(productId);
+            newProduct.setProductName(productName);
+            newProduct.setProductSn(productSn);
+            newProduct.setProductSkuCode(skuCode);
+            productRelationMapper.insert(newProduct);
+        }
+
+        // TODO: create coupon log, different from used history.
+
+        return newCoupon;
+    }
+
+    @Override
+    public List<Coupon> getAllCoupon() {
+        LocalDate localDate = LocalDate.now();
+        java.sql.Date date = java.sql.Date.valueOf(localDate);
+        CouponExample example = new CouponExample();
+        example.createCriteria().andEndTimeGreaterThan(date);
+        return couponMapper.selectByExample(example);
+    }
+
+    @Override
+    public Coupon getACoupon(int id) {
+        return couponMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Coupon updateCoupon(Coupon updateCoupon, Map<String, Integer> skuMap) {
+
+        int couponId = updateCoupon.getId();
+        Coupon foundCoupon = couponMapper.selectByPrimaryKey(couponId);
+
+        // currently can't change coupon type or coupon code itself
+        if (foundCoupon.getCouponType() != updateCoupon.getCouponType()) {
+            throw new CouponException("Can not change coupon type");
+        }
+
+        if (foundCoupon.getCode() != updateCoupon.getCode()) {
+            throw new CouponException("Can not change coupon code");
+        }
+
+        couponMapper.updateByPrimaryKey(updateCoupon);
+        // TODO: add a log
+
+        return updateCoupon;
+    }
+
+    private Coupon updateCouponProduct(Coupon updateCoupon) {
+        CouponExample example = new CouponExample();
+        example.createCriteria().andIdEqualTo(updateCoupon.getId());
+        couponMapper.updateByExample(updateCoupon, example);
+
+
+        // find existing
+
+        return updateCoupon;
+    }
+
+    @Override
+    public void deleteCoupon(int couponId) {
+        couponMapper.deleteByPrimaryKey(couponId);
+
+        CouponProductRelationExample productRelationExample = new CouponProductRelationExample();
+        productRelationExample.createCriteria().andCouponIdEqualTo(couponId);
+        List<CouponProductRelation> couponProductRelationList = productRelationMapper.selectByExample(productRelationExample);
+
+        for (CouponProductRelation product : couponProductRelationList) {
+            int productRelationId = product.getId();
+            productRelationMapper.deleteByPrimaryKey(productRelationId);
+        }
     }
 }

@@ -8,8 +8,6 @@ import java.util.List;
 
 @Data
 public class UsedCouponHistory {
-
     private Coupon coupon;
     private List<CouponHistory> couponHistoryList;
-
 }

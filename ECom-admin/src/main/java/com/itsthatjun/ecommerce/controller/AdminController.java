@@ -5,7 +5,7 @@ import com.itsthatjun.ecommerce.mbg.model.AdminLoginLog;
 import com.itsthatjun.ecommerce.mbg.model.Permission;
 import com.itsthatjun.ecommerce.mbg.model.Roles;
 import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
-import com.itsthatjun.ecommerce.service.UMS.implementation.AdminServiceImpl;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import com.itsthatjun.ecommerce.mbg.model.Admin;
 import com.itsthatjun.ecommerce.security.LoginRequest;
 import com.itsthatjun.ecommerce.security.LoginResponse;

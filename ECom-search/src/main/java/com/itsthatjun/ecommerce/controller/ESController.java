@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/esProduct")
-@Api(tags = "EsProductController", description = "brand management")
+@Api(tags = "EsProductController", description = "Elastic search management")
 public class ESController {
 
     @Autowired

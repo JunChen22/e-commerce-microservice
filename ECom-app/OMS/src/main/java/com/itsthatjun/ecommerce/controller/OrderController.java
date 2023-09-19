@@ -1,15 +1,12 @@
 package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.config.URLUtils;
-import com.itsthatjun.ecommerce.dto.ConfirmOrderResult;
+import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.dto.OrderParam;
-import com.itsthatjun.ecommerce.mbg.model.Address;
-import com.itsthatjun.ecommerce.mbg.model.CartItem;
+import com.itsthatjun.ecommerce.mbg.model.OrderItem;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.service.impl.OrderServiceImpl;
 import com.itsthatjun.ecommerce.service.PaypalService;
-import com.paypal.api.payments.Payment;
-import com.paypal.base.rest.PayPalRESTException;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -22,7 +19,6 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -56,13 +52,14 @@ public class OrderController {
 
     @ApiOperation("Get Order Detail by serial number")
     @GetMapping("/detail/{orderSn}")
-    public Mono<Orders> detail(@PathVariable String orderSn) {
-        return orderService.detail(orderSn);
+    public Mono<OrderDetail> detail(@PathVariable String orderSn) {
+        return orderService.getOrdeDetail(orderSn);
     }
+
 
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
-    public Mono<ConfirmOrderResult> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request, HttpSession session, @RequestParam int userId){
+    public Mono<Orders> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request, HttpSession session, @RequestParam int userId){
         session.setAttribute("shippingAddress", orderParam.getAddress());
         session.setAttribute("couponCode", orderParam.getCoupon());
 
@@ -88,7 +85,7 @@ public class OrderController {
 
     @ApiOperation("Cancel order")
     @PostMapping("/cancelOrder/{orderSn}")
-    public String cancelUserOrder(@PathVariable String orderSn) {
+    public Mono<Orders> cancelUserOrder(@PathVariable String orderSn) {
         return orderService.cancelOrder(orderSn);
     }
 
@@ -99,5 +96,63 @@ public class OrderController {
     @PostMapping(value = "/confirmReceiveOrder/{orderId}")
     public String confirmReceiveOrder(@PathVariable int orderId) {
         return null;
+    }
+
+    @GetMapping("/admin/payment")
+    @ApiOperation(value = "List all orders that need to be paid")
+    public Flux<Orders> listAllOrdersWaitForPayment(){
+        return orderService.getAllWaitingForPayment();
+    }
+
+    @GetMapping("/admin/fulfill")
+    @ApiOperation(value = "List all orders that need to be fulfill/open")
+    public Flux<Orders> listAllFulfullingOrders(){
+        return orderService.getAllFulfulling();
+    }
+
+    @GetMapping("/admin/send")
+    @ApiOperation(value = "List all orders that are send")
+    public Flux<Orders> listAllSendOrders(){
+        return orderService.getAllInSend();
+    }
+
+    @GetMapping("/admin/complete")
+    @ApiOperation(value = "List all orders that are delivered")
+    public Flux<Orders> listAl(){
+        return orderService.getAllCompleteOrder();
+    }
+
+    @GetMapping("/admin/user/{id}")
+    @ApiOperation(value = "get all orders made by user")
+    public Flux<Orders> getUserOrders(@PathVariable int id){
+        return orderService.getUserOrders(id);
+    }
+
+    @GetMapping("/admin/{serialNumber}")
+    @ApiOperation(value = "look up a order by serial number")
+    public Mono<OrderDetail> getOrder(@PathVariable String serialNumber){
+        return orderService.getOrdeDetail(serialNumber);
+    }
+
+    @PostMapping("/admin/create")
+    @ApiOperation(value = "create order")
+    public Mono<Orders> createOrder(@RequestBody OrderDetail newOrderDetail){
+
+        Orders newOrder = newOrderDetail.getOrders();
+        List<OrderItem> orderItemList = newOrderDetail.getOrderItemList();
+
+        return orderService.createOrder(newOrder, orderItemList, "", "");
+    }
+
+    @PostMapping("/admin/update")
+    @ApiOperation(value = "update a order")
+    public Mono<Orders> updateOrder(@RequestBody Orders updateOrder){
+        return orderService.updateOrder(updateOrder, "", "");
+    }
+
+    @DeleteMapping("/admin/delete/{serialNumber}")
+    @ApiOperation(value = "delete a order by serial number")
+    public void deleteOrder(@RequestBody Orders orderToDelete){
+        orderService.adminCancelOrder(orderToDelete, "", "");
     }
 }

@@ -60,10 +60,6 @@ spring.cloud.stream:
       destination: adminOrder
       producer:
         required-groups: adminOrderGroup
-    cart-out-0:
-      destination: adminCart
-      producer:
-        required-groups: adminCartGroup
     return-out-0:
       destination: adminReturn
       producer:

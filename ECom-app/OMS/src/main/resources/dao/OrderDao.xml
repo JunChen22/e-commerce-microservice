@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.dao.OrderDao">
-    <resultMap id="orderDetailMap" type="com.itsthatjun.ecommerce.dto.OrderDetail"
-               extends="com.itsthatjun.ecommerce.mbg.mapper.OrdersMapper.BaseResultMap">
-        <collection property="orderItemList" columnPrefix="oi_"
-                    resultMap="com.itsthatjun.ecommerce.mbg.mapper.OrderItemMapper.BaseResultMap">
+    <resultMap id="orderDetailMap" type="com.itsthatjun.ecommerce.dto.OrderDetail" autoMapping="true">
+        <association property="orders" javaType="com.itsthatjun.ecommerce.mbg.model.Orders">
+            <id property="id" column="id"/>
+            <result property="orderSn" column="order_sn"/>
+            <result property="memberId" column="member_id"/>
+        </association>
+        <collection property="orderItemList" ofType="com.itsthatjun.ecommerce.mbg.model.OrderItem">
+            <id property="id" column="oi_id"/>
+            <result property="productName" column="oi_product_name"/>
+            <result property="productSkuId" column="oi_product_sku_id"/>
+            <result property="productSkuCode" column="oi_product_sku_code"/>
+            <result property="productQuantity" column="oi_product_quantity"/>
         </collection>
     </resultMap>
 

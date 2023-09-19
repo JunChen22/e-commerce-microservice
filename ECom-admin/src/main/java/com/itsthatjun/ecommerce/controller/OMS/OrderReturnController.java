@@ -1,83 +1,135 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.oms.OrderReturnApplyDecision;
-import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
-import com.itsthatjun.ecommerce.service.OMS.implementation.ReturnOrderServiceImpl;
+import com.itsthatjun.ecommerce.dto.oms.ReturnRequestDecision;
+import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
+import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderReturnEvent;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
+
+import static com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderReturnEvent.Type.*;
+import static java.util.logging.Level.FINE;
 
 @RestController
 @RequestMapping("/order/return")
 @Api(tags = "return related", description = "apply return and related api")
 public class OrderReturnController {
 
-    private final ReturnOrderServiceImpl returnOrderService;
+    private static final Logger LOG = LoggerFactory.getLogger(OrderReturnController.class);
+
+    private final WebClient webClient;
+
+    private final StreamBridge streamBridge;
+
+    private final Scheduler publishEventScheduler;
+
+    @Value("${app.OMS-service.host}")
+    String orderServiceURL;
+    @Value("${app.OMS-service.port}")
+    int port;
 
     @Autowired
-    public OrderReturnController(ReturnOrderServiceImpl returnOrderService) {
-        this.returnOrderService = returnOrderService;
+    public OrderReturnController(WebClient.Builder webClient, StreamBridge streamBridge,
+                                 @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.webClient = webClient.build();
+        this.streamBridge = streamBridge;
+        this.publishEventScheduler = publishEventScheduler;
     }
-
-    // return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3
 
     @GetMapping("/AllOpening")
     @ApiOperation(value = "list all return request open waiting to be approved")
-    public List<OrderReturnApply> listAllOpening(){
-        return returnOrderService.getAllOpening();
+    public Flux<ReturnRequest> listAllOpening(){
+
+        String url = "http://" + orderServiceURL + ":" + port + "/order/return/admin/AllOpening";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/AllReturning")
     @ApiOperation(value = "List all returns that are on their way")
-    public List<OrderReturnApply> listReturning(){
-        return returnOrderService.getAllReturning();
+    public Flux<ReturnRequest> listReturning(){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/return/admin/AllReturning";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/AllCompleted")
     @ApiOperation(value = "List ALl completed returns")
-    public List<OrderReturnApply> listAllCompleted(){
-        return returnOrderService.getAllCompleted();
+    public Flux<ReturnRequest> listAllCompleted(){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/return/admin/AllCompleted";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/AllRejected")
     @ApiOperation(value = "List All rejected returns requests")
-    public List<OrderReturnApply> listAllRejected(){
-        return returnOrderService.getAllRejected();
+    public Flux<ReturnRequest> listAllRejected(){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/return/admin/AllRejected";
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @GetMapping("/{serialNumber}")
     @ApiOperation(value = "return a return request detail")
-    public OrderReturnApply getReturnRequest(@PathVariable String serialNumber){
-        return returnOrderService.getOrderReturnDetail(serialNumber);
+    public Mono<ReturnRequest> getReturnRequest(@PathVariable String serialNumber){
+        String url = "http://" + orderServiceURL + ":" + port + "/order/return/admin/" + serialNumber;
+
+        return webClient.get().uri(url).retrieve().bodyToMono(ReturnRequest.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "update the status of the return apply")
-    public OrderReturnApplyDecision updateReturnOrderStatus(@RequestBody OrderReturnApplyDecision orderReturnApplyDecision, HttpSession session){
-        OrderReturnApply returnApply = orderReturnApplyDecision.getReturnApply();
+    public void updateReturnOrderStatus(@RequestBody ReturnRequestDecision returnRequestDecision, HttpSession session){
+        String operator = (String) session.getAttribute("adminName");
 
-        String adminName = (String) session.getAttribute("adminName");
+        OmsAdminOrderReturnEvent event;
 
-        orderReturnApplyDecision.getReturnApply().setHandleOperator(adminName);
-
-        switch (orderReturnApplyDecision.getStatus()) {
+        switch (returnRequestDecision.getStatus()) {
             case APPROVED:
-                returnOrderService.approveReturnRequest(returnApply);
+                event = new OmsAdminOrderReturnEvent(APPROVED, returnRequestDecision, operator);
                 break;
+
             case REJECTED:
-                String rejectionReason = orderReturnApplyDecision.getReason();
-                returnOrderService.rejectReturnRequest(returnApply, rejectionReason);
+                event = new OmsAdminOrderReturnEvent(REJECTED, returnRequestDecision, operator);
                 break;
+
             case COMPLETED_RETURN:
-                returnOrderService.completeReturnRequest(returnApply);
+                event = new OmsAdminOrderReturnEvent(COMPLETED_RETURN, returnRequestDecision, operator);
                 break;
+
             default:
                 throw new IllegalArgumentException("Invalid status");
         }
-        return orderReturnApplyDecision;
+
+        Mono.fromRunnable(() -> sendMessage("return-out-0", event))
+                .subscribeOn(publishEventScheduler).subscribe();
+    }
+
+    private void sendMessage(String bindingName, OmsAdminOrderReturnEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 }

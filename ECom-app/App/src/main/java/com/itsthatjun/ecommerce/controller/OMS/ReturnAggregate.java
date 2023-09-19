@@ -39,13 +39,6 @@ public class ReturnAggregate {
         this.publishEventScheduler = publishEventScheduler;
     }
 
-
-
-
-
-
-
-
     private void sendMessage(String bindingName, OmsCartEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);

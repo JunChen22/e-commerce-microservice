@@ -23,4 +23,13 @@ public interface MemberService {
 
     @ApiOperation(value = "")
     Member getMemberByUserName(String username);
+
+    @ApiOperation(value = "")
+    Member getUserDetail(String username);
+
+    @ApiOperation(value = "")
+    Member deactivateMember(String username);
+
+    @ApiOperation(value = "")
+    Member activateMember(String username);
 }

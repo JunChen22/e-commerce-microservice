@@ -38,5 +38,10 @@ spring:
   elasticsearch:
     rest:
       uris: http://elasticsearch:9200
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: springecommerece
 
 spring.data.mongodb.host: mongodb

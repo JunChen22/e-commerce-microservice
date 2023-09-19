@@ -1,10 +1,17 @@
 package com.itsthatjun.ecommerce.config;
 
-import com.itsthatjun.ecommerce.dto.event.*;
+import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminBrandEvent;
+import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminProductEvent;
+import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminReviewEvent;
+import com.itsthatjun.ecommerce.dto.event.incoming.OmsUpdateIncomingEvent;
+import com.itsthatjun.ecommerce.dto.event.incoming.PmsReviewEvent;
+import com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent;
 import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import com.itsthatjun.ecommerce.mbg.model.Review;
-import com.itsthatjun.ecommerce.mbg.model.ReviewPictures;
+import com.itsthatjun.ecommerce.service.OmsEventUpdateService;
+import com.itsthatjun.ecommerce.service.SmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.impl.BrandServiceImpl;
 import com.itsthatjun.ecommerce.service.impl.ProductServiceImpl;
 import com.itsthatjun.ecommerce.service.impl.ReviewServiceImpl;
@@ -18,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent.Type.UPDATE_SALE_PRICE;
+
 @Configuration
 public class MessageProcessorConfig {
 
@@ -29,46 +38,18 @@ public class MessageProcessorConfig {
 
     private final ReviewServiceImpl reviewService;
 
+    private final OmsEventUpdateService omsEventUpdateService;
+
+    private final SmsEventUpdateService smsEventUpdateService;
+
     @Autowired
-    public MessageProcessorConfig(ProductServiceImpl productService, ReviewServiceImpl reviewService, BrandServiceImpl brandService) {
+    public MessageProcessorConfig(BrandServiceImpl brandService, ProductServiceImpl productService, ReviewServiceImpl reviewService,
+                                  OmsEventUpdateService omsEventUpdateService, SmsEventUpdateService smsEventUpdateService) {
+        this.brandService = brandService;
         this.productService = productService;
         this.reviewService = reviewService;
-        this.brandService = brandService;
-    }
-
-    @Bean
-    public Consumer<PmsProductEvent> productMessageProcessor() {
-        // lambda expression of override method accept
-        return event -> {
-            LOG.info("Process message created at {}...", event.getEventCreatedAt());
-
-            Map<String, Integer> skuQuantityMap = event.getProductMap();
-            switch (event.getEventType()) {
-
-                case UPDATE_PURCHASE:
-                    productService.updatePurchase(skuQuantityMap);
-                    break;
-
-                case UPDATE_PURCHASE_PAYMENT:
-                    productService.updatePurchasePayment(skuQuantityMap);
-                    break;
-
-                case UPDATE_RETURN:
-                    productService.updateReturn(skuQuantityMap);
-                    break;
-
-                case UPDATE_FAIL_PAYMENT:
-                    productService.updateFailPayment(skuQuantityMap);
-                    break;
-
-                default:
-
-                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_PURCHASE, " +
-                            "UPDATE_PURCHASE_PAYMENT, UPDATE_RETURN and UPDATE_FAIL_PAYMENT event";
-                    LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
-            }
-        };
+        this.omsEventUpdateService = omsEventUpdateService;
+        this.smsEventUpdateService = smsEventUpdateService;
     }
 
     @Bean
@@ -99,6 +80,7 @@ public class MessageProcessorConfig {
             }
         };
     }
+
 
     @Bean
     public Consumer<PmsAdminBrandEvent> adminBrandMessageProcessor() {
@@ -135,19 +117,22 @@ public class MessageProcessorConfig {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
-            Product product = event.getProduct();
+            Product product = event.getProductDetail().getProduct();
             switch (event.getEventType()) {
 
-                case CREATE:
+                case NEW_PRODUCT:
                     productService.createProduct(product);
                     break;
 
-                case UPDATE:
+                case UPDATE_STOCK:
                     productService.updateProduct(product);
                     break;
 
-                case DELETE:
-                    int productId = event.getProductId();
+                case UPDATE_PRODUCT_PRICE:
+                    break;
+
+                case REMOVE_PRODUCT:
+                    int productId = product.getId();
                     productService.deleteProduct(productId);
                     break;
 
@@ -184,6 +169,59 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", CREATE, UPDATE, and DELETE event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage); // TODO: create event exception
+            }
+        };
+    }
+
+    @Bean
+    public Consumer<OmsUpdateIncomingEvent> omsProductMessageProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+
+            Map<String, Integer> skuQuantityMap = event.getProductMap();
+            switch (event.getEventType()) {
+
+                case UPDATE_PURCHASE:
+                    omsEventUpdateService.updatePurchase(skuQuantityMap);
+                    break;
+
+                case UPDATE_PURCHASE_PAYMENT:
+                    omsEventUpdateService.updatePurchasePayment(skuQuantityMap);
+                    break;
+
+                case UPDATE_RETURN:
+                    omsEventUpdateService.updateReturn(skuQuantityMap);
+                    break;
+
+                case UPDATE_FAIL_PAYMENT:
+                    omsEventUpdateService.updateFailPayment(skuQuantityMap);
+                    break;
+
+                default:
+
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_PURCHASE, " +
+                            "UPDATE_PURCHASE_PAYMENT, UPDATE_RETURN and UPDATE_FAIL_PAYMENT event";
+                    LOG.warn(errorMessage);
+                    throw new RuntimeException(errorMessage); // TODO: create event exception
+            }
+        };
+    }
+
+    @Bean
+    public Consumer<SmsUpdateIncomingEvent> smsProductMessageProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+
+            List<ProductSku> skuList = event.getSkuList();
+            if (event.getEventType() == UPDATE_SALE_PRICE) {
+                smsEventUpdateService.updateSale(skuList);
+            } else {
+                String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_SALE_PRICE" +
+                        " event";
+                LOG.warn(errorMessage);
+                throw new RuntimeException(errorMessage); // TODO: create event exception
             }
         };
     }

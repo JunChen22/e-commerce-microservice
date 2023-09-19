@@ -71,4 +71,16 @@ public class PaypalService {
         paymentExecute.setPayerId(payerId);
         return payment.execute(apiContext, paymentExecute);
     }
+
+    // TODO: create refund for return service after complete
+    public Refund createRefund() {
+        RefundDetail refundDetail = new RefundDetail();
+        Refund refund = new Refund();
+        RefundRequest refundRequest = new RefundRequest();
+        return null;
+    }
+
+    public RefundDetail executeRefund() throws PayPalRESTException {
+        return  null;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 public interface OrderDao {
 
     @ApiModelProperty(value = "Get the order detail by order ID", example = "12345")
-    OrderDetail getDetail(@Param("orderId") Long Id);
+    OrderDetail getDetail(@Param("orderId") String orderSn);
 
     @ApiModelProperty(value = "Update the stock of SKUs in the given list of order items")
     int updateSkuStock(@Param("itemList") List<OrderItem> orderItemList);

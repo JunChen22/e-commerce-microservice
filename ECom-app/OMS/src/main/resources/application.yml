@@ -50,40 +50,53 @@ spring.rabbitmq:
 
 spring.cloud:
   function:
-    # can't have space between, tells spring which to use
-    definition: orderMessageProcessor;orderCompleteMessageProcessor;cartMessageProcessor;returnMessageProcessor
+    # can't have space between, tells spring which to use, using a pipe character allow multi-line.
+    definition: | 
+      cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;
+      adminOrderMessageProcessor;adminReturnMessageProcessor;
+      updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
   stream:
     default:
       contentType: application/json
     bindings:
+      cartMessageProcessor-in-0:        # incoming message from app/customer
+        destination: cart
+        group: cartGroup
+      returnMessageProcessor-in-0:
+        destination: return
+        group: returnGroup
       orderMessageProcessor-in-0:
         destination: order
         group: orderGroup
       orderCompleteMessageProcessor-in-0:
         destination: orderComplete
         group: orderGroup
-      cartMessageProcessor-in-0:
-        destination: cart
-        group: cartGroup
-      returnMessageProcessor-in-0:
-        destination: return
-        group: returnGroup
-      orderCompletion-out-0:         # for returned url when PayPal payment success or failure.
-        destination: orderComplete
+      adminOrderMessageProcessor-in-0: # admin CRUD order or return
+        destination: adminOrder
+        group: adminOrderGroup
+      adminReturnMessageProcessor-in-0:
+        destination: adminReturn
+        group: adminReturnGroup
+
+      updateFromPmsMessageProcessor-in-0:     #  update from SMS and PMS
+        destination: productStockOMSUpdate
+        group: productStockOMSUpdateGroup
+      updateFromSmsMessageProcessor-in-0:
+        destination: saleStockOMSUpdate
+        group: saleStockOMSUpdateGroup
+
+      coupon-out-0:           # sending to other queue to update their stock after sales or return
+        destination: orderCouponUpdate
         producer:
-          required-groups: orderCompleteGroup
-      coupon-out-0:
-        destination: coupon
-        producer:
-          required-groups: couponGroup
+          required-groups: orderCouponUpdateGroup
       salesStock-out-0:
-        destination: salesStock
+        destination: orderSaleStockUpdate
         producer:
-          required-groups: salesGroup
+          required-groups: orderSaleStockUpdateGroup
       product-out-0:
-        destination: product
+        destination: orderProductStockUpdate
         producer:
-          required-groups: productGroup
+          required-groups: orderProductStockUpdateGroup
 
 
 logging:

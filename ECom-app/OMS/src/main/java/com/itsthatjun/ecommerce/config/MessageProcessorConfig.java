@@ -1,16 +1,13 @@
 package com.itsthatjun.ecommerce.config;
 
-import com.itsthatjun.ecommerce.dto.event.OmsCartEvent;
-import com.itsthatjun.ecommerce.dto.event.OmsCompletionEvent;
-import com.itsthatjun.ecommerce.dto.event.OmsReturnOrderEvent;
-import com.itsthatjun.ecommerce.dto.event.OmsOrderEvent;
-import com.itsthatjun.ecommerce.mbg.model.CartItem;
-import com.itsthatjun.ecommerce.mbg.model.OrderReturnApply;
-import com.itsthatjun.ecommerce.mbg.model.OrderReturnReason;
-import com.itsthatjun.ecommerce.mbg.model.OrderReturnReasonPictures;
-import com.itsthatjun.ecommerce.service.CartItemService;
-import com.itsthatjun.ecommerce.service.OrderService;
-import com.itsthatjun.ecommerce.service.ReturnOrderService;
+import com.itsthatjun.ecommerce.dto.OrderDetail;
+import com.itsthatjun.ecommerce.dto.ReturnParam;
+import com.itsthatjun.ecommerce.dto.ReturnRequestDecision;
+import com.itsthatjun.ecommerce.dto.event.admin.OmsAdminOrderEvent;
+import com.itsthatjun.ecommerce.dto.event.admin.OmsAdminOrderReturnEvent;
+import com.itsthatjun.ecommerce.dto.event.incoming.*;
+import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+
+import static com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent.Type.UPDATE_SALE_PRICE;
 
 @Configuration
 public class MessageProcessorConfig {
@@ -31,11 +31,18 @@ public class MessageProcessorConfig {
 
     private final ReturnOrderService returnOrderService;
 
+    private final PmsEventUpdateService pmsEventUpdateService;
+
+    private final SmsEventUpdateService smsEventUpdateService;
+
     @Autowired
-    public MessageProcessorConfig(CartItemService cartItemService, OrderService orderService, ReturnOrderService returnOrderService) {
+    public MessageProcessorConfig(CartItemService cartItemService, OrderService orderService, ReturnOrderService returnOrderService,
+                                  PmsEventUpdateService pmsEventUpdateService, SmsEventUpdateService smsEventUpdateService) {
         this.cartItemService = cartItemService;
         this.orderService = orderService;
         this.returnOrderService = returnOrderService;
+        this.pmsEventUpdateService = pmsEventUpdateService;
+        this.smsEventUpdateService = smsEventUpdateService;
     }
 
     @Bean
@@ -81,6 +88,40 @@ public class MessageProcessorConfig {
     }
 
     @Bean
+    public Consumer<OmsReturnEvent> returnMessageProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+            String orderSn = event.getOrderSn();
+            int userId = event.getUserId();
+
+            ReturnParam returnParam = event.getReturnParam();
+            ReturnRequest returnRequest = returnParam.getReturnRequest();
+            List<ReturnReasonPictures> pictures = returnParam.getPicturesList();
+
+            switch (event.getEventType()) {
+                case APPLY:
+                    Map<String, Integer> skuQuantity = returnParam.getSkuQuantity();
+                    returnOrderService.applyForReturn(returnRequest, pictures, skuQuantity,userId);
+                    break;
+
+                case UPDATE:
+                    returnOrderService.updateReturnInfo(returnRequest, pictures, orderSn, userId);
+                    break;
+
+                case CANCEL:
+                    returnOrderService.cancelReturn(orderSn, userId);
+                    break;
+
+                default:
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE and CANCEL event";
+                    LOG.warn(errorMessage);
+                    throw new RuntimeException(errorMessage); // TODO: create event exception
+            }
+        };
+    }
+
+    @Bean
     public Consumer<OmsOrderEvent> orderMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
@@ -88,7 +129,7 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case GENERATE_ORDER:
-                    System.out.println("at generating order at the consumer");
+
                     orderService.generateOrder(event.getOrderParam(), event.getSuccessUrl(), event.getCancelUrl(), event.getUserId());
                     break;
 
@@ -96,9 +137,7 @@ public class MessageProcessorConfig {
                     orderService.cancelOrder("TODO");
                     break;
 
-                case UPDATE_ORDER:
-                    orderService.update();
-                    break;
+                // case UPDATE_ORDER:  TODO: update order minutes after order placed, like change quantity or cancel partial order
 
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected GENERATE_ORDER, CANCEL_ORDER, " +
@@ -133,33 +172,126 @@ public class MessageProcessorConfig {
     }
 
     @Bean
-    public Consumer<OmsReturnOrderEvent> returnMessageProcessor() {
+    public Consumer<OmsAdminOrderEvent> adminOrderMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
-            String orderSn = event.getOrderSn();
-            int userId = event.getUserId();
-            OrderReturnApply returnApply = event.getReturnApply();
-            OrderReturnReason returnReason = event.getReturnReason();
-            List<OrderReturnReasonPictures> pictures = event.getPictures();
+
+            OrderDetail orderDetail = event.getOrderDetail();
+            Orders order = orderDetail.getOrders();
+
+            String reason = event.getReason();
+            String operator = event.getOperator();
+            switch (event.getEventType()) {
+                case GENERATE_ORDER:
+                    List<OrderItem> orderItemList = orderDetail.getOrderItemList();
+                    orderService.createOrder(order, orderItemList, reason, operator);
+                    break;
+
+                case UPDATE_ORDER:
+                    orderService.updateOrder(order, reason, operator);
+                    break;
+
+                case CANCEL_ORDER:
+                    orderService.adminCancelOrder(order, reason, operator);
+                    break;
+
+                default:
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected GENERATE_ORDER, CANCEL_ORDER, " +
+                            "and UPDATE_ORDER event";
+                    LOG.warn(errorMessage);
+                    throw new RuntimeException(errorMessage); // TODO: create event exception
+            }
+        };
+    }
+
+    @Bean
+    public Consumer<OmsAdminOrderReturnEvent> adminReturnMessageProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+
+            String operator = event.getAdminName();
+            ReturnRequestDecision returnRequestDecision = event.getReturnRequestDecision();
 
             switch (event.getEventType()) {
-                case APPLY:
-                    returnOrderService.applyForReturn(returnApply, pictures, orderSn, userId);
+                case APPROVED:
+                    returnOrderService.approveReturnRequest(returnRequestDecision, operator);
                     break;
 
-                case UPDATE:
-                    returnOrderService.updateReturn(returnApply, pictures, orderSn, userId);
+                case REJECTED:
+                    String rejectionReason = returnRequestDecision.getReason();
+                    returnOrderService.rejectReturnRequest(returnRequestDecision, rejectionReason, operator);
                     break;
 
-                case CANCEL:
-                    returnOrderService.cancelReturn(orderSn, userId);
+                case COMPLETED_RETURN:
+                    returnOrderService.completeReturnRequest(returnRequestDecision, operator);
                     break;
 
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE and CANCEL event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage); // TODO: create event exception
+            }
+        };
+    }
+
+    @Bean
+    public Consumer<PmsUpdateIncomingEvent> updateFromPmsMessageProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+
+            Product newProduct = event.getProduct();
+            List<ProductSku> productSkuList = event.getProductSkuList();
+
+            switch (event.getEventType()) {
+
+                case NEW_PRODUCT:
+                    pmsEventUpdateService.addProduct(newProduct, productSkuList);
+                    break;
+
+                case NEW_PRODUCT_SKU:
+                    ProductSku newSku = productSkuList.get(0);
+                    pmsEventUpdateService.addProductSku(newSku);
+                    break;
+
+                case UPDATE_PRODUCT:
+                    pmsEventUpdateService.updateProduct(newProduct, productSkuList);
+                    break;
+
+                case REMOVE_PRODUCT_SKU:
+                    ProductSku removeSku = productSkuList.get(0);
+                    pmsEventUpdateService.removeProductSku(removeSku);
+                    break;
+
+                case REMOVE_PRODUCT:
+                    pmsEventUpdateService.removeProduct(newProduct, productSkuList);
+                    break;
+
+                default:
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_PRODUCT, NEW_PRODUCT_SKU, UPDATE_PRODUCT, " +
+                            " REMOVE_PRODUCT_SKU and REMOVE_PRODUCT event";
+                    LOG.warn(errorMessage);
+                    throw new RuntimeException(errorMessage); // TODO: create event exception
+            }
+        };
+    }
+
+    @Bean
+    public Consumer<SmsUpdateIncomingEvent> updateFromSmsMessageProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+
+            List<ProductSku> skuList = event.getSkuList();
+            if (event.getEventType() == UPDATE_SALE_PRICE) {
+                smsEventUpdateService.updateSale(skuList);
+            } else {
+                String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_SALE_PRICE" +
+                            " event";
+                LOG.warn(errorMessage);
+                throw new RuntimeException(errorMessage); // TODO: create event exception
             }
         };
     }

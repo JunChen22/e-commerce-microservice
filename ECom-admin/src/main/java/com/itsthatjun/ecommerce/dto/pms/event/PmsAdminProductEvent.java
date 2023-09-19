@@ -11,9 +11,9 @@ import static java.time.ZonedDateTime.now;
 public class PmsAdminProductEvent {
 
     public enum Type {
-        CREATE,
-        UPDATE,
-        DELETE
+        NEW_PRODUCT,
+        UPDATE_PRODUCT,
+        REMOVE_PRODUCT
     }
 
     private final Type eventType;

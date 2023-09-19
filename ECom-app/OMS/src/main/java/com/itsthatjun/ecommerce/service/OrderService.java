@@ -1,26 +1,27 @@
 package com.itsthatjun.ecommerce.service;
 
-import com.itsthatjun.ecommerce.dto.ConfirmOrderResult;
+import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.mbg.model.OrderItem;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
+import java.util.List;
 
 public interface OrderService {
 
-    @ApiOperation("Get order detail")
-    Mono<Orders> detail(String orderSN);
+    @ApiOperation(value = "")
+    Mono<OrderDetail> getOrdeDetail(String orderSn);
 
     @ApiOperation("list all user orders")
     Flux<Orders> list(int status, int pageNum, int pageSize, int userId);
 
     @Transactional
     @ApiOperation("Create the actual transaction and payment")
-    Mono<ConfirmOrderResult> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId);
+    Mono<Orders> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId);
 
     @Transactional
     @ApiOperation("payment successful, redirected from paypal")
@@ -29,11 +30,32 @@ public interface OrderService {
     @ApiOperation("payment unsuccessful, redirected from paypal")
     void payFail(String orderSN);
 
-    // TODO: create update method
-    @ApiOperation("update on status, or other information")
-    Mono<Orders> update();
-
-    @Transactional
     @ApiOperation("Member cancel order")
-    String cancelOrder(String orderSN);
+    Mono<Orders> cancelOrder(String orderSN);
+
+    //  waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
+    @ApiOperation(value = "")
+    Flux<Orders> getAllWaitingForPayment();
+
+    @ApiOperation(value = "")
+    Flux<Orders> getAllFulfulling();
+
+    @ApiOperation(value = "")
+    Flux<Orders> getAllInSend();
+
+    @ApiOperation(value = "")
+    Flux<Orders> getAllCompleteOrder();
+
+    @ApiOperation(value = "get all orders from user")
+    Flux<Orders> getUserOrders(int memberId);
+
+    @ApiOperation(value = "Admin created order for user, to fix mistake on order"
+            +  " or order a replacement.")
+    Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, String reason, String operator);
+
+    @ApiOperation(value = "Update order status")
+    Mono<Orders> updateOrder(Orders updateOrder, String reason, String operator);
+
+    @ApiOperation(value = "delete an order")
+    void adminCancelOrder(Orders updateOrder, String reason, String operator);
 }

@@ -66,10 +66,18 @@ Set up/installation:
 Database and mybatis generator
 
   Generate mybatis files
+ $ chmod +x update_mybatis.sh
+ $ ./update_mybatis.sh
+
+or generate the file manually.  
+
  $ docker-compose up postgres
  $ go to all the directory(Ecom-app App, CMS, OMS, PMS, SMS, UMS, and ECom-admin)
  $ mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true // generate DAO, mapper and java clasees
  $ docker-compose down
+ 
+ps : Remove docker volume so the new data.sql can function properly and update.
+
 
   Start whole landscape
  $ mvn package
@@ -79,7 +87,7 @@ Database and mybatis generator
  $ docker-compose up
 
 * can not deploy locally(IDE) only Docker or Kubernetes
- 
+
  
   Import data into elastic search
  $  curl -X POST http://localhost:8080/esProduct/importAll   // should return number of items imported

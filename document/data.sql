@@ -535,8 +535,8 @@ VALUES
 
 
 -- A product SKU (Stock Keeping Unit) is a unique identifier assigned to a specific product variant to facilitate inventory management, tracking, and sales analysis.
-DROP TABLE IF EXISTS product_sku_stock;
-CREATE TABLE product_sku_stock (    -- all product have one default sku variant
+DROP TABLE IF EXISTS product_sku;
+CREATE TABLE product_sku (    -- all product have one default sku variant
   id SERIAL PRIMARY KEY,
   product_id INTEGER,
   sku_code TEXT,
@@ -549,7 +549,7 @@ CREATE TABLE product_sku_stock (    -- all product have one default sku variant
   unit_sold INTEGER
 );
 
-INSERT INTO product_sku_stock (product_id, sku_code, picture, price, promotion_price, stock, low_stock, unit_sold)
+INSERT INTO product_sku (product_id, sku_code, picture, price, promotion_price, stock, low_stock, unit_sold)
 VALUES
 -- iphone
 (1, 'IP12-RED', 'iphone12-red.jpg', 899.99 ,  899.99 , 35 , 4 , 20),
@@ -894,8 +894,6 @@ VALUES
 (30, 'HPSS', 19, 'English', NULL);
 
 
-
-
 DROP TABLE IF EXISTS product_album;
 CREATE TABLE product_album (
     id SERIAL PRIMARY KEY,
@@ -1087,21 +1085,20 @@ CREATE TABLE product_update_log
      sale_price_old    NUMERIC,
      sale_price_new    NUMERIC,
      operate_man TEXT,          -- who changed it
-     stock_old NUMERIC,
-     stock_new NUMERIC,
+     old_stock NUMERIC,
+     added_stock NUMERIC,
+     total_stock NUMERIC,
      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 
-INSERT INTO product_update_log (product_id, price_old, price_new, sale_price_old, sale_price_new, stock_old, stock_new, operate_man)
+INSERT INTO product_update_log (product_id, price_old, price_new, sale_price_old, sale_price_new, old_stock, added_stock, total_stock, operate_man)
 VALUES
-(1, 899.99, 899.99, 899.99, 899.99, 100, 100, 'jun'),
-(2, 499.99, 499.99, 499.99, 499.99, 50, 50, 'jun'),
-(3, 249.99, 249.99, 249.99, 249.99, 200, 200, 'jun'),
-(4, 1099.99, 1099.99, 1099.99, 1099.99, 150, 150, 'jun'),
-(5, 349.99, 349.99, 349.99, 349.99, 100, 100, 'jun'),
-(6, 179.99, 179.99, 179.99, 179.99, 250, 250, 'jun');
-
-
+(1, 899.99, 899.99, 899.99, 899.99, 100, 0, 100, 'jun'),
+(2, 499.99, 499.99, 499.99, 499.99, 50, 0, 50, 'jun'),
+(3, 249.99, 249.99, 249.99, 249.99, 200, 0, 200, 'jun'),
+(4, 1099.99, 1099.99, 1099.99, 1099.99, 150, 0, 150, 'jun'),
+(5, 349.99, 349.99, 349.99, 349.99, 100, 0, 100, 'jun'),
+(6, 179.99, 179.99, 179.99, 179.99, 250, 0, 250, 'jun');
 
 
 DROP TABLE IF EXISTS review;
@@ -1648,52 +1645,15 @@ CREATE TABLE company_address (
   detail_address VARCHAR(200) NULL DEFAULT NULL
 );
 
-
 INSERT INTO company_address(address_name, send_status, receive_status, receiver_name ,  receiver_phone , state, city, zip_code, detail_address) VALUES
 ('111 over there send out avenue 2nd floor', 1, 0, 'Jun' , 1800000000, 'New York', 'New York', 11220, '222 over there avenue 2nd floor, go through the gate in north east corner to unload'),
 ('222 right here return avenue', 0, 1, 'Jun' , 1800000000, 'Nevada', 'Las Vegas', 88901, 'Next to the casino'),
 ('333 backup warehouse avenue', 1, 1, 'Jun' , 1800000000, 'Pennsylvania', 'Philadelphia', 19019, 'Big red sign turn left and ring bell to enter');
 
 
-DROP TABLE IF EXISTS order_return_reason;
-CREATE TABLE order_return_reason (
-  id SERIAL PRIMARY KEY,
-  order_id BIGINT NOT NULL,
-  reason VARCHAR(100) ,             -- pre-set reasons,      new return(buyer remorse), malfunction(DOA), and other
-  description VARCHAR(100),         -- detail return reason
-  status INT ,                      -- not active 0 , active - 1.
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-INSERT INTO order_return_reason (order_id, reason, description, status)
-VALUES
-(1, 'new return', 'Changed my mind about the purchase', 1),
-(2, 'malfunction', 'Item was dead on arrival', 1),
-(3, 'other', 'Received wrong item', 1),
-(4, 'new return', 'Size didn''t fit', 1),
-(5, 'malfunction', 'Item stopped working after', 1);
-
-
-DROP TABLE IF EXISTS order_return_reason_pictures;
-CREATE TABLE order_return_reason_pictures (
-  id SERIAL PRIMARY KEY,
-  order_return_reason_id BIGINT NOT NULL,
-  filename VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-INSERT INTO order_return_reason_pictures (order_return_reason_id, filename)
-VALUES
-(1, 'https://i.imgur.com/zNGBoLk.jpeg'),
-(1, 'https://i.imgur.com/DebpKZa.png'),
-(2, 'https://i.imgur.com/UJSZE08.jpeg'),
-(3, 'https://i.imgur.com/DCtQmc2.png'),
-(4, 'https://i.imgur.com/UHgW2D8.jpeg'),
-(5, 'https://i.imgur.com/UHgW2D8.jpeg');
-
 --- when admin/operator determined if the product can be return, one item(s) return at a time
-DROP TABLE IF EXISTS order_return_apply;
-CREATE TABLE order_return_apply  (
+DROP TABLE IF EXISTS return_request;
+CREATE TABLE return_request  (
   id SERIAL PRIMARY KEY,
   order_id bigint ,
   company_address_id bigint ,                   -- return to you(owner), return center or warehouse
@@ -1704,7 +1664,8 @@ CREATE TABLE order_return_apply  (
   return_phone varchar(100) ,
   status int,                -- return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3
   handle_time timestamp,                        -- how long to return this item, e.g 2 weeks to return this or return is voided.
-  refund_amount decimal(10, 2),
+  asking_amount decimal(10, 2),
+  refunded_amount decimal(10, 2),
   reason varchar(200) ,                         -- pre-set reasons
   description varchar(500) ,
   handle_note varchar(500) ,                    -- notes from admin to customer or rejection reason
@@ -1716,8 +1677,8 @@ CREATE TABLE order_return_apply  (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO order_return_apply ( order_id, company_address_id, order_sn, member_id, return_quantity, return_name, return_phone, status,
-                                 handle_time, refund_amount, reason, description, handle_note, handle_operator, receive_operator,
+INSERT INTO return_request (order_id, company_address_id, order_sn, member_id, return_quantity, return_name, return_phone, status,
+                                 handle_time, asking_amount, reason, description, handle_note, handle_operator, receive_operator,
                                  receive_time, receive_note
 ) VALUES
 (1001, 1, 'OR123456', 2001, 3, 'John Doe', '555-123-4567', 0,
@@ -1737,22 +1698,21 @@ INSERT INTO order_return_apply ( order_id, company_address_id, order_sn, member_
  NULL, NULL, 'Item arrived late', 'Items arrived after the expected delivery date.',
  NULL, NULL, NULL, NULL, NULL);
 
-
-
-DROP TABLE IF EXISTS order_return_item;
-CREATE TABLE order_return_item (
+DROP TABLE IF EXISTS return_item;
+CREATE TABLE return_item (
     id SERIAL PRIMARY KEY,
-    return_apply_id bigint,
+    return_request_id bigint NOT NULL,
     brand_id bigint,
     order_id bigint,
     order_sn varchar(64),
     product_id bigint,
     product_sku varchar(100),
+    purchased_price decimal(10, 2),
     quantity bigint
 );
 
-INSERT INTO order_return_item (
-    return_apply_id, brand_id, order_id, order_sn,
+INSERT INTO return_item (
+    return_request_id, brand_id, order_id, order_sn,
     product_id, product_sku, quantity
 ) VALUES
 (1, 100, 1001, 'OR123456', 101, 'SKU001', 1),
@@ -1764,18 +1724,38 @@ INSERT INTO order_return_item (
 (4, 200, 1004, 'OR987654', 401, 'SKU007', 1),
 (5, 300, 1005, 'OR555555', 501, 'SKU008', 2);
 
+DROP TABLE IF EXISTS return_reason_pictures;
+CREATE TABLE return_reason_pictures (
+  id SERIAL PRIMARY KEY,
+  return_request_id bigint NOT NULL,
+  filename VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+INSERT INTO return_reason_pictures (return_request_id, filename)
+VALUES
+(1, 'https://i.imgur.com/zNGBoLk.jpeg'),
+(1, 'https://i.imgur.com/DebpKZa.png'),
+(2, 'https://i.imgur.com/UJSZE08.jpeg'),
+(3, 'https://i.imgur.com/DCtQmc2.png'),
+(4, 'https://i.imgur.com/UHgW2D8.jpeg'),
+(5, 'https://i.imgur.com/UHgW2D8.jpeg');
 
+DROP TABLE IF EXISTS return_log;
+CREATE TABLE return_log (
+    id SERIAL PRIMARY KEY,
+    return_request_id bigint,
+    action       varchar(100),
+    operator     varchar(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-
-
-
-
-
-
-
-
-
+INSERT INTO return_log (
+    return_request_id, action, operator
+) VALUES
+(1, 'APPLY', 'Jun'),
+(1, 'APPLY', 'Jun'),
+(2, 'APPLY', 'Jun');
 
 
 
@@ -1966,20 +1946,20 @@ VALUES
 
 -- products that affected by this promotion
 -- user other services to find, brand, category, specific product, or All
-DROP TABLE IF EXISTS promotion_sale_product_relation;
-CREATE TABLE promotion_sale_product_relation (
+DROP TABLE IF EXISTS promotion_sale_product;
+CREATE TABLE promotion_sale_product (
     id SERIAL PRIMARY KEY,
     promotion_sale_id bigint NOT NULL,
     product_id bigint NOT NULL,
     product_sku_code TEXT,
-    promotion_price numeric NOT NULL,        -- what the price - promotion sale amount = promotion_price
-    promotion_count  integer NOT NULL,       -- how many allowed to sell at discount, need to check sku stock
-    promotion_limit  integer NOT NULL       -- number of limit per member/account
+    promotion_price numeric NOT NULL,       -- what the price - promotion sale amount = promotion_price
+    promotion_limit_item  integer NOT NULL,      -- how many allowed to sell at discount, need to check sku stock
+    promotion_limit_per_user  integer NOT NULL       -- number of limit per member/account
 );
 
 -- TODO: need to check when stock/sold meet limit before canceling hte discount
 -- does it have priority for discount? like all > category -> brand -> specific product and do they stack?
-INSERT INTO promotion_sale_product_relation(promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_count, promotion_limit)
+INSERT INTO promotion_sale_product (promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
 VALUES
 -- All laptop 100 off
 (3, 13, 'MBP', 1899.99, 80, 3),
@@ -1991,50 +1971,50 @@ VALUES
 
 -- update here to make it more consistency, will update using service when E-Com is running
 UPDATE product SET on_sale_status = 1, sale_price = 1899.99  WHERE id = 13;
-UPDATE product_sku_stock SET promotion_price = 1899.99 WHERE product_id = 13 AND sku_code = 'MBP';
+UPDATE product_sku SET promotion_price = 1899.99 WHERE product_id = 13 AND sku_code = 'MBP';
 
 UPDATE product SET on_sale_status = 1, sale_price = 1299.99 WHERE id = 14;
-UPDATE product_sku_stock SET promotion_price = 1299.99 WHERE product_id = 14 AND sku_code = 'XPS13';
+UPDATE product_sku SET promotion_price = 1299.99 WHERE product_id = 14 AND sku_code = 'XPS13';
 
 UPDATE product SET on_sale_status = 1, sale_price = 1399.99  WHERE id = 15;
-UPDATE product_sku_stock SET promotion_price = 1399.99 WHERE product_id = 15 AND sku_code = 'TPX1C';
+UPDATE product_sku SET promotion_price = 1399.99 WHERE product_id = 15 AND sku_code = 'TPX1C';
 
 UPDATE product SET on_sale_status = 1, sale_price = 1199.99  WHERE id = 16;
-UPDATE product_sku_stock SET promotion_price = 1199.99 WHERE product_id = 16 AND sku_code = 'YC940';
+UPDATE product_sku SET promotion_price = 1199.99 WHERE product_id = 16 AND sku_code = 'YC940';
 
 UPDATE product SET on_sale_status = 1, sale_price = 899.99 WHERE id = 17;
-UPDATE product_sku_stock SET promotion_price = 899.99 WHERE product_id = 17 AND sku_code = 'IPG3';
+UPDATE product_sku SET promotion_price = 899.99 WHERE product_id = 17 AND sku_code = 'IPG3';
 
 UPDATE product SET on_sale_status = 1, sale_price = 1899.99 WHERE id = 18;
-UPDATE product_sku_stock SET promotion_price = 1899.99 WHERE product_id = 18 AND sku_code = 'AM15R5';
+UPDATE product_sku SET promotion_price = 1899.99 WHERE product_id = 18 AND sku_code = 'AM15R5';
 
 -- OnePlus product $10 off
-INSERT INTO promotion_sale_product_relation(promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_count, promotion_limit)
+INSERT INTO promotion_sale_product (promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
 VALUES
 (2, 13, 'OP9P', 1089.99, 100, 3),
 (2, 14, 'OBPRO', 139.99, 150, 3),
 (2, 15, 'OPW3', 189.99, 80, 3);
 
 UPDATE product SET on_sale_status = 1, sale_price = 1089.99 WHERE id = 4;
-UPDATE product_sku_stock SET promotion_price = 1089.99 WHERE product_id = 4 AND sku_code = 'OP9P';
+UPDATE product_sku SET promotion_price = 1089.99 WHERE product_id = 4 AND sku_code = 'OP9P';
 
 UPDATE product SET on_sale_status = 1, sale_price = 139.99 WHERE id = 8;
-UPDATE product_sku_stock SET promotion_price = 139.99 WHERE product_id = 8 AND sku_code = 'OBPRO';
+UPDATE product_sku SET promotion_price = 139.99 WHERE product_id = 8 AND sku_code = 'OBPRO';
 
 UPDATE product SET on_sale_status = 1, sale_price = 189.99 WHERE id = 10;
-UPDATE product_sku_stock SET promotion_price = 189.99 WHERE product_id = 10 AND sku_code = 'OPW3';
+UPDATE product_sku SET promotion_price = 189.99 WHERE product_id = 10 AND sku_code = 'OPW3';
 
 -- iphone-SE 10% OFF
-INSERT INTO promotion_sale_product_relation(promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_count, promotion_limit)
+INSERT INTO promotion_sale_product (promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
 VALUES
 (4, 2, 'IPSE-BLUE', 449.99, 25, 3),
 (4, 2, 'IPSE-RED', 449.99, 25, 3);
 
 UPDATE product SET on_sale_status = 1, sale_price = 449.99  WHERE id = 2;
-UPDATE product_sku_stock SET promotion_price = 449.99 WHERE product_id = 2 AND sku_code = 'IPSE-BLUE';
+UPDATE product_sku SET promotion_price = 449.99 WHERE product_id = 2 AND sku_code = 'IPSE-BLUE';
 
 UPDATE product SET on_sale_status = 1, sale_price = 449.99 WHERE id = 2;
-UPDATE product_sku_stock SET promotion_price = 449.99 WHERE product_id = 2 AND sku_code = 'IPSE-RED';
+UPDATE product_sku SET promotion_price = 449.99 WHERE product_id = 2 AND sku_code = 'IPSE-RED';
 
 
 -- keep track of changes/update to promotion
@@ -2042,7 +2022,8 @@ DROP TABLE IF EXISTS promotion_sale_log;
 CREATE TABLE promotion_sale_log (
     id SERIAL PRIMARY KEY,
     promotion_sale_id numeric,
-    promotion_type numeric,    -- discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item
+    sale_action TEXT,
+    promotion_type integer,    -- discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item
     discount_type  integer,       -- 0 -> by amount , 1->  by percent off
     amount numeric,
     operate_man TEXT,     -- who made the change
@@ -2050,9 +2031,9 @@ CREATE TABLE promotion_sale_log (
 );
 
 
-INSERT INTO promotion_sale_log(promotion_sale_id, promotion_type, discount_type, amount, operate_man)
+INSERT INTO promotion_sale_log(promotion_sale_id, sale_action, promotion_type, discount_type, amount, operate_man)
 VALUES
-(1, 0, 1, 20, 'admin'),
-(2, 1, 1, 10, 'admin'),
-(3, 2, 0, 100, 'admin'),
-(4, 3, 1, 10, 'admin');
+(1, 'update action', 0, 1, 20, 'admin'),
+(2, 'update action', 1, 1, 10, 'admin'),
+(3, 'update action', 2, 0, 100, 'admin'),
+(4, 'update action', 3, 1, 10, 'admin');

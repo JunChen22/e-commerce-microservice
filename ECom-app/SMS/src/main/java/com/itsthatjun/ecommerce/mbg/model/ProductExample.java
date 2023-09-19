@@ -506,52 +506,52 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdEqualTo(Integer value) {
+        public Criteria andAttributeCategoryIdEqualTo(BigDecimal value) {
             addCriterion("attribute_category_id =", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdNotEqualTo(Integer value) {
+        public Criteria andAttributeCategoryIdNotEqualTo(BigDecimal value) {
             addCriterion("attribute_category_id <>", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdGreaterThan(Integer value) {
+        public Criteria andAttributeCategoryIdGreaterThan(BigDecimal value) {
             addCriterion("attribute_category_id >", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andAttributeCategoryIdGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("attribute_category_id >=", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdLessThan(Integer value) {
+        public Criteria andAttributeCategoryIdLessThan(BigDecimal value) {
             addCriterion("attribute_category_id <", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdLessThanOrEqualTo(Integer value) {
+        public Criteria andAttributeCategoryIdLessThanOrEqualTo(BigDecimal value) {
             addCriterion("attribute_category_id <=", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdIn(List<Integer> values) {
+        public Criteria andAttributeCategoryIdIn(List<BigDecimal> values) {
             addCriterion("attribute_category_id in", values, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdNotIn(List<Integer> values) {
+        public Criteria andAttributeCategoryIdNotIn(List<BigDecimal> values) {
             addCriterion("attribute_category_id not in", values, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdBetween(Integer value1, Integer value2) {
+        public Criteria andAttributeCategoryIdBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("attribute_category_id between", value1, value2, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andAttributeCategoryIdNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("attribute_category_id not between", value1, value2, "attributeCategoryId");
             return (Criteria) this;
         }

@@ -82,7 +82,7 @@ public class ProductController {
     @ApiOperation(value = "Create a product")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     public void createProduct(@RequestBody Product product){
-        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(CREATE, product, null)))
+        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT, product, null)))
                 .subscribeOn(publishEventScheduler).subscribe();
     }
 
@@ -91,7 +91,7 @@ public class ProductController {
     @PreAuthorize("hasRole('ROLE_admin-product')")
     public void updateProduct(@RequestBody Product product){
         int productId = product.getId();
-        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE, product, productId)))
+        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT, product, productId)))
                 .subscribeOn(publishEventScheduler).subscribe();
     }
 
@@ -99,7 +99,7 @@ public class ProductController {
     @ApiOperation(value = "Delete a product")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     public void deleteProduct(@PathVariable int productId){
-        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(DELETE, null, productId)))
+        Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(REMOVE_PRODUCT, null, productId)))
                 .subscribeOn(publishEventScheduler).subscribe();
     }
 

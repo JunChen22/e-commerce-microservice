@@ -3,12 +3,13 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.OrderReturnItemMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.OrderReturnItem">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="return_apply_id" jdbcType="BIGINT" property="returnApplyId" />
+    <result column="return_request_id" jdbcType="BIGINT" property="returnRequestId" />
     <result column="brand_id" jdbcType="BIGINT" property="brandId" />
     <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
     <result column="product_id" jdbcType="BIGINT" property="productId" />
     <result column="product_sku" jdbcType="VARCHAR" property="productSku" />
+    <result column="purchased_price" jdbcType="NUMERIC" property="purchasedPrice" />
     <result column="quantity" jdbcType="BIGINT" property="quantity" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, return_apply_id, brand_id, order_id, order_sn, product_id, product_sku, quantity
+    id, return_request_id, brand_id, order_id, order_sn, product_id, product_sku, purchased_price, 
+    quantity
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.OrderReturnItemExample" resultMap="BaseResultMap">
     select
@@ -103,18 +105,18 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.OrderReturnItem" useGeneratedKeys="true">
-    insert into order_return_item (return_apply_id, brand_id, order_id, 
+    insert into order_return_item (return_request_id, brand_id, order_id, 
       order_sn, product_id, product_sku, 
-      quantity)
-    values (#{returnApplyId,jdbcType=BIGINT}, #{brandId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, 
+      purchased_price, quantity)
+    values (#{returnRequestId,jdbcType=BIGINT}, #{brandId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, 
       #{orderSn,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{productSku,jdbcType=VARCHAR}, 
-      #{quantity,jdbcType=BIGINT})
+      #{purchasedPrice,jdbcType=NUMERIC}, #{quantity,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.OrderReturnItem" useGeneratedKeys="true">
     insert into order_return_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="returnApplyId != null">
-        return_apply_id,
+      <if test="returnRequestId != null">
+        return_request_id,
       </if>
       <if test="brandId != null">
         brand_id,
@@ -131,13 +133,16 @@
       <if test="productSku != null">
         product_sku,
       </if>
+      <if test="purchasedPrice != null">
+        purchased_price,
+      </if>
       <if test="quantity != null">
         quantity,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="returnApplyId != null">
-        #{returnApplyId,jdbcType=BIGINT},
+      <if test="returnRequestId != null">
+        #{returnRequestId,jdbcType=BIGINT},
       </if>
       <if test="brandId != null">
         #{brandId,jdbcType=BIGINT},
@@ -153,6 +158,9 @@
       </if>
       <if test="productSku != null">
         #{productSku,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasedPrice != null">
+        #{purchasedPrice,jdbcType=NUMERIC},
       </if>
       <if test="quantity != null">
         #{quantity,jdbcType=BIGINT},
@@ -171,8 +179,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.returnApplyId != null">
-        return_apply_id = #{record.returnApplyId,jdbcType=BIGINT},
+      <if test="record.returnRequestId != null">
+        return_request_id = #{record.returnRequestId,jdbcType=BIGINT},
       </if>
       <if test="record.brandId != null">
         brand_id = #{record.brandId,jdbcType=BIGINT},
@@ -189,6 +197,9 @@
       <if test="record.productSku != null">
         product_sku = #{record.productSku,jdbcType=VARCHAR},
       </if>
+      <if test="record.purchasedPrice != null">
+        purchased_price = #{record.purchasedPrice,jdbcType=NUMERIC},
+      </if>
       <if test="record.quantity != null">
         quantity = #{record.quantity,jdbcType=BIGINT},
       </if>
@@ -200,12 +211,13 @@
   <update id="updateByExample" parameterType="map">
     update order_return_item
     set id = #{record.id,jdbcType=INTEGER},
-      return_apply_id = #{record.returnApplyId,jdbcType=BIGINT},
+      return_request_id = #{record.returnRequestId,jdbcType=BIGINT},
       brand_id = #{record.brandId,jdbcType=BIGINT},
       order_id = #{record.orderId,jdbcType=BIGINT},
       order_sn = #{record.orderSn,jdbcType=VARCHAR},
       product_id = #{record.productId,jdbcType=BIGINT},
       product_sku = #{record.productSku,jdbcType=VARCHAR},
+      purchased_price = #{record.purchasedPrice,jdbcType=NUMERIC},
       quantity = #{record.quantity,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -214,8 +226,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.OrderReturnItem">
     update order_return_item
     <set>
-      <if test="returnApplyId != null">
-        return_apply_id = #{returnApplyId,jdbcType=BIGINT},
+      <if test="returnRequestId != null">
+        return_request_id = #{returnRequestId,jdbcType=BIGINT},
       </if>
       <if test="brandId != null">
         brand_id = #{brandId,jdbcType=BIGINT},
@@ -232,6 +244,9 @@
       <if test="productSku != null">
         product_sku = #{productSku,jdbcType=VARCHAR},
       </if>
+      <if test="purchasedPrice != null">
+        purchased_price = #{purchasedPrice,jdbcType=NUMERIC},
+      </if>
       <if test="quantity != null">
         quantity = #{quantity,jdbcType=BIGINT},
       </if>
@@ -240,12 +255,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.OrderReturnItem">
     update order_return_item
-    set return_apply_id = #{returnApplyId,jdbcType=BIGINT},
+    set return_request_id = #{returnRequestId,jdbcType=BIGINT},
       brand_id = #{brandId,jdbcType=BIGINT},
       order_id = #{orderId,jdbcType=BIGINT},
       order_sn = #{orderSn,jdbcType=VARCHAR},
       product_id = #{productId,jdbcType=BIGINT},
       product_sku = #{productSku,jdbcType=VARCHAR},
+      purchased_price = #{purchasedPrice,jdbcType=NUMERIC},
       quantity = #{quantity,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>

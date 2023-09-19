@@ -1,13 +1,16 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
-import java.util.List;
+import java.util.Map;
 
+@Data
 public class CouponDiscount {
 
-    // need to get quantity and sku if there's difference
-    List<Product> productList;
+    @ApiModelProperty("check price discounted by the coupon")
+    Map<String, Integer> skuQuantity;
     double discountAmount;
+    String couponCode;
     String message;
 }

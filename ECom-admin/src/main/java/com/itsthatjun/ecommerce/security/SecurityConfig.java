@@ -4,7 +4,7 @@ import com.itsthatjun.ecommerce.security.handler.CustomAccessDeniedHandler;
 import com.itsthatjun.ecommerce.security.handler.CustomAuthenticationEntryPoint;
 import com.itsthatjun.ecommerce.security.jwt.JwtAuthenticationFilter;
 import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
-import com.itsthatjun.ecommerce.service.UMS.implementation.AdminServiceImpl;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

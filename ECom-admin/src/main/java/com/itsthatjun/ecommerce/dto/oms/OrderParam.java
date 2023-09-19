@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import java.util.Map;
 
 @Data
-@EqualsAndHashCode
 public class OrderParam {
 
     @ApiModelProperty("item in shopping cart, sku code and quantity")

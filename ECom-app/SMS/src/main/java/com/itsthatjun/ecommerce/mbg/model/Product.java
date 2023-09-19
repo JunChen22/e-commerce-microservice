@@ -16,7 +16,7 @@ public class Product {
 
     private String categoryName;
 
-    private Integer attributeCategoryId;
+    private BigDecimal attributeCategoryId;
 
     private String sn;
 
@@ -112,11 +112,11 @@ public class Product {
         this.categoryName = categoryName;
     }
 
-    public Integer getAttributeCategoryId() {
+    public BigDecimal getAttributeCategoryId() {
         return attributeCategoryId;
     }
 
-    public void setAttributeCategoryId(Integer attributeCategoryId) {
+    public void setAttributeCategoryId(BigDecimal attributeCategoryId) {
         this.attributeCategoryId = attributeCategoryId;
     }
 

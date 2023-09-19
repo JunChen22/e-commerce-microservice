@@ -2,24 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.dao.AdminDao">
 
-    <resultMap id="AdminDetailResultMap" type="com.itsthatjun.ecommerce.dto.ums.AdminDetail" autoMapping="true">
+    <resultMap id="AdminDetailResultMap" type="com.itsthatjun.ecommerce.dao.domainmodel.AdminDetail" autoMapping="true">
         <id property="admin.id" column="admin_id"/>
         <result column="admin_name" property="admin.name" />
         <result column="username" property="admin.username"/>
         <result column="email" property="admin.email" />
         <result column="status" property="admin.status"/>
 
-        <collection property="roles" ofType="com.itsthatjun.ecommerce.dto.ums.RolePermission">
-            <result column="role_name" property="roleName"/>
-            <result column="permission_category" property="permissionCategory"/>
-            <result column="description" property="description"/>
-            <result column="value" property="value"/>
+        <collection property="roles" ofType="com.itsthatjun.ecommerce.mbg.model.Roles">
+            <result column="role_name" property="name"/>
+            <result column="role_description" property="description"/>
+            <result column="role_status" property="status"/>
         </collection>
 
         <collection property="permissions" ofType="com.itsthatjun.ecommerce.mbg.model.Permission">
-            <result column="description" property="name"/>
-            <result column="value" property="name"/>
-            <result column="status" property="status"/>
+            <result column="permission_name" property="name"/>
+            <result column="permission_value" property="value"/>
+            <result column="persmission_status" property="status"/>
         </collection>
     </resultMap>
 
@@ -53,9 +52,11 @@
             admin.email,
             admin.status status,
             roles.name role_name,
-            permission.name permission_category,
-            rolePermission.description,
-            rolePermission.value
+            roles.description role_description,
+            roles.status role_status,
+            rolePermission.name  permission_name,
+            rolePermission.value permission_value,
+            rolePermission.status persmission_status
         FROM admin
         LEFT JOIN admin_role_relation arr ON admin.id = arr.admin_id
         LEFT JOIN roles ON arr.role_id = roles.id

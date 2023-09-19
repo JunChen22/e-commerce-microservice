@@ -1,11 +1,13 @@
 package com.itsthatjun.ecommerce.service;
 
+import com.itsthatjun.ecommerce.dto.OnSaleRequest;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.PromotionSale;
 import io.swagger.annotations.ApiOperation;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 public interface SalesService {
 
@@ -13,23 +15,40 @@ public interface SalesService {
     // promotional sale and flash sale is similar
     // promotion sale is the "normal" discount. flash sale for clearance/used
     @ApiOperation(value = "get all promotion list that is on sale")  // TODO: add date interval, active status
-    List<PromotionSale> getAllPromotionalSale();
+    Flux<PromotionSale> getAllPromotionalSale();
 
     @ApiOperation(value = "get all promotion items on sale")
-    List<Product> getAllPromotionalSaleItems();
+    Flux<Product> getAllPromotionalSaleItems();
 
-    @ApiOperation(value = "get all sales items")
-    List<Product> getAllFlashSaleItems();
+    @ApiOperation(value = "get all flash sales items")
+    Flux<Product> getAllFlashSaleItems();
 
-    @ApiOperation(value = "Generated order, increase sku lock stock")
-    void updatePurchase(Map<String, Integer> skuQuantityMap);
+    @ApiOperation(value = "Update price, revert back to original after sale limit is reached")
+    void updateSaleLimitPrice();
 
-    @ApiOperation(value = "Generated order and success payment, decrease product stock, decrease sku stock and sku lock stock")
-    void updatePurchasePayment(Map<String, Integer> skuQuantityMap);
+    @ApiOperation(value = "Update price, revert back to original price after time limit")
+    void updateSaleTimeFramePrice();
 
-    @ApiOperation(value = "Generated order and success payment and return, increase product stock and sku stock")
-    void updateReturn(Map<String, Integer> skuQuantityMap);
+    // ===================== admin =====================
+    @ApiOperation(value = "create sale on list of items")
+    Mono<PromotionSale> createListSale(OnSaleRequest request, String operator);
 
-    @ApiOperation(value = "Generated order and failure payment, decrease sku lock stock")
-    void updateFailPayment(Map<String, Integer> skuQuantityMap);
+    /* TODO: create sepearate sale creation, currently is passed in after they are searched.
+    @ApiOperation(value = "create sales based on brand name")
+    Mono<PromotionSale> createBrandSale(OnSaleRequest request, String operator);
+
+    @ApiOperation(value = "create sales based on product category")
+    Mono<PromotionSale> createCategorySale(OnSaleRequest request, String operator);
+     */
+    @ApiOperation(value = "Update info like name, sale type and time, non-price affecting")
+    Mono<PromotionSale> updateSaleInfo(OnSaleRequest updateSaleRequest, String operator);
+
+    @ApiOperation(value = "Update sale discount percent or fixed amount. price affecting")
+    Mono<PromotionSale> updateSalePrice(OnSaleRequest updateSaleRequest, String operator);
+
+    @ApiOperation(value = "Update sale to be online or off line, price affecting")
+    Mono<PromotionSale> updateSaleStatus(OnSaleRequest updateSaleRequest, String operator);
+
+    @ApiOperation(value = "delete")
+    void delete(int promotionSaleId, String operator);
 }

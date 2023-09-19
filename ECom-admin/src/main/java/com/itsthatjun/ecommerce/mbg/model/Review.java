@@ -28,8 +28,6 @@ public class Review {
 
     private String content;
 
-    private BigDecimal albumId;
-
     public Integer getId() {
         return id;
     }
@@ -124,13 +122,5 @@ public class Review {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public BigDecimal getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(BigDecimal albumId) {
-        this.albumId = albumId;
     }
 }

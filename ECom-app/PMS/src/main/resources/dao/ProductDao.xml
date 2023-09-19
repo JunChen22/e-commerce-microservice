@@ -12,20 +12,27 @@
         <result property="originalPrice" column="original_price" />
     </resultMap>
 
-    <resultMap id="productWithAtrributeMap" type="com.itsthatjun.ecommerce.domainmodel.ProductDetail" autoMapping="true">
-        <result property="product.id" column="id"/>
-        <result property="brand.name" column="brandName"/>
-        <result property="product.name" column="name" />
-        <result property="product.originalPrice" column="price" />
-        <collection property="productAttributeList" ofType="com.itsthatjun.ecommerce.mbg.model.ProductAttribute">
-            <id column="attr_id" property="id" jdbcType="BIGINT"/>
-            <result property="attributeTypeId" column="attr_type"/>
-            <result property="attributeValue" column="attr_value"/>
-            <result property="attributeUnit" column="attr_unit"/>
+    <resultMap id="productWithAtrributeMap" type="com.itsthatjun.ecommerce.dto.ProductDetail">
+        <association property="product" javaType="com.itsthatjun.ecommerce.mbg.model.Product">
+            
+        </association>
+
+        <association property="brand" javaType="com.itsthatjun.ecommerce.mbg.model.Brand" >
+
+        </association>
+
+        <collection property="reviews" ofType="com.itsthatjun.ecommerce.mbg.model.Review">
+
+        </collection>
+        
+        <collection property="skuVariants" ofType="com.itsthatjun.ecommerce.mbg.model.ProductSkuStock"
+        
+        <collection property="picturesList" ofType="com.itsthatjun.ecommerce.mbg.model.ProductPictures">
+
         </collection>
     </resultMap>
 
-    <resultMap id="productWithListAtrributeMap" type="com.itsthatjun.ecommerce.domainmodel.ProductDetail" autoMapping="true">
+    <resultMap id="productWithListAtrributeMap" type="com.itsthatjun.ecommerce.dto.ProductDetail" autoMapping="true">
         <result property="product.id" column="id"/>
         <result property="brand.name" column="brandName"/>
         <result property="product.name" column="name" />
@@ -48,19 +55,18 @@
     <select id="getAllProduct" resultMap="productListMap">
         SELECT id, name, original_price
         FROM product
-        WHERE original_price > 200
     </select>
 
     <select id="getProductWithAtrribute" resultMap="productWithAtrributeMap">
         SELECT
-        p.id id,
-        p.name,
-        p.brand_name brandName,
-        p.original_price price,
-        pa.id attr_id,
-        pa.attribute_type_id attr_type,
-        pa.attribute_value attr_value,
-        pa.attribute_unit attr_unit
+            p.id,
+            p.name,
+            p.brand_name brandName,
+            p.original_price price,
+            pa.id attr_id,
+            pa.attribute_type_id attr_type,
+            pa.attribute_value attr_value,
+            pa.attribute_unit attr_unit
         FROM product p
         LEFT JOIN product_attribute pa on p.id = pa.product_id
         WHERE delete_status = 0 AND publish_status = 1 AND p.id = #{id};
@@ -68,14 +74,14 @@
 
     <select id="getProductListWithAtrribute" resultMap="productWithListAtrributeMap">
         SELECT
-        p.id id,
-        p.name,
-        p.brand_name brandName,
-        p.original_price price,
-        pa.id attr_id,
-        pa.attribute_type_id attr_type,
-        pa.attribute_value attr_value,
-        pa.attribute_unit attr_unit
+            p.id id,
+            p.name,
+            p.brand_name brandName,
+            p.original_price price,
+            pa.id attr_id,
+            pa.attribute_type_id attr_type,
+            pa.attribute_value attr_value,
+            pa.attribute_unit attr_unit
         FROM product p
         LEFT JOIN product_attribute pa on p.id = pa.product_id
         WHERE delete_status = 0 AND publish_status = 1;

@@ -13,7 +13,10 @@ public class ProductDetail {
     private List<ProductAttribute> productAttributeList;
     private List<Review> reviews;
 
+    // TODO: add these category to ProductDao currently these are null;
+    private List<String> skuVariants;
+    private List<ProductPictures> picturesList;
+    private List<String> productCategory;  // TODO: there's sub level for product category
     private List<ProductAttributeCategory> productAttributeCategoryList;
     private List<ProductAttributeType> productAttributeTypesList;
-    private List<Coupon> couponList;
 }

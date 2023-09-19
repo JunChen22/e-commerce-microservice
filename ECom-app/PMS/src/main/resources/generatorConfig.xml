@@ -71,6 +71,31 @@
             <columnOverride column="product_id" javaType="java.lang.Integer" />
         </table>
 
+        <table tableName= "product_album">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+        </table>
+
+        <table tableName= "product_pictures">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_album_id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+        </table>
+
+        <table tableName= "product_sku">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+        </table>
+
+        <table tableName= "product_update_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+        </table>
+
         <table tableName= "review">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
@@ -93,23 +118,5 @@
             <columnOverride column="review_id" javaType="java.lang.Integer" />
         </table>
 
-        <table tableName= "product_album">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="product_id" javaType="java.lang.Integer" />
-        </table>
-
-        <table tableName= "product_pictures">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="product_album_id" javaType="java.lang.Integer" />
-            <columnOverride column="product_id" javaType="java.lang.Integer" />
-        </table>
-
-        <table tableName= "product_sku_stock">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="product_id" javaType="java.lang.Integer" />
-        </table>
     </context>
 </generatorConfiguration>

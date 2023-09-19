@@ -12,14 +12,9 @@ public class ProductDetail {
     private Brand brand;
     private List<ProductAttribute> productAttributeList;
     private List<Review> reviews;
-
-    /* TODO:
-    private List<SKU> skuList
-    private List<Picture> pictures
-    private List<picture> descriptionPicures
+    private List<String> skuVariants;
+    private List<ProductPictures> picturesList;
+    private List<String> productCategory;  // TODO: there's sub level for product category
     private List<ProductAttributeCategory> productAttributeCategoryList;
     private List<ProductAttributeType> productAttributeTypesList;
-    private List<Coupon> couponList;
-
-     */
 }

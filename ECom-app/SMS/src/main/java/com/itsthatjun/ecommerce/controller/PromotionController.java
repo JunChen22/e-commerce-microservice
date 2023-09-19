@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -25,20 +26,23 @@ public class PromotionController {
 
     @GetMapping("/AllPromotionSale")
     @ApiOperation("")
-    public List<PromotionSale> getAllPromotionSale() {
+    public Flux<PromotionSale> getAllPromotionSale() {
         return salesServiceimpl.getAllPromotionalSale();
     }
 
     @GetMapping("/AllPromotionSaleItem")
     @ApiOperation("")
-    public List<Product> getAllPromotionSaleItem() {
+    public Flux<Product> getAllPromotionSaleItem() {
         return salesServiceimpl.getAllPromotionalSaleItems();
     }
 
     @GetMapping("/AllFlashSaleItem")
     @ApiOperation("")
-    public List<Product> getAllFlashSaleItem() {
+    public Flux<Product> getAllFlashSaleItem() {
         return salesServiceimpl.getAllFlashSaleItems();
     }
+
+
+
 
 }

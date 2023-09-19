@@ -65,7 +65,7 @@
             <columnOverride column="id" javaType="java.lang.Integer" />
         </table>
 
-        <table tableName="promotion_sale_product_relation">
+        <table tableName="promotion_sale_product">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="promotion_sale_id" javaType="java.lang.Integer" />
@@ -86,7 +86,7 @@
             <columnOverride column="category_id" javaType="java.lang.Integer" />
         </table>
 
-        <table tableName= "product_sku_stock">
+        <table tableName= "product_sku">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />

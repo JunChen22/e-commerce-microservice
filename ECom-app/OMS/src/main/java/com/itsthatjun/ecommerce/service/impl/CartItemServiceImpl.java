@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.service.impl;
 
-import com.itsthatjun.ecommerce.dto.ConfirmOrderResult;
 import com.itsthatjun.ecommerce.mbg.mapper.CartItemMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ShoppingCartMapper;
 import com.itsthatjun.ecommerce.mbg.model.*;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
