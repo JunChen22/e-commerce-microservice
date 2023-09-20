@@ -13,13 +13,19 @@ public class PmsAdminProductEvent {
 
     public enum Type {
         NEW_PRODUCT,
+        NEW_PRODUCT_SKU,
         UPDATE_STOCK,
+        UPDATE_PRODUCT_INFO,
         UPDATE_PRODUCT_PRICE,
-        REMOVE_PRODUCT
+        UPDATE_PRODUCT_STATUS,
+        UPDATE_PRODUCT_SKU_STATUS,
+        REMOVE_PRODUCT_SKU,
+        DELETE_PRODUCT
     }
 
     private final Type eventType;
     private final ProductDetail productDetail;
+    private final Integer stock;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
@@ -27,11 +33,13 @@ public class PmsAdminProductEvent {
         this.eventType = null;
         this.productDetail = null;
         this.eventCreatedAt = null;
+        this.stock = null;
     }
 
-    public PmsAdminProductEvent(Type eventType, ProductDetail productDetail) {
+    public PmsAdminProductEvent(Type eventType, ProductDetail productDetail, Integer stock) {
         this.eventType = eventType;
         this.productDetail = productDetail;
+        this.stock = stock;
         this.eventCreatedAt = now();
     }
 }

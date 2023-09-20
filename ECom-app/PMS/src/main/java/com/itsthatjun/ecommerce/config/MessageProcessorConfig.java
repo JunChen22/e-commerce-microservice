@@ -118,22 +118,44 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             Product product = event.getProductDetail().getProduct();
+            List<ProductSku> skuList = event.getProductDetail().getSkuVariants();
             switch (event.getEventType()) {
 
                 case NEW_PRODUCT:
-                    productService.createProduct(product);
+                    productService.createProduct(product, skuList);
+                    break;
+
+                case NEW_PRODUCT_SKU:
+                    productService.addProductSku(product, skuList.get(0));
+                    break;
+
+                case UPDATE_PRODUCT_INFO:
+                    productService.updateProductInfo(product);
+                    break;
+
+                case UPDATE_PRODUCT_STATUS:
+                    productService.updateProductStatus(product);
+                    break;
+
+                case UPDATE_PRODUCT_SKU_STATUS:
+                    productService.updateProductSkuStatus(skuList.get(0));
                     break;
 
                 case UPDATE_STOCK:
-                    productService.updateProduct(product);
+                    int addedStock = event.getStock();
+                    productService.updateProductStock(skuList.get(0), addedStock);
                     break;
 
                 case UPDATE_PRODUCT_PRICE:
+                    productService.updateProductPrice(skuList);
                     break;
 
-                case REMOVE_PRODUCT:
-                    int productId = product.getId();
-                    productService.deleteProduct(productId);
+                case REMOVE_PRODUCT_SKU:
+                    productService.removeProductSku(skuList.get(0));
+                    break;
+
+                case DELETE_PRODUCT:
+                    productService.deleteProduct(product.getId());
                     break;
 
                 default:

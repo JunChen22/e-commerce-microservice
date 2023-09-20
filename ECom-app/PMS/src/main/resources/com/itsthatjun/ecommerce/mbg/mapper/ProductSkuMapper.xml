@@ -12,6 +12,7 @@
     <result column="low_stock" jdbcType="INTEGER" property="lowStock" />
     <result column="lock_stock" jdbcType="INTEGER" property="lockStock" />
     <result column="unit_sold" jdbcType="INTEGER" property="unitSold" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, product_id, sku_code, picture, price, promotion_price, stock, low_stock, lock_stock, 
-    unit_sold
+    unit_sold, status
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductSkuExample" resultMap="BaseResultMap">
     select
@@ -108,12 +109,12 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductSku" useGeneratedKeys="true">
     insert into product_sku (product_id, sku_code, picture, 
       price, promotion_price, stock, 
-      low_stock, lock_stock, unit_sold
-      )
+      low_stock, lock_stock, unit_sold, 
+      status)
     values (#{productId,jdbcType=INTEGER}, #{skuCode,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
       #{price,jdbcType=NUMERIC}, #{promotionPrice,jdbcType=NUMERIC}, #{stock,jdbcType=INTEGER}, 
-      #{lowStock,jdbcType=INTEGER}, #{lockStock,jdbcType=INTEGER}, #{unitSold,jdbcType=INTEGER}
-      )
+      #{lowStock,jdbcType=INTEGER}, #{lockStock,jdbcType=INTEGER}, #{unitSold,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductSku" useGeneratedKeys="true">
     insert into product_sku
@@ -145,6 +146,9 @@
       <if test="unitSold != null">
         unit_sold,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="productId != null">
@@ -173,6 +177,9 @@
       </if>
       <if test="unitSold != null">
         #{unitSold,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -215,6 +222,9 @@
       <if test="record.unitSold != null">
         unit_sold = #{record.unitSold,jdbcType=INTEGER},
       </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -231,7 +241,8 @@
       stock = #{record.stock,jdbcType=INTEGER},
       low_stock = #{record.lowStock,jdbcType=INTEGER},
       lock_stock = #{record.lockStock,jdbcType=INTEGER},
-      unit_sold = #{record.unitSold,jdbcType=INTEGER}
+      unit_sold = #{record.unitSold,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -266,6 +277,9 @@
       <if test="unitSold != null">
         unit_sold = #{unitSold,jdbcType=INTEGER},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -279,7 +293,8 @@
       stock = #{stock,jdbcType=INTEGER},
       low_stock = #{lowStock,jdbcType=INTEGER},
       lock_stock = #{lockStock,jdbcType=INTEGER},
-      unit_sold = #{unitSold,jdbcType=INTEGER}
+      unit_sold = #{unitSold,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

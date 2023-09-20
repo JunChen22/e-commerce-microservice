@@ -1,6 +1,8 @@
 package com.itsthatjun.ecommerce.controller;
 
+import com.itsthatjun.ecommerce.dto.ProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import com.itsthatjun.ecommerce.service.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
-@Api(tags = "Product related", description = "")
+@Api(tags = "Product related", description = "Product management service controller")
 public class ProductController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductController.class);
@@ -48,10 +50,21 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get product by id")
-    public Mono<Product> listProduct(@PathVariable int id){
-        return productService.getProduct(id).subscribeOn(scheduler);
+    public Mono<ProductDetail> listProduct(@PathVariable int id){
+        return productService.getProduct(id);
     }
 
+
+
+
+
+
+
+
+
+
+
+    /*
     @PostMapping("/admin/create")
     @ApiOperation(value = "Create a product")
     public Product createProduct(@RequestBody Product product){
@@ -66,10 +79,12 @@ public class ProductController {
         return product;
     }
 
+
     @DeleteMapping("/admin/delete/{id}")
     @ApiOperation(value = "Delete a product")
     public String deleteProduct(@PathVariable int id){
         productService.deleteProduct(id);
-        return "deleted";
     }
+
+     */
 }

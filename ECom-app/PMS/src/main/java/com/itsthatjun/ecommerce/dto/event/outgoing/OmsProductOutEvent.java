@@ -17,8 +17,10 @@ public class OmsProductOutEvent {
         NEW_PRODUCT_SKU,
         UPDATE_STOCK,
         UPDATE_PRODUCT_PRICE,
-        REMOVE_PRODUCT,
-        REMOVE_PRODUCT_SKU
+        UPDATE_PRODUCT_STATUS,
+        UPDATE_PRODUCT_SKU_STATUS,
+        REMOVE_PRODUCT_SKU,
+        DELETE_PRODUCT
     }
 
     private final Type eventType;

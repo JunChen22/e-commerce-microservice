@@ -451,8 +451,6 @@ CREATE TABLE product (
   category_name TEXT,
   attribute_category_id NUMERIC,	--
   sn  varchar(64),
-  delete_status NUMERIC DEFAULT 0, -- 0-> product not deleted; 1->product deleted
-  publish_status NUMERIC DEFAULT 1, -- 0-> product is not published; 1->product is published
   new_status NUMERIC, -- 0->not new product; 1->new product
   recommend_status NUMERIC, -- 0->not recommend; 1->recommend
   verify_status NUMERIC, -- 0->not verified; 1->verified
@@ -461,8 +459,8 @@ CREATE TABLE product (
   picture_album  NUMERIC,           -- collection of pictures
   description       TEXT,
   original_price  decimal(10, 2),
-  on_sale_status integer,  --  0-> not on sale; 1-> is on sale; 2-> flash sale/special sales/clarance/used item
-  sale_price        decimal(10, 2),
+  on_sale_status INTEGER,  --  0-> not on sale; 1-> is on sale; 2-> flash sale/special sales/clarance/used item
+  sale_price        decimal(10, 2),     -- TODO: currently using it as lowest price of all sku variants. and using original price as highest, it changes with more sku variants added.
   stock             INTEGER,
   low_stock INTEGER, -- -- low stock alarm, default is about 10% alarm
   unit_sold INTEGER,
@@ -471,6 +469,8 @@ CREATE TABLE product (
   detail_title TEXT,                -- at the bottom of product with detail title, description and picture
   detail_desc TEXT,
   description_album NUMERIC,
+  delete_status INTEGER DEFAULT 0, -- 0-> product not deleted; 1->product deleted, record purpose
+  publish_status INTEGER DEFAULT 1, -- 0-> product is not published; 1->product is published, to temporary stop sale.
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   note TEXT
 );
@@ -546,7 +546,8 @@ CREATE TABLE product_sku (    -- all product have one default sku variant
   stock INTEGER,
   low_stock INTEGER,     -- low stock alarm, default is about 10% alarm
   lock_stock INTEGER DEFAULT 0, -- lock stock is updated from lock stock + order quantity, can't order when current stock is less than lock stock. update lock stock to 0 after ordered.
-  unit_sold INTEGER
+  unit_sold INTEGER,
+  status INTEGER DEFAULT 1      -- product sku online status , 0 - offline  1 - online ready for purchase
 );
 
 INSERT INTO product_sku (product_id, sku_code, picture, price, promotion_price, stock, low_stock, unit_sold)

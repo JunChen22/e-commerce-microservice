@@ -23,6 +23,8 @@ public class ProductSku {
 
     private Integer unitSold;
 
+    private Integer status;
+
     public Integer getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class ProductSku {
 
     public void setUnitSold(Integer unitSold) {
         this.unitSold = unitSold;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }
