@@ -30,9 +30,7 @@ spring:
 
 spring.cloud:
   function: # can't have space between, tells spring which to use
-    definition: |
-      adminCouponMessageProcessor;adminSalesStockMessageProcessor;
-      couponMessageProcessor;salesStockMessageProcessor;productStockMessageProcessor
+    definition: adminCouponMessageProcessor;adminSalesStockMessageProcessor;couponMessageProcessor;salesStockMessageProcessor;productStockMessageProcessor
   stream:
     default:
       contentType: application/json

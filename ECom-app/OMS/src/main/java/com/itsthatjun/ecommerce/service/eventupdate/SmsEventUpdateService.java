@@ -8,10 +8,12 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Service
 public class SmsEventUpdateService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmsEventUpdateService.class);

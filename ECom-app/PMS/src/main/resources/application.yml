@@ -36,10 +36,7 @@ spring:
 spring.cloud:
   function:
     # can't have space between, tells spring which to use
-    definition: |
-      reviewMessageProcessor;
-      adminBrandMessageProcessor;adminProductMessageProcessor;adminReviewMessageProcessor
-      omsProductMessageProcessor;smsProductMessageProcessor
+    definition: reviewMessageProcessor;adminBrandMessageProcessor;adminProductMessageProcessor;adminReviewMessageProcessor;omsProductMessageProcessor;smsProductMessageProcessor
   stream:
     default:
       contentType: application/json

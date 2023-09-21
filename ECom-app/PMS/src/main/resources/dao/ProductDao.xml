@@ -14,27 +14,21 @@
 
     <resultMap id="productWithAtrributeMap" type="com.itsthatjun.ecommerce.dto.ProductDetail">
         <association property="product" javaType="com.itsthatjun.ecommerce.mbg.model.Product">
-            
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="brandName" column="brandName"/>
+            <result property="originalPrice" column="price"/>
         </association>
-
-        <association property="brand" javaType="com.itsthatjun.ecommerce.mbg.model.Brand" >
-
-        </association>
-
-        <collection property="reviews" ofType="com.itsthatjun.ecommerce.mbg.model.Review">
-
-        </collection>
-        
-        <collection property="skuVariants" ofType="com.itsthatjun.ecommerce.mbg.model.ProductSkuStock"
-        
-        <collection property="picturesList" ofType="com.itsthatjun.ecommerce.mbg.model.ProductPictures">
-
+        <collection property="productAttributeList" ofType="com.itsthatjun.ecommerce.mbg.model.ProductAttribute">
+            <id property="id" column="attr_id"/>
+            <result property="attributeTypeId" column="attr_type"/>
+            <result property="attributeValue" column="attr_value"/>
+            <result property="attributeUnit" column="attr_unit"/>
         </collection>
     </resultMap>
 
     <resultMap id="productWithListAtrributeMap" type="com.itsthatjun.ecommerce.dto.ProductDetail" autoMapping="true">
         <result property="product.id" column="id"/>
-        <result property="brand.name" column="brandName"/>
         <result property="product.name" column="name" />
         <result property="product.originalPrice" column="price" />
         <collection property="productAttributeList" ofType="com.itsthatjun.ecommerce.mbg.model.ProductAttribute">

@@ -51,10 +51,7 @@ spring.rabbitmq:
 spring.cloud:
   function:
     # can't have space between, tells spring which to use, using a pipe character allow multi-line.
-    definition: | 
-      cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;
-      adminOrderMessageProcessor;adminReturnMessageProcessor;
-      updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
+    definition: cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;adminOrderMessageProcessor;adminReturnMessageProcessor;updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
   stream:
     default:
       contentType: application/json
