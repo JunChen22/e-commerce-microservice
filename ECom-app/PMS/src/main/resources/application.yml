@@ -2,6 +2,8 @@ server:
   port: 8083
 
 spring:
+  application:
+    name: PMS
   datasource:
     url: jdbc:postgresql://localhost:5435/productdb
     username: postgres
@@ -81,6 +83,30 @@ redis:
     expire:
       authCode: 120
 
+
+
+
+app.eureka-server: localhost
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+
+
+
+
+
+
+
+
+
 logging:
   level:
     #root: ERROR
@@ -112,3 +138,6 @@ spring:
     port: 5672
     virtual-host: /
     addresses: rabbitmq:5672
+
+app:
+  eureka-server: eureka

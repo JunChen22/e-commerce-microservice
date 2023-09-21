@@ -172,11 +172,6 @@ services:
     depends_on:
       - elasticsearch
 
-  nginx:
-    image: nginx:1.22
-    ports:
-      - 80:80
-
   app:
     build: ECom-app/App
     container_name: ECom-app

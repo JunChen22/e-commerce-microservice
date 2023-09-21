@@ -7,6 +7,8 @@ app:
     port: 8084
 
 spring:
+  application:
+    name: OMS
   datasource:
     url: jdbc:postgresql://localhost:5434/orderdb
     username: postgres
@@ -96,6 +98,19 @@ spring.cloud:
           required-groups: orderProductStockUpdateGroup
 
 
+app.eureka-server: localhost
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+
 logging:
   level:
     #root: ERROR
@@ -124,6 +139,9 @@ paypal:
   client:
     id: ${PAYPAL_CLIENT_ID}
     secret: ${PAYPAL_CLIENT_SECRET}
+
+app:
+  eureka-server: eureka
 
 spring.rabbitmq.host: rabbitmq
 

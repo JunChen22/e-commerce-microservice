@@ -2,6 +2,8 @@ server:
   port: 8084
 
 spring:
+  application:
+    name: SMS
   datasource:
     url: jdbc:postgresql://localhost:5436/salesdb
     username: postgres
@@ -77,6 +79,21 @@ redis:
     expire:
       authCode: 120
 
+
+
+app.eureka-server: localhost
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+
 logging:
   level:
     #root: ERROR
@@ -103,3 +120,6 @@ spring:
     port: 5672
     virtual-host: /
     addresses: rabbitmq:5672
+
+app:
+  eureka-server: eureka
