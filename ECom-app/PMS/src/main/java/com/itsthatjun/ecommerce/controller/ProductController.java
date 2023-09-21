@@ -54,37 +54,67 @@ public class ProductController {
         return productService.getProduct(id);
     }
 
-
-
-
-
-
-
-
-
-
-
-    /*
-    @PostMapping("/admin/create")
-    @ApiOperation(value = "Create a product")
-    public Product createProduct(@RequestBody Product product){
-        productService.createProduct(product);
-        return product;
+    @PostMapping("/create")
+    @ApiOperation(value = "create a product with at least one sku variant")
+    public Mono<Product>  createProduct(@RequestBody ProductDetail productDetail) {
+        Product product = productDetail.getProduct();
+        List<ProductSku> skuList = productDetail.getSkuVariants();
+        return productService.createProduct(product, skuList);
     }
 
-    @PostMapping("/admin/update")
-    @ApiOperation(value = "Update a product")
-    public Product updateProduct(@RequestBody Product product){
-        productService.updateProduct(product);
-        return product;
+    @PostMapping("/addProductSku")
+    @ApiOperation(value = "Add a sku to existing product.")
+    public Mono<Product> addProductSku(@RequestBody ProductDetail productDetail) {
+        Product product = productDetail.getProduct();
+        List<ProductSku> skuList = productDetail.getSkuVariants();
+        return productService.addProductSku(product, skuList.get(0));
     }
 
-
-    @DeleteMapping("/admin/delete/{id}")
-    @ApiOperation(value = "Delete a product")
-    public String deleteProduct(@PathVariable int id){
-        productService.deleteProduct(id);
+    @PostMapping("/updateProductInfo")
+    @ApiOperation(value = "Update product info like category, name, description, subtitle and etc non-price affecting.")
+    public Mono<Product> updateProductInfo(@RequestBody ProductDetail productDetail) {
+        Product product = productDetail.getProduct();
+        return productService.updateProductInfo(product);
     }
 
-     */
+    @PostMapping("/updateProductStatus")
+    @ApiOperation(value = "Update product publish status.")
+    public Mono<Product> updateProductStatus(@RequestBody ProductDetail productDetail) {
+        Product product = productDetail.getProduct();
+        return productService.updateProductStatus(product);
+    }
+
+    @PostMapping("/updateProductSkuStatus")
+    @ApiOperation(value = "Update product publish status.")
+    public Mono<ProductSku> updateProductSkuStatus(@RequestBody ProductDetail productDetail) {
+        List<ProductSku> skuList = productDetail.getSkuVariants();
+        return productService.updateProductSkuStatus(skuList.get(0));
+    }
+
+    @PostMapping("/updateProductStock/")
+    @ApiOperation(value = "Adding stock to sku with newly added stock.")
+    public Mono<ProductSku> updateProductStock(@RequestBody ProductDetail productDetail, @RequestParam int stock) {
+        List<ProductSku> skuList = productDetail.getSkuVariants();
+        return productService.updateProductStock(skuList.get(0), stock);
+    }
+
+    @PostMapping("/updateProductPrice")
+    @ApiOperation(value = "Update product and its sku prices of existing product.")
+    public Mono<Product> updateProductPrice(@RequestBody ProductDetail productDetail) {
+        List<ProductSku> skuList = productDetail.getSkuVariants();
+        return productService.updateProductPrice(skuList);
+    }
+
+    @PostMapping("/removeProductSku")
+    @ApiOperation(value = "Remove/actual delete a sku from product. Product can have no sku, just holding information.")
+    public Mono<ProductSku> removeProductSku(@RequestBody ProductDetail productDetail) {
+        List<ProductSku> skuList = productDetail.getSkuVariants();
+        return productService.removeProductSku(skuList.get(0));
+    }
+
+    @DeleteMapping("/delete/{productId}")
+    @ApiOperation(value = "Delete just means status changed for archive, not actual delete from database")
+    public void deleteProduct(@PathVariable int productId) {
+        productService.deleteProduct(productId);
+    }
 }

@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.service;
+package com.itsthatjun.ecommerce.service.eventupdate;
 
 import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper;
@@ -30,7 +30,6 @@ public class OmsEventUpdateService {
 
     @ApiOperation("Generated order, increase sku lock stock")
     public void updatePurchase(Map<String, Integer> skuQuantity) {
-
         Set<String> skuSet = skuQuantity.keySet();
 
         for (String sku : skuSet) {

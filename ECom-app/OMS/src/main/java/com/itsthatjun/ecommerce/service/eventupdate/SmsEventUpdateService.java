@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.service;
+package com.itsthatjun.ecommerce.service.eventupdate;
 
 import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper;

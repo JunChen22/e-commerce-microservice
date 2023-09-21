@@ -10,8 +10,8 @@ import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import com.itsthatjun.ecommerce.mbg.model.Review;
-import com.itsthatjun.ecommerce.service.OmsEventUpdateService;
-import com.itsthatjun.ecommerce.service.SmsEventUpdateService;
+import com.itsthatjun.ecommerce.service.eventupdate.OmsEventUpdateService;
+import com.itsthatjun.ecommerce.service.eventupdate.SmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.impl.BrandServiceImpl;
 import com.itsthatjun.ecommerce.service.impl.ProductServiceImpl;
 import com.itsthatjun.ecommerce.service.impl.ReviewServiceImpl;
@@ -142,7 +142,7 @@ public class MessageProcessorConfig {
                     break;
 
                 case UPDATE_STOCK:
-                    int addedStock = event.getStock();
+                    int addedStock = event.getProductDetail().getStock();
                     productService.updateProductStock(skuList.get(0), addedStock);
                     break;
 

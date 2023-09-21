@@ -114,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
         int productId = currentProduct.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
 
-        if (foundProduct == null) throw new ProductException("Product does not exist, product id: %d .", productId);
+        if (foundProduct == null) throw new ProductException("Product does not exist, product id: " + productId);
 
         ProductSkuExample skuExample = new ProductSkuExample();
         skuExample.createCriteria().andProductIdEqualTo(productId);
@@ -158,7 +158,7 @@ public class ProductServiceImpl implements ProductService {
         int productId = updatedProduct.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
 
-        if (foundProduct == null) throw new ProductException("Product id does not exist : %d", productId);
+        if (foundProduct == null) throw new ProductException("Product id does not exist : " + productId);
         productMapper.updateByPrimaryKey(updatedProduct);
 
         return Mono.just(updatedProduct);
@@ -173,7 +173,7 @@ public class ProductServiceImpl implements ProductService {
         skuExample.createCriteria().andProductIdEqualTo(productId);
         List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
 
-        if (!skuList.contains(sku)) throw new ProductException("Sku does not exist with product id: %d", productId);
+        if (!skuList.contains(sku)) throw new ProductException("Sku does not exist with product id: " + productId);
 
         int skuStock = sku.getStock();
         sku.setStock(skuStock + addedStock);
@@ -185,8 +185,8 @@ public class ProductServiceImpl implements ProductService {
 
         productMapper.updateByPrimaryKey(product);
 
-        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_STOCK, product, skuList));
-        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_STOCK, product, skuList));
+        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, skuList));
+        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, skuList));
 
         return Mono.just(sku);
     }
@@ -216,8 +216,8 @@ public class ProductServiceImpl implements ProductService {
 
         productMapper.updateByPrimaryKey(product);
 
-        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT_PRICE, product, productSkuList));
-        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT_PRICE, product, productSkuList));
+        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, productSkuList));
+        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, productSkuList));
 
         return Mono.just(product);
     }
@@ -228,7 +228,7 @@ public class ProductServiceImpl implements ProductService {
         int productId = updatedProduct.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
 
-        if (foundProduct == null) throw new ProductException("Product does not exist, product id: %d .", productId);
+        if (foundProduct == null) throw new ProductException("Product does not exist, product id: " + productId);
 
         int currentPublishStatus = foundProduct.getPublishStatus();
         int updateProductStatus = updatedProduct.getPublishStatus();
@@ -255,8 +255,8 @@ public class ProductServiceImpl implements ProductService {
         productMapper.updateByPrimaryKey(updatedProduct);
         // TODO: create log update
 
-        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT_STATUS, updatedProduct, affectedSkuList));
-        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT_STATUS, updatedProduct, affectedSkuList));
+        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, affectedSkuList));
+        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, affectedSkuList));
 
         return Mono.just(updatedProduct);
     }
@@ -270,15 +270,15 @@ public class ProductServiceImpl implements ProductService {
         int productId = updateSku.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
 
-        if (foundProduct == null) throw new ProductException("Product does not exist, product id: %d .", productId);
+        if (foundProduct == null) throw new RuntimeException("Product does not exist, product id: " + productId);
 
-        if (foundProduct.getPublishStatus() == 0) throw new ProductException("Product is not active, sku can not be set until product id %d is active", productId);
+        if (foundProduct.getPublishStatus() == 0) throw new ProductException("Product is not active, sku can not be set until product id: " + productId + "is active");
 
         List<ProductSku> skuList = new ArrayList<>();
         skuList.add(updateSku);
 
-        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT_SKU_STATUS, foundProduct, skuList));
-        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT_SKU_STATUS, foundProduct, skuList));
+        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
+        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
 
         return Mono.just(updateSku);
     }
@@ -292,7 +292,7 @@ public class ProductServiceImpl implements ProductService {
         skuExample.createCriteria().andProductIdEqualTo(productId);
         List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
 
-        if (!skuList.contains(removeSku)) throw new ProductException("Sku does not exist or belong to product id: %d", productId);
+        if (!skuList.contains(removeSku)) throw new ProductException("Sku does not exist or belong to product id: " + productId);
 
         int skuId = removeSku.getId();
         skuList.remove(removeSku);

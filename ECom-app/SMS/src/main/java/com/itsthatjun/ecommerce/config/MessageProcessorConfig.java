@@ -9,8 +9,8 @@ import com.itsthatjun.ecommerce.dto.event.incoming.PmsProductUpdateIncomingEvent
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.ProductSku;
-import com.itsthatjun.ecommerce.service.OmsEventUpdateService;
-import com.itsthatjun.ecommerce.service.PmsEventUpdateService;
+import com.itsthatjun.ecommerce.service.eventupdate.OmsEventUpdateService;
+import com.itsthatjun.ecommerce.service.eventupdate.PmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.impl.CouponServiceImpl;
 import com.itsthatjun.ecommerce.service.impl.SalesServiceimpl;
 import org.slf4j.Logger;

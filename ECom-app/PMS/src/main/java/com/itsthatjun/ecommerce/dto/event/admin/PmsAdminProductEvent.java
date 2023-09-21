@@ -25,7 +25,6 @@ public class PmsAdminProductEvent {
 
     private final Type eventType;
     private final ProductDetail productDetail;
-    private final Integer stock;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
@@ -33,13 +32,11 @@ public class PmsAdminProductEvent {
         this.eventType = null;
         this.productDetail = null;
         this.eventCreatedAt = null;
-        this.stock = null;
     }
 
-    public PmsAdminProductEvent(Type eventType, ProductDetail productDetail, Integer stock) {
+    public PmsAdminProductEvent(Type eventType, ProductDetail productDetail) {
         this.eventType = eventType;
         this.productDetail = productDetail;
-        this.stock = stock;
         this.eventCreatedAt = now();
     }
 }

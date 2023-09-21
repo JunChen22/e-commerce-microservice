@@ -15,7 +15,7 @@ public class PmsProductUpdateIncomingEvent {
     public enum Type {
         NEW_PRODUCT,
         NEW_PRODUCT_SKU,
-        UPDATE_PRODUCT,
+        UPDATE_PRODUCT,     // Logic is already done in PMS, just need update current information.
         REMOVE_PRODUCT,
         REMOVE_PRODUCT_SKU
     }

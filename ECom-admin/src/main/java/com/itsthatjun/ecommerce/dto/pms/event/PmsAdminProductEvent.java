@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.dto.pms.event;
 
+import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import lombok.Getter;
 
@@ -12,27 +13,30 @@ public class PmsAdminProductEvent {
 
     public enum Type {
         NEW_PRODUCT,
-        UPDATE_PRODUCT,
-        REMOVE_PRODUCT
+        NEW_PRODUCT_SKU,
+        UPDATE_STOCK,
+        UPDATE_PRODUCT_INFO,
+        UPDATE_PRODUCT_PRICE,
+        UPDATE_PRODUCT_STATUS,
+        UPDATE_PRODUCT_SKU_STATUS,
+        REMOVE_PRODUCT_SKU,
+        DELETE_PRODUCT
     }
 
     private final Type eventType;
-    private final Product product;
-    private final Integer productId;
+    private final ProductDetail productDetail;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public PmsAdminProductEvent() {
         this.eventType = null;
-        this.product = null;
-        this.productId = null;
+        this.productDetail = null;
         this.eventCreatedAt = null;
     }
 
-    public PmsAdminProductEvent(Type eventType, Product product, Integer productId) {
+    public PmsAdminProductEvent(Type eventType, ProductDetail productDetail) {
         this.eventType = eventType;
-        this.product = product;
-        this.productId = productId;
+        this.productDetail = productDetail;
         this.eventCreatedAt = now();
     }
 }

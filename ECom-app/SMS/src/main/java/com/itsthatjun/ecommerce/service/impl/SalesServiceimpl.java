@@ -1,14 +1,11 @@
 package com.itsthatjun.ecommerce.service.impl;
 
-import com.itsthatjun.ecommerce.dto.DiscountType;
 import com.itsthatjun.ecommerce.dto.OnSaleRequest;
 import com.itsthatjun.ecommerce.dto.event.outgoing.OmsSaleOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.PmsSaleOutEvent;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
-import com.itsthatjun.ecommerce.service.OmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.SalesService;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +20,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class SalesServiceimpl implements SalesService {

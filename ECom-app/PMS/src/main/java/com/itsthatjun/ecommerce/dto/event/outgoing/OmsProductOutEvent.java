@@ -15,10 +15,7 @@ public class OmsProductOutEvent {
     public enum Type {
         NEW_PRODUCT,
         NEW_PRODUCT_SKU,
-        UPDATE_STOCK,
-        UPDATE_PRODUCT_PRICE,
-        UPDATE_PRODUCT_STATUS,
-        UPDATE_PRODUCT_SKU_STATUS,
+        UPDATE_PRODUCT,
         REMOVE_PRODUCT_SKU,
         DELETE_PRODUCT
     }

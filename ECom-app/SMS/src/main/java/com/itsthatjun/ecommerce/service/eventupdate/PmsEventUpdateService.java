@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.service;
+package com.itsthatjun.ecommerce.service.eventupdate;
 
 import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper;
@@ -48,7 +48,7 @@ public class PmsEventUpdateService {
         LOG.info("Added sku to product id: %d, with sku id : %d and sku code: %s", productId, skuId, skuCode);
     }
 
-    @ApiOperation("Update product info and sku like stock, original price, online status.")
+    @ApiOperation("Update product info and sku like stock, original price, online status. Logic is done in PMS already.")
     public void updateProduct(Product affectedProduct, List<ProductSku> skuList) {
         productMapper.updateByPrimaryKey(affectedProduct);
         for (ProductSku sku : skuList){
