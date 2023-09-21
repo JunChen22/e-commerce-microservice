@@ -2,9 +2,6 @@ server:
   port: 8080
 
 app:
-  CMS-service:
-    host: localhost
-    port: 8081
   OMS-service:
     host: localhost
     port: 8082

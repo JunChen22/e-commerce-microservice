@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: CMS
+    name: cms
   datasource:
     url: jdbc:postgresql://localhost:5433/contentdb
     username: postgres

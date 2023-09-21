@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +28,7 @@ public class ContentAggregate {
 
     private final WebClient webClient;
 
-    @Value("${app.CMS-service.host}")
-    String contentServiceURL;
-    @Value("${app.CMS-service.port}")
-    int port;
+    private final String CMS_SERVICE_URL = "http://cms";
 
     @Autowired
     public ContentAggregate(WebClient.Builder webClient) {
@@ -39,7 +37,7 @@ public class ContentAggregate {
 
     @GetMapping("/article/all")
     public Flux<Articles> getAllArticle() {
-        String url = "http://" + contentServiceURL + ":" + port + "/article/all";
+        String url = CMS_SERVICE_URL + "/article/all";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Articles.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -47,8 +45,21 @@ public class ContentAggregate {
 
     @GetMapping("/article/{articleId}")
     public Mono<Articles> getArticle(@PathVariable int articleId) {
-        String url = "http://" + contentServiceURL + ":" + port + "/article/" + articleId;
+        String url = CMS_SERVICE_URL + "/article/" + articleId;
         return webClient.get().uri(url).retrieve().bodyToMono(Articles.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
+    }
+
+    public Mono<Health> getCmsHealth() {
+        return getHealth(CMS_SERVICE_URL);
+    }
+
+    private Mono<Health> getHealth(String url) {
+        url += "/actuator/health";
+        LOG.debug("Will call the Health API on URL: {}", url);
+        return webClient.get().uri(url).retrieve().bodyToMono(String.class)
+                .map(s -> new Health.Builder().up().build())
+                .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
+                .log(LOG.getName(), FINE);
     }
 }
