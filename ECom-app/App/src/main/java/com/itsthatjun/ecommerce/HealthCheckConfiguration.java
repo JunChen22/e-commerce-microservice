@@ -55,7 +55,20 @@ public class HealthCheckConfiguration {
     ReactiveHealthContributor coreService() {
         final Map<String, ReactiveHealthIndicator> registry = new LinkedHashMap<>();
 
-        registry.put("cms", () -> contentAggregate.getCmsHealth());
+        registry.put("cms-article", () -> contentAggregate.getCmsHealth());
+
+        registry.put("oms-cart", () -> cartAggregate.getOmsHealth());
+        registry.put("oms-order", () -> orderAggregate.getOmsHealth());
+        registry.put("oms-return", () -> returnAggregate.getOmsHealth());
+
+        registry.put("pms-brand", () -> brandAggregate.getPmsHealth());
+        registry.put("pms-product", () -> productAggregate.getPmsHealth());
+        registry.put("pms-review", () -> reviewAggregate.getPmsHealth());
+
+        registry.put("sms-coupon", () -> couponAggregate.getSmsHealth());
+        registry.put("sms-sale", () -> saleAggregate.getSmsHealth());
+
+        registry.put("ums-user", () -> userAggregate.getUmsHealth());
 
         return CompositeReactiveHealthContributor.fromMap(registry);
     }

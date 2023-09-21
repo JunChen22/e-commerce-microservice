@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -30,20 +31,18 @@ public class BrandAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.PMS-service.host}")
-    String brandServiceURL;
-    @Value("${app.PMS-service.port}")
-    int port;
+    private final String PMS_SERVICE_URL = "http://pms";
 
     @Autowired
-    public BrandAggregate(WebClient.Builder webClient, @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
+    public BrandAggregate(@Qualifier("") WebClient.Builder webClient,
+                          @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
         this.webClient = webClient.build();
         this.publishEventScheduler = publishEventScheduler;
     }
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
     public Flux<Brand> getAllBrand(){
-        String url = "http://" + brandServiceURL + ":" + port + "/listAll/";
+        String url = PMS_SERVICE_URL + "/listAll/";
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
     }
@@ -52,7 +51,7 @@ public class BrandAggregate {
     @ApiOperation(value = "Get brands with page and size")
     public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize){
-        String url = "http://" + brandServiceURL + ":" + port + "/list/" + "?pageNum=" + pageNum + "&pageSize=" + pageSize;
+        String url = PMS_SERVICE_URL + "/list/" + "?pageNum=" + pageNum + "&pageSize=" + pageSize;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -61,7 +60,7 @@ public class BrandAggregate {
     @GetMapping("/product/{brandId}")
     @ApiOperation(value = "Get all product of this brand")
     public Flux<Product> getBrandProduct(@PathVariable int brandId){
-        String url = "http://" + brandServiceURL + ":" + port + "/product/" + brandId;
+        String url = PMS_SERVICE_URL + "/product/" + brandId;
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
     }
@@ -69,10 +68,22 @@ public class BrandAggregate {
     @GetMapping("/{brandId}")
     @ApiOperation(value = "Get brand info")
     public Mono<Brand> getBrand(@PathVariable int brandId){
-        String url = "http://" + brandServiceURL + ":" + port +"/" + brandId;
+        String url = PMS_SERVICE_URL + "/" + brandId;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
+    public Mono<Health> getPmsHealth() {
+        return getHealth(PMS_SERVICE_URL);
+    }
+
+    private Mono<Health> getHealth(String url) {
+        url += "/actuator/health";
+        LOG.debug("Will call the Health API on URL: {}", url);
+        return webClient.get().uri(url).retrieve().bodyToMono(String.class)
+                .map(s -> new Health.Builder().up().build())
+                .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
+                .log(LOG.getName(), FINE);
+    }
 }

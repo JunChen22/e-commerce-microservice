@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -37,9 +38,6 @@ import static reactor.core.publisher.Flux.empty;
 public class OrderAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderAggregate.class);
-    public static final String PAYPAL_SUCCESS_URL = "order/success";
-
-    public static final String PAYPAL_CANCEL_URL = "order/cancel";
 
     private final WebClient webClient;
 
@@ -47,10 +45,11 @@ public class OrderAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.OMS-service.host}")
-    String orderServiceURL;
-    @Value("${app.OMS-service.port}")
-    int port;
+    public static final String PAYPAL_SUCCESS_URL = "order/success";
+
+    public static final String PAYPAL_CANCEL_URL = "order/cancel";
+
+    private final String OMS_SERVICE_URL = "http://oms";
 
     @Autowired
     public OrderAggregate(WebClient.Builder  webClient, StreamBridge streamBridge,
@@ -63,7 +62,7 @@ public class OrderAggregate {
     @ApiOperation("Get Order Detail by serial number")
     @GetMapping("/detail/{orderSn}")
     public Mono<Orders> detail(@PathVariable String orderSn) {
-        String url = "http://" + orderServiceURL + ":" + port + "/order/detail/{" + orderSn + "}";
+        String url = OMS_SERVICE_URL + "/order/detail/{" + orderSn + "}";
 
         return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
@@ -77,7 +76,7 @@ public class OrderAggregate {
                              @RequestParam(required = false, defaultValue = "1") Integer pageNum,
                              @RequestParam(required = false, defaultValue = "5") Integer pageSize,
                              @RequestParam int userId) {
-        String url = "http://" + orderServiceURL + ":" + port + "/cart/list?userId=" + userId;
+        String url = OMS_SERVICE_URL + "/cart/list?userId=" + userId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -139,5 +138,18 @@ public class OrderAggregate {
                 .setHeader("partitionKey", event.getOrderSN())
                 .build();
         streamBridge.send(bindingName, message);
+    }
+
+    public Mono<Health> getOmsHealth() {
+        return getHealth(OMS_SERVICE_URL);
+    }
+
+    private Mono<Health> getHealth(String url) {
+        url += "/actuator/health";
+        LOG.debug("Will call the Health API on URL: {}", url);
+        return webClient.get().uri(url).retrieve().bodyToMono(String.class)
+                .map(s -> new Health.Builder().up().build())
+                .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
+                .log(LOG.getName(), FINE);
     }
 }

@@ -97,23 +97,7 @@ spring.config.activate.on-profile: docker
 spring:
   datasource.url: jdbc:postgresql://postgres/springecommerece
 
-
 app:
-  CMS-service:
-    host: cms
-    port: 8080
-  OMS-service:
-    host: oms
-    port: 8080
-  PMS-service:
-    host: pms
-    port: 8080
-  SMS-service:
-    host: sms
-    port: 8080
-  UMS-service:
-    host: ums
-    port: 8080
   eureka-server: eureka
 
 spring.rabbitmq.host: rabbitmq

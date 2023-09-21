@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -38,10 +39,7 @@ public class CartAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.OMS-service.host}")
-    String orderServiceURL;
-    @Value("${app.OMS-service.port}")
-    int port;
+    private final String OMS_SERVICE_URL = "http://oms";
 
     @Autowired
     public CartAggregate(WebClient.Builder webClient, StreamBridge streamBridge,
@@ -54,7 +52,7 @@ public class CartAggregate {
     @ApiOperation("list current user's shopping cart")
     @GetMapping(value = "/list")
     public Flux<CartItem> list(@RequestParam int userId) {
-        String url = "http://" + orderServiceURL + ":" + port + "/cart/list?userId=" + userId;
+        String url = OMS_SERVICE_URL + "/cart/list?userId=" + userId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(CartItem.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -108,5 +106,18 @@ public class CartAggregate {
                 .setHeader("partitionKey", event.getKey())
                 .build();
         streamBridge.send(bindingName, message);
+    }
+
+    public Mono<Health> getOmsHealth() {
+        return getHealth(OMS_SERVICE_URL);
+    }
+
+    private Mono<Health> getHealth(String url) {
+        url += "/actuator/health";
+        LOG.debug("Will call the Health API on URL: {}", url);
+        return webClient.get().uri(url).retrieve().bodyToMono(String.class)
+                .map(s -> new Health.Builder().up().build())
+                .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
+                .log(LOG.getName(), FINE);
     }
 }

@@ -6,13 +6,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
+
+import static java.util.logging.Level.FINE;
 
 @RestController
 @Api(tags = "", description = "")
@@ -27,10 +31,7 @@ public class ReturnAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.OMS-service.host}")
-    String orderServiceURL;
-    @Value("${app.OMS-service.port}")
-    int port;
+    private final String OMS_SERVICE_URL = "http://oms";
 
     public ReturnAggregate(WebClient.Builder  webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
@@ -46,5 +47,18 @@ public class ReturnAggregate {
                 .setHeader("partitionKey", event.getKey())
                 .build();
         streamBridge.send(bindingName, message);
+    }
+
+    public Mono<Health> getOmsHealth() {
+        return getHealth(OMS_SERVICE_URL);
+    }
+
+    private Mono<Health> getHealth(String url) {
+        url += "/actuator/health";
+        LOG.debug("Will call the Health API on URL: {}", url);
+        return webClient.get().uri(url).retrieve().bodyToMono(String.class)
+                .map(s -> new Health.Builder().up().build())
+                .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
+                .log(LOG.getName(), FINE);
     }
 }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -36,10 +37,7 @@ public class ProductAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.PMS-service.host}")
-    String productServiceURL;
-    @Value("${app.PMS-service.port}")
-    int port;
+    private final String PMS_SERVICE_URL = "http://pms";
 
     @Autowired
     public ProductAggregate(WebClient.Builder  webClient, @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
@@ -50,7 +48,7 @@ public class ProductAggregate {
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all product")
     public Flux<Product> listAllProduct(){
-        String url = "http://" + productServiceURL + ":" + port + "/product/listAll";
+        String url = PMS_SERVICE_URL + "/product/listAll";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -59,7 +57,7 @@ public class ProductAggregate {
     @GetMapping("/{id}")
     @ApiOperation(value = "Get product by id")
     public Mono<Product> listProduct(@PathVariable int id){
-        String url = "http://" + productServiceURL + ":" + port + "/product/" + id;
+        String url = PMS_SERVICE_URL + "/product/" + id;
         return webClient.get().uri(url).retrieve().bodyToMono(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
@@ -68,9 +66,22 @@ public class ProductAggregate {
     @ApiOperation(value = "Get product with page and size")
     public Flux<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                         @RequestParam(value = "size", defaultValue = "5") int pageSize){
-        String url = "http://" + productServiceURL + ":" + port + "/list?page=" + pageNum + "&size=" + pageSize;
+        String url = PMS_SERVICE_URL + "/list?page=" + pageNum + "&size=" + pageSize;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+    }
+
+    public Mono<Health> getPmsHealth() {
+        return getHealth(PMS_SERVICE_URL);
+    }
+
+    private Mono<Health> getHealth(String url) {
+        url += "/actuator/health";
+        LOG.debug("Will call the Health API on URL: {}", url);
+        return webClient.get().uri(url).retrieve().bodyToMono(String.class)
+                .map(s -> new Health.Builder().up().build())
+                .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
+                .log(LOG.getName(), FINE);
     }
 }

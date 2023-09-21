@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: PMS
+    name: pms
   datasource:
     url: jdbc:postgresql://localhost:5435/productdb
     username: postgres

@@ -8,7 +8,7 @@ app:
 
 spring:
   application:
-    name: OMS
+    name: oms
   datasource:
     url: jdbc:postgresql://localhost:5434/orderdb
     username: postgres

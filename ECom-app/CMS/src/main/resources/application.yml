@@ -67,7 +67,6 @@ jwt:
   secretKey: JunChen522
   expirationTimeMinute: 150
 
-
 app.eureka-server: localhost
 
 eureka:
@@ -79,9 +78,6 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
-
-
-
 
 logging:
   level:

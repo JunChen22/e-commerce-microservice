@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: SMS
+    name: sms
   datasource:
     url: jdbc:postgresql://localhost:5436/salesdb
     username: postgres
