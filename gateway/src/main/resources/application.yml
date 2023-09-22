@@ -61,9 +61,11 @@ spring.cloud.gateway.routes:
       - Path=/user/**
 
   - id: search
-    uri: http://search:8081/esProduct
+    uri: http://search:8081/esProduct/search?keyword={keyword}
     predicates:
-      - Path=/search/**
+      - Path=/search
+    filters:
+      - RewritePath=/search(?<keyword>.*), /esProduct/search?keyword=${keyword}
 
   - id: search-import data
     uri: http://search:8081
@@ -75,10 +77,11 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/swagger**
 
-  - id: swagger-definition
+  - id: swagger-definition          # TODO: need to fix the swagger UI, it gets the definition but can't display properly
     uri: http://app:8080
     predicates:
       - Path=/v2/api-docs**
+
 
 management.endpoint.gateway.enabled: true
 management.endpoint.health.show-details: "ALWAYS"

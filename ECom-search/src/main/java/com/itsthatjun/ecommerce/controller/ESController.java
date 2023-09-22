@@ -35,6 +35,10 @@ public class ESController {
                                   @RequestParam(required = false, defaultValue = "0") int pageNum,
                                   @RequestParam(required = false, defaultValue = "5") int pageSize,
                                   @RequestParam(required = false, defaultValue = "0") int sort) {
+        if (keyword != null && keyword.startsWith("?keyword=")) {  // TODO: passing back from gateway, it pass in "?keyword=" instead just keyword.
+            keyword = keyword.substring("?keyword=".length());
+        }
+
         return productService.search(keyword, pageNum, pageSize);
     }
 
