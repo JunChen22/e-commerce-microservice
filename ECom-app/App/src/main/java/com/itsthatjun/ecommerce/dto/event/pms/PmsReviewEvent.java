@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.event;
+package com.itsthatjun.ecommerce.dto.event.pms;
 
 import com.itsthatjun.ecommerce.mbg.model.Review;
 import com.itsthatjun.ecommerce.mbg.model.ReviewPictures;

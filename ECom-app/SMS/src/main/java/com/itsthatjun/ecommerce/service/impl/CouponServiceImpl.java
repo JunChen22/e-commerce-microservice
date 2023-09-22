@@ -38,19 +38,13 @@ public class CouponServiceImpl implements CouponService {
         this.productSkuMapper = productSkuMapper;
     }
 
-
     @Override
-    public CouponDiscount checkDiscount(CouponDiscount couponDiscount) {
-        String couponCode = couponDiscount.getCouponCode();
-        Map<String, Integer> skuQuantity = couponDiscount.getSkuQuantity();
-
+    public double checkDiscount(String couponCode) {
         if (checkCoupon(couponCode) == null) {
-            couponDiscount.setMessage("Coupon does not exist or not work with current items");
-            return couponDiscount;
+            return 0;
         }
-        double discountAmount = getDiscountAmount(skuQuantity, couponCode);
-        couponDiscount.setDiscountAmount(discountAmount);
-        return couponDiscount;
+        double discountAmount = getDiscountAmount(null, couponCode);
+        return 0;
     }
 
     @Override

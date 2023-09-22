@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.event.OmsCompletionEvent;
-import com.itsthatjun.ecommerce.dto.event.OmsOrderEvent;
+import com.itsthatjun.ecommerce.dto.event.oms.OmsCompletionEvent;
+import com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent;
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.config.URLUtils;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
@@ -24,16 +23,16 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
-import static com.itsthatjun.ecommerce.dto.event.OmsCompletionEvent.Type.PAYMENT_FAILURE;
-import static com.itsthatjun.ecommerce.dto.event.OmsCompletionEvent.Type.PAYMENT_SUCCESS;
-import static com.itsthatjun.ecommerce.dto.event.OmsOrderEvent.Type.GENERATE_ORDER;
+import static com.itsthatjun.ecommerce.dto.event.oms.OmsCompletionEvent.Type.PAYMENT_FAILURE;
+import static com.itsthatjun.ecommerce.dto.event.oms.OmsCompletionEvent.Type.PAYMENT_SUCCESS;
+import static com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent.Type.CANCEL_ORDER;
+import static com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent.Type.GENERATE_ORDER;
 import static java.util.logging.Level.FINE;
 import static reactor.core.publisher.Flux.empty;
 
 @RestController
-@Api(tags = "", description = "")
+@Api(tags = "Order controller", description = "Order controller")
 @RequestMapping("/order")
 public class OrderAggregate {
 
@@ -52,7 +51,7 @@ public class OrderAggregate {
     private final String OMS_SERVICE_URL = "http://oms";
 
     @Autowired
-    public OrderAggregate(WebClient.Builder  webClient, StreamBridge streamBridge,
+    public OrderAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder  webClient, StreamBridge streamBridge,
                           @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
@@ -63,6 +62,7 @@ public class OrderAggregate {
     @GetMapping("/detail/{orderSn}")
     public Mono<Orders> detail(@PathVariable String orderSn) {
         String url = OMS_SERVICE_URL + "/order/detail/{" + orderSn + "}";
+        LOG.debug("Will call the detail API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
@@ -77,6 +77,7 @@ public class OrderAggregate {
                              @RequestParam(required = false, defaultValue = "5") Integer pageSize,
                              @RequestParam int userId) {
         String url = OMS_SERVICE_URL + "/cart/list?userId=" + userId;
+        LOG.debug("Will call the list API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -84,42 +85,42 @@ public class OrderAggregate {
 
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
-    public Map<String, Object> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request, @RequestParam int userId){
+    public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request, @RequestParam int userId){
 
         String successUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_SUCCESS_URL;
         String cancelUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_CANCEL_URL;
-        sendOrderMessage("order-out-0", new OmsOrderEvent(GENERATE_ORDER, userId, orderParam, successUrl, cancelUrl));
-        return null;
+
+        return Mono.fromCallable(() -> {
+            sendOrderMessage("order-out-0", new OmsOrderEvent(GENERATE_ORDER, userId, null, orderParam, successUrl, cancelUrl));
+            return orderParam;
+        }).subscribeOn(publishEventScheduler);
     }
 
-    @GetMapping("/success")
+    @GetMapping("/payment/success")
     @ApiOperation("after success paypal payment, actual processing the order , unlock stocks and update info's like coupon and stocks")
-    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId,
+    public Mono<String> successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId,
                              @RequestParam String orderSn){
-        sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_SUCCESS, orderSn, paymentId, payerId));
-        return "payment success";
+        return Mono.fromCallable(() -> {
+            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_SUCCESS, orderSn, paymentId, payerId));
+            return "payment success";
+        }).subscribeOn(publishEventScheduler);
     }
 
-    @GetMapping("/cancel")
+    @GetMapping("/payment/cancel")
     @ApiOperation("Payment failure feedback")
-    public String payFail(@RequestParam String orderSn) {
-        sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_FAILURE, "", "", ""));
-        return "payment fail";
+    public Mono<String> payFail(@RequestParam String orderSn) {
+        return Mono.fromCallable(() -> {
+            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_FAILURE, "", "", ""));
+            return "payment fail";
+        }).subscribeOn(publishEventScheduler);
     }
 
-    @ApiOperation("Cancel order")
     @PostMapping("/cancelOrder/{orderSn}")
-    public String cancelUserOrder(@PathVariable String orderSn) {
-        return null;
-    }
-
-    // TODO: redis or like Quartz
-    // timed/schedule depend on the deliver time and check UPS
-    // then called to change status by redis.
-    @ApiOperation("Member received deliver, update order status")
-    @PostMapping(value = "/confirmReceiveOrder/{orderId}")
-    public String confirmReceiveOrder(@PathVariable int orderId) {
-        return null;
+    @ApiOperation("Cancel order if before sending the order out.")
+    public Mono<Void> cancelUserOrder(@PathVariable String orderSn) {
+        return Mono.fromRunnable(() -> {
+            sendOrderMessage("orderComplete-out-0", new OmsOrderEvent(CANCEL_ORDER, 0, orderSn, null, null, null));
+        }).subscribeOn(publishEventScheduler).then();
     }
 
     private void sendOrderMessage(String bindingName, OmsOrderEvent event) {
@@ -135,7 +136,7 @@ public class OrderAggregate {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getOrderSN())
+                .setHeader("event type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
     }

@@ -18,23 +18,25 @@ public interface ReviewService {
     Flux<ProductReview> listProductAllReview(int productId);
 
     @ApiOperation(value = "")
-    int createReview(Review newReview, List<ReviewPictures> picturesList, int userId);
+    Mono<Review> createReview(Review newReview, List<ReviewPictures> picturesList, int userId);
 
     @ApiOperation(value = "")
-    int updateReview(Review updatedReview, List<ReviewPictures> picturesList, int userId);
+    Mono<Review> updateReview(Review updatedReview, List<ReviewPictures> picturesList, int userId);
 
     @ApiOperation(value = "")
-    int deleteReview(int reviewId, int userId);
+    Mono<Void> deleteReview(int reviewId, int userId);
+
+
+
+    @ApiOperation(value = "Admin retrieves all reviews made one user")
+    Flux<ProductReview> listAllReviewByUser(int userId);
 
     @ApiOperation(value = "")
-    List<ProductReview> listAllReviewByUser(int userId);
+    Mono<Review> adminCreateReview(Review newReview, List<ReviewPictures> picturesList);
 
     @ApiOperation(value = "")
-    void adminCreateReview(Review newReview, List<ReviewPictures> picturesList);
+    Mono<Review> adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList);
 
     @ApiOperation(value = "")
-    void adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList);
-
-    @ApiOperation(value = "")
-    void adminDeleteReview(int reviewId);
+    Mono<Void> adminDeleteReview(int reviewId);
 }

@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.event;
+package com.itsthatjun.ecommerce.dto.event.oms;
 
 import lombok.Getter;
 

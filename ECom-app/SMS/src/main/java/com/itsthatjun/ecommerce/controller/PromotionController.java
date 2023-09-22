@@ -42,7 +42,6 @@ public class PromotionController {
         return salesServiceimpl.getAllFlashSaleItems();
     }
 
-
-
+    // TODO: admin endpoints for synchronous/local connections
 
 }

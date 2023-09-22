@@ -94,7 +94,7 @@ public class MessageProcessorConfig {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
-            String orderSn = event.getOrderSn();
+            String orderSn = event.getReturnRequest().getOrderSn();
             int userId = event.getUserId();
 
             ReturnParam returnParam = event.getReturnParam();
@@ -131,12 +131,12 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case GENERATE_ORDER:
-
                     orderService.generateOrder(event.getOrderParam(), event.getSuccessUrl(), event.getCancelUrl(), event.getUserId());
                     break;
 
                 case CANCEL_ORDER:
-                    orderService.cancelOrder("TODO");
+                    String orderSn = event.getOrderSn();
+                    orderService.cancelOrder(orderSn);
                     break;
 
                 // case UPDATE_ORDER:  TODO: update order minutes after order placed, like change quantity or cancel partial order

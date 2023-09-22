@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.dto.event.incoming;
 
 import com.itsthatjun.ecommerce.dto.ReturnParam;
+import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -18,7 +19,7 @@ public class OmsReturnEvent {
 
     private final Type eventType;
     private final int userId;
-    private final String orderSn;
+    private final ReturnRequest returnRequest;
     private final ReturnParam returnParam;
     private final ZonedDateTime eventCreatedAt;
 
@@ -26,15 +27,15 @@ public class OmsReturnEvent {
     public OmsReturnEvent() {
         this.eventType = null;
         this.userId = 0;
-        this.orderSn = null;
+        this.returnRequest = null;
         this.returnParam = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsReturnEvent(Type eventType, int userId, String orderSn, ReturnParam returnParam) {
+    public OmsReturnEvent(Type eventType, int userId, ReturnRequest returnRequest, ReturnParam returnParam) {
         this.eventType = eventType;
         this.userId = userId;
-        this.orderSn = orderSn;
+        this.returnRequest = returnRequest;
         this.returnParam = returnParam;
         this.eventCreatedAt = now();
     }

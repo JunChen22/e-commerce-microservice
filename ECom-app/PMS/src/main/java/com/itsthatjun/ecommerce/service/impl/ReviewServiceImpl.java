@@ -102,7 +102,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public int createReview(Review newReview, List<ReviewPictures> picturesList, int userId) {
+    public Mono<Review> createReview(Review newReview, List<ReviewPictures> picturesList, int userId) {
 
         newReview.setCreatedAt(new Date());
         int status = reviewMapper.insert(newReview);
@@ -111,11 +111,11 @@ public class ReviewServiceImpl implements ReviewService {
 
         createAlbumAndPicture(reviewId, picturesList);
 
-        return status;
+        return Mono.just(newReview);
     }
 
     @Override
-    public int updateReview(Review updatedReview, List<ReviewPictures> picturesList, int userId) {
+    public Mono<Review> updateReview(Review updatedReview, List<ReviewPictures> picturesList, int userId) {
         ReviewExample example = new ReviewExample();
         example.createCriteria().andIdEqualTo(updatedReview.getId());
         Date currentTime = new Date();
@@ -126,15 +126,16 @@ public class ReviewServiceImpl implements ReviewService {
         deleteAlbumAndPicture(reviewId);
         createAlbumAndPicture(reviewId, picturesList);
 
-        int status = reviewMapper.updateByExample(updatedReview, example);
-        return status;
+        reviewMapper.updateByExample(updatedReview, example);
+
+        return Mono.just(updatedReview);
     }
 
     @Override
-    public int deleteReview(int reviewId, int userId) {
-        int status = reviewMapper.deleteByPrimaryKey(reviewId);
+    public Mono<Void> deleteReview(int reviewId, int userId) {
+        reviewMapper.deleteByPrimaryKey(reviewId);
         deleteAlbumAndPicture(reviewId);
-        return status;
+        return Mono.empty();
     }
 
     private int deleteAlbumAndPicture(int reviewId) {
@@ -178,14 +179,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ProductReview> listAllReviewByUser(int userId) {
+    public Flux<ProductReview> listAllReviewByUser(int userId) {
         ReviewExample reviewExample = new ReviewExample();
         reviewExample.createCriteria().andMemberIdEqualTo(userId);
         List<Review> reviews = reviewMapper.selectByExample(reviewExample);
 
         List<ProductReview> productReviewList = new ArrayList<>();
         if (reviews.isEmpty()) {
-            return productReviewList;
+            return Flux.empty();
         }
 
         for (Review review: reviews) {
@@ -209,21 +210,22 @@ public class ReviewServiceImpl implements ReviewService {
 
             productReviewList.add(productReview);
         }
-        return productReviewList;
+        return Flux.fromIterable(productReviewList);
     }
 
     @Override
-    public void adminCreateReview(Review newReview, List<ReviewPictures> picturesList) {
+    public Mono<Review> adminCreateReview(Review newReview, List<ReviewPictures> picturesList) {
         newReview.setCreatedAt(new Date());
         reviewMapper.insert(newReview);
 
         int reviewId = newReview.getId();
 
         createAlbumAndPicture(reviewId, picturesList);
+        return Mono.just(newReview);
     }
 
     @Override
-    public void adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList) {
+    public Mono<Review> adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList) {
         ReviewExample example = new ReviewExample();
         example.createCriteria().andIdEqualTo(updatedReview.getId());
         Date currentTime = new Date();
@@ -235,10 +237,11 @@ public class ReviewServiceImpl implements ReviewService {
         createAlbumAndPicture(reviewId, picturesList);
 
         reviewMapper.updateByExample(updatedReview, example);
+        return Mono.just(updatedReview);
     }
 
     @Override
-    public void adminDeleteReview(int reviewId) {
+    public Mono<Void> adminDeleteReview(int reviewId) {
 
         reviewMapper.deleteByPrimaryKey(reviewId);
 
@@ -254,10 +257,9 @@ public class ReviewServiceImpl implements ReviewService {
         picturesExample.createCriteria().andReviewAlbumIdEqualTo(albumId);
         List<ReviewPictures> picturesList = picturesMapper.selectByExample(picturesExample);
 
-        if (picturesList.isEmpty()) return;
-
         for (ReviewPictures picture: picturesList) {
             picturesMapper.deleteByPrimaryKey(picture.getId());
         }
+        return Mono.empty();
     }
 }

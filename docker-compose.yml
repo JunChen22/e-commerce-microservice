@@ -174,7 +174,6 @@ services:
 
   app:
     build: ECom-app/App
-    container_name: ECom-app
     ports:
       - 8080:8080
     environment:
@@ -193,7 +192,6 @@ services:
 
   cms:
     build: ECom-app/CMS
-    container_name: ECom-app-cms
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
@@ -212,7 +210,6 @@ services:
 
   oms:
     build: ECom-app/OMS
-    container_name: ECom-app-oms
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
@@ -228,7 +225,6 @@ services:
 
   pms:
     build: ECom-app/PMS
-    container_name: ECom-app-pms
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
@@ -247,7 +243,6 @@ services:
 
   sms:
     build: ECom-app/SMS
-    container_name: ECom-app-sms
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
@@ -264,7 +259,6 @@ services:
 
   ums:
     build: ECom-app/UMS
-    container_name: ECom-app-ums
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
@@ -283,7 +277,6 @@ services:
 
   search:
     build: ECom-search
-    container_name: ECom-search
     ports:
       - 8081:8081
     environment:
@@ -298,7 +291,6 @@ services:
 
   admin:
     build: ECom-admin
-    container_name: ECom-admin
     ports:
       - 8082:8082
     environment:

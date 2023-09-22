@@ -8,20 +8,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
 
 import static java.util.logging.Level.FINE;
 import static reactor.core.publisher.Flux.empty;
 
 @RestController
-@Api(tags = "", description = "")
+@Api(tags = "Brand controller", description = "Brand Controller")
 @RequestMapping("/brand")
 public class BrandAggregate {
 
@@ -29,20 +26,18 @@ public class BrandAggregate {
 
     private final WebClient webClient;
 
-    private final Scheduler publishEventScheduler;
-
     private final String PMS_SERVICE_URL = "http://pms";
 
     @Autowired
-    public BrandAggregate(@Qualifier("") WebClient.Builder webClient,
-                          @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
+    public BrandAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
         this.webClient = webClient.build();
-        this.publishEventScheduler = publishEventScheduler;
     }
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
     public Flux<Brand> getAllBrand(){
         String url = PMS_SERVICE_URL + "/listAll/";
+        LOG.debug("Will call the getAllBrand API on URL: {}", url);
+
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
     }
@@ -52,6 +47,7 @@ public class BrandAggregate {
     public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize){
         String url = PMS_SERVICE_URL + "/list/" + "?pageNum=" + pageNum + "&pageSize=" + pageSize;
+        LOG.debug("Will call the getAllBrand API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -61,6 +57,8 @@ public class BrandAggregate {
     @ApiOperation(value = "Get all product of this brand")
     public Flux<Product> getBrandProduct(@PathVariable int brandId){
         String url = PMS_SERVICE_URL + "/product/" + brandId;
+        LOG.debug("Will call the getBrandProduct API on URL: {}", url);
+
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
     }
@@ -69,6 +67,7 @@ public class BrandAggregate {
     @ApiOperation(value = "Get brand info")
     public Mono<Brand> getBrand(@PathVariable int brandId){
         String url = PMS_SERVICE_URL + "/" + brandId;
+        LOG.debug("Will call the getBrand API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());

@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.ProductReview;
+import com.itsthatjun.ecommerce.mbg.model.Review;
 import com.itsthatjun.ecommerce.service.impl.ReviewServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,40 +55,39 @@ public class ReviewController {
 
     @PostMapping("/update")
     @ApiOperation(value = "update a review")
-    public ProductReview updateProductReviews(@RequestBody ProductReview newReview, @RequestParam int userId) {
-        reviewService.updateReview(newReview.getReview(), newReview.getPicturesList(), userId);
-        return newReview;
+    public Mono<Review> updateProductReviews(@RequestBody ProductReview newReview, @RequestParam int userId) {
+        return reviewService.updateReview(newReview.getReview(), newReview.getPicturesList(), userId);
     }
 
     @DeleteMapping("/delete/{reviewId}")
     @ApiOperation(value = "Get product with page and size")
-    public void deleteProductReviews(@PathVariable int reviewId, @RequestParam int userId) {
-        reviewService.deleteReview(reviewId, userId);
+    public Mono<Void> deleteProductReviews(@PathVariable int reviewId, @RequestParam int userId) {
+        return reviewService.deleteReview(reviewId, userId);
     }
+
 
     @GetMapping("/admin/getAllReviewByUser/{userId}")
     @ApiOperation(value = "get all reviews for a product")
-    public List<ProductReview> getAllReviewByUser(@PathVariable int userId) {
+    public Flux<ProductReview> getAllReviewByUser(@PathVariable int userId) {
         return reviewService.listAllReviewByUser(userId);
     }
 
     @PostMapping("/admin/create")
     @ApiOperation(value = "create review for a product")
-    public ProductReview adminCreateProductReview(@RequestBody ProductReview newReview) {
-        reviewService.adminCreateReview(newReview.getReview(), newReview.getPicturesList());
-        return newReview;
+    public Mono<Review> adminCreateProductReview(@RequestBody ProductReview newReview) {
+        return reviewService.adminCreateReview(newReview.getReview(), newReview.getPicturesList());
     }
 
     @PostMapping("/admin/update")
     @ApiOperation(value = "update a review")
-    public ProductReview adminUpdateProductReviews(@RequestBody ProductReview newReview) {
-        reviewService.adminUpdateReview(newReview.getReview(), newReview.getPicturesList());
-        return newReview;
+    public Mono<Review> adminUpdateProductReviews(@RequestBody ProductReview newReview) {
+        return reviewService.adminUpdateReview(newReview.getReview(), newReview.getPicturesList());
+
     }
 
     @DeleteMapping("/admin/delete/{reviewId}")
     @ApiOperation(value = "Get product with page and size")
-    public void adminDeleteProductReviews(@PathVariable int reviewId) {
-        reviewService.adminDeleteReview(reviewId);
+    public Mono<Void> adminDeleteProductReviews(@PathVariable int reviewId) {
+        return reviewService.adminDeleteReview(reviewId);
     }
 }

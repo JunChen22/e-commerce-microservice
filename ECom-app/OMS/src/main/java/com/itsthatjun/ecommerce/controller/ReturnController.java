@@ -2,7 +2,9 @@ package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dao.ReturnDao;
 import com.itsthatjun.ecommerce.dto.ReturnDetail;
+import com.itsthatjun.ecommerce.dto.ReturnParam;
 import com.itsthatjun.ecommerce.dto.ReturnRequestDecision;
+import com.itsthatjun.ecommerce.mbg.model.ReturnReasonPictures;
 import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.impl.ReturnOrderServiceImpl;
 import io.swagger.annotations.Api;
@@ -13,50 +15,52 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/order/return")
 @Api(tags = "return related", description = "apply return and related api")
-public class OrderReturnController {
+public class ReturnController {
 
     private final ReturnOrderServiceImpl returnOrderService;
 
     private final ReturnDao dao;
 
     @Autowired
-    public OrderReturnController(ReturnOrderServiceImpl returnOrderService, ReturnDao dao) {
+    public ReturnController(ReturnOrderServiceImpl returnOrderService, ReturnDao dao) {
         this.returnOrderService = returnOrderService;
         this.dao = dao;
     }
 
     @GetMapping("/status")
     @ApiOperation(value = "check status of the return request")
-    public Map<String, Object> generateOrder(){
-        return null;
+    public Mono<ReturnRequest> checkStatus(@RequestParam String orderSn, @RequestParam int userId){
+        return returnOrderService.getStatus(orderSn, userId);
     }
 
     @PostMapping("/apply")
     @ApiOperation(value = "Apply for return item, waiting for admin approve")
-    public Map<String, Object> applyForReturn(){
-       return null;
+    public Mono<ReturnRequest> applyForReturn(@RequestBody ReturnParam returnParam, @RequestParam int userId){
+        ReturnRequest returnRequest = returnParam.getReturnRequest();
+        List<ReturnReasonPictures> picturesList = returnParam.getPicturesList();
+        Map<String, Integer> skuQuantity = returnParam.getSkuQuantity();
+        return returnOrderService.applyForReturn(returnRequest, picturesList, skuQuantity, userId);
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "change detail about return or return reason")
-    public Map<String, Object> updateReturn(){
-        return null;
+    public Mono<ReturnRequest> updateReturn(@RequestBody ReturnParam returnParam, @RequestParam int userId){
+        ReturnRequest returnRequest = returnParam.getReturnRequest();
+        List<ReturnReasonPictures> picturesList = returnParam.getPicturesList();
+        Map<String, Integer> skuQuantity = returnParam.getSkuQuantity();
+        return returnOrderService.updateReturnInfo(returnRequest, picturesList, returnRequest.getOrderSn(), userId);
     }
 
     @DeleteMapping("/cancel")
     @ApiOperation(value = "change detail about return or return reason")
-    public void cancelReturn(){
-    }
-
-    @GetMapping("/test/{orderSn}")
-    public ReturnDetail getReturnDetail(@PathVariable String orderSn) {
-        return dao.getDetail(orderSn);
-
+    public Mono<ReturnRequest> cancelReturn(@RequestParam String orderSn, @RequestParam int userId){
+        return returnOrderService.cancelReturn(orderSn, userId);
     }
 
     // return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3

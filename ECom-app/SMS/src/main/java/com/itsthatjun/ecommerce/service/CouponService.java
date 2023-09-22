@@ -11,8 +11,9 @@ import java.util.Map;
 
 public interface  CouponService {
 
+    // TODO: after security implement it, return discount amount based on shopping cart.
     @ApiOperation("Return discount amount based on item list")
-    CouponDiscount checkDiscount(CouponDiscount couponDiscount);
+    double checkDiscount(String couponCode);
 
     @ApiOperation("check coupon exist by coupon code")
     Coupon checkCoupon(String couponCode);

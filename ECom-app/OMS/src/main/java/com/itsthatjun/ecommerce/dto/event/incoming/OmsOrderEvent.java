@@ -12,12 +12,12 @@ public class OmsOrderEvent {
 
     public enum Type {
         GENERATE_ORDER,
-        CANCEL_ORDER,
-        UPDATE_ORDER
+        CANCEL_ORDER
     }
 
     private final Type eventType;
     private final int userId;
+    private final String orderSn;
     private final OrderParam orderParam;  // dto from user to endpoint
     private final String successUrl;
     private final String cancelUrl;
@@ -27,15 +27,17 @@ public class OmsOrderEvent {
     public OmsOrderEvent() {
         this.eventType = null;
         this.userId = 0;
+        this.orderSn = null;
         this.orderParam = null;
         this.successUrl = null;
         this.cancelUrl = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsOrderEvent(Type eventType, int userId, OrderParam orderParam, String successUrl, String cancelUrl) {
+    public OmsOrderEvent(Type eventType, int userId, String orderSn, OrderParam orderParam, String successUrl, String cancelUrl) {
         this.eventType = eventType;
         this.userId = userId;
+        this.orderSn = orderSn;
         this.orderParam = orderParam;
         this.successUrl = successUrl;
         this.cancelUrl = cancelUrl;

@@ -1,20 +1,6 @@
 server:
   port: 8080
 
-app:
-  OMS-service:
-    host: localhost
-    port: 8082
-  PMS-service:
-    host: localhost
-    port: 8083
-  SMS-service:
-    host: localhost
-    port: 8084
-  UMS-service:
-    host: localhost
-    port: 8085
-
 app.eureka-server: localhost
 
 eureka:
@@ -26,7 +12,6 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
-
 
 spring:
   application:

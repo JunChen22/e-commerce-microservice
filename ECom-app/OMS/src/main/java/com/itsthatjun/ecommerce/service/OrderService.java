@@ -6,6 +6,8 @@ import com.itsthatjun.ecommerce.mbg.model.OrderItem;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -32,6 +34,12 @@ public interface OrderService {
 
     @ApiOperation("Member cancel order")
     Mono<Orders> cancelOrder(String orderSN);
+
+    // TODO: redis or like Quartz or spring task
+    // timed/schedule depend on the deliver time and check UPS
+    // then called to change status by redis.
+    @ApiOperation("Member received deliver, update order status")
+    void confirmReceiveOrder(@PathVariable int orderId);
 
     //  waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
     @ApiOperation(value = "")

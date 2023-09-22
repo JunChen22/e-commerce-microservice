@@ -281,7 +281,6 @@ public class OrderServiceImpl implements OrderService {
         return Mono.error(new OrderException("Error payment after success URL"));
     }
 
-
     @Override
     public void payFail(String orderSn) {
 
@@ -378,6 +377,11 @@ public class OrderServiceImpl implements OrderService {
         } else {
             return Mono.error(new OrderException("unable to cancel order" + orderSn));
         }
+    }
+
+    @Override
+    public void confirmReceiveOrder(int orderId) {
+        // TODO: with spring stask to check from UPS/FedEx for package delivery update.
     }
 
     // TODO: use a better way to generate order serial number

@@ -219,6 +219,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         // get lsit of return item too
 
         // TODO: make a dao for this easier retrieve
+        //   dao.getDetail(orderSn);
         ReturnItemExample orderReturnItemExample = new ReturnItemExample();
 
         ReturnDetail returnDetail = new ReturnDetail();

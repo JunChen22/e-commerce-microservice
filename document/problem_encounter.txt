@@ -232,3 +232,16 @@ ECom-App is a interface just for user to interact with the service. both are sta
 Admin will send event to all 5 services to perform exclusive CRUD operations different than
 ECom-App can do.
 
+
+
+
+Q: WARNING: The "cms" service is using the custom container name "ECom-app-cms". Docker requires each container to have a unique name. Remove the custom name to scale the service.
+    there's error when creating multiple instance of a image will have error if they have container named set on them.
+
+A: remove container name if you want to run multiple copies of them.
+
+    docker-compose up --scale cms=2
+
+Q: can't scale up app because there's port number assigned to it.
+
+A:

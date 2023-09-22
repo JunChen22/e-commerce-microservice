@@ -1,7 +1,5 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
-import com.itsthatjun.ecommerce.controller.OMS.OrderAggregate;
-import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,25 +7,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-import java.util.List;
 
 import static java.util.logging.Level.FINE;
 import static reactor.core.publisher.Flux.empty;
 
 @RestController
-@Api(tags = "", description = "")
+@Api(tags = "Product controller", description = "product controller")
 @RequestMapping("/product")
 public class ProductAggregate {
 
@@ -35,14 +25,11 @@ public class ProductAggregate {
 
     private final WebClient webClient;
 
-    private final Scheduler publishEventScheduler;
-
     private final String PMS_SERVICE_URL = "http://pms";
 
     @Autowired
-    public ProductAggregate(WebClient.Builder  webClient, @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
+    public ProductAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
         this.webClient = webClient.build();
-        this.publishEventScheduler = publishEventScheduler;
     }
 
     @GetMapping("/listAll")

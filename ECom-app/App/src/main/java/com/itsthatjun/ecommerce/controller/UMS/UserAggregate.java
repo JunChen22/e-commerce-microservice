@@ -1,54 +1,52 @@
 package com.itsthatjun.ecommerce.controller.UMS;
 
-import com.itsthatjun.ecommerce.controller.PMS.ReviewAggregate;
-import com.itsthatjun.ecommerce.dto.event.PmsReviewEvent;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.dto.event.pms.PmsReviewEvent;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
-import java.util.List;
-
 import static java.util.logging.Level.FINE;
 
 @RestController
-@Api(tags = "", description = "")
+@Api(tags = "User controller", description = "user controller")
 @RequestMapping("/user")
 public class UserAggregate {
+
     private static final Logger LOG = LoggerFactory.getLogger(UserAggregate.class);
 
-    private final StreamBridge streamBridge;
-
     private final WebClient webClient;
+
+    private final StreamBridge streamBridge;
 
     private final Scheduler publishEventScheduler;
 
     private final String UMS_SERVICE_URL = "http://ums";
 
     @Autowired
-    public UserAggregate(StreamBridge streamBridge, WebClient webClient, Scheduler publishEventScheduler) {
+    public UserAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient, StreamBridge streamBridge,
+                         @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.webClient = webClient.build();
         this.streamBridge = streamBridge;
-        this.webClient = webClient;
         this.publishEventScheduler = publishEventScheduler;
     }
+
+    // TODO: after security implemented it
+    //      login
+    //      register
+    //      update info
+    //      get notification, order status, return status, some admin notes and etc.
+    //      delete account, just delete status changed for archive.
 
     private void sendMessage(String bindingName, PmsReviewEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
