@@ -36,40 +36,49 @@ spring.cloud.gateway.routes:
       - Path=/eureka/**
 
   - id: app-cms
-    uri: http://app:8080
+    uri: lb://app:8080
     predicates:
       - Path=/content/**
 
   - id: app-oms
-    uri: http://app:8080
+    uri: lb://app:8080
     predicates:
       - Path=/cart/**, /order/**, /return/**
 
   - id: app-pms
-    uri: http://app:8080
+    uri: lb://app:8080
     predicates:
       - Path=/brand/**m, /product/**, /review/**
 
   - id: app-sms
-    uri: http://app:8080
+    uri: lb://app:8080
     predicates:
       - Path=/coupon/**, /sale/**
 
   - id: app-ums
-    uri: http://app:8080
+    uri: lb://app:8080
     predicates:
       - Path=/user/**
 
+  - id: search
+    uri: http://search:8081/esProduct
+    predicates:
+      - Path=/search/**
 
+  - id: search-import data
+    uri: http://search:8081
+    predicates:
+      - Path=/esProduct/importAll
 
+  - id: swagger-ui
+    uri: http://app:8080
+    predicates:
+      - Path=/swagger**
 
-
-
-
-
-
-
-
+  - id: swagger-definition
+    uri: http://app:8080
+    predicates:
+      - Path=/v2/api-docs**
 
 management.endpoint.gateway.enabled: true
 management.endpoint.health.show-details: "ALWAYS"

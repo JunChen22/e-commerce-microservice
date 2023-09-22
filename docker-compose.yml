@@ -170,6 +170,19 @@ services:
     depends_on:
       - elasticsearch
 
+  search:
+    build: ECom-search
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      - mongodb
+      - kibana
+      - logstash
+      - elasticsearch
+      - PMS-db
+
   app:
     build: ECom-app/App
     environment:
@@ -259,19 +272,6 @@ services:
       redis:
         condition: service_healthy
 
-  search:
-    build: ECom-search
-    ports:
-      - 8081:8081
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
-    depends_on:
-      - kibana
-      - logstash
-      - elasticsearch
-      - PMS-db
 
   admin:
     build: ECom-admin

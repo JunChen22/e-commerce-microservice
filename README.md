@@ -87,10 +87,17 @@ ps : Remove docker volume so the new data.sql can function properly and update.
  $ docker-compose up
 
 * can not deploy locally(IDE) only Docker or Kubernetes
-
+* also need PayPal sandbox credential to run OMS.
  
   Import data into elastic search
  $  curl -X POST http://localhost:8080/esProduct/importAll   // should return number of items imported
+ 
+ 
+ Eureka to see which services are avaible. 
+ http://localhost:8080/eureka/web
+ 
+ 
+ 
  
 ```
 ### Tech stack
