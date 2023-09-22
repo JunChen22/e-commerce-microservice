@@ -22,6 +22,7 @@
         <module>ECom-app/PMS</module>
         <module>ECom-app/SMS</module>
         <module>ECom-app/UMS</module>
+        <module>auth-server</module>
     </modules>
 
     <parent>

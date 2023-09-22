@@ -305,6 +305,10 @@ services:
     build: eureka-server
     mem_limit: 512m
 
+  auth:
+    build: auth-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
 volumes:
   db-data:
