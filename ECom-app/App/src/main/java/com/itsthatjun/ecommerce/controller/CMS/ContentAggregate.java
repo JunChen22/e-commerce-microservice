@@ -51,17 +51,4 @@ public class ContentAggregate {
         return webClient.get().uri(url).retrieve().bodyToMono(Articles.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
-
-    public Mono<Health> getCmsHealth() {
-        return getHealth(CMS_SERVICE_URL);
-    }
-
-    private Mono<Health> getHealth(String url) {
-        url += "/actuator/health";
-        LOG.debug("Will call the Health API on URL: {}", url);
-        return webClient.get().uri(url).retrieve().bodyToMono(String.class)
-                .map(s -> new Health.Builder().up().build())
-                .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
-                .log(LOG.getName(), FINE);
-    }
 }

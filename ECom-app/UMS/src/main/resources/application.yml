@@ -54,6 +54,7 @@ jwt:
   secretKey: JunChen522
   expirationTimeMinute: 150
 
+app.eureka-server: localhost
 
 eureka:
   client:

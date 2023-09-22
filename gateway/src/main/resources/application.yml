@@ -1,0 +1,93 @@
+server.port: 8080
+
+spring.application.name: gateway
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+app.eureka-server: localhost
+
+spring.cloud.gateway.routes:
+
+  - id: eureka-api
+    uri: http://${app.eureka-server}:8761
+    predicates:
+      - Path=/eureka/api/{segment}
+    filters:
+      - SetPath=/eureka/{segment}
+
+  - id: eureka-web
+    uri: http://${app.eureka-server}:8761
+    predicates:
+      - Path=/eureka/web
+    filters:
+      - SetPath=/
+
+  - id: eureka-web-other
+    uri: http://${app.eureka-server}:8761
+    predicates:
+      - Path=/eureka/**
+
+  - id: app-cms
+    uri: http://app:8080
+    predicates:
+      - Path=/content/**
+
+  - id: app-oms
+    uri: http://app:8080
+    predicates:
+      - Path=/cart/**, /order/**, /return/**
+
+  - id: app-pms
+    uri: http://app:8080
+    predicates:
+      - Path=/brand/**m, /product/**, /review/**
+
+  - id: app-sms
+    uri: http://app:8080
+    predicates:
+      - Path=/coupon/**, /sale/**
+
+  - id: app-ums
+    uri: http://app:8080
+    predicates:
+      - Path=/user/**
+
+
+
+
+
+
+
+
+
+
+
+
+management.endpoint.gateway.enabled: true
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
+logging:
+  level:
+    #root: ERROR
+    org:
+      springframework:
+        security: DEBUG
+    com:
+      itsthatjun:
+        ecommerce: DEBUG
+
+---
+spring.config.activate.on-profile: docker
+
+app.eureka-server: eureka
+
+

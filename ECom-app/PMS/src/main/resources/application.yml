@@ -84,8 +84,6 @@ redis:
       authCode: 120
 
 
-
-
 app.eureka-server: localhost
 
 eureka:

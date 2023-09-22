@@ -132,9 +132,7 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USR}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PWD}
+
     healthcheck:
       test: [ "CMD", "rabbitmqctl", "status" ]
       interval: 10s
@@ -174,14 +172,10 @@ services:
 
   app:
     build: ECom-app/App
-    ports:
-      - 8080:8080
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
     depends_on:
       mongodb:
         condition: service_healthy
@@ -196,8 +190,6 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
     depends_on:
       CMS-db:
         condition: service_healthy
@@ -212,8 +204,6 @@ services:
     build: ECom-app/OMS
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
       - PAYPAL_MODE=${paypal_mode}
       - PAYPAL_CLIENT_ID=${paypal_client_id}
       - PAYPAL_CLIENT_SECRET=${paypal_client_secret}
@@ -229,8 +219,6 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
     depends_on:
       PMS-db:
         condition: service_healthy
@@ -247,8 +235,6 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
     depends_on:
       SMS-db:
         condition: service_healthy
@@ -263,8 +249,6 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
     depends_on:
       UMS-db:
         condition: service_healthy
@@ -311,20 +295,16 @@ services:
 
   gateway:
     build: gateway
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USR}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PWD}
-    ports:
-      - "8443:8443"
-
-  eureka:
-    build: eureka-server
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     ports:
-      - "8761:8761"
+      - "8080:8080"
+
+  eureka:
+    build: eureka-server
+    mem_limit: 512m
+
 
 volumes:
   db-data:

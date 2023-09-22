@@ -1,6 +1,8 @@
 server:
   port: 8080
 
+server.forward-headers-strategy: framework #
+
 app.eureka-server: localhost
 
 eureka:
@@ -15,7 +17,7 @@ eureka:
 
 spring:
   application:
-    name: App
+    name: app
   datasource:
     url: jdbc:postgresql://localhost/springecommerece
     username: postgres

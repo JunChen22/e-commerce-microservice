@@ -2,6 +2,8 @@ server:
   port: 8081
 
 spring:
+  application:
+    name: search
   datasource:
     url: jdbc:postgresql://localhost/springecommerece # need to change localhost for docker-compose
     username: postgres
@@ -29,6 +31,18 @@ spring.data.mongodb:
   port: 27017
   database: springecommerece-db
 
+app.eureka-server: localhost
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
 ---
 
 spring.config.activate.on-profile: docker
@@ -45,3 +59,6 @@ spring:
       database: springecommerece
 
 spring.data.mongodb.host: mongodb
+
+app:
+  eureka-server: eureka
