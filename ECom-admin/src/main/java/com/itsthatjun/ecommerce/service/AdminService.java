@@ -15,6 +15,7 @@ public interface AdminService {
 
     @ApiOperation(value = "")
     String register(Admin admin);
+
     @ApiOperation(value = "")
     Admin getAdminByUsername(String username);
 }

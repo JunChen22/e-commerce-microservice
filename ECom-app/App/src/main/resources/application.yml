@@ -1,13 +1,16 @@
 server:
   port: 8080
 
-springdoc:
-  cache:
-    disabled: true
-
 server.forward-headers-strategy: framework #
 
-app.eureka-server: localhost
+app:
+  eureka-server: localhost
+
+jwt:
+  HEADER_STRING: Authorization
+  tokenPrefix: Bearer
+  secretKey: JunChen522
+  issuer: auth-server
 
 eureka:
   client:
@@ -20,6 +23,8 @@ eureka:
     leaseExpirationDurationInSeconds: 5
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: app
   datasource:
@@ -28,7 +33,13 @@ spring:
     password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
-
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
 
 # message queue related
 spring.rabbitmq:
@@ -77,6 +88,7 @@ logging:
     com:
       itsthatjun:
         ecommerce: DEBUG
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
 
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -85,10 +97,17 @@ management.endpoints.web.exposure.include: "*"
 
 spring.config.activate.on-profile: docker
 
+server.port: 8080
+
 spring:
-  datasource.url: jdbc:postgresql://postgres/springecommerece
+  datasource:
+    url: jdbc:postgresql://postgres/springecommerece
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    virtual-host: /
+    addresses: rabbitmq:5672
 
 app:
   eureka-server: eureka
 
-spring.rabbitmq.host: rabbitmq

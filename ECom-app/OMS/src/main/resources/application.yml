@@ -1,11 +1,6 @@
 server:
   port: 8082
 
-app:
-  SMS-service:
-    host: localhost
-    port: 8084
-
 spring:
   application:
     name: oms
@@ -15,44 +10,16 @@ spring:
     password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
-  redis:
+  rabbitmq:         # message queue related
     host: localhost
-    database: 0
-    port: 6379
-    password:
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1ms
-        max-idle: 8
-        min-idle: 0
-    timeout: 3000ms
-
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
-# if you running it local/ide
-paypal:
-  mode: YOUR_PAYPAL_MODE
-  client:
-    id: YOUR_PAYPAL_CLIENT_ID
-    secret: YOUR_PAYPAL_CLIENT_SECRET
-
-# message queue related
-spring.rabbitmq:
-  host: localhost
-  port: 5672
-  virtual-host: /
-  username: guest
-  password: guest
-  publisher-confirms: true
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
 
 spring.cloud:
-  function:
-    # can't have space between, tells spring which to use, using a pipe character allow multi-line.
+  function: # can't have space between, tells spring which to use, using a pipe character allow multi-line.
     definition: cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;adminOrderMessageProcessor;adminReturnMessageProcessor;updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
   stream:
     default:
@@ -97,6 +64,18 @@ spring.cloud:
         producer:
           required-groups: orderProductStockUpdateGroup
 
+# tells spring mybatis mapper's xml(sql) located
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath:dao/*.xml
+
+# if you running it local/ide
+paypal:
+  mode: YOUR_PAYPAL_MODE
+  client:
+    id: YOUR_PAYPAL_CLIENT_ID
+    secret: YOUR_PAYPAL_CLIENT_SECRET
 
 app.eureka-server: localhost
 
@@ -109,7 +88,6 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
-
 
 logging:
   level:
@@ -133,6 +111,11 @@ server.port: 8080
 spring:
   datasource:
     url: jdbc:postgresql://OMS-db:5432/orderdb
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    virtual-host: /
+    addresses: rabbitmq:5672
 
 paypal:
   mode: ${PAYPAL_MODE}
@@ -144,5 +127,3 @@ app:
   eureka-server: eureka
 
 spring.rabbitmq.host: rabbitmq
-
-spring.cloud.stream.kafka.binder.brokers: kafka

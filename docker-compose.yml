@@ -103,6 +103,22 @@ services:
       interval: 10s
       retries: 5
 
+  Auth-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: authdb
+    ports:
+      - 5438:5432
+    volumes:
+      - Auth-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
 
   mongodb:
     image: mongo:5.0.0
@@ -132,7 +148,6 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-
     healthcheck:
       test: [ "CMD", "rabbitmqctl", "status" ]
       interval: 10s
@@ -300,15 +315,25 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     ports:
       - "8080:8080"
+    depends_on:
+      auth-server:
+        condition: service_healthy
 
   eureka:
     build: eureka-server
     mem_limit: 512m
 
-  auth:
+  auth-server:
     build: auth-server
+    mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:9999/actuator/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 60
+
 
 volumes:
   db-data:
@@ -317,3 +342,4 @@ volumes:
   PMS-data:
   SMS-data:
   UMS-data:
+  Auth-data:

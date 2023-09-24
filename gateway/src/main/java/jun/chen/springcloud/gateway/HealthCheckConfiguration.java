@@ -47,6 +47,10 @@ public class HealthCheckConfiguration {
 
         registry.put("ums-user", () -> getHealth("http://ums"));
 
+        registry.put("app", () -> getHealth("http://app"));
+
+        registry.put("auth-server", () -> getHealth("http://auth-server"));
+
         return CompositeReactiveHealthContributor.fromMap(registry);
     }
 

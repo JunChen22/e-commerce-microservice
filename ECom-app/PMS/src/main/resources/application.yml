@@ -10,23 +10,6 @@ spring:
     password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: springecommerece
-  redis:
-    host: localhost
-    database: 0
-    port: 6379
-    password:
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1ms
-        max-idle: 8
-        min-idle: 0
-    timeout: 3000ms
   rabbitmq:
     host: localhost
     port: 5672
@@ -76,14 +59,6 @@ mybatis:
     - classpath:mapper/*.xml
     - classpath:dao/*.xml
 
-redis:
-  key:
-    prefix:
-      authCode: "authCode:"
-    expire:
-      authCode: 120
-
-
 app.eureka-server: localhost
 
 eureka:
@@ -96,15 +71,6 @@ eureka:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
 
-
-
-
-
-
-
-
-
-
 logging:
   level:
     #root: ERROR
@@ -115,6 +81,9 @@ logging:
       itsthatjun:
         ecommerce: DEBUG
 
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
 ---
 
 spring.config.activate.on-profile: docker
@@ -122,15 +91,8 @@ spring.config.activate.on-profile: docker
 server.port: 8080
 
 spring:
-  datasource.url: jdbc:postgresql://PMS-db:5432/productdb
-  data:
-    mongodb:
-      host: mongodb
-      port: 27017
-      database: springecommerece
-  redis:
-    host: redis
-    port: 6379
+  datasource:
+    url: jdbc:postgresql://PMS-db:5432/productdb
   rabbitmq:
     host: rabbitmq
     port: 5672

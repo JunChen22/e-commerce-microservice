@@ -78,16 +78,6 @@ INSERT INTO brand(name, alphabet, logo, status) VALUES
 ('Yeti', 'Y', 'yeti.jpg', 'active');
 
 
-
-
-
-
-
-
-
-
-
-
 DROP TABLE IF EXISTS product_category;
 CREATE TABLE product_category
   (
@@ -1199,18 +1189,31 @@ CREATE TABLE member
      id SERIAL PRIMARY KEY,
      username     TEXT,
      password     TEXT,
+     name        TEXT,
      phone_number TEXT,
-     status       TEXT,
+     email       TEXT,
+     status       INTEGER DEFAULT 1,
+     delete_status       INTEGER DEFAULT 0,
      created_at  TIMESTAMP,
      last_login   TIMESTAMP,
-     source_type  TEXT,
-     icon         TEXT
+     source_type  TEXT          -- web user -> 0 , mobile user -> 1
   );
+
+DROP TABLE IF EXISTS member_icon;
+
+CREATE TABLE member_icon
+(
+    id SERIAL PRIMARY KEY,
+    member_id NUMERIC,
+    filename TEXT
+);
+
 
 DROP TABLE IF EXISTS address;
 
 CREATE TABLE address
-  (  id SERIAL PRIMARY KEY,
+  (
+     id SERIAL PRIMARY KEY,
      member_id    NUMERIC,
      receiver_name TEXT,
      phone_number TEXT,
@@ -1231,6 +1234,36 @@ CREATE TABLE member_login_log
      ip_address TEXT,
      login_type TEXT -- 0/1/2 pc TEXT, ios TEXT, android
   );
+
+
+
+---------------User  all password is password
+INSERT INTO member (username, password, name, phone_number, created_at, last_login)
+            VALUES ('user1','$2a$10$PHcLPlJod/fKyjMUsGuSVeVnI0.EKudDleRT9vM9jqCJzL9QvC5Ju', 'Jun', '212-212-2222', '2020-03-18 22:18:40', '2020-03-18 22:20:24');
+INSERT INTO member (username, password, name,  phone_number, created_at, last_login)
+            VALUES ('user2','$2a$10$pSHd2ngUssBZYRlHQQaKu.rb0me5ZAgld0fVASB50vrMslLb8md0a', 'John', '877-393-4448', '2020-03-19 14:02:32', '2020-03-19 22:18:40');
+INSERT INTO member (username, password, name,  phone_number, created_at, last_login)
+            VALUES ('user3', '$2a$10$xEbGJ1QHr/CZ.ltRIP4A9.K27Sq3HJ4Dh/sN0ssd5GwkaPbjPRW9S', 'Jane', '112-323-1111', '2020-03-18 04:20:52', '2020-03-20 05:01:02');
+
+INSERT INTO member_icon (member_id, filename)
+VALUES
+(1, 'https://i.imgur.com/aPrCAdn.png'),
+(2, 'https://i.imgur.com/1URlVYg.png'),
+(3, 'https://i.imgur.com/IG2yW8k.jpeg');
+
+
+INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (1, 'Jun',  '212-212-2222', '1 1st street 2nd ave', 'Chicago','Illinois','60007','');
+INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (2, 'John', '111-111-1111', '2 2nd street 3rd ave Apt 4F', 'Dallas','Texas', '75001' ,'please call, door bell broken');
+INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (3, 'Jane', '212-212-2222', '3 4st street 5nd ave', 'San Francisco','California','94016','');
+
+--- login type ,pc/andriod/IOS   = 0/1/2
+INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (1,'2020-03-18 22:18:40','127.0.0.1','0');
+INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (1,'2020-03-18 22:20:24', '127.0.0.1','0');
+INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (2, '2020-03-19 14:02:32', '127.0.0.1','1');
+INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (2, '2020-03-19 22:18:40', '127.0.0.1','1');
+INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (3, '2020-03-18 04:20:52', '127.0.0.1','0');
+INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (3,'2020-03-20 05:01:02', '127.0.0.1','2');
+
 
 
 ---------Admin related----------------
@@ -1300,27 +1333,6 @@ CREATE TABLE admin_role_relation
      admin_id NUMERIC,
      role_id  NUMERIC
   );
-
----------------User  all password is password
-INSERT INTO member (username, password, phone_number, status, created_at,icon, last_login)
-            VALUES ('user1','$2a$10$PHcLPlJod/fKyjMUsGuSVeVnI0.EKudDleRT9vM9jqCJzL9QvC5Ju', '212-212-2222','active','2020-03-18 22:18:40','','2020-03-18 22:20:24');
-INSERT INTO member (username, password, phone_number, status, created_at,icon, last_login)
-            VALUES ('user2','$2a$10$pSHd2ngUssBZYRlHQQaKu.rb0me5ZAgld0fVASB50vrMslLb8md0a', '877-393-4448', 'active','2020-03-19 14:02:32','','2020-03-19 22:18:40');
-INSERT INTO member (username, password, phone_number, status, created_at,icon, last_login)
-            VALUES ('user3', '$2a$10$xEbGJ1QHr/CZ.ltRIP4A9.K27Sq3HJ4Dh/sN0ssd5GwkaPbjPRW9S','112-323-1111', 'active', '2020-03-18 04:20:52','','2020-03-20 05:01:02');
-
-INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (1, 'Jun',  '212-212-2222', '1 1st street 2nd ave', 'Chicago','Illinois','60007','');
-INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (2, 'John', '111-111-1111', '2 2nd street 3rd ave Apt 4F', 'Dallas','Texas', '75001' ,'please call, door bell broken');
-INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (3, 'Jane', '212-212-2222', '3 4st street 5nd ave', 'San Francisco','California','94016','');
-INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note) VALUES (4, 'James', '212-212-2222', '5 6st street 7nd ave', 'Miami','Florida','33101','');
-
---- login type ,pc/andriod/IOS   = 0/1/2
-INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (1,'2020-03-18 22:18:40','127.0.0.1','0');
-INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (1,'2020-03-18 22:20:24', '127.0.0.1','0');
-INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (2, '2020-03-19 14:02:32', '127.0.0.1','1');
-INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (2, '2020-03-19 22:18:40', '127.0.0.1','1');
-INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (3, '2020-03-18 04:20:52', '127.0.0.1','0');
-INSERT INTO member_login_log (member_id, login_time, ip_address, login_type) VALUES (3,'2020-03-20 05:01:02', '127.0.0.1','2');
 
 --------------Admin
 

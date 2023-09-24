@@ -42,7 +42,6 @@ public class UserAggregate {
     }
 
     // TODO: after security implemented it
-    //      login
     //      register
     //      update info
     //      get notification, order status, return status, some admin notes and etc.

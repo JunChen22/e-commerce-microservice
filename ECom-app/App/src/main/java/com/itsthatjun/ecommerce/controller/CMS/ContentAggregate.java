@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,6 +30,18 @@ public class ContentAggregate {
     public ContentAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
         this.webClient = webClient.build();
     }
+
+    @GetMapping("/article/nope")
+    public String testController() {
+        return "nope";
+    }
+
+    @PostMapping("/article/post")
+    public String testpostController() {
+        return "post";
+    }
+
+
 
     @GetMapping("/article/all")
     public Flux<Articles> getAllArticle() {

@@ -11,8 +11,8 @@ import static java.time.ZonedDateTime.now;
 public class UmsAdminUserEvent {
 
     public enum Type {
-        ACTIVATE_ACCOUNT,
-        DEACTIVE_ACCOUNT,
+        NEW_ACCOUNT,
+        UPDATE_ACCOUNT_STATUS,
         UPDATE_ACCOUNT_INFO,
         DELETE_ACCOUNT
     }
