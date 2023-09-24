@@ -1,0 +1,78 @@
+server:
+  port: 9999
+
+server.forward-headers-strategy: framework
+
+spring:
+  application:
+    name: auth-server
+  datasource:
+    url: jdbc:postgresql://localhost:5438/authdb
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
+
+spring.cloud:
+  function:   # can't have space between, tells spring which to use
+    definition: userMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      userMessageProcessor-in-0:
+        destination: umsUserUpdate
+        group: umsUserUpdateGroup
+
+
+jwt:
+  HEADER_STRING: Authorization
+  tokenPrefix: Bearer
+  secretKey: JunChen522
+  expirationTimeMinute: 150
+  issuer: auth-server
+
+app.eureka-server: localhost
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
+logging:
+  level:
+    root: INFO
+
+---
+
+spring.config.activate.on-profile: docker
+
+server.port: 9999
+
+spring:
+  datasource.url: jdbc:postgresql://Auth-db:5432/authdb
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    virtual-host: /
+    addresses: rabbitmq:5672
+
+app:
+  eureka-server: eureka
+
+spring.rabbitmq.host: rabbitmq

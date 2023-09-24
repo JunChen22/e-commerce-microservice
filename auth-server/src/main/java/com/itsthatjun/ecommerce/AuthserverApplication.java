@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AuthserverApplication {
 
     public static void main(String[] args) {
+        System.out.println("at main");
         SpringApplication.run(AuthserverApplication.class, args);
     }
 }
