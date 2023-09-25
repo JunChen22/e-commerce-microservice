@@ -44,19 +44,29 @@ public class JwtTokenUtil {
         String issuer;
         try {
             Claims claims = getClaimsFromToken(token);
-            issuer = (String) claims.get("issuer");
-            //issuer =  claims.getIssuer(); TODO: better issuer
+            issuer =  claims.getIssuer();
         } catch (Exception e) {
             issuer = null;
         }
         return issuer;
     }
 
+    public String getUserNameFromToken(String token){
+        String userName;
+        try {
+            Claims claims = getClaimsFromToken(token);
+            userName = (String) claims.get("username");
+        } catch (Exception e) {
+            userName = null;
+        }
+        return userName;
+    }
+
     public String getNameFromToken(String token){
         String name;
         try {
             Claims claims = getClaimsFromToken(token);
-            name =  claims.getSubject();
+            name =  (String) claims.get("name");
         } catch (Exception e) {
             name = null;
         }
@@ -67,7 +77,7 @@ public class JwtTokenUtil {
         Integer userId;
         try {
             Claims claims = getClaimsFromToken(token);
-            userId = (Integer) claims.get("userId");
+            userId = Integer.valueOf( claims.getSubject());
         } catch (Exception e) {
             userId = null;
         }

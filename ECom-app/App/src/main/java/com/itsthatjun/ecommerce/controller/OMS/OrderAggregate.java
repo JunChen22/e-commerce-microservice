@@ -5,6 +5,7 @@ import com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent;
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.config.URLUtils;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
+import com.itsthatjun.ecommerce.security.UserContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,8 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -61,7 +64,7 @@ public class OrderAggregate {
     @ApiOperation("Get Order Detail by serial number")
     @GetMapping("/detail/{orderSn}")
     public Mono<Orders> detail(@PathVariable String orderSn) {
-        String url = OMS_SERVICE_URL + "/detail/{" + orderSn + "}";
+        String url = OMS_SERVICE_URL + "/detail/" + orderSn;
         LOG.debug("Will call the detail API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
@@ -74,21 +77,30 @@ public class OrderAggregate {
     @GetMapping("/list")
     public Flux<Orders> list(@RequestParam(required = false, defaultValue = "-1")  int status,
                              @RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                             @RequestParam(required = false, defaultValue = "5") Integer pageSize,
-                             @RequestParam int userId) {
-        String url = OMS_SERVICE_URL + "/list?userId=" + userId;
+                             @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
+        String url = OMS_SERVICE_URL + "/list";
         LOG.debug("Will call the list API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
+        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
     }
 
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
-    public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request, @RequestParam int userId){
+    public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request){
 
+        // TODO: might cause error with gateway
         String successUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_SUCCESS_URL;
         String cancelUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_CANCEL_URL;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
 
         return Mono.fromCallable(() -> {
             sendOrderMessage("order-out-0", new OmsOrderEvent(GENERATE_ORDER, userId, null, orderParam, successUrl, cancelUrl));
@@ -118,8 +130,12 @@ public class OrderAggregate {
     @PostMapping("/cancelOrder/{orderSn}")
     @ApiOperation("Cancel order if before sending the order out.")
     public Mono<Void> cancelUserOrder(@PathVariable String orderSn) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
         return Mono.fromRunnable(() -> {
-            sendOrderMessage("orderComplete-out-0", new OmsOrderEvent(CANCEL_ORDER, 0, orderSn, null, null, null));
+            sendOrderMessage("orderComplete-out-0", new OmsOrderEvent(CANCEL_ORDER, userId, orderSn, null, null, null));
         }).subscribeOn(publishEventScheduler).then();
     }
 

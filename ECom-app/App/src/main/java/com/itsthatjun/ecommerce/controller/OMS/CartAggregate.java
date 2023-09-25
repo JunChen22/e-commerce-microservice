@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.controller.OMS;
 
 import com.itsthatjun.ecommerce.dto.event.oms.OmsCartEvent;
 import com.itsthatjun.ecommerce.mbg.model.CartItem;
+import com.itsthatjun.ecommerce.security.UserContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -51,17 +54,25 @@ public class CartAggregate {
 
     @ApiOperation("list current user's shopping cart")
     @GetMapping(value = "/list")
-    public Flux<CartItem> list(@RequestParam int userId) {
-        String url = OMS_SERVICE_URL + "/list?userId=" + userId;
+    public Flux<CartItem> list() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
+        String url = OMS_SERVICE_URL + "/list";
         LOG.debug("Will call the list API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(CartItem.class)
+        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToFlux(CartItem.class)
                 .log(LOG.getName(), FINE).onErrorResume(WebClientResponseException.class, ex -> empty());
     }
 
     @ApiOperation("add item to shopping cart")
     @PostMapping(value = "/add")
-    public Mono<CartItem> add(@RequestBody CartItem cartItem, @RequestParam int userId) {
+    public Mono<CartItem> add(@RequestBody CartItem cartItem) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
         return Mono.fromCallable(() -> {
             List<CartItem> cartItemList = new ArrayList<>();
             cartItemList.add(cartItem);
@@ -72,7 +83,11 @@ public class CartAggregate {
 
     @ApiOperation("add all item to shopping cart")
     @PostMapping(value = "/add/all")
-    public Flux<CartItem> addAll(@RequestBody List<CartItem> cartItem, @RequestParam int userId) {
+    public Flux<CartItem> addAll(@RequestBody List<CartItem> cartItem) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
         return Flux.defer(() -> {
                 sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.ADD_ALL, userId, cartItem));
                 return Flux.fromIterable(cartItem);
@@ -81,7 +96,11 @@ public class CartAggregate {
 
     @ApiOperation("update shopping cart item quantity")
     @PostMapping(value = "/update/quantity")
-    public Mono<Void> updateQuantity(@RequestParam int cartItemId, @RequestParam int quantity, @RequestParam int userId) {
+    public Mono<Void> updateQuantity(@RequestParam int cartItemId, @RequestParam int quantity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
         return Mono.fromRunnable(() ->
                 sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.UPDATE, userId, null, quantity, cartItemId))
         ).subscribeOn(publishEventScheduler).then();
@@ -89,7 +108,11 @@ public class CartAggregate {
 
     @ApiOperation("remove item from shopping cart")
     @DeleteMapping(value = "/delete/{cartItemId}")
-    public Mono<Void> delete(@PathVariable int cartItemId, @RequestParam int userId) {
+    public Mono<Void> delete(@PathVariable int cartItemId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
         return Mono.fromRunnable(() ->
                 sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.DELETE, userId, null, 1, cartItemId))
         ).subscribeOn(publishEventScheduler).then();
@@ -97,7 +120,11 @@ public class CartAggregate {
 
     @ApiOperation("clear user shopping cart")
     @DeleteMapping(value = "/clear")
-    public Mono<Void> clear(@RequestParam int userId) {
+    public Mono<Void> clear() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
         return Mono.fromRunnable(() ->
                 sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.CLEAR, userId, null))
         ).subscribeOn(publishEventScheduler).then();

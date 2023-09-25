@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.controller.PMS;
 import com.itsthatjun.ecommerce.dto.ProductReview;
 import com.itsthatjun.ecommerce.dto.event.pms.PmsReviewEvent;
 import com.itsthatjun.ecommerce.mbg.model.Review;
+import com.itsthatjun.ecommerce.security.UserContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -67,7 +70,11 @@ public class ReviewAggregate {
 
     @PostMapping("/create")
     @ApiOperation(value = "create review for a product")
-    public Mono<ProductReview> createProductReview(@RequestBody ProductReview newReview, @RequestParam int userId) {
+    public Mono<ProductReview> createProductReview(@RequestBody ProductReview newReview) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
         return Mono.fromCallable(() -> {
             sendMessage("review-out-0", new PmsReviewEvent(CREATE_REVIEW, userId, newReview.getReview(), newReview.getPicturesList()));
             return newReview;
@@ -76,7 +83,10 @@ public class ReviewAggregate {
 
     @PostMapping("/update")
     @ApiOperation(value = "update a review")
-    public Mono<ProductReview> updateProductReviews(@RequestBody ProductReview newReview, @RequestParam int userId) {
+    public Mono<ProductReview> updateProductReviews(@RequestBody ProductReview newReview) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
         return Mono.fromCallable(() -> {
             sendMessage("review-out-0", new PmsReviewEvent(UPDATE_REVIEW, userId, newReview.getReview(), newReview.getPicturesList()));
             return newReview;
@@ -85,7 +95,11 @@ public class ReviewAggregate {
 
     @DeleteMapping("/delete/{reviewId}")
     @ApiOperation(value = "Get product with page and size")
-    public Mono<Void> deleteProductReviews(@PathVariable int reviewId, @RequestParam int userId) {
+    public Mono<Void> deleteProductReviews(@PathVariable int reviewId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
         Review review = new Review();
         review.setId(reviewId);
         return Mono.fromRunnable(() -> {

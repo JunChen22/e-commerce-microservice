@@ -33,9 +33,9 @@ public class ReturnController {
         this.dao = dao;
     }
 
-    @GetMapping("/status")
+    @GetMapping("/status/{orderSn}")
     @ApiOperation(value = "check status of the return request")
-    public Mono<ReturnRequest> checkStatus(@RequestParam String orderSn, @RequestParam int userId){
+    public Mono<ReturnRequest> checkStatus(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId){
         return returnOrderService.getStatus(orderSn, userId);
     }
 

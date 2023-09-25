@@ -46,7 +46,7 @@ public class OrderController {
     public Flux<Orders> list(@RequestParam(required = false, defaultValue = "-1")  int status,
                              @RequestParam(required = false, defaultValue = "1") Integer pageNum,
                              @RequestParam(required = false, defaultValue = "5") Integer pageSize,
-                             @RequestParam int userId) {
+                             @RequestHeader("X-UserId") int userId) {
         return orderService.list(status,pageNum,pageSize, userId);
     }
 

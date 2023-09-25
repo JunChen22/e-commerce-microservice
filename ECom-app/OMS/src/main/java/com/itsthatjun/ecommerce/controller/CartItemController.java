@@ -36,7 +36,7 @@ public class CartItemController {
 
     @ApiOperation("list current user's shopping cart")
     @GetMapping(value = "/list")
-    public Flux<CartItem> list(@RequestParam int userId) {
+    public Flux<CartItem> list(@RequestHeader("X-UserId") int userId) {
         return cartItemService.getUserCart(userId);
     }
 

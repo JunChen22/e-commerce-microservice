@@ -69,12 +69,13 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
         ReturnRequestExample returnRequestExample = new ReturnRequestExample();
         returnRequestExample.createCriteria().andOrderSnEqualTo(orderSn).andMemberIdEqualTo(userId);
-        ReturnRequest returnRequest = returnRequestMapper.selectByExample(returnRequestExample).get(0);
+        List<ReturnRequest> returnRequest = returnRequestMapper.selectByExample(returnRequestExample);
 
-        if (returnRequest != null) {
-            return Mono.just(returnRequest);
+        if (!returnRequest.isEmpty()) {
+            return Mono.just(returnRequest.get(0));
         } else {
-            return Mono.error(new ReturnRequestException("Return Request not found"));
+            //return Mono.error(new ReturnRequestException("Return Request not found")); // TODO: add return exception
+            return Mono.empty();
         }
     }
 

@@ -22,14 +22,15 @@ public class JwtTokenUtil {
 
     public String generateToken(CustomUserDetail userDetails){
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", userDetails.getUsername());
-        claims.put("created", new Date());
-        claims.put("userId", userDetails.getMember().getId());           // used in stateless to get information, using session in monolith.
-        claims.put("name", userDetails.getUsername());
-        claims.put("authorities", userDetails.getAuthorities());
-        claims.put("issuer", issuer);
+        claims.put("sub", userDetails.getUserId());
+        claims.put("username", userDetails.getUsername());
+        claims.put("authorities", userDetails.getAuthorities());  // TODO: add getAuthorities
+        claims.put("iat", new Date());
+        claims.put("name", userDetails.getName());
+        claims.put("iss", issuer);
+
         return Jwts.builder()
-                .setIssuer(issuer)
+                .setIssuer(issuer)          // TODO: idk why it won't set issuer, need to user claim.put("iss", issuer) instead
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, secret)
@@ -69,7 +70,7 @@ public class JwtTokenUtil {
         String username;
         try {
             Claims claims = getClaimsFromToken(token);
-            username =  claims.getSubject();
+            username =  (String) claims.get("userName");
         } catch (Exception e) {
             username = null;
         }

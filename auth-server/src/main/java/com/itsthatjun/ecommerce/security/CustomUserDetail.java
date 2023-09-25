@@ -12,7 +12,7 @@ public class CustomUserDetail implements UserDetails {
 
     @Getter
     private Member member;
-
+    // TODO: add authorities
     public CustomUserDetail(Member member) {
         this.member = member;
     }
@@ -30,6 +30,14 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public String getUsername() {
         return member.getUsername();
+    }
+
+    public String getName() {
+        return member.getName();
+    }
+
+    public int getUserId() {
+        return member.getId();
     }
 
     @Override

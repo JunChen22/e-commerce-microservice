@@ -54,7 +54,6 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
         String token = "";
         try{
             CustomUserDetail userDetails = loadUserByUsername(username);
-            System.out.println(userDetails.getMember());
             // decode password to compare
             if(!passwordEncoder().matches(password, userDetails.getPassword())){
                 throw new BadCredentialsException("incorrect password");

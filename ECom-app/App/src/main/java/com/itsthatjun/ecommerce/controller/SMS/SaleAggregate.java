@@ -37,7 +37,7 @@ public class SaleAggregate {
     @GetMapping("/AllPromotionSale")
     @ApiOperation("All sales including promotional sale(regular discount) and flash sale(could clearance or limited time discount")
     public Flux<PromotionSale> getAllPromotionSale() {
-        String url = SMS_SERVICE_URL + "s/AllPromotionSale";
+        String url = SMS_SERVICE_URL + "/AllPromotionSale";
         LOG.debug("Will call the getAllPromotionSale API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(PromotionSale.class)
@@ -47,7 +47,7 @@ public class SaleAggregate {
     @GetMapping("/AllPromotionSaleItem")
     @ApiOperation("")
     public Flux<Product> getAllPromotionSaleItem() {
-        String url = SMS_SERVICE_URL + "/sale/AllPromotionSaleItem";
+        String url = SMS_SERVICE_URL + "/AllPromotionSaleItem";
         LOG.debug("Will call the getAllPromotionSaleItem API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
@@ -57,7 +57,7 @@ public class SaleAggregate {
     @GetMapping("/AllFlashSaleItem")
     @ApiOperation("")
     public Flux<Product> getAllFlashSaleItem() {
-        String url = SMS_SERVICE_URL + "/sale/AllFlashSaleItem";
+        String url = SMS_SERVICE_URL + "/AllFlashSaleItem";
         LOG.debug("Will call the getAllFlashSaleItem API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
