@@ -22,7 +22,7 @@ public class CouponAggregate {
 
     private final WebClient webClient;
 
-    private final String SMS_SERVICE_URL = "http://sms";
+    private final String SMS_SERVICE_URL = "http://sms/coupon";
 
     @Autowired
     public CouponAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder  webClient) {
@@ -37,7 +37,7 @@ public class CouponAggregate {
 
         // TODO: don't send in the whole cart, send in coupon and user id(security not implement so no jwt)
         //   and coupon service ask shoppin cart service for current users cart and send back discount amount
-        String url = SMS_SERVICE_URL + "/coupon/check?code=" + couponCode;
+        String url = SMS_SERVICE_URL + "/check?code=" + couponCode;
         LOG.debug("Will call the checkCoupon API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(Double.class)

@@ -17,44 +17,32 @@ import static reactor.core.publisher.Flux.empty;
 
 @RestController
 @Api(tags = "content related", description = "aggregate content related services")
-@RequestMapping("/content")
+@RequestMapping("/article")
 public class ContentAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContentAggregate.class);
 
     private final WebClient webClient;
 
-    private final String CMS_SERVICE_URL = "http://cms";
+    private final String CMS_SERVICE_URL = "http://cms/article";
 
     @Autowired
     public ContentAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
         this.webClient = webClient.build();
     }
 
-    @GetMapping("/article/nope")
-    public String testController() {
-        return "nope";
-    }
-
-    @PostMapping("/article/post")
-    public String testpostController() {
-        return "post";
-    }
-
-
-
-    @GetMapping("/article/all")
+    @GetMapping("/all")
     public Flux<Articles> getAllArticle() {
-        String url = CMS_SERVICE_URL + "/article/all";
+        String url = CMS_SERVICE_URL + "/all";
         LOG.debug("Will call the getAllArticle API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Articles.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
     }
 
-    @GetMapping("/article/{articleId}")
+    @GetMapping("/{articleId}")
     public Mono<Articles> getArticle(@PathVariable int articleId) {
-        String url = CMS_SERVICE_URL + "/article/" + articleId;
+        String url = CMS_SERVICE_URL + "/" + articleId;
         LOG.debug("Will call the getArticle API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(Articles.class)

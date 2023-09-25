@@ -69,7 +69,7 @@ public class UserController {
     @ApiOperation(value = "")
     public void activateUser(@RequestBody Member member) {
         int memberId = member.getId();
-        Mono.fromRunnable(() -> sendMessage("user-out-0", new UmsAdminUserEvent(ACTIVATE_ACCOUNT, memberId, member)))
+        Mono.fromRunnable(() -> sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_STATUS, memberId, member)))
                 .subscribeOn(publishEventScheduler).subscribe();
     }
 
@@ -77,7 +77,7 @@ public class UserController {
     @ApiOperation(value = "")
     public void deactivateUser(@RequestBody Member member) {
         int memberId = member.getId();
-        Mono.fromRunnable(() -> sendMessage("user-out-0", new UmsAdminUserEvent(DEACTIVE_ACCOUNT, memberId, member)))
+        Mono.fromRunnable(() -> sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_STATUS, memberId, member)))
                 .subscribeOn(publishEventScheduler).subscribe();
     }
 

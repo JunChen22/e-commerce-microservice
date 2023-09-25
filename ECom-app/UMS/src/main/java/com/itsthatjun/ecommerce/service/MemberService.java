@@ -12,9 +12,6 @@ public interface MemberService {
     String verifyAuthCode(String telephone, String authCode);
 
     @ApiOperation(value = "")
-    String login(String username, String password);
-
-    @ApiOperation(value = "")
     String register(Member member);
 
     // TODO: use redis to send out auth code

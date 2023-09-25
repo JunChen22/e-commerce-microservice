@@ -44,9 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "index", "/css/*", "/js/*","/swagger-resources/**","/v2/api-docs/**", "/actuator/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/admin/login").permitAll()
-                //.antMatchers("/**").permitAll()  // TODO: for testing purposes. All endpoints are open. Remove when needed.
+                .antMatchers(HttpMethod.GET,"/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest()
                 .authenticated();
 

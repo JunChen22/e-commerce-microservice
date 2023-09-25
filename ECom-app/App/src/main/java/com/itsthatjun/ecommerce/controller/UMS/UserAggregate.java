@@ -31,7 +31,7 @@ public class UserAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    private final String UMS_SERVICE_URL = "http://ums";
+    private final String UMS_SERVICE_URL = "http://ums/user";
 
     @Autowired
     public UserAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient, StreamBridge streamBridge,

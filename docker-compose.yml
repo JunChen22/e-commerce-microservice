@@ -315,9 +315,6 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     ports:
       - "8080:8080"
-    depends_on:
-      auth-server:
-        condition: service_healthy
 
   eureka:
     build: eureka-server
@@ -333,7 +330,9 @@ services:
       interval: 5s
       timeout: 2s
       retries: 60
-
+    depends_on:
+      Auth-db:
+        condition: service_healthy
 
 volumes:
   db-data:

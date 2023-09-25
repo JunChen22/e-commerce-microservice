@@ -41,8 +41,8 @@ public class AdminController {
 
     @PostMapping("/login")
     @ApiOperation("")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginrequest, HttpServletRequest request){
-        String token = adminService.login(loginrequest.getUsername(), loginrequest.getPassword());
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request){
+        String token = adminService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if(token.isEmpty()){
             return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED);
         }

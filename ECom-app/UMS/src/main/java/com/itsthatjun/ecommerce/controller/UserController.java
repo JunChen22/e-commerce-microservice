@@ -32,16 +32,6 @@ public class UserController {
 
     // update user account
 
-    @PostMapping("/login")
-    @ApiOperation(value = "Login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request){
-        String token = memberService.login(request.getUsername(), request.getPassword());
-        if(token.isEmpty()){
-            return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(new LoginResponse(true, token));
-    }
-
     @PostMapping("/register")
     @ApiOperation(value = "Register")
     public ResponseEntity<?> register(@RequestBody Member member){

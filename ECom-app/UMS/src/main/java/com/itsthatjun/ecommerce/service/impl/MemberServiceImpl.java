@@ -50,31 +50,9 @@ public class MemberServiceImpl implements MemberService , UserDetailsService {
     }
 
     @Override
-    public String login(String username, String password) {
-        String token = "";
-        try{
-            UserDetails userDetails = loadUserByUsername(username);
-            // decode password to compare
-            if(!passwordEncoder().matches(password, userDetails.getPassword())){
-                throw new BadCredentialsException("incorrect password");
-            }
-
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, Collections.emptyList());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            token = jwtTokenUtil.generateToken(userDetails);
-        } catch (AuthenticationException e) {
-            // TODO: add a login error exception
-            System.out.println("login error");
-        }
-        return token;
-    }
-
-    @Override
     public String register(Member newMember) {
         newMember.setCreatedAt(new Date());
-        newMember.setStatus("active");
+        newMember.setStatus(1);
         MemberExample example = new MemberExample();
         example.createCriteria().andUsernameEqualTo(newMember.getUsername());
         List<Member> existing = memberMapper.selectByExample(example);
@@ -134,7 +112,7 @@ public class MemberServiceImpl implements MemberService , UserDetailsService {
         MemberExample example = new MemberExample();
         example.createCriteria().andUsernameEqualTo(username);
         List<Member> members = memberMapper.selectByExample(example);
-        members.get(0).setStatus("disable");
+        members.get(0).setStatus(0);
         memberMapper.updateByExampleSelective(members.get(0), example);
         return members.get(0);
     }
@@ -144,7 +122,7 @@ public class MemberServiceImpl implements MemberService , UserDetailsService {
         MemberExample example = new MemberExample();
         example.createCriteria().andUsernameEqualTo(username);
         List<Member> members = memberMapper.selectByExample(example);
-        members.get(0).setStatus("active");
+        members.get(0).setStatus(1);
         memberMapper.updateByExampleSelective(members.get(0), example);
         return members.get(0);
     }

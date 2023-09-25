@@ -24,9 +24,12 @@ public class JwtTokenUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", userDetails.getUsername());
         claims.put("created", new Date());
-        claims.put("adminId", userDetails.getMember().getId());           // used in stateless to get information, using session in monolith.
-        claims.put("adminName", userDetails.getMember().getUsername());
+        claims.put("userId", userDetails.getMember().getId());           // used in stateless to get information, using session in monolith.
+        claims.put("name", userDetails.getUsername());
+        claims.put("authorities", userDetails.getAuthorities());
+        claims.put("issuer", issuer);
         return Jwts.builder()
+                .setIssuer(issuer)
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, secret)
@@ -73,26 +76,26 @@ public class JwtTokenUtil {
         return username;
     }
 
-    public String getAdminNameFromToken(String token){
-        String adminName;
+    public String getNameFromToken(String token){
+        String name;
         try {
             Claims claims = getClaimsFromToken(token);
-            adminName =  (String) claims.get("adminName");
+            name =  (String) claims.get("name");
         } catch (Exception e) {
-            adminName = null;
+            name = null;
         }
-        return adminName;
+        return name;
     }
 
-    public int getAdminIdFromToken(String token){
-        Integer adminId;
+    public int getUserIdFromToken(String token){
+        Integer userId;
         try {
             Claims claims = getClaimsFromToken(token);
-            adminId = (Integer) claims.get("adminId");
+            userId = (Integer) claims.get("userId");
         } catch (Exception e) {
-            adminId = null;
+            userId = null;
         }
-        return (adminId != null) ? adminId.intValue() : 0;
+        return (userId != null) ? userId.intValue() : 0;
     }
 
     private Claims getClaimsFromToken(String token){

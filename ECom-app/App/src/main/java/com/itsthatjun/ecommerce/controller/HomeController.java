@@ -11,11 +11,8 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 public class HomeController {
 
-    RestTemplate restTemplate;
-
     @GetMapping("/")
     public String home() {
-        Product found = restTemplate.getForObject("/hello", Product.class);
         return "home";
     }
 

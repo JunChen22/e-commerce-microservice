@@ -35,7 +35,7 @@ public class ReviewAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    private final String PMS_SERVICE_URL = "http://pms";
+    private final String PMS_SERVICE_URL = "http://pms/review";
 
     @Autowired
     public ReviewAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder  webClient, StreamBridge streamBridge,
@@ -48,7 +48,7 @@ public class ReviewAggregate {
     @GetMapping("/detail/{reviewId}")
     @ApiOperation(value = "get detail of a review")
     public Mono<ProductReview> getDetailReview(@PathVariable int reviewId) {
-        String url = PMS_SERVICE_URL + "/reviews/detail/" + reviewId;
+        String url = PMS_SERVICE_URL + "/detail/" + reviewId;
         LOG.debug("Will call the getDetailReview API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(ProductReview.class)
@@ -58,7 +58,7 @@ public class ReviewAggregate {
     @GetMapping("/getAllProductReview/{productId}")
     @ApiOperation(value = "get all reviews for a product")
     public Flux<ProductReview> getProductReviews(@PathVariable int productId) {
-        String url = PMS_SERVICE_URL + "/reviews/getAllProductReview/" + productId;
+        String url = PMS_SERVICE_URL + "/getAllProductReview/" + productId;
         LOG.debug("Will call the getDetailReview API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ProductReview.class)

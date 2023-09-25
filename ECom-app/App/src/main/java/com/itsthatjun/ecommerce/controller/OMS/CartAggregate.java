@@ -39,7 +39,7 @@ public class CartAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    private final String OMS_SERVICE_URL = "http://oms";
+    private final String OMS_SERVICE_URL = "http://oms/cart";
 
     @Autowired
     public CartAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient, StreamBridge streamBridge,
@@ -52,7 +52,7 @@ public class CartAggregate {
     @ApiOperation("list current user's shopping cart")
     @GetMapping(value = "/list")
     public Flux<CartItem> list(@RequestParam int userId) {
-        String url = OMS_SERVICE_URL + "/cart/list?userId=" + userId;
+        String url = OMS_SERVICE_URL + "/list?userId=" + userId;
         LOG.debug("Will call the list API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(CartItem.class)

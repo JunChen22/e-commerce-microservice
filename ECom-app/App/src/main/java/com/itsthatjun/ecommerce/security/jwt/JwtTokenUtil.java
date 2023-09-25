@@ -44,7 +44,8 @@ public class JwtTokenUtil {
         String issuer;
         try {
             Claims claims = getClaimsFromToken(token);
-            issuer =  claims.getSubject();
+            issuer = (String) claims.get("issuer");
+            //issuer =  claims.getIssuer(); TODO: better issuer
         } catch (Exception e) {
             issuer = null;
         }

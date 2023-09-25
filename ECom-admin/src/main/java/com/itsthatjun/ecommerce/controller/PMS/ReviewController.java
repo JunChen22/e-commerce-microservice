@@ -24,7 +24,7 @@ import static com.itsthatjun.ecommerce.dto.pms.event.PmsAdminReviewEvent.Type.*;
 import static java.util.logging.Level.FINE;
 
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/review")
 @Api(tags = "Product related", description = "CRUD a specific product reviews")
 public class ReviewController {
 

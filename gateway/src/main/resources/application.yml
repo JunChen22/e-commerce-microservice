@@ -35,10 +35,15 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/eureka/**
 
+  - id: app-homepage
+    uri: lb://app:8080
+    predicates:
+      - Path=/
+
   - id: app-cms
     uri: lb://app:8080
     predicates:
-      - Path=/content/**
+      - Path=/article/**
 
   - id: app-oms
     uri: lb://app:8080
@@ -48,7 +53,7 @@ spring.cloud.gateway.routes:
   - id: app-pms
     uri: lb://app:8080
     predicates:
-      - Path=/brand/**m, /product/**, /review/**
+      - Path=/brand/**, /product/**, /review/**
 
   - id: app-sms
     uri: lb://app:8080

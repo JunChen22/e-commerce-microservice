@@ -108,7 +108,7 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
         throw new UsernameNotFoundException("Username not found");
     }
 
-    public PasswordEncoder passwordEncoder() {
+    private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

@@ -26,7 +26,7 @@ public class BrandAggregate {
 
     private final WebClient webClient;
 
-    private final String PMS_SERVICE_URL = "http://pms";
+    private final String PMS_SERVICE_URL = "http://pms/brand";
 
     @Autowired
     public BrandAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {

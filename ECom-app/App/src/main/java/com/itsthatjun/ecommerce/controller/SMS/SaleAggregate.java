@@ -27,7 +27,7 @@ public class SaleAggregate {
 
     private final WebClient webClient;
 
-    private final String SMS_SERVICE_URL = "http://sms";
+    private final String SMS_SERVICE_URL = "http://sms/sale";
 
     @Autowired
     public SaleAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
@@ -37,7 +37,7 @@ public class SaleAggregate {
     @GetMapping("/AllPromotionSale")
     @ApiOperation("All sales including promotional sale(regular discount) and flash sale(could clearance or limited time discount")
     public Flux<PromotionSale> getAllPromotionSale() {
-        String url = SMS_SERVICE_URL + "/sale/AllPromotionSale";
+        String url = SMS_SERVICE_URL + "s/AllPromotionSale";
         LOG.debug("Will call the getAllPromotionSale API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(PromotionSale.class)

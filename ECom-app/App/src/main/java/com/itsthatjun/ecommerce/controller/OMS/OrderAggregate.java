@@ -48,7 +48,7 @@ public class OrderAggregate {
 
     public static final String PAYPAL_CANCEL_URL = "order/cancel";
 
-    private final String OMS_SERVICE_URL = "http://oms";
+    private final String OMS_SERVICE_URL = "http://oms/order";
 
     @Autowired
     public OrderAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder  webClient, StreamBridge streamBridge,
@@ -61,7 +61,7 @@ public class OrderAggregate {
     @ApiOperation("Get Order Detail by serial number")
     @GetMapping("/detail/{orderSn}")
     public Mono<Orders> detail(@PathVariable String orderSn) {
-        String url = OMS_SERVICE_URL + "/order/detail/{" + orderSn + "}";
+        String url = OMS_SERVICE_URL + "/detail/{" + orderSn + "}";
         LOG.debug("Will call the detail API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
@@ -76,7 +76,7 @@ public class OrderAggregate {
                              @RequestParam(required = false, defaultValue = "1") Integer pageNum,
                              @RequestParam(required = false, defaultValue = "5") Integer pageSize,
                              @RequestParam int userId) {
-        String url = OMS_SERVICE_URL + "/cart/list?userId=" + userId;
+        String url = OMS_SERVICE_URL + "/list?userId=" + userId;
         LOG.debug("Will call the list API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)

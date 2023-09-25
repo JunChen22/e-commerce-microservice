@@ -17,7 +17,7 @@ import reactor.core.scheduler.Scheduler;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/review")
 @Api(tags = "Product related", description = "CRUD a specific product reviews")
 public class ReviewController {
 

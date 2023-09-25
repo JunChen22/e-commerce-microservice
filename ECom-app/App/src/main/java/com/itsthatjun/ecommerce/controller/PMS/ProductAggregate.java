@@ -25,7 +25,7 @@ public class ProductAggregate {
 
     private final WebClient webClient;
 
-    private final String PMS_SERVICE_URL = "http://pms";
+    private final String PMS_SERVICE_URL = "http://pms/product";
 
     @Autowired
     public ProductAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
@@ -35,7 +35,7 @@ public class ProductAggregate {
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all product")
     public Flux<Product> listAllProduct(){
-        String url = PMS_SERVICE_URL + "/product/listAll";
+        String url = PMS_SERVICE_URL + "/listAll";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -44,7 +44,7 @@ public class ProductAggregate {
     @GetMapping("/{id}")
     @ApiOperation(value = "Get product by id")
     public Mono<Product> listProduct(@PathVariable int id){
-        String url = PMS_SERVICE_URL + "/product/" + id;
+        String url = PMS_SERVICE_URL + "/" + id;
         return webClient.get().uri(url).retrieve().bodyToMono(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }

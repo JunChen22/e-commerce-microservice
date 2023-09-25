@@ -33,7 +33,7 @@ public class ReturnAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    private final String OMS_SERVICE_URL = "http://oms";
+    private final String OMS_SERVICE_URL = "http://oms/order/return";
 
     public ReturnAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder  webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
@@ -45,7 +45,7 @@ public class ReturnAggregate {
     @GetMapping("/status")
     @ApiOperation(value = "check status of the return request")
     public Mono<ReturnRequest> checkStatus(@RequestParam String orderSn, @RequestParam int userId){
-        String url = OMS_SERVICE_URL + "/order/return?orderSn=" + orderSn + "&userId=" + userId;
+        String url = OMS_SERVICE_URL + "/status?orderSn=" + orderSn + "&userId=" + userId;
         LOG.debug("Will call the checkStatus API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(ReturnRequest.class)
