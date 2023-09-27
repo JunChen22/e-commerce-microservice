@@ -35,6 +35,31 @@ spring:
         min-idle: 0
     timeout: 3000ms
 
+spring.cloud:
+  function:   # can't have space between, tells spring which to use
+    definition: adminUserMessageProcessor;userMessageProcessor;authMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      adminUserMessageProcessor-in-0:      # admin
+        destination: adminUmsUpdate
+        group: adminUmsUpdateGroup
+
+      userMessageProcessor-in-0:        # user and auth update
+        destination: user
+        group: userGroup
+      authMessageProcessor-in-0:
+        destination: authLogUpdate
+        group: authLogUpdateGroup
+
+      authUpdate-out-0:        # sending update to auth to update member info
+        destination: umsUserUpdate
+        producer:
+          required-groups: auditGroup
+
+
+
 # tells spring mybatis mapper's xml(sql) located
 mybatis:
   mapper-locations:
