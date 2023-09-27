@@ -1,6 +1,7 @@
-package com.itsthatjun.ecommerce.dto.event.Incoming;
+package com.itsthatjun.ecommerce.dto.event.outgoing;
 
 import com.itsthatjun.ecommerce.mbg.model.Member;
+import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -8,32 +9,30 @@ import java.time.ZonedDateTime;
 import static java.time.ZonedDateTime.now;
 
 @Getter
-public class UmsUserEvent {
+public class UmsLogUpdateEvent {
 
     public enum Type {
-        NEW_ACCOUNT,
-        UPDATE_ACCOUNT_STATUS,
-        UPDATE_ACCOUNT_INFO,
-        DELETE_ACCOUNT
+        New_LOGIN,
+        LOG_OFF
     }
 
     private final Type eventType;
     private final int userId;
-    private final Member member;
+    private final MemberLoginLog loginLog;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public UmsUserEvent() {
+    public UmsLogUpdateEvent() {
         this.eventType = null;
         this.userId = 0;
-        this.member = null;
+        this.loginLog = null;
         this.eventCreatedAt = null;
     }
 
-    public UmsUserEvent(Type eventType, int userId, Member member) {
+    public UmsLogUpdateEvent(Type eventType, int userId, MemberLoginLog loginLog) {
         this.eventType = eventType;
         this.userId = userId;
-        this.member = member;
+        this.loginLog = loginLog;
         this.eventCreatedAt = now();
     }
 }

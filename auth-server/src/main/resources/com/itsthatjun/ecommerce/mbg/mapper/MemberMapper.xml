@@ -9,6 +9,7 @@
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin" />
     <result column="source_type" jdbcType="VARCHAR" property="sourceType" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, name, phone_number, email, status, created_at, last_login, 
-    source_type
+    id, username, password, name, phone_number, email, status, delete_status, created_at, 
+    last_login, source_type
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberExample" resultMap="BaseResultMap">
     select
@@ -108,12 +109,12 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Member" useGeneratedKeys="true">
     insert into member (username, password, name, 
       phone_number, email, status, 
-      created_at, last_login, source_type
-      )
+      delete_status, created_at, last_login, 
+      source_type)
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{phoneNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{lastLogin,jdbcType=TIMESTAMP}, #{sourceType,jdbcType=VARCHAR}
-      )
+      #{deleteStatus,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{lastLogin,jdbcType=TIMESTAMP}, 
+      #{sourceType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Member" useGeneratedKeys="true">
     insert into member
@@ -135,6 +136,9 @@
       </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="deleteStatus != null">
+        delete_status,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -164,6 +168,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="deleteStatus != null">
+        #{deleteStatus,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -206,6 +213,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.deleteStatus != null">
+        delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -229,6 +239,7 @@
       phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
+      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       last_login = #{record.lastLogin,jdbcType=TIMESTAMP},
       source_type = #{record.sourceType,jdbcType=VARCHAR}
@@ -257,6 +268,9 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="deleteStatus != null">
+        delete_status = #{deleteStatus,jdbcType=INTEGER},
+      </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -277,6 +291,7 @@
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
+      delete_status = #{deleteStatus,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       last_login = #{lastLogin,jdbcType=TIMESTAMP},
       source_type = #{sourceType,jdbcType=VARCHAR}

@@ -1,7 +1,8 @@
 package com.itsthatjun.ecommerce.config;
 
-import com.itsthatjun.ecommerce.dto.event.UmsUserEvent;
+import com.itsthatjun.ecommerce.dto.event.Incoming.UmsUserEvent;
 import com.itsthatjun.ecommerce.mbg.model.Member;
+import com.itsthatjun.ecommerce.service.eventupdate.UmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,15 +17,15 @@ public class MessageProcessorConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageProcessorConfig.class);
 
-    private final MemberServiceImpl memberService;
+    private final UmsEventUpdateService umsEventUpdateService;
 
     @Autowired
-    public MessageProcessorConfig(MemberServiceImpl memberService) {
-        this.memberService = memberService;
+    public MessageProcessorConfig(UmsEventUpdateService umsEventUpdateService) {
+        this.umsEventUpdateService = umsEventUpdateService;
     }
 
     @Bean
-    public Consumer<UmsUserEvent> articleMessageProcessor() {
+    public Consumer<UmsUserEvent> userMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
@@ -35,19 +36,19 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
 
                 case NEW_ACCOUNT:
-                    memberService.addMember(member);
+                    umsEventUpdateService.addMember(member);
                     break;
 
                 case UPDATE_ACCOUNT_INFO:
-                    memberService.updateInfo(member);
+                    umsEventUpdateService.updateInfo(member);
                     break;
 
                 case UPDATE_ACCOUNT_STATUS:
-                    memberService.updateStatus(member);
+                    umsEventUpdateService.updateStatus(member);
                     break;
 
                 case DELETE_ACCOUNT:
-                    memberService.deleteMember(userId);
+                    umsEventUpdateService.deleteMember(userId);
                     break;
 
                 default:

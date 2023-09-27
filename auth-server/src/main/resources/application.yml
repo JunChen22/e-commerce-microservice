@@ -31,6 +31,11 @@ spring.cloud:
         destination: umsUserUpdate
         group: umsUserUpdateGroup
 
+      authLog-out-0: # sending update to UMS to update login log
+        destination: authLogUpdate
+        producer:
+          required-groups: authLogUpdateGroup
+
 
 jwt:
   HEADER_STRING: Authorization

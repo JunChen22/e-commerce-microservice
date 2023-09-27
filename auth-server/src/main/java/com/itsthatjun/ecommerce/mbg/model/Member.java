@@ -17,6 +17,8 @@ public class Member {
 
     private Integer status;
 
+    private Integer deleteStatus;
+
     private Date createdAt;
 
     private Date lastLogin;
@@ -77,6 +79,14 @@ public class Member {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getDeleteStatus() {
+        return deleteStatus;
+    }
+
+    public void setDeleteStatus(Integer deleteStatus) {
+        this.deleteStatus = deleteStatus;
     }
 
     public Date getCreatedAt() {

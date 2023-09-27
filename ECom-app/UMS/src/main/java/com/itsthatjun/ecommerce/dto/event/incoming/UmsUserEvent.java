@@ -19,21 +19,18 @@ public class UmsUserEvent {
     }
 
     private final Type eventType;
-    private final int userId;
     private final MemberDetail memberDetail;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public UmsUserEvent() {
         this.eventType = null;
-        this.userId = 0;
         this.memberDetail = null;
         this.eventCreatedAt = null;
     }
 
-    public UmsUserEvent(Type eventType, int userId, MemberDetail memberDetail) {
+    public UmsUserEvent(Type eventType, MemberDetail memberDetail) {
         this.eventType = eventType;
-        this.userId = userId;
         this.memberDetail = memberDetail;
         this.eventCreatedAt = now();
     }
