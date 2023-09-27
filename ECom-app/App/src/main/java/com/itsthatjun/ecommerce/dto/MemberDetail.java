@@ -1,14 +1,15 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.mbg.model.Member;
-import com.itsthatjun.ecommerce.mbg.model.Orders;
-import com.itsthatjun.ecommerce.mbg.model.Review;
+import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.mbg.model.Address;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class MemberDetail {
-
     Member member;
-    List<Review> commentList;
-    List<Orders> ordersList;
+    Address address;
+    MemberIcon icon;
+    List<MemberLoginLog> loginLogList;
 }
