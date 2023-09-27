@@ -37,10 +37,7 @@ public class BrandController {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.PMS-service.host}")
-    String pmsServiceURL;
-    @Value("${app.PMS-service.port}")
-    int port;
+    private final String PMS_SERVICE_URL = "http://pms/brand";
 
     @Autowired
     public BrandController(WebClient.Builder webClient, StreamBridge streamBridge,
@@ -53,7 +50,7 @@ public class BrandController {
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
     public Flux<Brand> getAllBrand(){
-        String url = "http://" + pmsServiceURL + ":" + port + "/brand/listAll";
+        String url = "PMS_SERVICE_URL + "/brand/listAll";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -64,7 +61,7 @@ public class BrandController {
     public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize){
 
-        String url = "http://" + pmsServiceURL + ":" + port + "/brand/list?page=" + pageNum + "&size=" + pageSize;
+        String url = PMS_SERVICE_URL + "/brand/list?page=" + pageNum + "&size=" + pageSize;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -73,7 +70,7 @@ public class BrandController {
     @GetMapping("/product/{brandId}")
     @ApiOperation(value = "Get all product of this brand")
     public Flux<Product> getBrandProduct(@PathVariable int brandId){
-        String url = "http://" + pmsServiceURL + ":" + port + "/brand/product/" + brandId;
+        String url = PMS_SERVICE_URL + "/brand/product/" + brandId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -82,7 +79,7 @@ public class BrandController {
     @GetMapping("/{brandId}")
     @ApiOperation(value = "Get brand info")
     public Mono<Brand> getBrand(@PathVariable int brandId){
-        String url = "http://" + pmsServiceURL + ":" + port + "/brand/" + brandId;
+        String url = PMS_SERVICE_URL + "/brand/" + brandId;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());

@@ -25,10 +25,7 @@ public class CouponHistoryController {
 
     private final WebClient webClient;
 
-    @Value("${app.SMS-service.host}")
-    String salesServiceURL;
-    @Value("${app.SMS-service.port}")
-    int port;
+    private final String SMS_SERVICE_URL = "http://sms/coupon/history";
 
     @Autowired
     public CouponHistoryController(WebClient.Builder webClient) {
@@ -39,7 +36,7 @@ public class CouponHistoryController {
     @ApiOperation(value = "return all the coupon used between two time")
     public Flux<UsedCouponHistory> couponUsed() {
         // TODO: add default value for the two times, currently all used coupons
-        String url = "http://" + salesServiceURL + ":" + port + "/coupon/getAllUsedCoupon";
+        String url = SMS_SERVICE_URL+ "/getAllUsedCoupon";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(UsedCouponHistory.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -48,7 +45,7 @@ public class CouponHistoryController {
     @GetMapping("/getUserCoupon/{userId}")
     @ApiOperation(value = "shows how many coupon(amount saved) a user used")
     public Flux<UsedCouponHistory> getUserCoupon(@PathVariable int userId) {
-        String url = "http://" + salesServiceURL + ":" + port + "/coupon/getUserCoupon/" + userId;
+        String url = SMS_SERVICE_URL + "/getUserCoupon/" + userId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(UsedCouponHistory.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());

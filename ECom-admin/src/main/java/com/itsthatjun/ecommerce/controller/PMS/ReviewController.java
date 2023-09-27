@@ -36,10 +36,7 @@ public class ReviewController {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.PMS-service.host}")
-    String pmsServiceURL;
-    @Value("${app.PMS-service.port}")
-    int port;
+    private final String PMS_SERVICE_URL = "http://pms/review";
 
     @Autowired
     public ReviewController(WebClient.Builder webClient, StreamBridge streamBridge,
@@ -52,7 +49,7 @@ public class ReviewController {
     @GetMapping("/getAllProductReview/{productId}")
     @ApiOperation(value = "get all reviews for a product")
     public Flux<ProductReview> getProductReviews(@PathVariable int productId) {
-        String url = "http://" + pmsServiceURL + ":" + port + "/reviews/getAllProductReview/" + productId;
+        String url = PMS_SERVICE_URL + "/reviews/getAllProductReview/" + productId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ProductReview.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -61,7 +58,7 @@ public class ReviewController {
     @GetMapping("/getAllReviewByUser/{useId}")
     @ApiOperation(value = "get all reviews made a user")
     public Flux<ProductReview> getProductReviewsByUser(@PathVariable int useId) {
-        String url = "http://" + pmsServiceURL + ":" + port + "/reviews/admin/getAllReviewByUser/" + useId;
+        String url = PMS_SERVICE_URL + "/reviews/admin/getAllReviewByUser/" + useId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ProductReview.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());

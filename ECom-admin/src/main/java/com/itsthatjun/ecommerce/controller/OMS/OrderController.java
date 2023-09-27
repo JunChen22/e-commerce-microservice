@@ -36,10 +36,7 @@ public class OrderController {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.OMS-service.host}")
-    String orderServiceURL;
-    @Value("${app.OMS-service.port}")
-    int port;
+    private final String OMS_SERVICE_URL = "http://oms/order";
 
     @Autowired
     public OrderController(WebClient.Builder webClient, StreamBridge streamBridge,
@@ -52,7 +49,7 @@ public class OrderController {
     @GetMapping("/payment")
     @ApiOperation(value = "List all orders that need to be paid")
     public Flux<Orders> listAllOrdersWaitForPayment(){
-        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/payment";
+        String url = OMS_SERVICE_URL + "/order/admin/payment";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -61,7 +58,7 @@ public class OrderController {
     @GetMapping("/fulfill")
     @ApiOperation(value = "List all orders that need to be fulfill/open")
     public Flux<Orders> listAllFulfullingOrders(){
-        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/fulfill";
+        String url = OMS_SERVICE_URL + "/order/admin/fulfill";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -70,7 +67,7 @@ public class OrderController {
     @GetMapping("/send")
     @ApiOperation(value = "List all orders that are send")
     public Flux<Orders> listAllSendOrders(){
-        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/send";
+        String url = OMS_SERVICE_URL + "/order/admin/send";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -79,7 +76,7 @@ public class OrderController {
     @GetMapping("/complete")
     @ApiOperation(value = "List all orders that are delivered")
     public Flux<Orders> listAl(){
-        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/complete";
+        String url = OMS_SERVICE_URL + "/order/admin/complete";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -88,7 +85,7 @@ public class OrderController {
     @GetMapping("/user/{userId}")
     @ApiOperation(value = "get all orders made by user")
     public Flux<Orders> getUserOrders(@PathVariable int userId){
-        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/user/" + userId;
+        String url = OMS_SERVICE_URL + "/order/admin/user/" + userId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -97,7 +94,7 @@ public class OrderController {
     @GetMapping("/{serialNumber}")
     @ApiOperation(value = "look up a order by serial number")
     public Mono<Orders> getOrder(@PathVariable String serialNumber){
-        String url = "http://" + orderServiceURL + ":" + port + "/order/admin/" + serialNumber;
+        String url = OMS_SERVICE_URL+ "/order/admin/" + serialNumber;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());

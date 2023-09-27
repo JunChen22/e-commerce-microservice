@@ -39,10 +39,7 @@ public class CouponController {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.SMS-service.host}")
-    String salesServiceURL;
-    @Value("${app.SMS-service.port}")
-    int port;
+    private final String SMS_SERVICE_URL = "http://sms/coupon";
 
     @Autowired
     public CouponController(WebClient.Builder webClient, StreamBridge streamBridge,
@@ -55,7 +52,7 @@ public class CouponController {
     @GetMapping("/listAll")
     @ApiOperation(value = "return all working non-expired coupon")
     public Flux<Coupon> listAll() {
-        String url = "http://" + salesServiceURL + ":" + port + "/coupon/";
+        String url = SMS_SERVICE_URL+ "/coupon/";
 
         // TODO: add default value to get only active or disabled coupon , currently is all
         return webClient.get().uri(url).retrieve().bodyToFlux(Coupon.class)
@@ -65,7 +62,7 @@ public class CouponController {
     @GetMapping("/{couponId}")
     @ApiOperation(value = "Get coupons that works with a product")
     public Mono<Coupon> list(@PathVariable int couponId) {
-        String url = "http://" + salesServiceURL + ":" + port + "/coupon/" + couponId;
+        String url = SMS_SERVICE_URL + "/coupon/" + couponId;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Coupon.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
@@ -74,7 +71,7 @@ public class CouponController {
     @GetMapping("/product/all/{productId}")
     @ApiOperation(value = "Get coupons that works with a product")
     public Flux<Coupon> getCouponForProduct(@PathVariable int productId) {
-        String url = "http://" + salesServiceURL + ":" + port + "/coupon/product/all/" + productId;
+        String url = SMS_SERVICE_URL + "/coupon/product/all/" + productId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Coupon.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());

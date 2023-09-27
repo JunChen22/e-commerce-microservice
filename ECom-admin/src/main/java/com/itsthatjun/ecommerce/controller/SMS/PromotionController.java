@@ -37,10 +37,7 @@ public class PromotionController {
 
     private final Scheduler publishEventScheduler;
 
-    @Value("${app.SMS-service.host}")
-    String salesServiceURL;
-    @Value("${app.SMS-service.port}")
-    int port;
+    private final String SMS_SERVICE_URL = "http://sms/sale";
 
     @Autowired
     public PromotionController(WebClient.Builder webClient, StreamBridge streamBridge,
@@ -53,7 +50,7 @@ public class PromotionController {
     @GetMapping("/AllSale")
     @ApiOperation("All the sales that is going on")
     public Flux<PromotionSale> getAllPromotionSale() {
-        String url = "http://" + salesServiceURL + ":" + port + "/sale/";
+        String url = SMS_SERVICE_URL + "/sale/AllSale";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(PromotionSale.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -62,7 +59,7 @@ public class PromotionController {
     @GetMapping("/AllPromotionSaleItem")
     @ApiOperation("Items that are on regular sale")
     public Flux<Product> getAllPromotionSaleItem() {
-        String url = "http://" + salesServiceURL + ":" + port + "/sale/";
+        String url = SMS_SERVICE_URL + "/sale/AllPromotionSaleItem";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -72,7 +69,7 @@ public class PromotionController {
     @ApiOperation("Items that are like flash sale, clearance sale that needs to go quick")
     public Flux<Product> getAllFlashSaleItem() {
 
-        String url = "http://" + salesServiceURL + ":" + port + "/sale/";
+        String url = SMS_SERVICE_URL + "/sale/AllFlashSaleItem";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
