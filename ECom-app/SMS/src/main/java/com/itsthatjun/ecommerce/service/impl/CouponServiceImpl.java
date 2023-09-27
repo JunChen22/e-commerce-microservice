@@ -6,17 +6,23 @@ import com.itsthatjun.ecommerce.exceptions.ProductException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.CouponService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CouponServiceImpl implements CouponService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CouponServiceImpl.class);
 
     private final CouponMapper couponMapper;
 
@@ -28,23 +34,66 @@ public class CouponServiceImpl implements CouponService {
 
     private final ProductSkuMapper productSkuMapper;
 
+    private final String OMS_SERVICE_URL = "http://oms:8080/cart";
+
+    private final WebClient webClient;
+
     @Autowired
     public CouponServiceImpl(CouponMapper couponMapper, ProductMapper productMapper, CouponHistoryMapper couponHistoryMapper,
-                             CouponProductRelationMapper productRelationMapper, ProductSkuMapper productSkuMapper) {
+                             CouponProductRelationMapper productRelationMapper, ProductSkuMapper productSkuMapper,
+                             WebClient.Builder webClient) {
         this.couponMapper = couponMapper;
         this.productMapper = productMapper;
         this.couponHistoryMapper = couponHistoryMapper;
         this.productRelationMapper = productRelationMapper;
         this.productSkuMapper = productSkuMapper;
+        this.webClient = webClient.build();
     }
 
     @Override
-    public double checkDiscount(String couponCode) {
-        if (checkCoupon(couponCode) == null) {
-            return 0;
+    public double checkDiscount(String couponCode, int userId) {
+        Coupon foundCoupon = checkCoupon(couponCode);
+        if (foundCoupon == null) return 0;
+
+        List<CartItem> cartItemList = getCartFromOms(userId);
+        if (cartItemList.isEmpty()) return 0;
+
+        Map<String, Integer> skuQuantity = new HashMap<>();
+        for (CartItem cartItem : cartItemList) {
+            int quantity = cartItem.getQuantity();
+            String skuCode = cartItem.getProductSku();
+            skuQuantity.put(skuCode, quantity);
+            System.out.println(skuCode + " added to cart list");
         }
-        double discountAmount = getDiscountAmount(null, couponCode);
-        return 0;
+
+        return  getDiscountAmount(skuQuantity, foundCoupon);
+    }
+
+    private List<CartItem> getCartFromOms(int userId) {
+        String url = OMS_SERVICE_URL + "/list";
+        LOG.debug("Will call the list API on URL: {}", url);
+
+        // Define the timeout in milliseconds
+        int timeoutMilliseconds = 200; // 0.2 second
+        List<CartItem> cartItems = null;
+
+        try {
+            // Make a synchronous HTTP GET request with a timeout
+            Mono<List<CartItem>> cartItemListMono = webClient.get()
+                    .uri(url)
+                    .header("X-UserId", String.valueOf(userId))
+                    .retrieve()
+                    .onStatus(httpStatus -> httpStatus.is5xxServerError(),
+                            clientResponse -> Mono.error(new RuntimeException("Server error"))) // Use Mono.error
+                    .bodyToFlux(CartItem.class) // Use bodyToFlux for a list of CartItem
+                    .timeout(Duration.ofMillis(timeoutMilliseconds))
+                    .collectList(); // Collect the items into a list
+            cartItems = cartItemListMono.block();
+        } catch (Exception e) {
+            // Handle errors, including timeouts, here
+            cartItems = Collections.emptyList();
+        }
+        return cartItems;
     }
 
     @Override
@@ -60,7 +109,7 @@ public class CouponServiceImpl implements CouponService {
     // -- discount on 0-> all, 1 -> specific brand, 2-> specific item
     @Override
     public List<Coupon> getCouponForProduct(int productId) {
-         //TODO: change this to loose coupling
+
         Product product = productMapper.selectByPrimaryKey(productId);
         if (product == null)
             throw new ProductException("Can't find product : " + productId);
@@ -103,39 +152,36 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public double getDiscountAmount(Map<String, Integer> skuQuantity, String couponCode) {
-
-        Coupon foundCoupon = checkCoupon(couponCode);
-        if (foundCoupon == null) {
-            return 0;
-        }
-
+    public double getDiscountAmount(Map<String, Integer> skuQuantity, Coupon coupon) {
         double totalDiscount = 0;
 
         // check expiration
-        Date startDate = foundCoupon.getStartTime();
-        Date endDate = foundCoupon.getEndTime();
+        Date startDate = coupon.getStartTime();
+        Date endDate = coupon.getEndTime();
         Date currentDate = new Date();
 
         if (!(currentDate.after(startDate) && currentDate.before(endDate))) {
             return 0;
         }
 
-        if (foundCoupon.getStatus() == 0) return 0;  // not active coupon
+        if (coupon.getStatus() == 0) return 0;  // not active coupon
 
         // check usage limit
-        if (foundCoupon.getCount() <= foundCoupon.getUsedCount() && foundCoupon.getUsedCount() >= foundCoupon.getPublishCount()) return 0;
+        if (coupon.getCount() <= coupon.getUsedCount() && coupon.getUsedCount() >= coupon.getPublishCount()) {
+            LOG.info("Coupon expired.");
+            return 0;
+        }
 
         // discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item
-        if (foundCoupon.getCouponType() == 0) {  // whole order discount
-            totalDiscount = wholeOrderDiscount(skuQuantity, foundCoupon);
+        if (coupon.getCouponType() == 0) {  // whole order discount
+            totalDiscount = wholeOrderDiscount(skuQuantity, coupon);
             return totalDiscount;
         }
 
         // TODO:  create dao and use SQL for simpler method
         // Find products affected by this coupon
         CouponProductRelationExample productRelationExample = new CouponProductRelationExample();
-        productRelationExample.createCriteria().andCouponIdEqualTo(foundCoupon.getId());
+        productRelationExample.createCriteria().andCouponIdEqualTo(coupon.getId());
         List<CouponProductRelation> itemAffectedByCouponList = productRelationMapper.selectByExample(productRelationExample);
 
         for (String skuCode : skuQuantity.keySet()) {
@@ -150,10 +196,10 @@ public class CouponServiceImpl implements CouponService {
 
             for (CouponProductRelation discountItem: itemAffectedByCouponList) {
                 if (discountItem.getProductSkuCode().equals(itemSKuCode)  && discountItem.getProductId() == itemId) {
-                    if (foundCoupon.getDiscountType() == 0) {// discount by amount
-                        totalDiscount = totalDiscount + (foundCoupon.getAmount().doubleValue() * quantityNeeded);
+                    if (coupon.getDiscountType() == 0) {// discount by amount
+                        totalDiscount = totalDiscount + (coupon.getAmount().doubleValue() * quantityNeeded);
                     } else {   // discount  by percent
-                        totalDiscount = totalDiscount + ((foundCoupon.getAmount().doubleValue() * productSkuStock.getPromotionPrice().doubleValue()) / 100) * quantityNeeded;
+                        totalDiscount = totalDiscount + ((coupon.getAmount().doubleValue() * productSkuStock.getPromotionPrice().doubleValue()) / 100) * quantityNeeded;
                     }
                 }
             }
@@ -165,7 +211,6 @@ public class CouponServiceImpl implements CouponService {
         double totalDiscount = 0;
         double totalPrice = 0;
         for (String skuCode : skuQuantity.keySet()) {
-            String itemSKuCode = skuCode;
             int quantityNeeded = skuQuantity.get(skuCode);
 
             ProductSkuExample productSkuStockExample = new ProductSkuExample();
@@ -174,6 +219,7 @@ public class CouponServiceImpl implements CouponService {
             totalPrice += productSkuStock.getPromotionPrice().doubleValue() * quantityNeeded;
         }
 
+        System.out.println("at whole order discount: " + totalPrice);
         if (coupon.getDiscountType() == 0) {// discount by amount
             totalDiscount = coupon.getAmount().doubleValue();
         } else {   // discount  by percent

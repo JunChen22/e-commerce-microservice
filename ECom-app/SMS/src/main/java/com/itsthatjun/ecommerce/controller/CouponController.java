@@ -26,10 +26,11 @@ public class CouponController {
 
     @GetMapping("/check")
     @ApiOperation("Check coupon and return discount amount")
-    public double checkCoupon(@RequestParam String couponCode) {
-        // TODO: currently reutrn total amount, need to change to return individual discount.
+    public double checkCoupon(@RequestParam String couponCode, @RequestHeader("X-UserId") int userId) {
+        // TODO: currently return total amount, need to change to return individual discount.
         //  might return something like <String, Double> skuDiscount
-        return couponService.checkDiscount(couponCode);
+        System.out.println("at coupon controller");
+        return couponService.checkDiscount(couponCode, userId);
     }
 
     @GetMapping("/admin/listAll")

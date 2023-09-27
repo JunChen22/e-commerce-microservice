@@ -1873,12 +1873,12 @@ CREATE TABLE coupon (
 -- TODO: make sure free coupon don't go negative
 INSERT INTO coupon(coupon_type, name, discount_type, amount, start_time, end_time, count, publish_count, used_count, code, status)
 VALUES
-(0, '$15 off whole order', 0, 15.00, '2019-08-18 16:00:3', '2023-08-18 16:00:3', 20, 10 , 0, '15OFF', 1),
-(0, '10% off whole order', 1, 10, '2019-08-18 16:00:3', '2023-08-18 16:00:3', 20, 10 , 0, '10OFF', 1),
-(0, 'All free', 0, 999999.99, '2019-08-18 16:00:3', '2023-08-18 16:00:3', 1, 1 , 1, 'FREE', 1),
-(1, '$50 off Apple product', 0, 50.00, '2019-08-18 16:00:3', '2023-08-18 16:00:3', 1, 1 , 0, '50OFFAPPLE', 1),
-(2, '60% off shirts', 1, 60, '2019-08-18 16:00:3', '2023-08-18 16:00:3', 1, 1 , 0, '60OFFSHIRTS', 1),
-(3, '20% off Galaxy S21', 1, 20, '2019-08-18 16:00:3', '2023-08-18 16:00:3', 1, 1 , 1, '20OFFS21', 1);
+(0, '$15 off whole order', 0, 15.00, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 20, 10 , 0, '15OFF', 1),
+(0, '10% off whole order', 1, 10, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 20, 10 , 0, '10OFF', 1),
+(0, 'All free', 0, 999999.99, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1 , 1, 'FREE', 1),
+(1, '$50 off Apple product', 0, 50.00, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1 , 0, '50OFFAPPLE', 1),
+(2, '60% off shirts', 1, 60, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1 , 0, '60OFFSHIRTS', 1),
+(3, '20% off Galaxy S21', 1, 20, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1 , 1, '20OFFS21', 1);
 
 
 -- the product that are affected by the coupon, coupon type 1-3 will use this. 0 type will not.

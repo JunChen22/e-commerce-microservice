@@ -287,7 +287,6 @@ services:
       redis:
         condition: service_healthy
 
-
   admin:
     build: ECom-admin
     ports:

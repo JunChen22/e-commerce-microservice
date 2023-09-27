@@ -13,7 +13,7 @@ public interface  CouponService {
 
     // TODO: after security implement it, return discount amount based on shopping cart.
     @ApiOperation("Return discount amount based on item list")
-    double checkDiscount(String couponCode);
+    double checkDiscount(String couponCode, int userId);
 
     @ApiOperation("check coupon exist by coupon code")
     Coupon checkCoupon(String couponCode);
@@ -25,7 +25,7 @@ public interface  CouponService {
     void updateUsedCoupon(String code, int orderId, int memberId);
 
     @ApiOperation("Get discounted amount for all the product affected by the coupon")
-    double getDiscountAmount(Map<String, Integer> skuQuantity, String couponCode);
+    double getDiscountAmount(Map<String, Integer> skuQuantity, Coupon coupon);
 
     @ApiOperation(value = "")
     Coupon createCoupon(Coupon newCoupon, Map<String, Integer> skuQuantity);

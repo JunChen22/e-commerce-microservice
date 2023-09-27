@@ -50,7 +50,7 @@ public class BrandController {
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
     public Flux<Brand> getAllBrand(){
-        String url = "PMS_SERVICE_URL + "/brand/listAll";
+        String url = PMS_SERVICE_URL + "/brand/listAll";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());

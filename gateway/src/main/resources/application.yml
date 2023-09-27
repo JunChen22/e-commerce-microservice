@@ -92,11 +92,6 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/login
 
-  - id: local-auth-login
-    uri: http://auth-server:9999
-    predicates:
-      - Path=/somesome
-
 
 management.endpoint.gateway.enabled: true
 management.endpoint.health.show-details: "ALWAYS"
