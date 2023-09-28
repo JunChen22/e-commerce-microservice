@@ -47,9 +47,9 @@ public class OrderAggregate {
 
     private final Scheduler publishEventScheduler;
 
-    public static final String PAYPAL_SUCCESS_URL = "order/success";
+    public static final String PAYPAL_SUCCESS_URL = "order/payment/success";
 
-    public static final String PAYPAL_CANCEL_URL = "order/cancel";
+    public static final String PAYPAL_CANCEL_URL = "order/payment/cancel";
 
     private final String OMS_SERVICE_URL = "http://oms/order";
 

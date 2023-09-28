@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/product/listAll", "/product/{id}", "/product/list").permitAll()
                 .antMatchers(HttpMethod.GET, "/review/detail/{reviewId}", "/review/getAllProductReview").permitAll()
                 .antMatchers(HttpMethod.GET, "/sale/AllPromotionSale", "/sale/AllPromotionSaleItem", "/sale/AllFlashSaleItem").permitAll()
+                .antMatchers(HttpMethod.GET,"/order/payment/**").permitAll()
                 .antMatchers("/").permitAll()
                 .anyRequest()
                 .authenticated();

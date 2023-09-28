@@ -29,7 +29,6 @@ public class CouponController {
     public double checkCoupon(@RequestParam String couponCode, @RequestHeader("X-UserId") int userId) {
         // TODO: currently return total amount, need to change to return individual discount.
         //  might return something like <String, Double> skuDiscount
-        System.out.println("at coupon controller");
         return couponService.checkDiscount(couponCode, userId);
     }
 

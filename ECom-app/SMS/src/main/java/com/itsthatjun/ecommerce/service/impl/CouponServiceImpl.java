@@ -63,7 +63,6 @@ public class CouponServiceImpl implements CouponService {
             int quantity = cartItem.getQuantity();
             String skuCode = cartItem.getProductSku();
             skuQuantity.put(skuCode, quantity);
-            System.out.println(skuCode + " added to cart list");
         }
 
         return  getDiscountAmount(skuQuantity, foundCoupon);
@@ -219,7 +218,6 @@ public class CouponServiceImpl implements CouponService {
             totalPrice += productSkuStock.getPromotionPrice().doubleValue() * quantityNeeded;
         }
 
-        System.out.println("at whole order discount: " + totalPrice);
         if (coupon.getDiscountType() == 0) {// discount by amount
             totalDiscount = coupon.getAmount().doubleValue();
         } else {   // discount  by percent

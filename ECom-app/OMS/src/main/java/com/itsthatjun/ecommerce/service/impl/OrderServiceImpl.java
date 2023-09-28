@@ -25,11 +25,13 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
 
 import static com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent.Type.*;
@@ -59,15 +61,15 @@ public class OrderServiceImpl implements OrderService {
 
     private final StreamBridge streamBridge;
 
-    @Value("${app.SMS-service.host}")
-    String couponServiceURL;
-    @Value("${app.SMS-service.port}")
-    int smsPort;
+    private final String SMS_SERVICE_URL = "http://sms:8080/coupon";
+
+    private final WebClient webClient;
 
     @Autowired
     public OrderServiceImpl(PaypalService paypalService, OrdersMapper ordersMapper, CartItemServiceImpl cartItemService,
                             OrderItemMapper orderItemMapper, ProductSkuMapper stockMapper, ProductMapper productMapper,
-                            OrderChangeHistoryMapper changeHistoryMapper, OrderDao orderDao, StreamBridge streamBridge) {
+                            OrderChangeHistoryMapper changeHistoryMapper, OrderDao orderDao, StreamBridge streamBridge,
+                            WebClient.Builder webClient) {
         this.paypalService = paypalService;
         this.ordersMapper = ordersMapper;
         this.cartItemService = cartItemService;
@@ -77,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
         this.changeHistoryMapper = changeHistoryMapper;
         this.orderDao = orderDao;
         this.streamBridge = streamBridge;
+        this.webClient = webClient.build();
     }
 
     @Override
@@ -156,8 +159,9 @@ public class OrderServiceImpl implements OrderService {
 
         lockStock(orderItemList);
 
-        // TODO: it's synchronous call to coupon service, assume the accepted discount amount is correct.
-        // couponDiscount = couponDiscount == couponservice.checkcoupon(coupon)? couponDiscount : 0;
+        // synchronous call to coupon service, assume the accepted discount amount is incorrect.
+        double checkedDiscount = checkCouponDiscountFromSms(couponCode, userId);
+        couponDiscount = couponDiscount == checkedDiscount ? couponDiscount : 0;
 
         // check shipping cost, $50 or more get free shipping or $15
         // TODO: calculate shipping cost from UPS API, currently just fixed rate
@@ -170,6 +174,11 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setOrderSn(orderSn);
         newOrder.setStatus(0);   // waiting for payment
         newOrder.setTotalAmount(BigDecimal.valueOf(orderTotal));
+        newOrder.setMemberId(userId);
+
+        newOrder.setReceiverName(address.getReceiverName());
+        newOrder.setReceiverDetailAddress(address.getDetailAddress());
+
         ordersMapper.insert(newOrder);
 
         int newOrderId = newOrder.getId();
@@ -213,9 +222,37 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    private double checkCouponDiscountFromSms(String couponCode, int userId) {
+        String url = SMS_SERVICE_URL + "/check?couponCode=" + couponCode;
+        LOG.debug("Will call the list API on URL: {}", url);
+
+        // Define the timeout in milliseconds
+        int timeoutMilliseconds = 200; // 0.2 second
+
+        double discountAmount = 0;
+
+        try {
+            // Make a synchronous HTTP GET request with a timeout to the coupon service
+            Mono<Double> discountMono = webClient.get()
+                    .uri(url)
+                    .header("X-UserId", String.valueOf(userId))
+                    .retrieve()
+                    .onStatus(httpStatus -> httpStatus.is5xxServerError(),
+                            clientResponse -> Mono.error(new RuntimeException("Server error")))
+                    .bodyToMono(Double.class)
+                    .timeout(Duration.ofMillis(timeoutMilliseconds));
+
+            discountAmount = discountMono.blockOptional().orElse(0.0);
+        } catch (Exception e) {
+            // Handle errors, including timeouts, here
+            discountAmount = 0;
+        }
+
+        return discountAmount;
+    }
+
     @Override
     public Mono<Orders> paySuccess(String orderSn, String paymentId, String payerId) {
-
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
@@ -283,7 +320,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void payFail(String orderSn) {
-
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
         Orders newOrder = ordersMapper.selectByExample(ordersExample).get(0);
