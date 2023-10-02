@@ -106,18 +106,18 @@
             <columnOverride column="return_request_id" javaType="java.lang.Integer" />
         </table>
 
-        <table tableName= "product">
+        <table tableName="product">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
         </table>
 
-        <table tableName= "product_sku">
+        <table tableName="product_sku">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
         </table>
 
-        <table tableName= "address">
+        <table tableName="address">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />

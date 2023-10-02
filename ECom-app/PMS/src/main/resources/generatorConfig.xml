@@ -44,6 +44,16 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
         </table>
+
+        <table tableName= "brand_update_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="brand_id" javaType="java.lang.Integer" />
+        </table>
+
+
+
+
         <table tableName= "product_category">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
@@ -118,5 +128,10 @@
             <columnOverride column="review_id" javaType="java.lang.Integer" />
         </table>
 
+        <table tableName= "review_update_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="review_id" javaType="java.lang.Integer" />
+        </table>
     </context>
 </generatorConfiguration>

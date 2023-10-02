@@ -36,7 +36,7 @@ The .env file stores login infos for easier change. Gets read in during run time
 ```
 First split ECom-app into 5 parts with rabbit mq, gateway and eureka in docker.
 
-![alt text](./document/Untitled%20Diagram.drawio.png)
+![alt text](./document/ECom-microservice.png)
 
 Then to kubernetes.
 
@@ -50,7 +50,6 @@ Since using Postgres, there's no support for non-blocking programming model, wil
 psudo non-blocking. Default is 10 threads, but I changed to 2 threads per service due to my 6 core CPU.  Using a thread pool
 for the blocking code avoids draining the available threads in the microservice(avoid affecting the non-blocking processing
 in the microservice).
-
 
 Tried separating mbg to another module but kept having problem with it. Either maven or IntelliJ error. Right now it's 
 kept together and will separate it later.
@@ -142,18 +141,25 @@ minikube
 IntelliJ plugin
 - MyBatisCodeHelperPro 3.1.8 (highly needed when writing dao.xml)
 
-
 Mongo and Redis wasn't being used yet.
 
+App - aggregated service for all 5 services, authentication with Auth server and communicate via jwt token. stateless.
+
+Auth server - local authentication server, will implement Oauth2.0 + OIDC later on.
+
+Admin - admin service with all service functions plus admin exclusive functions. All administrative task implementation is on the service itself.
+
+Search - import data from PMS for quick search and store user search history in MongoDB.
 
 Product management system(PMS) - manage their product catalog, including product data, pricing, and inventory.
 - product
 - brand
+- review
 
 Order management system(OMS) -  manage their order processing, inventory, shipping, and other fulfillment-related tasks.
 - order management
 - return/refund
-- shipping
+- shopping cart
 
 Sales management system(SMS) - manage their sales processes, including lead generation, customer relationship management, and sales analytics.
 - sales
@@ -186,11 +192,11 @@ User management system(UMS) - manage user accounts and permissions, including au
 
 1. add product -> cart,cart items
 
-2. cart items -> checkout -> generate cconfirmed order
+2. cart items -> checkout -> generate order
 
 3. (will ask for login if your e-commerce requires, this ECom requires)
 
-4. geneated (actual) order ->
+4. generated (actual) order ->
    calculate final price(coupon, promotion, sale), check stock, lock in stock, shipping
    -> send price to PayPal -> PayPal send customer to their paypal page -> (this part not done by us)
    they choose their payment and agreed amount to pay to PayPal -> PayPal send us pay proof they paid to PayPal,

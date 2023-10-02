@@ -4,13 +4,27 @@
 
 DROP TABLE IF EXISTS brand;
 CREATE TABLE brand
-  (
-     id SERIAL PRIMARY KEY,
-     name     TEXT,
-     alphabet TEXT,
-     status   TEXT DEFAULT 'active',
-     logo     TEXT
-  );
+(
+    id SERIAL PRIMARY KEY,
+    name     TEXT,
+    alphabet TEXT,
+    status   TEXT DEFAULT 'active',
+    logo     TEXT
+);
+
+
+DROP TABLE IF EXISTS brand_update_log;
+CREATE TABLE brand_update_log
+(
+    id SERIAL PRIMARY KEY,
+    brand_id   NUMERIC,
+    update_action TEXT,
+    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    operator     TEXT
+);
+
+
+
 
 -- phone/computer/electronic brand
 INSERT INTO brand(name, alphabet, logo, status) VALUES
@@ -1175,8 +1189,15 @@ VALUES
 (10, 'https://i.imgur.com/LUszOiA.jpeg');
 
 
-
-
+DROP TABLE IF EXISTS review_update_log;
+CREATE TABLE review_update_log
+(
+    id SERIAL PRIMARY KEY,
+    review_id  NUMERIC,
+    update_action TEXT,
+    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    operator     TEXT
+);
 
 -------------------------------
 ---------- UMS ----------------

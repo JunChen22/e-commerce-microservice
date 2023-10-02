@@ -424,7 +424,7 @@ public class OrderServiceImpl implements OrderService {
     private String generateOrderSn() {
         StringBuilder sb = new StringBuilder();
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        //String key = REDIS_DATABASE+":"+ REDIS_KEY_ORDER_ID + date;
+        //String key = REDIS_DATABASE + ":"+ REDIS_KEY_ORDER_ID + date;
         //Long increment = redisService.incr(key, 1);
         sb.append(date);
         sb.append("A BETTER WAY TO GENERATE SN");
@@ -544,7 +544,6 @@ public class OrderServiceImpl implements OrderService {
         List<Orders> orderCompletedOrder = ordersMapper.selectByExample(example);
         return Flux.fromIterable(orderCompletedOrder);
     }
-
 
     @Override
     public Flux<Orders> getUserOrders(int memberId) {

@@ -43,6 +43,13 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
         </table>
+
+        <table tableName= "brand_update_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="brand_id" javaType="java.lang.Integer" />
+        </table>
+
         <table tableName= "product_category">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
@@ -70,27 +77,6 @@
             <columnOverride column="product_id" javaType="java.lang.Integer" />
         </table>
 
-        <table tableName= "review">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="product_id" javaType="java.lang.Integer" />
-            <columnOverride column="member_id" javaType="java.lang.Integer" />
-        </table>
-
-
-        <table tableName= "review_album">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="review_id" javaType="java.lang.Integer" />
-        </table>
-
-
-        <table tableName= "review_pictures">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="review_id" javaType="java.lang.Integer" />
-        </table>
-
         <table tableName= "product_update_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
@@ -110,11 +96,35 @@
             <columnOverride column="product_id" javaType="java.lang.Integer" />
         </table>
 
-
         <table tableName= "product_sku">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
+        </table>
+
+        <table tableName= "review">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="member_id" javaType="java.lang.Integer" />
+        </table>
+
+        <table tableName= "review_album">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="review_id" javaType="java.lang.Integer" />
+        </table>
+
+        <table tableName= "review_pictures">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="review_id" javaType="java.lang.Integer" />
+        </table>
+
+        <table tableName= "review_update_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="review_id" javaType="java.lang.Integer" />
         </table>
 
         <!--  UMS -->
