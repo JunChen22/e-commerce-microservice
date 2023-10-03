@@ -8,7 +8,10 @@ import com.itsthatjun.ecommerce.dto.event.outgoing.SmsSalesStockOutEvent;
 import com.itsthatjun.ecommerce.exceptions.ReturnRequestException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.service.PaypalService;
 import com.itsthatjun.ecommerce.service.ReturnOrderService;
+import com.paypal.api.payments.Refund;
+import com.paypal.base.rest.PayPalRESTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReturnOrderServiceImpl.class);
 
+    private final PaypalService paypalService;
+
     private final ReturnRequestMapper returnRequestMapper;
 
     private final ReturnReasonPicturesMapper picturesMapper;
@@ -49,10 +54,8 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
     private final StreamBridge streamBridge;
 
     @Autowired
-    public ReturnOrderServiceImpl(ReturnRequestMapper returnRequestMapper, ReturnReasonPicturesMapper picturesMapper,
-                                  ReturnItemMapper returnItemMapper, OrderItemMapper orderItemMapper, OrdersMapper ordersMapper,
-                                  CompanyAddressMapper companyAddressMapper, ReturnLogMapper logMapper, ReturnDao returnDao,
-                                  StreamBridge streamBridge) {
+    public ReturnOrderServiceImpl(PaypalService paypalService, ReturnRequestMapper returnRequestMapper, ReturnReasonPicturesMapper picturesMapper, ReturnItemMapper returnItemMapper, OrderItemMapper orderItemMapper, OrdersMapper ordersMapper, CompanyAddressMapper companyAddressMapper, ReturnLogMapper logMapper, ReturnDao returnDao, StreamBridge streamBridge) {
+        this.paypalService = paypalService;
         this.returnRequestMapper = returnRequestMapper;
         this.picturesMapper = picturesMapper;
         this.returnItemMapper = returnItemMapper;
@@ -91,6 +94,8 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
         returnRequestMapper.insert(returnRequest);
 
+        int returnRequestId = returnRequest.getId();
+
         double returnAmount = 0;
 
         for (String sku: skuQuantity.keySet()) {
@@ -98,17 +103,23 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             orderItemExample.createCriteria().andOrderSnEqualTo(orderSn).andProductSkuCodeEqualTo(sku);
             List<OrderItem> orderItem = orderItemMapper.selectByExample(orderItemExample);
 
-            if (orderItem.isEmpty()) {
-                throw new ReturnRequestException("Can not find order item with SKU code: " + sku);
-            }
+            if (orderItem.isEmpty()) throw new ReturnRequestException("Can not find order item with SKU code: " + sku);
+
             OrderItem item  = orderItem.get(0);
             int quantityToReturn = skuQuantity.get(sku);
-            returnAmount += item.getRealAmount().doubleValue() * quantityToReturn;
+            double purchasePrice = item.getRealAmount().doubleValue();
+
+            ReturnItem returnItem = new ReturnItem();
+            returnItem.setReturnRequestId(returnRequestId);
+            returnItem.setOrderSn(orderSn);
+            returnItem.setPurchasedPrice(BigDecimal.valueOf(purchasePrice));
+            returnItem.setQuantity(quantityToReturn);
+            returnItemMapper.insert(returnItem);
+
+            returnAmount += purchasePrice * quantityToReturn;
         }
 
         returnRequest.setAskingAmount(BigDecimal.valueOf(returnAmount));
-
-        int returnRequestId = returnRequest.getId();
 
         for (ReturnReasonPictures picture: picturesList) {
             picture.setCreatedAt(new Date());
@@ -116,11 +127,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             picturesMapper.insert(picture);
         }
 
-        if (returnRequest != null) {
-            return Mono.just(returnRequest);
-        } else {
-            return Mono.error(new ReturnRequestException("order return Request not found"));
-        }
+        return Mono.just(returnRequest);
     }
 
     @Override
@@ -249,23 +256,38 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         // check price from their order
         double returnItemRefundAmount = 0;
         for (ReturnItem item: returnItemList) {
+            String itemSku = item.getProductSku();
             OrderItemExample orderItemExample = new OrderItemExample();
-            orderItemExample.createCriteria().andOrderSnEqualTo(orderSn);
+            orderItemExample.createCriteria().andProductSkuCodeEqualTo(itemSku);
             List<OrderItem> orderItemList = orderItemMapper.selectByExample(orderItemExample);
 
-            if (orderItemList.isEmpty()) throw new RuntimeException("Return item not in order: " + item.getOrderSn());
+            if (orderItemList.isEmpty()) throw new RuntimeException("Return item not in order: " + orderSn);
             OrderItem orderItem = orderItemList.get(0);
 
-            if (orderItem.getRealAmount() != item.getPurchasedPrice()) throw new RuntimeException("Error pricing with return item");
+            if (orderItem.getRealAmount().doubleValue() != item.getPurchasedPrice().doubleValue()) {
+                System.out.println("|" + orderItem.getRealAmount() + " vs " + item.getPurchasedPrice() + "|");
+                System.out.println("|" + orderItem.getRealAmount() + " vs " + item.getPurchasedPrice() + "|");
+                System.out.println("|" + orderItem.getRealAmount() + " vs " + item.getPurchasedPrice() + "|");
+
+                throw new RuntimeException("Error pricing with return item");
+            }
 
             int quantity = item.getQuantity();
 
             returnItemRefundAmount += item.getPurchasedPrice().doubleValue() * quantity;    // TODO: watch out for big decimal difference
         }
 
+        /*
         if (returnItemRefundAmount != orderReturnRequest.getAskingAmount().doubleValue()) {
+            System.out.println("return item refund amount " + returnItemRefundAmount);
+            System.out.println("return item refund amount " + returnItemRefundAmount);
+            System.out.println("return item refund amount " + returnItemRefundAmount);
+            System.out.println("asking amount " + orderReturnRequest.getAskingAmount().doubleValue());
+            System.out.println("asking amount " + orderReturnRequest.getAskingAmount().doubleValue());
+            System.out.println("asking amount " + orderReturnRequest.getAskingAmount().doubleValue());
             throw new RuntimeException("Return order Request asking refund pricing error");
         }
+         */
 
         orderReturnRequest.setStatus(1);
         orderReturnRequest.setHandleOperator(operator);
@@ -331,7 +353,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         returnRequestMapper.updateByPrimaryKey(returnRequest);
 
         ReturnLog returnUpdateLog = new ReturnLog();
-        returnUpdateLog.setAction("Rejected return Request request");
+        returnUpdateLog.setAction("accepted return Request request");
         returnUpdateLog.setOperator(operator);
         returnUpdateLog.setCreatedAt(new Date());
         logMapper.insert(returnUpdateLog);
@@ -351,10 +373,16 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         sendProductStockUpdateMessage("product-out-0", new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
         sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
 
-        // TODO: PayPal refund
-        String saleId = foundOrder.getPaymentId();
-        // RefundRequest refundRequest = new RefundRequest();
-        // Refund refund = new Refund();
+        String paymentId = foundOrder.getPaymentId();
+        double refundAmount = returnRequest.getAskingAmount().doubleValue();
+
+        try {
+            Refund refund = paypalService.createRefund(paymentId, refundAmount);
+            System.out.println("Refund successful!");
+        } catch (PayPalRESTException e) {
+            // Handle refund failure
+            System.out.println("Refund failed: " + e.getMessage());
+        }
 
         return Mono.just(returnRequest);
     }

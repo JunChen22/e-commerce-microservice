@@ -1618,7 +1618,7 @@ CREATE TABLE order_item (
 	promotion_name VARCHAR(200) DEFAULT NULL,
 	promotion_amount NUMERIC(10,2) DEFAULT NULL,
 	coupon_amount NUMERIC(10,2) DEFAULT NULL,               -- the coupon that applied to the product will have it if not just 0
-	real_amount NUMERIC(10,2) DEFAULT NULL
+	real_amount NUMERIC(10,2) DEFAULT NULL      -- final paying price after sale and coupon.
 );
 
 INSERT INTO

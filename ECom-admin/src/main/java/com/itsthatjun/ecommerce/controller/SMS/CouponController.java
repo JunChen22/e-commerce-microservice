@@ -39,7 +39,7 @@ public class CouponController {
 
     private final Scheduler publishEventScheduler;
 
-    private final String SMS_SERVICE_URL = "http://sms/coupon";
+    private final String SMS_SERVICE_URL = "http://sms:8080/coupon";
 
     @Autowired
     public CouponController(WebClient.Builder webClient, StreamBridge streamBridge,

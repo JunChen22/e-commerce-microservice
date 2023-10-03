@@ -13,7 +13,6 @@ import java.util.Map;
 @Configuration
 public class PaypalConfig {
 
-
     @Value("${paypal.client.id}")
     private String clientId;
 

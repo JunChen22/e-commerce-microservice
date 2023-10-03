@@ -92,7 +92,7 @@ public class OrderAggregate {
 
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
-    public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request){
+    public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam, HttpServletRequest request){
 
         // TODO: might cause error with gateway
         String successUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_SUCCESS_URL;
@@ -110,10 +110,9 @@ public class OrderAggregate {
 
     @GetMapping("/payment/success")
     @ApiOperation("after success paypal payment, actual processing the order , unlock stocks and update info's like coupon and stocks")
-    public Mono<String> successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId,
-                             @RequestParam String orderSn){
+    public Mono<String> successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId){
         return Mono.fromCallable(() -> {
-            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_SUCCESS, orderSn, paymentId, payerId));
+            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_SUCCESS, "", paymentId, payerId));
             return "payment success";
         }).subscribeOn(publishEventScheduler);
     }

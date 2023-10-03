@@ -37,7 +37,7 @@ public class PromotionController {
 
     private final Scheduler publishEventScheduler;
 
-    private final String SMS_SERVICE_URL = "http://sms/sale";
+    private final String SMS_SERVICE_URL = "http://sms:8080/sale";
 
     @Autowired
     public PromotionController(WebClient.Builder webClient, StreamBridge streamBridge,

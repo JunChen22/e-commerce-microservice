@@ -37,7 +37,7 @@ public class OrderReturnController {
 
     private final Scheduler publishEventScheduler;
 
-    private final String OMS_SERVICE_URL = "http://oms/order/return";
+    private final String OMS_SERVICE_URL = "http://oms:8080/order/return";
 
     @Autowired
     public OrderReturnController(WebClient.Builder webClient, StreamBridge streamBridge,
@@ -51,7 +51,7 @@ public class OrderReturnController {
     @ApiOperation(value = "list all return request open waiting to be approved")
     public Flux<ReturnRequest> listAllOpening(){
 
-        String url = OMS_SERVICE_URL + "/order/return/admin/AllOpening";
+        String url = OMS_SERVICE_URL + "/admin/AllOpening";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -60,7 +60,7 @@ public class OrderReturnController {
     @GetMapping("/AllReturning")
     @ApiOperation(value = "List all returns that are on their way")
     public Flux<ReturnRequest> listReturning(){
-        String url = OMS_SERVICE_URL + "/order/return/admin/AllReturning";
+        String url = OMS_SERVICE_URL + "/admin/AllReturning";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -69,7 +69,7 @@ public class OrderReturnController {
     @GetMapping("/AllCompleted")
     @ApiOperation(value = "List ALl completed returns")
     public Flux<ReturnRequest> listAllCompleted(){
-        String url = OMS_SERVICE_URL + "/order/return/admin/AllCompleted";
+        String url = OMS_SERVICE_URL + "admin/AllCompleted";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -78,7 +78,7 @@ public class OrderReturnController {
     @GetMapping("/AllRejected")
     @ApiOperation(value = "List All rejected returns requests")
     public Flux<ReturnRequest> listAllRejected(){
-        String url = OMS_SERVICE_URL + "/order/return/admin/AllRejected";
+        String url = OMS_SERVICE_URL + "/admin/AllRejected";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -87,7 +87,7 @@ public class OrderReturnController {
     @GetMapping("/{serialNumber}")
     @ApiOperation(value = "return a return request detail")
     public Mono<ReturnRequest> getReturnRequest(@PathVariable String serialNumber){
-        String url = OMS_SERVICE_URL + "/order/return/admin/" + serialNumber;
+        String url = OMS_SERVICE_URL + "/admin/" + serialNumber;
 
         return webClient.get().uri(url).retrieve().bodyToMono(ReturnRequest.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
@@ -98,6 +98,8 @@ public class OrderReturnController {
     public void updateReturnOrderStatus(@RequestBody ReturnRequestDecision returnRequestDecision, HttpSession session){
         String operator = (String) session.getAttribute("adminName");
 
+        System.out.println("=============================");
+        System.out.println(returnRequestDecision);
         OmsAdminOrderReturnEvent event;
 
         switch (returnRequestDecision.getStatus()) {

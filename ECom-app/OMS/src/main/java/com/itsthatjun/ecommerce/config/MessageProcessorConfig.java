@@ -94,6 +94,8 @@ public class MessageProcessorConfig {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
+
+            System.out.println("==================================================================================");
             String orderSn = event.getReturnRequest().getOrderSn();
             int userId = event.getUserId();
 
@@ -158,7 +160,7 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case PAYMENT_SUCCESS:
-                    orderService.paySuccess(event.getOrderSN(), event.getPaymentId(), event.getPayerId());
+                    orderService.paySuccess(event.getPaymentId(), event.getPayerId());
                     break;
 
                 case PAYMENT_FAILURE:

@@ -35,7 +35,7 @@ public class ArticleController {
 
     private final Scheduler publishEventScheduler;
 
-    private final String CMS_SERVICE_URL = "http://cms/article";
+    private final String CMS_SERVICE_URL = "http://cms:8080/article";
 
     @Autowired
     public ArticleController(WebClient.Builder webClient, StreamBridge streamBridge,

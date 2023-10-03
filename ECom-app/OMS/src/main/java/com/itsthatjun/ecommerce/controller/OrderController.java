@@ -60,9 +60,6 @@ public class OrderController {
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
     public Mono<Orders> generateOrder(@RequestBody OrderParam orderParam , HttpServletRequest request, HttpSession session, @RequestParam int userId){
-        session.setAttribute("shippingAddress", orderParam.getAddress());
-        session.setAttribute("couponCode", orderParam.getCoupon());
-
         String cancelUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_CANCEL_URL;
         String successUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_SUCCESS_URL;
 
@@ -72,7 +69,7 @@ public class OrderController {
     @GetMapping("/success")
     @ApiOperation("after success paypal payment, actual processing the order , unlock stocks and update info's like coupon and stocks")
     public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam String orderSn){
-        orderService.paySuccess(orderSn, paymentId, payerId);
+        orderService.paySuccess(paymentId, payerId);
         return "redirect:/";
     }
 

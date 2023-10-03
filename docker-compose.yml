@@ -296,15 +296,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
     depends_on:
-      CMS-db:
-        condition: service_healthy
-      OMS-db:
-        condition: service_healthy
-      PMS-db:
-        condition: service_healthy
-      SMS-db:
-        condition: service_healthy
-      UMS-db:
+      postgres:
         condition: service_healthy
 
   gateway:

@@ -67,7 +67,7 @@ public class ReturnAggregate {
         int userId = userContext.getUserId();
 
         return Mono.fromCallable(() -> {
-            sendMessage("return-out-0", new OmsReturnEvent(APPLY, userId, null, returnParam));
+            sendMessage("return-out-0", new OmsReturnEvent(APPLY, userId, returnParam.getReturnRequest(), returnParam));
             return returnParam;
         }).subscribeOn(publishEventScheduler);
     }

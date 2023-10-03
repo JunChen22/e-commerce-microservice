@@ -36,7 +36,7 @@ public class UserController {
 
     private final Scheduler publishEventScheduler;
 
-    private final String UMS_SERVICE_URL = "http://ums/user";
+    private final String UMS_SERVICE_URL = "http://ums:8080/user";
 
     @Autowired
     public UserController(WebClient.Builder webClient, StreamBridge streamBridge,

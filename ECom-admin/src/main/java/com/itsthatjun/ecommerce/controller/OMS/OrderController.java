@@ -36,7 +36,7 @@ public class OrderController {
 
     private final Scheduler publishEventScheduler;
 
-    private final String OMS_SERVICE_URL = "http://oms/order";
+    private final String OMS_SERVICE_URL = "http://oms:8080/order";
 
     @Autowired
     public OrderController(WebClient.Builder webClient, StreamBridge streamBridge,

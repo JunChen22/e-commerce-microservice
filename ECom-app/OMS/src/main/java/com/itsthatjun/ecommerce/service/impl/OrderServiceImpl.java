@@ -16,6 +16,7 @@ import com.itsthatjun.ecommerce.service.OrderService;
 import com.itsthatjun.ecommerce.service.PaypalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
+import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,6 +141,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setProductName(product.getName());
             orderItem.setProductQuantity(quantity);
             orderItem.setProductSkuCode(productSku);
+            orderItem.setRealAmount(productSkuStock.getPromotionPrice());
 
             orderTotal += productSkuStock.getPromotionPrice().doubleValue() * quantity;
             orderItemList.add(orderItem);
@@ -154,6 +156,7 @@ public class OrderServiceImpl implements OrderService {
 
         // verify price difference
         if (orderTotal != orderParam.getAmount()) {
+            System.out.println(orderTotal);
             throw new OrderException("Pricing error");
         }
 
@@ -252,11 +255,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Orders> paySuccess(String orderSn, String paymentId, String payerId) {
+    public Mono<Orders> paySuccess(String paymentId, String payerId) {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
+
             if(payment.getState().equals("approved")){
                 System.out.println("successful payment");
+
+                Transaction transaction = payment.getTransactions().get(0);
+                String saleId = transaction.getRelatedResources().get(0).getSale().getId();
+                String orderSn = transaction.getCustom();
 
                 // find and update the order, status, payment info
                 OrdersExample ordersExample = new OrdersExample();
@@ -264,7 +272,7 @@ public class OrderServiceImpl implements OrderService {
                 Orders foundOrder = ordersMapper.selectByExample(ordersExample).get(0);
 
                 foundOrder.setStatus(1);  // waiting for payment 0 , fulfilling 1,
-                foundOrder.setPaymentId(paymentId);
+                foundOrder.setPaymentId(saleId);
                 foundOrder.setPayerId(payerId);
                 foundOrder.setPayAmount(foundOrder.getTotalAmount());
 
@@ -320,6 +328,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void payFail(String orderSn) {
+        // TODO: delete from users latest order and cancel it?
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
         Orders newOrder = ordersMapper.selectByExample(ordersExample).get(0);

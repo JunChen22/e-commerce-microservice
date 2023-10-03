@@ -72,15 +72,19 @@ public class PaypalService {
         return payment.execute(apiContext, paymentExecute);
     }
 
-    // TODO: create refund for return service after complete
-    public Refund createRefund() {
-        RefundDetail refundDetail = new RefundDetail();
-        Refund refund = new Refund();
-        RefundRequest refundRequest = new RefundRequest();
-        return null;
-    }
+    public Refund createRefund(String saleId, double amount) throws PayPalRESTException {
+        Sale sale = new Sale();
+        sale.setId(saleId);
 
-    public RefundDetail executeRefund() throws PayPalRESTException {
-        return  null;
+        Amount refundAmount = new Amount();
+        refundAmount.setCurrency("USD");
+        refundAmount.setTotal(String.valueOf(amount));
+
+        Refund refund = new Refund();
+        refund.setAmount(refundAmount);
+
+        // Use the Sale object and RefundRequest to initiate the refund
+        return sale.refund(apiContext, refund);
+
     }
 }

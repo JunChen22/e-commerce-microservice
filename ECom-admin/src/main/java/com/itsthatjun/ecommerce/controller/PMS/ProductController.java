@@ -37,7 +37,7 @@ public class ProductController {
 
     private final Scheduler publishEventScheduler;
 
-    private final String PMS_SERVICE_URL = "http://pms/product";
+    private final String PMS_SERVICE_URL = "http://pms:8080/product";
 
     @Autowired
     public ProductController(WebClient.Builder webClient, StreamBridge streamBridge,

@@ -25,7 +25,7 @@ public class CouponHistoryController {
 
     private final WebClient webClient;
 
-    private final String SMS_SERVICE_URL = "http://sms/coupon/history";
+    private final String SMS_SERVICE_URL = "http://sms:8080/coupon/history";
 
     @Autowired
     public CouponHistoryController(WebClient.Builder webClient) {

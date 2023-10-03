@@ -27,7 +27,7 @@ public interface OrderService {
 
     @Transactional
     @ApiOperation("payment successful, redirected from paypal")
-    Mono<Orders> paySuccess(String orderSn, String paymentId, String payerId);
+    Mono<Orders> paySuccess(String paymentId, String payerId);
 
     @ApiOperation("payment unsuccessful, redirected from paypal")
     void payFail(String orderSN);
