@@ -1553,7 +1553,7 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
    pay_amount NUMERIC(10,2),
    pay_type INTEGER,              -- credit card -> 0, paypal -> 1, google pay -> 2
    source_type INTEGER,           -- pc -> 0 , mobile -> 1
-   status INTEGER DEFAULT 0,                -- waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid/cancel 5
+   status INTEGER DEFAULT 0,                -- waiting for payment 0 , fulfilling(paid) 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid/cancel 5
    delivery_company VARCHAR(64),
    delivery_tracking_number VARCHAR(64),
    receiver_phone VARCHAR(32),
@@ -1562,7 +1562,7 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
    receiver_city VARCHAR(32),
    receiver_state VARCHAR(32),
    receiver_zip_code VARCHAR(32),
-   payment_id VARCHAR(32),
+   payment_id VARCHAR(32),                  -- store sale id if transaction complete for refund later, or token for pay later
    payer_id VARCHAR(32),
    payment_time TIMESTAMP,                  --
    delivery_time TIMESTAMP,                 -- TBD by UPS api/label and added in

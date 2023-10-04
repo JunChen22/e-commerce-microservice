@@ -8,6 +8,8 @@
     <context id="PostgresContext" targetRuntime="MyBatis3" defaultModelType="flat">
         <!--newly generated mapper will update existing one-->
         <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <!-- add serializable to all the generator model. for redis if needed.-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
         <!-- congifuration for generated code comments, default is false ,generic comment -->
         <commentGenerator>
             <property name="suppressAllComments" value="true"/>

@@ -40,6 +40,10 @@ spring:
     username: guest
     password: guest
     publisher-confirms: true
+  redis:
+    host: localhost
+    database: 0
+    port: 6379
 
 # message queue related
 spring.rabbitmq:
@@ -107,6 +111,9 @@ spring:
     port: 5672
     virtual-host: /
     addresses: rabbitmq:5672
+  redis:
+    host: redis
+    port: 6379
 
 app:
   eureka-server: eureka

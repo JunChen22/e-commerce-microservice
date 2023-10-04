@@ -1,8 +1,9 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ReturnLog {
+public class ReturnLog implements Serializable {
     private Integer id;
 
     private Integer returnRequestId;
@@ -12,6 +13,8 @@ public class ReturnLog {
     private String operator;
 
     private Date createdAt;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;

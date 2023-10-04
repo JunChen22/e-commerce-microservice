@@ -8,10 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static java.util.logging.Level.FINE;
 import static reactor.core.publisher.Flux.empty;
@@ -32,21 +35,31 @@ public class ProductAggregate {
         this.webClient = webClient.build();
     }
 
-    @GetMapping("/listAll")
-    @ApiOperation(value = "Get all product")
-    public Flux<Product> listAllProduct(){
-        String url = PMS_SERVICE_URL + "/listAll";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
-    }
-
     @GetMapping("/{id}")
     @ApiOperation(value = "Get product by id")
     public Mono<Product> listProduct(@PathVariable int id){
         String url = PMS_SERVICE_URL + "/" + id;
         return webClient.get().uri(url).retrieve().bodyToMono(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
+    }
+
+    @GetMapping("/listAll")
+    @Cacheable(value = "productsCache", key = "'listAllProduct'")
+    @ApiOperation(value = "Get all product")
+    public List<Product> listAllProduct() {
+        String url = PMS_SERVICE_URL + "/listAll";
+
+        Flux<Product> productFlux = webClient.get().uri(url)
+                .retrieve()
+                .bodyToFlux(Product.class)
+                .log(LOG.getName(), FINE)
+                .onErrorResume(error -> Flux.empty());
+
+        // Collect the elements of the Flux into a List
+        List<Product> productList = productFlux.collectList().block();
+
+        // Return the List<Product>
+        return productList;
     }
 
     @GetMapping("/list")

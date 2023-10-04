@@ -93,8 +93,6 @@ public class OrderAggregate {
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
     public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam, HttpServletRequest request){
-
-        // TODO: might cause error with gateway
         String successUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_SUCCESS_URL;
         String cancelUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_CANCEL_URL;
 
@@ -117,11 +115,17 @@ public class OrderAggregate {
         }).subscribeOn(publishEventScheduler);
     }
 
-    @GetMapping("/payment/cancel")
+    @GetMapping("/payment/cancel/{orderSn}")
     @ApiOperation("Payment failure feedback")
-    public Mono<String> payFail(@RequestParam String orderSn) {
+    public Mono<String> payFail(@PathVariable String orderSn, @RequestParam("token") String token) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserContext userContext = (UserContext) authentication.getPrincipal();
+        int userId = userContext.getUserId();
+
+        System.out.println("my new order sn is " + orderSn);
+        System.out.println("my token associated is " + token);
         return Mono.fromCallable(() -> {
-            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_FAILURE, "", "", ""));
+            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_FAILURE, orderSn, "", ""));
             return "payment fail";
         }).subscribeOn(publishEventScheduler);
     }

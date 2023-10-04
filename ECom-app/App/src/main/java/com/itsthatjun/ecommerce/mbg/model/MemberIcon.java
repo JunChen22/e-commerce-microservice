@@ -1,11 +1,15 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-public class MemberIcon {
+import java.io.Serializable;
+
+public class MemberIcon implements Serializable {
     private Integer id;
 
     private Integer memberId;
 
     private String filename;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;

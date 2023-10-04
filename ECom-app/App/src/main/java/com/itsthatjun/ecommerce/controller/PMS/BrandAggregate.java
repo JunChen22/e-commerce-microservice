@@ -9,10 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.health.Health;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static java.util.logging.Level.FINE;
 import static reactor.core.publisher.Flux.empty;
@@ -32,35 +35,51 @@ public class BrandAggregate {
     public BrandAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
         this.webClient = webClient.build();
     }
+
     @GetMapping("/listAll")
+    @Cacheable(value = "allBrandCache", key = "'getAllBrand'")
     @ApiOperation(value = "Get all brands")
-    public Flux<Brand> getAllBrand(){
+    public List<Brand> getAllBrand(){
         String url = PMS_SERVICE_URL + "/listAll/";
         LOG.debug("Will call the getAllBrand API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
+        Flux<Brand> brandFlux = webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+
+        List<Brand> brandList = brandFlux.collectList().block();
+
+        return brandList;
     }
 
     @GetMapping("/list")
+    @Cacheable(value = "allBrandCachePage", key = "'getAllBrand'")
     @ApiOperation(value = "Get brands with page and size")
-    public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+    public List<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize){
         String url = PMS_SERVICE_URL + "/list/" + "?pageNum=" + pageNum + "&pageSize=" + pageSize;
         LOG.debug("Will call the getAllBrand API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
+        Flux<Brand> brandFlux = webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+
+        List<Brand> brandList = brandFlux.collectList().block();
+
+        return brandList;
     }
 
     @GetMapping("/product/{brandId}")
+    @Cacheable(value = "brandProductCache", key = "'getBrandProduct'")
     @ApiOperation(value = "Get all product of this brand")
-    public Flux<Product> getBrandProduct(@PathVariable int brandId){
+    public List<Product> getBrandProduct(@PathVariable int brandId){
         String url = PMS_SERVICE_URL + "/product/" + brandId;
         LOG.debug("Will call the getBrandProduct API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
+        Flux<Product> productFlux = webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+
+        List<Product> productList = productFlux.collectList().block();
+
+        return productList;
     }
 
     @GetMapping("/{brandId}")

@@ -1,8 +1,9 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ReviewUpdateLog {
+public class ReviewUpdateLog implements Serializable {
     private Integer id;
 
     private Integer reviewId;
@@ -12,6 +13,8 @@ public class ReviewUpdateLog {
     private Date updatedAt;
 
     private String operator;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
