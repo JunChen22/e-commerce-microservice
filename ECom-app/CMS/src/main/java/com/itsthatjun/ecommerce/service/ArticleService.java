@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 public interface ArticleService {
 
     @ApiOperation(value = "get all articles")
@@ -14,11 +16,11 @@ public interface ArticleService {
     Mono<ArticleInfo> getArticle(int articleId);
 
     @ApiOperation(value = "create article")
-    void createArticle(ArticleInfo article);
+    Mono<ArticleInfo> createArticle(ArticleInfo article);
 
     @ApiOperation(value = "update/add article and its media content")
-    void updateArticle(ArticleInfo article);
+    Mono<ArticleInfo> updateArticle(ArticleInfo article);
 
     @ApiOperation(value = "delete article and all of its media content")
-    void deleteArticle(int articleId);
+    Mono<Void> deleteArticle(int articleId);
 }

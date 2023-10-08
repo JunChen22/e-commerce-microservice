@@ -1951,10 +1951,12 @@ CREATE TABLE coupon_history (
 INSERT INTO coupon_history (coupon_id, member_id, order_id, used_time, code)
 VALUES
 (1, 1, 1, '2023-04-25 08:45:00', '15OFF'),
-(2, 2, 2, '2023-03-25 08:45:00', '15OFF'),
-(3, 1, 3, '2023-02-25 08:45:00', '50OFF'),
-(1, 3, 4, '2022-01-11 10:00:00', 'FREE');
-
+(1, 2, 2, '2023-03-25 08:45:00', '15OFF'),
+(3, 3, 3, '2022-01-11 10:00:00', 'FREE'),
+(3, 1, 4, '2022-01-11 10:00:00', 'FREE'),
+(4, 1, 5, '2023-02-25 08:45:00', '50OFFAPPLE'),
+(4, 1, 6, '2023-02-25 08:45:00', '50OFFAPPLE'),
+(4, 1, 7, '2023-02-25 08:45:00', '50OFFAPPLE');
 
 DROP TABLE IF EXISTS promotion_sale;
 CREATE TABLE promotion_sale (

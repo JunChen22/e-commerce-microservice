@@ -15,7 +15,6 @@ public class OmsCartEvent {
 
     public enum Type {
         ADD_ONE,
-        ADD_ALL,
         UPDATE,
         DELETE,
         CLEAR
@@ -23,35 +22,21 @@ public class OmsCartEvent {
 
     private final Type eventType;
     private final Integer userId;
-    private final List<CartItem> cartItemList;
-    private final int quantity;
-    private final int cartItemId;
+    private final CartItem cartItem;
     private final ZonedDateTime eventCreatedAt;
 
+    // Jackson needs it, (the library used for JSON serialization/deserialization)
     public OmsCartEvent() {
         this.eventType = null;
         this.userId = null;
-        this.cartItemList = null;
-        this.quantity = 0;
-        this.cartItemId = 0;
+        this.cartItem = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsCartEvent(Type eventType, Integer userId, List<CartItem> cartItemList) {
-        this(eventType, userId, cartItemList, 1,-1);
-    }
-
-    public OmsCartEvent(Type eventType, Integer userId, List<CartItem> cartItemList, int quantity, int cartItemId) {
+    public OmsCartEvent(Type eventType, Integer userId, CartItem cartItem) {
         this.eventType = eventType;
         this.userId = userId;
-        this.cartItemList = cartItemList;
-        this.quantity = quantity;
-        this.cartItemId = cartItemId;
+        this.cartItem = cartItem;
         this.eventCreatedAt = now();
-    }
-
-    @JsonSerialize(using = ZonedDateTimeSerializer.class)
-    public ZonedDateTime getEventCreatedAt() {
-        return eventCreatedAt;
     }
 }

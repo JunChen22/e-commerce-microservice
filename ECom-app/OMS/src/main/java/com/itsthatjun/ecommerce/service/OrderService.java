@@ -30,7 +30,7 @@ public interface OrderService {
     Mono<Orders> paySuccess(String paymentId, String payerId);
 
     @ApiOperation("payment unsuccessful, redirected from paypal")
-    void payFail(String orderSN);
+    Mono<Void> payFail(String orderSN);
 
     @ApiOperation("Member cancel order")
     Mono<Orders> cancelOrder(String orderSN);
@@ -39,31 +39,23 @@ public interface OrderService {
     // timed/schedule depend on the deliver time and check UPS
     // then called to change status by redis.
     @ApiOperation("Member received deliver, update order status")
-    void confirmReceiveOrder(@PathVariable int orderId);
+    Mono<Void> confirmReceiveOrder(@PathVariable int orderId);
 
-    //  waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
-    @ApiOperation(value = "")
-    Flux<Orders> getAllWaitingForPayment();
+    @ApiOperation(value = "waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5")
+    Flux<Orders> getAllOrderByStatus(int statusCode);
 
-    @ApiOperation(value = "")
-    Flux<Orders> getAllFulfulling();
-
-    @ApiOperation(value = "")
-    Flux<Orders> getAllInSend();
-
-    @ApiOperation(value = "")
-    Flux<Orders> getAllCompleteOrder();
+    @ApiOperation(value = "get user detail order")
+    Mono<OrderDetail> getUserOrderDetail(String orderSn);
 
     @ApiOperation(value = "get all orders from user")
     Flux<Orders> getUserOrders(int memberId);
 
-    @ApiOperation(value = "Admin created order for user, to fix mistake on order"
-            +  " or order a replacement.")
+    @ApiOperation(value = "Admin created order for user, to fix mistake on order or order a replacement.")
     Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, String reason, String operator);
 
     @ApiOperation(value = "Update order status")
     Mono<Orders> updateOrder(Orders updateOrder, String reason, String operator);
 
     @ApiOperation(value = "delete an order")
-    void adminCancelOrder(Orders updateOrder, String reason, String operator);
+    Mono<Void> adminCancelOrder(Orders updateOrder, String reason, String operator);
 }

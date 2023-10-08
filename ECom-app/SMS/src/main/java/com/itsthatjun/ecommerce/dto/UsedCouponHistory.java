@@ -9,5 +9,6 @@ import java.util.List;
 @Data
 public class UsedCouponHistory {
     private Coupon coupon;
+    private int userCount;
     private List<CouponHistory> couponHistoryList;
 }

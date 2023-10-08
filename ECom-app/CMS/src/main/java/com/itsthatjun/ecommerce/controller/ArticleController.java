@@ -20,43 +20,20 @@ public class ArticleController {
 
     private final ArticleServiceImpl articleService;
 
-    private final Scheduler scheduler;
-
     @Autowired
-    public ArticleController(ArticleServiceImpl articleService,
-                             @Qualifier("scheduler") Scheduler scheduler) {
+    public ArticleController(ArticleServiceImpl articleService) {
         this.articleService = articleService;
-        this.scheduler = scheduler;
     }
 
     @GetMapping("/all")
     @ApiOperation(value = "get all articles")
     public Flux<ArticleInfo> getAllArticle() {
-        return articleService.getAllArticles().subscribeOn(scheduler);
+        return articleService.getAllArticles();
     }
 
     @GetMapping("/{articleId}")
     @ApiOperation(value = "")
     public Mono<ArticleInfo> getArticle(@PathVariable int articleId) {
-        return articleService.getArticle(articleId).subscribeOn(scheduler);
-    }
-
-    @PostMapping("/admin/create")
-    @ApiOperation(value = "create an article(buyer's guide, comparison, and etc)")
-    public void createArticle(@RequestBody ArticleInfo articles) {
-        articleService.createArticle(articles);
-    }
-
-    @PostMapping("/admin/update")
-    @ApiOperation(value = "update an article and it's content")
-    public ArticleInfo updateArticle(@RequestBody ArticleInfo articles) {
-        articleService.updateArticle(articles);
-        return articles;
-    }
-
-    @DeleteMapping("/admin/delete/{articleId}")
-    @ApiOperation(value = "delete article and it's related content(QA, videos, and images)")
-    public void deleteArticle(@PathVariable int articleId) {
-        articleService.deleteArticle(articleId);
+        return articleService.getArticle(articleId);
     }
 }

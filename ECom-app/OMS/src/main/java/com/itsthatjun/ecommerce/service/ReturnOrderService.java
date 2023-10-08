@@ -25,17 +25,8 @@ public interface ReturnOrderService {
     @ApiOperation(value = "cancel the return request")
     Mono<ReturnRequest> cancelReturn(String orderSn, int userId);
 
-    @ApiOperation(value = "")
-    Flux<ReturnRequest> getAllOpening();
-
-    @ApiOperation(value = "")
-    Flux<ReturnRequest> getAllReturning();
-
-    @ApiOperation(value = "")
-    Flux<ReturnRequest> getAllCompleted();
-
-    @ApiOperation(value = "")
-    Flux<ReturnRequest> getAllRejected();
+    @ApiOperation(value = "return request based on status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(with reason) 3")
+    Flux<ReturnRequest> getAllReturnRequest(int statusCode);
 
     @ApiOperation(value = "")
     Mono<ReturnDetail> getReturnDetail(String orderSn);

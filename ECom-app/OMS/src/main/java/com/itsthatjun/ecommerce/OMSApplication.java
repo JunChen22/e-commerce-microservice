@@ -17,14 +17,22 @@ public class OMSApplication {
     private static final Logger LOG = LoggerFactory.getLogger(OMSApplication.class);
 
     private final Integer threadPoolSize;
+
     private final Integer taskQueueSize;
 
     @Autowired
     public OMSApplication(
-            @Value("${app.threadPoolSize:5}") Integer threadPoolSize,
-            @Value("${app.taskQueueSize:100}") Integer taskQueueSize) {
+            @Value("${app.threadPoolSize:2}") Integer threadPoolSize,
+            @Value("${app.taskQueueSize:100}") Integer taskQueueSize
+    ) {
         this.threadPoolSize = threadPoolSize;
         this.taskQueueSize = taskQueueSize;
+    }
+
+    @Bean
+    public Scheduler jdbcScheduler() {
+        LOG.info("Creates a jdbcScheduler with thread pool size = {}", threadPoolSize);
+        return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "jdbc-pool");
     }
 
     public static void main(String[] args) {
@@ -32,11 +40,5 @@ public class OMSApplication {
 
         String postgresSqlURL = context.getEnvironment().getProperty("spring.datasource.url");
         LOG.info("Connected to Postgres:" + postgresSqlURL);
-    }
-
-    @Bean
-    public Scheduler jdbcScheduler() {
-        LOG.info("Creates a jdbcScheduler with thread pool size = {}", threadPoolSize);
-        return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "jdbc-pool");
     }
 }

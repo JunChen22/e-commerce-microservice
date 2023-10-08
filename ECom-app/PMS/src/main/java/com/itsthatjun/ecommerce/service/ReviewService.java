@@ -26,8 +26,6 @@ public interface ReviewService {
     @ApiOperation(value = "")
     Mono<Void> deleteReview(int reviewId, int userId);
 
-
-
     @ApiOperation(value = "Admin retrieves all reviews made one user")
     Flux<ProductReview> listAllReviewByUser(int userId);
 

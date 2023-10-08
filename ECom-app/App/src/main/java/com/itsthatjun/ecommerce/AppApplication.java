@@ -23,10 +23,6 @@ public class AppApplication {
 
     private final Integer taskQueueSize;
 
-    public static void main(String[] args) {
-        SpringApplication.run(AppApplication.class, args);
-    }
-
     @Autowired
     public AppApplication(
             @Value("${app.threadPoolSize:2}") Integer threadPoolSize,
@@ -46,5 +42,9 @@ public class AppApplication {
     @LoadBalanced                   // turn all the webclient to load balanced when sending, if there's more than one.
     public WebClient.Builder loadBalancedWebClientBuilder() {
         return WebClient.builder();
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(AppApplication.class, args);
     }
 }

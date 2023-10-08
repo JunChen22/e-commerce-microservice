@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -29,12 +30,15 @@ public class CMSApplication {
     }
 
     @Bean
-    public Scheduler scheduler() {
-        LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
-        return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
+    public Scheduler jdbcScheduler() {
+        LOG.info("Creates a jdbcScheduler with thread pool size = {}", threadPoolSize);
+        return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "jdbc-pool");
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(CMSApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(CMSApplication.class, args);
+
+        String postgresSqlURL = context.getEnvironment().getProperty("spring.datasource.url");
+        LOG.info("Connected to Postgres:" + postgresSqlURL);
     }
 }

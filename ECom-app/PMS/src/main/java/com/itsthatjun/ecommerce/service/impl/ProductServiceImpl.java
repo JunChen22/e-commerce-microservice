@@ -14,12 +14,14 @@ import com.itsthatjun.ecommerce.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -41,48 +43,62 @@ public class ProductServiceImpl implements ProductService {
 
     private final StreamBridge streamBridge;
 
+    private final Scheduler jdbcScheduler;
+
     @Autowired
     public ProductServiceImpl(ProductMapper productMapper, ProductSkuMapper skuMapper, ProductUpdateLogMapper logMapper,
-                              ProductDao dao, StreamBridge streamBridge) {
+                              ProductDao dao, StreamBridge streamBridge,
+                              @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.productMapper = productMapper;
         this.skuMapper = skuMapper;
         this.logMapper = logMapper;
         this.dao = dao;
         this.streamBridge = streamBridge;
+        this.jdbcScheduler = jdbcScheduler;
     }
 
     @Override
     public Mono<ProductDetail> getProduct(int id) {
-
-        ProductDetail productDetail = new ProductDetail();
-        Product product = productMapper.selectByPrimaryKey(id);
-
-        // productDetail.setProductAttributeList();
-        if (product != null) {
-            return Mono.just(productDetail);
-        } else {
-            return Mono.error(new ProductException("Product not found"));
-        }
+        return Mono.fromCallable(() -> {
+                    ProductDetail productDetail = new ProductDetail();
+                    Product product = productMapper.selectByPrimaryKey(id);
+                    productDetail.setProduct(product);  // TODO: set dao to get product detail
+                    return productDetail;
+                })
+                .subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Flux<Product> listAllProduct() {
-        ProductExample productExample = new ProductExample();
-        productExample.createCriteria().andPublishStatusEqualTo(1);
-        List<Product> productList =  productMapper.selectByExample(productExample);
-
-        return Flux.fromIterable(productList);
+        return Mono.fromCallable(() -> {
+                    ProductExample productExample = new ProductExample();
+                    productExample.createCriteria().andPublishStatusEqualTo(1);
+                    return productMapper.selectByExample(productExample);
+                })
+                .flatMapMany(Flux::fromIterable)
+                .subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Flux<Product> listProduct(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Product> productList = productMapper.selectByExample(new ProductExample());
-        return Flux.fromIterable(productList);
+        return Mono.fromCallable(() -> {
+                    PageHelper.startPage(pageNum, pageSize);
+                    ProductExample productExample = new ProductExample();
+                    productExample.createCriteria().andPublishStatusEqualTo(1);
+                    return productMapper.selectByExample(productExample);
+                })
+                .flatMapMany(Flux::fromIterable)
+                .subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Mono<Product> createProduct(Product newProduct, List<ProductSku> skuList) {
+        return Mono.fromCallable(
+                () -> internalCreateProduct(newProduct, skuList)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private Product internalCreateProduct(Product newProduct, List<ProductSku> skuList) {
 
         newProduct.setCreatedAt(new Date());
         productMapper.insert(newProduct);
@@ -104,12 +120,17 @@ public class ProductServiceImpl implements ProductService {
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT, newProduct, skuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT, newProduct, skuList));
 
-        return Mono.just(newProduct);
+        return newProduct;
     }
-
 
     @Override
     public Mono<Product> addProductSku(Product currentProduct, ProductSku newSKu) {
+        return Mono.fromCallable(
+                () -> internalAddProductSku(currentProduct, newSKu)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private Product internalAddProductSku(Product currentProduct, ProductSku newSKu) {
 
         int productId = currentProduct.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
@@ -148,11 +169,17 @@ public class ProductServiceImpl implements ProductService {
 
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT_SKU, currentProduct, skuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT_SKU, currentProduct, skuList));
-        return Mono.just(currentProduct);
+        return currentProduct;
     }
 
     @Override
     public Mono<Product> updateProductInfo(Product updatedProduct) {
+        return Mono.fromCallable(
+                () -> internalUpdateProductInfo(updatedProduct)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private Product internalUpdateProductInfo(Product updatedProduct) {
         // TODO: there might be category name, but that might as well create new product.
 
         int productId = updatedProduct.getId();
@@ -161,11 +188,17 @@ public class ProductServiceImpl implements ProductService {
         if (foundProduct == null) throw new ProductException("Product id does not exist : " + productId);
         productMapper.updateByPrimaryKey(updatedProduct);
 
-        return Mono.just(updatedProduct);
+        return updatedProduct;
     }
 
     @Override
     public Mono<ProductSku> updateProductStock(ProductSku sku, int addedStock) {
+        return Mono.fromCallable(
+                () -> internalUpdateProductStock(sku, addedStock)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private ProductSku internalUpdateProductStock(ProductSku sku, int addedStock) {
 
         int productId = sku.getProductId();
 
@@ -188,11 +221,17 @@ public class ProductServiceImpl implements ProductService {
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, skuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, skuList));
 
-        return Mono.just(sku);
+        return sku;
     }
 
     @Override
     public Mono<Product> updateProductPrice(List<ProductSku> productSkuList) {
+        return Mono.fromCallable(
+                () -> internalUpdateProductPrice(productSkuList)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private Product internalUpdateProductPrice(List<ProductSku> productSkuList) {
 
         double newHighestPrice = 0;
         double newLowPrice = 0;
@@ -219,11 +258,17 @@ public class ProductServiceImpl implements ProductService {
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, productSkuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, productSkuList));
 
-        return Mono.just(product);
+        return product;
     }
 
     @Override
     public Mono<Product> updateProductStatus(Product updatedProduct) {
+        return Mono.fromCallable(
+                () -> internalUpdateProductStatus(updatedProduct)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private Product internalUpdateProductStatus(Product updatedProduct) {
 
         int productId = updatedProduct.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
@@ -235,7 +280,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductSku> affectedSkuList = new ArrayList<>();
         if (currentPublishStatus == updateProductStatus) {
-            return Mono.just(updatedProduct);
+            return updatedProduct;
         }
 
         // Turning product offline and all of its sku.
@@ -258,12 +303,17 @@ public class ProductServiceImpl implements ProductService {
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, affectedSkuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, affectedSkuList));
 
-        return Mono.just(updatedProduct);
+        return updatedProduct;
     }
-
 
     @Override
     public Mono<ProductSku> updateProductSkuStatus(ProductSku updateSku) {
+        return Mono.fromCallable(
+                () -> internalUpdateProductSkuStatus(updateSku)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private ProductSku internalUpdateProductSkuStatus(ProductSku updateSku) {
 
         // find out if the product is online first
 
@@ -280,11 +330,17 @@ public class ProductServiceImpl implements ProductService {
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
 
-        return Mono.just(updateSku);
+        return updateSku;
     }
 
     @Override
     public Mono<ProductSku> removeProductSku(ProductSku removeSku) {
+        return Mono.fromCallable(
+                () -> internalRemoveProductSku(removeSku)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private ProductSku internalRemoveProductSku(ProductSku removeSku) {
 
         int productId = removeSku.getProductId();
 
@@ -309,11 +365,17 @@ public class ProductServiceImpl implements ProductService {
 
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removedSkuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removedSkuList));
-        return Mono.just(removeSku);
+        return removeSku;
     }
 
     @Override
-    public void deleteProduct(int id) {
+    public Mono<Void> deleteProduct(int id) {
+        return Mono.fromRunnable(() ->
+            internalDeleteProduct(id)
+        ).subscribeOn(jdbcScheduler).then();
+    }
+
+    public void internalDeleteProduct(int id) {
 
         Product foundProduct = productMapper.selectByPrimaryKey(id);
         foundProduct.setPublishStatus(0);

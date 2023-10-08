@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.controller.OMS;
 
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.OrderParam;
+import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderEvent;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.Api;
@@ -55,28 +56,10 @@ public class OrderController {
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
-    @GetMapping("/fulfill")
-    @ApiOperation(value = "List all orders that need to be fulfill/open")
-    public Flux<Orders> listAllFulfullingOrders(){
-        String url = OMS_SERVICE_URL + "/order/admin/fulfill";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-    }
-
-    @GetMapping("/send")
-    @ApiOperation(value = "List all orders that are send")
-    public Flux<Orders> listAllSendOrders(){
-        String url = OMS_SERVICE_URL + "/order/admin/send";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-    }
-
-    @GetMapping("/complete")
+    @GetMapping("/all")
     @ApiOperation(value = "List all orders that are delivered")
-    public Flux<Orders> listAl(){
-        String url = OMS_SERVICE_URL + "/order/admin/complete";
+    public Flux<Orders> listAllOrder(@RequestParam("statusCode") ReturnStatusCode statusCode){
+        String url = OMS_SERVICE_URL + "/order/admin/all?statusCode=" + statusCode.getCode();
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());

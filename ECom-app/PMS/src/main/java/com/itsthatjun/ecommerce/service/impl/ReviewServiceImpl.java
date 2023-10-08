@@ -5,12 +5,15 @@ import com.itsthatjun.ecommerce.exceptions.ReviewException;
 import com.itsthatjun.ecommerce.mbg.mapper.ReviewAlbumMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ReviewMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ReviewPicturesMapper;
+import com.itsthatjun.ecommerce.mbg.mapper.ReviewUpdateLogMapper;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,15 +28,30 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewPicturesMapper picturesMapper;
 
+    private final ReviewUpdateLogMapper updateLogMapper;
+
+    private final Scheduler jdbcScheduler;
+
     @Autowired
-    public ReviewServiceImpl(ReviewMapper reviewMapper, ReviewAlbumMapper albumMapper, ReviewPicturesMapper picturesMapper) {
+    public ReviewServiceImpl(ReviewMapper reviewMapper, ReviewAlbumMapper albumMapper, ReviewPicturesMapper picturesMapper,
+                             ReviewUpdateLogMapper updateLogMapper,
+                             @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.reviewMapper = reviewMapper;
         this.albumMapper = albumMapper;
         this.picturesMapper = picturesMapper;
+        this.updateLogMapper = updateLogMapper;
+        this.jdbcScheduler = jdbcScheduler;
     }
 
     @Override
     public Mono<ProductReview> getDetailReview(int reviewId) {
+        return Mono.fromCallable(() ->
+            // Offload the blocking operation to the specified scheduler
+            internalGetDetailReview(reviewId)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private ProductReview internalGetDetailReview(int reviewId) {
 
         Review review = reviewMapper.selectByPrimaryKey(reviewId);
 
@@ -54,15 +72,18 @@ public class ReviewServiceImpl implements ReviewService {
         productReview.setAlbumId(albumId);
         productReview.setPicturesList(reviewPicturesList);
 
-        if (review != null) {
-            return Mono.just(productReview);
-        } else {
-            return Mono.error(new ReviewException("Review not found"));
-        }
+        return productReview;
     }
 
     @Override
     public Flux<ProductReview> listProductAllReview(int productId) {
+        return Mono.fromCallable(() ->
+            // Offload the blocking operation to the specified scheduler
+            internalListProductAllReview(productId)
+        ).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+    }
+
+    private List<ProductReview> internalListProductAllReview(int productId) {
         ReviewExample reviewExample = new ReviewExample();
         reviewExample.createCriteria().andProductIdEqualTo(productId);
         List<Review> productReviews = reviewMapper.selectByExample(reviewExample);
@@ -70,10 +91,10 @@ public class ReviewServiceImpl implements ReviewService {
         List<ProductReview> productReviewList = new ArrayList<>();
 
         System.out.println(" review size " + productReviews.size());
-        if (productReviews.isEmpty()) return Flux.fromIterable(productReviewList);
+        if (productReviews.isEmpty()) return productReviewList;
 
         for (Review review: productReviews) {
-            // copy over infomation
+            // copy over information
             ProductReview productReview = new ProductReview();
             productReview.setReview(review);
 
@@ -88,34 +109,42 @@ public class ReviewServiceImpl implements ReviewService {
             ReviewPicturesExample reviewPicturesExample = new ReviewPicturesExample();
             reviewPicturesExample.createCriteria().andReviewAlbumIdEqualTo(albumId);
             List<ReviewPictures> reviewPicturesList = picturesMapper.selectByExample(reviewPicturesExample);
-            System.out.println("picture lsit :" + reviewPicturesList.size());
             if (reviewPicturesList.isEmpty()) {
                 productReview.setPicturesList(null);
             } else {
                 productReview.setPicturesList(reviewPicturesList);
             }
-
             productReviewList.add(productReview);
         }
-
-        return Flux.fromIterable(productReviewList);
+        return productReviewList;
     }
 
     @Override
     public Mono<Review> createReview(Review newReview, List<ReviewPictures> picturesList, int userId) {
+        return Mono.fromCallable(() ->
+            // Offload the blocking operation to the specified scheduler
+             internalCreateReview(newReview, picturesList, userId)
+        ).subscribeOn(jdbcScheduler);
+    }
 
+    public Review internalCreateReview(Review newReview, List<ReviewPictures> picturesList, int userId) {
         newReview.setCreatedAt(new Date());
+        newReview.setMemberId(userId);
         int status = reviewMapper.insert(newReview);
-
         int reviewId = newReview.getId();
-
         createAlbumAndPicture(reviewId, picturesList);
-
-        return Mono.just(newReview);
+        return newReview;
     }
 
     @Override
     public Mono<Review> updateReview(Review updatedReview, List<ReviewPictures> picturesList, int userId) {
+        return Mono.fromCallable(() ->
+            // Offload the blocking operation to the specified scheduler
+            internalUpdateReview(updatedReview, picturesList, userId)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private Review internalUpdateReview(Review updatedReview, List<ReviewPictures> picturesList, int userId) {
         ReviewExample example = new ReviewExample();
         example.createCriteria().andIdEqualTo(updatedReview.getId());
         Date currentTime = new Date();
@@ -128,14 +157,19 @@ public class ReviewServiceImpl implements ReviewService {
 
         reviewMapper.updateByExample(updatedReview, example);
 
-        return Mono.just(updatedReview);
+        return updatedReview;
     }
 
     @Override
     public Mono<Void> deleteReview(int reviewId, int userId) {
+        return Mono.fromRunnable(() ->
+                internalDeleteReview(reviewId, userId)
+        ).subscribeOn(jdbcScheduler).then();
+    }
+
+    private void internalDeleteReview(int reviewId, int userId) {
         reviewMapper.deleteByPrimaryKey(reviewId);
         deleteAlbumAndPicture(reviewId);
-        return Mono.empty();
     }
 
     private int deleteAlbumAndPicture(int reviewId) {
@@ -180,13 +214,20 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Flux<ProductReview> listAllReviewByUser(int userId) {
+        return Mono.fromCallable(() ->
+            // Offload the blocking operation to the specified scheduler
+            internalListAllReviewByUser(userId)
+        ).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+    }
+
+    private List<ProductReview> internalListAllReviewByUser(int userId) {
         ReviewExample reviewExample = new ReviewExample();
         reviewExample.createCriteria().andMemberIdEqualTo(userId);
         List<Review> reviews = reviewMapper.selectByExample(reviewExample);
 
         List<ProductReview> productReviewList = new ArrayList<>();
         if (reviews.isEmpty()) {
-            return Flux.empty();
+            return productReviewList;
         }
 
         for (Review review: reviews) {
@@ -210,22 +251,36 @@ public class ReviewServiceImpl implements ReviewService {
 
             productReviewList.add(productReview);
         }
-        return Flux.fromIterable(productReviewList);
+        return productReviewList;
     }
 
     @Override
     public Mono<Review> adminCreateReview(Review newReview, List<ReviewPictures> picturesList) {
+        return Mono.fromCallable(() ->
+            // Offload the blocking operation to the specified scheduler
+             internalAdminCreateReview(newReview, picturesList)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private Review internalAdminCreateReview(Review newReview, List<ReviewPictures> picturesList) {
         newReview.setCreatedAt(new Date());
         reviewMapper.insert(newReview);
 
         int reviewId = newReview.getId();
 
         createAlbumAndPicture(reviewId, picturesList);
-        return Mono.just(newReview);
+        return newReview;
     }
 
     @Override
     public Mono<Review> adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList) {
+        return Mono.fromCallable(() ->
+            // Offload the blocking operation to the specified scheduler
+            internalAdminUpdateReview(updatedReview, picturesList)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    private Review internalAdminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList) {
         ReviewExample example = new ReviewExample();
         example.createCriteria().andIdEqualTo(updatedReview.getId());
         Date currentTime = new Date();
@@ -237,11 +292,17 @@ public class ReviewServiceImpl implements ReviewService {
         createAlbumAndPicture(reviewId, picturesList);
 
         reviewMapper.updateByExample(updatedReview, example);
-        return Mono.just(updatedReview);
+        return updatedReview;
     }
 
     @Override
     public Mono<Void> adminDeleteReview(int reviewId) {
+        return Mono.fromRunnable(() ->
+                internalAdminDeleteReview(reviewId)
+        ).subscribeOn(jdbcScheduler).then();
+    }
+
+    private void internalAdminDeleteReview(int reviewId) {
 
         reviewMapper.deleteByPrimaryKey(reviewId);
 
@@ -260,6 +321,5 @@ public class ReviewServiceImpl implements ReviewService {
         for (ReviewPictures picture: picturesList) {
             picturesMapper.deleteByPrimaryKey(picture.getId());
         }
-        return Mono.empty();
     }
 }

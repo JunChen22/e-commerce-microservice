@@ -40,7 +40,6 @@
         <!-- without <columnOverride column="id" javaType="java.lang.Integer" /> -->
 
         <!--  UMS -->
-
         <table tableName= "member">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />

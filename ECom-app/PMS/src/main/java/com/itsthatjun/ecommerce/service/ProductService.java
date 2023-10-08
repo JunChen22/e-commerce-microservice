@@ -45,5 +45,5 @@ public interface ProductService {
     Mono<ProductSku> removeProductSku(ProductSku removeSku);
 
     @ApiOperation(value = "Delete just means status changed for archive, not actual delete from database")
-    void deleteProduct(int id); // TODO: might add a method to undelete the product and moved from archive back to offline.
+    Mono<Void> deleteProduct(int id); // TODO: might add a method to undelete the product and moved from archive back to offline.
 }

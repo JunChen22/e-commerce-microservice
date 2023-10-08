@@ -15,12 +15,14 @@ import com.paypal.base.rest.PayPalRESTException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -53,8 +55,13 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
     private final StreamBridge streamBridge;
 
+    private final Scheduler jdbcScheduler;
+
     @Autowired
-    public ReturnOrderServiceImpl(PaypalService paypalService, ReturnRequestMapper returnRequestMapper, ReturnReasonPicturesMapper picturesMapper, ReturnItemMapper returnItemMapper, OrderItemMapper orderItemMapper, OrdersMapper ordersMapper, CompanyAddressMapper companyAddressMapper, ReturnLogMapper logMapper, ReturnDao returnDao, StreamBridge streamBridge) {
+    public ReturnOrderServiceImpl(PaypalService paypalService, ReturnRequestMapper returnRequestMapper, ReturnReasonPicturesMapper picturesMapper,
+                                  ReturnItemMapper returnItemMapper, OrderItemMapper orderItemMapper, OrdersMapper ordersMapper,
+                                  CompanyAddressMapper companyAddressMapper, ReturnLogMapper logMapper, ReturnDao returnDao, StreamBridge streamBridge,
+                                  @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.paypalService = paypalService;
         this.returnRequestMapper = returnRequestMapper;
         this.picturesMapper = picturesMapper;
@@ -65,26 +72,28 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         this.logMapper = logMapper;
         this.returnDao = returnDao;
         this.streamBridge = streamBridge;
+        this.jdbcScheduler = jdbcScheduler;
     }
 
     @Override
     public Mono<ReturnRequest> getStatus(String orderSn, int userId) {
-
-        ReturnRequestExample returnRequestExample = new ReturnRequestExample();
-        returnRequestExample.createCriteria().andOrderSnEqualTo(orderSn).andMemberIdEqualTo(userId);
-        List<ReturnRequest> returnRequest = returnRequestMapper.selectByExample(returnRequestExample);
-
-        if (!returnRequest.isEmpty()) {
-            return Mono.just(returnRequest.get(0));
-        } else {
-            //return Mono.error(new ReturnRequestException("Return Request not found")); // TODO: add return exception
-            return Mono.empty();
-        }
+        return Mono.fromCallable( () -> {
+                    ReturnRequest returnRquest = getUserReturnRequest(orderSn, userId);
+                    return returnRquest;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public Mono<ReturnRequest> applyForReturn(ReturnRequest returnRequest, List<ReturnReasonPictures> picturesList, Map<String, Integer> skuQuantity,
-                                              int userId) {
+    public Mono<ReturnRequest> applyForReturn(ReturnRequest returnRequest, List<ReturnReasonPictures> picturesList,
+                                              Map<String, Integer> skuQuantity, int userId) {
+        return Mono.fromCallable(() -> {
+            ReturnRequest newReturnRequest = internalApplyForReturn(returnRequest, picturesList, skuQuantity, userId);
+            return newReturnRequest;
+        }).subscribeOn(jdbcScheduler);
+    }
+
+    private ReturnRequest internalApplyForReturn(ReturnRequest returnRequest, List<ReturnReasonPictures> picturesList,
+                                              Map<String, Integer> skuQuantity, int userId) {
 
         String orderSn = returnRequest.getOrderSn();
         returnRequest.setOrderSn(orderSn);
@@ -98,6 +107,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
         double returnAmount = 0;
 
+        // check for item validation from order and price
         for (String sku: skuQuantity.keySet()) {
             OrderItemExample orderItemExample = new OrderItemExample();
             orderItemExample.createCriteria().andOrderSnEqualTo(orderSn).andProductSkuCodeEqualTo(sku);
@@ -121,133 +131,80 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
         returnRequest.setAskingAmount(BigDecimal.valueOf(returnAmount));
 
+        // attach picture to request if any
         for (ReturnReasonPictures picture: picturesList) {
             picture.setCreatedAt(new Date());
             picture.setReturnRequestId(returnRequestId);
             picturesMapper.insert(picture);
         }
-
-        return Mono.just(returnRequest);
+        return returnRequest;
     }
 
     @Override
     public Mono<ReturnRequest> updateReturnInfo(ReturnRequest returnRequest, List<ReturnReasonPictures> picturesList, String orderSn, int userId) {
-        ReturnRequestExample orderReturnRequestExample = new ReturnRequestExample();
-        orderReturnRequestExample.createCriteria().andOrderSnEqualTo(orderSn).andMemberIdEqualTo(userId);
-        List<ReturnRequest> orderReturnRequestList = returnRequestMapper.selectByExample(orderReturnRequestExample);
+        return Mono.fromCallable(() -> {
+            ReturnRequest foundReturnRequest = getUserReturnRequest(orderSn, userId);
 
-        if (orderReturnRequestList.isEmpty()) {
-            throw new ReturnRequestException("Can't find return Request with order serial number: " + orderSn);
-        }
+            foundReturnRequest.setUpdatedAt(new Date());
 
-        ReturnRequest foundReturnRequest = orderReturnRequestList.get(0);
+            // TODO: update the info
 
-        foundReturnRequest.setUpdatedAt(new Date());
-
-        if (returnRequest != null) {
-            return Mono.just(returnRequest);
-        } else {
-            return Mono.error(new ReturnRequestException("order return Request not found"));
-        }
+            return returnRequest;
+        }).subscribeOn(jdbcScheduler);
     }
 
-    @Override
+    @Override // return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3. 4 cancel
     public Mono<ReturnRequest> cancelReturn(String orderSn, int userId) {
+        return Mono.fromCallable(() -> {
+            ReturnRequest foundReturnRequest = getUserReturnRequest(orderSn, userId);
+            foundReturnRequest.setStatus(4);
+            foundReturnRequest.setUpdatedAt(new Date());
+            returnRequestMapper.updateByPrimaryKey(foundReturnRequest);
+            return foundReturnRequest;
+        }).subscribeOn(jdbcScheduler);
+    }
 
+    private ReturnRequest getUserReturnRequest(String orderSn, int userId) {
         ReturnRequestExample orderReturnRequestExample = new ReturnRequestExample();
         orderReturnRequestExample.createCriteria().andOrderSnEqualTo(orderSn).andMemberIdEqualTo(userId);
         List<ReturnRequest> orderReturnRequestList = returnRequestMapper.selectByExample(orderReturnRequestExample);
 
         if (orderReturnRequestList.isEmpty()) {
             throw new ReturnRequestException("Can't find return Request with order serial number: " + orderSn);
-        }
-
-        ReturnRequest foundReturnRequest = orderReturnRequestList.get(0);
-
-        foundReturnRequest.setStatus(4);               // return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3. 4 cancel
-        foundReturnRequest.setUpdatedAt(new Date());
-
-        returnRequestMapper.updateByPrimaryKey(foundReturnRequest);
-
-        if (foundReturnRequest != null) {
-            return Mono.just(foundReturnRequest);
         } else {
-            return Mono.error(new ReturnRequestException("order return Request not found"));
+            return  orderReturnRequestList.get(0);
         }
     }
 
     // return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3
     @Override
-    public Flux<ReturnRequest> getAllOpening() {
-        ReturnRequestExample example = new ReturnRequestExample();
-        example.createCriteria().andStatusEqualTo(0);
-
-        List<ReturnRequest> orderReturnRequests = returnRequestMapper.selectByExample(example);
-        return Flux.fromIterable(orderReturnRequests);
-    }
-
-    @Override
-    public Flux<ReturnRequest> getAllReturning() {
-        ReturnRequestExample example = new ReturnRequestExample();
-        example.createCriteria().andStatusEqualTo(1);
-        List<ReturnRequest> returningRequests = returnRequestMapper.selectByExample(example);
-
-        return Flux.fromIterable(returningRequests);
-    }
-
-    @Override
-    public Flux<ReturnRequest> getAllCompleted() {
-        ReturnRequestExample example = new ReturnRequestExample();
-        example.createCriteria().andStatusEqualTo(2);
-        List<ReturnRequest> completedReturns = returnRequestMapper.selectByExample(example);
-
-        return Flux.fromIterable(completedReturns);
-    }
-
-    @Override
-    public Flux<ReturnRequest> getAllRejected() {
-        ReturnRequestExample example = new ReturnRequestExample();
-        example.createCriteria().andStatusEqualTo(3);
-        List<ReturnRequest> rejectedRequests = returnRequestMapper.selectByExample(example);
-
-        return Flux.fromIterable(rejectedRequests);
+    public Flux<ReturnRequest> getAllReturnRequest(int statusCode) {
+        return Mono.fromCallable(() -> {
+                ReturnRequestExample example = new ReturnRequestExample();
+                example.createCriteria().andStatusEqualTo(statusCode);
+                List<ReturnRequest> orderReturnRequests = returnRequestMapper.selectByExample(example);
+                return orderReturnRequests;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Mono<ReturnDetail> getReturnDetail(String orderSn) {
-        ReturnRequestExample example = new ReturnRequestExample();
-        example.createCriteria().andOrderSnEqualTo(orderSn);
-
-        List<ReturnRequest> returnRequest = returnRequestMapper.selectByExample(example);
-        if (returnRequest.isEmpty())
-            throw new ReturnRequestException("Order Return request for order serial number: " + orderSn + " does not exist");
-
-        ReturnRequest returnOrderRequest = returnRequest.get(0);
-
-        // get lsit of return item too
-
-        // TODO: make a dao for this easier retrieve
-        //   dao.getDetail(orderSn);
-        ReturnItemExample orderReturnItemExample = new ReturnItemExample();
-
-        ReturnDetail returnDetail = new ReturnDetail();
-
-        returnDetail = returnDao.getDetail(orderSn);
-
-        List<ReturnItem> returnItemList;
-        List<ReturnReasonPictures> picturesList;
-
-        if (returnDetail != null) {
-            return Mono.just(returnDetail);
-        } else {
-            return Mono.error(new ReturnRequestException("Order Request does not exist for order serial number :" + orderSn));
-        }
+        return Mono.fromCallable(() -> {
+            ReturnDetail returnDetail = returnDao.getDetail(orderSn);
+            return returnDetail;
+        }).subscribeOn(jdbcScheduler);
     }
 
     // return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3
     @Override
     public Mono<ReturnRequest> approveReturnRequest(ReturnRequestDecision returnRequestDecision, String operator) {
+        return Mono.fromCallable(() -> {
+            ReturnRequest returnRequest= internalApproveReturnRequest(returnRequestDecision, operator);
+            return returnRequest;
+        }).subscribeOn(jdbcScheduler);
+    }
 
+    private ReturnRequest internalApproveReturnRequest(ReturnRequestDecision returnRequestDecision, String operator) {
         ReturnRequest orderReturnRequest = returnRequestDecision.getReturnRequest();
         List<ReturnItem> returnItemList = returnRequestDecision.getReturnItemList();
         int companyAddressId = orderReturnRequest.getCompanyAddressId();
@@ -265,10 +222,6 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             OrderItem orderItem = orderItemList.get(0);
 
             if (orderItem.getRealAmount().doubleValue() != item.getPurchasedPrice().doubleValue()) {
-                System.out.println("|" + orderItem.getRealAmount() + " vs " + item.getPurchasedPrice() + "|");
-                System.out.println("|" + orderItem.getRealAmount() + " vs " + item.getPurchasedPrice() + "|");
-                System.out.println("|" + orderItem.getRealAmount() + " vs " + item.getPurchasedPrice() + "|");
-
                 throw new RuntimeException("Error pricing with return item");
             }
 
@@ -277,14 +230,8 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             returnItemRefundAmount += item.getPurchasedPrice().doubleValue() * quantity;    // TODO: watch out for big decimal difference
         }
 
-        /*
+        /*  TODO: need to change double back to big decimal, this pricing is causing error
         if (returnItemRefundAmount != orderReturnRequest.getAskingAmount().doubleValue()) {
-            System.out.println("return item refund amount " + returnItemRefundAmount);
-            System.out.println("return item refund amount " + returnItemRefundAmount);
-            System.out.println("return item refund amount " + returnItemRefundAmount);
-            System.out.println("asking amount " + orderReturnRequest.getAskingAmount().doubleValue());
-            System.out.println("asking amount " + orderReturnRequest.getAskingAmount().doubleValue());
-            System.out.println("asking amount " + orderReturnRequest.getAskingAmount().doubleValue());
             throw new RuntimeException("Return order Request asking refund pricing error");
         }
          */
@@ -312,29 +259,38 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         // TODO: UPS to print label and send back to customer
 
         // TODO: send notification to maybe an email service to notify user
-        return Mono.just(orderReturnRequest);
+        return orderReturnRequest;
     }
 
     @Override
     public Mono<ReturnRequest> rejectReturnRequest(ReturnRequestDecision returnRequestDecision, String reason, String operator) {
-        ReturnRequest returnRequest = returnRequestDecision.getReturnRequest();
-        returnRequest.setStatus(3);
-        returnRequest.setHandleNote(reason);
-        returnRequest.setHandleOperator(operator);
-        returnRequest.setUpdatedAt(new Date());
-        returnRequestMapper.updateByPrimaryKey(returnRequest);
+        return Mono.fromCallable(() -> {
+            ReturnRequest returnRequest = returnRequestDecision.getReturnRequest();
+            returnRequest.setStatus(3);
+            returnRequest.setHandleNote(reason);
+            returnRequest.setHandleOperator(operator);
+            returnRequest.setUpdatedAt(new Date());
+            returnRequestMapper.updateByPrimaryKey(returnRequest);
 
-        ReturnLog returnUpdateLog = new ReturnLog();
-        returnUpdateLog.setAction("Rejected return Request request");
-        returnUpdateLog.setOperator(operator);
-        returnUpdateLog.setCreatedAt(new Date());
-        logMapper.insert(returnUpdateLog);
+            ReturnLog returnUpdateLog = new ReturnLog();
+            returnUpdateLog.setAction("Rejected return Request request");
+            returnUpdateLog.setOperator(operator);
+            returnUpdateLog.setCreatedAt(new Date());
+            logMapper.insert(returnUpdateLog);
 
-        return Mono.just(returnRequest);
+            return returnRequest;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Mono<ReturnRequest> completeReturnRequest(ReturnRequestDecision returnRequestDecision, String operator) {
+        return Mono.fromCallable(() -> {
+            ReturnRequest returnRequest = internalCompleteReturnRequest(returnRequestDecision, operator);
+            return  returnRequest;
+        }).subscribeOn(jdbcScheduler);
+    }
+
+    private ReturnRequest internalCompleteReturnRequest(ReturnRequestDecision returnRequestDecision, String operator) {
         ReturnRequest returnRequest = returnRequestDecision.getReturnRequest();
 
         String orderSn = returnRequest.getOrderSn();
@@ -384,7 +340,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             System.out.println("Refund failed: " + e.getMessage());
         }
 
-        return Mono.just(returnRequest);
+        return returnRequest;
     }
 
     private void sendProductStockUpdateMessage(String bindingName, PmsProductOutEvent event) {

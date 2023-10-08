@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
 import com.itsthatjun.ecommerce.dto.oms.ReturnRequestDecision;
+import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
 import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderReturnEvent;
 import io.swagger.annotations.Api;
@@ -47,38 +48,10 @@ public class OrderReturnController {
         this.publishEventScheduler = publishEventScheduler;
     }
 
-    @GetMapping("/AllOpening")
+    @GetMapping("/all")
     @ApiOperation(value = "list all return request open waiting to be approved")
-    public Flux<ReturnRequest> listAllOpening(){
-
-        String url = OMS_SERVICE_URL + "/admin/AllOpening";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-    }
-
-    @GetMapping("/AllReturning")
-    @ApiOperation(value = "List all returns that are on their way")
-    public Flux<ReturnRequest> listReturning(){
-        String url = OMS_SERVICE_URL + "/admin/AllReturning";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-    }
-
-    @GetMapping("/AllCompleted")
-    @ApiOperation(value = "List ALl completed returns")
-    public Flux<ReturnRequest> listAllCompleted(){
-        String url = OMS_SERVICE_URL + "admin/AllCompleted";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-    }
-
-    @GetMapping("/AllRejected")
-    @ApiOperation(value = "List All rejected returns requests")
-    public Flux<ReturnRequest> listAllRejected(){
-        String url = OMS_SERVICE_URL + "/admin/AllRejected";
+    public Flux<ReturnRequest> listAllReturnRequest(@RequestParam("statusCode") ReturnStatusCode statusCode){
+        String url = OMS_SERVICE_URL + "/admin/all?statusCode=" + statusCode.getCode();
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ReturnRequest.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -98,10 +71,7 @@ public class OrderReturnController {
     public void updateReturnOrderStatus(@RequestBody ReturnRequestDecision returnRequestDecision, HttpSession session){
         String operator = (String) session.getAttribute("adminName");
 
-        System.out.println("=============================");
-        System.out.println(returnRequestDecision);
         OmsAdminOrderReturnEvent event;
-
         switch (returnRequestDecision.getStatus()) {
             case APPROVED:
                 event = new OmsAdminOrderReturnEvent(APPROVED, returnRequestDecision, operator);

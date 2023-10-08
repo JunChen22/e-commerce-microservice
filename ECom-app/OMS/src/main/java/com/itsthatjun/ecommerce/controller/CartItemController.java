@@ -18,19 +18,16 @@ import java.util.List;
 import static java.util.logging.Level.FINE;
 
 @RestController
-@Api(tags = "shopping cart controller", description = "shopping cart and related api")
 @RequestMapping("/cart")
+@Api(tags = "shopping cart controller", description = "shopping cart and related api")
 public class CartItemController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CartItemController.class);
 
-    private final Scheduler jdbcScheduler;
-
     private final CartItemServiceImpl cartItemService;
 
     @Autowired
-    public CartItemController(@Qualifier("jdbcScheduler") Scheduler jdbcScheduler, CartItemServiceImpl cartItemService) {
-        this.jdbcScheduler = jdbcScheduler;
+    public CartItemController(CartItemServiceImpl cartItemService) {
         this.cartItemService = cartItemService;
     }
 
@@ -40,33 +37,4 @@ public class CartItemController {
         return cartItemService.getUserCart(userId);
     }
 
-    @ApiOperation("add item to shopping cart")
-    @PostMapping(value = "/add")
-    public Flux<CartItem> add(@RequestBody CartItem cartItem, @RequestParam int userId) {
-        return cartItemService.addItem(cartItem, userId);
-    }
-
-    @ApiOperation("add all item to shopping cart")
-    @PostMapping(value = "/add/all")
-    public Flux<CartItem> addAll(@RequestBody List<CartItem> cartItem, @RequestParam int userId) {
-        return cartItemService.addAllItem(cartItem, userId);
-    }
-
-    @ApiOperation("update shopping cart item quantity")
-    @PostMapping(value = "/update/quantity")
-    public Flux<CartItem> updateQuantity(@RequestParam int cartItemId, @RequestParam int quantity, @RequestParam int userId) {
-        return cartItemService.updateQuantity(cartItemId, quantity, userId);
-    }
-
-    @ApiOperation("remove item from shopping cart")
-    @DeleteMapping(value = "/delete/{cartItemId}")
-    public void delete(@PathVariable int cartItemId, @RequestParam int userId) {
-        cartItemService.deleteCartItem(cartItemId, userId);
-    }
-
-    @ApiOperation("clear user shopping cart")
-    @DeleteMapping(value = "/clear")
-    public void clear(@RequestParam int userId) {
-        cartItemService.clearCartItem(userId);
-    }
 }

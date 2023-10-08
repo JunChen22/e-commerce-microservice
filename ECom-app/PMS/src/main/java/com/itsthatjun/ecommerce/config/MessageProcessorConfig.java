@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent.Type.REMOVE_SALE;
 import static com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent.Type.UPDATE_SALE_PRICE;
 
 @Configuration
@@ -91,16 +92,16 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
 
                 case CREATE:
-                    brandService.createBrand(brand);
+                    brandService.adminCreateBrand(brand);
                     break;
 
                 case UPDATE:
-                    brandService.updateBrand(brand);
+                    brandService.adminUpdateBrand(brand);
                     break;
 
                 case DELETE:
                     int brandId = event.getBrandId();
-                    brandService.deleteBrand(brandId);
+                    brandService.adminDeleteBrand(brandId);
                     break;
 
                 default:
@@ -159,7 +160,6 @@ public class MessageProcessorConfig {
                     break;
 
                 default:
-
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", CREATE, UPDATE, and DELETE event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage); // TODO: create event exception
@@ -239,6 +239,8 @@ public class MessageProcessorConfig {
             List<ProductSku> skuList = event.getSkuList();
             if (event.getEventType() == UPDATE_SALE_PRICE) {
                 smsEventUpdateService.updateSale(skuList);
+            } else if (event.getEventType() == REMOVE_SALE) {
+                smsEventUpdateService.removeSale(skuList);
             } else {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_SALE_PRICE" +
                         " event";

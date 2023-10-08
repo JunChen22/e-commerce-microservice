@@ -25,58 +25,33 @@ public class BrandController {
 
     private final BrandServiceImpl brandService;
 
-    private final Scheduler scheduler;
-
     @Autowired
-    public BrandController(BrandServiceImpl brandService,
-                           @Qualifier("scheduler") Scheduler scheduler) {
+    public BrandController(BrandServiceImpl brandService) {
         this.brandService = brandService;
-        this.scheduler = scheduler;
     }
 
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
     public Flux<Brand> getAllBrand(){
-        return brandService.listAllBrand().subscribeOn(scheduler);
+        return brandService.listAllBrand();
     }
 
     @GetMapping("/list")
     @ApiOperation(value = "Get brands with page and size")
     public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize){
-        return brandService.listBrand(pageNum, pageSize).subscribeOn(scheduler);
+        return brandService.listBrand(pageNum, pageSize);
     }
 
     @GetMapping("/product/{brandId}")
     @ApiOperation(value = "Get all product of this brand")
     public Flux<Product> getBrandProduct(@PathVariable int brandId){
-        return brandService.listAllBrandProduct(brandId).subscribeOn(scheduler);
+        return brandService.listAllBrandProduct(brandId);
     }
 
     @GetMapping("/{brandId}")
     @ApiOperation(value = "Get brand info")
     public Mono<Brand> getBrand(@PathVariable int brandId){
-        return brandService.getBrand(brandId).subscribeOn(scheduler);
-    }
-
-    @PostMapping("/admin/create")
-    @ApiOperation(value = "Create a brand")
-    public Brand createBrand(@RequestBody Brand brand){
-        brandService.createBrand(brand);
-        return brand;
-    }
-
-    @PostMapping("/admin/update")
-    @ApiOperation(value = "Update a brand")
-    public Brand updateBrand(@RequestBody Brand brand){
-        brandService.updateBrand(brand);
-        return brand;
-    }
-
-    @DeleteMapping("/admin/delete/{id}")
-    @ApiOperation(value = "Delete a brand")
-    public String deleteBrand(@PathVariable int id){
-        brandService.deleteBrand(id);
-        return "deleted";
+        return brandService.getBrand(brandId);
     }
 }

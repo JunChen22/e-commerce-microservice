@@ -4,77 +4,103 @@ import com.github.pagehelper.PageHelper;
 import com.itsthatjun.ecommerce.exceptions.BrandException;
 import com.itsthatjun.ecommerce.mbg.mapper.BrandMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
-import com.itsthatjun.ecommerce.mbg.model.Brand;
-import com.itsthatjun.ecommerce.mbg.model.BrandExample;
-import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.ProductExample;
+import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.BrandService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import java.util.List;
 
 @Service
 public class BrandServiceImpl implements BrandService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BrandServiceImpl.class);
+
     private final ProductMapper productMapper;
 
     private final BrandMapper brandMapper;
 
+    // TODO: add update log
+    private final BrandUpdateLog updateLog;
+
+    private final Scheduler jdbcScheduler;
+
     @Autowired
-    public BrandServiceImpl(ProductMapper productMapper, BrandMapper brandMapper) {
+    public BrandServiceImpl(ProductMapper productMapper, BrandMapper brandMapper, BrandUpdateLog updateLog,
+                            @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.productMapper = productMapper;
         this.brandMapper = brandMapper;
+        this.updateLog = updateLog;
+        this.jdbcScheduler = jdbcScheduler;
     }
 
     @Override
     public Flux<Brand> listAllBrand() {
-        List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
-        return Flux.fromIterable(brandList);
+        return Mono.fromCallable(() -> {
+                    List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
+                    return brandList;
+                })
+                .flatMapMany(Flux::fromIterable)
+                .subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Flux<Brand> listBrand(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
-        return Flux.fromIterable(brandList);
+        return Mono.fromCallable(() -> {
+                    PageHelper.startPage(pageNum, pageSize);
+                    List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
+                    return brandList;
+                })
+                .flatMapMany(Flux::fromIterable)
+                .subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Flux<Product> listAllBrandProduct(int brandId) {
-        ProductExample example = new ProductExample();
-        example.createCriteria().andBrandIdEqualTo(brandId);
-        List<Product> productList = productMapper.selectByExample(example);
-        return Flux.fromIterable(productList);
+        return Mono.fromCallable(() -> {
+                    ProductExample example = new ProductExample();
+                    example.createCriteria().andBrandIdEqualTo(brandId);
+                    List<Product> productList = productMapper.selectByExample(example);
+                    return productList;
+                })
+                .flatMapMany(Flux::fromIterable)
+                .subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Mono<Brand> getBrand(int id) {
-        Brand brand =  brandMapper.selectByPrimaryKey(id);
-        if (brand != null) {
-            return Mono.just(brand);
-        } else {
-            return Mono.error(new BrandException("Brand not found"));
-        }
+        return Mono.fromCallable(() -> {
+            Brand brand = brandMapper.selectByPrimaryKey(id);
+            return brand; // Use Mono.justOrEmpty to handle potential null values
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public boolean createBrand(Brand brand) {
-        brandMapper.insert(brand);
-        return true;
+    public Mono<Brand> adminCreateBrand(Brand brand) {
+        return Mono.fromCallable(() -> {
+            brandMapper.insert(brand);
+            return brand; // Use Mono.justOrEmpty to handle potential null values
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public boolean updateBrand(Brand brand) {
-        brandMapper.updateByPrimaryKeySelective(brand);
-        return true;
+    public Mono<Brand> adminUpdateBrand(Brand brand) {
+        return Mono.fromCallable(() -> {
+            brandMapper.updateByPrimaryKeySelective(brand);
+            return brand; // Use Mono.justOrEmpty to handle potential null values
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public boolean deleteBrand(int id) {
-        brandMapper.deleteByPrimaryKey(id);
-        return true;
+    public Mono<Void> adminDeleteBrand(int id) {
+        return Mono.fromRunnable(() ->
+                brandMapper.deleteByPrimaryKey(id)
+        ).subscribeOn(jdbcScheduler).then();
     }
 }

@@ -9,10 +9,12 @@ import com.itsthatjun.ecommerce.service.CouponService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -38,34 +40,38 @@ public class CouponServiceImpl implements CouponService {
 
     private final WebClient webClient;
 
+    private final Scheduler jdbcScheduler;
+
     @Autowired
     public CouponServiceImpl(CouponMapper couponMapper, ProductMapper productMapper, CouponHistoryMapper couponHistoryMapper,
                              CouponProductRelationMapper productRelationMapper, ProductSkuMapper productSkuMapper,
-                             WebClient.Builder webClient) {
+                             WebClient.Builder webClient, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.couponMapper = couponMapper;
         this.productMapper = productMapper;
         this.couponHistoryMapper = couponHistoryMapper;
         this.productRelationMapper = productRelationMapper;
         this.productSkuMapper = productSkuMapper;
         this.webClient = webClient.build();
+        this.jdbcScheduler = jdbcScheduler;
     }
 
     @Override
-    public double checkDiscount(String couponCode, int userId) {
-        Coupon foundCoupon = checkCoupon(couponCode);
-        if (foundCoupon == null) return 0;
+    public Mono<Double> checkDiscount(String couponCode, int userId) {
+        return Mono.fromCallable(() -> {
+            Coupon foundCoupon = checkCoupon(couponCode);
+            if (foundCoupon == null) return 0.0;
 
-        List<CartItem> cartItemList = getCartFromOms(userId);
-        if (cartItemList.isEmpty()) return 0;
+            List<CartItem> cartItemList = getCartFromOms(userId);
+            if (cartItemList.isEmpty()) return 0.0;
 
-        Map<String, Integer> skuQuantity = new HashMap<>();
-        for (CartItem cartItem : cartItemList) {
-            int quantity = cartItem.getQuantity();
-            String skuCode = cartItem.getProductSku();
-            skuQuantity.put(skuCode, quantity);
-        }
-
-        return  getDiscountAmount(skuQuantity, foundCoupon);
+            Map<String, Integer> skuQuantity = new HashMap<>();
+            for (CartItem cartItem : cartItemList) {
+                int quantity = cartItem.getQuantity();
+                String skuCode = cartItem.getProductSku();
+                skuQuantity.put(skuCode, quantity);
+            }
+            return getDiscountAmount(skuQuantity, foundCoupon);
+        }).subscribeOn(jdbcScheduler);
     }
 
     private List<CartItem> getCartFromOms(int userId) {
@@ -95,8 +101,7 @@ public class CouponServiceImpl implements CouponService {
         return cartItems;
     }
 
-    @Override
-    public Coupon checkCoupon(String couponCode) {
+    private Coupon checkCoupon(String couponCode) {
         CouponExample couponExample = new CouponExample();
         couponExample.createCriteria().andCodeEqualTo(couponCode);
         List<Coupon> result = couponMapper.selectByExample(couponExample);
@@ -105,53 +110,7 @@ public class CouponServiceImpl implements CouponService {
         return result.get(0);
     }
 
-    // -- discount on 0-> all, 1 -> specific brand, 2-> specific item
-    @Override
-    public List<Coupon> getCouponForProduct(int productId) {
-
-        Product product = productMapper.selectByPrimaryKey(productId);
-        if (product == null)
-            throw new ProductException("Can't find product : " + productId);
-
-        String productName = product.getName();
-        String brandName = product.getBrandName();
-
-        CouponExample example = new CouponExample();
-        // coupon that have product name, brand name, or all product in name
-        example.createCriteria().andNameLike("%" + productName + "%");
-        example.or().andNameLike("%" + brandName + "%");
-        example.or().andNameLike("%" + "all product" + "%");
-        example.or().andCouponTypeEqualTo(0);
-        return couponMapper.selectByExample(example);
-    }
-
-    @Override
-    public void updateUsedCoupon(String code, int orderId, int memberId) {
-        if (checkCoupon(code) == null) {
-            return ;
-        }
-
-        // find and update coupon count
-        CouponExample couponExample = new CouponExample();
-        couponExample.createCriteria().andCodeEqualTo(code);
-        Coupon usedCoupon = couponMapper.selectByExample(couponExample).get(0);
-        int usedCount = usedCoupon.getUsedCount() + 1;
-        usedCoupon.setUsedCount(usedCount);
-
-        couponMapper.updateByPrimaryKey(usedCoupon);
-
-        // add used history
-        CouponHistory couponHistory = new CouponHistory();
-        couponHistory.setOrderId(orderId);
-        couponHistory.setCouponId(usedCoupon.getId());
-        couponHistory.setCode(code);
-        couponHistory.setMemberId(memberId);
-
-        couponHistoryMapper.insert(couponHistory);
-    }
-
-    @Override
-    public double getDiscountAmount(Map<String, Integer> skuQuantity, Coupon coupon) {
+    private double getDiscountAmount(Map<String, Integer> skuQuantity, Coupon coupon) {
         double totalDiscount = 0;
 
         // check expiration
@@ -226,9 +185,60 @@ public class CouponServiceImpl implements CouponService {
         return totalDiscount;
     }
 
+    // -- discount on 0-> all, 1 -> specific brand, 2-> specific item
     @Override
-    public Coupon createCoupon(Coupon newCoupon, Map<String, Integer> skuMap) {
+    public Flux<Coupon> getCouponForProduct(int productId) {
+        return Mono.fromCallable(() -> {
+            Product product = productMapper.selectByPrimaryKey(productId);
+            if (product == null) throw new ProductException("Can't find product : " + productId);
 
+            String productName = product.getName();
+            String brandName = product.getBrandName();
+
+            CouponExample example = new CouponExample();
+            // coupon that have product name, brand name, or all product in name
+            example.createCriteria().andNameLike("%" + productName + "%");
+            example.or().andNameLike("%" + brandName + "%");
+            example.or().andNameLike("%" + "all product" + "%");
+            example.or().andCouponTypeEqualTo(0);
+            return couponMapper.selectByExample(example);
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Mono<Void> updateUsedCoupon(String code, int orderId, int memberId) {
+        return Mono.fromRunnable(() -> {
+            if (checkCoupon(code) == null) throw new RuntimeException("coupon code is empty can't update");
+
+            // find and update coupon count
+            CouponExample couponExample = new CouponExample();
+            couponExample.createCriteria().andCodeEqualTo(code);
+            Coupon usedCoupon = couponMapper.selectByExample(couponExample).get(0);
+            int usedCount = usedCoupon.getUsedCount() + 1;
+            usedCoupon.setUsedCount(usedCount);
+
+            couponMapper.updateByPrimaryKey(usedCoupon);
+
+            // add used history
+            CouponHistory couponHistory = new CouponHistory();
+            couponHistory.setOrderId(orderId);
+            couponHistory.setCouponId(usedCoupon.getId());
+            couponHistory.setCode(code);
+            couponHistory.setMemberId(memberId);
+
+            couponHistoryMapper.insert(couponHistory);
+        }).subscribeOn(jdbcScheduler).then();
+    }
+
+    @Override
+    public Mono<Coupon> createCoupon(Coupon newCoupon, Map<String, Integer> skuMap) {
+        return Mono.fromCallable(() -> {
+            Coupon coupon = internalCreateCoupon(newCoupon, skuMap);
+            return coupon;
+        }).subscribeOn(jdbcScheduler);
+    }
+
+    private Coupon internalCreateCoupon(Coupon newCoupon, Map<String, Integer> skuMap) {
         String couponCode = newCoupon.getCode();
         Coupon existingCoupon = checkCoupon(couponCode);
         if (existingCoupon != null) throw new CouponException("Coupon code already exist");
@@ -244,7 +254,6 @@ public class CouponServiceImpl implements CouponService {
 
         // quantity is not needed, could also store product id into value, <Sku code, productId>
         for (String skuCode : skuMap.keySet()) {
-
             CouponProductRelation newProduct = new CouponProductRelation();
 
             ProductSkuExample productSkuExample = new ProductSkuExample();
@@ -271,38 +280,43 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public List<Coupon> getAllCoupon() {
-        LocalDate localDate = LocalDate.now();
-        java.sql.Date date = java.sql.Date.valueOf(localDate);
-        CouponExample example = new CouponExample();
-        example.createCriteria().andEndTimeGreaterThan(date);
-        return couponMapper.selectByExample(example);
+    public Flux<Coupon> getAllCoupon() {
+        return Mono.fromCallable(() -> {
+            LocalDate localDate = LocalDate.now();
+            java.sql.Date date = java.sql.Date.valueOf(localDate);
+            CouponExample example = new CouponExample();
+            example.createCriteria().andEndTimeGreaterThan(date);
+            return couponMapper.selectByExample(example);
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public Coupon getACoupon(int id) {
-        return couponMapper.selectByPrimaryKey(id);
+    public Mono<Coupon> getACoupon(int id) {
+        return Mono.fromCallable(() ->
+            couponMapper.selectByPrimaryKey(id)
+        ).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public Coupon updateCoupon(Coupon updateCoupon, Map<String, Integer> skuMap) {
+    public Mono<Coupon> updateCoupon(Coupon updateCoupon, Map<String, Integer> skuMap) {
+        return Mono.fromCallable(() -> {
+            int couponId = updateCoupon.getId();
+            Coupon foundCoupon = couponMapper.selectByPrimaryKey(couponId);
 
-        int couponId = updateCoupon.getId();
-        Coupon foundCoupon = couponMapper.selectByPrimaryKey(couponId);
+            // currently can't change coupon type or coupon code itself
+            if (foundCoupon.getCouponType().intValue() == updateCoupon.getCouponType().intValue()) {
+                throw new CouponException("Can not change coupon type");
+            }
 
-        // currently can't change coupon type or coupon code itself
-        if (foundCoupon.getCouponType() != updateCoupon.getCouponType()) {
-            throw new CouponException("Can not change coupon type");
-        }
+            if (foundCoupon.getCode().equals(updateCoupon.getCode())) {
+                throw new CouponException("Can not change coupon code");
+            }
+            // TODO: Update coupon info's like discount type, amount, date, count, status, and name
+            couponMapper.updateByPrimaryKey(updateCoupon);
+            // TODO: add a log
 
-        if (foundCoupon.getCode() != updateCoupon.getCode()) {
-            throw new CouponException("Can not change coupon code");
-        }
-
-        couponMapper.updateByPrimaryKey(updateCoupon);
-        // TODO: add a log
-
-        return updateCoupon;
+            return updateCoupon;
+        }).subscribeOn(jdbcScheduler);
     }
 
     private Coupon updateCouponProduct(Coupon updateCoupon) {
@@ -317,16 +331,18 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public void deleteCoupon(int couponId) {
-        couponMapper.deleteByPrimaryKey(couponId);
+    public Mono<Void> deleteCoupon(int couponId) {
+        return Mono.fromRunnable(() -> {
+            couponMapper.deleteByPrimaryKey(couponId);
 
-        CouponProductRelationExample productRelationExample = new CouponProductRelationExample();
-        productRelationExample.createCriteria().andCouponIdEqualTo(couponId);
-        List<CouponProductRelation> couponProductRelationList = productRelationMapper.selectByExample(productRelationExample);
+            CouponProductRelationExample productRelationExample = new CouponProductRelationExample();
+            productRelationExample.createCriteria().andCouponIdEqualTo(couponId);
+            List<CouponProductRelation> couponProductRelationList = productRelationMapper.selectByExample(productRelationExample);
 
-        for (CouponProductRelation product : couponProductRelationList) {
-            int productRelationId = product.getId();
-            productRelationMapper.deleteByPrimaryKey(productRelationId);
-        }
+            for (CouponProductRelation product : couponProductRelationList) {
+                int productRelationId = product.getId();
+                productRelationMapper.deleteByPrimaryKey(productRelationId);
+            }
+        }).subscribeOn(jdbcScheduler).then();
     }
 }

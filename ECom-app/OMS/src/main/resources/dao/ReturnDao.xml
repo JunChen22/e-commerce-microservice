@@ -2,16 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.dao.ReturnDao">
     <resultMap id="returnDetailMap" type="com.itsthatjun.ecommerce.dto.ReturnDetail" autoMapping="true">
-        <association property="returnRequest" javaType="com.itsthatjun.ecommerce.mbg.model.ReturnRequest">
+        <association property="returnRequest" javaType="com.itsthatjun.ecommerce.mbg.model.ReturnRequest" autoMapping="true">
             <id property="id" column="id"/>
             <result property="updatedAt" column="request_update"/>
         </association>
-        <collection property="picturesList"
-                    ofType="com.itsthatjun.ecommerce.mbg.model.ReturnReasonPictures">
+
+        <collection property="returnItemList" ofType="com.itsthatjun.ecommerce.mbg.model.ReturnItem">
+            <result property="productSku" column="product_sku"/>
+            <result property="quantity" column="quantity"/>
+        </collection>
+
+        <collection property="picturesList" ofType="com.itsthatjun.ecommerce.mbg.model.ReturnReasonPictures">
             <result property="filename" column="filename"/>
         </collection>
-        <collection property="logList"
-                    ofType="com.itsthatjun.ecommerce.mbg.model.ReturnLog">
+        <collection property="logList" ofType="com.itsthatjun.ecommerce.mbg.model.ReturnLog">
             <result property="action" column="action"/>
             <result property="operator" column="last_updated_by" />
             <result property="createdAt" column="last_update_time"/>
@@ -21,26 +25,29 @@
     <select id="getDetail" resultMap="returnDetailMap">
         SELECT
             request.id,
-            order_id,
+            request.order_id,
             company_address_id,
-            order_sn,
-            member_id,
-            return_quantity,
-            return_name,
-            return_phone,
-            status,
-            handle_time,
-            asking_amount,
-            refunded_amount,
-            reason,
-            description,
-            handle_note,
-            handle_operator,
-            receive_operator,
-            receive_time,
-            receive_note,
+            request.order_sn,
+            request.member_id,
+            request.return_quantity,
+            request.return_name,
+            request.return_phone,
+            request.status,
+            request.handle_time,
+            request.asking_amount,
+            request.refunded_amount,
+            request.reason,
+            request.description,
+            request.handle_note,
+            request.handle_operator,
+            request.receive_operator,
+            request.receive_time,
+            request.receive_note,
             request.created_at,
-            updated_at request_update,
+            request.updated_at request_update,
+
+            item.product_sku,
+            item.quantity,
 
             picture.filename,
 
@@ -48,8 +55,9 @@
             log.operator last_update_time,
             log.created_at last_updated_by
         FROM return_request request
+        LEFT JOIN return_item item ON return_request_id = request.id
         LEFT JOIN return_reason_pictures picture ON picture.return_request_id = request.id
         LEFT JOIN return_log log ON log.return_request_id = request.id
-        WHERE request.orderSn = #{orderSn}
+        WHERE request.order_sn = #{orderSn}
     </select>
 </mapper>

@@ -105,11 +105,6 @@ yarn-error.log*
 # mac files
 .DS_Store
 
-# TODO list
-TODO.txt
-
-
-
 # Mac
 .DS_Store
 

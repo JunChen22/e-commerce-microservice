@@ -74,35 +74,20 @@ public class CartAggregate {
         int userId = userContext.getUserId();
 
         return Mono.fromCallable(() -> {
-            List<CartItem> cartItemList = new ArrayList<>();
-            cartItemList.add(cartItem);
-            sendMessage("cart-out-0", new OmsCartEvent(ADD_ONE, userId, cartItemList));
+            sendMessage("cart-out-0", new OmsCartEvent(ADD_ONE, userId, cartItem));
             return cartItem;
-        }).subscribeOn(publishEventScheduler);
-    }
-
-    @ApiOperation("add all item to shopping cart")
-    @PostMapping(value = "/add/all")
-    public Flux<CartItem> addAll(@RequestBody List<CartItem> cartItem) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-
-        return Flux.defer(() -> {
-                sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.ADD_ALL, userId, cartItem));
-                return Flux.fromIterable(cartItem);
         }).subscribeOn(publishEventScheduler);
     }
 
     @ApiOperation("update shopping cart item quantity")
     @PostMapping(value = "/update/quantity")
-    public Mono<Void> updateQuantity(@RequestParam int cartItemId, @RequestParam int quantity) {
+    public Mono<Void> updateQuantity(@RequestBody CartItem cartItem) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext userContext = (UserContext) authentication.getPrincipal();
         int userId = userContext.getUserId();
 
         return Mono.fromRunnable(() ->
-                sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.UPDATE, userId, null, quantity, cartItemId))
+                sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.UPDATE, userId, cartItem))
         ).subscribeOn(publishEventScheduler).then();
     }
 
@@ -113,8 +98,11 @@ public class CartAggregate {
         UserContext userContext = (UserContext) authentication.getPrincipal();
         int userId = userContext.getUserId();
 
+        CartItem cartItem = new CartItem();
+        cartItem.setCartId(cartItemId);
+
         return Mono.fromRunnable(() ->
-                sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.DELETE, userId, null, 1, cartItemId))
+                sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.DELETE, userId, cartItem))
         ).subscribeOn(publishEventScheduler).then();
     }
 

@@ -50,5 +50,5 @@ public interface SalesService {
     Mono<PromotionSale> updateSaleStatus(OnSaleRequest updateSaleRequest, String operator);
 
     @ApiOperation(value = "delete")
-    void delete(int promotionSaleId, String operator);
+    Mono<Void> delete(int promotionSaleId, String operator);
 }

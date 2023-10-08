@@ -262,3 +262,6 @@ A: indices error, need to delete current indices due to changes is made and didn
  and they need to document/indices/indexes needs to lower case or else have error.
 
 
+Q : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 7] with root cause
+A: having trouble with nested data for query, getting multiple object instead a nested one with a list.
+    create multiple simple query then put it back together instead of one big complex query.

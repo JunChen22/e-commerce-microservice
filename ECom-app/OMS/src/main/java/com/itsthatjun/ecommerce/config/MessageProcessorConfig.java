@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent.Type.REMOVE_SALE;
 import static com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent.Type.UPDATE_SALE_PRICE;
 
 @Configuration
@@ -48,31 +49,28 @@ public class MessageProcessorConfig {
     }
 
     @Bean
-    public Consumer<OmsCartEvent<Integer, CartItem>> cartMessageProcessor() {
+    public Consumer<OmsCartEvent> cartMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            int userId = event.getKey();
-            int cartItemId = event.getCartItemId();
-            List<CartItem> cartItems = event.getData();
+            CartItem cartItem = event.getCartItem();
+            int userId = event.getUserId();
+            int cartItemId;
 
             switch (event.getEventType()) {
                 case ADD_ONE:
-                    CartItem cartItem = cartItems.get(0);
                     cartItemService.addItem(cartItem, userId);
                     break;
 
-                case ADD_ALL:
-                    cartItemService.addAllItem(cartItems, userId);
-                    break;
-
                 case UPDATE:
-                    int quantity = event.getQuantity();
+                    int quantity = cartItem.getQuantity();
+                    cartItemId = cartItem.getCartId();
                     cartItemService.updateQuantity(cartItemId, quantity, userId);
                     break;
 
                 case DELETE:
+                    cartItemId = cartItem.getCartId();
                     cartItemService.deleteCartItem(cartItemId, userId);
                     break;
 
@@ -95,7 +93,6 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            System.out.println("==================================================================================");
             String orderSn = event.getReturnRequest().getOrderSn();
             int userId = event.getUserId();
 
@@ -291,6 +288,8 @@ public class MessageProcessorConfig {
             List<ProductSku> skuList = event.getSkuList();
             if (event.getEventType() == UPDATE_SALE_PRICE) {
                 smsEventUpdateService.updateSale(skuList);
+            } else if (event.getEventType() == REMOVE_SALE) {
+                smsEventUpdateService.removeSale(skuList);
             } else {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_SALE_PRICE" +
                             " event";

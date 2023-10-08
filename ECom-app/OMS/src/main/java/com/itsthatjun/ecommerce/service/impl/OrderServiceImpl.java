@@ -18,9 +18,11 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
@@ -29,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -46,6 +49,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final PaypalService paypalService;
 
+    private final RedisServiceImpl redisService;
+
     private final OrdersMapper ordersMapper;
 
     private final CartItemServiceImpl cartItemService;
@@ -62,16 +67,24 @@ public class OrderServiceImpl implements OrderService {
 
     private final StreamBridge streamBridge;
 
+    private final Scheduler jdbcScheduler;
+
     private final String SMS_SERVICE_URL = "http://sms:8080/coupon";
+
+    @Value("${redis.key.orderId}")
+    private String REDIS_KEY_ORDER_ID;
+    @Value("${redis.database}")
+    private String REDIS_DATABASE;
 
     private final WebClient webClient;
 
     @Autowired
-    public OrderServiceImpl(PaypalService paypalService, OrdersMapper ordersMapper, CartItemServiceImpl cartItemService,
-                            OrderItemMapper orderItemMapper, ProductSkuMapper stockMapper, ProductMapper productMapper,
-                            OrderChangeHistoryMapper changeHistoryMapper, OrderDao orderDao, StreamBridge streamBridge,
-                            WebClient.Builder webClient) {
+    public OrderServiceImpl(PaypalService paypalService, RedisServiceImpl redisService, OrdersMapper ordersMapper,
+                            CartItemServiceImpl cartItemService, OrderItemMapper orderItemMapper, ProductSkuMapper stockMapper,
+                            ProductMapper productMapper, OrderChangeHistoryMapper changeHistoryMapper, OrderDao orderDao,
+                            StreamBridge streamBridge, WebClient webClient, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.paypalService = paypalService;
+        this.redisService = redisService;
         this.ordersMapper = ordersMapper;
         this.cartItemService = cartItemService;
         this.orderItemMapper = orderItemMapper;
@@ -80,35 +93,39 @@ public class OrderServiceImpl implements OrderService {
         this.changeHistoryMapper = changeHistoryMapper;
         this.orderDao = orderDao;
         this.streamBridge = streamBridge;
-        this.webClient = webClient.build();
+        this.webClient = webClient;
+        this.jdbcScheduler = jdbcScheduler;
     }
 
     @Override
     public Mono<OrderDetail> getOrdeDetail(String orderSn) {
-        OrderDetail orderDetail = orderDao.getDetail(orderSn);
-
-        if (orderDetail == null) {
-            return Mono.just(orderDetail);
-        } else {
-            return Mono.error(new OrderException("Order number does not exist: " + orderSn));
-        }
+        return Mono.fromCallable(() -> {
+            OrderDetail orderDetail = orderDao.getDetail(orderSn);
+            return orderDetail;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Flux<Orders> list(int status, int pageNum, int pageSize, int userId) {
-        PageHelper.startPage(pageNum, pageSize);
-        OrdersExample ordersExample = new OrdersExample();
-        // TODO: the status code. currently just return all
-        ordersExample.createCriteria().andMemberIdEqualTo(userId);
-
-        List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
-
-        return Flux.fromIterable(ordersList);
+        return Mono.fromCallable(() -> {
+            PageHelper.startPage(pageNum, pageSize);
+            OrdersExample ordersExample = new OrdersExample();
+            // TODO: the status code. currently just return all
+            ordersExample.createCriteria().andMemberIdEqualTo(userId);
+            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+            return ordersList;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Mono<Orders> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId) {
+        return Mono.fromCallable(() -> {
+            Orders newOrder = internalGenerateOrder(orderParam, successUrl, cancelUrl, userId);
+            return newOrder;
+        }).subscribeOn(jdbcScheduler);
+    }
 
+    private Orders internalGenerateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId) {
         String orderSn = generateOrderSn();
         String couponCode = orderParam.getCoupon();
         Address address = orderParam.getAddress();
@@ -196,9 +213,7 @@ public class OrderServiceImpl implements OrderService {
         sendProductStockUpdateMessage("product-out-0", new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
         sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
 
-        if (!couponCode.equals("")) { // update coupon usage, won't go up even return or payment fail
-            sendCouponUpdateMessage("coupon-out-0", new SmsCouponOutEvent(UPDATE_COUPON_USAGE, couponCode, userId, newOrderId));
-        }
+        if (!couponCode.isEmpty()) sendCouponUpdateMessage("coupon-out-0", new SmsCouponOutEvent(UPDATE_COUPON_USAGE, couponCode, userId, newOrderId));
 
         // clear cart
         cartItemService.clearCartItem(userId);
@@ -207,7 +222,7 @@ public class OrderServiceImpl implements OrderService {
 
         try {
             Payment payment = paypalService.createPayment(orderTotal, "USD", PaypalPaymentMethod.paypal,
-                    PaypalPaymentIntent.sale, "payment description", cancelUrl ,
+                    PaypalPaymentIntent.sale, "payment description", cancelUrl + "/" +  orderSn,
                     successUrl, orderSn);
             for(Links links : payment.getLinks()){
                 if(links.getRel().equals("approval_url")){
@@ -218,11 +233,7 @@ public class OrderServiceImpl implements OrderService {
             LOG.error(e.getMessage());
         }
 
-        if (newOrder != null) {
-            return Mono.just(newOrder);
-        } else {
-            return Mono.error(new OrderException("error creating new order"));
-        }
+         return newOrder;
     }
 
     private double checkCouponDiscountFromSms(String couponCode, int userId) {
@@ -250,12 +261,18 @@ public class OrderServiceImpl implements OrderService {
             // Handle errors, including timeouts, here
             discountAmount = 0;
         }
-
         return discountAmount;
     }
 
     @Override
     public Mono<Orders> paySuccess(String paymentId, String payerId) {
+        return Mono.fromCallable(() -> {
+            Orders newOrder = internalPaySuccess(paymentId, payerId);
+            return newOrder;
+        }).subscribeOn(jdbcScheduler);
+    }
+
+    private Orders internalPaySuccess(String paymentId, String payerId) {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
 
@@ -318,17 +335,25 @@ public class OrderServiceImpl implements OrderService {
 
                 updateChangeLog(orderId, 1, "payment success","user");
 
-                return Mono.just(foundOrder);
+                return foundOrder;
             }
         } catch (PayPalRESTException e) {
             LOG.error(e.getMessage());
         }
-        return Mono.error(new OrderException("Error payment after success URL"));
+        throw new OrderException("Error payment after success URL");
     }
 
     @Override
-    public void payFail(String orderSn) {
-        // TODO: delete from users latest order and cancel it?
+    public Mono<Void> payFail(String orderSn) {
+        return Mono.fromRunnable(() -> {
+            internalPayFail(orderSn);
+        }).subscribeOn(jdbcScheduler).then();
+    }
+
+    private void internalPayFail(String orderSn) {
+        // TODO: change it to cancel after 10 minutes not pay.
+        //    have waiting for payment status, and use messagequeue
+        //   with TTL like 10 miuntes to cancel
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
         Orders newOrder = ordersMapper.selectByExample(ordersExample).get(0);
@@ -366,7 +391,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Mono<Orders> cancelOrder(String orderSn) {
+        return Mono.fromCallable(() -> {
+            Orders cancelledOrder = internalCancelOrder(orderSn);
+            return cancelledOrder;
+        }).subscribeOn(jdbcScheduler);
+    }
 
+    private Orders internalCancelOrder(String orderSn) {
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
         List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
@@ -417,34 +448,34 @@ public class OrderServiceImpl implements OrderService {
 
         updateChangeLog(orderId, 5, "Cancel order","user");
 
-        if (foundOrder != null) {
-            return Mono.just(foundOrder);
-        } else {
-            return Mono.error(new OrderException("unable to cancel order" + orderSn));
-        }
+        return foundOrder;
     }
 
     @Override
-    public void confirmReceiveOrder(int orderId) {
+    public Mono<Void> confirmReceiveOrder(int orderId) {
         // TODO: with spring stask to check from UPS/FedEx for package delivery update.
+        return Mono.empty();
     }
 
-    // TODO: use a better way to generate order serial number
+    // generate id with redis: date + source type + pay type + today's order % 6
     private String generateOrderSn() {
         StringBuilder sb = new StringBuilder();
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        //String key = REDIS_DATABASE + ":"+ REDIS_KEY_ORDER_ID + date;
-        //Long increment = redisService.incr(key, 1);
+        String key = REDIS_DATABASE + ":"+ REDIS_KEY_ORDER_ID + date;
+        Long increment = redisService.increment(key, 1);
         sb.append(date);
-        sb.append("A BETTER WAY TO GENERATE SN");
-        //sb.append(String.format("%02d", order.getSourceType()));
-        //sb.append(String.format("%02d", order.getPayType()));
-        //String incrementStr = increment.toString();
-        //if (incrementStr.length() <= 6) {
-        //    sb.append(String.format("%06d", increment));
-        //} else {
-        //    sb.append(incrementStr);
-        //}
+        /*
+        sb.append(String.format("%02d", newOrder.getSourceType()));
+        sb.append(String.format("%02d", newOrder.getPayType()));
+        String incrementStr = increment.toString();
+
+
+        if (incrementStr.length() <= 6) {
+            sb.append(String.format("%06d", increment));
+        } else {
+            sb.append(incrementStr);
+        }
+         */
         return sb.toString();
     }
 
@@ -523,48 +554,42 @@ public class OrderServiceImpl implements OrderService {
     // TODO: change these based of status code and add 4 and 5 in
     // waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
     @Override
-    public Flux<Orders> getAllWaitingForPayment() {
-        OrdersExample example = new OrdersExample();
-        example.createCriteria().andStatusEqualTo(0);
-        List<Orders> orderWaitingForPayment = ordersMapper.selectByExample(example);
-        return Flux.fromIterable(orderWaitingForPayment);
+    public Flux<Orders> getAllOrderByStatus(int statusCode) {
+        return Mono.fromCallable(() -> {
+            OrdersExample example = new OrdersExample();
+            example.createCriteria().andStatusEqualTo(statusCode);
+            List<Orders> orderWaitingForPayment = ordersMapper.selectByExample(example);
+            return orderWaitingForPayment;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public Flux<Orders> getAllFulfulling() {
-        OrdersExample example = new OrdersExample();
-        example.createCriteria().andStatusEqualTo(1);
-        List<Orders> orderWaitingToBeFulfill = ordersMapper.selectByExample(example);
-        return Flux.fromIterable(orderWaitingToBeFulfill);
-    }
-
-    @Override
-    public Flux<Orders> getAllInSend() {
-        OrdersExample example = new OrdersExample();
-        example.createCriteria().andStatusEqualTo(2);
-        List<Orders> orderInTransit = ordersMapper.selectByExample(example);
-        return Flux.fromIterable(orderInTransit);
-    }
-
-    @Override
-    public Flux<Orders> getAllCompleteOrder() {
-        OrdersExample example = new OrdersExample();
-        example.createCriteria().andStatusEqualTo(3);
-        List<Orders> orderCompletedOrder = ordersMapper.selectByExample(example);
-        return Flux.fromIterable(orderCompletedOrder);
+    public Mono<OrderDetail> getUserOrderDetail(String orderSn) {
+        return Mono.fromCallable(() -> {
+            OrderDetail orderDetail = orderDao.getDetail(orderSn);
+            return orderDetail;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Flux<Orders> getUserOrders(int memberId) {
-        OrdersExample example = new OrdersExample();
-        example.createCriteria().andMemberIdEqualTo(memberId);
-        List<Orders> ordersList = ordersMapper.selectByExample(example);
-        return Flux.fromIterable(ordersList);
+        return Mono.fromCallable(() -> {
+            OrdersExample example = new OrdersExample();
+            example.createCriteria().andMemberIdEqualTo(memberId);
+            List<Orders> ordersList = ordersMapper.selectByExample(example);
+            return ordersList;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, String reason, String operator) {
+    public Mono<Orders> createOrder(Orders order, List<OrderItem> orderItemList, String reason, String operator) {
+        return Mono.fromCallable(() -> {
+            Orders newOrder = internalCreateOrder(order, orderItemList, reason, operator);
+            return newOrder;
+        }).subscribeOn(jdbcScheduler);
+    }
 
+    private Orders internalCreateOrder(Orders newOrder, List<OrderItem> orderItemList, String reason, String operator) {
         // TODO: make it generate order but still need user to pay.
         //      currently is just replacement parts, free of charge
         //      admin make orders for user.
@@ -581,7 +606,6 @@ public class OrderServiceImpl implements OrderService {
 
         // fill in order item info
         for (OrderItem item : orderItemList) {
-
             int quantity = item.getProductQuantity();
             String productSku = item.getProductSkuCode();
 
@@ -651,43 +675,33 @@ public class OrderServiceImpl implements OrderService {
 
         updateChangeLog(orderId, 1, reason,operator);
 
-        if (newOrder != null) {
-            return Mono.just(newOrder);
-        } else {
-            return Mono.error(new OrderException("Error creating order by" + operator));
-        }
+        return newOrder;
     }
 
     @Override
     public Mono<Orders> updateOrder(Orders updateOrder, String reason, String operator) {
+        return Mono.fromCallable(() -> {
+            updateOrder.setUpdatedAt(new Date());
+            updateOrder.setAdminNote(reason);
+            ordersMapper.updateByPrimaryKey(updateOrder);
 
-        updateOrder.setUpdatedAt(new Date());
-        updateOrder.setAdminNote(reason);
-        ordersMapper.updateByPrimaryKey(updateOrder);
-
-        OrderChangeHistory changelog = new OrderChangeHistory();
-        int orderId = updateOrder.getId();
-        int status = updateOrder.getStatus();
-
-        updateChangeLog(orderId, status, reason,operator);
-
-        if (updateOrder != null) {
-            return Mono.just(updateOrder);
-        } else {
-            return Mono.error(new OrderException("Update order error with order id " + orderId));
-        }
+            int orderId = updateOrder.getId();
+            int status = updateOrder.getStatus();
+            updateChangeLog(orderId, status, reason,operator);
+            return updateOrder;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public void adminCancelOrder(Orders updateOrder, String reason, String operator) {
-        updateOrder.setComment(reason);
-        updateOrder.setUpdatedAt(new Date());
-        updateOrder.setStatus(4);
-        ordersMapper.updateByPrimaryKey(updateOrder);
+    public Mono<Void> adminCancelOrder(Orders updateOrder, String reason, String operator) {
+        return Mono.fromRunnable(() -> {
+            updateOrder.setComment(reason);
+            updateOrder.setUpdatedAt(new Date());
+            updateOrder.setStatus(4);
+            ordersMapper.updateByPrimaryKey(updateOrder);
 
-        OrderChangeHistory changelog = new OrderChangeHistory();
-        int orderId = updateOrder.getId();
-
-        updateChangeLog(orderId, 4, reason, operator);
+            int orderId = updateOrder.getId();
+            updateChangeLog(orderId, 4, reason, operator);
+        }).subscribeOn(jdbcScheduler).then();
     }
 }

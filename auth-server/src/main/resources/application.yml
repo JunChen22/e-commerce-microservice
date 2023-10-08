@@ -36,7 +36,6 @@ spring.cloud:
         producer:
           required-groups: authLogUpdateGroup
 
-
 jwt:
   HEADER_STRING: Authorization
   tokenPrefix: Bearer

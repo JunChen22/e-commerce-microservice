@@ -36,7 +36,6 @@ public class UmsEventUpdateService {
         Member existingMember = memberMapper.selectByPrimaryKey(userId);
         existingMember.setStatus(0);
         existingMember.setDeleteStatus(1);
-
         memberMapper.updateByPrimaryKey(existingMember);
     }
 }

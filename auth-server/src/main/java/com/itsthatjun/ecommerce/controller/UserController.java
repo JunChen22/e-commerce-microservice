@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-
 @RestController
 @Api(tags = "User related", description = "retrieve user information")
 public class UserController {
@@ -46,8 +44,6 @@ public class UserController {
         if(token.isEmpty()){
             return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED);
         }
-
-        String name = tokenUtil.getNameFromToken(token);          // two approach, token = stateless for microservices,
 
         return ResponseEntity.ok(new LoginResponse(true, token));
     }

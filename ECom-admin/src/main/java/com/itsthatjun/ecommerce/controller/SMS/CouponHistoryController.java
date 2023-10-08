@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.controller.SMS;
 
 import com.itsthatjun.ecommerce.dto.sms.UsedCouponHistory;
+import com.itsthatjun.ecommerce.mbg.model.CouponHistory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -44,10 +45,10 @@ public class CouponHistoryController {
 
     @GetMapping("/getUserCoupon/{userId}")
     @ApiOperation(value = "shows how many coupon(amount saved) a user used")
-    public Flux<UsedCouponHistory> getUserCoupon(@PathVariable int userId) {
+    public Flux<CouponHistory> getUserCoupon(@PathVariable int userId) {
         String url = SMS_SERVICE_URL + "/getUserCoupon/" + userId;
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(UsedCouponHistory.class)
+        return webClient.get().uri(url).retrieve().bodyToFlux(CouponHistory.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 }

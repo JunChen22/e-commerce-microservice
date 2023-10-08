@@ -118,14 +118,11 @@ public class OrderAggregate {
     @GetMapping("/payment/cancel/{orderSn}")
     @ApiOperation("Payment failure feedback")
     public Mono<String> payFail(@PathVariable String orderSn, @RequestParam("token") String token) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-
-        System.out.println("my new order sn is " + orderSn);
-        System.out.println("my token associated is " + token);
+        // TODO: make pay later feature with message queue TTL, store the token for later payment.
+        //     example https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-2LX47521TW024812X
+        //     and need to set in Payment object for how long the transaction will stay up.
         return Mono.fromCallable(() -> {
-            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_FAILURE, orderSn, "", ""));
+            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_FAILURE, orderSn, token, ""));
             return "payment fail";
         }).subscribeOn(publishEventScheduler);
     }
