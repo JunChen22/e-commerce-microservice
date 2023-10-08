@@ -334,6 +334,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
         try {
             Refund refund = paypalService.createRefund(paymentId, refundAmount);
+            // TODO: add refund info to database
             System.out.println("Refund successful!");
         } catch (PayPalRESTException e) {
             // Handle refund failure

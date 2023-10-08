@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.itsthatjun.ecommerce.exceptions.BrandException;
 import com.itsthatjun.ecommerce.mbg.mapper.BrandMapper;
+import com.itsthatjun.ecommerce.mbg.mapper.BrandUpdateLogMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.BrandService;
@@ -27,16 +28,16 @@ public class BrandServiceImpl implements BrandService {
     private final BrandMapper brandMapper;
 
     // TODO: add update log
-    private final BrandUpdateLog updateLog;
+    private final BrandUpdateLogMapper brandUpdateLogMapper;
 
     private final Scheduler jdbcScheduler;
 
     @Autowired
-    public BrandServiceImpl(ProductMapper productMapper, BrandMapper brandMapper, BrandUpdateLog updateLog,
+    public BrandServiceImpl(ProductMapper productMapper, BrandMapper brandMapper, BrandUpdateLogMapper brandUpdateLogMapper,
                             @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.productMapper = productMapper;
         this.brandMapper = brandMapper;
-        this.updateLog = updateLog;
+        this.brandUpdateLogMapper = brandUpdateLogMapper;
         this.jdbcScheduler = jdbcScheduler;
     }
 

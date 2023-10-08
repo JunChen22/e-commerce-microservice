@@ -18,7 +18,6 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +44,6 @@ public class OrderServiceImpl implements OrderService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
 
-    private final double SHIPPING_COST = 15;  // default shipping cost for order less than 50
-
     private final PaypalService paypalService;
 
     private final RedisServiceImpl redisService;
@@ -68,6 +65,8 @@ public class OrderServiceImpl implements OrderService {
     private final StreamBridge streamBridge;
 
     private final Scheduler jdbcScheduler;
+
+    private final double SHIPPING_COST = 15;  // default shipping cost for order less than 50
 
     private final String SMS_SERVICE_URL = "http://sms:8080/coupon";
 
@@ -453,7 +452,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Mono<Void> confirmReceiveOrder(int orderId) {
-        // TODO: with spring stask to check from UPS/FedEx for package delivery update.
+        // TODO: with spring task to check from UPS/FedEx for package delivery update.
         return Mono.empty();
     }
 

@@ -1,11 +1,6 @@
 server:
   port: 8082
 
-app:
-  SMS-service:                # TODO: might need it for checking coupon
-    host: localhost
-    port: 8084
-
 spring:
   application:
     name: oms

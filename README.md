@@ -34,17 +34,12 @@ The .env file stores login infos for easier change. Gets read in during run time
 
 
 ```
-First split ECom-app into 5 parts with rabbit mq, gateway and eureka in docker.
-
 ![alt text](./document/ECom-microservice.png)
-
-Then to kubernetes.
 
 Hibernate is an ORM framework that provides a high-level, declarative way to define your data model in Java and have
 Hibernate generate the database schema for you, while MyBatis is a SQL mapper framework that provides a low-level,
 programmatic way to interact with a database using SQL statements. MyBatis Generator is a tool that generates Java
 code based on an existing database schema to help with building a custom data access layer.
-
 
 Since using Postgres, there's no support for non-blocking programming model, will use thread pool and scheduler to achieve
 psudo non-blocking. Default is 10 threads, but I changed to 2 threads per service due to my 6 core CPU.  Using a thread pool
@@ -206,8 +201,6 @@ User management system(UMS) - manage user accounts and permissions, including au
 
 
 ![alt text](./document/paypal%20checkout%20workflow.png)
-
-
 
 Docker:
 - https://docs.docker.com/engine/install/ubuntu/

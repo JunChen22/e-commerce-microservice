@@ -52,12 +52,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Flux<ArticleInfo> getAllArticles() {
-        //  TODO: it works but too much query to database
         return Mono.fromCallable(() ->
                 articleDao.getAllArticles()
-                )
-                .flatMapMany(Flux::fromIterable)
-                .subscribeOn(jdbcScheduler);
+                ).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
@@ -83,6 +80,7 @@ public class ArticleServiceImpl implements ArticleService {
             // TODO: return exception tobe added in ECom-common
             return null;
         }
+        System.out.println("at creating");
 
         Date currentDate = new Date();
         articleInfo.getArticle().setCreatedAt(currentDate);

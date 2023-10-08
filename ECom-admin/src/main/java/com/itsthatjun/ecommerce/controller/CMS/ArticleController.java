@@ -48,7 +48,8 @@ public class ArticleController {
     @GetMapping("/all")
     @ApiOperation(value = "Get all the articles")
     public Flux<ArticleInfo> getAllArticle() {
-        String url = CMS_SERVICE_URL + "/article/all";
+        String url = CMS_SERVICE_URL + "/all";
+        LOG.debug("Will call the getAllArticle API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ArticleInfo.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -57,7 +58,8 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     @ApiOperation(value = "Get a specific article by article id")
     public Mono<ArticleInfo> getArticle(@PathVariable int articleId) {
-        String url = CMS_SERVICE_URL + "/article/" + articleId;
+        String url = CMS_SERVICE_URL + "/" + articleId;
+        LOG.debug("Will call the getArticle API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(ArticleInfo.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());

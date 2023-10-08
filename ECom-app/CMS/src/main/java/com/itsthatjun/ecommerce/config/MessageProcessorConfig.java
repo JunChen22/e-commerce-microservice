@@ -32,16 +32,16 @@ public class MessageProcessorConfig {
             ArticleInfo articleInfo = event.getArticleInfo();
             switch (event.getEventType()) {
                 case CREATE:
-                    articleService.createArticle(articleInfo);
+                    articleService.createArticle(articleInfo).block();
                     break;
 
                 case UPDATE:
-                    articleService.updateArticle(articleInfo);
+                    articleService.updateArticle(articleInfo).block();
                     break;
 
                 case DELETE:
                     int articleId = event.getArticleID();
-                    articleService.deleteArticle(articleId);
+                    articleService.deleteArticle(articleId).block();
                     break;
 
                 default:
