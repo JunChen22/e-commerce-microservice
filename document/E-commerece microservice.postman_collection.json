@@ -15,16 +15,18 @@
 						{
 							"name": "Article - Get all",
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/content/article/all",
+									"raw": "localhost:8080/article/all",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
-										"content",
 										"article",
 										"all"
 									]
@@ -38,13 +40,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/content/article/1",
+									"raw": "localhost:8080/article/1",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
-										"content",
 										"article",
 										"1"
 									]
@@ -58,50 +59,6 @@
 					"name": "OMS",
 					"item": [
 						{
-							"name": "Order - Generate confirme order from shopping cart",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODY3OTAyMzIwMDksImV4cCI6MTY4Njc5MTEzMn0.eXzk8YEXuIZFeYPnbkRlmyudwtt5JcwPoKRDXP0TX5DjolBcFGiHIHeYejXSOY-FDMHe7gx2DCoPuNr1ivuiog",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "[\n    {\n        \"productId\": 2,\n        \"productName\": \"note 10\",\n        \"productSku\": \"Size: 256 gb, Color: black\",\n        \"productPic\": \"https://example.com/product1.jpg\",\n        \"quantity\": 1,\n        \"price\": 999.00\n    },\n    {\n        \"productId\": 1,\n        \"productName\": \"Iphone-10\",\n        \"productSku\": \"Size: 256 gb, Color: Red\",\n        \"productPic\": \"https://example.com/product1.jpg\",\n        \"quantity\": 2,\n        \"price\": 999.00\n    }\n]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8080/order/generateConfirmOrder?coupon=15OFF",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"generateConfirmOrder"
-									],
-									"query": [
-										{
-											"key": "coupon",
-											"value": "15OFF"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Order - Generate acutal transaction order",
 							"request": {
 								"auth": {
@@ -109,7 +66,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODczOTc5NjE2ODEsImV4cCI6MTY4NzQwNjk2MX0.BFOcbPKWW8hi74yEj5Z0S1Wq_iHNN2h5Y2QeW_yx_l-laC2u_yTBdejwUV9u_55T7vD1vUJ2ymoGbNKS3LqYlA",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjMsIm5hbWUiOiJKYW5lIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU4Nzc2OTcsImlhdCI6MTY5NTg2ODY5Nzc2NCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjMifQ.lL29EcnIatoqJ_aZpUrUFZ9NpxevShZvbxRMyDlx08ncfwxZ_yAZW_ywWASz9ZIwfJeNWV-meBXjVvYtjjWFbA",
 											"type": "string"
 										}
 									]
@@ -118,7 +75,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"orderProductSku\": {\n        \"IP12-RED\": 1,\n        \"IPSE-BLUE\": 2,\n        \"GS21\": 3\n    },\n    \"payType\": \"paypal\",\n    \"coupon\": \"50OFFAPPLE\",\n    \"discountAmount\": 10.5,\n    \"amount\": 5099.94,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
+									"raw": "{\n    \"orderProductSku\": {\n        \"IP12-RED\": 1,\n        \"IPSE-BLUE\": 2,\n        \"GS21\": 3\n    },\n    \"payType\": \"paypal\",\n    \"coupon\": \"10OFF\",\n    \"discountAmount\": 10.5,\n    \"amount\": 5099.94,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -126,7 +83,7 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8080/order/generateOrder?userId=2",
+									"raw": "localhost:8080/order/generateOrder",
 									"host": [
 										"localhost"
 									],
@@ -134,12 +91,44 @@
 									"path": [
 										"order",
 										"generateOrder"
-									],
-									"query": [
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order - Generate acutal transaction order Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
 										{
-											"key": "userId",
-											"value": "2"
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTYzNzI1NDIsImlhdCI6MTY5NjM2MzU0MjEzMCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.gcTtPVnqjVwUVyKsBw406szsYwUYNrIncxHlmPtS0C4lBd7ES9Z-DU8kklL_gPeYtJSYy-sINC-sWe2jN6e4-A",
+											"type": "string"
 										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderProductSku\": {\n        \"NAM270\": 1,\n        \"TKAM\": 1\n    },\n    \"payType\": \"paypal\",\n    \"coupon\": \"10OFF\",\n    \"discountAmount\": 10.5,\n    \"amount\": 142.98,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/order/generateOrder",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"order",
+										"generateOrder"
 									]
 								}
 							},
@@ -220,14 +209,30 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/order/",
+									"raw": "http://localhost:8080/order/payment/success?paymentId=PAYID-MUKPFXA1X743110HL031135W&token=EC-54R02812R8431745F&PayerID=PQVC7TMEZCCWC",
+									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
 										"order",
-										""
+										"payment",
+										"success"
+									],
+									"query": [
+										{
+											"key": "paymentId",
+											"value": "PAYID-MUKPFXA1X743110HL031135W"
+										},
+										{
+											"key": "token",
+											"value": "EC-54R02812R8431745F"
+										},
+										{
+											"key": "PayerID",
+											"value": "PQVC7TMEZCCWC"
+										}
 									]
 								}
 							},
@@ -235,6 +240,9 @@
 						},
 						{
 							"name": "Order - payment fail",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -248,6 +256,15 @@
 								},
 								"method": "GET",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "localhost:8080/order/",
 									"host": [
@@ -294,8 +311,27 @@
 						{
 							"name": "OrderReturn -apply for return",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTYzMDk3ODYsImlhdCI6MTY5NjMwMDc4Njc1NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.XRucCp_3mM-tZix6OQDIEI7fQtPfSWtPa98r1Cbx4AObmdYqjjF994meJw5cxuJhoZhH6PNgJhggBhAIdLT0Gg",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"returnRequest\": {\n    \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\",\n    \"returnQuantity\": 2,\n    \"returnName\": \"John Doe\",\n    \"returnPhone\": \"123-456-7890\",\n    \"askingAmount\": 142.98,\n    \"reason\": \"Product damaged\",\n    \"description\": \"Received damaged goods\"\n  },\n  \"skuQuantity\": {\n    \"NAM270\": 1,\n    \"TKAM\": 1\n  },\n  \"picturesList\": [\n  ]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
 									"raw": "localhost:8080/order/return/apply",
 									"host": [
@@ -314,10 +350,20 @@
 						{
 							"name": "OrderReturn - Get return status",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU2ODQ2NDcsImlhdCI6MTY5NTY3NTY0NzkzMywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.NrVw1GzqNGvDr2InfyAGydut3wKwKxmDW3q51watFYVp3FCyxKammFTJVL1l8UF82aH3YOXObveyZcMVZhK8zA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/order/return/status",
+									"raw": "localhost:8080/order/return/status/OR789012",
 									"host": [
 										"localhost"
 									],
@@ -325,7 +371,8 @@
 									"path": [
 										"order",
 										"return",
-										"status"
+										"status",
+										"OR789012"
 									]
 								}
 							},
@@ -359,7 +406,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODczOTc5NjE2ODEsImV4cCI6MTY4NzQwNjk2MX0.BFOcbPKWW8hi74yEj5Z0S1Wq_iHNN2h5Y2QeW_yx_l-laC2u_yTBdejwUV9u_55T7vD1vUJ2ymoGbNKS3LqYlA",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTYyOTMwMDgsImlhdCI6MTY5NjI4NDAwODU0NCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.QYIlfzwG_NGOtiByijGcTVLF2WUKi6r2V0yAfR9CzGqO7rK0bSNgPYP3veur_BcE8zs_be-peflYfhtdf4vG0g",
 											"type": "string"
 										}
 									]
@@ -367,7 +414,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/cart/list?userId=2",
+									"raw": "localhost:8080/cart/list",
 									"host": [
 										"localhost"
 									],
@@ -375,12 +422,6 @@
 									"path": [
 										"cart",
 										"list"
-									],
-									"query": [
-										{
-											"key": "userId",
-											"value": "2"
-										}
 									]
 								}
 							},
@@ -596,254 +637,312 @@
 					"name": "PMS",
 					"item": [
 						{
-							"name": "Review - Get all reviews of a product",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/reviews/getAllProductReview/1",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"reviews",
-										"getAllProductReview",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Review - Create a review",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODY1MDkzNDY1MjgsImV4cCI6MTY4NjUxMDI0Nn0.B93EomYFXSmZ-Dw0g82IbAo_JMtyMsVcrawjaPYdlcRfNCGSG78mYcuKWBVkZ2iSmIPzqY7HD4z-yx-xN3hKJg",
-											"type": "string"
+							"name": "Review",
+							"item": [
+								{
+									"name": "Review - Get all reviews of a product",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/review/getAllProductReview/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"review",
+												"getAllProductReview",
+												"1"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n   \"productId\": 1,\n   \"memberId\": 12,\n   \"memberName\": \"test1\",\n   \"star\": 1,\n   \"tittle\": \"item arrive late\",\n   \"content\": \"late\",\n   \"pictures\": \"something.jpg\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Review - Get  detail of a review",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTY4MDAyODIsImlhdCI6MTY5Njc5MTI4MjI1MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.2Q4HPtBakpIBe6eUUxuUNic1JBFDNdfdYPv4pslBSh90d2junXsFy05r0WbKauscPwzro-fOeUWqazCTUeu1aA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/review/detail/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"review",
+												"detail",
+												"1"
+											]
 										}
-									}
+									},
+									"response": []
 								},
-								"url": {
-									"raw": "localhost:8080/reviews/create",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"reviews",
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Review - Update a review",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 9,\n    \"productId\": 4,\n    \"memberId\": 1,\n    \"memberName\": \"test1\",\n    \"star\": 5,\n    \"tittle\": \"item arrive late\",\n    \"content\": \"changed my mind\",\n    \"pictures\": \"something.jpg\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Review - Create a review",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTY4MDAyODIsImlhdCI6MTY5Njc5MTI4MjI1MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.2Q4HPtBakpIBe6eUUxuUNic1JBFDNdfdYPv4pslBSh90d2junXsFy05r0WbKauscPwzro-fOeUWqazCTUeu1aA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"review\": {\n    \"productId\": 1,\n    \"memberName\": \"John Doe\",\n    \"memberIcon\": \"https://example.com/johndoe.jpg\",\n    \"star\": 4.5,\n    \"createdAt\": \"2023-10-08T10:00:00Z\",\n    \"updatedAt\": \"2023-10-08T12:00:00Z\",\n    \"title\": \"Great Product\",\n    \"likes\": 25.0,\n    \"verified\": true,\n    \"content\": \"I really love this product. It works great!\"\n  },\n  \"picturesList\": [\n    {\n      \"id\": 1,\n      \"reviewAlbumId\": 1,\n      \"filename\": \"picture1.jpg\",\n      \"createdAt\": \"2023-10-08T10:30:00Z\"\n    },\n    {\n      \"id\": 2,\n      \"reviewAlbumId\": 1,\n      \"filename\": \"picture2.jpg\",\n      \"createdAt\": \"2023-10-08T11:00:00Z\"\n    }\n  ]\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/review/create",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"review",
+												"create"
+											]
 										}
-									}
+									},
+									"response": []
 								},
-								"url": {
-									"raw": "localhost:8080/reviews/update",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"reviews",
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Review - Delete a review",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMiIsImNyZWF0ZWQiOjE2ODY1MTIxNDI3MTQsImV4cCI6MTY4NjUxMzA0Mn0.p2InzGCGFasDjouMc3d_ZtqfQfnsYfTnMQNiekOg5Q6WEtlgNR3WNedZfiKuTq-lDolGii8p_fQ24QXXYe5ymQ",
-											"type": "string"
+								{
+									"name": "Review - Update a review",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTY4MDMxNzcsImlhdCI6MTY5Njc5NDE3NzUxNywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.no9ZxP7wpQw2oq8gArEpgCQ2vxUGOaZKA12saF742Ya83anSN5-4RMxbbylUc3GVVyM2zRaINZpUe4KlpHa4iA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"review\": {\n    \"id\" : 12,\n    \"productId\": 1,\n    \"memberName\": \"John Doe\",\n    \"memberIcon\": \"https://example.com/johndoe.jpg\",\n    \"star\": 4.5,\n    \"createdAt\": \"2023-10-08T10:00:00Z\",\n    \"updatedAt\": \"2023-10-08T12:00:00Z\",\n    \"title\": \"Great Product\",\n    \"likes\": 25.0,\n    \"verified\": true,\n    \"content\": \"I really love this product. It works great!\"\n  },\n  \"picturesList\": [\n    {\n      \"id\": 1,\n      \"reviewAlbumId\": 1,\n      \"filename\": \"picture1.jpg\",\n      \"createdAt\": \"2023-10-08T10:30:00Z\"\n    },\n    {\n      \"id\": 2,\n      \"reviewAlbumId\": 1,\n      \"filename\": \"picture2.jpg\",\n      \"createdAt\": \"2023-10-08T11:00:00Z\"\n    }\n  ]\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/review/update",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"review",
+												"update"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/reviews/delete/9",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"reviews",
-										"delete",
-										"9"
-									]
+								{
+									"name": "Review - Delete a review",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTY4MDAyODIsImlhdCI6MTY5Njc5MTI4MjI1MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.2Q4HPtBakpIBe6eUUxuUNic1JBFDNdfdYPv4pslBSh90d2junXsFy05r0WbKauscPwzro-fOeUWqazCTUeu1aA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/review/delete/11",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"review",
+												"delete",
+												"11"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Product - Get All",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/product/listAll",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"product",
-										"listAll"
-									]
+							"name": "Product",
+							"item": [
+								{
+									"name": "Product - Get All",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/product/listAll",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"product",
+												"listAll"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Product - Get page of 5 product",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/product/list",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"product",
+												"list"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Product - Get a product by id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/product/3",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"product",
+												"3"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Product - Get page of 5 product",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/product/list",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"product",
-										"list"
-									]
+							"name": "Brand",
+							"item": [
+								{
+									"name": "Brand - Get all brands",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/brand/listAll",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"brand",
+												"listAll"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Brand - Get All brand in size of 3",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/brand/list",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"brand",
+												"list"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Brand - Get all brand product",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/brand/product/2",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"brand",
+												"product",
+												"2"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Brand - Get Brand info",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/brand/2",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"brand",
+												"2"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
-						},
-						{
-							"name": "Product - Get a product by id",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/product/3",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"product",
-										"3"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Get all brands",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/brand/listAll",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"brand",
-										"listAll"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Get All brand in size of 3",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/brand/list",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"brand",
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Get all brand product",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/brand/product/2",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"brand",
-										"product",
-										"2"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Get Brand info",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/brand/2",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"brand",
-										"2"
-									]
-								}
-							},
-							"response": []
+							]
 						}
 					]
 				},
@@ -856,7 +955,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": ""
+									"raw": "localhost:8080/sale/AllFlashSaleItem",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"sale",
+										"AllFlashSaleItem"
+									]
 								}
 							},
 							"response": []
@@ -867,13 +974,68 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/",
+									"raw": "localhost:8080/sale/AllPromotionSale",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
-										""
+										"sale",
+										"AllPromotionSale"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Promotional Sale Items -",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/sale/AllPromotionSaleItem",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"sale",
+										"AllPromotionSaleItem"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check coupon discount on cart",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU4NTg1NTgsImlhdCI6MTY5NTg0OTU1ODgxMiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.9GwTBCk8ZgpWnq-3LXRmKqr5Zwd08Jt3bAdO5uQ7ZbNw7EBdPd9HG3My7lb9UWKkG9XlaJGHEiUgUbIls05XFw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/coupon/check?couponCode=10OFF",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"coupon",
+										"check"
+									],
+									"query": [
+										{
+											"key": "couponCode",
+											"value": "10OFF"
+										}
 									]
 								}
 							},
@@ -1039,6 +1201,62 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Login - user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"user2\",\n  \"password\": \"password\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test cart controller",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU4NTg1NTgsImlhdCI6MTY5NTg0OTU1ODgxMiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.9GwTBCk8ZgpWnq-3LXRmKqr5Zwd08Jt3bAdO5uQ7ZbNw7EBdPd9HG3My7lb9UWKkG9XlaJGHEiUgUbIls05XFw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/cart/test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart",
+								"test"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1056,7 +1274,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NDg0MTg2MjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ0OTMxODZ9.FydUu8LTYUxDZ9G9E402FHDyZXWJ-HtxlUkQuc0XvO65_tT6aNcpLpuGQlokENf7e5YUXBzA8fV3qb5yf8VEYA",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgxNTM0MTc0LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTA1MzR9.BI4UQpBYigpYgLMC5q1M8PEGORKBS_VEd-ZIfcYdhRAwSSIBsNfM-p-cMufamywfNeqeK9_i7FGEwqRSIuCE8g",
 											"type": "string"
 										}
 									]
@@ -1094,7 +1312,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NDg0MTg2MjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ0OTMxODZ9.FydUu8LTYUxDZ9G9E402FHDyZXWJ-HtxlUkQuc0XvO65_tT6aNcpLpuGQlokENf7e5YUXBzA8fV3qb5yf8VEYA",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgxNTM0MTc0LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTA1MzR9.BI4UQpBYigpYgLMC5q1M8PEGORKBS_VEd-ZIfcYdhRAwSSIBsNfM-p-cMufamywfNeqeK9_i7FGEwqRSIuCE8g",
 											"type": "string"
 										}
 									]
@@ -1123,7 +1341,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NDg0MTg2MjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ0OTMxODZ9.FydUu8LTYUxDZ9G9E402FHDyZXWJ-HtxlUkQuc0XvO65_tT6aNcpLpuGQlokENf7e5YUXBzA8fV3qb5yf8VEYA",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzgyNTg0MjAyLCJhZG1pbklkIjoxLCJleHAiOjE2OTY3OTE1ODR9.XTgsY6rIPvob68wNP9vWDGW9rrg32dLFLRk9NQIyrZi_6ve71tWxi0-Eu2XX0ClxYN2s_AmE1Z-zId5fgy46Lg",
 											"type": "string"
 										}
 									]
@@ -1152,7 +1370,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0MzkyODk4NzkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTQzOTM3OTh9.HXMJY0mksMr7phrsenKyb2k2Lc30pYbT-24EGt7vFQGr_J6xB4nc7IIQpORSGNg9XdHGYZBZZclTzZFTmBhboQ",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzgyNTg0MjAyLCJhZG1pbklkIjoxLCJleHAiOjE2OTY3OTE1ODR9.XTgsY6rIPvob68wNP9vWDGW9rrg32dLFLRk9NQIyrZi_6ve71tWxi0-Eu2XX0ClxYN2s_AmE1Z-zId5fgy46Lg",
 											"type": "string"
 										}
 									]
@@ -1190,7 +1408,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0MzkyODk4NzkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTQzOTM3OTh9.HXMJY0mksMr7phrsenKyb2k2Lc30pYbT-24EGt7vFQGr_J6xB4nc7IIQpORSGNg9XdHGYZBZZclTzZFTmBhboQ",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzgyNTg0MjAyLCJhZG1pbklkIjoxLCJleHAiOjE2OTY3OTE1ODR9.XTgsY6rIPvob68wNP9vWDGW9rrg32dLFLRk9NQIyrZi_6ve71tWxi0-Eu2XX0ClxYN2s_AmE1Z-zId5fgy46Lg",
 											"type": "string"
 										}
 									]
@@ -1388,7 +1606,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0Mjk4ODQ4MzkyLCJhZG1pbklkIjoxLCJleHAiOjE2OTQyOTk3NDh9.LdGi5olZ0oelP5EE7vaA_Ve7bSCCz2D4rGYVQg2c44vM1KiXo3XctPak-CWvEo_rp-uKxHKTk_3R1WlrSJI28w",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Mjk3Mjk2NjE0LCJhZG1pbklkIjoxLCJleHAiOjE2OTYzMDYyOTZ9.Rk8b4JRds61lTpUcgCXa9SuWzWfu4cfbS6L_gYQB4lLefshwEE5Q7t3Dy2foKqVYQlanhMzXoUuyVX_HSH-AgA",
 											"type": "string"
 										}
 									]
@@ -1498,7 +1716,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0Mjk5NzUzNTEyLCJhZG1pbklkIjoxLCJleHAiOjE2OTQzMDA2NTN9.j4qYN0lpYQVQaL8jDPQvSCH7EW1cVQJep95guy2Smo-08qT6X3k7jk_NbgLi58IjUaMkHJ90ZBSefTN898kyig",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Mjk4MjQyMTgyLCJhZG1pbklkIjoxLCJleHAiOjE2OTYzMDcyNDJ9.T24bBxJ0PIlUGl8oSOgYWTNvzaOOixh1QafOjNu_yXkK7LHQ4SPHhsW71sgS4qg8stZXal-Djhi9Os5PB6bkAw",
 											"type": "string"
 										}
 									]
@@ -1507,7 +1725,46 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"status\": \"REJECTED\",\n    \"returnApply\": {\n        \"id\": 1,\n        \"orderId\": 1,\n        \"companyAddressId\": 1,\n        \"productId\": 1,\n        \"orderSn\": \"1001\",\n        \"memberId\": 1,\n        \"returnAmount\": 450.00,\n        \"returnName\": \"John Doe\",\n        \"returnPhone\": \"555-123-4567\",\n        \"status\": 0,\n        \"handleTime\": \"2023-04-03T14:00:00.000+00:00\",\n        \"productName\": \"iPhone SE\",\n        \"productBrand\": \"Apple\",\n        \"productSkuCode\": \"IPSE-RED\",\n        \"productCount\": 1,\n        \"productPrice\": 450.00,\n        \"reason\": \"Wrong size\",\n        \"description\": \"Received size L, ordered size M\",\n        \"handleNote\": \"Handled successfully\",\n        \"handleOperator\": \"JaneSmith\",\n        \"receiveOperator\": \"JohnDoe\",\n        \"receiveTime\": \"2023-04-04T14:00:00.000+00:00\",\n        \"receiveNote\": \"Received item in good condition\",\n        \"createdAt\": \"2023-09-10T02:38:10.547+00:00\"\n    },\n    \"reason\": \"Your reason for the decision\"\n}",
+									"raw": "{\n    \"status\": \"APPROVED\",\n    \"returnRequest\": {\n        \"id\": 6,\n        \"askingAmount\" : 142.98,\n        \"companyAddressId\": 1,\n        \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\"\n    },\n    \"reason\": \"Your reason for the decision\",\n    \"returnItemList\": [\n        {\n            \"productSku\" : \"NAM270\",\n            \"purchasedPrice\" : 129.99,\n            \"quantity\" : 1\n        },\n        {\n            \"productSku\" : \"TKAM\",\n            \"purchasedPrice\" : 12.99,\n            \"quantity\" : 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8082/order/return/update",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"order",
+										"return",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "OrderReturn - Update return COMPLETED_RETURN",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Mjk4MjQyMTgyLCJhZG1pbklkIjoxLCJleHAiOjE2OTYzMDcyNDJ9.T24bBxJ0PIlUGl8oSOgYWTNvzaOOixh1QafOjNu_yXkK7LHQ4SPHhsW71sgS4qg8stZXal-Djhi9Os5PB6bkAw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"status\": \"COMPLETED_RETURN\",\n    \"returnRequest\": {\n        \"id\": 6,\n        \"askingAmount\" : 142.98,\n        \"companyAddressId\": 1,\n        \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\"\n    },\n    \"reason\": \"Your reason for the decision\",\n    \"returnItemList\": [\n        {\n            \"productSku\" : \"NAM270\",\n            \"purchasedPrice\" : 129.99,\n            \"quantity\" : 1\n        },\n        {\n            \"productSku\" : \"TKAM\",\n            \"purchasedPrice\" : 12.99,\n            \"quantity\" : 1\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1535,497 +1792,792 @@
 					"name": "PMS",
 					"item": [
 						{
-							"name": "Review - Get all reviews of a product",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTU0MTUxMTQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1NjMxNTF9.La-ZUS4n160JK5gr1bILuBr28vdZnuZ25gdLh5tRI9j4W_8xZPPBapCGQK2T3UAHlG4GzAQl7w0-Fc8dA9A_IA",
-											"type": "string"
+							"name": "Brand",
+							"item": [
+								{
+									"name": "Brand - Get all brands",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/brand/listAll",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"brand",
+												"listAll"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/reviews/getAllProductReview/4",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"reviews",
-										"getAllProductReview",
-										"4"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Review - Get All reviews by User",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTU0MTUxMTQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1NjMxNTF9.La-ZUS4n160JK5gr1bILuBr28vdZnuZ25gdLh5tRI9j4W_8xZPPBapCGQK2T3UAHlG4GzAQl7w0-Fc8dA9A_IA",
-											"type": "string"
+								{
+									"name": "Brand - Get All brand in size of 3",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Nzk0OTU2NTc1LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4MDM5NTZ9.6EtuYBdbpYcmcaX4ZSN_VzBcGzqmkyT9_rvRr1wQmzuJYwr86BQWrYCi3QfuEER21mMYUk-OD1atKeFfgTFnkQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/brand/list",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"brand",
+												"list"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/reviews/getAllReviewByUser/4",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"reviews",
-										"getAllReviewByUser",
-										"4"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Review - Create a review",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTU0MTUxMTQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1NjMxNTF9.La-ZUS4n160JK5gr1bILuBr28vdZnuZ25gdLh5tRI9j4W_8xZPPBapCGQK2T3UAHlG4GzAQl7w0-Fc8dA9A_IA",
-											"type": "string"
+								{
+									"name": "Brand - Get all brand product",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Nzk0OTU2NTc1LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4MDM5NTZ9.6EtuYBdbpYcmcaX4ZSN_VzBcGzqmkyT9_rvRr1wQmzuJYwr86BQWrYCi3QfuEER21mMYUk-OD1atKeFfgTFnkQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/brand/product/2",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"brand",
+												"product",
+												"2"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"review\": {\n        \"productId\": 4,\n        \"memberId\": 4,\n        \"memberName\": \"user1\",\n        \"star\": 3.5,\n        \"tittle\": \"new review created\",\n        \"content\": \"size was smaller than expected\"\n    },\n    \"picturesList\": [\n        {\n            \"filename\": \"https://i.imgur.com/rzocQcD.jpeg\"\n        }\n    ]\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Brand - Get Brand info",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/brand/2",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"brand",
+												"2"
+											]
 										}
-									}
+									},
+									"response": []
 								},
-								"url": {
-									"raw": "localhost:8082/reviews/create",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"reviews",
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Review - Update a review",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 9,\n    \"productId\": 4,\n    \"memberId\": 1,\n    \"memberName\": \"test1\",\n    \"star\": 5,\n    \"tittle\": \"item arrive late\",\n    \"content\": \"changed my mind\",\n    \"pictures\": \"something.jpg\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Brand - Create a brand",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Nzk0OTU2NTc1LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4MDM5NTZ9.6EtuYBdbpYcmcaX4ZSN_VzBcGzqmkyT9_rvRr1wQmzuJYwr86BQWrYCi3QfuEER21mMYUk-OD1atKeFfgTFnkQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\": \"Pine-Apple\",\n    \"alphabet\": \"P\",\n    \"logo\": \"something.jpg\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/brand/create",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"brand",
+												"create"
+											]
 										}
-									}
+									},
+									"response": []
 								},
-								"url": {
-									"raw": "localhost:8082/reviews/update",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"reviews",
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Review - Delete a review",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTU0MTUxMTQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1NjMxNTF9.La-ZUS4n160JK5gr1bILuBr28vdZnuZ25gdLh5tRI9j4W_8xZPPBapCGQK2T3UAHlG4GzAQl7w0-Fc8dA9A_IA",
-											"type": "string"
+								{
+									"name": "Brand - update a brand",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Nzk0OTU2NTc1LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4MDM5NTZ9.6EtuYBdbpYcmcaX4ZSN_VzBcGzqmkyT9_rvRr1wQmzuJYwr86BQWrYCi3QfuEER21mMYUk-OD1atKeFfgTFnkQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id\": 2,\n    \"name\": \"Pine-Apple\",\n    \"alphabet\": \"P\",\n    \"status\": \"active\",\n    \"logo\": \"\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/brand/update/",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"brand",
+												"update",
+												""
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/reviews/delete/14",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"reviews",
-										"delete",
-										"14"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Product - Get All",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
-											"type": "string"
+								{
+									"name": "Brand - Delete a brand",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/brand/delete/12",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"brand",
+												"delete",
+												"12"
+											]
 										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/product/listAll",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"product",
-										"listAll"
-									]
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Product - Get page of 5 product",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
-											"type": "string"
+							"name": "Product",
+							"item": [
+								{
+									"name": "Get All product",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODY3Nzk0MDQ5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4NzY3OTR9.HgXy2iJawFP49aP3g5hJ3Y2bSOVaJVPUbyXb6LsIrcV7O5U9Li2Wo5Oc7JjYTj09XpxmJ3X9S32fJXts4ZKCsg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/product/listAll",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"listAll"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/product/list",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"product",
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Product - Get a product by id",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/product/3",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"product",
-										"3"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Product - Create a product",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
-											"type": "string"
+								{
+									"name": "Get page of 5 product",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODY3Nzk0MDQ5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4NzY3OTR9.HgXy2iJawFP49aP3g5hJ3Y2bSOVaJVPUbyXb6LsIrcV7O5U9Li2Wo5Oc7JjYTj09XpxmJ3X9S32fJXts4ZKCsg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/product/list",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"list"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"brandId\": 7,\n    \"brandName\": \"oneplus\",\n    \"name\": \"oneplus 8p\",\n    \"categoryId\": 15,\n    \"categoryName\": null,\n    \"attributeCategoryId\": 1,\n    \"sn\": null,\n    \"deleteStatus\": 0,\n    \"publishStatus\": 1,\n    \"newStatus\": null,\n    \"recommendStatus\": null,\n    \"verifyStatus\": null,\n    \"subTitle\": \"phone\",\n    \"picture\": \" \",\n    \"description\": \"phone desc\",\n    \"originalPrice\": 499.00,\n    \"onSaleStatus\": null,\n    \"salePrice\": 480.00,\n    \"stock\": 15,\n    \"lowStock\": null,\n    \"unit\": null,\n    \"weight\": null,\n    \"promotionStartTime\": null,\n    \"promotionEndTime\": null,\n    \"promotionPerLimit\": null,\n    \"promotionType\": null,\n    \"keywords\": \"smart phone\",\n    \"descriptionAlbum\": \"\",\n    \"albumPics\": null,\n    \"detailTitle\": null,\n    \"detailDesc\": null,\n    \"note\": null\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Get a product by id",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAxNTIzODI3LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTA1MjN9.Dxh4RcVs9S3YB4Odq1tMAtx4Pohm55XiNunl-in7CySn9WX6WAWcKP_i9f2VnXSfhDa-Q00Q1aJqBKI5harzqQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/product/2",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"2"
+											]
 										}
-									}
+									},
+									"response": []
 								},
-								"url": {
-									"raw": "localhost:8082/product/create",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"product",
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Product - Update product",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
-											"type": "string"
+								{
+									"name": "Create a product",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgxODE5ODYxLCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTA4MTl9.U6yLi0EB054jRCxjiG18G_p0AiVHv_YDFwsJZDZEEU0iXIA1SEQ5_ZEXDvTXPdLD2vXv4lso-M6JbszSmf8BOg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product\": {\n        \"brandId\": 3,\n        \"brandName\": \"Google\",\n        \"name\": \"Pixel 55\",\n        \"categoryId\": 15,\n        \"categoryName\": \"Smartphones\",\n        \"attributeCategoryId\": 9,\n        \"sn\": \"SN-345\",\n        \"newStatus\": null,\n        \"recommendStatus\": null,\n        \"subTitle\": \"Capture the perfect shot\",\n        \"coverPicture\": \"pixel5.jpg\",\n        \"description\": \"The Pixel 5 features an exceptional camera and advanced AI capabilities.\",\n        \"originalPrice\": 799.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 799.99,\n        \"stock\": 160,\n        \"lowStock\": 8,\n        \"weight\": 140.00,\n        \"keywords\": \"Google, Pixel, smartphone\",\n        \"detailTitle\": \"Product Details\",\n        \"detailDesc\": \"Capture stunning photos with the Pixel 5.\",\n        \"createdAt\": \"2023-10-08T16:18:19.340+00:00\",\n        \"note\": null\n    },\n        \"skuVariants\": [\n        {\n            \"skuCode\": \"PX5\",\n            \"picture\": \"pixel5.jpg\",\n            \"price\": 799.99,\n            \"promotionPrice\": 799.99,\n            \"stock\": 80,\n            \"lowStock\": 8,\n            \"lockStock\": 0,\n            \"unitSold\": 40,\n            \"status\": 1\n        },\n        {\n            \"skuCode\": \"PX6\",\n            \"picture\": \"pixel6.jpg\",\n            \"price\": 799.99,\n            \"promotionPrice\": 599.99,\n            \"stock\": 80,\n            \"lowStock\": 8,\n            \"lockStock\": 0,\n            \"unitSold\": 40,\n            \"status\": 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/create",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"create"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 3,\n    \"brandId\": 7,\n    \"brandName\": \"new\",\n    \"name\": \"oneplus 8p\",\n    \"categoryId\": 15,\n    \"categoryName\": null,\n    \"attributeCategoryId\": 1,\n    \"sn\": null,\n    \"deleteStatus\": 0,\n    \"publishStatus\": 1,\n    \"newStatus\": null,\n    \"recommendStatus\": null,\n    \"verifyStatus\": null,\n    \"subTitle\": \"phone\",\n    \"picture\": \" \",\n    \"description\": \"phone desc\",\n    \"originalPrice\": 499.00,\n    \"onSaleStatus\": null,\n    \"salePrice\": 480.00,\n    \"stock\": 15,\n    \"lowStock\": null,\n    \"unit\": null,\n    \"weight\": null,\n    \"promotionStartTime\": null,\n    \"promotionEndTime\": null,\n    \"promotionPerLimit\": null,\n    \"promotionType\": null,\n    \"keywords\": \"smart phone\",\n    \"descriptionAlbum\": \"\",\n    \"albumPics\": null,\n    \"detailTitle\": null,\n    \"detailDesc\": null,\n    \"note\": null\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Add a product sku",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgxODE5ODYxLCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTA4MTl9.U6yLi0EB054jRCxjiG18G_p0AiVHv_YDFwsJZDZEEU0iXIA1SEQ5_ZEXDvTXPdLD2vXv4lso-M6JbszSmf8BOg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product\": {\n        \"id\" : 3,\n        \"originalPrice\": 799.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 799.99\n    },\n        \"skuVariants\": [\n        {\n            \"skuCode\": \"PX5\",\n            \"picture\": \"pixel5.jpg\",\n            \"price\": 799.99,\n            \"promotionPrice\": 799.99,\n            \"stock\": 80,\n            \"lowStock\": 8,\n            \"lockStock\": 0,\n            \"unitSold\": 40,\n            \"status\": 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/addProductSku",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"addProductSku"
+											]
 										}
-									}
+									},
+									"response": []
 								},
-								"url": {
-									"raw": "localhost:8082/product/update",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"product",
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Product - Delete product",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk0NTczOTIyNjU0LCJhZG1pbklkIjoxLCJleHAiOjE2OTQ1ODI5MjJ9.wEhi5wlW7cveWW8WkGyMxNRA1EQMzQGcA0G4V13bI66VyPxVWe90_VL5zlvsnYCdfbF7zJCtIUNTrs94aBk9Ig",
-											"type": "string"
+								{
+									"name": "Update product info",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgyNTQwNTk5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTE1NDB9.nxeIBIU5kVIDObXeG1YczDrjaQwrM4laj9w7VcBbCXfuJXV1BwlaNE1bg3JHlBF2He221djY7jfSFWqTHA3g5A",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product\": {\n        \"id\": 3,\n        \"brandId\": 3,\n        \"brandName\": \"Google\",\n        \"name\": \"Pixel 55\",\n        \"categoryId\": 15,\n        \"categoryName\": \"Smartphones\",\n        \"attributeCategoryId\": 9,\n        \"sn\": \"SN-345\",\n        \"newStatus\": null,\n        \"recommendStatus\": null,\n        \"subTitle\": \"Capture the perfect shot\",\n        \"coverPicture\": \"pixel5.jpg\",\n        \"description\": \"The Pixel 5 features an exceptional camera and advanced AI capabilities.\",\n        \"originalPrice\": 799.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 799.99,\n        \"stock\": 160,\n        \"lowStock\": 8,\n        \"weight\": 140.00,\n        \"keywords\": \"Google, Pixel, smartphone\",\n        \"detailTitle\": \"Product Details\",\n        \"detailDesc\": \"Capture stunning photos with the Pixel 5.\",\n        \"createdAt\": \"2023-10-08T16:18:19.340+00:00\",\n        \"note\": null\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/updateProductInfo",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"updateProductInfo"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/product/delete/1",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"product",
-										"delete",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Get all brands",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/brand/listAll",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"brand",
-										"listAll"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Get All brand in size of 3",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/brand/list",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"brand",
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Get all brand product",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/brand/product/2",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"brand",
-										"product",
-										"2"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Get Brand info",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/brand/2",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"brand",
-										"2"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - Create a brand",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\n    \"name\": \"Pine-Apple\",\n    \"alphabet\": \"P\",\n    \"logo\": \"something.jpg\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Update product status",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgyNTQwNTk5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTE1NDB9.nxeIBIU5kVIDObXeG1YczDrjaQwrM4laj9w7VcBbCXfuJXV1BwlaNE1bg3JHlBF2He221djY7jfSFWqTHA3g5A",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product\": {\n        \"id\": 1,\n        \"publishStatus\" : 0\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/updateProductStatus",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"updateProductStatus"
+											]
 										}
-									}
+									},
+									"response": []
 								},
-								"url": {
-									"raw": "localhost:8082/brand/create",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"brand",
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Brand - update a brand",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 2,\n    \"name\": \"Pine-Apple\",\n    \"alphabet\": \"P\",\n    \"status\": \"active\",\n    \"logo\": \"\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+								{
+									"name": "Update product sku status",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODk5MDE5MjA5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MDgwMTl9.mplqYc7KThP5CCWSKKwGHn-ImVqk7vQkPXOiLS73IVnVoO_mtysXekWey5RVdKo-iM52ZMCRbJJarePJF00Cuw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"skuVariants\": [\n        {\n            \"id\": 32,\n            \"productId\": 29,\n            \"status\": 0\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/updateProductSkuStatus",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"updateProductSkuStatus"
+											]
 										}
-									}
+									},
+									"response": []
 								},
-								"url": {
-									"raw": "localhost:8082/brand/update/",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"brand",
-										"update",
-										""
-									]
+								{
+									"name": "Update product stock",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODk5MDE5MjA5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MDgwMTl9.mplqYc7KThP5CCWSKKwGHn-ImVqk7vQkPXOiLS73IVnVoO_mtysXekWey5RVdKo-iM52ZMCRbJJarePJF00Cuw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"skuVariants\": [\n        {\n            \"id\": 1,\n            \"productId\": 1\n        }\n    ],\n    \"stock\": 20\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/updateProductStock",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"updateProductStock"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update product price",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAyNDk4NjA3LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTE0OTh9.aK2iHvpSxjOmJpZ2J6yNOAoIrCqDlG60wzVaBjClW7Uq0YVk2cKY0ufXfo_pcYSRYHNmalKdidYxAILetQ9hoQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"skuVariants\": [\n        {\n            \"id\": 4,\n            \"productId\": 2,\n            \"skuCode\": \"IPSE-BLUE\",\n            \"price\": 499.99,\n            \"promotionPrice\": 349.99\n        },\n        {\n            \"id\": 5,\n            \"productId\": 2,\n            \"skuCode\": \"IPSE-RED\",\n            \"price\": 499.99,\n            \"promotionPrice\": 249.99\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/updateProductPrice",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"updateProductPrice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Product - Delete product",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/product/delete/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"delete",
+												"1"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Brand - Delete a brand",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/brand/delete/12",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"brand",
-										"delete",
-										"12"
-									]
+							"name": "Review",
+							"item": [
+								{
+									"name": "Review - Get all reviews of a product",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/review/getAllProductReview/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"review",
+												"getAllProductReview",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Review - Get All reviews by User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/review/getAllReviewByUser/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"review",
+												"getAllReviewByUser",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Review - Create a review",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"review\": {\n        \"id\": 1,\n        \"productId\": 1,\n        \"memberId\": -1,\n        \"memberName\": \"user1\",\n        \"memberIcon\": \"icon.jpg\",\n        \"star\": 3.5,\n        \"createdAt\": \"2020-03-18T22:18:40.000+00:00\",\n        \"updatedAt\": null,\n        \"tittle\": \"size smaller than expected\",\n        \"likes\": 1,\n        \"verified\": null,\n        \"content\": \"size was smaller than expected\"\n    },\n    \"picturesList\": [\n        {\n            \"filename\": \"https://i.imgur.com/rzocQcD.jpeg\",\n            \"createdAt\": \"2023-10-10T01:51:34.392+00:00\"\n        },\n        {\n            \"filename\": \"https://i.imgur.com/LUszOiA.jpeg\",\n            \"createdAt\": \"2023-10-10T01:51:34.392+00:00\"\n        },\n        {\n            \"filename\": \"https://i.imgur.com/IQAzB6P.jpeg\",\n            \"createdAt\": \"2023-10-10T01:51:34.392+00:00\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/review/create",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"review",
+												"create"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Review - Update a review",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"review\": {\n        \"id\": 1,\n        \"productId\": 1,\n        \"memberId\": 1,\n        \"memberName\": \"user1\",\n        \"memberIcon\": \"icon.jpg\",\n        \"star\": 3.5,\n        \"createdAt\": \"2020-03-18T22:18:40.000+00:00\",\n        \"updatedAt\": null,\n        \"tittle\": \"size smaller than expected\",\n        \"likes\": 1,\n        \"verified\": null,\n        \"content\": \"size was smaller than expected\"\n    },\n    \"picturesList\": [\n        {\n            \"id\": 1,\n            \"reviewAlbumId\": 1,\n            \"filename\": \"https://i.imgur.com/rzocQcD.jpeg\",\n            \"createdAt\": \"2023-10-10T01:51:34.392+00:00\"\n        },\n        {\n            \"id\": 2,\n            \"reviewAlbumId\": 1,\n            \"filename\": \"https://i.imgur.com/LUszOiA.jpeg\",\n            \"createdAt\": \"2023-10-10T01:51:34.392+00:00\"\n        },\n        {\n            \"id\": 3,\n            \"reviewAlbumId\": 1,\n            \"filename\": \"https://i.imgur.com/IQAzB6P.jpeg\",\n            \"createdAt\": \"2023-10-10T01:51:34.392+00:00\"\n        }\n    ]\n},",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/review/update",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"review",
+												"update"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Review - Delete a review",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/review/delete/11",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"review",
+												"delete",
+												"11"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						}
 					]
 				},
@@ -2170,6 +2722,16 @@
 						{
 							"name": "Coupon History - Getll all used coupons",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzMzNjE4ODcwLCJhZG1pbklkIjoxLCJleHAiOjE2OTY3NDI2MTh9.UEVZcsOIoQ-FFKWKCuOA5knS1moP32ZPC8nlQMikXEwb2MOWLW_oSwTH83gd88v7SAZNkOZUjIQtjedaAVH9RA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -2187,8 +2749,18 @@
 							"response": []
 						},
 						{
-							"name": "Coupon History - Copy",
+							"name": "Coupon History - Getll user coupon usage",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzA5ODc4NjQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTY3MTg4Nzh9.Ww7oOlOjyurGmqWcEOVWge-_oLFs3RVbFva5a3XUdtnHb2MpiYQMtnSNtrHknp5a572YuT-cdjgo954SumQRVA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -2879,6 +3451,28 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Health check",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/actuator/health",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"actuator",
+								"health"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2891,11 +3485,11 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/esProduct/importAll",
+							"raw": "localhost:8080/esProduct/importAll",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
 								"esProduct",
 								"importAll"
@@ -2910,19 +3504,26 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/esProduct/search?keyword=phone",
+							"raw": "localhost:8080/search?keyword=phone&pageNum=1&sort=3",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8080",
 							"path": [
-								"esProduct",
 								"search"
 							],
 							"query": [
 								{
 									"key": "keyword",
 									"value": "phone"
+								},
+								{
+									"key": "pageNum",
+									"value": "1"
+								},
+								{
+									"key": "sort",
+									"value": "3"
 								}
 							]
 						}

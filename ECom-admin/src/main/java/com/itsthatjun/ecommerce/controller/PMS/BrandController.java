@@ -50,7 +50,7 @@ public class BrandController {
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
     public Flux<Brand> getAllBrand(){
-        String url = PMS_SERVICE_URL + "/brand/listAll";
+        String url = PMS_SERVICE_URL + "/listAll";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -61,7 +61,7 @@ public class BrandController {
     public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize){
 
-        String url = PMS_SERVICE_URL + "/brand/list?page=" + pageNum + "&size=" + pageSize;
+        String url = PMS_SERVICE_URL + "/list?page=" + pageNum + "&size=" + pageSize;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -70,7 +70,7 @@ public class BrandController {
     @GetMapping("/product/{brandId}")
     @ApiOperation(value = "Get all product of this brand")
     public Flux<Product> getBrandProduct(@PathVariable int brandId){
-        String url = PMS_SERVICE_URL + "/brand/product/" + brandId;
+        String url = PMS_SERVICE_URL + "/product/" + brandId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> empty());
@@ -79,7 +79,7 @@ public class BrandController {
     @GetMapping("/{brandId}")
     @ApiOperation(value = "Get brand info")
     public Mono<Brand> getBrand(@PathVariable int brandId){
-        String url = PMS_SERVICE_URL + "/brand/" + brandId;
+        String url = PMS_SERVICE_URL + "/" + brandId;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());

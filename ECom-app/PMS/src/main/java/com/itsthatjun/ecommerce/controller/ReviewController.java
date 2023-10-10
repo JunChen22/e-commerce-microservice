@@ -41,4 +41,10 @@ public class ReviewController {
     public Flux<ProductReview> getProductReviews(@PathVariable int productId) {
         return reviewService.listProductAllReview(productId);
     }
+
+    @GetMapping("/admin/getAllReviewByUser/{useId}")
+    @ApiOperation(value = "get all reviews for a product")
+    public Flux<ProductReview> getProductReviewsByUser(@PathVariable int useId) {
+        return reviewService.listAllReviewByUser(useId);
+    }
 }

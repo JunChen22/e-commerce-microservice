@@ -49,7 +49,7 @@ public class ReviewController {
     @GetMapping("/getAllProductReview/{productId}")
     @ApiOperation(value = "get all reviews for a product")
     public Flux<ProductReview> getProductReviews(@PathVariable int productId) {
-        String url = PMS_SERVICE_URL + "/reviews/getAllProductReview/" + productId;
+        String url = PMS_SERVICE_URL + "/getAllProductReview/" + productId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ProductReview.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -58,7 +58,7 @@ public class ReviewController {
     @GetMapping("/getAllReviewByUser/{useId}")
     @ApiOperation(value = "get all reviews made a user")
     public Flux<ProductReview> getProductReviewsByUser(@PathVariable int useId) {
-        String url = PMS_SERVICE_URL + "/reviews/admin/getAllReviewByUser/" + useId;
+        String url = PMS_SERVICE_URL + "/admin/getAllReviewByUser/" + useId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ProductReview.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());

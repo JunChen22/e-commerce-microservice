@@ -62,10 +62,15 @@ public class ProductServiceImpl implements ProductService {
         return Mono.fromCallable(() -> {
                     ProductDetail productDetail = new ProductDetail();
                     Product product = productMapper.selectByPrimaryKey(id);
-                    productDetail.setProduct(product);  // TODO: set dao to get product detail
+
+                    ProductSkuExample skuExample = new ProductSkuExample();
+                    skuExample.createCriteria().andProductIdEqualTo(product.getId());
+                    List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
+
+                    productDetail.setProduct(product);  // TODO: set dao to get product detail and attribute and review
+                    productDetail.setSkuVariants(skuList);
                     return productDetail;
-                })
-                .subscribeOn(jdbcScheduler);
+                }).subscribeOn(jdbcScheduler);
     }
 
     @Override
@@ -93,8 +98,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<Product> createProduct(Product newProduct, List<ProductSku> skuList) {
-        return Mono.fromCallable(
-                () -> internalCreateProduct(newProduct, skuList)
+        return Mono.fromCallable(() ->
+                internalCreateProduct(newProduct, skuList)
         ).subscribeOn(jdbcScheduler);
     }
 
@@ -125,8 +130,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<Product> addProductSku(Product currentProduct, ProductSku newSKu) {
-        return Mono.fromCallable(
-                () -> internalAddProductSku(currentProduct, newSKu)
+        return Mono.fromCallable(() ->
+                internalAddProductSku(currentProduct, newSKu)
         ).subscribeOn(jdbcScheduler);
     }
 
@@ -174,14 +179,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<Product> updateProductInfo(Product updatedProduct) {
-        return Mono.fromCallable(
-                () -> internalUpdateProductInfo(updatedProduct)
+        return Mono.fromCallable(() ->
+                internalUpdateProductInfo(updatedProduct)
         ).subscribeOn(jdbcScheduler);
     }
 
     private Product internalUpdateProductInfo(Product updatedProduct) {
         // TODO: there might be category name, but that might as well create new product.
-
+        // TODO: update sku too
+        // todo update will over write the existing data like publish status, i didn't include it in postman
+        //     but it will make it null. use update by existing data, use productMapper.updateByExampleSelective(
         int productId = updatedProduct.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
 
@@ -193,30 +200,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<ProductSku> updateProductStock(ProductSku sku, int addedStock) {
-        return Mono.fromCallable(
-                () -> internalUpdateProductStock(sku, addedStock)
+        return Mono.fromCallable(() ->
+                internalUpdateProductStock(sku, addedStock)
         ).subscribeOn(jdbcScheduler);
     }
 
     private ProductSku internalUpdateProductStock(ProductSku sku, int addedStock) {
+        ProductSku foundSku = skuMapper.selectByPrimaryKey(sku.getId());
+        if (foundSku == null) throw new ProductException("Sku does not exist: " + sku.getSkuCode());
 
-        int productId = sku.getProductId();
-
-        ProductSkuExample skuExample = new ProductSkuExample();
-        skuExample.createCriteria().andProductIdEqualTo(productId);
-        List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
-
-        if (!skuList.contains(sku)) throw new ProductException("Sku does not exist with product id: " + productId);
-
-        int skuStock = sku.getStock();
-        sku.setStock(skuStock + addedStock);
-        skuMapper.updateByPrimaryKey(sku);
+        int productId = foundSku.getProductId();
+        int skuStock = foundSku.getStock();
+        foundSku.setStock(skuStock + addedStock);
+        skuMapper.updateByPrimaryKeySelective(foundSku);
 
         Product product = productMapper.selectByPrimaryKey(productId);
+        if (product == null) throw new ProductException("product id doesn't exist: " + productId);
+
         int currentStock = product.getStock();
         product.setStock(currentStock + addedStock);
 
         productMapper.updateByPrimaryKey(product);
+
+        List<ProductSku> skuList = new ArrayList<>();
+        skuList.add(foundSku);
 
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, skuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, skuList));
@@ -232,7 +239,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Product internalUpdateProductPrice(List<ProductSku> productSkuList) {
-
         double newHighestPrice = 0;
         double newLowPrice = 0;
         for (ProductSku sku : productSkuList) {
@@ -245,7 +251,7 @@ public class ProductServiceImpl implements ProductService {
         // update highest/original price
         for (ProductSku sku : productSkuList) {
             sku.setPrice(BigDecimal.valueOf(newHighestPrice));
-            skuMapper.updateByPrimaryKey(sku);
+            skuMapper.updateByPrimaryKeySelective(sku);
         }
 
         int productId = productSkuList.get(0).getProductId();
@@ -253,7 +259,7 @@ public class ProductServiceImpl implements ProductService {
         product.setSalePrice(BigDecimal.valueOf(newLowPrice));
         product.setOriginalPrice(BigDecimal.valueOf(newHighestPrice));
 
-        productMapper.updateByPrimaryKey(product);
+        productMapper.updateByPrimaryKeySelective(product);
 
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, productSkuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, product, productSkuList));
@@ -263,13 +269,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<Product> updateProductStatus(Product updatedProduct) {
-        return Mono.fromCallable(
-                () -> internalUpdateProductStatus(updatedProduct)
+        return Mono.fromCallable(() ->
+                internalUpdateProductStatus(updatedProduct)
         ).subscribeOn(jdbcScheduler);
     }
 
     private Product internalUpdateProductStatus(Product updatedProduct) {
-
         int productId = updatedProduct.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
 
@@ -308,15 +313,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Mono<ProductSku> updateProductSkuStatus(ProductSku updateSku) {
-        return Mono.fromCallable(
-                () -> internalUpdateProductSkuStatus(updateSku)
+        return Mono.fromCallable(() ->
+                internalUpdateProductSkuStatus(updateSku)
         ).subscribeOn(jdbcScheduler);
     }
 
     private ProductSku internalUpdateProductSkuStatus(ProductSku updateSku) {
-
         // find out if the product is online first
-
         int productId = updateSku.getId();
         Product foundProduct = productMapper.selectByPrimaryKey(productId);
 
@@ -326,6 +329,8 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductSku> skuList = new ArrayList<>();
         skuList.add(updateSku);
+        // TODO: when there's no more sku, might want to notify admin or just take the product off line too
+        skuMapper.updateByPrimaryKeySelective(updateSku);
 
         sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
         sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
@@ -376,7 +381,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public void internalDeleteProduct(int id) {
-
         Product foundProduct = productMapper.selectByPrimaryKey(id);
         foundProduct.setPublishStatus(0);
         foundProduct.setDeleteStatus(1);
@@ -387,7 +391,7 @@ public class ProductServiceImpl implements ProductService {
 
         for (ProductSku sku : skuList) {
             sku.setStatus(0);
-            skuMapper.updateByPrimaryKey(sku);
+            skuMapper.updateByPrimaryKeySelective(sku);
         }
 
         productMapper.updateByPrimaryKeySelective(foundProduct);

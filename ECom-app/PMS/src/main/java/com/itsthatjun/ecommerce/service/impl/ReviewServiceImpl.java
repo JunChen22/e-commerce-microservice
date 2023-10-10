@@ -51,8 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
         ).subscribeOn(jdbcScheduler);
     }
 
-    private ProductReview internalGetDetailReview(int reviewId) {
-
+    private ProductReview internalGetDetailReview(int reviewId) { // TODO: add purchase verify status check
         Review review = reviewMapper.selectByPrimaryKey(reviewId);
 
         ProductReview productReview = new ProductReview();
@@ -148,8 +147,9 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewExample example = new ReviewExample();
         example.createCriteria().andIdEqualTo(updatedReview.getId());
         Date currentTime = new Date();
+        updatedReview.setMemberId(userId);
         updatedReview.setUpdatedAt(currentTime);
-
+        // TODO: check user id and review id
         int reviewId = updatedReview.getId();
 
         deleteAlbumAndPicture(reviewId);
@@ -281,17 +281,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private Review internalAdminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList) {
-        ReviewExample example = new ReviewExample();
-        example.createCriteria().andIdEqualTo(updatedReview.getId());
         Date currentTime = new Date();
         updatedReview.setUpdatedAt(currentTime);
 
         int reviewId = updatedReview.getId();
-
         deleteAlbumAndPicture(reviewId);
         createAlbumAndPicture(reviewId, picturesList);
 
-        reviewMapper.updateByExample(updatedReview, example);
+        reviewMapper.updateByPrimaryKeySelective(updatedReview);
         return updatedReview;
     }
 
@@ -303,7 +300,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void internalAdminDeleteReview(int reviewId) {
-
         reviewMapper.deleteByPrimaryKey(reviewId);
 
         ReviewAlbumExample albumExample = new ReviewAlbumExample();

@@ -21,7 +21,6 @@ public class PmsReviewEvent {
     private final Type eventType;
     private final int userId;
     private final Review review;
-
     private final List<ReviewPictures> picturesList;
     private final ZonedDateTime eventCreatedAt;
 

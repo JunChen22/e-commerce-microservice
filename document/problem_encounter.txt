@@ -265,3 +265,8 @@ A: indices error, need to delete current indices due to changes is made and didn
 Q : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 7] with root cause
 A: having trouble with nested data for query, getting multiple object instead a nested one with a list.
     create multiple simple query then put it back together instead of one big complex query.
+
+
+Q: using select by primary key can't find anything even though i can search it in database,Product product = productMapper.selectByPrimaryKey(productId);.
+A: docker remove volume did fixed for me. i reloaded the data and it should be same as new but only delete volume fixed for me. IntelliJ behaving funny.
+
