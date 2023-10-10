@@ -68,26 +68,30 @@ public class ArticleController {
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "create an article(buyer's guide, comparison, and etc)")
-    public void createArticle(@RequestBody ArticleInfo articleInfo) {
-        Mono.fromRunnable(() -> sendMessage("article-out-0", new CmsAdminArticleEvent(CREATE, articleInfo, null)))
-                .subscribeOn(publishEventScheduler).subscribe();
+    public Mono<ArticleInfo> createArticle(@RequestBody ArticleInfo articleInfo) {
+        return Mono.fromCallable(() -> {
+            sendMessage("article-out-0", new CmsAdminArticleEvent(CREATE, articleInfo, null));
+            return articleInfo;
+        }).subscribeOn(publishEventScheduler);
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "update an article and it's content")
-    public void updateArticle(@RequestBody ArticleInfo articleInfo) {
+    public Mono<ArticleInfo> updateArticle(@RequestBody ArticleInfo articleInfo) {
         int articleId = articleInfo.getArticle().getId();
-        Mono.fromRunnable(() -> sendMessage("article-out-0", new CmsAdminArticleEvent(UPDATE, articleInfo, articleId)))
-                .subscribeOn(publishEventScheduler).subscribe();
+        return Mono.fromCallable(() -> {
+            sendMessage("article-out-0", new CmsAdminArticleEvent(UPDATE, articleInfo, articleId));
+            return articleInfo;
+        }).subscribeOn(publishEventScheduler);
     }
 
     @DeleteMapping("/delete/{articleId}")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "delete article and it's related content(QA, videos, and images)")
-    public void deleteArticle(@PathVariable int articleId) {
-        Mono.fromRunnable(() -> sendMessage("article-out-0", new CmsAdminArticleEvent(DELETE, null, articleId)))
-                .subscribeOn(publishEventScheduler).subscribe();
+    public Mono<Void> deleteArticle(@PathVariable int articleId) {
+        return Mono.fromRunnable(() -> sendMessage("article-out-0", new CmsAdminArticleEvent(DELETE, null, articleId)))
+                .subscribeOn(publishEventScheduler).then();
     }
 
     private void sendMessage(String bindingName, CmsAdminArticleEvent event) {

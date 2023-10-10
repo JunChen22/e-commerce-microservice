@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
+import com.itsthatjun.ecommerce.dto.ProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,9 +38,9 @@ public class ProductAggregate {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get product by id")
-    public Mono<Product> listProduct(@PathVariable int id){
+    public Mono<ProductDetail> listProduct(@PathVariable int id){
         String url = PMS_SERVICE_URL + "/" + id;
-        return webClient.get().uri(url).retrieve().bodyToMono(Product.class)
+        return webClient.get().uri(url).retrieve().bodyToMono(ProductDetail.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 

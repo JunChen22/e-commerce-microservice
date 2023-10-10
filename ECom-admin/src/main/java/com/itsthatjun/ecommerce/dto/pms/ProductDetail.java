@@ -13,9 +13,11 @@ public class ProductDetail {
     private List<ProductSku> skuVariants;
     private Integer stock;
 
+    /*
     private List<ProductPictures> picturesList;
     private List<String> productCategory;  // TODO: there's sub level for product category
     private List<ProductAttributeCategory> productAttributeCategoryList;
     private List<ProductAttribute> productAttributeList;
     private List<ProductAttributeType> productAttributeTypesList;
+     */
 }
