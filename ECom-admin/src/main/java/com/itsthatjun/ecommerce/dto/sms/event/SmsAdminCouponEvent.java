@@ -18,18 +18,21 @@ public class SmsAdminCouponEvent {
 
     private final Type eventType;
     private final CouponSale couponSale;
+    private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public SmsAdminCouponEvent() {
         this.eventType = null;
         this.couponSale = null;
+        this.operator = null;
         this.eventCreatedAt = null;
     }
 
-    public SmsAdminCouponEvent(Type eventType, CouponSale couponSale) {
+    public SmsAdminCouponEvent(Type eventType, CouponSale couponSale, String operator) {
         this.eventType = eventType;
         this.couponSale = couponSale;
+        this.operator = operator;
         this.eventCreatedAt = now();
     }
 }

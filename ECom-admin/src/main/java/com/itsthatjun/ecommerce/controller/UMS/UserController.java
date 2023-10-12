@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
 import com.itsthatjun.ecommerce.dto.ums.event.UmsAdminUserEvent;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
+import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -20,6 +21,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import javax.servlet.http.HttpSession;
+
 import static com.itsthatjun.ecommerce.dto.ums.event.UmsAdminUserEvent.Type.*;
 import static java.util.logging.Level.FINE;
 
@@ -30,86 +33,56 @@ public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
-    private final WebClient webClient;
-
-    private final StreamBridge streamBridge;
-
-    private final Scheduler publishEventScheduler;
-
-    private final String UMS_SERVICE_URL = "http://ums:8080/user";
+    private final UserServiceImpl userService;
 
     @Autowired
-    public UserController(WebClient.Builder webClient, StreamBridge streamBridge,
-                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
-        this.streamBridge = streamBridge;
-        this.publishEventScheduler = publishEventScheduler;
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/{userId}")
     @ApiOperation(value = "")
     public Mono<MemberDetail> getUser(@PathVariable int userId) {
-        String url = UMS_SERVICE_URL + "/admin/getMemberDetailByUserId/" + userId;
-
-        return webClient.get().uri(url).retrieve().bodyToMono(MemberDetail.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
+        return userService.getUser(userId);
     }
 
     @GetMapping("/getAllUser")
     @ApiOperation(value = "")
     public Flux<Member> getAllUser() {
-        String url = UMS_SERVICE_URL + "/admin/getAllUser";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Member.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+        return userService.getAllUser();
     }
 
     @GetMapping("/getMemberLoginFrequency/{userId}")
     @ApiOperation(value = "")
     public Flux<MemberLoginLog> listAllLoginFrequency(@PathVariable int userId) {
-        String url = UMS_SERVICE_URL + "/admin/getMemberLoginFrequency/" + userId;
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(MemberLoginLog.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+        return userService.listAllLoginFrequency(userId);
     }
 
     @PostMapping("/createMember")
     @ApiOperation(value = "")
-    public void createMember(@RequestBody Member member) {
-        int memberId = member.getId();
-        Mono.fromRunnable(() -> sendMessage("user-out-0", new UmsAdminUserEvent(NEW_ACCOUNT, -1, member)))
-                .subscribeOn(publishEventScheduler).subscribe();
+    public Mono<Member> createMember(@RequestBody Member member, HttpSession session) {
+        String operatorName  = (String) session.getAttribute("adminName");
+        return userService.createMember(member, operatorName);
     }
 
     @PostMapping("/updateMemberInfo")
     @ApiOperation(value = "")
-    public void updateMemberInfo(@RequestBody Member member){
-        int memberId = member.getId();
-        Mono.fromRunnable(() -> sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_INFO, memberId, member)))
-                .subscribeOn(publishEventScheduler).subscribe();
+    public Mono<Member> updateMemberInfo(@RequestBody Member member, HttpSession session){
+        String operatorName  = (String) session.getAttribute("adminName");
+        return userService.updateMemberInfo(member, operatorName);
     }
 
     @PostMapping("/updateMemberStatus")
     @ApiOperation(value = "")
-    public void deactivateUser(@RequestBody Member member) {
-        int memberId = member.getId();
-        Mono.fromRunnable(() -> sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_STATUS, memberId, member)))
-                .subscribeOn(publishEventScheduler).subscribe();
+    public Mono<Member> updateMemberStatus(@RequestBody Member member, HttpSession session) {
+        String operatorName  = (String) session.getAttribute("adminName");
+        return userService.updateMemberStatus(member, operatorName);
     }
 
     @DeleteMapping("/delete/{memberId}")
     @ApiOperation(value = "")
-    public void delete(@PathVariable int memberId) {
-        Mono.fromRunnable(() -> sendMessage("user-out-0", new UmsAdminUserEvent(DELETE_ACCOUNT, memberId, null)))
-                .subscribeOn(publishEventScheduler).subscribe();
-    }
-
-    private void sendMessage(String bindingName, UmsAdminUserEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event-type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+    public Mono<Void> delete(@PathVariable int memberId, HttpSession session) {
+        String operatorName  = (String) session.getAttribute("adminName");
+        return userService.delete(memberId, operatorName);
     }
 }

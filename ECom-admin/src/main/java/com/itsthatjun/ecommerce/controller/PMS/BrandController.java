@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.controller.PMS;
 import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminBrandEvent;
 import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.service.PMS.impl.BrandServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -31,91 +32,56 @@ public class BrandController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BrandController.class);
 
-    private final WebClient webClient;
-
-    private final StreamBridge streamBridge;
-
-    private final Scheduler publishEventScheduler;
-
-    private final String PMS_SERVICE_URL = "http://pms:8080/brand";
+    private final BrandServiceImpl brandService;
 
     @Autowired
-    public BrandController(WebClient.Builder webClient, StreamBridge streamBridge,
-                           @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
-        this.streamBridge = streamBridge;
-        this.publishEventScheduler = publishEventScheduler;
+    public BrandController(BrandServiceImpl brandService) {
+        this.brandService = brandService;
     }
 
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
     public Flux<Brand> getAllBrand(){
-        String url = PMS_SERVICE_URL + "/listAll";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+        return brandService.getAllBrand();
     }
 
     @GetMapping("/list")
     @ApiOperation(value = "Get brands with page and size")
     public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize){
-
-        String url = PMS_SERVICE_URL + "/list?page=" + pageNum + "&size=" + pageSize;
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+        return brandService.getAllBrand(pageNum, pageSize);
     }
 
     @GetMapping("/product/{brandId}")
     @ApiOperation(value = "Get all product of this brand")
     public Flux<Product> getBrandProduct(@PathVariable int brandId){
-        String url = PMS_SERVICE_URL + "/product/" + brandId;
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+        return brandService.getBrandProduct(brandId);
     }
 
     @GetMapping("/{brandId}")
     @ApiOperation(value = "Get brand info")
     public Mono<Brand> getBrand(@PathVariable int brandId){
-        String url = PMS_SERVICE_URL + "/" + brandId;
-
-        return webClient.get().uri(url).retrieve().bodyToMono(Brand.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
+        return brandService.getBrand(brandId);
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Create a brand")
-    public void createBrand(@RequestBody Brand brand){
-        Mono.fromRunnable(() -> sendMessage("brand-out-0", new PmsAdminBrandEvent(CREATE, brand, null)))
-                .subscribeOn(publishEventScheduler).subscribe();
+    public Mono<Brand> createBrand(@RequestBody Brand brand){
+        return brandService.createBrand(brand);
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update a brand")
-    public void updateBrand(@RequestBody Brand brand){
-        int brandId = brand.getId();
-        Mono.fromRunnable(() -> sendMessage("brand-out-0", new PmsAdminBrandEvent(UPDATE, brand, brandId)))
-                .subscribeOn(publishEventScheduler).subscribe();
+    public Mono<Brand> updateBrand(@RequestBody Brand brand){
+        return brandService.updateBrand(brand);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Delete a brand")
-    public void deleteBrand(@PathVariable int id){
-        Mono.fromRunnable(() -> sendMessage("brand-out-0", new PmsAdminBrandEvent(DELETE, null, id)))
-                .subscribeOn(publishEventScheduler).subscribe();
-    }
-
-    private void sendMessage(String bindingName, PmsAdminBrandEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event-type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+    public Mono<Void> deleteBrand(@PathVariable int brandId){
+        return brandService.deleteBrand(brandId);
     }
 }

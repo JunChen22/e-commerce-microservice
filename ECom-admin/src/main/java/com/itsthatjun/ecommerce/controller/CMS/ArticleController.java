@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.controller.CMS;
 
 import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
 import com.itsthatjun.ecommerce.dto.cms.event.CmsAdminArticleEvent;
+import com.itsthatjun.ecommerce.service.CMS.impl.ArticleServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -29,77 +30,43 @@ public class ArticleController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArticleController.class);
 
-    private final WebClient webClient;
-
-    private final StreamBridge streamBridge;
-
-    private final Scheduler publishEventScheduler;
-
-    private final String CMS_SERVICE_URL = "http://cms:8080/article";
+    private final ArticleServiceImpl articleService;
 
     @Autowired
-    public ArticleController(WebClient.Builder webClient, StreamBridge streamBridge,
-                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
-        this.streamBridge = streamBridge;
-        this.publishEventScheduler = publishEventScheduler;
+    public ArticleController(ArticleServiceImpl articleService) {
+        this.articleService = articleService;
     }
 
     @GetMapping("/all")
     @ApiOperation(value = "Get all the articles")
     public Flux<ArticleInfo> getAllArticle() {
-        String url = CMS_SERVICE_URL + "/all";
-        LOG.debug("Will call the getAllArticle API on URL: {}", url);
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(ArticleInfo.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+        return articleService.getAllArticle();
     }
 
     @GetMapping("/{articleId}")
     @ApiOperation(value = "Get a specific article by article id")
     public Mono<ArticleInfo> getArticle(@PathVariable int articleId) {
-        String url = CMS_SERVICE_URL + "/" + articleId;
-        LOG.debug("Will call the getArticle API on URL: {}", url);
-
-        return webClient.get().uri(url).retrieve().bodyToMono(ArticleInfo.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
+        return articleService.getArticle(articleId);
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "create an article(buyer's guide, comparison, and etc)")
     public Mono<ArticleInfo> createArticle(@RequestBody ArticleInfo articleInfo) {
-        return Mono.fromCallable(() -> {
-            sendMessage("article-out-0", new CmsAdminArticleEvent(CREATE, articleInfo, null));
-            return articleInfo;
-        }).subscribeOn(publishEventScheduler);
+        return articleService.createArticle(articleInfo);
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "update an article and it's content")
     public Mono<ArticleInfo> updateArticle(@RequestBody ArticleInfo articleInfo) {
-        int articleId = articleInfo.getArticle().getId();
-        return Mono.fromCallable(() -> {
-            sendMessage("article-out-0", new CmsAdminArticleEvent(UPDATE, articleInfo, articleId));
-            return articleInfo;
-        }).subscribeOn(publishEventScheduler);
+        return articleService.updateArticle(articleInfo);
     }
 
     @DeleteMapping("/delete/{articleId}")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "delete article and it's related content(QA, videos, and images)")
     public Mono<Void> deleteArticle(@PathVariable int articleId) {
-        return Mono.fromRunnable(() -> sendMessage("article-out-0", new CmsAdminArticleEvent(DELETE, null, articleId)))
-                .subscribeOn(publishEventScheduler).then();
-    }
-
-    private void sendMessage(String bindingName, CmsAdminArticleEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event-type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+        return articleService.deleteArticle(articleId);
     }
 }

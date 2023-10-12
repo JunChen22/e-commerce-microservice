@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.controller.SMS;
 
 import com.itsthatjun.ecommerce.dto.sms.UsedCouponHistory;
 import com.itsthatjun.ecommerce.mbg.model.CouponHistory;
+import com.itsthatjun.ecommerce.service.SMS.impl.CouponHistoryServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -24,31 +25,22 @@ public class CouponHistoryController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CouponHistoryController.class);
 
-    private final WebClient webClient;
-
-    private final String SMS_SERVICE_URL = "http://sms:8080/coupon/history";
+    private final CouponHistoryServiceImpl historyService;
 
     @Autowired
-    public CouponHistoryController(WebClient.Builder webClient) {
-        this.webClient = webClient.build();
+    public CouponHistoryController(CouponHistoryServiceImpl historyService) {
+        this.historyService = historyService;
     }
 
     @GetMapping("/getAllUsedCoupon")
     @ApiOperation(value = "return all the coupon used between two time")
     public Flux<UsedCouponHistory> couponUsed() {
-        // TODO: add default value for the two times, currently all used coupons
-        String url = SMS_SERVICE_URL+ "/getAllUsedCoupon";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(UsedCouponHistory.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+        return historyService.couponUsed();
     };
 
     @GetMapping("/getUserCoupon/{userId}")
     @ApiOperation(value = "shows how many coupon(amount saved) a user used")
     public Flux<CouponHistory> getUserCoupon(@PathVariable int userId) {
-        String url = SMS_SERVICE_URL + "/getUserCoupon/" + userId;
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(CouponHistory.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+        return historyService.getUserCoupon(userId);
     }
 }

@@ -7,7 +7,6 @@ import java.util.Map;
 
 @Data
 public class CouponSale {
-
     private Integer couponId;
     private UpdateType updateType;
     private PromotionType promotionType;  //-- discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item(s)

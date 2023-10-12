@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.controller.PMS;
 import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
 import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminProductEvent;
 import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.service.PMS.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -31,132 +32,92 @@ public class ProductController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductController.class);
 
-    private final WebClient webClient;
-
-    private final StreamBridge streamBridge;
-
-    private final Scheduler publishEventScheduler;
-
-    private final String PMS_SERVICE_URL = "http://pms:8080/product";
+    private final ProductServiceImpl productService;
 
     @Autowired
-    public ProductController(WebClient.Builder webClient, StreamBridge streamBridge,
-                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
-        this.streamBridge = streamBridge;
-        this.publishEventScheduler = publishEventScheduler;
+    public ProductController(ProductServiceImpl productService) {
+        this.productService = productService;
     }
 
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all product")
-    public Flux<Product> listAllProduct(){
-        String url = PMS_SERVICE_URL + "/listAll";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+    public Flux<Product> listAllProduct() {
+        return productService.listAllProduct();
     }
 
     @GetMapping("/list")
     @ApiOperation(value = "Get product with page and size")
     public Flux<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
-                                        @RequestParam(value = "size", defaultValue = "5") int pageSize){
-        String url = PMS_SERVICE_URL + "/list?page=" + pageNum + "&size=" + pageSize;
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> empty());
+                                        @RequestParam(value = "size", defaultValue = "5") int pageSize) {
+        return productService.listAllProduct(pageNum, pageSize);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{productId}")
     @ApiOperation(value = "Get product by id")
-    public Mono<ProductDetail> listProduct(@PathVariable int id){
-        String url = PMS_SERVICE_URL + "/" + id;
-
-        return webClient.get().uri(url).retrieve().bodyToMono(ProductDetail.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
+    public Mono<ProductDetail> listProduct(@PathVariable int productId) {
+        return productService.listProduct(productId);
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "create a product with at least one sku variant")
-    public Mono<Void> createProduct(@RequestBody ProductDetail productDetail) {
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT, productDetail)))
-                .subscribeOn(publishEventScheduler).then();
+    public Mono<ProductDetail> createProduct(@RequestBody ProductDetail productDetail) {
+        return productService.createProduct(productDetail);
     }
 
     @PostMapping("/addProductSku")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Add a sku to existing product.")
-    public Mono<Void> addProductSku(@RequestBody ProductDetail productDetail) {
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT_SKU, productDetail)))
-                .subscribeOn(publishEventScheduler).then();
+    public Mono<ProductDetail> addProductSku(@RequestBody ProductDetail productDetail) {
+        return productService.addProductSku(productDetail);
     }
 
     @PostMapping("/updateProductInfo")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update product info like category, name, description, subtitle and etc non-price affecting.")
-    public Mono<Void> updateProductInfo(@RequestBody ProductDetail productDetail) {
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_INFO, productDetail)))
-                .subscribeOn(publishEventScheduler).then();
+    public Mono<ProductDetail> updateProductInfo(@RequestBody ProductDetail productDetail) {
+        return productService.updateProductInfo(productDetail);
     }
 
     @PostMapping("/updateProductStatus")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update product publish status.")
-    public Mono<Void> updateProductStatus(@RequestBody ProductDetail productDetail) {
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_STATUS, productDetail)))
-                .subscribeOn(publishEventScheduler).then();
+    public Mono<ProductDetail> updateProductStatus(@RequestBody ProductDetail productDetail) {
+        return productService.updateProductStatus(productDetail);
     }
 
     @PostMapping("/updateProductSkuStatus")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update product publish status.")
-    public Mono<Void> updateProductSkuStatus(@RequestBody ProductDetail productDetail) {
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_SKU_STATUS, productDetail)))
-                .subscribeOn(publishEventScheduler).then();
+    public Mono<ProductDetail> updateProductSkuStatus(@RequestBody ProductDetail productDetail) {
+        return productService.updateProductSkuStatus(productDetail);
     }
 
     @PostMapping("/updateProductStock")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Adding stock to sku with newly added stock.")
-    public Mono<Void> updateProductStock(@RequestBody ProductDetail productDetail) {
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_STOCK, productDetail)))
-                .subscribeOn(publishEventScheduler).then();
+    public Mono<ProductDetail> updateProductStock(@RequestBody ProductDetail productDetail) {
+        return productService.updateProductStock(productDetail);
     }
 
     @PostMapping("/updateProductPrice")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update product and its sku prices of existing product.")
-    public Mono<Void> updateProductPrice(@RequestBody ProductDetail productDetail) {
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent( UPDATE_PRODUCT_PRICE, productDetail)))
-                .subscribeOn(publishEventScheduler).then();
+    public Mono<ProductDetail> updateProductPrice(@RequestBody ProductDetail productDetail) {
+        return productService.updateProductPrice(productDetail);
     }
 
     @PostMapping("/removeProductSku")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Remove/actual delete a sku from product. Product can have no sku, just holding information.")
-    public Mono<Void> removeProductSku(@RequestBody ProductDetail productDetail) {
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(REMOVE_PRODUCT_SKU ,productDetail)))
-                .subscribeOn(publishEventScheduler).then();
+    public Mono<ProductDetail> removeProductSku(@RequestBody ProductDetail productDetail) {
+        return productService.removeProductSku(productDetail);
     }
 
     @DeleteMapping("/delete/{productId}")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Delete just means status changed for archive, not actual delete from database")
     public Mono<Void> deleteProduct(@PathVariable int productId) {
-        ProductDetail productDetail = new ProductDetail();
-        Product product = new Product();
-        product.setId(productId);
-        productDetail.setProduct(product);
-        return Mono.fromRunnable(() -> sendMessage("product-out-0", new PmsAdminProductEvent(DELETE_PRODUCT ,productDetail)))
-                .subscribeOn(publishEventScheduler).then();
-    }
-
-    private void sendMessage(String bindingName, PmsAdminProductEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event-type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+        return productService.deleteProduct(productId);
     }
 }
