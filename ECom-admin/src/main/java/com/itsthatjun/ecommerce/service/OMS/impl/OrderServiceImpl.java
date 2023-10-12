@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Flux<Orders> listAllOrder(ReturnStatusCode statusCode){
+    public Flux<Orders> listAllOrder(ReturnStatusCode statusCode) {
         String url = OMS_SERVICE_URL + "/order/admin/all?statusCode=" + statusCode.getCode();
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Flux<Orders> getUserOrders(int userId){
+    public Flux<Orders> getUserOrders(int userId) {
         String url = OMS_SERVICE_URL + "/order/admin/user/" + userId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Orders> getOrder(String serialNumber){
+    public Mono<Orders> getOrder(String serialNumber) {
         String url = OMS_SERVICE_URL+ "/order/admin/" + serialNumber;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<OrderDetail> createOrder(OrderDetail orderDetail, int userId, String reason, String operatorName){
+    public Mono<OrderDetail> createOrder(OrderDetail orderDetail, int userId, String reason, String operatorName) {
         return Mono.fromCallable(() -> {
             sendMessage("order-out-0", new OmsAdminOrderEvent(GENERATE_ORDER, userId, orderDetail, reason, operatorName));
             return orderDetail;
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<OrderDetail> updateOrder(OrderDetail orderDetail, String reason, String operatorName){
+    public Mono<OrderDetail> updateOrder(OrderDetail orderDetail, String reason, String operatorName) {
         return Mono.fromCallable(() -> {
             sendMessage("order-out-0", new OmsAdminOrderEvent(UPDATE_ORDER, null, orderDetail, reason, operatorName));
             return orderDetail;
@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Void> cancelOrder(String serialNumber, int userId, String reason, String operatorName){
+    public Mono<Void> cancelOrder(String serialNumber, int userId, String reason, String operatorName) {
         return Mono.fromRunnable(() -> {
             OrderDetail orderDetail = new OrderDetail();
             Orders orderTobeCancelled = new Orders();

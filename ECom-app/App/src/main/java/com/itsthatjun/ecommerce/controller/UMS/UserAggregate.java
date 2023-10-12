@@ -5,6 +5,7 @@ import com.itsthatjun.ecommerce.dto.event.ums.UmsUserEvent;
 import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.security.UserContext;
+import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -31,102 +32,58 @@ public class UserAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserAggregate.class);
 
-    private final WebClient webClient;
-
-    private final StreamBridge streamBridge;
-
-    private final Scheduler publishEventScheduler;
-
-    private final String UMS_SERVICE_URL = "http://ums/user";
+    private final UserServiceImpl userService;
 
     @Autowired
-    public UserAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient, StreamBridge streamBridge,
-                         @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
-        this.streamBridge = streamBridge;
-        this.publishEventScheduler = publishEventScheduler;
+    public UserAggregate(UserServiceImpl userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/getInfo")
     @ApiOperation(value = "")
-    Mono<MemberDetail> getInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-
-        String url = UMS_SERVICE_URL + "/getInfo";
-        LOG.debug("Will call the list API on URL: {}", url);
-
-        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToMono(MemberDetail.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
+    public Mono<MemberDetail> getInfo() {
+        int userId = getUserId();
+        return userService.getInfo(userId);
     }
 
     @PostMapping("/register")
     @ApiOperation(value = "Register")
-    public Mono<MemberDetail> register(@RequestBody MemberDetail memberDetail){
-        return Mono.fromCallable(() -> {
-                sendMessage("user-out-0", new UmsUserEvent(NEW_ACCOUNT, memberDetail));
-                return memberDetail;
-        }).subscribeOn(publishEventScheduler);
+    public Mono<MemberDetail> register(@RequestBody MemberDetail newMemberDetail) {
+        return userService.register(newMemberDetail);
     }
 
     @PostMapping("/updatePassword")
     @ApiOperation(value = "")
-    public Mono<Void> updatePassword(@RequestBody String newPassword) {
-        Member member = new Member();
-        member.setPassword(newPassword);
-        MemberDetail memberDetail = new MemberDetail();
-        memberDetail.setMember(member);
-
-        return Mono.fromRunnable(() ->
-            sendMessage("user-out-0", new UmsUserEvent(UPDATE_PASSWORD, memberDetail))
-        ).subscribeOn(publishEventScheduler).then();
+    public Mono<String> updatePassword(@RequestBody String newPassword) {
+        int userId = getUserId();
+        return userService.updatePassword(newPassword, userId);
     }
 
     @PostMapping("/updateInfo")
     @ApiOperation(value = "password, name, icon")
     public Mono<MemberDetail> updateInfo(@RequestBody MemberDetail memberDetail) {
-        return Mono.fromCallable(() -> {
-            sendMessage("user-out-0", new UmsUserEvent(UPDATE_ACCOUNT_INFO, memberDetail));
-            return memberDetail;
-        }).subscribeOn(publishEventScheduler);
+        int userId = getUserId();
+        return userService.updateInfo(memberDetail, userId);
     }
 
     @PostMapping("/updateAddress")
     @ApiOperation(value = "")
     public Mono<Address> updateAddress(@RequestBody Address newAddress) {
-        MemberDetail memberDetail = new MemberDetail();
-        memberDetail.setAddress(newAddress);
-
-        return Mono.fromCallable(() -> {
-            sendMessage("user-out-0", new UmsUserEvent(UPDATE_ADDRESS, memberDetail));
-            return newAddress;
-        }).subscribeOn(publishEventScheduler);
+        int userId = getUserId();
+        return userService.updateAddress(newAddress, userId);
     }
 
     @PostMapping("/deleteAccount")
     @ApiOperation(value = "")
     public Mono<Void> deleteAccount() {
+        int userId = getUserId();
+        return userService.deleteAccount(userId);
+    }
+
+    private int getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext userContext = (UserContext) authentication.getPrincipal();
         int userId = userContext.getUserId();
-
-        Member member = new Member();
-        member.setId(userId);
-        MemberDetail memberDetail = new MemberDetail();
-        memberDetail.setMember(member);
-
-        return Mono.fromRunnable(() ->
-                sendMessage("user-out-0", new UmsUserEvent(DELETE_ACCOUNT, memberDetail))
-        ).subscribeOn(publishEventScheduler).then();
-    }
-
-    private void sendMessage(String bindingName, UmsUserEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("even type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+        return userId;
     }
 }

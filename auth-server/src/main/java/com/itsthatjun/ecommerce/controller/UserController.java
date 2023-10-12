@@ -41,7 +41,7 @@ public class UserController {
     public ResponseEntity<?>  login(@RequestBody LoginRequest loginRequest) {
 
         String token = memberService.login(loginRequest.getUsername(), loginRequest.getPassword());
-        if(token.isEmpty()){
+        if (token.isEmpty()) {
             return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED);
         }
 

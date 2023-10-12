@@ -67,7 +67,7 @@ public class UserController {
 
     @PostMapping("/updateMemberInfo")
     @ApiOperation(value = "")
-    public Mono<Member> updateMemberInfo(@RequestBody Member member, HttpSession session){
+    public Mono<Member> updateMemberInfo(@RequestBody Member member, HttpSession session) {
         String operatorName  = (String) session.getAttribute("adminName");
         return userService.updateMemberInfo(member, operatorName);
     }

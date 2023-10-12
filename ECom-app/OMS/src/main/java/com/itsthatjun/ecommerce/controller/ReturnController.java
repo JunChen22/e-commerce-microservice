@@ -36,19 +36,19 @@ public class ReturnController {
 
     @GetMapping("/status/{orderSn}")
     @ApiOperation(value = "check status of the return request")
-    public Mono<ReturnRequest> checkStatus(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId){
+    public Mono<ReturnRequest> checkStatus(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId) {
         return returnOrderService.getStatus(orderSn, userId);
     }
 
     @GetMapping("/admin/all")
     @ApiOperation(value = "get all of the return request based on status code")
-    public Flux<ReturnRequest> getAllRequestByStatus(@RequestParam int statusCode){
+    public Flux<ReturnRequest> getAllRequestByStatus(@RequestParam int statusCode) {
         return returnOrderService.getAllReturnRequest(statusCode);
     }
 
     @GetMapping("/admin/{serialNumber}")
     @ApiOperation(value = "get user return detail by order serial number")
-    public Mono<ReturnDetail> getReturnDetailBySn(@PathVariable String serialNumber){
+    public Mono<ReturnDetail> getReturnDetailBySn(@PathVariable String serialNumber) {
         return returnOrderService.getReturnDetail(serialNumber);
     }
 }

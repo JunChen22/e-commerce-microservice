@@ -41,47 +41,47 @@ public class BrandController {
 
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
-    public Flux<Brand> getAllBrand(){
+    public Flux<Brand> getAllBrand() {
         return brandService.getAllBrand();
     }
 
     @GetMapping("/list")
     @ApiOperation(value = "Get brands with page and size")
     public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
-                                   @RequestParam(value = "size", defaultValue = "3") int pageSize){
+                                   @RequestParam(value = "size", defaultValue = "3") int pageSize) {
         return brandService.getAllBrand(pageNum, pageSize);
     }
 
     @GetMapping("/product/{brandId}")
     @ApiOperation(value = "Get all product of this brand")
-    public Flux<Product> getBrandProduct(@PathVariable int brandId){
+    public Flux<Product> getBrandProduct(@PathVariable int brandId) {
         return brandService.getBrandProduct(brandId);
     }
 
     @GetMapping("/{brandId}")
     @ApiOperation(value = "Get brand info")
-    public Mono<Brand> getBrand(@PathVariable int brandId){
+    public Mono<Brand> getBrand(@PathVariable int brandId) {
         return brandService.getBrand(brandId);
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Create a brand")
-    public Mono<Brand> createBrand(@RequestBody Brand brand){
+    public Mono<Brand> createBrand(@RequestBody Brand brand) {
         return brandService.createBrand(brand);
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update a brand")
-    public Mono<Brand> updateBrand(@RequestBody Brand brand){
+    public Mono<Brand> updateBrand(@RequestBody Brand brand) {
         return brandService.updateBrand(brand);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Delete a brand")
-    public Mono<Void> deleteBrand(@PathVariable int brandId){
+    public Mono<Void> deleteBrand(@PathVariable int brandId) {
         return brandService.deleteBrand(brandId);
     }
 }

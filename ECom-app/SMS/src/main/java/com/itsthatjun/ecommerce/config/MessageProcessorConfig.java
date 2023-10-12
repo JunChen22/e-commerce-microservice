@@ -127,7 +127,7 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            if(event.getEventType() == UPDATE_COUPON_USAGE) {
+            if (event.getEventType() == UPDATE_COUPON_USAGE) {
                 couponService.updateUsedCoupon(event.getCoupon(), event.getOrderId(), event.getMemberId());
             } else {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_COUPON_USAGE event";

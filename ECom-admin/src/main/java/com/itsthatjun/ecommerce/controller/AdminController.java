@@ -41,9 +41,9 @@ public class AdminController {
 
     @PostMapping("/login")
     @ApiOperation("")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request){
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         String token = adminService.login(loginRequest.getUsername(), loginRequest.getPassword());
-        if(token.isEmpty()){
+        if (token.isEmpty()) {
             return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED);
         }
 
@@ -58,7 +58,7 @@ public class AdminController {
     @PostMapping("/register")
     @PreAuthorize("hasRole('ROLE_admin-root')")
     @ApiOperation(value = "Register a admin account, only main admin can create another admin and assign role and permission")
-    public ResponseEntity<?> register(@RequestBody Admin admin){
+    public ResponseEntity<?> register(@RequestBody Admin admin) {
 
         // TODO: register a admin
         //adminService.register(admin);
@@ -68,7 +68,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_admin-user')")
     @GetMapping("/roles/{id}")
     @ApiOperation(value = "")
-    public List<Roles> getRole(@PathVariable int id){
+    public List<Roles> getRole(@PathVariable int id) {
         List<Roles> roles = adminDao.getRolesList(id);
         return roles;
     }
@@ -76,7 +76,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_admin-user')")
     @GetMapping("/permission/{id}")
     @ApiOperation(value = "")
-    public List<Permission> getPermission(@PathVariable int id){
+    public List<Permission> getPermission(@PathVariable int id) {
         List<Permission> permissions = adminDao.getPermissionList(id);
         return permissions;
     }
@@ -84,7 +84,7 @@ public class AdminController {
     @GetMapping("/logs/{id}")
     @PreAuthorize("hasAuthority('user:read')")
     @ApiOperation(value = "")
-    public List<AdminLoginLog> getLoginLogs(@PathVariable int id){
+    public List<AdminLoginLog> getLoginLogs(@PathVariable int id) {
         List<AdminLoginLog> logs = adminDao.getLoginLog(id);
         return logs;
     }

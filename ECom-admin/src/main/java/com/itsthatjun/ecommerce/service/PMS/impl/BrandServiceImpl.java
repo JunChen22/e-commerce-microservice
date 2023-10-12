@@ -42,7 +42,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Flux<Brand> getAllBrand(){
+    public Flux<Brand> getAllBrand() {
         String url = PMS_SERVICE_URL + "/listAll";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
@@ -50,7 +50,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Flux<Brand> getAllBrand(int pageNum, int pageSize){
+    public Flux<Brand> getAllBrand(int pageNum, int pageSize) {
         String url = PMS_SERVICE_URL + "/list?page=" + pageNum + "&size=" + pageSize;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
@@ -58,7 +58,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Flux<Product> getBrandProduct(int brandId){
+    public Flux<Product> getBrandProduct(int brandId) {
         String url = PMS_SERVICE_URL + "/product/" + brandId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
@@ -66,7 +66,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Brand> getBrand(int brandId){
+    public Mono<Brand> getBrand(int brandId) {
         String url = PMS_SERVICE_URL + "/" + brandId;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Brand.class)
@@ -74,7 +74,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Brand> createBrand(Brand brand){
+    public Mono<Brand> createBrand(Brand brand) {
         return Mono.fromCallable(() -> {
             sendMessage("brand-out-0", new PmsAdminBrandEvent(CREATE, brand, null));
             return brand;
@@ -82,7 +82,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Brand> updateBrand(Brand brand){
+    public Mono<Brand> updateBrand(Brand brand) {
         int brandId = brand.getId();
         return Mono.fromCallable(() -> {
             sendMessage("brand-out-0", new PmsAdminBrandEvent(UPDATE, brand, brandId));
@@ -91,7 +91,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Void>  deleteBrand(int brandId){
+    public Mono<Void>  deleteBrand(int brandId) {
         return Mono.fromRunnable(() ->
                 sendMessage("brand-out-0", new PmsAdminBrandEvent(DELETE, null, brandId))
         ).subscribeOn(publishEventScheduler).then();

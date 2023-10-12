@@ -60,7 +60,7 @@ public class MessageProcessorConfig {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             Review review = event.getReview();
             int userId = event.getUserId();
-            switch (event.getEventType()){
+            switch (event.getEventType()) {
                 case CREATE_REVIEW:
                     reviewService.createReview(review, event.getPicturesList(), userId).block();
                     break;

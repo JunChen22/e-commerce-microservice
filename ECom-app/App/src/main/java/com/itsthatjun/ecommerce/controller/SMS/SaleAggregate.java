@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.controller.SMS;
 
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.PromotionSale;
+import com.itsthatjun.ecommerce.service.SMS.impl.PromotionServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -28,25 +29,18 @@ public class SaleAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaleAggregate.class);
 
-    private final WebClient webClient;
-
-    private final String SMS_SERVICE_URL = "http://sms/sale";
+    private PromotionServiceImpl promotionService;
 
     @Autowired
-    public SaleAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
-        this.webClient = webClient.build();
+    public SaleAggregate(PromotionServiceImpl promotionService) {
+        this.promotionService = promotionService;
     }
 
     @GetMapping("/AllPromotionSale")
     @Cacheable(value = "promotionSale", key = "'getAllPromotionSale'")
     @ApiOperation("All sales including promotional sale(regular discount) and flash sale(could clearance or limited time discount")
     public List<PromotionSale> getAllPromotionSale() {
-        String url = SMS_SERVICE_URL + "/AllPromotionSale";
-        LOG.debug("Will call the getAllPromotionSale API on URL: {}", url);
-
-        Flux<PromotionSale> promotionSaleFlux = webClient.get().uri(url).retrieve().bodyToFlux(PromotionSale.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-
+        Flux<PromotionSale> promotionSaleFlux = promotionService.getAllPromotionSale();
         List<PromotionSale> promotionSaleList = promotionSaleFlux.collectList().block();
 
         return promotionSaleList;
@@ -56,12 +50,7 @@ public class SaleAggregate {
     @Cacheable(value = "promotionSaleCache", key = "'getAllPromotionSaleItem'")
     @ApiOperation("get all the item that is on regular sale discount")
     public List<Product> getAllPromotionSaleItem() {
-        String url = SMS_SERVICE_URL + "/AllPromotionSaleItem";
-        LOG.debug("Will call the getAllPromotionSaleItem API on URL: {}", url);
-
-        Flux<Product> productFlux = webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-
+        Flux<Product> productFlux = promotionService.getAllPromotionSaleItem();
         List<Product> productList = productFlux.collectList().block();
 
         return productList;
@@ -71,12 +60,7 @@ public class SaleAggregate {
     @Cacheable(value = "flashSaleCache", key = "'getAllFlashSaleItem'")
     @ApiOperation("get all item that is on short term sale like clearance or special sale")
     public List<Product> getAllFlashSaleItem() {
-        String url = SMS_SERVICE_URL + "/AllFlashSaleItem";
-        LOG.debug("Will call the getAllFlashSaleItem API on URL: {}", url);
-
-        Flux<Product> productFlux = webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-
+        Flux<Product> productFlux = promotionService.getAllFlashSaleItem();
         List<Product> productList = productFlux.collectList().block();
 
         return productList;

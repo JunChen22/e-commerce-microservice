@@ -42,19 +42,19 @@ public class OrderReturnController {
 
     @GetMapping("/all")
     @ApiOperation(value = "list all return request open waiting to be approved")
-    public Flux<ReturnRequest> listAllReturnRequest(@RequestParam("statusCode") ReturnStatusCode statusCode){
+    public Flux<ReturnRequest> listAllReturnRequest(@RequestParam("statusCode") ReturnStatusCode statusCode) {
         return orderReturnService.listAllReturnRequest(statusCode);
     }
 
     @GetMapping("/{serialNumber}")
     @ApiOperation(value = "return a return request detail")
-    public Mono<ReturnRequest> getReturnRequest(@PathVariable String serialNumber){
+    public Mono<ReturnRequest> getReturnRequest(@PathVariable String serialNumber) {
         return orderReturnService.getReturnRequest(serialNumber);
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "update the status of the return apply")
-    public Mono<Void> updateReturnOrderStatus(@RequestBody ReturnRequestDecision returnRequestDecision, HttpSession session){
+    public Mono<Void> updateReturnOrderStatus(@RequestBody ReturnRequestDecision returnRequestDecision, HttpSession session) {
         String operator = (String) session.getAttribute("adminName");
         return orderReturnService.updateReturnOrderStatus(returnRequestDecision, operator);
     }

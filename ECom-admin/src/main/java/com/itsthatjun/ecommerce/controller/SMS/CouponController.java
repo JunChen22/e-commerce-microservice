@@ -69,7 +69,7 @@ public class CouponController {
 
     @PostMapping("/update")
     @ApiOperation(value = "update a coupon")
-    public Mono<CouponSale> update(@RequestBody CouponSale updatedCouponSale, HttpSession session){
+    public Mono<CouponSale> update(@RequestBody CouponSale updatedCouponSale, HttpSession session) {
         String operatorName  = (String) session.getAttribute("adminName");
         return couponService.update(updatedCouponSale, operatorName);
     }

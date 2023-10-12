@@ -86,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
         example.createCriteria().andUsernameEqualTo(newUserName);
         List<Member> existing = memberMapper.selectByExample(example);
 
-        if(!existing.isEmpty()){
+        if (!existing.isEmpty()) {
             System.out.println("existing account");
             return null; // TODO: make exception for existing account
         }
@@ -202,7 +202,7 @@ public class MemberServiceImpl implements MemberService {
             example.createCriteria().andUsernameEqualTo(newUserName);
             List<Member> existing = memberMapper.selectByExample(example);
 
-            if(!existing.isEmpty()){
+            if (!existing.isEmpty()) {
                 System.out.println("existing account");
                 return null; // TODO: make exception for existing account
             }

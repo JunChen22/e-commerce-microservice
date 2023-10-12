@@ -94,7 +94,6 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
     private ReturnRequest internalApplyForReturn(ReturnRequest returnRequest, List<ReturnReasonPictures> picturesList,
                                               Map<String, Integer> skuQuantity, int userId) {
-
         String orderSn = returnRequest.getOrderSn();
         returnRequest.setOrderSn(orderSn);
         returnRequest.setCreatedAt(new Date());

@@ -1,33 +1,18 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.event.oms.OmsCartEvent;
 import com.itsthatjun.ecommerce.mbg.model.CartItem;
 import com.itsthatjun.ecommerce.security.UserContext;
+import com.itsthatjun.ecommerce.service.OMS.impl.CartServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.itsthatjun.ecommerce.dto.event.oms.OmsCartEvent.Type.ADD_ONE;
-import static java.util.logging.Level.FINE;
-import static reactor.core.publisher.Flux.empty;
 
 @RestController
 @Api(tags = "Cart controller", description = "Cart controller")
@@ -36,94 +21,52 @@ public class CartAggregate {
 
     private static final Logger LOG = LoggerFactory.getLogger(CartAggregate.class);
 
-    private final WebClient webClient;
-
-    private final StreamBridge streamBridge;
-
-    private final Scheduler publishEventScheduler;
-
-    private final String OMS_SERVICE_URL = "http://oms/cart";
+    private final CartServiceImpl cartService;
 
     @Autowired
-    public CartAggregate(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient, StreamBridge streamBridge,
-                         @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
-        this.streamBridge = streamBridge;
-        this.publishEventScheduler = publishEventScheduler;
+    public CartAggregate(CartServiceImpl cartService) {
+        this.cartService = cartService;
     }
 
     @ApiOperation("list current user's shopping cart")
     @GetMapping(value = "/list")
     public Flux<CartItem> list() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-
-        String url = OMS_SERVICE_URL + "/list";
-        LOG.debug("Will call the list API on URL: {}", url);
-
-        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToFlux(CartItem.class)
-                .log(LOG.getName(), FINE).onErrorResume(WebClientResponseException.class, ex -> empty());
+        int userId = getUserId();
+        return cartService.list(userId);
     }
 
     @ApiOperation("add item to shopping cart")
     @PostMapping(value = "/add")
     public Mono<CartItem> add(@RequestBody CartItem cartItem) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-
-        return Mono.fromCallable(() -> {
-            sendMessage("cart-out-0", new OmsCartEvent(ADD_ONE, userId, cartItem));
-            return cartItem;
-        }).subscribeOn(publishEventScheduler);
+        int userId = getUserId();
+        return cartService.add(cartItem, userId);
     }
 
     @ApiOperation("update shopping cart item quantity")
     @PostMapping(value = "/update/quantity")
-    public Mono<Void> updateQuantity(@RequestBody CartItem cartItem) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-
-        return Mono.fromRunnable(() ->
-                sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.UPDATE, userId, cartItem))
-        ).subscribeOn(publishEventScheduler).then();
+    public Mono<CartItem> updateQuantity(@RequestBody CartItem cartItem) {
+        int userId = getUserId();
+        return cartService.updateQuantity(cartItem, userId);
     }
 
     @ApiOperation("remove item from shopping cart")
     @DeleteMapping(value = "/delete/{cartItemId}")
     public Mono<Void> delete(@PathVariable int cartItemId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-
-        CartItem cartItem = new CartItem();
-        cartItem.setCartId(cartItemId);
-
-        return Mono.fromRunnable(() ->
-                sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.DELETE, userId, cartItem))
-        ).subscribeOn(publishEventScheduler).then();
+        int userId = getUserId();
+        return cartService.delete(cartItemId, userId);
     }
 
     @ApiOperation("clear user shopping cart")
     @DeleteMapping(value = "/clear")
     public Mono<Void> clear() {
+        int userId = getUserId();
+        return cartService.clear(userId);
+    }
+
+    private int getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext userContext = (UserContext) authentication.getPrincipal();
         int userId = userContext.getUserId();
-
-        return Mono.fromRunnable(() ->
-                sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.CLEAR, userId, null))
-        ).subscribeOn(publishEventScheduler).then();
-    }
-
-    private void sendMessage(String bindingName, OmsCartEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+        return userId;
     }
 }

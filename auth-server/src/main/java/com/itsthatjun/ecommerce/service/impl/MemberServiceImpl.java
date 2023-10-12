@@ -56,7 +56,7 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
     @Override
     public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = getMemberByUsername(username);
-        if(member != null & member.getStatus() == 1){
+        if (member != null & member.getStatus() == 1) {
             return new CustomUserDetail(member);
         }
         //TODO: wasn't invoked when entering wrong username
@@ -70,7 +70,7 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
         try{
             CustomUserDetail userDetails = loadUserByUsername(username);
             // decode password to compare
-            if(!passwordEncoder().matches(password, userDetails.getPassword())){
+            if (!passwordEncoder().matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("incorrect password");
             }
 
@@ -101,7 +101,7 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
         example.createCriteria().andUsernameEqualTo(username).andStatusEqualTo(1);
         List<Member> memberList = memberMapper.selectByExample(example);
 
-        if(memberList != null && !memberList.isEmpty()){
+        if (memberList != null && !memberList.isEmpty()) {
             return memberList.get(0);
         }
         return null;

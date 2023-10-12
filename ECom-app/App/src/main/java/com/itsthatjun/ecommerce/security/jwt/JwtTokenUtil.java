@@ -15,7 +15,7 @@ public class JwtTokenUtil {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
             String tokenIssuer = getIssuerFromToken(token);
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
@@ -34,13 +34,13 @@ public class JwtTokenUtil {
         return false;
     }
 
-    private boolean isTokenExpired(String token){
+    private boolean isTokenExpired(String token) {
         Claims claims= getClaimsFromToken(token);
         Date date = claims.getExpiration();
         return date.before(new Date());
     }
 
-    public String getIssuerFromToken(String token){
+    public String getIssuerFromToken(String token) {
         String issuer;
         try {
             Claims claims = getClaimsFromToken(token);
@@ -51,7 +51,7 @@ public class JwtTokenUtil {
         return issuer;
     }
 
-    public String getUserNameFromToken(String token){
+    public String getUserNameFromToken(String token) {
         String userName;
         try {
             Claims claims = getClaimsFromToken(token);
@@ -62,7 +62,7 @@ public class JwtTokenUtil {
         return userName;
     }
 
-    public String getNameFromToken(String token){
+    public String getNameFromToken(String token) {
         String name;
         try {
             Claims claims = getClaimsFromToken(token);
@@ -73,7 +73,7 @@ public class JwtTokenUtil {
         return name;
     }
 
-    public int getUserIdFromToken(String token){
+    public int getUserIdFromToken(String token) {
         Integer userId;
         try {
             Claims claims = getClaimsFromToken(token);
@@ -84,7 +84,7 @@ public class JwtTokenUtil {
         return (userId != null) ? userId.intValue() : 0;
     }
 
-    private Claims getClaimsFromToken(String token){
+    private Claims getClaimsFromToken(String token) {
         Claims claims = null;
         try {
             claims = Jwts.parser()

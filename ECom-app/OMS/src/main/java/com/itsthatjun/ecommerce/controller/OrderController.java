@@ -48,13 +48,13 @@ public class OrderController {
 
     @GetMapping("/admin/all")
     @ApiOperation(value = "get all of the return request based on status code")
-    public Flux<Orders> getAllOrderByStatus(@RequestParam int statusCode){
+    public Flux<Orders> getAllOrderByStatus(@RequestParam int statusCode) {
         return orderService.getAllOrderByStatus(statusCode);
     }
 
     @GetMapping("/admin/detail/{orderSn}")
     @ApiOperation(value = "get user order detail")
-    public Mono<OrderDetail> getUserOrderDetail(@PathVariable String orderSn){
+    public Mono<OrderDetail> getUserOrderDetail(@PathVariable String orderSn) {
         return orderService.getUserOrderDetail(orderSn);
     }
 }

@@ -223,8 +223,8 @@ public class OrderServiceImpl implements OrderService {
             Payment payment = paypalService.createPayment(orderTotal, "USD", PaypalPaymentMethod.paypal,
                     PaypalPaymentIntent.sale, "payment description", cancelUrl + "/" +  orderSn,
                     successUrl, orderSn);
-            for(Links links : payment.getLinks()){
-                if(links.getRel().equals("approval_url")){
+            for(Links links : payment.getLinks()) {
+                if (links.getRel().equals("approval_url")) {
                     System.out.println("redirect:" + links.getHref());
                 }
             }
@@ -275,7 +275,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
 
-            if(payment.getState().equals("approved")){
+            if (payment.getState().equals("approved")) {
                 System.out.println("successful payment");
 
                 Transaction transaction = payment.getTransactions().get(0);
@@ -516,7 +516,7 @@ public class OrderServiceImpl implements OrderService {
             example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
             ProductSku itemStock = stockMapper.selectByExample(example).get(0);
 
-            if (itemStock != null && itemStock.getStock() < (itemStock.getLockStock() + quantityNeeded)){
+            if (itemStock != null && itemStock.getStock() < (itemStock.getLockStock() + quantityNeeded)) {
                 return false; // send alert somewhere here to alert admin about low stock
             }
         }

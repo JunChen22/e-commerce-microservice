@@ -32,26 +32,26 @@ public class BrandController {
 
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all brands")
-    public Flux<Brand> getAllBrand(){
+    public Flux<Brand> getAllBrand() {
         return brandService.listAllBrand();
     }
 
     @GetMapping("/list")
     @ApiOperation(value = "Get brands with page and size")
     public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
-                                   @RequestParam(value = "size", defaultValue = "3") int pageSize){
+                                   @RequestParam(value = "size", defaultValue = "3") int pageSize) {
         return brandService.listBrand(pageNum, pageSize);
     }
 
     @GetMapping("/product/{brandId}")
     @ApiOperation(value = "Get all product of this brand")
-    public Flux<Product> getBrandProduct(@PathVariable int brandId){
+    public Flux<Product> getBrandProduct(@PathVariable int brandId) {
         return brandService.listAllBrandProduct(brandId);
     }
 
     @GetMapping("/{brandId}")
     @ApiOperation(value = "Get brand info")
-    public Mono<Brand> getBrand(@PathVariable int brandId){
+    public Mono<Brand> getBrand(@PathVariable int brandId) {
         return brandService.getBrand(brandId);
     }
 }
