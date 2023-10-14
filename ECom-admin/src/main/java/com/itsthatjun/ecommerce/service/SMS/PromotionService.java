@@ -19,7 +19,13 @@ public interface PromotionService {
     Flux<Product> getAllFlashSaleItem();
 
     @ApiOperation("")
-    Mono<OnSaleRequest> createSale(OnSaleRequest request, String operator);
+    Mono<OnSaleRequest> createListSale(OnSaleRequest request, String operator);
+
+    @ApiOperation("")
+    Mono<OnSaleRequest> createBrandSale(OnSaleRequest request, String operator);
+
+    @ApiOperation("")
+    Mono<OnSaleRequest> createCategorySale(OnSaleRequest request, String operator);
 
     @ApiOperation("")
     Mono<OnSaleRequest> updateSaleInfo(OnSaleRequest request, String operator);

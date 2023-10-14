@@ -12,7 +12,9 @@ import static java.time.ZonedDateTime.now;
 public class SmsAdminSaleEvent {
 
     public enum Type {
-        CREATE_SALE,
+        CREATE_SALE_LIST,
+        CREATE_SALE_BRAND,
+        CREATE_SALE_CATEGORY,
         UPDATE_SALE_INFO,
         UPDATE_SALE_PRICE,
         UPDATE_SALE_STATUS,

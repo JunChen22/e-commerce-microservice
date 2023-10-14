@@ -30,7 +30,6 @@ public class TestProductControllerWithMybatis {
         ProductExample example = new ProductExample();
         example.createCriteria().andOriginalPriceLessThan(BigDecimal.valueOf(200));
         long numProductLessThan = productMapper.countByExample(example);
-        System.out.println(numProductLessThan + " of products less than 200");
         return numProductLessThan;
     }
 

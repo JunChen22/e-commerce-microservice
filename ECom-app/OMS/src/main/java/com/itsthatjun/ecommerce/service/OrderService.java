@@ -29,8 +29,8 @@ public interface OrderService {
     @ApiOperation("payment successful, redirected from paypal")
     Mono<Orders> paySuccess(String paymentId, String payerId);
 
-    @ApiOperation("payment unsuccessful, redirected from paypal")
-    Mono<Void> payFail(String orderSN);
+    @ApiOperation("payment unsuccessful, redirected from paypal, store token to pay later, 30 minute ttl")
+    Mono<Void> payFail(String orderSN, String token);
 
     @ApiOperation("Member cancel order")
     Mono<Orders> cancelOrder(String orderSN);

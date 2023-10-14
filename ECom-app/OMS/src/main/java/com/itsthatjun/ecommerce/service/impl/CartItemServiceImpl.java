@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.service.impl;
 
 import com.itsthatjun.ecommerce.mbg.mapper.CartItemMapper;
+import com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ShoppingCartMapper;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.CartItemService;
@@ -24,14 +25,17 @@ public class CartItemServiceImpl implements CartItemService {
 
     private final ShoppingCartMapper shoppingCartMapper;
 
+    private final ProductSkuMapper skuMapper;
+
     private final CartItemMapper cartItemMapper;
 
     private final Scheduler jdbcScheduler;
 
     @Autowired
-    public CartItemServiceImpl(ShoppingCartMapper shoppingCartMapper, CartItemMapper cartItemMapper,
+    public CartItemServiceImpl(ShoppingCartMapper shoppingCartMapper, CartItemMapper cartItemMapper, ProductSkuMapper skuMapper,
                                @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.shoppingCartMapper = shoppingCartMapper;
+        this.skuMapper = skuMapper;
         this.cartItemMapper = cartItemMapper;
         this.jdbcScheduler = jdbcScheduler;
     }
@@ -52,8 +56,9 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public Flux<CartItem> addItem(CartItem item, int userId) {
-       return Mono.fromCallable(() -> internalAddItem(item, userId)
-               ).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+       return Mono.fromCallable(() ->
+           internalAddItem(item, userId)
+       ).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     private List<CartItem> internalAddItem(CartItem newItem, int userId) {
@@ -62,24 +67,38 @@ public class CartItemServiceImpl implements CartItemService {
         CartItemExample cartItemExample = new CartItemExample();
         cartItemExample.createCriteria().andCartIdEqualTo(currentShoppingCart.getId());
         List<CartItem> currentCartItems = cartItemMapper.selectByExample(cartItemExample);
-        boolean existingInCart = true;
+        String productSkuCode = newItem.getProductSku();
+        boolean existingInCart = false;
 
         for (CartItem item : currentCartItems) {
-            if (item.getProductSku().equals(newItem.getProductSku())) {
+            if (item.getProductSku().equals(productSkuCode)) {
                 int currentQuantity = item.getQuantity();
                 item.setQuantity(currentQuantity + newItem.getQuantity());
-                cartItemMapper.updateByPrimaryKey(item);
-                existingInCart = false;
+                item.setModifyDate(new Date());
+                cartItemMapper.updateByPrimaryKeySelective(item);
+                existingInCart = true;
                 break;
             }
         }
 
         if (!existingInCart) {
+            ProductSkuExample skuExample = new ProductSkuExample();
+            skuExample.createCriteria().andSkuCodeEqualTo(productSkuCode);
+            List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
+
+            if (skuList.isEmpty()) throw new RuntimeException("Sku code error, does not exist: " + productSkuCode);
+
+            ProductSku sku = skuList.get(0);
+
             newItem.setCartId(currentShoppingCart.getId());
+            newItem.setProductId(sku.getProductId());
+            newItem.setPrice(sku.getPrice());
+            newItem.setProductPic(sku.getPicture());
             newItem.setCreatedAt(new Date());
             cartItemMapper.insert(newItem);
         }
 
+        // check quantity and price
         currentCartItems = cartItemMapper.selectByExample(cartItemExample);
         return currentCartItems;
     }

@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Mono<Void> cancelUserOrder(String orderSn, int userId) {
         return Mono.fromRunnable(() -> {
-            sendOrderMessage("orderComplete-out-0", new OmsOrderEvent(CANCEL_ORDER, userId, orderSn, null, null, null));
+            sendOrderMessage("order-out-0", new OmsOrderEvent(CANCEL_ORDER, userId, orderSn, null, null, null));
         }).subscribeOn(publishEventScheduler).then();
     }
 

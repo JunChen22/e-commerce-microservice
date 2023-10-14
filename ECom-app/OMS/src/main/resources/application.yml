@@ -105,6 +105,15 @@ logging:
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
+
+
+redis:
+  key:
+    orderId: oms
+  database: ECom
+  expire:
+    common: 7200    # 120 minutes, measured in seconds
+
 ---
 
 spring.config.activate.on-profile: docker

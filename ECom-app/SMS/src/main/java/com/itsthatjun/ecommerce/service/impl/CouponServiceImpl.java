@@ -232,6 +232,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Mono<Coupon> createCoupon(Coupon newCoupon, Map<String, Integer> skuMap) {
+        // TODO: create create brand or category discount by pass brand name or category id
         return Mono.fromCallable(() -> {
             Coupon coupon = internalCreateCoupon(newCoupon, skuMap);
             return coupon;
@@ -304,15 +305,15 @@ public class CouponServiceImpl implements CouponService {
             Coupon foundCoupon = couponMapper.selectByPrimaryKey(couponId);
 
             // currently can't change coupon type or coupon code itself
-            if (foundCoupon.getCouponType().intValue() == updateCoupon.getCouponType().intValue()) {
+            if (foundCoupon.getCouponType().intValue() != updateCoupon.getCouponType().intValue()) {
                 throw new CouponException("Can not change coupon type");
             }
 
-            if (foundCoupon.getCode().equals(updateCoupon.getCode())) {
+            if (!foundCoupon.getCode().equals(updateCoupon.getCode())) {
                 throw new CouponException("Can not change coupon code");
             }
             // TODO: Update coupon info's like discount type, amount, date, count, status, and name
-            couponMapper.updateByPrimaryKey(updateCoupon);
+            couponMapper.updateByPrimaryKeySelective(updateCoupon);
             // TODO: add a log
 
             return updateCoupon;

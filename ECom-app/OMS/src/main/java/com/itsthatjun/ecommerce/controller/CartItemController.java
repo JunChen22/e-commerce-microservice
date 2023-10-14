@@ -36,5 +36,4 @@ public class CartItemController {
     public Flux<CartItem> list(@RequestHeader("X-UserId") int userId) {
         return cartItemService.getUserCart(userId);
     }
-
 }

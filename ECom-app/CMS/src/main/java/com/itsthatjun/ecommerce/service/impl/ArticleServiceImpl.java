@@ -76,11 +76,9 @@ public class ArticleServiceImpl implements ArticleService {
         //TODO: optimize this
         Article exist = articleMapper.selectByPrimaryKey(articleInfo.getArticle().getId());
         if (exist != null) {
-            System.out.println("existing id");
             // TODO: return exception tobe added in ECom-common
-            return null;
+            throw new RuntimeException("Article id already exist:" + exist.getId());
         }
-        System.out.println("at creating");
 
         Date currentDate = new Date();
         articleInfo.getArticle().setCreatedAt(currentDate);

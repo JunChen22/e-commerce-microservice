@@ -2,7 +2,7 @@ package com.itsthatjun.ecommerce.controller.OMS;
 
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.OrderParam;
-import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
+import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
 import io.swagger.annotations.Api;
@@ -30,10 +30,10 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/all/{statusCode}")
     @ApiOperation(value = "List all orders that are delivered")
-    public Flux<Orders> listAllOrder(@RequestParam("statusCode") ReturnStatusCode statusCode) {
-        return Flux.empty();
+    public Flux<Orders> listAllOrder(@PathVariable OrderStatus statusCode) {
+        return orderService.listAllOrder(statusCode);
     }
 
     @GetMapping("/user/{userId}")
@@ -44,8 +44,8 @@ public class OrderController {
 
     @GetMapping("/{serialNumber}")
     @ApiOperation(value = "look up a order by serial number")
-    public Mono<Orders> getOrder(@PathVariable String serialNumber) {
-        return getOrder(serialNumber);
+    public Mono<OrderDetail> getOrder(@PathVariable String serialNumber) {
+        return orderService.getOrder(serialNumber);
     }
 
     @PostMapping("/create")
@@ -68,7 +68,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/cancel/{serialNumber}")
-    @ApiOperation(value = "delete a order by serial number")
+    @ApiOperation(value = "cancel a order by serial number")
     public Mono<Void> cancelOrder(@RequestBody OrderParam orderParam, HttpSession session) {
         String orderSn = orderParam.getOrderDetail().getOrders().getOrderSn();
         int userId = orderParam.getUserId();

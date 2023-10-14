@@ -54,20 +54,20 @@ public class MessageProcessorConfig {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
             Coupon coupon = event.getCouponSale().getCoupon();
-            Map<String, Integer> skuQuantity = event.getCouponSale().getSkuQuantity();;
+            Map<String, Integer> skuQuantity = event.getCouponSale().getSkuQuantity();
             switch (event.getEventType()) {
 
                 case CREATE_COUPON:
-                    couponService.createCoupon(coupon, skuQuantity);
+                    couponService.createCoupon(coupon, skuQuantity).subscribe();
                     break;
 
                 case UPDATE_COUPON:
-                    couponService.updateCoupon(coupon, skuQuantity);
+                    couponService.updateCoupon(coupon, skuQuantity).subscribe();
                     break;
 
                 case DELETE_COUPON:
                     int couponId = event.getCouponSale().getCouponId();
-                    couponService.deleteCoupon(couponId);
+                    couponService.deleteCoupon(couponId).subscribe();
                     break;
 
                 default:
@@ -90,25 +90,33 @@ public class MessageProcessorConfig {
             String operator = event.getSaleRequest().getOperator();
             switch (event.getEventType()) {
 
-                case CREATE_SALE:
-                    salesService.createListSale(saleRequest, operator);
+                case CREATE_SALE_LIST:
+                    salesService.createListSale(saleRequest, operator).subscribe();
+                    break;
+
+                case CREATE_SALE_BRAND:
+                    salesService.createBrandSale(saleRequest, operator).subscribe();
+                    break;
+
+                case CREATE_SALE_CATEGORY:
+                    salesService.createCategorySale(saleRequest, operator).subscribe();
                     break;
 
                 case UPDATE_SALE_INFO:
-                    salesService.updateSaleInfo(saleRequest, operator);
+                    salesService.updateSaleInfo(saleRequest, operator).subscribe();
                     break;
 
                 case UPDATE_SALE_PRICE:
-                    salesService.updateSalePrice(saleRequest, operator);
+                    salesService.updateSalePrice(saleRequest, operator).subscribe();
                     break;
 
                 case UPDATE_SALE_STATUS:
-                    salesService.updateSaleStatus(saleRequest, operator);
+                    salesService.updateSaleStatus(saleRequest, operator).subscribe();
                     break;
 
                 case DELETE_SALE:
                     int promotionId = saleRequest.getPromotionSale().getId();
-                    salesService.delete(promotionId, operator);
+                    salesService.delete(promotionId, operator).subscribe();
                     break;
 
                 default:
@@ -128,7 +136,7 @@ public class MessageProcessorConfig {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
             if (event.getEventType() == UPDATE_COUPON_USAGE) {
-                couponService.updateUsedCoupon(event.getCoupon(), event.getOrderId(), event.getMemberId());
+                couponService.updateUsedCoupon(event.getCoupon(), event.getOrderId(), event.getMemberId()).subscribe();
             } else {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_COUPON_USAGE event";
                 LOG.warn(errorMessage);
@@ -147,19 +155,19 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
 
                 case UPDATE_PURCHASE:
-                    omsEventUpdateService.updatePurchase(skuQuantityMap);
+                    omsEventUpdateService.updatePurchase(skuQuantityMap).subscribe();
                     break;
 
                 case UPDATE_PURCHASE_PAYMENT:
-                    omsEventUpdateService.updatePurchasePayment(skuQuantityMap);
+                    omsEventUpdateService.updatePurchasePayment(skuQuantityMap).subscribe();
                     break;
 
                 case UPDATE_RETURN:
-                    omsEventUpdateService.updateReturn(skuQuantityMap);
+                    omsEventUpdateService.updateReturn(skuQuantityMap).subscribe();
                     break;
 
                 case UPDATE_FAIL_PAYMENT:
-                    omsEventUpdateService.updateFailPayment(skuQuantityMap);
+                    omsEventUpdateService.updateFailPayment(skuQuantityMap).subscribe();
                     break;
 
                 default:
@@ -183,23 +191,23 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
 
                 case NEW_PRODUCT:
-                    pmsEventUpdateService.addProduct(product, productSkuList);
+                    pmsEventUpdateService.addProduct(product, productSkuList).subscribe();
                     break;
 
                 case NEW_PRODUCT_SKU:
-                    pmsEventUpdateService.addProductSku(productSkuList.get(0));
+                    pmsEventUpdateService.addProductSku(productSkuList.get(0)).subscribe();
                     break;
 
                 case UPDATE_PRODUCT:
-                    pmsEventUpdateService.updateProduct(product, productSkuList);
+                    pmsEventUpdateService.updateProduct(product, productSkuList).subscribe();
                     break;
 
                 case REMOVE_PRODUCT:
-                    pmsEventUpdateService.removeProductSku(productSkuList.get(0));
+                    pmsEventUpdateService.removeProductSku(productSkuList.get(0)).subscribe();
                     break;
 
                 case REMOVE_PRODUCT_SKU:
-                    pmsEventUpdateService.removeProduct(product, productSkuList);
+                    pmsEventUpdateService.removeProduct(product, productSkuList).subscribe();
                     break;
 
                 default:

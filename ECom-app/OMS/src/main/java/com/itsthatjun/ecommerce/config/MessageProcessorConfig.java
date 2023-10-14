@@ -60,22 +60,22 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case ADD_ONE:
-                    cartItemService.addItem(cartItem, userId);
+                    cartItemService.addItem(cartItem, userId).subscribe();
                     break;
 
                 case UPDATE:
                     int quantity = cartItem.getQuantity();
                     cartItemId = cartItem.getCartId();
-                    cartItemService.updateQuantity(cartItemId, quantity, userId);
+                    cartItemService.updateQuantity(cartItemId, quantity, userId).subscribe();
                     break;
 
                 case DELETE:
                     cartItemId = cartItem.getCartId();
-                    cartItemService.deleteCartItem(cartItemId, userId);
+                    cartItemService.deleteCartItem(cartItemId, userId).subscribe();
                     break;
 
                 case CLEAR:
-                    cartItemService.clearCartItem(userId);
+                    cartItemService.clearCartItem(userId).subscribe();
                     break;
 
                 default:
@@ -103,15 +103,15 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
                 case APPLY:
                     Map<String, Integer> skuQuantity = returnParam.getSkuQuantity();
-                    returnOrderService.applyForReturn(returnRequest, pictures, skuQuantity,userId);
+                    returnOrderService.applyForReturn(returnRequest, pictures, skuQuantity,userId).subscribe();
                     break;
 
                 case UPDATE:
-                    returnOrderService.updateReturnInfo(returnRequest, pictures, orderSn, userId);
+                    returnOrderService.updateReturnInfo(returnRequest, pictures, orderSn, userId).subscribe();
                     break;
 
                 case CANCEL:
-                    returnOrderService.cancelReturn(orderSn, userId);
+                    returnOrderService.cancelReturn(orderSn, userId).subscribe();
                     break;
 
                 default:
@@ -130,12 +130,12 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case GENERATE_ORDER:
-                    orderService.generateOrder(event.getOrderParam(), event.getSuccessUrl(), event.getCancelUrl(), event.getUserId());
+                    orderService.generateOrder(event.getOrderParam(), event.getSuccessUrl(), event.getCancelUrl(), event.getUserId()).subscribe();
                     break;
 
                 case CANCEL_ORDER:
                     String orderSn = event.getOrderSn();
-                    orderService.cancelOrder(orderSn);
+                    orderService.cancelOrder(orderSn).subscribe();
                     break;
 
                 // case UPDATE_ORDER:  TODO: update order minutes after order placed, like change quantity or cancel partial order
@@ -157,11 +157,11 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case PAYMENT_SUCCESS:
-                    orderService.paySuccess(event.getPaymentId(), event.getPayerId());
+                    orderService.paySuccess(event.getPaymentId(), event.getPayerId()).subscribe();
                     break;
 
                 case PAYMENT_FAILURE:
-                    orderService.payFail(event.getOrderSN());
+                    orderService.payFail(event.getOrderSN(), event.getPaymentId()).subscribe();
                     break;
 
                 default:
@@ -186,15 +186,15 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
                 case GENERATE_ORDER:
                     List<OrderItem> orderItemList = orderDetail.getOrderItemList();
-                    orderService.createOrder(order, orderItemList, reason, operator);
+                    orderService.createOrder(order, orderItemList, reason, operator).subscribe();
                     break;
 
                 case UPDATE_ORDER:
-                    orderService.updateOrder(order, reason, operator);
+                    orderService.updateOrder(order, reason, operator).subscribe();
                     break;
 
                 case CANCEL_ORDER:
-                    orderService.adminCancelOrder(order, reason, operator);
+                    orderService.adminCancelOrder(order, reason, operator).subscribe();
                     break;
 
                 default:
@@ -217,16 +217,16 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case APPROVED:
-                    returnOrderService.approveReturnRequest(returnRequestDecision, operator);
+                    returnOrderService.approveReturnRequest(returnRequestDecision, operator).subscribe();
                     break;
 
                 case REJECTED:
                     String rejectionReason = returnRequestDecision.getReason();
-                    returnOrderService.rejectReturnRequest(returnRequestDecision, rejectionReason, operator);
+                    returnOrderService.rejectReturnRequest(returnRequestDecision, rejectionReason, operator).subscribe();
                     break;
 
                 case COMPLETED_RETURN:
-                    returnOrderService.completeReturnRequest(returnRequestDecision, operator);
+                    returnOrderService.completeReturnRequest(returnRequestDecision, operator).subscribe();
                     break;
 
                 default:
@@ -249,25 +249,25 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
 
                 case NEW_PRODUCT:
-                    pmsEventUpdateService.addProduct(newProduct, productSkuList);
+                    pmsEventUpdateService.addProduct(newProduct, productSkuList).subscribe();
                     break;
 
                 case NEW_PRODUCT_SKU:
                     ProductSku newSku = productSkuList.get(0);
-                    pmsEventUpdateService.addProductSku(newSku);
+                    pmsEventUpdateService.addProductSku(newSku).subscribe();
                     break;
 
                 case UPDATE_PRODUCT:
-                    pmsEventUpdateService.updateProduct(newProduct, productSkuList);
+                    pmsEventUpdateService.updateProduct(newProduct, productSkuList).subscribe();
                     break;
 
                 case REMOVE_PRODUCT_SKU:
                     ProductSku removeSku = productSkuList.get(0);
-                    pmsEventUpdateService.removeProductSku(removeSku);
+                    pmsEventUpdateService.removeProductSku(removeSku).subscribe();
                     break;
 
                 case REMOVE_PRODUCT:
-                    pmsEventUpdateService.removeProduct(newProduct, productSkuList);
+                    pmsEventUpdateService.removeProduct(newProduct, productSkuList).subscribe();
                     break;
 
                 default:
@@ -287,9 +287,9 @@ public class MessageProcessorConfig {
 
             List<ProductSku> skuList = event.getSkuList();
             if (event.getEventType() == UPDATE_SALE_PRICE) {
-                smsEventUpdateService.updateSale(skuList);
+                smsEventUpdateService.updateSale(skuList).subscribe();
             } else if (event.getEventType() == REMOVE_SALE) {
-                smsEventUpdateService.removeSale(skuList);
+                smsEventUpdateService.removeSale(skuList).subscribe();
             } else {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_SALE_PRICE" +
                             " event";

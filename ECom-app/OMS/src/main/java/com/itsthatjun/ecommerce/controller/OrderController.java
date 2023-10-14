@@ -57,4 +57,11 @@ public class OrderController {
     public Mono<OrderDetail> getUserOrderDetail(@PathVariable String orderSn) {
         return orderService.getUserOrderDetail(orderSn);
     }
+
+    @GetMapping("/admin/user/{userId}")
+    @ApiOperation(value = "get user order detail")
+    public Flux<Orders> getUserOrderDetail(@PathVariable int userId) {
+        return orderService.getUserOrders(userId);
+    }
+
 }

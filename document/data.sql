@@ -23,9 +23,6 @@ CREATE TABLE brand_update_log
     operator     TEXT
 );
 
-
-
-
 -- phone/computer/electronic brand
 INSERT INTO brand(name, alphabet, logo, status) VALUES
 ('Apple', 'A', 'apple.jpg', 'active'),
@@ -101,7 +98,6 @@ CREATE TABLE product_category
      level     NUMERIC
   );
 
-
 -- main category
 INSERT INTO product_category(name, parent_id, level) VALUES
 ('Fashion', 0, 1),
@@ -145,19 +141,6 @@ INSERT INTO product_category(name, parent_id, level) VALUES
 ('Vitamins', 6, 2),
 ('Skin care', 6, 2),
 ('Health care products', 6, 2);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 DROP TABLE IF EXISTS product_attribute_category;
@@ -556,12 +539,12 @@ CREATE TABLE product_sku (    -- all product have one default sku variant
 
 INSERT INTO product_sku (product_id, sku_code, picture, price, promotion_price, stock, low_stock, unit_sold)
 VALUES
--- iphone
-(1, 'IP12-RED', 'iphone12-red.jpg', 899.99 ,  899.99 , 35 , 4 , 20),
-(1, 'IP12-WHITE', 'iphone12-white.jpg', 899.99 , 899.99 , 35 , 4 , 20),
-(1, 'IP12-BLACK', 'iphone12-black.jpg', 899.99 , 899.99 , 30 , 2 , 10),
-(2, 'IPSE-BLUE', 'iphonese-blue.jpg', 499.99 ,  499.99 , 25 ,  3 , 25),
-(2, 'IPSE-RED', 'iphonese-red.jpg', 499.99 , 499.99 , 25 , 3 , 5),
+-- iphone/electronics
+(1, 'IP12-RED-128', 'iphone12-red.jpg', 899.99 ,  899.99 , 35 , 4 , 20),
+(1, 'IP12-WHITE-128', 'iphone12-white.jpg', 899.99 , 899.99 , 35 , 4 , 20),
+(1, 'IP12-BLACK-128', 'iphone12-black.jpg', 899.99 , 899.99 , 30 , 2 , 10),
+(2, 'IPSE-BLUE-64', 'iphonese-blue.jpg', 499.99 ,  499.99 , 25 ,  3 , 25),
+(2, 'IPSE-RED-64', 'iphonese-red.jpg', 499.99 , 499.99 , 25 , 3 , 5),
 (3, 'PX5', 'pixel5.jpg', 799.99 ,  799.99 , 80 ,  8 , 40),
 (4, 'OP9P', 'oneplus9pro.jpg', 1099.99 , 1099.99 , 100 , 10 , 60),
 (5, 'GS21', 'galaxys21.jpg', 1099.99 , 1099.99 , 150 , 15 , 70),
@@ -580,18 +563,25 @@ VALUES
 (18, 'AM15R5', 'alienwarem15r5.jpg', 1999.99 , 1999.99 , 80 ,  8 , 50),
 (19, 'XSX', 'xboxseriesx.jpg', 499.99 ,  499.99 , 80 ,  8 , 50),
 (20, 'DUU2720Q', 'dellultrasharp.jpg', 599.99 ,  599.99 , 120 , 12 , 70),
-(21, 'NAM270', 'nikeairmax270.jpg', 129.99 ,  129.99 , 100 , 10 , 50),
+-- clothing and shoes
+(21, 'NAM270-105', 'nikeairmax270.jpg', 129.99 ,  129.99 , 40 , 10 , 50),
+(21, 'NAM270-90', 'nikeairmax270.jpg', 129.99 ,  119.99 , 30 , 10 , 50),
+(21, 'NAM270-75', 'nikeairmax270.jpg', 129.99 ,  109.99 , 30 , 10 , 50),
+
 (22, 'NZVNEXT', 'nikezoomx.jpg', 249.99 ,  249.99 , 80 ,  8 , 30),
 (23, 'AUB', 'adidasultraboost.jpg', 149.99 ,  149.99 , 150 , 15 , 60),
 (24, 'AAS', 'adidasadilette.jpg', 29.99 ,  29.99 , 200 , 20 , 120),
 (25, 'NDFTS', 'nikedrifit.jpg', 29.99 ,  29.99 , 200 , 20 , 100),
-(26, 'CKLTS', 'calvinkleintshirt.jpg', 39.99 ,  39.99 , 100 , 10 , 70),
+
+(26, 'CKLTS-L', 'calvinkleintshirt.jpg', 39.99 ,  39.99 , 100 , 10 , 70),
+(26, 'CKLTS-M', 'calvinkleintshirt.jpg', 39.99 ,  39.99 , 100 , 10 , 70),
+(26, 'CKLTS-S', 'calvinkleintshirt.jpg', 39.99 ,  39.99 , 100 , 10 , 70),
+
 (27, 'AEPTP', 'adidasessentialpants.jpg', 49.99 ,  49.99 , 100 , 10 , 80),
+
 (28, 'TGG', 'thegreatgatsby.jpg', 14.99 ,  14.99 , 200 , 20 , 150),
 (29, 'TKAM', 'tokillamockingbird.jpg', 12.99 ,  12.99 , 150 , 15 , 120),
 (30, 'HPSS', 'harrypotter.jpg', 19.99 ,  19.99 , 100 , 10 , 200);
-
-
 
 DROP TABLE IF EXISTS product_attribute;
 CREATE TABLE product_attribute
@@ -608,93 +598,93 @@ CREATE TABLE product_attribute
 INSERT INTO product_attribute (product_id, sku_code, attribute_type_id, attribute_value, attribute_unit)
 VALUES
 -- iPhone 12 and variant(red, white, black)
-(1, 'IP12-RED', 22, '128 GB', 'GB'), -- storage capacity
-(1, 'IP12-RED', 23, '12 MP', 'MP'), -- camera resolution
-(1, 'IP12-RED', 24, '6.1 inches', 'inches'), -- screen size
-(1, 'IP12-RED', 25, '4 GB', 'GB'), -- RAM size
-(1, 'IP12-RED', 26, '2532 x 1170 pixels', 'pixels'), -- screen resolution
-(1, 'IP12-RED', 27, '2815 mAh', 'mAh'), -- battery capacity
-(1, 'IP12-RED', 28, 'Apple A14 Bionic', NULL), -- processor
-(1, 'IP12-RED', 29, 'Red', NULL), -- color
-(1, 'IP12-RED', 30, 'Lightning', NULL), -- ports
-(1, 'IP12-RED', 31, '2022', NULL), -- year
+(1, 'IP12-RED-128', 22, '128', 'GB'), -- storage capacity
+(1, 'IP12-RED-128', 23, '12', 'MP'), -- camera resolution
+(1, 'IP12-RED-128', 24, '6.1', 'inches'), -- screen size
+(1, 'IP12-RED-128', 25, '4 ', 'GB'), -- RAM size
+(1, 'IP12-RED-128', 26, '2532 x 1170', 'pixels'), -- screen resolution
+(1, 'IP12-RED-128', 27, '2815', 'mAh'), -- battery capacity
+(1, 'IP12-RED-128', 28, 'A14', ' Bionic'), -- processor
+(1, 'IP12-RED-128', 29, 'Red', NULL), -- color
+(1, 'IP12-RED-128', 30, 'Lightning', NULL), -- ports
+(1, 'IP12-RED-128', 31, '2022', NULL), -- year
 
-(1, 'IP12-WHITE', 22, '128 GB', 'GB'), -- storage capacity
-(1, 'IP12-WHITE', 23, '12 MP', 'MP'), -- camera resolution
-(1, 'IP12-WHITE', 24, '6.1 inches', 'inches'), -- screen size
-(1, 'IP12-WHITE', 25, '4 GB', 'GB'), -- RAM size
-(1, 'IP12-WHITE', 26, '2532 x 1170 pixels', 'pixels'), -- screen resolution
-(1, 'IP12-WHITE', 27, '2815 mAh', 'mAh'), -- battery capacity
-(1, 'IP12-WHITE', 28, 'Apple A14 Bionic', NULL), -- processor
-(1, 'IP12-WHITE', 29, 'White', NULL), -- color
-(1, 'IP12-WHITE', 30, 'Lightning', NULL), -- ports
-(1, 'IP12-WHITE', 31, '2022', NULL), -- year
+(1, 'IP12-WHITE-128', 22, '128', 'GB'), -- storage capacity
+(1, 'IP12-WHITE-128', 23, '12', 'MP'), -- camera resolution
+(1, 'IP12-WHITE-128', 24, '6.1', 'inches'), -- screen size
+(1, 'IP12-WHITE-128', 25, '4', 'GB'), -- RAM size
+(1, 'IP12-WHITE-128', 26, '2532 x 1170', 'pixels'), -- screen resolution
+(1, 'IP12-WHITE-128', 27, '2815', 'mAh'), -- battery capacity
+(1, 'IP12-WHITE-128', 28, 'Apple A14 Bionic', NULL), -- processor
+(1, 'IP12-WHITE-128', 29, 'White', NULL), -- color
+(1, 'IP12-WHITE-128', 30, 'Lightning', NULL), -- ports
+(1, 'IP12-WHITE-128', 31, '2022', NULL), -- year
 
-(1, 'IP12-BLACK', 22, '128 GB', 'GB'), -- storage capacity
-(1, 'IP12-BLACK', 23, '12 MP', 'MP'), -- camera resolution
-(1, 'IP12-BLACK', 24, '6.1 inches', 'inches'), -- screen size
-(1, 'IP12-BLACK', 25, '4 GB', 'GB'), -- RAM size
-(1, 'IP12-BLACK', 26, '2532 x 1170 pixels', 'pixels'), -- screen resolution
-(1, 'IP12-BLACK', 27, '2815 mAh', 'mAh'), -- battery capacity
-(1, 'IP12-BLACK', 28, 'Apple A14 Bionic', NULL), -- processor
-(1, 'IP12-BLACK', 29, 'Black', NULL), -- color
-(1, 'IP12-BLACK', 30, 'Lightning', NULL), -- ports
-(1, 'IP12-BLACK', 31, '2022', NULL), -- year
+(1, 'IP12-BLACK-128', 22, '128', 'GB'), -- storage capacity
+(1, 'IP12-BLACK-128', 23, '12 MP', 'MP'), -- camera resolution
+(1, 'IP12-BLACK-128', 24, '6.1', 'inches'), -- screen size
+(1, 'IP12-BLACK-128', 25, '4', 'GB'), -- RAM size
+(1, 'IP12-BLACK-128', 26, '2532 x 1170', 'pixels'), -- screen resolution
+(1, 'IP12-BLACK-128', 27, '2815', 'mAh'), -- battery capacity
+(1, 'IP12-BLACK-128', 28, 'Apple A14 Bionic', NULL), -- processor
+(1, 'IP12-BLACK-128', 29, 'Black', NULL), -- color
+(1, 'IP12-BLACK-128', 30, 'Lightning', NULL), -- ports
+(1, 'IP12-BLACK-128', 31, '2022', NULL), -- year
 
 -- iPhone SE  and variant(blue and red)
-(2, 'IPSE-BLUE', 22, '64 GB', 'GB'),
-(2, 'IPSE-BLUE', 23, '12 MP', 'MP'),
-(2, 'IPSE-BLUE', 24, '4.7 inches', 'inches'),
-(2, 'IPSE-BLUE', 25, '3 GB', 'GB'),
-(2, 'IPSE-BLUE', 26, '1334 x 750 pixels', 'pixels'),
-(2, 'IPSE-BLUE', 27, '1821 mAh', 'mAh'),
-(2, 'IPSE-BLUE', 28, 'Apple A13 Bionic', NULL),
-(2, 'IPSE-BLUE', 29, 'Blue', NULL),
-(2, 'IPSE-BLUE', 30, 'Lightning', NULL),
-(2, 'IPSE-BLUE', 31, '2022', NULL), -- year
+(2, 'IPSE-BLUE-64', 22, '64', 'GB'),
+(2, 'IPSE-BLUE-64', 23, '12 MP', 'MP'),
+(2, 'IPSE-BLUE-64', 24, '4.7', 'inches'),
+(2, 'IPSE-BLUE-64', 25, '3', 'GB'),
+(2, 'IPSE-BLUE-64', 26, '1334 x 750', 'pixels'),
+(2, 'IPSE-BLUE-64', 27, '1821', 'mAh'),
+(2, 'IPSE-BLUE-64', 28, 'Apple A13 Bionic', NULL),
+(2, 'IPSE-BLUE-64', 29, 'Blue', NULL),
+(2, 'IPSE-BLUE-64', 30, 'Lightning', NULL),
+(2, 'IPSE-BLUE-64', 31, '2022', NULL), -- year
 
-(2, 'IPSE-RED', 22, '64 GB', 'GB'),
-(2, 'IPSE-RED', 23, '12 MP', 'MP'),
-(2, 'IPSE-RED', 24, '4.7 inches', 'inches'),
-(2, 'IPSE-RED', 25, '3 GB', 'GB'),
-(2, 'IPSE-RED', 26, '1334 x 750 pixels', 'pixels'),
-(2, 'IPSE-RED', 27, '1821 mAh', 'mAh'),
-(2, 'IPSE-RED', 28, 'Apple A13 Bionic', NULL),
-(2, 'IPSE-RED', 29, 'Red', NULL),
-(2, 'IPSE-RED', 30, 'Lightning', NULL),
-(2, 'IPSE-RED', 31, '2022', NULL), -- year
+(2, 'IPSE-RED-64', 22, '64', 'GB'),
+(2, 'IPSE-RED-64', 23, '12 MP', 'MP'),
+(2, 'IPSE-RED-64', 24, '4.7', 'inches'),
+(2, 'IPSE-RED-64', 25, '3', 'GB'),
+(2, 'IPSE-RED-64', 26, '1334 x 750', 'pixels'),
+(2, 'IPSE-RED-64', 27, '1821', 'mAh'),
+(2, 'IPSE-RED-64', 28, 'Apple A13 Bionic', NULL),
+(2, 'IPSE-RED-64', 29, 'Red', NULL),
+(2, 'IPSE-RED-64', 30, 'Lightning', NULL),
+(2, 'IPSE-RED-64', 31, '2022', NULL), -- year
 
 -- Pixel 5
-(3, 'PX5', 22, '128 GB', 'GB'),
+(3, 'PX5', 22, '128', 'GB'),
 (3, 'PX5', 23, '12.2 MP', 'MP'),
-(3, 'PX5', 24, '6 inches', 'inches'),
-(3, 'PX5', 25, '8 GB', 'GB'),
-(3, 'PX5', 26, '2340 x 1080 pixels', 'pixels'),
-(3, 'PX5', 27, '4080 mAh', 'mAh'),
+(3, 'PX5', 24, '6', 'inches'),
+(3, 'PX5', 25, '8', 'GB'),
+(3, 'PX5', 26, '2340 x 1080', 'pixels'),
+(3, 'PX5', 27, '4080', 'mAh'),
 (3, 'PX5', 28, 'Qualcomm Snapdragon 765G', NULL),
 (3, 'PX5', 29, 'Black', NULL),
 (3, 'PX5', 30, 'USB-C', NULL),
 (3, 'PX5', 31, '2022', NULL), -- year
 
 -- OnePlus 9 Pro
-(4, 'OP9P', 22, '256 GB', 'GB'),
+(4, 'OP9P', 22, '256', 'GB'),
 (4, 'OP9P', 23, '48 MP', 'MP'),
-(4, 'OP9P', 24, '6.7 inches', 'inches'),
-(4, 'OP9P', 25, '12 GB', 'GB'),
-(4, 'OP9P', 26, '1440 x 3216 pixels', 'pixels'),
-(4, 'OP9P', 27, '4500 mAh', 'mAh'),
+(4, 'OP9P', 24, '6.7', 'inches'),
+(4, 'OP9P', 25, '12', 'GB'),
+(4, 'OP9P', 26, '1440 x 3216', 'pixels'),
+(4, 'OP9P', 27, '4500', 'mAh'),
 (4, 'OP9P', 28, 'Qualcomm Snapdragon 888', NULL),
 (4, 'OP9P', 29, 'Various colors', NULL),
 (4, 'OP9P', 30, 'USB-C', NULL),
 (4, 'OP9P', 31, '2022', NULL), -- year
 
 -- Galaxy S21
-(5, 'GS21', 22, '128 GB', 'GB'), -- storage capacity
+(5, 'GS21', 22, '128', 'GB'), -- storage capacity
 (5, 'GS21', 23, '12 MP', 'MP'), -- camera resolution
-(5, 'GS21', 24, '6.2 inches', 'inches'), -- screen size
-(5, 'GS21', 25, '8 GB', 'GB'), -- RAM size
-(5, 'GS21', 26, '2400 x 1080 pixels', 'pixels'), -- screen resolution
-(5, 'GS21', 27, '4000 mAh', 'mAh'), -- battery capacity
+(5, 'GS21', 24, '6.2', 'inches'), -- screen size
+(5, 'GS21', 25, '8', 'GB'), -- RAM size
+(5, 'GS21', 26, '2400 x 1080', 'pixels'), -- screen resolution
+(5, 'GS21', 27, '4000', 'mAh'), -- battery capacity
 (5, 'GS21', 28, 'Samsung Exynos 2100', NULL), -- processor
 (5, 'GS21', 29, 'Various colors', NULL), -- color
 (5, 'GS21', 30, 'USB-C', NULL), -- ports
@@ -719,36 +709,36 @@ VALUES
 (8, 'OBPRO', 77, '2022', NULL), -- year
 
 -- ipad pro
-(9, 'IPPRO', 54, '256 GB', 'GB'), -- storage capacity
+(9, 'IPPRO', 54, '256', 'GB'), -- storage capacity
 (9, 'IPPRO', 55, '12 MP', 'MP'), -- camera resolution
-(9, 'IPPRO', 56, '12.9 inches', 'inches'), -- screen size
-(9, 'IPPRO', 57, '16 GB', 'GB'), -- RAM size
-(9, 'IPPRO', 58, '2732 x 2048 pixels', 'pixels'), -- screen resolution
-(9, 'IPPRO', 59, '10090 mAh', 'mAh'), -- battery capacity
+(9, 'IPPRO', 56, '12.9', 'inches'), -- screen size
+(9, 'IPPRO', 57, '16', 'GB'), -- RAM size
+(9, 'IPPRO', 58, '2732 x 2048', 'pixels'), -- screen resolution
+(9, 'IPPRO', 59, '10090', 'mAh'), -- battery capacity
 (9, 'IPPRO', 60, 'Apple M1', NULL), -- processor
 (9, 'IPPRO', 61, 'Various colors', NULL), -- color
 (9, 'IPPRO', 62, 'USB-C', NULL), -- ports
 (9, 'IPPRO', 63, '2022', NULL), -- year
 
 -- OnePlus Watch 3
-(10, 'OPW3', 64, '4 GB', 'GB'), -- storage capacity
+(10, 'OPW3', 64, '4', 'GB'), -- storage capacity
 (10, 'OPW3', 65, NULL, NULL), -- camera resolution (not applicable)
-(10, 'OPW3', 66, '1.59 inches', 'inches'), -- screen size
-(10, 'OPW3', 67, '1 GB', 'GB'), -- RAM size
-(10, 'OPW3', 68, '454 x 454 pixels', 'pixels'), -- screen resolution
-(10, 'OPW3', 69, '402 mAh', 'mAh'), -- battery capacity
+(10, 'OPW3', 66, '1.59', 'inches'), -- screen size
+(10, 'OPW3', 67, '1', 'GB'), -- RAM size
+(10, 'OPW3', 68, '454 x 454', 'pixels'), -- screen resolution
+(10, 'OPW3', 69, '402', 'mAh'), -- battery capacity
 (10, 'OPW3', 70, 'Snapdragon Wear 4100', NULL), -- processor
 (10, 'OPW3', 71, 'Various colors', NULL), -- color
 (10, 'OPW3', 72, 'Charging dock', NULL), -- ports
 (10, 'OPW3', 73, '2022', NULL), -- year
 
 -- Galaxy Watch3
-(11, 'GW3', 64, '8 GB', 'GB'), -- storage capacity
+(11, 'GW3', 64, '8', 'GB'), -- storage capacity
 (11, 'GW3', 65, NULL, NULL), -- camera resolution (not applicable)
-(11, 'GW3', 66, '1.4 inches', 'inches'), -- screen size
-(11, 'GW3', 67, '1 GB', 'GB'), -- RAM size
-(11, 'GW3', 68, '360 x 360 pixels', 'pixels'), -- screen resolution
-(11, 'GW3', 69, '340 mAh', 'mAh'), -- battery capacity
+(11, 'GW3', 66, '1.4', 'inches'), -- screen size
+(11, 'GW3', 67, '1', 'GB'), -- RAM size
+(11, 'GW3', 68, '360 x 360', 'pixels'), -- screen resolution
+(11, 'GW3', 69, '340', 'mAh'), -- battery capacity
 (11, 'GW3', 70, 'Exynos 9110', NULL), -- processor
 (11, 'GW3', 71, 'Various colors', NULL), -- color
 (11, 'GW3', 72, 'Wireless charging', NULL), -- ports
@@ -757,15 +747,15 @@ VALUES
 -- T5 Portable SSD
 (12, 'T5SSD', 78, 'SSD', NULL), -- storage type
 (12, 'T5SSD', 79, 'USB-C', NULL), -- connection port
-(12, 'T5SSD', 80, '1 TB', 'TB'), -- storage size
+(12, 'T5SSD', 80, '1', 'TB'), -- storage size
 (12, 'T5SSD', 81, 'Up to 540 MB/s', 'MB/s'), -- storage speed
 (12, 'T5SSD', 82, '2022', NULL), -- year
 
 -- MacBook Pro
-(13, 'MBP', 40, '512 GB', 'GB'), -- storage capacity
-(13, 'MBP', 41, '13.3 inches', 'inches'), -- screen size
-(13, 'MBP', 42, '16 GB', 'GB'), -- RAM size
-(13, 'MBP', 43, '2560 x 1600 pixels', 'pixels'), -- screen resolution
+(13, 'MBP', 40, '512', 'GB'), -- storage capacity
+(13, 'MBP', 41, '13.3', 'inches'), -- screen size
+(13, 'MBP', 42, '16', 'GB'), -- RAM size
+(13, 'MBP', 43, '2560 x 1600', 'pixels'), -- screen resolution
 (13, 'MBP', 44, 'Up to 10 hours', 'hours'), -- battery capacity
 (13, 'MBP', 45, 'Intel Core i7', NULL), -- processor
 (13, 'MBP', 46, 'Silver', NULL), -- color
@@ -774,10 +764,10 @@ VALUES
 (13, 'MBP', 49, '2022', NULL), -- year
 
 -- XPS 13
-(14, 'XPS13', 40, '1 TB', 'TB'),
-(14, 'XPS13', 41, '13.4 inches', 'inches'),
-(14, 'XPS13', 42, '16 GB', 'GB'),
-(14, 'XPS13', 43, '3840 x 2400 pixels', 'pixels'),
+(14, 'XPS13', 40, '1', 'TB'),
+(14, 'XPS13', 41, '13.4', 'inches'),
+(14, 'XPS13', 42, '16', 'GB'),
+(14, 'XPS13', 43, '3840 x 2400', 'pixels'),
 (14, 'XPS13', 44, 'Up to 14 hours', 'hours'),
 (14, 'XPS13', 45, 'Intel Core i7', NULL),
 (14, 'XPS13', 46, 'Silver', NULL),
@@ -786,10 +776,10 @@ VALUES
 (14, 'XPS13', 49, '2022', NULL), -- year
 
 -- ThinkPad X1 Carbon
-(15, 'TPX1C', 40, '512 GB', 'GB'),
-(15, 'TPX1C', 41, '14 inches', 'inches'),
-(15, 'TPX1C', 42, '16 GB', 'GB'),
-(15, 'TPX1C', 43, '2560 x 1440 pixels', 'pixels'),
+(15, 'TPX1C', 40, '512', 'GB'),
+(15, 'TPX1C', 41, '14', 'inches'),
+(15, 'TPX1C', 42, '16', 'GB'),
+(15, 'TPX1C', 43, '2560 x 1440', 'pixels'),
 (15, 'TPX1C', 44, 'Up to 19.5 hours', 'hours'),
 (15, 'TPX1C', 45, 'Intel Core i7', NULL),
 (15, 'TPX1C', 46, 'Black', NULL),
@@ -798,10 +788,10 @@ VALUES
 (15, 'TPX1C', 49, '2022', NULL), -- year
 
 -- Yoga C940
-(16, 'YC940', 40, '1 TB', 'TB'),
-(16, 'YC940', 41, '14 inches', 'inches'),
-(16, 'YC940', 42, '16 GB', 'GB'),
-(16, 'YC940', 43, '3840 x 2160 pixels', 'pixels'),
+(16, 'YC940', 40, '1', 'TB'),
+(16, 'YC940', 41, '14', 'inches'),
+(16, 'YC940', 42, '16', 'GB'),
+(16, 'YC940', 43, '3840 x 2160', 'pixels'),
 (16, 'YC940', 44, 'Up to 15 hours', 'hours'),
 (16, 'YC940', 45, 'Intel Core i7', NULL),
 (16, 'YC940', 46, 'Iron Grey', NULL),
@@ -810,10 +800,10 @@ VALUES
 (16, 'YC940', 49, '2022', NULL), -- year
 
 -- IdeaPad Gaming 3
-(17, 'IPG3', 40, '512 GB', 'GB'),
-(17, 'IPG3', 41, '15.6 inches', 'inches'),
-(17, 'IPG3', 42, '8 GB', 'GB'),
-(17, 'IPG3', 43, '1920 x 1080 pixels', 'pixels'),
+(17, 'IPG3', 40, '512', 'GB'),
+(17, 'IPG3', 41, '15.6', 'inches'),
+(17, 'IPG3', 42, '8', 'GB'),
+(17, 'IPG3', 43, '1920 x 1080', 'pixels'),
 (17, 'IPG3', 44, 'Up to 9 hours', 'hours'),
 (17, 'IPG3', 45, 'AMD Ryzen 5', NULL),
 (17, 'IPG3', 46, 'Black', NULL),
@@ -822,10 +812,10 @@ VALUES
 (17, 'IPG3', 49, '2022', NULL), -- year
 
 -- Alienware m15 R5
-(18, 'AM15R5', 40, '1 TB', 'TB'),
-(18, 'AM15R5', 41, '15.6 inches', 'inches'),
-(18, 'AM15R5', 42, '16 GB', 'GB'),
-(18, 'AM15R5', 43, '3840 x 2160 pixels', 'pixels'),
+(18, 'AM15R5', 40, '1', 'TB'),
+(18, 'AM15R5', 41, '15.6', 'inches'),
+(18, 'AM15R5', 42, '16', 'GB'),
+(18, 'AM15R5', 43, '3840 x 2160', 'pixels'),
 (18, 'AM15R5', 44, 'Up to 6 hours', 'hours'),
 (18, 'AM15R5', 45, 'AMD Ryzen 9', NULL),
 (18, 'AM15R5', 46, 'Lunar Light', NULL),
@@ -840,8 +830,8 @@ VALUES
 (19, 'XSX', 53, '2022', NULL), -- year
 
 -- Dell UltraSharp U2720Q
-(20, 'DUU2720Q', 83, '27 inches', 'inches'), -- Screen size
-(20, 'DUU2720Q', 84, '3840 x 2160 pixels', 'pixels'), -- Screen resolution
+(20, 'DUU2720Q', 83, '27', 'inches'), -- Screen size
+(20, 'DUU2720Q', 84, '3840 x 2160', 'pixels'), -- Screen resolution
 (20, 'DUU2720Q', 85, '60 Hz', 'Hz'), -- Screen refresh rate
 (20, 'DUU2720Q', 86, '16.7 million colors', NULL), -- Color
 (20, 'DUU2720Q', 87, 'No', NULL), -- Speaker
@@ -874,7 +864,7 @@ VALUES
 (25, 'NDFTS', 3, 'Short Sleeve', NULL),
 
 -- Calvin Klein Logo T-Shirt
-(26, 'CKLTS', 1, 'L', NULL),
+(26, 'CKLTS', 1, 'L/M/S', NULL),
 (26, 'CKLTS', 2, 'Black', NULL),
 (26, 'CKLTS', 3, 'Short Sleeve', NULL),
 
@@ -1531,7 +1521,7 @@ INSERT INTO cart_item (cart_id, product_id, product_name, product_sku, product_p
 (2, 29, 'To Kill a Mockingbird ', 'TKAM', 'tokillamockingbird.jpg', 1, 12.99),
 
 (3, 25, 'Nike Dri-FIT T-Shirt ', 'NDFTS', 'nikeDriFitShirt.jpg', 2, 29.99),
-(3, 2, 'iPhone SE','IPSE-RED' , 'iphonese-red.jpg', 1, 449.99),
+(3, 2, 'iPhone SE','IPSE-RED-64' , 'iphonese-red.jpg', 1, 449.99),
 
 (5, 5, 'Galaxy S21', 'GS21', 'galaxyS21.jpg', 2, 1099.99),
 (5, 19, 'Xbox Series X', 'XSX', 'xboxSeriesX.jpg', 1, 499.99);
@@ -1626,7 +1616,7 @@ INSERT INTO
                 product_sku_id, product_sku_code, product_category_id, promotion_name, promotion_amount, coupon_amount, real_amount)
 VALUES
   -- 1 iphone se red and a macbook , 15$ off
-  (1, '1001', 2, 'iphoneSE.jpg', 'iPhone SE', 'Apple', 'SN-456', 499.99, 1, 5, 'IPSE-RED', 15, 'iphone-SE 10% OFF', 49.99, 0, 450),
+  (1, '1001', 2, 'iphoneSE.jpg', 'iPhone SE', 'Apple', 'SN-456', 499.99, 1, 5, 'IPSE-RED-64', 15, 'iphone-SE 10% OFF', 49.99, 0, 450),
   (1, '1001', 13, 'macBookPro.jpg', 'MacBook Pro', 'Apple', 'SN-678', 1999.99, 1, 16, 'MBP', 17, 'All laptop 100 off', 100, 0, 1899.99),
   -- 2 OnePlus 9 , 10 % off
   (2, '1002', 4, 'oneplus9Pro.jpg', 'OnePlus 9 Pro', 'OnePlus', 'SN-789', 1099.99, 2, 7, 'OP9P', 15, 'OnePlus product $10 off', 20, 0, 2179.98),
@@ -1915,11 +1905,11 @@ CREATE TABLE coupon_product_relation(
 
 INSERT INTO coupon_product_relation(coupon_id, product_id, product_name, product_sn, product_sku_code)
 VALUES
-(4, 1, 'iPhone 12', 'SN-123', 'IP12-RED'),
-(4, 1, 'iPhone 12', 'SN-123', 'IP12-WHITE'),
-(4, 1, 'iPhone 12', 'SN-123', 'IP12-BLACK'),
-(4, 2, 'iPhone SE', 'SN-456', 'IPSE-RED'),
-(4, 2, 'iPhone SE', 'SN-456', 'IPSE-BLUE'),
+(4, 1, 'iPhone 12', 'SN-123', 'IP12-RED-128'),
+(4, 1, 'iPhone 12', 'SN-123', 'IP12-WHITE-128'),
+(4, 1, 'iPhone 12', 'SN-123', 'IP12-BLACK-128'),
+(4, 2, 'iPhone SE', 'SN-456', 'IPSE-RED-64'),
+(4, 2, 'iPhone SE', 'SN-456', 'IPSE-BLUE-64'),
 (4, 6, 'AirPods Pro', 'SN-234', 'APRO1'),
 (4, 7, 'AirPods 2', 'SN-789', 'APO2'),
 (4, 9, 'iPad Pro', 'SN-901', 'IPPRO'),
@@ -1929,7 +1919,9 @@ VALUES
 INSERT INTO coupon_product_relation(coupon_id, product_id, product_name, product_sn, product_sku_code)
 VALUES
 (5, 25, 'Nike Dri-FIT T-Shirt', 'SN-002', 'NDFTS'),
-(5, 26, 'Calvin Klein Logo T-Shirt', 'SN-008', 'CKLTS'),
+(5, 26, 'Calvin Klein Logo T-Shirt', 'SN-008', 'CKLTS-L'),
+(5, 26, 'Calvin Klein Logo T-Shirt', 'SN-008', 'CKLTS-M'),
+(5, 26, 'Calvin Klein Logo T-Shirt', 'SN-008', 'CKLTS-S'),
 (5, 27, 'Adidas Essential Track Pants', 'SN-005', 'AEPTP');
 
 
@@ -2043,14 +2035,14 @@ UPDATE product_sku SET promotion_price = 189.99 WHERE product_id = 10 AND sku_co
 -- iphone-SE 10% OFF
 INSERT INTO promotion_sale_product (promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
 VALUES
-(4, 2, 'IPSE-BLUE', 449.99, 25, 3),
-(4, 2, 'IPSE-RED', 449.99, 25, 3);
+(4, 2, 'IPSE-BLUE-64', 449.99, 25, 3),
+(4, 2, 'IPSE-RED-64', 449.99, 25, 3);
 
 UPDATE product SET on_sale_status = 1, sale_price = 449.99  WHERE id = 2;
-UPDATE product_sku SET promotion_price = 449.99 WHERE product_id = 2 AND sku_code = 'IPSE-BLUE';
+UPDATE product_sku SET promotion_price = 449.99 WHERE product_id = 2 AND sku_code = 'IPSE-BLUE-64';
 
 UPDATE product SET on_sale_status = 1, sale_price = 449.99 WHERE id = 2;
-UPDATE product_sku SET promotion_price = 449.99 WHERE product_id = 2 AND sku_code = 'IPSE-RED';
+UPDATE product_sku SET promotion_price = 449.99 WHERE product_id = 2 AND sku_code = 'IPSE-RED-64';
 
 
 -- keep track of changes/update to promotion

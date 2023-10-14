@@ -23,7 +23,7 @@ public class OrderItem {
 
     private Integer productQuantity;
 
-    private Long productSkuId;
+    private Integer productSkuId;
 
     private String productSkuCode;
 
@@ -117,11 +117,11 @@ public class OrderItem {
         this.productQuantity = productQuantity;
     }
 
-    public Long getProductSkuId() {
+    public Integer getProductSkuId() {
         return productSkuId;
     }
 
-    public void setProductSkuId(Long productSkuId) {
+    public void setProductSkuId(Integer productSkuId) {
         this.productSkuId = productSkuId;
     }
 

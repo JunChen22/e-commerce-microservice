@@ -42,19 +42,19 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
 
                 case NEW_ACCOUNT:
-                    memberService.createMember(member);
+                    memberService.createMember(member).subscribe();
                     break;
 
                 case UPDATE_ACCOUNT_INFO:
-                    memberService.updateMemberInfo(member);
+                    memberService.updateMemberInfo(member).subscribe();
                     break;
 
                 case UPDATE_ACCOUNT_STATUS:
-                    memberService.updateMemberStatus(member);
+                    memberService.updateMemberStatus(member).subscribe();
                     break;
 
                 case DELETE_ACCOUNT:
-                    memberService.deleteMember(userId);
+                    memberService.deleteMember(userId).subscribe();
                     break;
 
                 default:
@@ -76,26 +76,26 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case NEW_ACCOUNT:
-                    memberService.register(memberDetail);
+                    memberService.register(memberDetail).subscribe();
                     break;
 
                 case UPDATE_PASSWORD:
                     int userId = memberDetail.getMember().getId();
                     String newPassword = memberDetail.getMember().getPassword();
-                    memberService.updatePassword(userId, newPassword);
+                    memberService.updatePassword(userId, newPassword).subscribe();
                     break;
 
                 case UPDATE_ACCOUNT_INFO:
-                    memberService.updateInfo(memberDetail);
+                    memberService.updateInfo(memberDetail).subscribe();
                     break;
 
                 case UPDATE_ADDRESS:
                     Address newAddress = memberDetail.getAddress();
-                    memberService.updateAddress(memberDetail.getMember().getId(), newAddress);
+                    memberService.updateAddress(memberDetail.getMember().getId(), newAddress).subscribe();
                     break;
 
                 case DELETE_ACCOUNT:
-                    memberService.deleteAccount(memberDetail.getMember().getId());
+                    memberService.deleteAccount(memberDetail.getMember().getId()).subscribe();
                     break;
 
                 default:
@@ -115,7 +115,7 @@ public class MessageProcessorConfig {
 
             MemberLoginLog newLog = event.getLoginLog();
             if (event.getEventType() == New_LOGIN) {
-                memberService.createLoginLog(newLog);
+                memberService.createLoginLog(newLog).subscribe();
             } else {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected New_LOGIN and LOG_OFF event";
                 LOG.warn(errorMessage);

@@ -59,577 +59,401 @@
 					"name": "OMS",
 					"item": [
 						{
-							"name": "Order - Generate acutal transaction order",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjMsIm5hbWUiOiJKYW5lIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU4Nzc2OTcsImlhdCI6MTY5NTg2ODY5Nzc2NCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjMifQ.lL29EcnIatoqJ_aZpUrUFZ9NpxevShZvbxRMyDlx08ncfwxZ_yAZW_ywWASz9ZIwfJeNWV-meBXjVvYtjjWFbA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderProductSku\": {\n        \"IP12-RED\": 1,\n        \"IPSE-BLUE\": 2,\n        \"GS21\": 3\n    },\n    \"payType\": \"paypal\",\n    \"coupon\": \"10OFF\",\n    \"discountAmount\": 10.5,\n    \"amount\": 5099.94,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8080/order/generateOrder",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"generateOrder"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - Generate acutal transaction order Copy",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTYzNzI1NDIsImlhdCI6MTY5NjM2MzU0MjEzMCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.gcTtPVnqjVwUVyKsBw406szsYwUYNrIncxHlmPtS0C4lBd7ES9Z-DU8kklL_gPeYtJSYy-sINC-sWe2jN6e4-A",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderProductSku\": {\n        \"NAM270\": 1,\n        \"TKAM\": 1\n    },\n    \"payType\": \"paypal\",\n    \"coupon\": \"10OFF\",\n    \"discountAmount\": 10.5,\n    \"amount\": 142.98,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8080/order/generateOrder",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"generateOrder"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - List all order",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODcyMTMzNTEwNTIsImV4cCI6MTY4NzIxNDI1MX0.zlpVlAGHIH7jSAKayMfgf1UNV2IdS_cRI-jGK2nPvIO57MdxKnbkCq5NymigM_3DPOf_cZzNaxTBc3mVwA-j3Q",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/order/list",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - Get Order detail",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMiIsImNyZWF0ZWQiOjE2ODY1OTEwODc1NzgsImV4cCI6MTY4NjU5MTk4N30.CoqulUU2NBavCxrOjkm9fRDzFsvpM9EmeyBrZ8qWoJ0LgTIO1Y5GCQgZqirvG1YE2vtEegT6PpBlTITditd5Qg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/order/detail/1",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"detail",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - payment success",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMiIsImNyZWF0ZWQiOjE2ODY1OTEwODc1NzgsImV4cCI6MTY4NjU5MTk4N30.CoqulUU2NBavCxrOjkm9fRDzFsvpM9EmeyBrZ8qWoJ0LgTIO1Y5GCQgZqirvG1YE2vtEegT6PpBlTITditd5Qg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/order/payment/success?paymentId=PAYID-MUKPFXA1X743110HL031135W&token=EC-54R02812R8431745F&PayerID=PQVC7TMEZCCWC",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"payment",
-										"success"
-									],
-									"query": [
-										{
-											"key": "paymentId",
-											"value": "PAYID-MUKPFXA1X743110HL031135W"
+							"name": "cart",
+							"item": [
+								{
+									"name": "Shopping cart - list user cart",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzgyOTIsImlhdCI6MTY5NzIyOTI5Mjc3NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Xoi-gZOJSb-7ZVur-oQi8ov5HgeQ6Kd3OXFh8SexzGGe3OZatVCg3rZx3s59pqkOYkwbMmmzuOrikgr6T4LNdQ",
+													"type": "string"
+												}
+											]
 										},
-										{
-											"key": "token",
-											"value": "EC-54R02812R8431745F"
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/cart/list",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"cart",
+												"list"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Shopping cart - add",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzgyOTIsImlhdCI6MTY5NzIyOTI5Mjc3NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Xoi-gZOJSb-7ZVur-oQi8ov5HgeQ6Kd3OXFh8SexzGGe3OZatVCg3rZx3s59pqkOYkwbMmmzuOrikgr6T4LNdQ",
+													"type": "string"
+												}
+											]
 										},
-										{
-											"key": "PayerID",
-											"value": "PQVC7TMEZCCWC"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - payment fail",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMiIsImNyZWF0ZWQiOjE2ODY1OTEwODc1NzgsImV4cCI6MTY4NjU5MTk4N30.CoqulUU2NBavCxrOjkm9fRDzFsvpM9EmeyBrZ8qWoJ0LgTIO1Y5GCQgZqirvG1YE2vtEegT6PpBlTITditd5Qg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8080/order/",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - cancel order",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMiIsImNyZWF0ZWQiOjE2ODY1OTEwODc1NzgsImV4cCI6MTY4NjU5MTk4N30.CoqulUU2NBavCxrOjkm9fRDzFsvpM9EmeyBrZ8qWoJ0LgTIO1Y5GCQgZqirvG1YE2vtEegT6PpBlTITditd5Qg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/order/cancelOrder",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"cancelOrder"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn -apply for return",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTYzMDk3ODYsImlhdCI6MTY5NjMwMDc4Njc1NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.XRucCp_3mM-tZix6OQDIEI7fQtPfSWtPa98r1Cbx4AObmdYqjjF994meJw5cxuJhoZhH6PNgJhggBhAIdLT0Gg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"returnRequest\": {\n    \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\",\n    \"returnQuantity\": 2,\n    \"returnName\": \"John Doe\",\n    \"returnPhone\": \"123-456-7890\",\n    \"askingAmount\": 142.98,\n    \"reason\": \"Product damaged\",\n    \"description\": \"Received damaged goods\"\n  },\n  \"skuQuantity\": {\n    \"NAM270\": 1,\n    \"TKAM\": 1\n  },\n  \"picturesList\": [\n  ]\n}\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8080/order/return/apply",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"return",
-										"apply"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Get return status",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU2ODQ2NDcsImlhdCI6MTY5NTY3NTY0NzkzMywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.NrVw1GzqNGvDr2InfyAGydut3wKwKxmDW3q51watFYVp3FCyxKammFTJVL1l8UF82aH3YOXObveyZcMVZhK8zA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/order/return/status/OR789012",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"return",
-										"status",
-										"OR789012"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Cancel return apply",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/order/return/cancel",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"order",
-										"return",
-										"cancel"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Shopping cart - list user cart",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTYyOTMwMDgsImlhdCI6MTY5NjI4NDAwODU0NCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.QYIlfzwG_NGOtiByijGcTVLF2WUKi6r2V0yAfR9CzGqO7rK0bSNgPYP3veur_BcE8zs_be-peflYfhtdf4vG0g",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/cart/list",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"cart",
-										"list"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Shopping cart - add",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODczNTcyNTkwMDUsImV4cCI6MTY4NzM2NjI1OX0.ts35dqU8SEbLqoxQ7aiDHbJgLOA-QZhLW1PMQ_mxtW472IGRyZEuEUj71CXg6FxkdHemqLHmX3d5hvswCjuWOA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"productId\": 6,\n    \"productName\": \"69 t-shirt\",\n    \"productSku\": \"Size: XXL, Color: White\",\n    \"productPic\": \"https://example.com/product3.jpg\",\n    \"quantity\": 1,\n    \"price\": 20.00\n}\n\n\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8080/cart/add?userId=2",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"cart",
-										"add"
-									],
-									"query": [
-										{
-											"key": "userId",
-											"value": "2"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Shopping cart - add All",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODczOTc5NjE2ODEsImV4cCI6MTY4NzQwNjk2MX0.BFOcbPKWW8hi74yEj5Z0S1Wq_iHNN2h5Y2QeW_yx_l-laC2u_yTBdejwUV9u_55T7vD1vUJ2ymoGbNKS3LqYlA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "[\n    {\n        \"productId\": 1,\n        \"productName\": \"iPhone 12\",\n        \"productSku\": \"IP12-WHITE\",\n        \"quantity\": 1\n    },\n    {\n        \"productId\": 2,\n        \"productName\": \"iPhone SE\",\n        \"productSku\": \"IPSE-BLUE\",\n        \"quantity\": 10\n    },\n    {\n        \"productId\": 3,\n        \"productName\": \"Pixel 5\",\n        \"productSku\": \"PX5\",\n        \"quantity\": 1\n    }\n]",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8080/cart/add/all?userId=2",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"cart",
-										"add",
-										"all"
-									],
-									"query": [
-										{
-											"key": "userId",
-											"value": "2"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Shopping cart - update",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODY3NTQ3MzUxMDMsImV4cCI6MTY4Njc1NTYzNX0.yqsxKtsZzQV8WAEYBZRzYdkNjEHoBb1FAsNXrxA8hVId0w14LZxOMa7qxJCQGmqBO6X6-aOez2XHmcIrtZNr6Q",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/cart/update/quantity?cartItemId=1&quantity=2&userId=2",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"cart",
-										"update",
-										"quantity"
-									],
-									"query": [
-										{
-											"key": "cartItemId",
-											"value": "1"
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"productName\": \"Calvin Klein Logo T-Shirt\",\n    \"productSku\": \"CKLTS-L\",\n    \"quantity\": 12\n}\n\n\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
 										},
-										{
-											"key": "quantity",
-											"value": "2"
+										"url": {
+											"raw": "localhost:8080/cart/add",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"cart",
+												"add"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Shopping cart - update",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzIwMDEsImlhdCI6MTY5NzIyMzAwMTYyNywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.f6xEiWcmC0kP0TFMiX93RZH5j-evw9GHhIZ849tn8KzxClw4WT2uU-JW-vh3derODA0uDzsoDYESUV9JKO2zag",
+													"type": "string"
+												}
+											]
 										},
-										{
-											"key": "userId",
-											"value": "2"
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"cartId\": 2,\n    \"productSku\": \"TKAM\",\n    \"quantity\": 69\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/cart/update/quantity",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"cart",
+												"update",
+												"quantity"
+											]
 										}
-									]
+									},
+									"response": []
+								},
+								{
+									"name": "Shopping cart - delete a item",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzIwMDEsImlhdCI6MTY5NzIyMzAwMTYyNywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.f6xEiWcmC0kP0TFMiX93RZH5j-evw9GHhIZ849tn8KzxClw4WT2uU-JW-vh3derODA0uDzsoDYESUV9JKO2zag",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/cart/delete/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"cart",
+												"delete",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Shopping cart - clear cart",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzIwMDEsImlhdCI6MTY5NzIyMzAwMTYyNywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.f6xEiWcmC0kP0TFMiX93RZH5j-evw9GHhIZ849tn8KzxClw4WT2uU-JW-vh3derODA0uDzsoDYESUV9JKO2zag",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/cart/clear",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"cart",
+												"clear"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Shopping cart - delete a item",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODY3NTM0OTYwMjIsImV4cCI6MTY4Njc1NDM5Nn0.V8INBoZsj2LZf7-1zRuDmtKdRZznomxXwCB8EPUb7cCt7qerOIAQ9-D4CLKo395ouyz8UfilDDHkZvYrkYzzvw",
-											"type": "string"
+							"name": "order",
+							"item": [
+								{
+									"name": "Order - Generate acutal transaction order",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTczMjE0MzAsImlhdCI6MTY5NzMxMjQzMDA4MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.QKWRTkavdpas6aVy6V-L3mYVFaY3J82aG_BRvGC2W5dV8Sqi9TQ3U9qX4I1kJpolmidcs_q5j5fu76xwAdsW0g",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"orderProductSku\": {\n        \"IP12-RED-128\": 1,\n        \"IPSE-BLUE-64\": 2,\n        \"GS21\": 3\n    },\n    \"payType\": \"paypal\",\n    \"coupon\": \"10OFF\",\n    \"discountAmount\": 10.5,\n    \"amount\": 5099.94,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/order/generateOrder",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"generateOrder"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/cart/delete/7?userId=2",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"cart",
-										"delete",
-										"7"
-									],
-									"query": [
-										{
-											"key": "userId",
-											"value": "2"
+								{
+									"name": "Order - List all order",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzYwMTgsImlhdCI6MTY5NzIyNzAxODQ2NCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Q0DtYEArMzODx5qiYwVIgHn4YONd4xBCGhmXWq50RXGlxSljr7XIBo7oTGiEYEOqc0npXMLBI2OP0oEudNI1Og",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/order/list",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"list"
+											]
 										}
-									]
+									},
+									"response": []
+								},
+								{
+									"name": "Order - Get Order detail",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzYwMTgsImlhdCI6MTY5NzIyNzAxODQ2NCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Q0DtYEArMzODx5qiYwVIgHn4YONd4xBCGhmXWq50RXGlxSljr7XIBo7oTGiEYEOqc0npXMLBI2OP0oEudNI1Og",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/order/detail/20231013s",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"detail",
+												"20231013s"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - cancel order",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTczMjE0MzAsImlhdCI6MTY5NzMxMjQzMDA4MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.QKWRTkavdpas6aVy6V-L3mYVFaY3J82aG_BRvGC2W5dV8Sqi9TQ3U9qX4I1kJpolmidcs_q5j5fu76xwAdsW0g",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/order/cancelOrder/MD1014",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"cancelOrder",
+												"MD1014"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Shopping cart - clear cart",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODY3NTQxMzUxNzcsImV4cCI6MTY4Njc1NTAzNX0.PC1uJmoxjDRIJKrn_jw2Rkj9Yakap0kBFGSqx_jX8qNTEEUWIYY5jy3EvtgaTw8FSscouf2Nymt_mCg2yoDB1w",
-											"type": "string"
+							"name": "return order",
+							"item": [
+								{
+									"name": "OrderReturn -apply for return",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTYzMDk3ODYsImlhdCI6MTY5NjMwMDc4Njc1NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.XRucCp_3mM-tZix6OQDIEI7fQtPfSWtPa98r1Cbx4AObmdYqjjF994meJw5cxuJhoZhH6PNgJhggBhAIdLT0Gg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"returnRequest\": {\n    \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\",\n    \"returnQuantity\": 2,\n    \"returnName\": \"John Doe\",\n    \"returnPhone\": \"123-456-7890\",\n    \"askingAmount\": 142.98,\n    \"reason\": \"Product damaged\",\n    \"description\": \"Received damaged goods\"\n  },\n  \"skuQuantity\": {\n    \"NAM270\": 1,\n    \"TKAM\": 1\n  },\n  \"picturesList\": [\n  ]\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/order/return/apply",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"return",
+												"apply"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/cart/clear?userId=2",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"cart",
-										"clear"
-									],
-									"query": [
-										{
-											"key": "userId",
-											"value": "2"
+								{
+									"name": "OrderReturn - Get return status",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU2ODQ2NDcsImlhdCI6MTY5NTY3NTY0NzkzMywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.NrVw1GzqNGvDr2InfyAGydut3wKwKxmDW3q51watFYVp3FCyxKammFTJVL1l8UF82aH3YOXObveyZcMVZhK8zA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/order/return/status/OR789012",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"return",
+												"status",
+												"OR789012"
+											]
 										}
-									]
+									},
+									"response": []
+								},
+								{
+									"name": "OrderReturn - Cancel return apply",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/order/return/cancel",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"return",
+												"cancel"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						}
 					]
 				},
@@ -950,96 +774,106 @@
 					"name": "SMS",
 					"item": [
 						{
-							"name": "Flash Sales -",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/sale/AllFlashSaleItem",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"sale",
-										"AllFlashSaleItem"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale -",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/sale/AllPromotionSale",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"sale",
-										"AllPromotionSale"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale Items -",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/sale/AllPromotionSaleItem",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"sale",
-										"AllPromotionSaleItem"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Check coupon discount on cart",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU4NTg1NTgsImlhdCI6MTY5NTg0OTU1ODgxMiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.9GwTBCk8ZgpWnq-3LXRmKqr5Zwd08Jt3bAdO5uQ7ZbNw7EBdPd9HG3My7lb9UWKkG9XlaJGHEiUgUbIls05XFw",
-											"type": "string"
+							"name": "Sale",
+							"item": [
+								{
+									"name": "Flash Sales -",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/sale/AllFlashSaleItem",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"sale",
+												"AllFlashSaleItem"
+											]
 										}
-									]
+									},
+									"response": []
 								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8080/coupon/check?couponCode=10OFF",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"coupon",
-										"check"
-									],
-									"query": [
-										{
-											"key": "couponCode",
-											"value": "10OFF"
+								{
+									"name": "Promotional Sale -",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/sale/AllPromotionSale",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"sale",
+												"AllPromotionSale"
+											]
 										}
-									]
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale Items -",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/sale/AllPromotionSaleItem",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"sale",
+												"AllPromotionSaleItem"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
+						},
+						{
+							"name": "coupon",
+							"item": [
+								{
+									"name": "Check coupon discount on cart",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzgyOTIsImlhdCI6MTY5NzIyOTI5Mjc3NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Xoi-gZOJSb-7ZVur-oQi8ov5HgeQ6Kd3OXFh8SexzGGe3OZatVCg3rZx3s59pqkOYkwbMmmzuOrikgr6T4LNdQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/coupon/check?couponCode=10OFF",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"coupon",
+												"check"
+											],
+											"query": [
+												{
+													"key": "couponCode",
+													"value": "10OFF"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						}
 					]
 				},
@@ -1436,128 +1270,271 @@
 					"name": "OMS",
 					"item": [
 						{
-							"name": "Order - Wait for payment",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/payment",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"payment"
-									]
+							"name": "Order",
+							"item": [
+								{
+									"name": "Order - Wait for payment",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwMDU5NDQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjkwNTl9.6zOlXXVZBMODYeyzK00ugChdaf1aMBTjZYYtchQcgzghBLB_rYMBsGlYyFJDvcSN3VQUbhFcaAKGZ72lfq_vsg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/all/WAITING_FOR_PAYMENT",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"all",
+												"WAITING_FOR_PAYMENT"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - fulfil",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/all/FULFILLING",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"all",
+												"FULFILLING"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - Send/In Transit",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/all/SEND",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"all",
+												"SEND"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - Complete",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/all/COMPLETE",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"all",
+												"COMPLETE"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - Closed",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/all/CLOSED",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"all",
+												"CLOSED"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - Invalid",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/all/INVALID",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"all",
+												"INVALID"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - Get all user orders",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIxNTUzMjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTczMzA1NTN9.nxl90QxXd9629agM6XVfztDYKOao6t995UogP53QjCONnFlYfZkLLvdZOgbRLbCq_tk3omw6tyyioPbnZj5DvQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/user/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"user",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - Order look up",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIxNTUzMjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTczMzA1NTN9.nxl90QxXd9629agM6XVfztDYKOao6t995UogP53QjCONnFlYfZkLLvdZOgbRLbCq_tk3omw6tyyioPbnZj5DvQ",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/1001",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"1001"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Order - fulfil",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/fulfill",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"fulfill"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - Send/In Transit",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/send",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"send"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - Complete",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/complete",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"complete"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - Order look up",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/1002",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"1002"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - Orders made by user",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/user/1",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"user",
-										"1"
-									]
-								}
-							},
-							"response": []
+							"name": "return",
+							"item": []
 						},
 						{
 							"name": "Order - create order",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MDc1MjkzMDkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTcwODQyOTN9.wnXxwZ8bkrbsIFdLfIakz3hTqs638htLWGu2amz4v26dmbumrwLmRoTr1qjdorxAiY6hmMMcC-DZCrLOfcDT_Q",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n   \"memberId\": 1,\n   \"couponId\": 11,\n   \"orderSn\": 1001,\n   \"memberEmail\": \"john@example.com\",\n   \"totalAmount\": 150.50,\n   \"payAmount\": 150.50,\n   \"shippingCost\": 0.00,\n   \"promotionAmount\": 0.00,\n   \"couponAmount\": 0.00,\n   \"discountAmount\": 0.00,\n   \"payType\": 1,\n   \"sourceType\": 0,\n   \"status\": 1,\n   \"deliveryCompany\": \"UPS\",\n   \"deliveryTrackingNumber\": \"new tracking\",\n   \"promotionInfo\": \"Free shipping on orders over $100\",\n   \"invoiceContent\": \"new\",\n   \"invoiceReceiverPhone\": \"123-456-7890\",\n   \"invoiceReceiverEmail\": \"new@gmail.com\",\n   \"receiverName\": \"new new\",\n   \"receiverPhone\": \"111-111-1111\",\n   \"receiverState\": \"NY\",\n   \"receiverCity\": \"New York City\",\n   \"receiverZipCode\": \"12345\",\n   \"receiverDetailAddress\": \"123 st\",\n   \"confirmStatus\": 1,\n   \"deleteStatus\": 0,\n   \"paymentTime\": \"2023-04-25T12:30:00.000+00:00\",\n   \"deliveryTime\": \"2023-04-26T13:30:00.000+00:00\",\n   \"receiveTime\": \"2023-04-28T16:30:00.000+00:00\",\n   \"comment\": \"Please include stickers\"\n}",
+									"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"id\": 1,\n            \"memberId\": 123,\n            \"couponId\": 456,\n            \"orderSn\": \"ORD123456\",\n            \"memberEmail\": \"user@example.com\",\n            \"totalAmount\": 100.0,\n            \"promotionAmount\": 10.0,\n            \"couponAmount\": 5.0,\n            \"discountAmount\": 15.0,\n            \"shippingCost\": 5.0,\n            \"payAmount\": 85.0,\n            \"payType\": 1,\n            \"sourceType\": 2,\n            \"status\": 3,\n            \"deliveryCompany\": \"Fast Shipping\",\n            \"deliveryTrackingNumber\": \"TRK7890123\",\n            \"receiverPhone\": \"555-123-4567\",\n            \"receiverName\": \"John Doe\",\n            \"receiverDetailAddress\": \"123 Main St\",\n            \"receiverCity\": \"Cityville\",\n            \"receiverState\": \"Stateland\",\n            \"receiverZipCode\": \"12345\",\n            \"paymentId\": \"PAY987654\",\n            \"payerId\": \"PAY123456\",\n            \"paymentTime\": \"2023-10-13T14:30:00Z\",\n            \"deliveryTime\": \"2023-10-15T10:00:00Z\",\n            \"receiveTime\": \"2023-10-17T12:15:00Z\",\n            \"comment\": \"Please handle with care.\",\n            \"adminNote\": \"Order processed successfully\"\n        },\n        \"orderItemList\": [\n            {\n                \"id\": 101,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 789,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product A\",\n                \"productBrand\": \"Brand X\",\n                \"productSn\": \"PROD789\",\n                \"productPrice\": 25.0,\n                \"productQuantity\": 2,\n                \"productSkuId\": 1001,\n                \"productSkuCode\": \"SKU123\",\n                \"productCategoryId\": 5001,\n                \"promotionName\": \"Summer Sale\",\n                \"promotionAmount\": 5.0,\n                \"couponAmount\": 2.0,\n                \"realAmount\": 43.0\n            },\n            {\n                \"id\": 102,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 790,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product B\",\n                \"productBrand\": \"Brand Y\",\n                \"productSn\": \"PROD790\",\n                \"productPrice\": 30.0,\n                \"productQuantity\": 3,\n                \"productSkuId\": 1002,\n                \"productSkuCode\": \"SKU456\",\n                \"productCategoryId\": 5002,\n                \"promotionName\": \"Spring Promo\",\n                \"promotionAmount\": 8.0,\n                \"couponAmount\": 3.0,\n                \"realAmount\": 81.0\n            }\n        ],\n        \"address\": {\n            \"id\": 1001,\n            \"memberId\": 123,\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Customer request to update shipping address\",\n    \"userId\": 123\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1579,19 +1556,76 @@
 							"response": []
 						},
 						{
-							"name": "Order - delete",
+							"name": "Order - update",
 							"request": {
-								"method": "DELETE",
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MDc1MjkzMDkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTcwODQyOTN9.wnXxwZ8bkrbsIFdLfIakz3hTqs638htLWGu2amz4v26dmbumrwLmRoTr1qjdorxAiY6hmMMcC-DZCrLOfcDT_Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"id\": 1,\n            \"memberId\": 123,\n            \"couponId\": 456,\n            \"orderSn\": \"ORD123456\",\n            \"memberEmail\": \"user@example.com\",\n            \"totalAmount\": 100.0,\n            \"promotionAmount\": 10.0,\n            \"couponAmount\": 5.0,\n            \"discountAmount\": 15.0,\n            \"shippingCost\": 5.0,\n            \"payAmount\": 85.0,\n            \"payType\": 1,\n            \"sourceType\": 2,\n            \"status\": 3,\n            \"deliveryCompany\": \"Fast Shipping\",\n            \"deliveryTrackingNumber\": \"TRK7890123\",\n            \"receiverPhone\": \"555-123-4567\",\n            \"receiverName\": \"John Doe\",\n            \"receiverDetailAddress\": \"123 Main St\",\n            \"receiverCity\": \"Cityville\",\n            \"receiverState\": \"Stateland\",\n            \"receiverZipCode\": \"12345\",\n            \"paymentId\": \"PAY987654\",\n            \"payerId\": \"PAY123456\",\n            \"paymentTime\": \"2023-10-13T14:30:00Z\",\n            \"deliveryTime\": \"2023-10-15T10:00:00Z\",\n            \"receiveTime\": \"2023-10-17T12:15:00Z\",\n            \"comment\": \"Please handle with care.\",\n            \"adminNote\": \"Order processed successfully\"\n        },\n        \"orderItemList\": [\n            {\n                \"id\": 101,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 789,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product A\",\n                \"productBrand\": \"Brand X\",\n                \"productSn\": \"PROD789\",\n                \"productPrice\": 25.0,\n                \"productQuantity\": 2,\n                \"productSkuId\": 1001,\n                \"productSkuCode\": \"SKU123\",\n                \"productCategoryId\": 5001,\n                \"promotionName\": \"Summer Sale\",\n                \"promotionAmount\": 5.0,\n                \"couponAmount\": 2.0,\n                \"realAmount\": 43.0\n            },\n            {\n                \"id\": 102,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 790,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product B\",\n                \"productBrand\": \"Brand Y\",\n                \"productSn\": \"PROD790\",\n                \"productPrice\": 30.0,\n                \"productQuantity\": 3,\n                \"productSkuId\": 1002,\n                \"productSkuCode\": \"SKU456\",\n                \"productCategoryId\": 5002,\n                \"promotionName\": \"Spring Promo\",\n                \"promotionAmount\": 8.0,\n                \"couponAmount\": 3.0,\n                \"realAmount\": 81.0\n            }\n        ],\n        \"address\": {\n            \"id\": 1001,\n            \"memberId\": 123,\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Customer request to update shipping address\",\n    \"userId\": 123\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "localhost:8082/order/delete/1002",
+									"raw": "localhost:8082/order/update",
 									"host": [
 										"localhost"
 									],
 									"port": "8082",
 									"path": [
 										"order",
-										"delete",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order - cancel",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzI0NTc3ODU2LCJhZG1pbklkIjoxLCJleHAiOjE2OTczMzM1Nzd9.NaJDSRo6vH1MAMqzhCxtGNG1XrDZoeyme-Lk0RlFlBO13Qn_sgQoIpettBu1mcS_1zgUrbdN08OLgu8enYLNyQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"id\": 1,\n            \"memberId\": 123,\n            \"couponId\": 456,\n            \"orderSn\": \"ORD123456\",\n            \"memberEmail\": \"user@example.com\",\n            \"totalAmount\": 100.0,\n            \"promotionAmount\": 10.0,\n            \"couponAmount\": 5.0,\n            \"discountAmount\": 15.0,\n            \"shippingCost\": 5.0,\n            \"payAmount\": 85.0,\n            \"payType\": 1,\n            \"sourceType\": 2,\n            \"status\": 3,\n            \"deliveryCompany\": \"Fast Shipping\",\n            \"deliveryTrackingNumber\": \"TRK7890123\",\n            \"receiverPhone\": \"555-123-4567\",\n            \"receiverName\": \"John Doe\",\n            \"receiverDetailAddress\": \"123 Main St\",\n            \"receiverCity\": \"Cityville\",\n            \"receiverState\": \"Stateland\",\n            \"receiverZipCode\": \"12345\",\n            \"paymentId\": \"PAY987654\",\n            \"payerId\": \"PAY123456\",\n            \"paymentTime\": \"2023-10-13T14:30:00Z\",\n            \"deliveryTime\": \"2023-10-15T10:00:00Z\",\n            \"receiveTime\": \"2023-10-17T12:15:00Z\",\n            \"comment\": \"Please handle with care.\",\n            \"adminNote\": \"Order processed successfully\"\n        },\n        \"orderItemList\": [\n            {\n                \"id\": 101,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 789,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product A\",\n                \"productBrand\": \"Brand X\",\n                \"productSn\": \"PROD789\",\n                \"productPrice\": 25.0,\n                \"productQuantity\": 2,\n                \"productSkuId\": 1001,\n                \"productSkuCode\": \"SKU123\",\n                \"productCategoryId\": 5001,\n                \"promotionName\": \"Summer Sale\",\n                \"promotionAmount\": 5.0,\n                \"couponAmount\": 2.0,\n                \"realAmount\": 43.0\n            },\n            {\n                \"id\": 102,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 790,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product B\",\n                \"productBrand\": \"Brand Y\",\n                \"productSn\": \"PROD790\",\n                \"productPrice\": 30.0,\n                \"productQuantity\": 3,\n                \"productSkuId\": 1002,\n                \"productSkuCode\": \"SKU456\",\n                \"productCategoryId\": 5002,\n                \"promotionName\": \"Spring Promo\",\n                \"promotionAmount\": 8.0,\n                \"couponAmount\": 3.0,\n                \"realAmount\": 81.0\n            }\n        ],\n        \"address\": {\n            \"id\": 1001,\n            \"memberId\": 123,\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Customer request to update shipping address\",\n    \"userId\": 123\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8082/order/cancel/1002",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"order",
+										"cancel",
 										"1002"
 									]
 								}
@@ -2585,619 +2619,617 @@
 					"name": "SMS",
 					"item": [
 						{
-							"name": "Coupon - Get all coupons",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/coupon/listAll",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"coupon",
-										"listAll"
-									]
+							"name": "coupon",
+							"item": [
+								{
+									"name": "Coupon - Get all coupons",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMwMjMxNjExLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyMzkyMzF9.1ofD-d-JDeXK3ECbCe2ttY3Wah44gvALsdyTL9KXNxvOrNEqzUdbtKH9xHpZLZ-aJ8xPeL2FC6mYTMqgOAdm-w",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/coupon/listAll",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"coupon",
+												"listAll"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Coupon - Get a coupon",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMwMjQ1NDA0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyMzkyNDV9.6QwhhMMdGaCOhNmoAJk28cME2DWfnPf1NG7WtHRa7GgAbHlJM23GP6DV0tjarsGtSieDZaY1T8GBFiwo5-t5Hw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/coupon/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"coupon",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Coupon - Get all coupon for a product",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMwMjQ1NDA0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyMzkyNDV9.6QwhhMMdGaCOhNmoAJk28cME2DWfnPf1NG7WtHRa7GgAbHlJM23GP6DV0tjarsGtSieDZaY1T8GBFiwo5-t5Hw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/coupon/product/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"coupon",
+												"product",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Coupon - Create a coupon",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMxNzExMzE4LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDA3MTF9.G4Sjc7C-qOWpRZmCd0vrZFJI6NJ6UXG7zKttOWLL_nQ-1G1F0EQGqk9okWHzCOoMEWzw7hcs4XJ3XFxh6A6NNw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"coupon\": {\n        \"couponType\": 3,\n        \"name\": \"$10 off Adidas sneakers\",\n        \"discountType\": 0,\n        \"amount\": 100.00,\n        \"startTime\": \"2019-08-18\",\n        \"endTime\": \"2024-08-18\",\n        \"count\": 30,\n        \"publishCount\": 20,\n        \"usedCount\": 0,\n        \"code\": \"Adidas10OFF\"\n    },\n    \"skuQuantity\": {\n        \"NAM270-105\": 5,\n        \"NAM270-90\": 10,\n        \"NAM270-75\": 5\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/coupon/create",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"coupon",
+												"create"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Coupon - Update a coupon",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMzMDMyMTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDIwMzJ9.I5zdZB5oPvT1oYWoPDf7PLhcVh1U_OAJp4FjynKyOCet6MPmBfQ25EMlNxSprJwlXuo1S0xmnP8z2bvxtipisg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"coupon\": {\n        \"id\" : 7,\n        \"couponType\": 3,\n        \"name\": \"$10 off Adidas sneakers\",\n        \"discountType\": 0,\n        \"amount\": 100.00,\n        \"startTime\": \"2019-08-18\",\n        \"endTime\": \"2024-08-18\",\n        \"count\": 30,\n        \"publishCount\": 20,\n        \"usedCount\": 0,\n        \"code\": \"Adidas10OFF\",\n        \"status\" : 1\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/coupon/update",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"coupon",
+												"update"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Coupon - Delete a coupon",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMzODAxMDgzLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDI4MDF9.2I__Gy1863bzZdxlQcKxwOV8EAQEv4DC9veAyaxMq39jCneQwykcn8a0oMJRoDLuG70woVKNVHUHZhIEtse2Sw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/coupon/delete/7",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"coupon",
+												"delete",
+												"7"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Coupon - Get a coupon",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/coupon/1",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"coupon",
-										"1"
-									]
+							"name": "coupon history",
+							"item": [
+								{
+									"name": "Coupon History - Getll all used coupons",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMzODk0NzkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDI4OTR9._M136TLm76kXlvQ-rpU-frVNn_GYeY9Qbkxnky_a35cwrqS9XZebDa09SqpS2XAKuPhm588XD9dohpBHjZHdXw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/coupon/getAllUsedCoupon",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"coupon",
+												"getAllUsedCoupon"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Coupon History - Getll user coupon usage",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMzODk0NzkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDI4OTR9._M136TLm76kXlvQ-rpU-frVNn_GYeY9Qbkxnky_a35cwrqS9XZebDa09SqpS2XAKuPhm588XD9dohpBHjZHdXw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/coupon/getUserCoupon/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"coupon",
+												"getUserCoupon",
+												"1"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
+							]
 						},
 						{
-							"name": "Coupon - Get all coupon for a product",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/coupon/product/all/1",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"coupon",
-										"product",
-										"all",
-										"1"
-									]
+							"name": "Promotion sale",
+							"item": [
+								{
+									"name": "Promotional Sale - get all promotion sales",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjU5NzEwODg1LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNjg3MTB9.QYA5d00na-AWZwSmatRavl5U9NeOhnPbHXyY2-Tyq4QabBdeolTsPia1WmJj3n2qFWxbCGqZ7MU5HMUqHUkgRw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/sale/AllPromotionSale",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"AllPromotionSale"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - get all promotion sales items",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjU2Mzg1NzExLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNjUzODV9.7BaHlwMgpu2JnXGCXnFd3CRXFcPszAi1wUT8pcclzQ8iraOxVujj6lEAKDMwfklhaxCFnqQbKBuQuedWvjlS6Q",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/sale/AllPromotionSaleItem",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"AllPromotionSaleItem"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - get all flash sale items",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjU2Mzg1NzExLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNjUzODV9.7BaHlwMgpu2JnXGCXnFd3CRXFcPszAi1wUT8pcclzQ8iraOxVujj6lEAKDMwfklhaxCFnqQbKBuQuedWvjlS6Q",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/sale/AllFlashSaleItem",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"AllFlashSaleItem"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - create sale for specific items",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjU5NzEwODg1LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNjg3MTB9.QYA5d00na-AWZwSmatRavl5U9NeOhnPbHXyY2-Tyq4QabBdeolTsPia1WmJj3n2qFWxbCGqZ7MU5HMUqHUkgRw",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"promotionSale\": {\n        \"name\": \"Summer shirt sale 50% Off\",\n        \"promotionType\": 3,\n        \"discountType\": 1,\n        \"amount\": 50.0,\n        \"status\": 1,\n        \"startTime\": \"2023-07-01T00:00:00Z\",\n        \"endTime\": \"2025-08-31T23:59:59Z\"\n    },\n    \"onSaleProduct\": [\n        {\n            \"productId\": 26,\n            \"productSkuCode\": \"CKLTS-L\",\n            \"promotionLimitItem\": 50,\n            \"promotionLimitPerUser\": 3\n        },\n        {\n            \"productId\": 26,\n            \"productSkuCode\": \"CKLTS-M\",\n            \"promotionLimitItem\": 50,\n            \"promotionLimitPerUser\": 3\n        },\n        {\n            \"productId\": 26,\n            \"productSkuCode\": \"CKLTS-S\",\n            \"promotionLimitItem\": 50,\n            \"promotionLimitPerUser\": 3\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/sale/createList",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"createList"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - create category sale",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDc0MTQ2MTE0LCJleHAiOjE2ODgwNzUwNDZ9.GTtUDym9yywptBhgRzIJ1m-KdqlH33x6RW9gP6_bxpo58gTyejXWY_2M3d93E1KdMseVFV9s9FXTmWGQ7pcjEg",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"promotionSale\": {\n        \"name\": \"Cyber Monday Sale $20 dollar off\",\n        \"promotionType\": 2,\n        \"discountType\": 0,\n        \"amount\": 20.0,\n        \"status\": 1,\n        \"startTime\": \"2023-07-01T00:00:00Z\",\n        \"endTime\": \"2025-08-31T23:59:59Z\"\n    },\n    \"productCategoryId\": 3\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/sale/createCategorySale",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"createCategorySale"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - create  brand sale",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDc0NTM3Nzc0LCJleHAiOjE2ODgwNzU0Mzd9.xUw5M_0EoUkO2WkzjmyLY4PAh7RtPGn20CWoveIeXTd-I3A1OVpyk0ZEKwCUGKKbt55Oj0_lVj6gsM4wF_urXA",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"promotionSale\": {\n        \"name\": \"Apple product sale 15% off\",\n        \"promotionType\": 1,\n        \"discountType\": 1,\n        \"amount\": 15,\n        \"status\": 1,\n        \"startTime\": \"2023-07-01T00:00:00Z\",\n        \"endTime\": \"2025-08-31T23:59:59Z\"\n    },\n    \"brandId\": 1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/sale/createBrandSale",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"createBrandSale"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - update sale info",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjYzNzc0Mzg0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNzI3NzR9.cP4JEOonBRXUR6W3xUvFr7kI5-AYadaKZ0uUuh_hzVQdHGuX5YDHTnTWwSNXOuioqhZNctrRB301UnU_HXK6ug",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"promotionSale\": {\n        \"id\": 5,\n        \"name\": \"Winter shirt sale 50% Off\",\n        \"startTime\": \"2023-07-01\",\n        \"endTime\": \"2025-11-31\"\n    },\n    \"onSaleProduct\": [\n        {\n            \"id\": 12,\n            \"promotionLimitItem\": 30,\n            \"promotionLimitPerUser\": 1\n        },\n        {\n            \"id\": 13,\n            \"promotionLimitItem\": 30,\n            \"promotionLimitPerUser\": 1\n        },\n        {\n            \"id\": 14,\n            \"promotionLimitItem\": 30,\n            \"promotionLimitPerUser\": 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/sale/updateInfo",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"updateInfo"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - update sale amount",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjYzNzc0Mzg0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNzI3NzR9.cP4JEOonBRXUR6W3xUvFr7kI5-AYadaKZ0uUuh_hzVQdHGuX5YDHTnTWwSNXOuioqhZNctrRB301UnU_HXK6ug",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"promotionSale\": {\n        \"id\": 5,\n        \"name\": \"Summer shirt sale 60% Off\",\n        \"promotionType\": 3,\n        \"discountType\": 1,\n        \"amount\": 60.0\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/sale/updatePrice",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"updatePrice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - update status",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjYzNzc0Mzg0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNzI3NzR9.cP4JEOonBRXUR6W3xUvFr7kI5-AYadaKZ0uUuh_hzVQdHGuX5YDHTnTWwSNXOuioqhZNctrRB301UnU_HXK6ug",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"promotionSale\": {\n        \"id\": 5,\n        \"name\": \"Summer shirt sale 60% Off\",\n        \"promotionType\": 3,\n        \"discountType\": 1,\n        \"amount\": 60.0,\n        \"status\": 0\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/sale/updateStatus",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"updateStatus"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Promotional Sale - delete sale",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjYzNzc0Mzg0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNzI3NzR9.cP4JEOonBRXUR6W3xUvFr7kI5-AYadaKZ0uUuh_hzVQdHGuX5YDHTnTWwSNXOuioqhZNctrRB301UnU_HXK6ug",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/sale/delete/5",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"sale",
+												"delete",
+												"5"
+											]
+										}
+									},
+									"response": []
 								}
-							},
-							"response": []
-						},
-						{
-							"name": "Coupon - Create a coupon",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": " {\n    \"type\": 0,\n    \"name\": \"$100 off whole order\",\n    \"amount\": 100.00,\n    \"startTime\": \"2019-08-18\",\n    \"endTime\": \"2023-08-18\",\n    \"count\": 30,\n    \"publishCount\": 20,\n    \"usedCount\": 0,\n    \"code\": \"15OFF\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/coupon/create",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"coupon",
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Coupon - Update a coupon",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": " {\n     \"id\": 5,\n    \"type\": 1,\n    \"name\": \"$10 off whole order\",\n    \"amount\": 10.00,\n    \"startTime\": \"2019-08-18\",\n    \"endTime\": \"2023-08-18\",\n    \"count\": 30,\n    \"publishCount\": 20,\n    \"usedCount\": 0,\n    \"code\": \"15OFF\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/coupon/update",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"coupon",
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Coupon - Delete a coupon",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/coupon/delete/5",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"coupon",
-										"delete",
-										"5"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Coupon History - Getll all used coupons",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzMzNjE4ODcwLCJhZG1pbklkIjoxLCJleHAiOjE2OTY3NDI2MTh9.UEVZcsOIoQ-FFKWKCuOA5knS1moP32ZPC8nlQMikXEwb2MOWLW_oSwTH83gd88v7SAZNkOZUjIQtjedaAVH9RA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/coupon/getAllUsedCoupon",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"coupon",
-										"getAllUsedCoupon"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Coupon History - Getll user coupon usage",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzA5ODc4NjQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTY3MTg4Nzh9.Ww7oOlOjyurGmqWcEOVWge-_oLFs3RVbFva5a3XUdtnHb2MpiYQMtnSNtrHknp5a572YuT-cdjgo954SumQRVA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/coupon/getUserCoupon/1",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"coupon",
-										"getUserCoupon",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - get all promotion sales",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDY5Njc3NjM4LCJleHAiOjE2ODgwNzA1Nzd9.6lbdkB6YnbOCGPILiAfvc3GAB0Dd8PEt0PEAoG3C1MPuCmRcktYcP1UlKDYGdpBnDLsaSyeQfR46b6qRavR0ZA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/sale/AllPromotionSale",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"AllPromotionSale"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - get all promotion sales items",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDY5Njc3NjM4LCJleHAiOjE2ODgwNzA1Nzd9.6lbdkB6YnbOCGPILiAfvc3GAB0Dd8PEt0PEAoG3C1MPuCmRcktYcP1UlKDYGdpBnDLsaSyeQfR46b6qRavR0ZA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/sale/AllPromotionSaleItem",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"AllPromotionSaleItem"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - get all flash sale items",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDY5Njc3NjM4LCJleHAiOjE2ODgwNzA1Nzd9.6lbdkB6YnbOCGPILiAfvc3GAB0Dd8PEt0PEAoG3C1MPuCmRcktYcP1UlKDYGdpBnDLsaSyeQfR46b6qRavR0ZA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/sale/AllFlashSaleItem",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"AllFlashSaleItem"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - create sale for specific items",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDY5Njc3NjM4LCJleHAiOjE2ODgwNzA1Nzd9.6lbdkB6YnbOCGPILiAfvc3GAB0Dd8PEt0PEAoG3C1MPuCmRcktYcP1UlKDYGdpBnDLsaSyeQfR46b6qRavR0ZA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"product\": [\n    {\n      \"id\": 23,\n      \"name\": \"Adidas Ultra Boost\"\n    },\n    {\n      \"id\": 24,\n      \"name\": \"Adidas Adilette Slides \"\n    }\n  ],\n  \"productIdToSkuCode\": {\n    \"23\": [\"AUB\"],\n    \"24\": [\"AAS\"]\n  },\n  \"name\": \"Adidas women and men shoes 15% off\",\n  \"promotionType\": 3,\n  \"discountType\": 1,\n  \"amount\": 15,\n  \"numberAvailable\": 100,\n  \"startTime\": \"2023-06-28T09:00:00Z\",\n  \"endTime\": \"2023-06-30T18:00:00Z\",\n  \"status\": 1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/sale/createList",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"createList"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - create category sale",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDc0MTQ2MTE0LCJleHAiOjE2ODgwNzUwNDZ9.GTtUDym9yywptBhgRzIJ1m-KdqlH33x6RW9gP6_bxpo58gTyejXWY_2M3d93E1KdMseVFV9s9FXTmWGQ7pcjEg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"name\": \"Books 50% off\",\n  \"promotionType\": 2,\n  \"discountType\": 1,\n  \"amount\": 50,\n  \"productCategoryId\": 13,\n  \"numberAvailable\": 100,\n  \"startTime\": \"2023-06-28T09:00:00Z\",\n  \"endTime\": \"2023-06-30T18:00:00Z\",\n  \"status\": 1\n}\n\n\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/sale/createCategorySale",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"createCategorySale"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - create  brand sale",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDc0NTM3Nzc0LCJleHAiOjE2ODgwNzU0Mzd9.xUw5M_0EoUkO2WkzjmyLY4PAh7RtPGn20CWoveIeXTd-I3A1OVpyk0ZEKwCUGKKbt55Oj0_lVj6gsM4wF_urXA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"name\": \"Apple product 90 % off\",\n  \"promotionType\": 1,\n  \"discountType\": 1,\n  \"amount\": 90,\n  \"brandId\": 1,\n  \"numberAvailable\": 100,\n  \"startTime\": \"2023-06-28T09:00:00Z\",\n  \"endTime\": \"2023-06-30T18:00:00Z\",\n  \"status\": 1\n}\n\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/sale/createBrandSale",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"createBrandSale"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - update status",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg3ODk3MDc4MTQxLCJleHAiOjE2ODc4OTc5Nzh9.O1nZPrshOowNRDOpZJwSgBLJdA421vVHxtKzZuWscltuXY_v5mo_N-Bz8wP1dUO6vlceyfCs0HhREeHVvf2cAg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 2,\n    \"name\": \"Apple product 90 % off\",\n    \"status\": 1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/sale/updateStatus",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"updateStatus"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - update sale date",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg3ODk3MDc4MTQxLCJleHAiOjE2ODc4OTc5Nzh9.O1nZPrshOowNRDOpZJwSgBLJdA421vVHxtKzZuWscltuXY_v5mo_N-Bz8wP1dUO6vlceyfCs0HhREeHVvf2cAg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 2,\n    \"name\": \"OnePlus product $10 off\",\n    \"startTime\": \"2023-02-25T13:45:00.000+00:00\",\n    \"endTime\": \"2023-10-25T12:45:00.000+00:00\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/sale/updateSaleDate",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"updateSaleDate"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - update sale amount",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg3ODk3MDc4MTQxLCJleHAiOjE2ODc4OTc5Nzh9.O1nZPrshOowNRDOpZJwSgBLJdA421vVHxtKzZuWscltuXY_v5mo_N-Bz8wP1dUO6vlceyfCs0HhREeHVvf2cAg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 2,\n    \"name\": \"OnePlus product $10 off\",\n    \"discountType\": 1,\n    \"amount\": 100\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/sale/updateSaleAmount",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"updateSaleAmount"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - update sale limit/count",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg3ODk3MDc4MTQxLCJleHAiOjE2ODc4OTc5Nzh9.O1nZPrshOowNRDOpZJwSgBLJdA421vVHxtKzZuWscltuXY_v5mo_N-Bz8wP1dUO6vlceyfCs0HhREeHVvf2cAg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 2,\n    \"name\": \"OnePlus product $10 off\",\n    \"numberAvailable\": 10\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/sale/updateSaleLimit",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"updateSaleLimit"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - update sale type, promotion or flash",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg3ODk3MDc4MTQxLCJleHAiOjE2ODc4OTc5Nzh9.O1nZPrshOowNRDOpZJwSgBLJdA421vVHxtKzZuWscltuXY_v5mo_N-Bz8wP1dUO6vlceyfCs0HhREeHVvf2cAg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"id\": 2,\n    \"name\": \"OnePlus product $10 off\",\n    \"promotionType\": 0\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/sale/updateSaltType",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"updateSaltType"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Promotional Sale - delete sale",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg3ODk3MDc4MTQxLCJleHAiOjE2ODc4OTc5Nzh9.O1nZPrshOowNRDOpZJwSgBLJdA421vVHxtKzZuWscltuXY_v5mo_N-Bz8wP1dUO6vlceyfCs0HhREeHVvf2cAg",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/sale/delete/12",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"sale",
-										"delete",
-										"12"
-									]
-								}
-							},
-							"response": []
+							]
 						}
 					]
 				},

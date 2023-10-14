@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderServiceImpl(PaypalService paypalService, RedisServiceImpl redisService, OrdersMapper ordersMapper,
                             CartItemServiceImpl cartItemService, OrderItemMapper orderItemMapper, ProductSkuMapper stockMapper,
                             ProductMapper productMapper, OrderChangeHistoryMapper changeHistoryMapper, OrderDao orderDao,
-                            StreamBridge streamBridge, WebClient webClient, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
+                            StreamBridge streamBridge, WebClient.Builder webClient, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.paypalService = paypalService;
         this.redisService = redisService;
         this.ordersMapper = ordersMapper;
@@ -92,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         this.changeHistoryMapper = changeHistoryMapper;
         this.orderDao = orderDao;
         this.streamBridge = streamBridge;
-        this.webClient = webClient;
+        this.webClient = webClient.build();
         this.jdbcScheduler = jdbcScheduler;
     }
 
@@ -139,27 +139,27 @@ public class OrderServiceImpl implements OrderService {
         double couponDiscount = orderParam.getDiscountAmount();
 
         // verify the price again
-        for (String productSku: skuQuantity.keySet()) {
-
-            int quantity = orderParam.getOrderProductSku().get(productSku);
+        for (String skuCode: skuQuantity.keySet()) {
+            int quantity = orderParam.getOrderProductSku().get(skuCode);
 
             // find the sku and product
             ProductSkuExample productSkuExample = new ProductSkuExample();
-            productSkuExample.createCriteria().andSkuCodeEqualTo(productSku);
-            ProductSku productSkuStock = stockMapper.selectByExample(productSkuExample).get(0);
+            productSkuExample.createCriteria().andSkuCodeEqualTo(skuCode);
+            ProductSku sku = stockMapper.selectByExample(productSkuExample).get(0);
 
             ProductExample productExample = new ProductExample();
-            productExample.createCriteria().andIdEqualTo(productSkuStock.getProductId());
+            productExample.createCriteria().andIdEqualTo(sku.getProductId());
             Product product = productMapper.selectByExample(productExample).get(0);
 
             OrderItem orderItem = new OrderItem();
+            orderItem.setProductSkuId(sku.getId());
             orderItem.setProductId(product.getId());
+            orderItem.setProductSkuCode(skuCode);
             orderItem.setProductName(product.getName());
             orderItem.setProductQuantity(quantity);
-            orderItem.setProductSkuCode(productSku);
-            orderItem.setRealAmount(productSkuStock.getPromotionPrice());
+            orderItem.setRealAmount(sku.getPromotionPrice());
 
-            orderTotal += productSkuStock.getPromotionPrice().doubleValue() * quantity;
+            orderTotal += sku.getPromotionPrice().doubleValue() * quantity;
             orderItemList.add(orderItem);
         }
 
@@ -172,7 +172,6 @@ public class OrderServiceImpl implements OrderService {
 
         // verify price difference
         if (orderTotal != orderParam.getAmount()) {
-            System.out.println(orderTotal);
             throw new OrderException("Pricing error");
         }
 
@@ -198,6 +197,7 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setReceiverName(address.getReceiverName());
         newOrder.setReceiverDetailAddress(address.getDetailAddress());
 
+        newOrder.setCreatedAt(new Date());
         ordersMapper.insert(newOrder);
 
         int newOrderId = newOrder.getId();
@@ -215,7 +215,7 @@ public class OrderServiceImpl implements OrderService {
         if (!couponCode.isEmpty()) sendCouponUpdateMessage("coupon-out-0", new SmsCouponOutEvent(UPDATE_COUPON_USAGE, couponCode, userId, newOrderId));
 
         // clear cart
-        cartItemService.clearCartItem(userId);
+        cartItemService.clearCartItem(userId).subscribe();
 
         updateChangeLog(newOrderId, 0, "generate order","user");
 
@@ -307,7 +307,7 @@ public class OrderServiceImpl implements OrderService {
 
                 // update stock and free up locked stock
                 for (OrderItem item: orderItemList) {
-                    int quantityOrdered = item.getProductQuantity();;
+                    int quantityOrdered = item.getProductQuantity();
 
                     // find product and get current stock and update it
                     ProductExample productExample = new ProductExample();
@@ -343,19 +343,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Void> payFail(String orderSn) {
+    public Mono<Void> payFail(String orderSn, String token) {
         return Mono.fromRunnable(() -> {
-            internalPayFail(orderSn);
+            internalPayFail(orderSn, token);
         }).subscribeOn(jdbcScheduler).then();
     }
 
-    private void internalPayFail(String orderSn) {
+    private void internalPayFail(String orderSn, String token) {
         // TODO: change it to cancel after 10 minutes not pay.
         //    have waiting for payment status, and use messagequeue
         //   with TTL like 10 miuntes to cancel
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
         Orders newOrder = ordersMapper.selectByExample(ordersExample).get(0);
+
+        newOrder.setPaymentId(token);   // store token to pay later
+        newOrder.setUpdatedAt(new Date());
+        ordersMapper.updateByPrimaryKeySelective(newOrder);
 
         int orderId = newOrder.getId();
 
@@ -401,9 +405,8 @@ public class OrderServiceImpl implements OrderService {
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
         List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
 
-        if (ordersList.isEmpty()) {
-            throw new RuntimeException("order not found with order serial number: " + orderSn); // TODO: create OrderNotFoundException
-        }
+        // TODO: create OrderNotFoundException
+        if (ordersList.isEmpty()) throw new RuntimeException("order not found with order serial number: " + orderSn);
 
         Orders foundOrder = ordersList.get(0);
         int orderId = foundOrder.getId();
@@ -422,7 +425,7 @@ public class OrderServiceImpl implements OrderService {
 
         Map<String, Integer> skuQuantity = new HashMap<>();
 
-        // record order sku and quantity, and update OMS stock.
+        // record order sku and quantity, and update OMS stock. free up stock.
         for (OrderItem orderItem : orderItemList) {
             String skuCode = orderItem.getProductSkuCode();
             int quantity = orderItem.getProductQuantity();
@@ -433,10 +436,17 @@ public class OrderServiceImpl implements OrderService {
             skuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
             ProductSku skuStock = stockMapper.selectByExample(skuStockExample).get(0);
 
+            // update sku stock
             int currentStock = skuStock.getStock();
-
             skuStock.setStock(currentStock + quantity);
-            stockMapper.updateByPrimaryKey(skuStock);
+            stockMapper.updateByPrimaryKeySelective(skuStock);
+
+            // update stock product
+            int productId = orderItem.getProductId();
+            Product product = productMapper.selectByPrimaryKey(productId);
+            currentStock = product.getStock();
+            product.setStock(currentStock + quantity);
+            productMapper.updateByPrimaryKeySelective(product);
         }
 
         sendProductStockUpdateMessage("product-out-0", new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
@@ -456,13 +466,13 @@ public class OrderServiceImpl implements OrderService {
         return Mono.empty();
     }
 
-    // generate id with redis: date + source type + pay type + today's order % 6
+    // TODO: generate id with redis: date + source type + pay type + today's order % 6
     private String generateOrderSn() {
         StringBuilder sb = new StringBuilder();
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String key = REDIS_DATABASE + ":"+ REDIS_KEY_ORDER_ID + date;
         Long increment = redisService.increment(key, 1);
-        sb.append(date);
+        sb.append(date + Math.random() +  increment);
         /*
         sb.append(String.format("%02d", newOrder.getSourceType()));
         sb.append(String.format("%02d", newOrder.getPayType()));
@@ -565,8 +575,25 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Mono<OrderDetail> getUserOrderDetail(String orderSn) {
         return Mono.fromCallable(() -> {
-            OrderDetail orderDetail = orderDao.getDetail(orderSn);
-            return orderDetail;
+            // TODO: fix dao
+            //OrderDetail orderDetail = orderDao.getDetail(orderSn);
+
+            OrdersExample ordersExample = new OrdersExample();
+            ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
+            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+            if (ordersList.isEmpty()) throw new RuntimeException("Order serial number does not exist: " + orderSn);
+
+            Orders order = ordersList.get(0);
+
+            OrderItemExample orderItemExample = new OrderItemExample();
+            orderItemExample.createCriteria().andOrderSnEqualTo(orderSn);
+            List<OrderItem> orderItemList = orderItemMapper.selectByExample(orderItemExample);
+
+            OrderDetail result = new OrderDetail();
+            result.setOrders(order);
+            result.setOrderItemList( orderItemList);
+
+            return result;
         }).subscribeOn(jdbcScheduler);
     }
 
@@ -602,7 +629,6 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setPayAmount(new BigDecimal(0));
 
         // TODO: address in here
-
         // fill in order item info
         for (OrderItem item : orderItemList) {
             int quantity = item.getProductQuantity();
@@ -646,7 +672,7 @@ public class OrderServiceImpl implements OrderService {
 
         // free up stock
         for (OrderItem item: orderItemList) {
-            int quantityOrdered = item.getProductQuantity();;
+            int quantityOrdered = item.getProductQuantity();
 
             // find product and get current stock and update it
             ProductExample productExample = new ProductExample();
@@ -669,8 +695,6 @@ public class OrderServiceImpl implements OrderService {
         }
         sendProductStockUpdateMessage("product-out-0",new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, skuQuantity));
         sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, skuQuantity));
-
-        OrderChangeHistory changelog = new OrderChangeHistory();
 
         updateChangeLog(orderId, 1, reason,operator);
 

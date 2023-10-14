@@ -89,7 +89,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         List<ProductReview> productReviewList = new ArrayList<>();
 
-        System.out.println(" review size " + productReviews.size());
         if (productReviews.isEmpty()) return productReviewList;
 
         for (Review review: productReviews) {

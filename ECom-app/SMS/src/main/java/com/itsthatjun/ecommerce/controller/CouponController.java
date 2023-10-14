@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.ws.rs.PathParam;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +41,23 @@ public class CouponController {
         return couponService.checkDiscount(couponCode, userId);
     }
 
+    @GetMapping("/admin/listAll")
+    @ApiOperation("list all coupons")
+    public Flux<Coupon> listAllCoupon() {
+        return couponService.getAllCoupon();
+    }
 
-    // admin controllers
+    @GetMapping("/admin/{couponId}")
+    @ApiOperation("list all coupons")
+    public Mono<Coupon> CouponDetail(@PathVariable int couponId) {
+        // TODO: show coupon and all of affected product
+        //     if it's all then just say all
+        return couponService.getACoupon(couponId);
+    }
 
+    @GetMapping("/admin/product/{productId}")
+    @ApiOperation("list all coupons")
+    public Flux<Coupon> getCouponForProduct(@PathVariable int productId) {
+        return couponService.getCouponForProduct(productId);
+    }
 }

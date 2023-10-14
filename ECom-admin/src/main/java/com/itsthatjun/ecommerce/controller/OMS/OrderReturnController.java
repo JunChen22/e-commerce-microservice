@@ -40,9 +40,9 @@ public class OrderReturnController {
         this.orderReturnService = orderReturnService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/all/{statusCode}")
     @ApiOperation(value = "list all return request open waiting to be approved")
-    public Flux<ReturnRequest> listAllReturnRequest(@RequestParam("statusCode") ReturnStatusCode statusCode) {
+    public Flux<ReturnRequest> listAllReturnRequest(@PathVariable ReturnStatusCode statusCode) {
         return orderReturnService.listAllReturnRequest(statusCode);
     }
 

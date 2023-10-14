@@ -49,12 +49,12 @@ public class CouponController {
     }
 
     @GetMapping("/{couponId}")
-    @ApiOperation(value = "Get coupons that works with a product")
-    public Mono<Coupon> list(@PathVariable int couponId) {
+    @ApiOperation(value = "Get coupon detail and related products")
+    public Mono<Coupon> couponDetail(@PathVariable int couponId) {
         return couponService.list(couponId);
     }
 
-    @GetMapping("/product/all/{productId}")
+    @GetMapping("/product/{productId}")
     @ApiOperation(value = "Get coupons that works with a product")
     public Flux<Coupon> getCouponForProduct(@PathVariable int productId) {
         return couponService.getCouponForProduct(productId);

@@ -44,7 +44,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public Flux<PromotionSale> getAllPromotionSale() {
-        String url = SMS_SERVICE_URL + "/sale/AllSale";
+        String url = SMS_SERVICE_URL + "/AllPromotionSale";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(PromotionSale.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -52,7 +52,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public Flux<Product> getAllPromotionSaleItem() {
-        String url = SMS_SERVICE_URL + "/sale/AllPromotionSaleItem";
+        String url = SMS_SERVICE_URL + "/AllPromotionSaleItem";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -61,17 +61,33 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public Flux<Product> getAllFlashSaleItem() {
 
-        String url = SMS_SERVICE_URL + "/sale/AllFlashSaleItem";
+        String url = SMS_SERVICE_URL + "/AllFlashSaleItem";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @Override
-    public Mono<OnSaleRequest> createSale(OnSaleRequest request, String operator) {
+    public Mono<OnSaleRequest> createListSale(OnSaleRequest request, String operator) {
         return Mono.fromCallable(() -> {
-                sendMessage("sales-out-0", new SmsAdminSaleEvent(CREATE_SALE, request, operator));
+                sendMessage("sales-out-0", new SmsAdminSaleEvent(CREATE_SALE_LIST, request, operator));
                 return request;
+        }).subscribeOn(publishEventScheduler);
+    }
+
+    @Override
+    public Mono<OnSaleRequest> createBrandSale(OnSaleRequest request, String operator) {
+        return Mono.fromCallable(() -> {
+            sendMessage("sales-out-0", new SmsAdminSaleEvent(CREATE_SALE_BRAND, request, operator));
+            return request;
+        }).subscribeOn(publishEventScheduler);
+    }
+
+    @Override
+    public Mono<OnSaleRequest> createCategorySale(OnSaleRequest request, String operator) {
+        return Mono.fromCallable(() -> {
+            sendMessage("sales-out-0", new SmsAdminSaleEvent(CREATE_SALE_CATEGORY, request, operator));
+            return request;
         }).subscribeOn(publishEventScheduler);
     }
 
@@ -103,7 +119,9 @@ public class PromotionServiceImpl implements PromotionService {
     public Mono<Void> delete(int promotionSaleId, String operator) {
         return Mono.fromRunnable(() -> {
             OnSaleRequest saleRequest = new OnSaleRequest();
-            saleRequest.setPromotionId(promotionSaleId);
+            PromotionSale promotionSale = new PromotionSale();
+            promotionSale.setId(promotionSaleId);
+            saleRequest.setPromotionSale(promotionSale);
             sendMessage("sales-out-0", new SmsAdminSaleEvent(DELETE_SALE, saleRequest, operator));
         }).subscribeOn(publishEventScheduler).then();
     }

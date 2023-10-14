@@ -33,13 +33,12 @@ public interface SalesService {
     @ApiOperation(value = "create sale on list of items")
     Mono<PromotionSale> createListSale(OnSaleRequest request, String operator);
 
-    /* TODO: create sepearate sale creation, currently is passed in after they are searched.
     @ApiOperation(value = "create sales based on brand name")
     Mono<PromotionSale> createBrandSale(OnSaleRequest request, String operator);
 
     @ApiOperation(value = "create sales based on product category")
     Mono<PromotionSale> createCategorySale(OnSaleRequest request, String operator);
-     */
+
     @ApiOperation(value = "Update info like name, sale type and time, non-price affecting")
     Mono<PromotionSale> updateSaleInfo(OnSaleRequest updateSaleRequest, String operator);
 

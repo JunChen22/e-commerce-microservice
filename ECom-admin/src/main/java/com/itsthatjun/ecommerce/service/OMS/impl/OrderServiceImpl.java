@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.service.OMS.impl;
 
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
+import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
 import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderEvent;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
@@ -43,8 +44,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Flux<Orders> listAllOrder(ReturnStatusCode statusCode) {
-        String url = OMS_SERVICE_URL + "/order/admin/all?statusCode=" + statusCode.getCode();
+    public Flux<Orders> listAllOrder(OrderStatus statusCode) {
+        String url = OMS_SERVICE_URL + "/admin/all?statusCode=" + statusCode.getCode();
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -52,17 +53,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Flux<Orders> getUserOrders(int userId) {
-        String url = OMS_SERVICE_URL + "/order/admin/user/" + userId;
+        String url = OMS_SERVICE_URL + "/admin/user/" + userId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @Override
-    public Mono<Orders> getOrder(String serialNumber) {
-        String url = OMS_SERVICE_URL+ "/order/admin/" + serialNumber;
+    public Mono<OrderDetail> getOrder(String serialNumber) {
+        String url = OMS_SERVICE_URL+ "/admin/detail/" + serialNumber;
 
-        return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
+        return webClient.get().uri(url).retrieve().bodyToMono(OrderDetail.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 

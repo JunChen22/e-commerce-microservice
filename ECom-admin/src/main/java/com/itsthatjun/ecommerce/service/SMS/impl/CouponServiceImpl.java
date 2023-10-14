@@ -43,7 +43,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Flux<Coupon> listAll() {
-        String url = SMS_SERVICE_URL+ "/coupon/";
+        String url = SMS_SERVICE_URL+ "/admin/listAll";
 
         // TODO: add default value to get only active or disabled coupon , currently is all
         return webClient.get().uri(url).retrieve().bodyToFlux(Coupon.class)
@@ -52,7 +52,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Mono<Coupon> list(int couponId) {
-        String url = SMS_SERVICE_URL + "/coupon/" + couponId;
+        String url = SMS_SERVICE_URL + "/admin/" + couponId;
 
         return webClient.get().uri(url).retrieve().bodyToMono(Coupon.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
@@ -60,7 +60,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public Flux<Coupon> getCouponForProduct(int productId) {
-        String url = SMS_SERVICE_URL + "/coupon/product/all/" + productId;
+        String url = SMS_SERVICE_URL + "/admin/product/" + productId;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Coupon.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
