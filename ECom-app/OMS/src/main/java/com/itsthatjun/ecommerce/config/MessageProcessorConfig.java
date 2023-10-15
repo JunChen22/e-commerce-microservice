@@ -180,13 +180,14 @@ public class MessageProcessorConfig {
 
             OrderDetail orderDetail = event.getOrderDetail();
             Orders order = orderDetail.getOrders();
-
             String reason = event.getReason();
             String operator = event.getOperator();
+
             switch (event.getEventType()) {
                 case GENERATE_ORDER:
                     List<OrderItem> orderItemList = orderDetail.getOrderItemList();
-                    orderService.createOrder(order, orderItemList, reason, operator).subscribe();
+                    Address address = orderDetail.getAddress();
+                    orderService.createOrder(order, orderItemList, address, reason, operator).subscribe();
                     break;
 
                 case UPDATE_ORDER:

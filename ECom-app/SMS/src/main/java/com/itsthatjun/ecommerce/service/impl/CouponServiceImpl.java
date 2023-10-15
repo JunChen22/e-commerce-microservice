@@ -146,9 +146,9 @@ public class CouponServiceImpl implements CouponService {
             String itemSKuCode = skuCode;
             int quantityNeeded = skuQuantity.get(skuCode);
 
-            ProductSkuExample productSkuStockExample = new ProductSkuExample();
-            productSkuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
-            ProductSku productSkuStock = productSkuMapper.selectByExample(productSkuStockExample).get(0);
+            ProductSkuExample skuExample = new ProductSkuExample();
+            skuExample.createCriteria().andSkuCodeEqualTo(skuCode);
+            ProductSku productSkuStock = productSkuMapper.selectByExample(skuExample).get(0);
 
             int itemId = productSkuStock.getProductId();
 
@@ -171,9 +171,9 @@ public class CouponServiceImpl implements CouponService {
         for (String skuCode : skuQuantity.keySet()) {
             int quantityNeeded = skuQuantity.get(skuCode);
 
-            ProductSkuExample productSkuStockExample = new ProductSkuExample();
-            productSkuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
-            ProductSku productSkuStock = productSkuMapper.selectByExample(productSkuStockExample).get(0);
+            ProductSkuExample skuExample = new ProductSkuExample();
+            skuExample.createCriteria().andSkuCodeEqualTo(skuCode);
+            ProductSku productSkuStock = productSkuMapper.selectByExample(skuExample).get(0);
             totalPrice += productSkuStock.getPromotionPrice().doubleValue() * quantityNeeded;
         }
 

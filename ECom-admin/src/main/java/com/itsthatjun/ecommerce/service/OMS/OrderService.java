@@ -20,11 +20,11 @@ public interface OrderService {
     Mono<OrderDetail> getOrder(String serialNumber);
 
     @ApiOperation(value = "create order")
-    Mono<OrderDetail> createOrder(OrderDetail orderDetail, int userId, String reason, String operatorName);
+    Mono<OrderDetail> createOrder(OrderDetail orderDetail, String reason, String operatorName);
 
     @ApiOperation(value = "update a order")
     Mono<OrderDetail> updateOrder(OrderDetail orderDetail, String reason, String operatorName);
 
     @ApiOperation(value = "delete a order by serial number")
-    Mono<Void> cancelOrder(String serialNumber, int userId, String reason, String operatorName);
+    Mono<Void> cancelOrder(String serialNumber, String reason, String operatorName);
 }

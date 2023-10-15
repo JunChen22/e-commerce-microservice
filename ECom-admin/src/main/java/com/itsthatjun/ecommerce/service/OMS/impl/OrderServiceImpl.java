@@ -68,9 +68,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<OrderDetail> createOrder(OrderDetail orderDetail, int userId, String reason, String operatorName) {
+    public Mono<OrderDetail> createOrder(OrderDetail orderDetail, String reason, String operatorName) {
         return Mono.fromCallable(() -> {
-            sendMessage("order-out-0", new OmsAdminOrderEvent(GENERATE_ORDER, userId, orderDetail, reason, operatorName));
+            sendMessage("order-out-0", new OmsAdminOrderEvent(GENERATE_ORDER, orderDetail, reason, operatorName));
             return orderDetail;
         }).subscribeOn(publishEventScheduler);
     }
@@ -78,19 +78,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Mono<OrderDetail> updateOrder(OrderDetail orderDetail, String reason, String operatorName) {
         return Mono.fromCallable(() -> {
-            sendMessage("order-out-0", new OmsAdminOrderEvent(UPDATE_ORDER, null, orderDetail, reason, operatorName));
+            sendMessage("order-out-0", new OmsAdminOrderEvent(UPDATE_ORDER, orderDetail, reason, operatorName));
             return orderDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> cancelOrder(String serialNumber, int userId, String reason, String operatorName) {
+    public Mono<Void> cancelOrder(String serialNumber, String reason, String operatorName) {
         return Mono.fromRunnable(() -> {
             OrderDetail orderDetail = new OrderDetail();
             Orders orderTobeCancelled = new Orders();
             orderTobeCancelled.setOrderSn(serialNumber);
             orderDetail.setOrders(orderTobeCancelled);
-            sendMessage("order-out-0", new OmsAdminOrderEvent(CANCEL_ORDER, userId, orderDetail, reason, operatorName));
+            sendMessage("order-out-0", new OmsAdminOrderEvent(CANCEL_ORDER, orderDetail, reason, operatorName));
         }).subscribeOn(publishEventScheduler).then();
     }
 

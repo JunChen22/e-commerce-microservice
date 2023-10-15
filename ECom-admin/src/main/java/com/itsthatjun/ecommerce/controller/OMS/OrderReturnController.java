@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
+import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
 import com.itsthatjun.ecommerce.dto.oms.ReturnRequestDecision;
 import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
 import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
@@ -48,8 +49,14 @@ public class OrderReturnController {
 
     @GetMapping("/{serialNumber}")
     @ApiOperation(value = "return a return request detail")
-    public Mono<ReturnRequest> getReturnRequest(@PathVariable String serialNumber) {
+    public Mono<ReturnDetail> getReturnRequest(@PathVariable String serialNumber) {
         return orderReturnService.getReturnRequest(serialNumber);
+    }
+
+    @GetMapping("/user/{userId}")
+    @ApiOperation(value = "return a return request detail")
+    public Flux<ReturnDetail> getUserAllRequest(@PathVariable int userId) {
+        return orderReturnService.listUserAllReturnRequest(userId);
     }
 
     @PostMapping("/update")

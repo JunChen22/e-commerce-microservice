@@ -46,8 +46,14 @@ public class ReturnController {
         return returnOrderService.getAllReturnRequest(statusCode);
     }
 
+    @GetMapping("/admin/user/all/{userId}")
+    @ApiOperation(value = "get all of the return request based on status code")
+    public Flux<ReturnDetail> getUserAllRequest(@PathVariable int userId) {
+        return returnOrderService.getUserAllReturnDetail(userId);
+    }
+
     @GetMapping("/admin/{serialNumber}")
-    @ApiOperation(value = "get user return detail by order serial number")
+    @ApiOperation(value = "get a return detail by order serial number")
     public Mono<ReturnDetail> getReturnDetailBySn(@PathVariable String serialNumber) {
         return returnOrderService.getReturnDetail(serialNumber);
     }

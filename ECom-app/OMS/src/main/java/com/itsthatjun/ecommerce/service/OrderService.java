@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.mbg.model.OrderItem;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.ApiOperation;
@@ -50,8 +51,8 @@ public interface OrderService {
     @ApiOperation(value = "get all orders from user")
     Flux<Orders> getUserOrders(int memberId);
 
-    @ApiOperation(value = "Admin created order for user, to fix mistake on order or order a replacement.")
-    Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, String reason, String operator);
+    @ApiOperation(value = "Admin created order for user, to fix mistake on order or order a replacement. free or pay later")
+    Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator);
 
     @ApiOperation(value = "Update order status")
     Mono<Orders> updateOrder(Orders updateOrder, String reason, String operator);

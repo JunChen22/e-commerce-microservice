@@ -1705,20 +1705,20 @@ INSERT INTO return_request (order_id, company_address_id, order_sn, member_id, r
                                  handle_time, asking_amount, reason, description, handle_note, handle_operator, receive_operator,
                                  receive_time, receive_note
 ) VALUES
-(1001, 1, 'OR123456', 2001, 3, 'John Doe', '555-123-4567', 0,
+(1, 1, '1001', 1, 3, 'John Doe', '555-123-4567', 0,
  NULL, NULL, 'Item damaged upon arrival', 'Received two damaged items in the package.',
  NULL, NULL, NULL, NULL, NULL),
-(1002, 2, 'OR789012', 2002, 1, 'Alice Smith', '555-987-6543', 1,
+(2, 2, '1002', 2, 1, 'Alice Smith', '555-987-6543', 1,
  NULL, NULL, 'Wrong item received', 'Received a different product than what was ordered.',
  NULL, NULL, NULL, NULL, NULL),
-(1003, 3, 'OR456789', 2003, 6, 'Mary Johnson', '555-789-1234', 2,
+(3, 3, '1003', 3, 6, 'Mary Johnson', '555-789-1234', 2,
  '2023-09-09 14:30:00', 75.99, 'Changed my mind', 'Decided not to keep these items.',
  'Refund processed successfully.', 'AdminUser123', 'WarehouseStaff456',
  '2023-09-10 09:15:00', 'Items received in good condition.'),
-(1004, 1, 'OR987654', 2004, 1, 'David Wilson', '555-555-5555', 3,
+(4, 1, '1004', 4, 1, 'David Wilson', '555-555-5555', 3,
  NULL, NULL, 'Item does not match the description', 'The product received is not as described on the website.',
  'Rejected due to mismatch.', 'AdminUser789', NULL, NULL, NULL),
-(1005, 2, 'OR555555', 2005, 2, 'Linda Davis', '555-123-7890', 0,
+(5, 2, '1005', 5, 2, 'Linda Davis', '555-123-7890', 0,
  NULL, NULL, 'Item arrived late', 'Items arrived after the expected delivery date.',
  NULL, NULL, NULL, NULL, NULL);
 

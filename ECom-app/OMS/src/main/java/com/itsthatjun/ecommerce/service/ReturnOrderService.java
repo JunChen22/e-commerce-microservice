@@ -28,7 +28,10 @@ public interface ReturnOrderService {
     @ApiOperation(value = "return request based on status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(with reason) 3")
     Flux<ReturnRequest> getAllReturnRequest(int statusCode);
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "Get users all return requests")
+    Flux<ReturnDetail> getUserAllReturnDetail(int userId);
+
+    @ApiOperation(value = "Get detail of return request")
     Mono<ReturnDetail> getReturnDetail(String orderSn);
 
     @ApiOperation(value = "")

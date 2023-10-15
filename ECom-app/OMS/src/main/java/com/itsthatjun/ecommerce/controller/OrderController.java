@@ -63,5 +63,4 @@ public class OrderController {
     public Flux<Orders> getUserOrderDetail(@PathVariable int userId) {
         return orderService.getUserOrders(userId);
     }
-
 }

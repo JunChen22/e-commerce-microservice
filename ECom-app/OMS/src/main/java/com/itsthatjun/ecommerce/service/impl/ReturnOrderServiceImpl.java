@@ -12,6 +12,7 @@ import com.itsthatjun.ecommerce.service.PaypalService;
 import com.itsthatjun.ecommerce.service.ReturnOrderService;
 import com.paypal.api.payments.Refund;
 import com.paypal.base.rest.PayPalRESTException;
+import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ReturnOrderServiceImpl implements ReturnOrderService {
@@ -187,9 +185,63 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
     }
 
     @Override
+    public Flux<ReturnDetail> getUserAllReturnDetail(int userId) {
+        return Mono.fromCallable(() -> {
+            ReturnRequestExample returnRequestExample = new ReturnRequestExample();
+            returnRequestExample.createCriteria().andMemberIdEqualTo(userId);
+            List<ReturnRequest> returnRequestList = returnRequestMapper.selectByExample(returnRequestExample);
+            if (returnRequestList.isEmpty()) return null;
+
+            List<ReturnDetail> returnDetailList = new ArrayList<>();
+            for (ReturnRequest returnRequest : returnRequestList) {
+                int returnRequestId = returnRequest.getId();
+
+                ReturnItemExample returnItemExample = new ReturnItemExample();
+                returnItemExample.createCriteria().andReturnRequestIdEqualTo(returnRequestId);
+                List<ReturnItem> returnItemList = returnItemMapper.selectByExample(returnItemExample);
+
+                ReturnReasonPicturesExample picturesExample = new ReturnReasonPicturesExample();
+                picturesExample.createCriteria().andReturnRequestIdEqualTo(returnRequestId);
+                List<ReturnReasonPictures> returnReasonPicturesList = picturesMapper.selectByExample(picturesExample);
+
+                ReturnDetail returnDetail = new ReturnDetail();
+                returnDetail.setReturnRequest(returnRequest);
+                returnDetail.setReturnItemList(returnItemList);
+                returnDetail.setPicturesList(returnReasonPicturesList);
+
+                returnDetailList.add(returnDetail);
+            }
+
+            return returnDetailList;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
     public Mono<ReturnDetail> getReturnDetail(String orderSn) {
         return Mono.fromCallable(() -> {
-            ReturnDetail returnDetail = returnDao.getDetail(orderSn);
+            //ReturnDetail returnDetail = returnDao.getDetail(orderSn); TODO: fix dao
+            ReturnRequestExample returnRequestExample = new ReturnRequestExample();
+            returnRequestExample.createCriteria().andOrderSnEqualTo(orderSn);
+            List<ReturnRequest> returnRequestList = returnRequestMapper.selectByExample(returnRequestExample);
+
+            if (returnRequestList.isEmpty()) return null;
+
+            ReturnRequest returnRequest = returnRequestList.get(0);
+            ReturnDetail returnDetail = new ReturnDetail();
+            int returnRequestId = returnRequest.getId();
+
+            ReturnItemExample returnItemExample = new ReturnItemExample();
+            returnItemExample.createCriteria().andReturnRequestIdEqualTo(returnRequestId);
+            List<ReturnItem> returnItemList = returnItemMapper.selectByExample(returnItemExample);
+
+            ReturnReasonPicturesExample picturesExample = new ReturnReasonPicturesExample();
+            picturesExample.createCriteria().andReturnRequestIdEqualTo(returnRequestId);
+            List<ReturnReasonPictures> returnReasonPicturesList = picturesMapper.selectByExample(picturesExample);
+
+            returnDetail.setReturnRequest(returnRequest);
+            returnDetail.setReturnItemList(returnItemList);
+            returnDetail.setPicturesList(returnReasonPicturesList);
+
             return returnDetail;
         }).subscribeOn(jdbcScheduler);
     }

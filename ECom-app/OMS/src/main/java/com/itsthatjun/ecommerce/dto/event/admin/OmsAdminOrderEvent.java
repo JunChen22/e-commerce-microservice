@@ -18,7 +18,6 @@ public class OmsAdminOrderEvent {
     }
 
     private final Type eventType;
-    private final Integer userId;
     private final OrderDetail orderDetail;
     private final String reason;
     private final String operator;
@@ -27,16 +26,14 @@ public class OmsAdminOrderEvent {
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public OmsAdminOrderEvent() {
         this.eventType = null;
-        this.userId = null;
         this.orderDetail = null;
         this.reason = null;
         this.operator = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsAdminOrderEvent(Type eventType, Integer userId, OrderDetail OrderDetail, String reason, String operator) {
+    public OmsAdminOrderEvent(Type eventType, OrderDetail OrderDetail, String reason, String operator) {
         this.eventType = eventType;
-        this.userId = userId;
         this.orderDetail = OrderDetail;
         this.reason = reason;
         this.operator = operator;

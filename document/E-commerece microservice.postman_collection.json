@@ -37,6 +37,9 @@
 						{
 							"name": "Article - Get one",
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -64,16 +67,6 @@
 								{
 									"name": "Shopping cart - list user cart",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzgyOTIsImlhdCI6MTY5NzIyOTI5Mjc3NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Xoi-gZOJSb-7ZVur-oQi8ov5HgeQ6Kd3OXFh8SexzGGe3OZatVCg3rZx3s59pqkOYkwbMmmzuOrikgr6T4LNdQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -93,16 +86,6 @@
 								{
 									"name": "Shopping cart - add",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzgyOTIsImlhdCI6MTY5NzIyOTI5Mjc3NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Xoi-gZOJSb-7ZVur-oQi8ov5HgeQ6Kd3OXFh8SexzGGe3OZatVCg3rZx3s59pqkOYkwbMmmzuOrikgr6T4LNdQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -131,16 +114,6 @@
 								{
 									"name": "Shopping cart - update",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzIwMDEsImlhdCI6MTY5NzIyMzAwMTYyNywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.f6xEiWcmC0kP0TFMiX93RZH5j-evw9GHhIZ849tn8KzxClw4WT2uU-JW-vh3derODA0uDzsoDYESUV9JKO2zag",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -170,16 +143,6 @@
 								{
 									"name": "Shopping cart - delete a item",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzIwMDEsImlhdCI6MTY5NzIyMzAwMTYyNywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.f6xEiWcmC0kP0TFMiX93RZH5j-evw9GHhIZ849tn8KzxClw4WT2uU-JW-vh3derODA0uDzsoDYESUV9JKO2zag",
-													"type": "string"
-												}
-											]
-										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -200,16 +163,6 @@
 								{
 									"name": "Shopping cart - clear cart",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzIwMDEsImlhdCI6MTY5NzIyMzAwMTYyNywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.f6xEiWcmC0kP0TFMiX93RZH5j-evw9GHhIZ849tn8KzxClw4WT2uU-JW-vh3derODA0uDzsoDYESUV9JKO2zag",
-													"type": "string"
-												}
-											]
-										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -234,16 +187,6 @@
 								{
 									"name": "Order - Generate acutal transaction order",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTczMjE0MzAsImlhdCI6MTY5NzMxMjQzMDA4MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.QKWRTkavdpas6aVy6V-L3mYVFaY3J82aG_BRvGC2W5dV8Sqi9TQ3U9qX4I1kJpolmidcs_q5j5fu76xwAdsW0g",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -272,16 +215,6 @@
 								{
 									"name": "Order - List all order",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzYwMTgsImlhdCI6MTY5NzIyNzAxODQ2NCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Q0DtYEArMzODx5qiYwVIgHn4YONd4xBCGhmXWq50RXGlxSljr7XIBo7oTGiEYEOqc0npXMLBI2OP0oEudNI1Og",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -301,16 +234,6 @@
 								{
 									"name": "Order - Get Order detail",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzYwMTgsImlhdCI6MTY5NzIyNzAxODQ2NCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Q0DtYEArMzODx5qiYwVIgHn4YONd4xBCGhmXWq50RXGlxSljr7XIBo7oTGiEYEOqc0npXMLBI2OP0oEudNI1Og",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -331,16 +254,6 @@
 								{
 									"name": "Order - cancel order",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTczMjE0MzAsImlhdCI6MTY5NzMxMjQzMDA4MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.QKWRTkavdpas6aVy6V-L3mYVFaY3J82aG_BRvGC2W5dV8Sqi9TQ3U9qX4I1kJpolmidcs_q5j5fu76xwAdsW0g",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"url": {
@@ -366,16 +279,6 @@
 								{
 									"name": "OrderReturn -apply for return",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTYzMDk3ODYsImlhdCI6MTY5NjMwMDc4Njc1NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.XRucCp_3mM-tZix6OQDIEI7fQtPfSWtPa98r1Cbx4AObmdYqjjF994meJw5cxuJhoZhH6PNgJhggBhAIdLT0Gg",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -405,16 +308,6 @@
 								{
 									"name": "OrderReturn - Get return status",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU2ODQ2NDcsImlhdCI6MTY5NTY3NTY0NzkzMywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.NrVw1GzqNGvDr2InfyAGydut3wKwKxmDW3q51watFYVp3FCyxKammFTJVL1l8UF82aH3YOXObveyZcMVZhK8zA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -490,14 +383,7 @@
 									"name": "Review - Get  detail of a review",
 									"request": {
 										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTY4MDAyODIsImlhdCI6MTY5Njc5MTI4MjI1MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.2Q4HPtBakpIBe6eUUxuUNic1JBFDNdfdYPv4pslBSh90d2junXsFy05r0WbKauscPwzro-fOeUWqazCTUeu1aA",
-													"type": "string"
-												}
-											]
+											"type": "noauth"
 										},
 										"method": "GET",
 										"header": [],
@@ -519,16 +405,6 @@
 								{
 									"name": "Review - Create a review",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTY4MDAyODIsImlhdCI6MTY5Njc5MTI4MjI1MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.2Q4HPtBakpIBe6eUUxuUNic1JBFDNdfdYPv4pslBSh90d2junXsFy05r0WbKauscPwzro-fOeUWqazCTUeu1aA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -557,16 +433,6 @@
 								{
 									"name": "Review - Update a review",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTY4MDMxNzcsImlhdCI6MTY5Njc5NDE3NzUxNywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.no9ZxP7wpQw2oq8gArEpgCQ2vxUGOaZKA12saF742Ya83anSN5-4RMxbbylUc3GVVyM2zRaINZpUe4KlpHa4iA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -595,16 +461,6 @@
 								{
 									"name": "Review - Delete a review",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTY4MDAyODIsImlhdCI6MTY5Njc5MTI4MjI1MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.2Q4HPtBakpIBe6eUUxuUNic1JBFDNdfdYPv4pslBSh90d2junXsFy05r0WbKauscPwzro-fOeUWqazCTUeu1aA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -779,6 +635,9 @@
 								{
 									"name": "Flash Sales -",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -798,6 +657,9 @@
 								{
 									"name": "Promotional Sale -",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -817,6 +679,9 @@
 								{
 									"name": "Promotional Sale Items -",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -841,16 +706,6 @@
 								{
 									"name": "Check coupon discount on cart",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTcyMzgyOTIsImlhdCI6MTY5NzIyOTI5Mjc3NiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Xoi-gZOJSb-7ZVur-oQi8ov5HgeQ6Kd3OXFh8SexzGGe3OZatVCg3rZx3s59pqkOYkwbMmmzuOrikgr6T4LNdQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -881,13 +736,16 @@
 					"name": "UMS",
 					"item": [
 						{
-							"name": "Member - Login",
+							"name": "Get Info",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
-								"method": "POST",
+								"method": "GET",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\" :\"user1\",\n\t\"password\": \"password\"\n}",
+									"raw": "{\n\t\"username\" : \"user5\",\n\t\"password\": \"password\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -895,21 +753,21 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8080/user/login",
+									"raw": "localhost:8080/user/getInfo",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
 										"user",
-										"login"
+										"getInfo"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Member - Register",
+							"name": "Register",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -935,6 +793,118 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Update Passoword",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\" : \"user5\",\n\t\"password\": \"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/user/updatePassword",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"updatePassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update info",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\" : \"user5\",\n\t\"password\": \"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/user/updateInfo",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"updateInfo"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update address",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\" : \"user5\",\n\t\"password\": \"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/user/updateAddress",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"updateAddress"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete account",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\" : \"user5\",\n\t\"password\": \"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/user/deleteAccount",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"deleteAccount"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -954,83 +924,6 @@
 							"port": "8080",
 							"path": [
 								"actuator"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Paypal - payment success",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImNyZWF0ZWQiOjE2ODY2MjMwMzczMjcsImV4cCI6MTY4NjYyMzkzN30.sTbJSzsL-uFbjGqrE5JbKS9_64k7nyTfRZCrnsT8b7clGxktVXApUKJlH3y4VojFkt8D7IjdanNtnDn6OVIvCg",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "paymentId",
-								"value": "PAYID-MSD4WIY82883406XJ140011M",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "PayerID",
-								"value": "PQVC7TMEZCCWC",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "http://localhost:8080/payment/success?paymentId=PAYID-MSJEORY6T020451G542594&token=EC-72E39575AAU536120R&PayerID=PQVC7TMEZCCWC",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"payment",
-								"success"
-							],
-							"query": [
-								{
-									"key": "paymentId",
-									"value": "PAYID-MSJEORY6T020451G542594"
-								},
-								{
-									"key": "token",
-									"value": "EC-72E39575AAU536120R"
-								},
-								{
-									"key": "PayerID",
-									"value": "PQVC7TMEZCCWC"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Paypal - payment fail",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/payment/pay/cancel",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"payment",
-								"pay",
-								"cancel"
 							]
 						}
 					},
@@ -1062,35 +955,29 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				},
 				{
-					"name": "test cart controller",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTU4NTg1NTgsImlhdCI6MTY5NTg0OTU1ODgxMiwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.9GwTBCk8ZgpWnq-3LXRmKqr5Zwd08Jt3bAdO5uQ7ZbNw7EBdPd9HG3My7lb9UWKkG9XlaJGHEiUgUbIls05XFw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/cart/test",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"cart",
-								"test"
-							]
-						}
-					},
-					"response": []
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
@@ -1103,16 +990,6 @@
 						{
 							"name": "Article - Create one",
 							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgxNTM0MTc0LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTA1MzR9.BI4UQpBYigpYgLMC5q1M8PEGORKBS_VEd-ZIfcYdhRAwSSIBsNfM-p-cMufamywfNeqeK9_i7FGEwqRSIuCE8g",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1141,16 +1018,6 @@
 						{
 							"name": "Article - Get all",
 							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgxNTM0MTc0LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTA1MzR9.BI4UQpBYigpYgLMC5q1M8PEGORKBS_VEd-ZIfcYdhRAwSSIBsNfM-p-cMufamywfNeqeK9_i7FGEwqRSIuCE8g",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1170,16 +1037,6 @@
 						{
 							"name": "Article - Get one",
 							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzgyNTg0MjAyLCJhZG1pbklkIjoxLCJleHAiOjE2OTY3OTE1ODR9.XTgsY6rIPvob68wNP9vWDGW9rrg32dLFLRk9NQIyrZi_6ve71tWxi0-Eu2XX0ClxYN2s_AmE1Z-zId5fgy46Lg",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1199,16 +1056,6 @@
 						{
 							"name": "Article - Update one",
 							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzgyNTg0MjAyLCJhZG1pbklkIjoxLCJleHAiOjE2OTY3OTE1ODR9.XTgsY6rIPvob68wNP9vWDGW9rrg32dLFLRk9NQIyrZi_6ve71tWxi0-Eu2XX0ClxYN2s_AmE1Z-zId5fgy46Lg",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1237,16 +1084,6 @@
 						{
 							"name": "Article - Delete one",
 							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2NzgyNTg0MjAyLCJhZG1pbklkIjoxLCJleHAiOjE2OTY3OTE1ODR9.XTgsY6rIPvob68wNP9vWDGW9rrg32dLFLRk9NQIyrZi_6ve71tWxi0-Eu2XX0ClxYN2s_AmE1Z-zId5fgy46Lg",
-											"type": "string"
-										}
-									]
-								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -1275,16 +1112,6 @@
 								{
 									"name": "Order - Wait for payment",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwMDU5NDQ3LCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjkwNTl9.6zOlXXVZBMODYeyzK00ugChdaf1aMBTjZYYtchQcgzghBLB_rYMBsGlYyFJDvcSN3VQUbhFcaAKGZ72lfq_vsg",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1305,16 +1132,6 @@
 								{
 									"name": "Order - fulfil",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1335,16 +1152,6 @@
 								{
 									"name": "Order - Send/In Transit",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1365,16 +1172,6 @@
 								{
 									"name": "Order - Complete",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1395,16 +1192,6 @@
 								{
 									"name": "Order - Closed",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1425,16 +1212,6 @@
 								{
 									"name": "Order - Invalid",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIwOTQzNTUyLCJhZG1pbklkIjoxLCJleHAiOjE2OTczMjk5NDN9.mOMKosA21sSottweUICn5Qa9RDCgF59CU8zAkw7SIISWK2RSjpLCJpJhX5WUZfmDfC6jYaRmJTHkzKE00AXXLA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1455,16 +1232,6 @@
 								{
 									"name": "Order - Get all user orders",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIxNTUzMjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTczMzA1NTN9.nxl90QxXd9629agM6XVfztDYKOao6t995UogP53QjCONnFlYfZkLLvdZOgbRLbCq_tk3omw6tyyioPbnZj5DvQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1485,16 +1252,6 @@
 								{
 									"name": "Order - Order look up",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzIxNTUzMjM0LCJhZG1pbklkIjoxLCJleHAiOjE2OTczMzA1NTN9.nxl90QxXd9629agM6XVfztDYKOao6t995UogP53QjCONnFlYfZkLLvdZOgbRLbCq_tk3omw6tyyioPbnZj5DvQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1510,315 +1267,356 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Order - create order",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"memberId\": 1,\n            \"status\": 0\n        },\n        \"orderItemList\": [\n            {\n                \"productSkuCode\": \"IP12-RED-128\",\n                \"productQuantity\": 1\n            },\n            {\n                \"productSkuCode\": \"IPSE-BLUE-64\",\n                \"productQuantity\": 2\n            },\n            {\n                \"productSkuCode\": \"GS21\",\n                \"productQuantity\": 3\n            }\n        ],\n        \"address\": {\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Custom order\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/order/create",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"create"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - create order warranty free replacement",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"memberId\": 1,\n            \"status\": 1\n        },\n        \"orderItemList\": [\n            {\n                \"productSkuCode\": \"IP12-RED-128\",\n                \"productQuantity\": 1\n            },\n            {\n                \"productSkuCode\": \"IPSE-BLUE-64\",\n                \"productQuantity\": 2\n            },\n            {\n                \"productSkuCode\": \"GS21\",\n                \"productQuantity\": 3\n            }\n        ],\n        \"address\": {\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"custom order - part replacement\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/order/create",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"create"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - update",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"id\": 1,\n            \"memberId\": 123,\n            \"couponId\": 456,\n            \"orderSn\": \"ORD123456\",\n            \"memberEmail\": \"user@example.com\",\n            \"totalAmount\": 100.0,\n            \"promotionAmount\": 10.0,\n            \"couponAmount\": 5.0,\n            \"discountAmount\": 15.0,\n            \"shippingCost\": 5.0,\n            \"payAmount\": 85.0,\n            \"payType\": 1,\n            \"sourceType\": 2,\n            \"status\": 3,\n            \"deliveryCompany\": \"Fast Shipping\",\n            \"deliveryTrackingNumber\": \"TRK7890123\",\n            \"receiverPhone\": \"555-123-4567\",\n            \"receiverName\": \"John Doe\",\n            \"receiverDetailAddress\": \"123 Main St\",\n            \"receiverCity\": \"Cityville\",\n            \"receiverState\": \"Stateland\",\n            \"receiverZipCode\": \"12345\",\n            \"paymentId\": \"PAY987654\",\n            \"payerId\": \"PAY123456\",\n            \"paymentTime\": \"2023-10-13T14:30:00Z\",\n            \"deliveryTime\": \"2023-10-15T10:00:00Z\",\n            \"receiveTime\": \"2023-10-17T12:15:00Z\",\n            \"comment\": \"Please handle with care.\",\n            \"adminNote\": \"Order processed successfully\"\n        },\n        \"orderItemList\": [\n            {\n                \"id\": 101,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 789,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product A\",\n                \"productBrand\": \"Brand X\",\n                \"productSn\": \"PROD789\",\n                \"productPrice\": 25.0,\n                \"productQuantity\": 2,\n                \"productSkuId\": 1001,\n                \"productSkuCode\": \"SKU123\",\n                \"productCategoryId\": 5001,\n                \"promotionName\": \"Summer Sale\",\n                \"promotionAmount\": 5.0,\n                \"couponAmount\": 2.0,\n                \"realAmount\": 43.0\n            },\n            {\n                \"id\": 102,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 790,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product B\",\n                \"productBrand\": \"Brand Y\",\n                \"productSn\": \"PROD790\",\n                \"productPrice\": 30.0,\n                \"productQuantity\": 3,\n                \"productSkuId\": 1002,\n                \"productSkuCode\": \"SKU456\",\n                \"productCategoryId\": 5002,\n                \"promotionName\": \"Spring Promo\",\n                \"promotionAmount\": 8.0,\n                \"couponAmount\": 3.0,\n                \"realAmount\": 81.0\n            }\n        ],\n        \"address\": {\n            \"id\": 1001,\n            \"memberId\": 123,\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Customer request to update shipping address\"\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/order/update",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"update"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - cancel",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"id\": 1,\n            \"orderSn\": \"1001\"\n        }\n    },\n    \"reason\": \"Order invalid, admin cancelling it\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/order/cancel",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"cancel"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
 						{
 							"name": "return",
-							"item": []
+							"item": [
+								{
+									"name": "OrderReturn - Get All waiting to process",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/return/all/WAITING_TO_PROCESS",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"all",
+												"WAITING_TO_PROCESS"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "OrderReturn - Get All returning",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/return/all/RETURNING",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"all",
+												"RETURNING"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "OrderReturn - Get All Complete return",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/return/all/COMPLETED",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"all",
+												"COMPLETED"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "OrderReturn - Get All rejected",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/return/REJECTED",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"REJECTED"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "OrderReturn - Get a return request",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/return/1003",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"1003"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "OrderReturn - Get user all return requests",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/return/user/1",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"user",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update return status - returning/approved",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"status\": \"APPROVED\",\n    \"returnRequest\": {\n        \"id\": 6,\n        \"askingAmount\" : 142.98,\n        \"companyAddressId\": 1,\n        \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\"\n    },\n    \"reason\": \"Your reason for the decision\",\n    \"returnItemList\": [\n        {\n            \"productSku\" : \"NAM270\",\n            \"purchasedPrice\" : 129.99,\n            \"quantity\" : 1\n        },\n        {\n            \"productSku\" : \"TKAM\",\n            \"purchasedPrice\" : 12.99,\n            \"quantity\" : 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/order/return/update",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"update"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update return status - completed/got item back",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"status\": \"COMPLETED_RETURN\",\n    \"returnRequest\": {\n        \"id\": 6,\n        \"askingAmount\" : 142.98,\n        \"companyAddressId\": 1,\n        \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\"\n    },\n    \"reason\": \"Your reason for the decision\",\n    \"returnItemList\": [\n        {\n            \"productSku\" : \"NAM270\",\n            \"purchasedPrice\" : 129.99,\n            \"quantity\" : 1\n        },\n        {\n            \"productSku\" : \"TKAM\",\n            \"purchasedPrice\" : 12.99,\n            \"quantity\" : 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/order/return/update",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"update"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update return status - reject item/damaged",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"status\": \"REJECTED\",\n    \"returnRequest\": {\n        \"id\": 6,\n        \"askingAmount\" : 142.98,\n        \"companyAddressId\": 1,\n        \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\"\n    },\n    \"reason\": \"Your reason for the decision\",\n    \"returnItemList\": [\n        {\n            \"productSku\" : \"NAM270\",\n            \"purchasedPrice\" : 129.99,\n            \"quantity\" : 1\n        },\n        {\n            \"productSku\" : \"TKAM\",\n            \"purchasedPrice\" : 12.99,\n            \"quantity\" : 1\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/order/return/update",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"return",
+												"update"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						},
 						{
-							"name": "Order - create order",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MDc1MjkzMDkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTcwODQyOTN9.wnXxwZ8bkrbsIFdLfIakz3hTqs638htLWGu2amz4v26dmbumrwLmRoTr1qjdorxAiY6hmMMcC-DZCrLOfcDT_Q",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"id\": 1,\n            \"memberId\": 123,\n            \"couponId\": 456,\n            \"orderSn\": \"ORD123456\",\n            \"memberEmail\": \"user@example.com\",\n            \"totalAmount\": 100.0,\n            \"promotionAmount\": 10.0,\n            \"couponAmount\": 5.0,\n            \"discountAmount\": 15.0,\n            \"shippingCost\": 5.0,\n            \"payAmount\": 85.0,\n            \"payType\": 1,\n            \"sourceType\": 2,\n            \"status\": 3,\n            \"deliveryCompany\": \"Fast Shipping\",\n            \"deliveryTrackingNumber\": \"TRK7890123\",\n            \"receiverPhone\": \"555-123-4567\",\n            \"receiverName\": \"John Doe\",\n            \"receiverDetailAddress\": \"123 Main St\",\n            \"receiverCity\": \"Cityville\",\n            \"receiverState\": \"Stateland\",\n            \"receiverZipCode\": \"12345\",\n            \"paymentId\": \"PAY987654\",\n            \"payerId\": \"PAY123456\",\n            \"paymentTime\": \"2023-10-13T14:30:00Z\",\n            \"deliveryTime\": \"2023-10-15T10:00:00Z\",\n            \"receiveTime\": \"2023-10-17T12:15:00Z\",\n            \"comment\": \"Please handle with care.\",\n            \"adminNote\": \"Order processed successfully\"\n        },\n        \"orderItemList\": [\n            {\n                \"id\": 101,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 789,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product A\",\n                \"productBrand\": \"Brand X\",\n                \"productSn\": \"PROD789\",\n                \"productPrice\": 25.0,\n                \"productQuantity\": 2,\n                \"productSkuId\": 1001,\n                \"productSkuCode\": \"SKU123\",\n                \"productCategoryId\": 5001,\n                \"promotionName\": \"Summer Sale\",\n                \"promotionAmount\": 5.0,\n                \"couponAmount\": 2.0,\n                \"realAmount\": 43.0\n            },\n            {\n                \"id\": 102,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 790,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product B\",\n                \"productBrand\": \"Brand Y\",\n                \"productSn\": \"PROD790\",\n                \"productPrice\": 30.0,\n                \"productQuantity\": 3,\n                \"productSkuId\": 1002,\n                \"productSkuCode\": \"SKU456\",\n                \"productCategoryId\": 5002,\n                \"promotionName\": \"Spring Promo\",\n                \"promotionAmount\": 8.0,\n                \"couponAmount\": 3.0,\n                \"realAmount\": 81.0\n            }\n        ],\n        \"address\": {\n            \"id\": 1001,\n            \"memberId\": 123,\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Customer request to update shipping address\",\n    \"userId\": 123\n}\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/order/create",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - update",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MDc1MjkzMDkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTcwODQyOTN9.wnXxwZ8bkrbsIFdLfIakz3hTqs638htLWGu2amz4v26dmbumrwLmRoTr1qjdorxAiY6hmMMcC-DZCrLOfcDT_Q",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"id\": 1,\n            \"memberId\": 123,\n            \"couponId\": 456,\n            \"orderSn\": \"ORD123456\",\n            \"memberEmail\": \"user@example.com\",\n            \"totalAmount\": 100.0,\n            \"promotionAmount\": 10.0,\n            \"couponAmount\": 5.0,\n            \"discountAmount\": 15.0,\n            \"shippingCost\": 5.0,\n            \"payAmount\": 85.0,\n            \"payType\": 1,\n            \"sourceType\": 2,\n            \"status\": 3,\n            \"deliveryCompany\": \"Fast Shipping\",\n            \"deliveryTrackingNumber\": \"TRK7890123\",\n            \"receiverPhone\": \"555-123-4567\",\n            \"receiverName\": \"John Doe\",\n            \"receiverDetailAddress\": \"123 Main St\",\n            \"receiverCity\": \"Cityville\",\n            \"receiverState\": \"Stateland\",\n            \"receiverZipCode\": \"12345\",\n            \"paymentId\": \"PAY987654\",\n            \"payerId\": \"PAY123456\",\n            \"paymentTime\": \"2023-10-13T14:30:00Z\",\n            \"deliveryTime\": \"2023-10-15T10:00:00Z\",\n            \"receiveTime\": \"2023-10-17T12:15:00Z\",\n            \"comment\": \"Please handle with care.\",\n            \"adminNote\": \"Order processed successfully\"\n        },\n        \"orderItemList\": [\n            {\n                \"id\": 101,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 789,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product A\",\n                \"productBrand\": \"Brand X\",\n                \"productSn\": \"PROD789\",\n                \"productPrice\": 25.0,\n                \"productQuantity\": 2,\n                \"productSkuId\": 1001,\n                \"productSkuCode\": \"SKU123\",\n                \"productCategoryId\": 5001,\n                \"promotionName\": \"Summer Sale\",\n                \"promotionAmount\": 5.0,\n                \"couponAmount\": 2.0,\n                \"realAmount\": 43.0\n            },\n            {\n                \"id\": 102,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 790,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product B\",\n                \"productBrand\": \"Brand Y\",\n                \"productSn\": \"PROD790\",\n                \"productPrice\": 30.0,\n                \"productQuantity\": 3,\n                \"productSkuId\": 1002,\n                \"productSkuCode\": \"SKU456\",\n                \"productCategoryId\": 5002,\n                \"promotionName\": \"Spring Promo\",\n                \"promotionAmount\": 8.0,\n                \"couponAmount\": 3.0,\n                \"realAmount\": 81.0\n            }\n        ],\n        \"address\": {\n            \"id\": 1001,\n            \"memberId\": 123,\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Customer request to update shipping address\",\n    \"userId\": 123\n}\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/order/update",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - cancel",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MzI0NTc3ODU2LCJhZG1pbklkIjoxLCJleHAiOjE2OTczMzM1Nzd9.NaJDSRo6vH1MAMqzhCxtGNG1XrDZoeyme-Lk0RlFlBO13Qn_sgQoIpettBu1mcS_1zgUrbdN08OLgu8enYLNyQ",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"id\": 1,\n            \"memberId\": 123,\n            \"couponId\": 456,\n            \"orderSn\": \"ORD123456\",\n            \"memberEmail\": \"user@example.com\",\n            \"totalAmount\": 100.0,\n            \"promotionAmount\": 10.0,\n            \"couponAmount\": 5.0,\n            \"discountAmount\": 15.0,\n            \"shippingCost\": 5.0,\n            \"payAmount\": 85.0,\n            \"payType\": 1,\n            \"sourceType\": 2,\n            \"status\": 3,\n            \"deliveryCompany\": \"Fast Shipping\",\n            \"deliveryTrackingNumber\": \"TRK7890123\",\n            \"receiverPhone\": \"555-123-4567\",\n            \"receiverName\": \"John Doe\",\n            \"receiverDetailAddress\": \"123 Main St\",\n            \"receiverCity\": \"Cityville\",\n            \"receiverState\": \"Stateland\",\n            \"receiverZipCode\": \"12345\",\n            \"paymentId\": \"PAY987654\",\n            \"payerId\": \"PAY123456\",\n            \"paymentTime\": \"2023-10-13T14:30:00Z\",\n            \"deliveryTime\": \"2023-10-15T10:00:00Z\",\n            \"receiveTime\": \"2023-10-17T12:15:00Z\",\n            \"comment\": \"Please handle with care.\",\n            \"adminNote\": \"Order processed successfully\"\n        },\n        \"orderItemList\": [\n            {\n                \"id\": 101,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 789,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product A\",\n                \"productBrand\": \"Brand X\",\n                \"productSn\": \"PROD789\",\n                \"productPrice\": 25.0,\n                \"productQuantity\": 2,\n                \"productSkuId\": 1001,\n                \"productSkuCode\": \"SKU123\",\n                \"productCategoryId\": 5001,\n                \"promotionName\": \"Summer Sale\",\n                \"promotionAmount\": 5.0,\n                \"couponAmount\": 2.0,\n                \"realAmount\": 43.0\n            },\n            {\n                \"id\": 102,\n                \"orderId\": 1,\n                \"orderSn\": \"ORD123456\",\n                \"productId\": 790,\n                \"productPic\": \"product_image.jpg\",\n                \"productName\": \"Product B\",\n                \"productBrand\": \"Brand Y\",\n                \"productSn\": \"PROD790\",\n                \"productPrice\": 30.0,\n                \"productQuantity\": 3,\n                \"productSkuId\": 1002,\n                \"productSkuCode\": \"SKU456\",\n                \"productCategoryId\": 5002,\n                \"promotionName\": \"Spring Promo\",\n                \"promotionAmount\": 8.0,\n                \"couponAmount\": 3.0,\n                \"realAmount\": 81.0\n            }\n        ],\n        \"address\": {\n            \"id\": 1001,\n            \"memberId\": 123,\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Customer request to update shipping address\",\n    \"userId\": 123\n}\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/order/cancel/1002",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"cancel",
-										"1002"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Get All waiting to process",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Mjk3Mjk2NjE0LCJhZG1pbklkIjoxLCJleHAiOjE2OTYzMDYyOTZ9.Rk8b4JRds61lTpUcgCXa9SuWzWfu4cfbS6L_gYQB4lLefshwEE5Q7t3Dy2foKqVYQlanhMzXoUuyVX_HSH-AgA",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/return/AllOpening",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"return",
-										"AllOpening"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Get All returning",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/return/AllReturning",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"return",
-										"AllReturning"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Get All Complete return",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/return/AllCompleted",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"return",
-										"AllCompleted"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Get All rejected",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/return/AllRejected",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"return",
-										"AllRejected"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Get return request",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "localhost:8082/order/return/1002",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"return",
-										"1002"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Update return status",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Mjk4MjQyMTgyLCJhZG1pbklkIjoxLCJleHAiOjE2OTYzMDcyNDJ9.T24bBxJ0PIlUGl8oSOgYWTNvzaOOixh1QafOjNu_yXkK7LHQ4SPHhsW71sgS4qg8stZXal-Djhi9Os5PB6bkAw",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"status\": \"APPROVED\",\n    \"returnRequest\": {\n        \"id\": 6,\n        \"askingAmount\" : 142.98,\n        \"companyAddressId\": 1,\n        \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\"\n    },\n    \"reason\": \"Your reason for the decision\",\n    \"returnItemList\": [\n        {\n            \"productSku\" : \"NAM270\",\n            \"purchasedPrice\" : 129.99,\n            \"quantity\" : 1\n        },\n        {\n            \"productSku\" : \"TKAM\",\n            \"purchasedPrice\" : 12.99,\n            \"quantity\" : 1\n        }\n    ]\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/order/return/update",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"return",
-										"update"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "OrderReturn - Update return COMPLETED_RETURN",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Mjk4MjQyMTgyLCJhZG1pbklkIjoxLCJleHAiOjE2OTYzMDcyNDJ9.T24bBxJ0PIlUGl8oSOgYWTNvzaOOixh1QafOjNu_yXkK7LHQ4SPHhsW71sgS4qg8stZXal-Djhi9Os5PB6bkAw",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"status\": \"COMPLETED_RETURN\",\n    \"returnRequest\": {\n        \"id\": 6,\n        \"askingAmount\" : 142.98,\n        \"companyAddressId\": 1,\n        \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\"\n    },\n    \"reason\": \"Your reason for the decision\",\n    \"returnItemList\": [\n        {\n            \"productSku\" : \"NAM270\",\n            \"purchasedPrice\" : 129.99,\n            \"quantity\" : 1\n        },\n        {\n            \"productSku\" : \"TKAM\",\n            \"purchasedPrice\" : 12.99,\n            \"quantity\" : 1\n        }\n    ]\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "localhost:8082/order/return/update",
-									"host": [
-										"localhost"
-									],
-									"port": "8082",
-									"path": [
-										"order",
-										"return",
-										"update"
-									]
-								}
-							},
-							"response": []
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
 					]
 				},
@@ -1831,16 +1629,6 @@
 								{
 									"name": "Brand - Get all brands",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1860,16 +1648,6 @@
 								{
 									"name": "Brand - Get All brand in size of 3",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Nzk0OTU2NTc1LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4MDM5NTZ9.6EtuYBdbpYcmcaX4ZSN_VzBcGzqmkyT9_rvRr1wQmzuJYwr86BQWrYCi3QfuEER21mMYUk-OD1atKeFfgTFnkQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1889,16 +1667,6 @@
 								{
 									"name": "Brand - Get all brand product",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Nzk0OTU2NTc1LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4MDM5NTZ9.6EtuYBdbpYcmcaX4ZSN_VzBcGzqmkyT9_rvRr1wQmzuJYwr86BQWrYCi3QfuEER21mMYUk-OD1atKeFfgTFnkQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1919,16 +1687,6 @@
 								{
 									"name": "Brand - Get Brand info",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1948,16 +1706,6 @@
 								{
 									"name": "Brand - Create a brand",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Nzk0OTU2NTc1LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4MDM5NTZ9.6EtuYBdbpYcmcaX4ZSN_VzBcGzqmkyT9_rvRr1wQmzuJYwr86BQWrYCi3QfuEER21mMYUk-OD1atKeFfgTFnkQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -1986,16 +1734,6 @@
 								{
 									"name": "Brand - update a brand",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2Nzk0OTU2NTc1LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4MDM5NTZ9.6EtuYBdbpYcmcaX4ZSN_VzBcGzqmkyT9_rvRr1wQmzuJYwr86BQWrYCi3QfuEER21mMYUk-OD1atKeFfgTFnkQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2025,16 +1763,6 @@
 								{
 									"name": "Brand - Delete a brand",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -2060,16 +1788,6 @@
 								{
 									"name": "Get All product",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODY3Nzk0MDQ5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4NzY3OTR9.HgXy2iJawFP49aP3g5hJ3Y2bSOVaJVPUbyXb6LsIrcV7O5U9Li2Wo5Oc7JjYTj09XpxmJ3X9S32fJXts4ZKCsg",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2089,16 +1807,6 @@
 								{
 									"name": "Get page of 5 product",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODY3Nzk0MDQ5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4NzY3OTR9.HgXy2iJawFP49aP3g5hJ3Y2bSOVaJVPUbyXb6LsIrcV7O5U9Li2Wo5Oc7JjYTj09XpxmJ3X9S32fJXts4ZKCsg",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2118,16 +1826,6 @@
 								{
 									"name": "Get a product by id",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAxNTIzODI3LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTA1MjN9.Dxh4RcVs9S3YB4Odq1tMAtx4Pohm55XiNunl-in7CySn9WX6WAWcKP_i9f2VnXSfhDa-Q00Q1aJqBKI5harzqQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2147,16 +1845,6 @@
 								{
 									"name": "Create a product",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgxODE5ODYxLCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTA4MTl9.U6yLi0EB054jRCxjiG18G_p0AiVHv_YDFwsJZDZEEU0iXIA1SEQ5_ZEXDvTXPdLD2vXv4lso-M6JbszSmf8BOg",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2185,16 +1873,6 @@
 								{
 									"name": "Add a product sku",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgxODE5ODYxLCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTA4MTl9.U6yLi0EB054jRCxjiG18G_p0AiVHv_YDFwsJZDZEEU0iXIA1SEQ5_ZEXDvTXPdLD2vXv4lso-M6JbszSmf8BOg",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2223,16 +1901,6 @@
 								{
 									"name": "Update product info",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgyNTQwNTk5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTE1NDB9.nxeIBIU5kVIDObXeG1YczDrjaQwrM4laj9w7VcBbCXfuJXV1BwlaNE1bg3JHlBF2He221djY7jfSFWqTHA3g5A",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2261,16 +1929,6 @@
 								{
 									"name": "Update product status",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODgyNTQwNTk5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY4OTE1NDB9.nxeIBIU5kVIDObXeG1YczDrjaQwrM4laj9w7VcBbCXfuJXV1BwlaNE1bg3JHlBF2He221djY7jfSFWqTHA3g5A",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2299,16 +1957,6 @@
 								{
 									"name": "Update product sku status",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODk5MDE5MjA5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MDgwMTl9.mplqYc7KThP5CCWSKKwGHn-ImVqk7vQkPXOiLS73IVnVoO_mtysXekWey5RVdKo-iM52ZMCRbJJarePJF00Cuw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2337,16 +1985,6 @@
 								{
 									"name": "Update product stock",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2ODk5MDE5MjA5LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MDgwMTl9.mplqYc7KThP5CCWSKKwGHn-ImVqk7vQkPXOiLS73IVnVoO_mtysXekWey5RVdKo-iM52ZMCRbJJarePJF00Cuw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2375,16 +2013,6 @@
 								{
 									"name": "Update product price",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAyNDk4NjA3LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTE0OTh9.aK2iHvpSxjOmJpZ2J6yNOAoIrCqDlG60wzVaBjClW7Uq0YVk2cKY0ufXfo_pcYSRYHNmalKdidYxAILetQ9hoQ",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2413,16 +2041,6 @@
 								{
 									"name": "Product - Delete product",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -2448,16 +2066,6 @@
 								{
 									"name": "Review - Get all reviews of a product",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2478,16 +2086,6 @@
 								{
 									"name": "Review - Get All reviews by User",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2508,16 +2106,6 @@
 								{
 									"name": "Review - Create a review",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2546,16 +2134,6 @@
 								{
 									"name": "Review - Update a review",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2584,16 +2162,6 @@
 								{
 									"name": "Review - Delete a review",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk2OTAzMDg2MTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTY5MTIwODZ9.3aRnacUAJCBlwLBlbnR6HRd5EZIwq0VEH3SW9464EnmCZsZMaesVFUnAF-BMYou9EhYzE0J_m1Ni9v1UNBwhIA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -2624,16 +2192,6 @@
 								{
 									"name": "Coupon - Get all coupons",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMwMjMxNjExLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyMzkyMzF9.1ofD-d-JDeXK3ECbCe2ttY3Wah44gvALsdyTL9KXNxvOrNEqzUdbtKH9xHpZLZ-aJ8xPeL2FC6mYTMqgOAdm-w",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2653,16 +2211,6 @@
 								{
 									"name": "Coupon - Get a coupon",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMwMjQ1NDA0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyMzkyNDV9.6QwhhMMdGaCOhNmoAJk28cME2DWfnPf1NG7WtHRa7GgAbHlJM23GP6DV0tjarsGtSieDZaY1T8GBFiwo5-t5Hw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2682,16 +2230,6 @@
 								{
 									"name": "Coupon - Get all coupon for a product",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMwMjQ1NDA0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyMzkyNDV9.6QwhhMMdGaCOhNmoAJk28cME2DWfnPf1NG7WtHRa7GgAbHlJM23GP6DV0tjarsGtSieDZaY1T8GBFiwo5-t5Hw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2712,26 +2250,11 @@
 								{
 									"name": "Coupon - Create a coupon",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMxNzExMzE4LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDA3MTF9.G4Sjc7C-qOWpRZmCd0vrZFJI6NJ6UXG7zKttOWLL_nQ-1G1F0EQGqk9okWHzCOoMEWzw7hcs4XJ3XFxh6A6NNw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"coupon\": {\n        \"couponType\": 3,\n        \"name\": \"$10 off Adidas sneakers\",\n        \"discountType\": 0,\n        \"amount\": 100.00,\n        \"startTime\": \"2019-08-18\",\n        \"endTime\": \"2024-08-18\",\n        \"count\": 30,\n        \"publishCount\": 20,\n        \"usedCount\": 0,\n        \"code\": \"Adidas10OFF\"\n    },\n    \"skuQuantity\": {\n        \"NAM270-105\": 5,\n        \"NAM270-90\": 10,\n        \"NAM270-75\": 5\n    }\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
+											"mode": "urlencoded",
+											"urlencoded": []
 										},
 										"url": {
 											"raw": "localhost:8082/coupon/create",
@@ -2750,16 +2273,6 @@
 								{
 									"name": "Coupon - Update a coupon",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMzMDMyMTE2LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDIwMzJ9.I5zdZB5oPvT1oYWoPDf7PLhcVh1U_OAJp4FjynKyOCet6MPmBfQ25EMlNxSprJwlXuo1S0xmnP8z2bvxtipisg",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -2788,16 +2301,6 @@
 								{
 									"name": "Coupon - Delete a coupon",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMzODAxMDgzLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDI4MDF9.2I__Gy1863bzZdxlQcKxwOV8EAQEv4DC9veAyaxMq39jCneQwykcn8a0oMJRoDLuG70woVKNVHUHZhIEtse2Sw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -2823,16 +2326,6 @@
 								{
 									"name": "Coupon History - Getll all used coupons",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMzODk0NzkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDI4OTR9._M136TLm76kXlvQ-rpU-frVNn_GYeY9Qbkxnky_a35cwrqS9XZebDa09SqpS2XAKuPhm588XD9dohpBHjZHdXw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2852,16 +2345,6 @@
 								{
 									"name": "Coupon History - Getll user coupon usage",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjMzODk0NzkxLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNDI4OTR9._M136TLm76kXlvQ-rpU-frVNn_GYeY9Qbkxnky_a35cwrqS9XZebDa09SqpS2XAKuPhm588XD9dohpBHjZHdXw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2887,16 +2370,6 @@
 								{
 									"name": "Promotional Sale - get all promotion sales",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjU5NzEwODg1LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNjg3MTB9.QYA5d00na-AWZwSmatRavl5U9NeOhnPbHXyY2-Tyq4QabBdeolTsPia1WmJj3n2qFWxbCGqZ7MU5HMUqHUkgRw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2916,16 +2389,6 @@
 								{
 									"name": "Promotional Sale - get all promotion sales items",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjU2Mzg1NzExLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNjUzODV9.7BaHlwMgpu2JnXGCXnFd3CRXFcPszAi1wUT8pcclzQ8iraOxVujj6lEAKDMwfklhaxCFnqQbKBuQuedWvjlS6Q",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2945,16 +2408,6 @@
 								{
 									"name": "Promotional Sale - get all flash sale items",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjU2Mzg1NzExLCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNjUzODV9.7BaHlwMgpu2JnXGCXnFd3CRXFcPszAi1wUT8pcclzQ8iraOxVujj6lEAKDMwfklhaxCFnqQbKBuQuedWvjlS6Q",
-													"type": "string"
-												}
-											]
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -2974,16 +2427,6 @@
 								{
 									"name": "Promotional Sale - create sale for specific items",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjU5NzEwODg1LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNjg3MTB9.QYA5d00na-AWZwSmatRavl5U9NeOhnPbHXyY2-Tyq4QabBdeolTsPia1WmJj3n2qFWxbCGqZ7MU5HMUqHUkgRw",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -3012,16 +2455,6 @@
 								{
 									"name": "Promotional Sale - create category sale",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDc0MTQ2MTE0LCJleHAiOjE2ODgwNzUwNDZ9.GTtUDym9yywptBhgRzIJ1m-KdqlH33x6RW9gP6_bxpo58gTyejXWY_2M3d93E1KdMseVFV9s9FXTmWGQ7pcjEg",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -3050,16 +2483,6 @@
 								{
 									"name": "Promotional Sale - create  brand sale",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjg4MDc0NTM3Nzc0LCJleHAiOjE2ODgwNzU0Mzd9.xUw5M_0EoUkO2WkzjmyLY4PAh7RtPGn20CWoveIeXTd-I3A1OVpyk0ZEKwCUGKKbt55Oj0_lVj6gsM4wF_urXA",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -3088,16 +2511,6 @@
 								{
 									"name": "Promotional Sale - update sale info",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjYzNzc0Mzg0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNzI3NzR9.cP4JEOonBRXUR6W3xUvFr7kI5-AYadaKZ0uUuh_hzVQdHGuX5YDHTnTWwSNXOuioqhZNctrRB301UnU_HXK6ug",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -3126,16 +2539,6 @@
 								{
 									"name": "Promotional Sale - update sale amount",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjYzNzc0Mzg0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNzI3NzR9.cP4JEOonBRXUR6W3xUvFr7kI5-AYadaKZ0uUuh_hzVQdHGuX5YDHTnTWwSNXOuioqhZNctrRB301UnU_HXK6ug",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -3164,16 +2567,6 @@
 								{
 									"name": "Promotional Sale - update status",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjYzNzc0Mzg0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNzI3NzR9.cP4JEOonBRXUR6W3xUvFr7kI5-AYadaKZ0uUuh_hzVQdHGuX5YDHTnTWwSNXOuioqhZNctrRB301UnU_HXK6ug",
-													"type": "string"
-												}
-											]
-										},
 										"method": "POST",
 										"header": [],
 										"body": {
@@ -3202,16 +2595,6 @@
 								{
 									"name": "Promotional Sale - delete sale",
 									"request": {
-										"auth": {
-											"type": "bearer",
-											"bearer": [
-												{
-													"key": "token",
-													"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3MjYzNzc0Mzg0LCJhZG1pbklkIjoxLCJleHAiOjE2OTcyNzI3NzR9.cP4JEOonBRXUR6W3xUvFr7kI5-AYadaKZ0uUuh_hzVQdHGuX5YDHTnTWwSNXOuioqhZNctrRB301UnU_HXK6ug",
-													"type": "string"
-												}
-											]
-										},
 										"method": "DELETE",
 										"header": [],
 										"url": {
@@ -3505,6 +2888,36 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3NDA1NTgyNzIxLCJhZG1pbklkIjoxLCJleHAiOjE2OTc0MTQ1ODJ9.yyLZ09vozJFNiMQdKi-7GhFW8OkeGnxTtbNOPyGMGbTJsljqhvBsCRN-mYF_jGME40MB1K9Z-yGnU19Kan-Baw",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},

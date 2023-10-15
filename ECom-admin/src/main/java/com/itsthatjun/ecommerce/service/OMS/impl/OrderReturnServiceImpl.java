@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.service.OMS.impl;
 
+import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
 import com.itsthatjun.ecommerce.dto.oms.ReturnRequestDecision;
 import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderReturnEvent;
@@ -13,6 +14,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -51,10 +53,18 @@ public class OrderReturnServiceImpl implements OrderReturnService {
     }
 
     @Override
-    public Mono<ReturnRequest> getReturnRequest(String serialNumber) {
+    public Flux<ReturnDetail> listUserAllReturnRequest(int userId) {
+        String url = OMS_SERVICE_URL + "/admin/user/all/" + userId;
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(ReturnDetail.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+    }
+
+    @Override
+    public Mono<ReturnDetail> getReturnRequest(String serialNumber) {
         String url = OMS_SERVICE_URL + "/admin/" + serialNumber;
 
-        return webClient.get().uri(url).retrieve().bodyToMono(ReturnRequest.class)
+        return webClient.get().uri(url).retrieve().bodyToMono(ReturnDetail.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 

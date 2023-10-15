@@ -54,8 +54,7 @@ public class OrderController {
         String operatorName  = (String) session.getAttribute("adminName");
         OrderDetail orderDetail = orderParam.getOrderDetail();
         String reason = orderParam.getReason();
-        int userId = orderParam.getUserId();
-        return orderService.createOrder(orderDetail, userId, reason, operatorName);
+        return orderService.createOrder(orderDetail, reason, operatorName);
     }
 
     @PostMapping("/update")
@@ -67,13 +66,12 @@ public class OrderController {
         return orderService.updateOrder(orderDetail, reason, operatorName);
     }
 
-    @DeleteMapping("/cancel/{serialNumber}")
+    @DeleteMapping("/cancel")
     @ApiOperation(value = "cancel a order by serial number")
     public Mono<Void> cancelOrder(@RequestBody OrderParam orderParam, HttpSession session) {
         String orderSn = orderParam.getOrderDetail().getOrders().getOrderSn();
-        int userId = orderParam.getUserId();
         String operatorName  = (String) session.getAttribute("adminName");
         String reason = orderParam.getReason();
-        return orderService.cancelOrder(orderSn, userId, reason, operatorName);
+        return orderService.cancelOrder(orderSn, reason, operatorName);
     }
 }

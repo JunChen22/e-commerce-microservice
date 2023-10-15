@@ -319,14 +319,14 @@ public class OrderServiceImpl implements OrderService {
                     productMapper.updateByPrimaryKey(product);
 
                     // update sku stock and free lock stock
-                    ProductSkuExample productSkuStockExample = new ProductSkuExample();
-                    productSkuStockExample.createCriteria().andSkuCodeEqualTo(item.getProductSkuCode()).andProductIdEqualTo(product.getId());
-                    ProductSku producutSku = stockMapper.selectByExample(productSkuStockExample).get(0);
+                    ProductSkuExample skuExample = new ProductSkuExample();
+                    skuExample.createCriteria().andSkuCodeEqualTo(item.getProductSkuCode()).andProductIdEqualTo(product.getId());
+                    ProductSku productSku = stockMapper.selectByExample(skuExample).get(0);
 
-                    currentStock = producutSku.getStock();
-                    producutSku.setStock(currentStock - quantityOrdered);
-                    producutSku.setLockStock(producutSku.getLockStock() - quantityOrdered);
-                    stockMapper.updateByPrimaryKey(producutSku);
+                    currentStock = productSku.getStock();
+                    productSku.setStock(currentStock - quantityOrdered);
+                    productSku.setLockStock(productSku.getLockStock() - quantityOrdered);
+                    stockMapper.updateByPrimaryKey(productSku);
                 }
                 // Generated order and success payment, decrease product stock, decrease sku stock and sku lock stock
                 sendProductStockUpdateMessage("product-out-0",new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, itemOrderQuantity));
@@ -377,11 +377,11 @@ public class OrderServiceImpl implements OrderService {
 
             ProductSkuExample example = new ProductSkuExample();
             example.createCriteria().andProductIdEqualTo(productId).andSkuCodeEqualTo(skuCode);
-            ProductSku skuStock = stockMapper.selectByExample(example).get(0);
+            ProductSku sku = stockMapper.selectByExample(example).get(0);
 
-            int itemStockLockNow = skuStock.getLockStock();
-            skuStock.setLockStock(itemStockLockNow - quantityNeeded);
-            stockMapper.updateByPrimaryKey(skuStock);
+            int itemStockLockNow = sku.getLockStock();
+            sku.setLockStock(itemStockLockNow - quantityNeeded);
+            stockMapper.updateByPrimaryKey(sku);
 
             itemOrderQuantity.put(skuCode, quantityNeeded);
         }
@@ -432,14 +432,14 @@ public class OrderServiceImpl implements OrderService {
             skuQuantity.put(skuCode, quantity);
 
             // update OMS stock, increase product and sku stock. same as return.
-            ProductSkuExample skuStockExample = new ProductSkuExample();
-            skuStockExample.createCriteria().andSkuCodeEqualTo(skuCode);
-            ProductSku skuStock = stockMapper.selectByExample(skuStockExample).get(0);
+            ProductSkuExample skuExample = new ProductSkuExample();
+            skuExample.createCriteria().andSkuCodeEqualTo(skuCode);
+            ProductSku sku = stockMapper.selectByExample(skuExample).get(0);
 
             // update sku stock
-            int currentStock = skuStock.getStock();
-            skuStock.setStock(currentStock + quantity);
-            stockMapper.updateByPrimaryKeySelective(skuStock);
+            int currentStock = sku.getStock();
+            sku.setStock(currentStock + quantity);
+            stockMapper.updateByPrimaryKeySelective(sku);
 
             // update stock product
             int productId = orderItem.getProductId();
@@ -608,27 +608,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Orders> createOrder(Orders order, List<OrderItem> orderItemList, String reason, String operator) {
+    public Mono<Orders> createOrder(Orders order, List<OrderItem> orderItemList, Address address, String reason, String operator) {
         return Mono.fromCallable(() -> {
-            Orders newOrder = internalCreateOrder(order, orderItemList, reason, operator);
+            Orders newOrder = internalCreateOrder(order, orderItemList, address, reason, operator);
             return newOrder;
         }).subscribeOn(jdbcScheduler);
     }
 
-    private Orders internalCreateOrder(Orders newOrder, List<OrderItem> orderItemList, String reason, String operator) {
-        // TODO: make it generate order but still need user to pay.
-        //      currently is just replacement parts, free of charge
-        //      admin make orders for user.
-
+    private Orders internalCreateOrder(Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator) {
         //  TODO: need to generate order serial number
         String orderSn = generateOrderSn();
         newOrder.setOrderSn(orderSn);
-        newOrder.setStatus(1);
         newOrder.setCreatedAt(new Date());
         newOrder.setAdminNote(reason);
-        newOrder.setPayAmount(new BigDecimal(0));
+
+        double orderTotal = 0;
 
         // TODO: address in here
+        newOrder.setReceiverName(address.getReceiverName());
+
         // fill in order item info
         for (OrderItem item : orderItemList) {
             int quantity = item.getProductQuantity();
@@ -637,27 +635,30 @@ public class OrderServiceImpl implements OrderService {
             // find the sku and product
             ProductSkuExample productSkuExample = new ProductSkuExample();
             productSkuExample.createCriteria().andSkuCodeEqualTo(productSku);
-            ProductSku productSkuStock = stockMapper.selectByExample(productSkuExample).get(0);
+            ProductSku sku = stockMapper.selectByExample(productSkuExample).get(0);
 
             ProductExample productExample = new ProductExample();
-            productExample.createCriteria().andIdEqualTo(productSkuStock.getProductId());
+            productExample.createCriteria().andIdEqualTo(sku.getProductId());
             Product product = productMapper.selectByExample(productExample).get(0);
 
             item.setProductId(product.getId());
             item.setProductName(product.getName());
             item.setProductQuantity(quantity);
+            item.setPromotionAmount(sku.getPromotionPrice());
+            item.setProductSkuCode(productSku);
+
+            orderTotal += sku.getPromotionPrice().doubleValue() * quantity;
         }
 
-        if (!hasStock(orderItemList)) {
-            throw new OrderException("Not enough stock, Unable to order");
-        }
+        if (!hasStock(orderItemList)) throw new OrderException("Not enough stock, Unable to order");
 
         lockStock(orderItemList);
+
         ordersMapper.insert(newOrder);
-
         int orderId = newOrder.getId();
-        Map<String, Integer> skuQuantity = new HashMap<>();
 
+        // insert order item and prep for other service stock update
+        Map<String, Integer> skuQuantity = new HashMap<>();
         for (OrderItem item : orderItemList) {
             item.setOrderId(orderId);
             orderItemMapper.insert(item);
@@ -670,60 +671,98 @@ public class OrderServiceImpl implements OrderService {
         sendProductStockUpdateMessage("product-out-0", new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
         sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE, orderSn, skuQuantity));
 
-        // free up stock
-        for (OrderItem item: orderItemList) {
-            int quantityOrdered = item.getProductQuantity();
+        if (newOrder.getStatus() == 0) { // waiting for payment
+            try {
+                Payment payment = paypalService.createPayment(orderTotal, "USD", PaypalPaymentMethod.paypal,
+                        PaypalPaymentIntent.sale, "payment description",   "/" +  orderSn,
+                        "/", orderSn);
+                for(Links links : payment.getLinks()) {
+                    if (links.getRel().equals("approval_url")) {
+                        System.out.println("redirect:" + links.getHref());
+                    }
+                }
+            } catch (PayPalRESTException e) {
+                LOG.error(e.getMessage());
+            }
+        } else { // free replacement parts/warranty
+            // free up stock
+            for (OrderItem item: orderItemList) {
+                int quantityOrdered = item.getProductQuantity();
 
-            // find product and get current stock and update it
-            ProductExample productExample = new ProductExample();
-            productExample.createCriteria().andIdEqualTo(item.getProductId());
-            Product product = productMapper.selectByExample(productExample).get(0);
+                // find product and get current stock and update it
+                ProductExample productExample = new ProductExample();
+                productExample.createCriteria().andIdEqualTo(item.getProductId());
+                Product product = productMapper.selectByExample(productExample).get(0);
 
-            int currentStock = product.getStock();
-            product.setStock(currentStock - quantityOrdered);
-            productMapper.updateByPrimaryKey(product);
+                int currentStock = product.getStock();
+                product.setStock(currentStock - quantityOrdered);
+                productMapper.updateByPrimaryKey(product);
 
-            // update sku stock and free lock stock
-            ProductSkuExample productSkuStockExample = new ProductSkuExample();
-            productSkuStockExample.createCriteria().andSkuCodeEqualTo(item.getProductSkuCode()).andProductIdEqualTo(product.getId());
-            ProductSku producutSku = stockMapper.selectByExample(productSkuStockExample).get(0);
+                // update sku stock and free lock stock
+                ProductSkuExample skuExample = new ProductSkuExample();
+                skuExample.createCriteria().andSkuCodeEqualTo(item.getProductSkuCode()).andProductIdEqualTo(product.getId());
+                ProductSku producutSku = stockMapper.selectByExample(skuExample).get(0);
 
-            currentStock = producutSku.getStock();
-            producutSku.setStock(currentStock - quantityOrdered);
-            producutSku.setLockStock(producutSku.getLockStock() - quantityOrdered);
-            stockMapper.updateByPrimaryKey(producutSku);
+                currentStock = producutSku.getStock();
+                producutSku.setStock(currentStock - quantityOrdered);
+                producutSku.setLockStock(producutSku.getLockStock() - quantityOrdered);
+                stockMapper.updateByPrimaryKey(producutSku);
+            }
+            sendProductStockUpdateMessage("product-out-0",new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, skuQuantity));
+            sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, skuQuantity));
         }
-        sendProductStockUpdateMessage("product-out-0",new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, skuQuantity));
-        sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_PURCHASE_PAYMENT, orderSn, skuQuantity));
 
         updateChangeLog(orderId, 1, reason,operator);
-
         return newOrder;
     }
 
     @Override
     public Mono<Orders> updateOrder(Orders updateOrder, String reason, String operator) {
         return Mono.fromCallable(() -> {
-            updateOrder.setUpdatedAt(new Date());
-            updateOrder.setAdminNote(reason);
-            ordersMapper.updateByPrimaryKey(updateOrder);
+            String orderSn = updateOrder.getOrderSn();
 
+            OrdersExample ordersExample = new OrdersExample();
+            ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
+            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+            if (ordersList.isEmpty()) throw new RuntimeException("Can not find order with serial number: " + orderSn);
+            Orders order = ordersList.get(0);
+
+            order.setUpdatedAt(new Date());
+            order.setAdminNote(reason);
+
+            ordersMapper.updateByPrimaryKeySelective(order);
+            // TODO: find the find the order by serial number and check if i can update it before shipping out
             int orderId = updateOrder.getId();
             int status = updateOrder.getStatus();
             updateChangeLog(orderId, status, reason,operator);
             return updateOrder;
+
+            // TODO: send update to other service if updates affect other service like adding product so need to update
+                // stock on other services.
         }).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Mono<Void> adminCancelOrder(Orders updateOrder, String reason, String operator) {
         return Mono.fromRunnable(() -> {
-            updateOrder.setComment(reason);
-            updateOrder.setUpdatedAt(new Date());
-            updateOrder.setStatus(4);
-            ordersMapper.updateByPrimaryKey(updateOrder);
+            String orderSn = updateOrder.getOrderSn();
 
-            int orderId = updateOrder.getId();
+            OrdersExample ordersExample = new OrdersExample();
+            ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
+            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+            if (ordersList.isEmpty()) throw new RuntimeException("Can not find order with serial number: " + orderSn);
+            Orders order = ordersList.get(0);
+
+            order.setComment(reason);
+            order.setAdminNote(reason);
+            order.setUpdatedAt(new Date());
+            order.setStatus(4);
+            ordersMapper.updateByPrimaryKeySelective(order);
+
+            // TODO: find the find the order by serial number, and check if i can cancel it before shipping out
+            int orderId = order.getId();
             updateChangeLog(orderId, 4, reason, operator);
         }).subscribeOn(jdbcScheduler).then();
     }
