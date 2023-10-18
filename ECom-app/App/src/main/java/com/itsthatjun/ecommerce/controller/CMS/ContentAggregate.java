@@ -41,7 +41,9 @@ public class ContentAggregate {
 
     @GetMapping("/{articleId}")
     @ApiOperation(value = "Get a article")
-    public Mono<Articles> getArticle(@PathVariable int articleId) {
-        return articleService.getArticle(articleId);
+    public Mono<Articles> getArticle(@PathVariable int articleId,
+                                     @RequestParam(value = "delay", required = false, defaultValue = "0") int delay,
+                                     @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent) {
+        return articleService.getArticle(articleId, delay, faultPercent);
     }
 }

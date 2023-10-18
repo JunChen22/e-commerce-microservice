@@ -18,8 +18,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -38,6 +40,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final Scheduler jdbcScheduler;
 
+    private final Random randomNumberGenerator = new Random();
+
     @Autowired
     public ArticleServiceImpl(ArticleMapper articleMapper, ArticleVideoMapper videoMapper, ArticleQaMapper qaMapper,
                               ArticleImageMapper imageMapper, ArticleDao articleDao,
@@ -54,14 +58,31 @@ public class ArticleServiceImpl implements ArticleService {
     public Flux<ArticleInfo> getAllArticles() {
         return Mono.fromCallable(() ->
                 articleDao.getAllArticles()
-                ).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+        ).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public Mono<ArticleInfo> getArticle(int articleId) {
+    public Mono<ArticleInfo> getArticle(int articleId, int delay, int faultPercent) {
         return Mono.fromCallable(() ->
                 articleDao.getArticle(articleId)
-        ).subscribeOn(jdbcScheduler);
+        ).map(e -> throwErrorIfBadLuck(e, faultPercent)).delayElement(Duration.ofSeconds(delay)).subscribeOn(jdbcScheduler);
+    }
+
+    /*  use to test/simulate circuit breaker. fault percent.
+    */
+    private ArticleInfo throwErrorIfBadLuck(ArticleInfo articleInfo, int faultPercent) {
+        if (faultPercent == 0) return articleInfo;
+
+        int randomThreshold = randomNumberGenerator.nextInt(100);
+
+        if (faultPercent < randomThreshold) {
+            LOG.debug("We got lucky, no error occurred, {} < {}", faultPercent, randomThreshold);
+        } else {
+            LOG.debug("Bad luck, an error occurred, {} >= {}", faultPercent, randomThreshold);
+            throw new RuntimeException("Something went wrong...");
+        }
+
+        return articleInfo;
     }
 
     @Override

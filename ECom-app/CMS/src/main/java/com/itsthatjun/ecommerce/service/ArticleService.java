@@ -13,7 +13,7 @@ public interface ArticleService {
     Flux<ArticleInfo> getAllArticles();
 
     @ApiOperation(value = "get article based on id")
-    Mono<ArticleInfo> getArticle(int articleId);
+    Mono<ArticleInfo> getArticle(int articleId, int delay, int faultPercent);
 
     @ApiOperation(value = "create article")
     Mono<ArticleInfo> createArticle(ArticleInfo article);

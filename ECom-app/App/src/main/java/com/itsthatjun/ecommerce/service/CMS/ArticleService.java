@@ -11,5 +11,5 @@ public interface ArticleService {
     Flux<Articles> getAllArticle();
 
     @ApiOperation(value = "Get a article")
-    Mono<Articles> getArticle(int articleId);
+    Mono<Articles> getArticle(int articleId, int delay, int faultPercent);
 }

@@ -96,6 +96,45 @@ logging:
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
+management.health.circuitbreakers.enabled: true
+
+resilience4j:
+  timelimiter:
+    instances:
+      genericTimeLimiter:
+        timeoutDuration: 2s
+
+  retry:
+    instances:
+      genericRetry:
+        maxAttempts: 3
+        waitDuration: 1000
+        retryExceptions:
+          - org.springframework.web.reactive.function.client.WebClientResponseException$InternalServerError
+
+  circuitbreaker:
+    instances:
+      genericCircuitBreaker:
+        allowHealthIndicatorToFail: false
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        ignoreExceptions:
+          - com.itsthatjun.ecommerce.exception.InvalidInputException
+          - com.itsthatjun.ecommerce.exception.NotFoundException
+
+  rateLimiter:
+    instances:
+      genericRateLimiter:
+        limitForPeriod: 5
+        limitRefreshPeriod: 10000
+        timeoutDuration: 1000
+        enableExpiry: false
+
 ---
 
 spring.config.activate.on-profile: docker

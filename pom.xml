@@ -36,6 +36,7 @@
         <java.version>1.8</java.version>
         <skipTests>true</skipTests>
         <spring.cloud-version>2020.0.2</spring.cloud-version>
+        <resilience4jVersion>1.7.0</resilience4jVersion>
     </properties>
 
     <dependencies>          <!-- all child module will used -->
@@ -62,6 +63,12 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>2.5.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
                 <version>2.5.2</version>
             </dependency>
 
@@ -130,6 +137,11 @@
                 <version>2.5.2</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-all</artifactId>
+                <version>${resilience4jVersion}</version>
+            </dependency>
 
             <!-- documentation -->
             <dependency>
