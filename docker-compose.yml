@@ -339,6 +339,14 @@ services:
       rabbitmq:
         condition: service_healthy
 
+  config-server:
+    build: config-server
+    mem_limit: 512m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,native
+    volumes:
+      - $PWD/config-repo:/config-repo
+
 volumes:
   db-data:
   CMS-data:

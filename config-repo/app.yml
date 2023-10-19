@@ -1,0 +1,106 @@
+server.port: 8080
+
+server.forward-headers-strategy: framework #
+
+jwt:
+  HEADER_STRING: Authorization
+  tokenPrefix: Bearer
+  secretKey: JunChen522
+  issuer: auth-server
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: app
+  datasource:
+    url: jdbc:postgresql://localhost/springecommerece
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+  redis:
+    host: localhost
+    port: 6379
+
+# outputs
+# CMS and SMS does not need message queue, they only have read operations.
+spring.cloud.stream:
+  bindings:             # only OMS,PMS,UMS have write operations. Read operations don't need to message queue, non-blocking synchronous.
+    order-out-0:  # OMS
+      destination: order
+      producer:
+        required-groups: auditGroup
+    orderComplete-out-0: # OMS
+      destination: orderComplete
+      producer:
+        required-groups: auditGroup
+    cart-out-0:
+      destination: cart
+      producer:
+        required-groups: auditGroup
+    return-out-0:
+      destination: return
+      producer:
+        required-groups: auditGroup
+    review-out-0: # PMS
+      destination: review
+      producer:
+        required-groups: auditGroup
+    user-out-0:    # UMS
+      destination: user
+      producer:
+        required-groups: auditGroup
+
+management.health.circuitbreakers.enabled: true
+
+resilience4j:
+  timelimiter:
+    instances:
+      genericTimeLimiter:
+        timeoutDuration: 2s
+
+  retry:
+    instances:
+      genericRetry:
+        maxAttempts: 3
+        waitDuration: 1000
+        retryExceptions:
+          - org.springframework.web.reactive.function.client.WebClientResponseException$InternalServerError
+
+  circuitbreaker:
+    instances:
+      genericCircuitBreaker:
+        allowHealthIndicatorToFail: false
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        ignoreExceptions:
+          - com.itsthatjun.ecommerce.exception.InvalidInputException
+          - com.itsthatjun.ecommerce.exception.NotFoundException
+
+  rateLimiter:
+    instances:
+      genericRateLimiter:
+        limitForPeriod: 5
+        limitRefreshPeriod: 10000
+        timeoutDuration: 1000
+        enableExpiry: false
+
+---
+
+spring.config.activate.on-profile: docker
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres/springecommerece
+  redis:
+    host: redis
+    port: 6379
+
+
+

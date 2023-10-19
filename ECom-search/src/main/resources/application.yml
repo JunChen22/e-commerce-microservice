@@ -1,87 +1,17 @@
-server:
-  port: 8081
+spring.config.import: "configserver:"
 
 spring:
-  application:
-    name: search
-  datasource:
-    url: jdbc:postgresql://localhost/springecommerece # need to change localhost for docker-compose
-    username: postgres
-    password: password
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
-  data:
-    elasticsearch:
-      repositories:
-        enabled: true
-    mongodb:
-      auto-index-creation: true
-  elasticsearch:
-    rest:
-      uris: http://localhost:9200
-
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
-spring.data.mongodb:
-  host: localhost
-  port: 27017
-  database: springecommerece-db
-
-app.eureka-server: localhost
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
-spring.rabbitmq:
-  host: localhost
-  port: 5672
-  virtual-host: /
-  username: guest
-  password: guest
-  publisher-confirms: true
-
-spring.zipkin.sender.type: rabbit
-spring.sleuth.sampler.probability: 1.0
-spring.cloud.stream.defaultBinder: rabbit
-
-logging:
-  level:
-    root: ERROR
-    org.springframework.security: DEBUG
-    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
-    com.itsthatjun.ecommerce: DEBUG
-
-management.endpoint.health.show-details: "ALWAYS"
-management.endpoints.web.exposure.include: "*"
+  application.name: search
+  cloud.config:
+    failFast: true
+    retry:
+      initialInterval: 3000
+      multiplier: 1.3
+      maxInterval: 10000
+      maxAttempts: 20
+    uri: http://localhost:8888
 
 ---
-
 spring.config.activate.on-profile: docker
 
-spring:
-  datasource.url: jdbc:postgresql://postgres/springecommerece
-  elasticsearch:
-    rest:
-      uris: http://elasticsearch:9200
-  data:
-    mongodb:
-      host: mongodb
-      port: 27017
-      database: springecommerece
-
-spring.data.mongodb.host: mongodb
-
-spring.rabbitmq.host: rabbitmq
-
-app.eureka-server: eureka
+spring.cloud.config.uri: http://config-server:8888

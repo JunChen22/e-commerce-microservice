@@ -1,0 +1,59 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: sms
+  datasource:
+    url: jdbc:postgresql://localhost:5436/salesdb
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+
+spring.cloud:
+  function: # can't have space between, tells spring which to use
+    definition: adminCouponMessageProcessor;adminSalesStockMessageProcessor;couponMessageProcessor;salesStockMessageProcessor;productStockMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      adminCouponMessageProcessor-in-0:         # admin CRUD coupon or sale
+        destination: adminCoupon
+        group: adminCouponGroup
+      adminSalesStockMessageProcessor-in-0:
+        destination: adminSales
+        group: adminSalesGroup
+
+      couponMessageProcessor-in-0:   # update from OMS(purchase, return) and PMS for new product
+        destination: orderCouponUpdate
+        group: orderCouponUpdateGroup
+      salesStockMessageProcessor-in-0:
+        destination: orderSaleStockUpdate
+        group: orderSaleStockUpdateGroup
+      productStockMessageProcessor-in-0:
+        destination: productStockSMSUpdate
+        group: productStockSMSUpdateGroup
+
+      saleupdatetoOMS-out-0:            # sending update to PMS and OMS for new sale
+        destination: saleStockOMSUpdate
+        group: saleStockOMSUpdateGroup
+      saleupdatetoPms-out-0:
+        destination: saleStockPMSUpdate
+        group: saleStockPMSUpdateGroup
+
+# tells spring mybatis mapper's xml(sql) located
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath:dao/*.xml
+
+---
+
+spring.config.activate.on-profile: docker
+
+server.port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://SMS-db:5432/salesdb

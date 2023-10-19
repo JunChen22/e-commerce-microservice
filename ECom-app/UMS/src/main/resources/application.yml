@@ -1,118 +1,17 @@
-server:
-  port: 8085
+spring.config.import: "configserver:"
 
 spring:
-  application:
-    name: ums
-  datasource:
-    url: jdbc:postgresql://localhost:5437/userdb
-    username: postgres
-    password: password
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: springecommerece
-  rabbitmq:
-    host: localhost
-    port: 5672
-    virtual-host: /
-    username: guest
-    password: guest
-    publisher-confirms: true
-  redis:
-    host: localhost
-    port: 6379
-
-spring.cloud:
-  function:   # can't have space between, tells spring which to use
-    definition: adminUserMessageProcessor;userMessageProcessor;authMessageProcessor
-  stream:
-    default:
-      contentType: application/json
-    bindings:
-      adminUserMessageProcessor-in-0:      # admin
-        destination: adminUmsUpdate
-        group: adminUmsUpdateGroup
-
-      userMessageProcessor-in-0:        # user and auth update
-        destination: user
-        group: userGroup
-      authMessageProcessor-in-0:
-        destination: authLogUpdate
-        group: authLogUpdateGroup
-
-      authUpdate-out-0:        # sending update to auth to update member info
-        destination: umsUserUpdate
-        producer:
-          required-groups: auditGroup
-
-
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
-redis:
-  key:
-    prefix:
-      authCode: "authCode:"
-    expire:
-      authCode: 120
-
-app.eureka-server: localhost
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
-logging:
-  level:
-    #root: ERROR
-    org:
-      springframework:
-        security: DEBUG
-    com:
-      itsthatjun:
-        ecommerce: DEBUG
-
-management.endpoint.health.show-details: "ALWAYS"
-management.endpoints.web.exposure.include: "*"
-
-spring.zipkin.sender.type: rabbit
-spring.sleuth.sampler.probability: 1.0
+  application.name: ums
+  cloud.config:
+    failFast: true
+    retry:
+      initialInterval: 3000
+      multiplier: 1.3
+      maxInterval: 10000
+      maxAttempts: 20
+    uri: http://localhost:8888
 
 ---
-
 spring.config.activate.on-profile: docker
 
-server.port: 8080
-
-spring:
-  datasource:
-    url: jdbc:postgresql://UMS-db:5432/userdb
-  data:
-    mongodb:
-      host: mongodb
-      port: 27017
-      database: springecommerece
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    virtual-host: /
-    addresses: rabbitmq:5672
-  redis:
-    host: redis
-    port: 6379
-
-app:
-  eureka-server: eureka
+spring.cloud.config.uri: http://config-server:8888

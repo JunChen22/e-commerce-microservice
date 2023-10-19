@@ -1,158 +1,17 @@
-server:
-  port: 8080
-
-server.forward-headers-strategy: framework #
-
-app:
-  eureka-server: localhost
-
-jwt:
-  HEADER_STRING: Authorization
-  tokenPrefix: Bearer
-  secretKey: JunChen522
-  issuer: auth-server
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
+spring.config.import: "configserver:"
 
 spring:
-  main:
-    allow-bean-definition-overriding: true
-  application:
-    name: app
-  datasource:
-    url: jdbc:postgresql://localhost/springecommerece
-    username: postgres
-    password: password
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
-  rabbitmq:
-    host: localhost
-    port: 5672
-    virtual-host: /
-    username: guest
-    password: guest
-    publisher-confirms: true
-  redis:
-    host: localhost
-    port: 6379
-
-# message queue related
-spring.rabbitmq:
-  host: localhost
-  port: 5672
-  virtual-host: /
-  username: guest
-  password: guest
-  publisher-confirms: true
-
-# outputs
-# CMS and SMS does not need message queue, they only have read operations.
-spring.cloud.stream:
-  bindings:             # only OMS,PMS,UMS have write operations. Read operations don't need to message queue, non-blocking synchronous.
-    order-out-0:  # OMS
-      destination: order
-      producer:
-        required-groups: auditGroup
-    orderComplete-out-0: # OMS
-      destination: orderComplete
-      producer:
-        required-groups: auditGroup
-    cart-out-0:
-      destination: cart
-      producer:
-        required-groups: auditGroup
-    return-out-0:
-      destination: return
-      producer:
-        required-groups: auditGroup
-    review-out-0: # PMS
-      destination: review
-      producer:
-        required-groups: auditGroup
-    user-out-0:    # UMS
-      destination: user
-      producer:
-        required-groups: auditGroup
-
-logging:
-  level:
-    root: ERROR
-    org.springframework.security: DEBUG
-    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
-    com.itsthatjun.ecommerce: DEBUG
-
-management.endpoint.health.show-details: "ALWAYS"
-management.endpoints.web.exposure.include: "*"
-
-management.health.circuitbreakers.enabled: true
-
-resilience4j:
-  timelimiter:
-    instances:
-      genericTimeLimiter:
-        timeoutDuration: 2s
-
-  retry:
-    instances:
-      genericRetry:
-        maxAttempts: 3
-        waitDuration: 1000
-        retryExceptions:
-          - org.springframework.web.reactive.function.client.WebClientResponseException$InternalServerError
-
-  circuitbreaker:
-    instances:
-      genericCircuitBreaker:
-        allowHealthIndicatorToFail: false
-        registerHealthIndicator: true
-        slidingWindowType: COUNT_BASED
-        slidingWindowSize: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10000
-        permittedNumberOfCallsInHalfOpenState: 3
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-        ignoreExceptions:
-          - com.itsthatjun.ecommerce.exception.InvalidInputException
-          - com.itsthatjun.ecommerce.exception.NotFoundException
-
-  rateLimiter:
-    instances:
-      genericRateLimiter:
-        limitForPeriod: 5
-        limitRefreshPeriod: 10000
-        timeoutDuration: 1000
-        enableExpiry: false
-
-spring.cloud.stream.defaultBinder: rabbit
-spring.zipkin.sender.type: rabbit
-spring.sleuth.sampler.probability: 1.0
+  application.name: app
+  cloud.config:
+    failFast: true
+    retry:
+      initialInterval: 3000
+      multiplier: 1.3
+      maxInterval: 10000
+      maxAttempts: 20
+    uri: http://localhost:8888
 
 ---
-
 spring.config.activate.on-profile: docker
 
-server.port: 8080
-
-spring:
-  datasource:
-    url: jdbc:postgresql://postgres/springecommerece
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    virtual-host: /
-    addresses: rabbitmq:5672
-  redis:
-    host: redis
-    port: 6379
-
-app:
-  eureka-server: eureka
-
+spring.cloud.config.uri: http://config-server:8888

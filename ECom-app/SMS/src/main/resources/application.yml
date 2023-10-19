@@ -1,102 +1,17 @@
-server:
-  port: 8084
+spring.config.import: "configserver:"
 
 spring:
-  application:
-    name: sms
-  datasource:
-    url: jdbc:postgresql://localhost:5436/salesdb
-    username: postgres
-    password: password
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
-  rabbitmq:            # message queue related
-    host: localhost
-    port: 5672
-    virtual-host: /
-    username: guest
-    password: guest
-    publisher-confirms: true
-
-spring.cloud:
-  function: # can't have space between, tells spring which to use
-    definition: adminCouponMessageProcessor;adminSalesStockMessageProcessor;couponMessageProcessor;salesStockMessageProcessor;productStockMessageProcessor
-  stream:
-    default:
-      contentType: application/json
-    bindings:
-      adminCouponMessageProcessor-in-0:         # admin CRUD coupon or sale
-        destination: adminCoupon
-        group: adminCouponGroup
-      adminSalesStockMessageProcessor-in-0:
-        destination: adminSales
-        group: adminSalesGroup
-
-      couponMessageProcessor-in-0:   # update from OMS(purchase, return) and PMS for new product
-        destination: orderCouponUpdate
-        group: orderCouponUpdateGroup
-      salesStockMessageProcessor-in-0:
-        destination: orderSaleStockUpdate
-        group: orderSaleStockUpdateGroup
-      productStockMessageProcessor-in-0:
-        destination: productStockSMSUpdate
-        group: productStockSMSUpdateGroup
-
-      saleupdatetoOMS-out-0:            # sending update to PMS and OMS for new sale
-        destination: saleStockOMSUpdate
-        group: saleStockOMSUpdateGroup
-      saleupdatetoPms-out-0:
-        destination: saleStockPMSUpdate
-        group: saleStockPMSUpdateGroup
-
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
-app.eureka-server: localhost
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
-logging:
-  level:
-    #root: ERROR
-    org:
-      springframework:
-        security: DEBUG
-    com:
-      itsthatjun:
-        ecommerce: DEBUG
-
-management.endpoint.health.show-details: "ALWAYS"
-management.endpoints.web.exposure.include: "*"
-
-spring.zipkin.sender.type: rabbit
-spring.sleuth.sampler.probability: 1.0
+  application.name: sms
+  cloud.config:
+    failFast: true
+    retry:
+      initialInterval: 3000
+      multiplier: 1.3
+      maxInterval: 10000
+      maxAttempts: 20
+    uri: http://localhost:8888
 
 ---
-
 spring.config.activate.on-profile: docker
 
-server.port: 8080
-
-spring:
-  datasource:
-    url: jdbc:postgresql://SMS-db:5432/salesdb
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    virtual-host: /
-    addresses: rabbitmq:5672
-
-app:
-  eureka-server: eureka
+spring.cloud.config.uri: http://config-server:8888

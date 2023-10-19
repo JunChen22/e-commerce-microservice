@@ -1,0 +1,42 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: cms
+  datasource:
+    url: jdbc:postgresql://localhost:5433/contentdb
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+
+spring.cloud:
+  function:   # can't have space between, tells spring which to use
+    definition: articleMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      articleMessageProcessor-in-0:
+        destination: adminArticle
+        group: adminArticleGroup
+
+# tells spring mybatis mapper's xml(sql) located
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath:dao/*.xml
+
+
+
+---
+
+spring.config.activate.on-profile: docker
+
+server.port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://CMS-db:5432/contentdb
+

@@ -1,0 +1,64 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: pms
+  datasource:
+    url: jdbc:postgresql://localhost:5435/productdb
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+
+spring.cloud:
+  function:
+    # can't have space between, tells spring which to use
+    definition: reviewMessageProcessor;adminBrandMessageProcessor;adminProductMessageProcessor;adminReviewMessageProcessor;omsProductMessageProcessor;smsProductMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      reviewMessageProcessor-in-0:      # incoming message from App/customer
+        destination: review
+        group: reviewGroup
+      adminBrandMessageProcessor-in-0:  # admin CRUD brand, product and review
+        destination: adminBrand
+        group: adminBrandGroup
+      adminProductMessageProcessor-in-0:
+        destination: adminProduct
+        group: adminProductGroup
+      adminReviewMessageProcessor-in-0:
+        destination: adminReview
+        group: adminReviewGroup
+
+      omsProductMessageProcessor-in-0:      # update from OMS(purchase, return) and SMS for new sale
+        destination: orderProductStockUpdate
+        group: orderProductStockUpdateGroup
+      smsProductMessageProcessor-in-0:
+        destination: saleStockPMSUpdate
+        group: saleStockPMSUpdateGroup
+
+      omsProductUpdate-out-0:               # sending update to SMS and OMS for product changes
+        destination:  productStockOMSUpdate
+        group: productStockOMSUpdateGroup
+      smsProductUpdate-out-0:
+        destination: productStockSMSUpdate
+        group: productStockSMSUpdateGroup
+
+# tells spring mybatis mapper's xml(sql) located
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath:dao/*.xml
+
+
+---
+
+spring.config.activate.on-profile: docker
+
+server.port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://PMS-db:5432/productdb

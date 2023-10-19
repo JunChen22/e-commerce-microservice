@@ -23,6 +23,7 @@
         <module>ECom-app/SMS</module>
         <module>ECom-app/UMS</module>
         <module>auth-server</module>
+        <module>config-server</module>
     </modules>
 
     <parent>
@@ -50,15 +51,6 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>  <!-- optional dependencies that child module can choose -->

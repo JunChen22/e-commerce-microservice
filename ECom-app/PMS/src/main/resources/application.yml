@@ -1,106 +1,17 @@
-server:
-  port: 8083
+spring.config.import: "configserver:"
 
 spring:
-  application:
-    name: pms
-  datasource:
-    url: jdbc:postgresql://localhost:5435/productdb
-    username: postgres
-    password: password
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
-  rabbitmq:
-    host: localhost
-    port: 5672
-    virtual-host: /
-    username: guest
-    password: guest
-    publisher-confirms: true
-
-spring.cloud:
-  function:
-    # can't have space between, tells spring which to use
-    definition: reviewMessageProcessor;adminBrandMessageProcessor;adminProductMessageProcessor;adminReviewMessageProcessor;omsProductMessageProcessor;smsProductMessageProcessor
-  stream:
-    default:
-      contentType: application/json
-    bindings:
-      reviewMessageProcessor-in-0:      # incoming message from App/customer
-        destination: review
-        group: reviewGroup
-      adminBrandMessageProcessor-in-0:  # admin CRUD brand, product and review
-        destination: adminBrand
-        group: adminBrandGroup
-      adminProductMessageProcessor-in-0:
-        destination: adminProduct
-        group: adminProductGroup
-      adminReviewMessageProcessor-in-0:
-        destination: adminReview
-        group: adminReviewGroup
-
-      omsProductMessageProcessor-in-0:      # update from OMS(purchase, return) and SMS for new sale
-        destination: orderProductStockUpdate
-        group: orderProductStockUpdateGroup
-      smsProductMessageProcessor-in-0:
-        destination: saleStockPMSUpdate
-        group: saleStockPMSUpdateGroup
-
-      omsProductUpdate-out-0:               # sending update to SMS and OMS for product changes
-        destination:  productStockOMSUpdate
-        group: productStockOMSUpdateGroup
-      smsProductUpdate-out-0:
-        destination: productStockSMSUpdate
-        group: productStockSMSUpdateGroup
-
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
-app.eureka-server: localhost
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
-logging:
-  level:
-    #root: ERROR
-    org:
-      springframework:
-        security: DEBUG
-    com:
-      itsthatjun:
-        ecommerce: DEBUG
-
-management.endpoint.health.show-details: "ALWAYS"
-management.endpoints.web.exposure.include: "*"
-
-spring.zipkin.sender.type: rabbit
-spring.sleuth.sampler.probability: 1.0
+  application.name: pms
+  cloud.config:
+    failFast: true
+    retry:
+      initialInterval: 3000
+      multiplier: 1.3
+      maxInterval: 10000
+      maxAttempts: 20
+    uri: http://localhost:8888
 
 ---
-
 spring.config.activate.on-profile: docker
 
-server.port: 8080
-
-spring:
-  datasource:
-    url: jdbc:postgresql://PMS-db:5432/productdb
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    virtual-host: /
-    addresses: rabbitmq:5672
-
-app:
-  eureka-server: eureka
+spring.cloud.config.uri: http://config-server:8888

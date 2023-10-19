@@ -1,145 +1,17 @@
-server:
-  port: 8082
+spring.config.import: "configserver:"
 
 spring:
-  application:
-    name: oms
-  datasource:
-    url: jdbc:postgresql://localhost:5434/orderdb
-    username: postgres
-    password: password
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
-  rabbitmq:         # message queue related
-    host: localhost
-    port: 5672
-    virtual-host: /
-    username: guest
-    password: guest
-    publisher-confirms: true
-  redis:
-    host: localhost
-    port: 6379
-
-spring.cloud:
-  function: # can't have space between, tells spring which to use, using a pipe character allow multi-line.
-    definition: cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;adminOrderMessageProcessor;adminReturnMessageProcessor;updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
-  stream:
-    default:
-      contentType: application/json
-    bindings:
-      cartMessageProcessor-in-0:        # incoming message from app/customer
-        destination: cart
-        group: cartGroup
-      returnMessageProcessor-in-0:
-        destination: return
-        group: returnGroup
-      orderMessageProcessor-in-0:
-        destination: order
-        group: orderGroup
-      orderCompleteMessageProcessor-in-0:
-        destination: orderComplete
-        group: orderGroup
-      adminOrderMessageProcessor-in-0: # admin CRUD order or return
-        destination: adminOrder
-        group: adminOrderGroup
-      adminReturnMessageProcessor-in-0:
-        destination: adminReturn
-        group: adminReturnGroup
-
-      updateFromPmsMessageProcessor-in-0:     #  update from SMS and PMS
-        destination: productStockOMSUpdate
-        group: productStockOMSUpdateGroup
-      updateFromSmsMessageProcessor-in-0:
-        destination: saleStockOMSUpdate
-        group: saleStockOMSUpdateGroup
-
-      coupon-out-0:           # sending to other queue to update their stock after sales or return
-        destination: orderCouponUpdate
-        producer:
-          required-groups: orderCouponUpdateGroup
-      salesStock-out-0:
-        destination: orderSaleStockUpdate
-        producer:
-          required-groups: orderSaleStockUpdateGroup
-      product-out-0:
-        destination: orderProductStockUpdate
-        producer:
-          required-groups: orderProductStockUpdateGroup
-
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
-# if you running it local/ide
-paypal:
-  mode: YOUR_PAYPAL_MODE
-  client:
-    id: YOUR_PAYPAL_CLIENT_ID
-    secret: YOUR_PAYPAL_CLIENT_SECRET
-
-app.eureka-server: localhost
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
-logging:
-  level:
-    #root: ERROR
-    org:
-      springframework:
-        security: DEBUG
-    com:
-      itsthatjun:
-        ecommerce: DEBUG
-
-management.endpoint.health.show-details: "ALWAYS"
-management.endpoints.web.exposure.include: "*"
-
-redis:
-  key:
-    orderId: oms
-  database: ECom
-  expire:
-    common: 7200    # 120 minutes, measured in seconds
-
-spring.zipkin.sender.type: rabbit
-spring.sleuth.sampler.probability: 1.0
+  application.name: oms
+  cloud.config:
+    failFast: true
+    retry:
+      initialInterval: 3000
+      multiplier: 1.3
+      maxInterval: 10000
+      maxAttempts: 20
+    uri: http://localhost:8888
 
 ---
-
 spring.config.activate.on-profile: docker
 
-server.port: 8080
-
-spring:
-  datasource:
-    url: jdbc:postgresql://OMS-db:5432/orderdb
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    virtual-host: /
-    addresses: rabbitmq:5672
-  redis:
-    host: redis
-    port: 6379
-
-paypal:
-  mode: ${PAYPAL_MODE}
-  client:
-    id: ${PAYPAL_CLIENT_ID}
-    secret: ${PAYPAL_CLIENT_SECRET}
-
-app:
-  eureka-server: eureka
-
-spring.rabbitmq.host: rabbitmq
+spring.cloud.config.uri: http://config-server:8888

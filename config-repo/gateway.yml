@@ -1,0 +1,99 @@
+server.port: 8080
+
+spring.application.name: gateway
+
+spring.cloud.gateway.routes:
+
+  - id: eureka-api
+    uri: http://${app.eureka-server}:8761
+    predicates:
+      - Path=/eureka/api/{segment}
+    filters:
+      - SetPath=/eureka/{segment}
+
+  - id: eureka-web
+    uri: http://${app.eureka-server}:8761
+    predicates:
+      - Path=/eureka/web
+    filters:
+      - SetPath=/
+
+  - id: eureka-web-other
+    uri: http://${app.eureka-server}:8761
+    predicates:
+      - Path=/eureka/**
+
+  - id: app-homepage
+    uri: lb://app:8080
+    predicates:
+      - Path=/
+
+  - id: app-cms
+    uri: lb://app:8080
+    predicates:
+      - Path=/article/**
+
+  - id: app-oms
+    uri: lb://app:8080
+    predicates:
+      - Path=/cart/**, /order/**, /return/**
+
+  - id: app-pms
+    uri: lb://app:8080
+    predicates:
+      - Path=/brand/**, /product/**, /review/**
+
+  - id: app-sms
+    uri: lb://app:8080
+    predicates:
+      - Path=/coupon/**, /sale/**
+
+  - id: app-ums
+    uri: lb://app:8080
+    predicates:
+      - Path=/user/**
+
+  - id: search
+    uri: http://search:8081/esProduct/search?keyword={keyword}
+    predicates:
+      - Path=/search
+    filters:
+      - RewritePath=/search(?<keyword>.*), /esProduct/search?keyword=${keyword}
+
+  - id: search-import data
+    uri: http://search:8081
+    predicates:
+      - Path=/esProduct/importAll
+
+  - id: swagger-ui
+    uri: http://app:8080
+    predicates:
+      - Path=/swagger**
+
+  - id: swagger-definition          # TODO: need to fix the swagger UI, it gets the definition but can't display properly
+    uri: http://app:8080
+    predicates:
+      - Path=/v2/api-docs**
+
+  - id: local-auth-login
+    uri: http://auth-server:9999
+    predicates:
+      - Path=/login
+
+management.endpoint.gateway.enabled: true
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.security: DEBUG
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+      #com:
+      # itsthatjun:
+    #  ecommerce: DEBUG
+
+spring.sleuth.reactor.instrumentation-type: decorate-on-last
+
+---
+spring.config.activate.on-profile: docker

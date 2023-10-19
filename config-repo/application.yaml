@@ -1,0 +1,57 @@
+# message queue related and distributed tracing/Zipkin/Slueth needed to collect logs
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+app.eureka-server: localhost
+
+spring.cloud.stream.defaultBinder: rabbit
+spring.zipkin.sender.type: rabbit
+spring.sleuth.sampler.probability: 1.0
+
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.security: DEBUG
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+    com.itsthatjun.ecommerce: DEBUG
+
+
+
+# logging.level.root: INFO
+
+---
+
+spring.config.activate.on-profile: docker
+
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    virtual-host: /
+    addresses: rabbitmq:5672
+
+spring.rabbitmq.host: rabbitmq
+app.eureka-server: eureka
+
+

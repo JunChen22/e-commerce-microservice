@@ -1,0 +1,102 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: oms
+  datasource:
+    url: jdbc:postgresql://localhost:5434/orderdb
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+  redis:
+    host: localhost
+    port: 6379
+
+spring.cloud:
+  function: # can't have space between, tells spring which to use, using a pipe character allow multi-line.
+    definition: cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;adminOrderMessageProcessor;adminReturnMessageProcessor;updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      cartMessageProcessor-in-0:        # incoming message from app/customer
+        destination: cart
+        group: cartGroup
+      returnMessageProcessor-in-0:
+        destination: return
+        group: returnGroup
+      orderMessageProcessor-in-0:
+        destination: order
+        group: orderGroup
+      orderCompleteMessageProcessor-in-0:
+        destination: orderComplete
+        group: orderGroup
+      adminOrderMessageProcessor-in-0: # admin CRUD order or return
+        destination: adminOrder
+        group: adminOrderGroup
+      adminReturnMessageProcessor-in-0:
+        destination: adminReturn
+        group: adminReturnGroup
+
+      updateFromPmsMessageProcessor-in-0:     #  update from SMS and PMS
+        destination: productStockOMSUpdate
+        group: productStockOMSUpdateGroup
+      updateFromSmsMessageProcessor-in-0:
+        destination: saleStockOMSUpdate
+        group: saleStockOMSUpdateGroup
+
+      coupon-out-0:           # sending to other queue to update their stock after sales or return
+        destination: orderCouponUpdate
+        producer:
+          required-groups: orderCouponUpdateGroup
+      salesStock-out-0:
+        destination: orderSaleStockUpdate
+        producer:
+          required-groups: orderSaleStockUpdateGroup
+      product-out-0:
+        destination: orderProductStockUpdate
+        producer:
+          required-groups: orderProductStockUpdateGroup
+
+# tells spring mybatis mapper's xml(sql) located
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath:dao/*.xml
+
+# if you running it local/ide
+paypal:
+  mode: YOUR_PAYPAL_MODE
+  client:
+    id: YOUR_PAYPAL_CLIENT_ID
+    secret: YOUR_PAYPAL_CLIENT_SECRET
+
+redis:
+  key:
+    orderId: oms
+  database: ECom
+  expire:
+    common: 7200    # 120 minutes, measured in seconds
+
+
+---
+
+spring.config.activate.on-profile: docker
+
+server.port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://OMS-db:5432/orderdb
+  redis:
+    host: redis
+    port: 6379
+
+paypal:
+  mode: ${PAYPAL_MODE}
+  client:
+    id: ${PAYPAL_CLIENT_ID}
+    secret: ${PAYPAL_CLIENT_SECRET}
+

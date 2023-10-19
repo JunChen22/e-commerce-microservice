@@ -1,0 +1,47 @@
+server:
+  port: 9999
+
+server.forward-headers-strategy: framework
+
+spring:
+  application:
+    name: auth-server
+  datasource:
+    url: jdbc:postgresql://localhost:5438/authdb
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+
+spring.cloud:
+  function:   # can't have space between, tells spring which to use
+    definition: userMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      userMessageProcessor-in-0:
+        destination: umsUserUpdate
+        group: umsUserUpdateGroup
+
+      authLog-out-0: # sending update to UMS to update login log
+        destination: authLogUpdate
+        producer:
+          required-groups: authLogUpdateGroup
+
+jwt:
+  HEADER_STRING: Authorization
+  tokenPrefix: Bearer
+  secretKey: JunChen522
+  expirationTimeMinute: 150
+  issuer: auth-server
+
+
+---
+
+spring.config.activate.on-profile: docker
+
+spring:
+  datasource.url: jdbc:postgresql://Auth-db:5432/authdb
+
+
