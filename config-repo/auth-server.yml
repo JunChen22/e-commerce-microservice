@@ -36,7 +36,6 @@ jwt:
   expirationTimeMinute: 150
   issuer: auth-server
 
-
 ---
 
 spring.config.activate.on-profile: docker

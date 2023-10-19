@@ -80,7 +80,6 @@ redis:
   expire:
     common: 7200    # 120 minutes, measured in seconds
 
-
 ---
 
 spring.config.activate.on-profile: docker
@@ -92,7 +91,6 @@ spring:
     url: jdbc:postgresql://OMS-db:5432/orderdb
   redis:
     host: redis
-    port: 6379
 
 paypal:
   mode: ${PAYPAL_MODE}

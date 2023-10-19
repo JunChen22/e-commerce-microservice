@@ -56,13 +56,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/review/detail/{reviewId}", "/review/getAllProductReview/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/sale/AllPromotionSale", "/sale/AllPromotionSaleItem", "/sale/AllFlashSaleItem").permitAll()
                 .antMatchers(HttpMethod.GET,"/order/payment/**").permitAll() // TODO: remove it when you have frontend that store the jwt
+                .antMatchers("/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger**",
+                        "/v2/api**",
+                        "/webjars/**").permitAll()
                 .antMatchers("/").permitAll()
                 .anyRequest()
                 .authenticated();
 
         httpSecurity.authenticationProvider(jwtAuthenticationProvider());
 
-        // TODO: remove comment when security needed
         // authenticate the JWT token before Spring Security if you have a token.
         httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

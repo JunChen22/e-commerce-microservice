@@ -65,12 +65,27 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/esProduct/importAll
 
+  - id: swagger
+    uri: http://app:8080
+    predicates:
+      - Path=/swagger/**
+
   - id: swagger-ui
     uri: http://app:8080
     predicates:
-      - Path=/swagger**
+      - Path=/swagger-ui.html
 
-  - id: swagger-definition          # TODO: need to fix the swagger UI, it gets the definition but can't display properly
+  - id: swagger-resource
+    uri: http://app:8080
+    predicates:
+      - Path=/swagger-resources/**
+
+  - id: swagger-webjars
+    uri: http://app:8080
+    predicates:
+      - Path=/webjars/**
+
+  - id: swagger-definition
     uri: http://app:8080
     predicates:
       - Path=/v2/api-docs**
@@ -84,16 +99,8 @@ management.endpoint.gateway.enabled: true
 
 logging:
   level:
-    root: ERROR
-    org.springframework.security: DEBUG
     org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
     org.springframework.cloud.gateway: TRACE
-    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
-      #com:
-      # itsthatjun:
-    #  ecommerce: DEBUG
 
 spring.sleuth.reactor.instrumentation-type: decorate-on-last
 
----
-spring.config.activate.on-profile: docker

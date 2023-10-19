@@ -28,8 +28,6 @@ mybatis:
     - classpath:mapper/*.xml
     - classpath:dao/*.xml
 
-
-
 ---
 
 spring.config.activate.on-profile: docker

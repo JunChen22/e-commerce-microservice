@@ -89,15 +89,6 @@ ps : Remove docker volume so the new data.sql can function properly and update.
  $ curl -X DELETE 'http://localhost:9200/products'          // delete existing ones
  $ curl -X POST http://localhost:8080/esProduct/importAll   // should return number of items imported
  
- 
- Eureka to see which services are avaible. 
- http://localhost:8080/eureka/web
- 
- Swagger
- http://localhost:8080/swagger-ui.html
- 
- 
- 
 ```
 ### Tech stack
 | Tech                                                                                   | role                                  | version | How is it being used here                               |
@@ -127,6 +118,18 @@ ps : Remove docker volume so the new data.sql can function properly and update.
 | [PayPal](https://developer.paypal.com/home)                                            | Payment Gateway                       | 1.14.0  | Third party payment processor                           |
 | [Ubuntu](https://ubuntu.com/)                                                          | OS                                    |         |                                                         |
 | AWS S3                                                                                 | File storage                          |         | store images, videos                                    |
+
+
+Eureka to see which services are available.http://localhost:8080/eureka/web
+![alt text](./document/Eureka.png)
+
+Swagger
+http://localhost:8080/swagger-ui.html
+![alt text](./document/swagger.png)
+
+Zipkin to see the interaction between services. http://localhost:9411/zipkin
+![alt text](./document/zipkin%201.png)
+![alt text](./document/zipkin%202.png)
 
 
 kubectl

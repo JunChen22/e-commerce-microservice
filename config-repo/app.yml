@@ -100,7 +100,6 @@ spring:
     url: jdbc:postgresql://postgres/springecommerece
   redis:
     host: redis
-    port: 6379
 
 
 

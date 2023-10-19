@@ -55,6 +55,70 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Article - Get one with time limit 5 seconds",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/article/1?delay=5&faultPercent=0",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"article",
+										"1"
+									],
+									"query": [
+										{
+											"key": "delay",
+											"value": "5"
+										},
+										{
+											"key": "faultPercent",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Article - Get one fault percent high",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/article/1?delay=0&faultPercent=50",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"article",
+										"1"
+									],
+									"query": [
+										{
+											"key": "delay",
+											"value": "0"
+										},
+										{
+											"key": "faultPercent",
+											"value": "50"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -486,6 +550,9 @@
 								{
 									"name": "Product - Get All",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -505,6 +572,9 @@
 								{
 									"name": "Product - Get page of 5 product",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -524,6 +594,9 @@
 								{
 									"name": "Product - Get a product by id",
 									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -958,7 +1031,14 @@
 				}
 			],
 			"auth": {
-				"type": "bearer"
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTc2OTE4NzAsImlhdCI6MTY5NzY4Mjg3MDY3NywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.pjvhpof-Ed3yK7OC80PMtbGjrYu5Qp4bH85ztHS4caG7pMzmtKLHLZZX_O_0_VRpqcGhtJbllCzu_BlSdMY4sg",
+						"type": "string"
+					}
+				]
 			},
 			"event": [
 				{

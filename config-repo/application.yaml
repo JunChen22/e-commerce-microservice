@@ -24,34 +24,31 @@ spring.cloud.stream.defaultBinder: rabbit
 spring.zipkin.sender.type: rabbit
 spring.sleuth.sampler.probability: 1.0
 
-
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
 
+#    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+#    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+#    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+#    WARN: A level higher than INFO that indicates potentially harmful situations.
+#    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+
 logging:
   level:
-    root: ERROR
+    #root: ERROR
+    root: INFO
     org.springframework.security: DEBUG
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
     com.itsthatjun.ecommerce: DEBUG
-
-
-
-# logging.level.root: INFO
 
 ---
 
 spring.config.activate.on-profile: docker
 
-spring:
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    virtual-host: /
-    addresses: rabbitmq:5672
-
 spring.rabbitmq.host: rabbitmq
+
 app.eureka-server: eureka
 
+---
 

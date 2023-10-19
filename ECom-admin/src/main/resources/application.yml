@@ -9,6 +9,7 @@ server:
 logging:
   level:
     #root: ERROR
+    root: INFO
     org:
       springframework:
         security: DEBUG
@@ -118,13 +119,7 @@ spring:
   data:
     mongodb:
       host: mongodb
-      port: 27017
-      database: springecommerece
   redis:
     host: redis
-    port: 6379
   rabbitmq:
     host: rabbitmq
-    port: 5672
-    virtual-host: /
-    addresses: rabbitmq:5672
