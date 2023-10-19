@@ -60,9 +60,9 @@ public class ArticleServiceImpl implements ArticleService {
                 .onErrorResume(error -> Mono.empty());
     }
 
-    private Mono<Articles> getArticleFallbackValue(int articleId, int delay, int faultPercent) {
-        LOG.warn("Creating a fail-fast fallback article for articleId = {}, delay = {}, and faultPercent = {}",
-                articleId, delay, faultPercent);
+    private Mono<Articles> getArticleFallbackValue(int articleId, int delay, int faultPercent, CallNotPermittedException ex) {
+        LOG.warn("Creating a fail-fast fallback article for articleId = {}, delay = {}, faultPercent = {} and exception = {} ",
+                articleId, delay, faultPercent, ex.toString());
         return Mono.error(new ServiceUnavailableException("The service is currently unavailable."));
     }
 }

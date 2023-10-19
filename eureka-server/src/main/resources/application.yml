@@ -12,3 +12,24 @@ eureka:
   server:
     waitTimeInMsWhenSyncEmpty: 0
     response-cache-update-interval-ms: 5000
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-confirms: true
+
+spring.zipkin.sender.type: rabbit
+spring.sleuth.sampler.probability: 1.0
+spring.cloud.stream.defaultBinder: rabbit
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+
+---
+spring.config.activate.on-profile: docker
+
+spring.rabbitmq.host: rabbitmq

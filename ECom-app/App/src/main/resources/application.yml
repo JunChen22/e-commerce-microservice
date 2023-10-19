@@ -84,14 +84,10 @@ spring.cloud.stream:
 
 logging:
   level:
-    #root: ERROR
-    org:
-      springframework:
-        security: DEBUG
-    com:
-      itsthatjun:
-        ecommerce: DEBUG
+    root: ERROR
+    org.springframework.security: DEBUG
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+    com.itsthatjun.ecommerce: DEBUG
 
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -134,6 +130,10 @@ resilience4j:
         limitRefreshPeriod: 10000
         timeoutDuration: 1000
         enableExpiry: false
+
+spring.cloud.stream.defaultBinder: rabbit
+spring.zipkin.sender.type: rabbit
+spring.sleuth.sampler.probability: 1.0
 
 ---
 

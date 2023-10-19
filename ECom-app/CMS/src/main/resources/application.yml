@@ -49,16 +49,21 @@ eureka:
 
 logging:
   level:
-    #root: ERROR
+    root: ERROR
     org:
       springframework:
         security: DEBUG
     com:
       itsthatjun:
         ecommerce: DEBUG
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
 
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
+
+spring.cloud.stream.defaultBinder: rabbit
+spring.zipkin.sender.type: rabbit
+spring.sleuth.sampler.probability: 1.0
 
 ---
 

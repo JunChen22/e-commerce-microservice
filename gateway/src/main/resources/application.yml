@@ -92,24 +92,37 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/login
 
-
 management.endpoint.gateway.enabled: true
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
 logging:
   level:
-    #root: ERROR
-    org:
-      springframework:
-        security: DEBUG
-    com:
-      itsthatjun:
-        ecommerce: DEBUG
+    root: ERROR
+    org.springframework.security: DEBUG
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+    #com:
+     # itsthatjun:
+      #  ecommerce: DEBUG
+
+spring.rabbitmq:
+  host: localhost
+  port: 5672
+  virtual-host: /
+  username: guest
+  password: guest
+  publisher-confirms: true
+
+spring.sleuth.reactor.instrumentation-type: decorate-on-last
+spring.zipkin.sender.type: rabbit
+spring.sleuth.sampler.probability: 1.0
+spring.cloud.stream.defaultBinder: rabbit
 
 ---
 spring.config.activate.on-profile: docker
 
 app.eureka-server: eureka
 
-
+spring.rabbitmq.host: rabbitmq

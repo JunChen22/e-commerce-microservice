@@ -80,6 +80,9 @@ logging:
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
+spring.zipkin.sender.type: rabbit
+spring.sleuth.sampler.probability: 1.0
+
 ---
 
 spring.config.activate.on-profile: docker
