@@ -61,3 +61,32 @@ server.port: 8080
 spring:
   datasource:
     url: jdbc:postgresql://PMS-db:5432/productdb
+
+
+---
+
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.bindings.reviewMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.adminBrandMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.adminProductMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.adminReviewMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.omsProductMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.smsProductMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.omsProductUpdate-out-0:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.smsProductUpdate-out-0:
+  partition-key-expression: headers['event-type']

@@ -537,7 +537,7 @@ public class OrderServiceImpl implements OrderService {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getOrderSN())
+                .setHeader("event-type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
     }
@@ -546,7 +546,7 @@ public class OrderServiceImpl implements OrderService {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getOrderSN())
+                .setHeader("event-type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
     }
@@ -555,7 +555,7 @@ public class OrderServiceImpl implements OrderService {
         LOG.debug("Sending a {} message to {}", event.getEventType() , bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getOrderId())
+                .setHeader("event-type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
     }

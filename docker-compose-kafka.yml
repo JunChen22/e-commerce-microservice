@@ -1,0 +1,371 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: springecommerece
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
+
+  CMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: contentdb
+    ports:
+      - 5433:5432
+    volumes:
+      - CMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
+  OMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: orderdb
+    ports:
+      - 5434:5432
+    volumes:
+      - OMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
+  PMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: productdb
+    ports:
+      - 5435:5432
+    volumes:
+      - PMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
+  SMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: salesdb
+    ports:
+      - 5436:5432
+    volumes:
+      - SMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
+  UMS-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: userdb
+    ports:
+      - 5437:5432
+    volumes:
+      - UMS-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+
+  Auth-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: authdb
+    ports:
+      - 5438:5432
+    volumes:
+      - Auth-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
+
+  mongodb:
+    image: mongo:5.0.0
+    restart: always
+    ports:
+      - 27017:27017
+    command: mongod
+    healthcheck:
+      test: "mongo --eval 'db.stats().ok'"
+      interval: 5s
+      timeout: 2s
+      retries: 60
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kafka:
+    image: wurstmeister/kafka:2.12-2.5.0
+    mem_limit: 512m
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ADVERTISED_PORT=9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    mem_limit: 512m
+    ports:
+      - "2181:2181"
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=zookeeper
+
+  kafka-manager:
+    image: hlebalbau/kafka-manager
+    ports:
+      - "9000:9000"
+    environment:
+      - ZK_HOSTS=zookeeper:2181
+
+  elasticsearch:
+    image: elasticsearch:7.12.0
+    environment:
+      - "cluster.name=elasticsearch"
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
+    #volumes:
+    #  - /home/jun/Desktop/data/ELK/es:/usr/share/elasticsearch/data # data
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  logstash:
+    image: logstash:7.12.0
+    ports:
+      - 4560:4560
+      - 4561:4561
+      - 4562:4562
+      - 4563:4563
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:7.12.0
+    environment:
+      - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+  search:
+    build: ECom-search
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      - mongodb
+      - kibana
+      - logstash
+      - elasticsearch
+      - PMS-db
+
+  app:
+    build: ECom-app/App
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  cms:
+    build: ECom-app/CMS
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      CMS-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  oms:
+    build: ECom-app/OMS
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+      - PAYPAL_MODE=${paypal_mode}
+      - PAYPAL_CLIENT_ID=${paypal_client_id}
+      - PAYPAL_CLIENT_SECRET=${paypal_client_secret}
+    depends_on:
+      OMS-db:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+
+  pms:
+    build: ECom-app/PMS
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      PMS-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  sms:
+    build: ECom-app/SMS
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      SMS-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+
+  ums:
+    build: ECom-app/UMS
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      UMS-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  admin:
+    build: ECom-admin
+    ports:
+      - 8082:8082
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  gateway:
+    build: gateway
+    mem_limit: 512m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+    ports:
+      - "8080:8080"
+
+  eureka:
+    build: eureka-server
+    mem_limit: 512m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+
+  auth-server:
+    build: auth-server
+    mem_limit: 512m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,kafka
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:9999/actuator/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 60
+    depends_on:
+      Auth-db:
+        condition: service_healthy
+
+  zipkin:
+    image: openzipkin/zipkin:2.23.2
+    mem_limit: 1024m
+    environment:
+      - STORAGE_TYPE=mem
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    ports:
+      - "9411:9411"
+    depends_on:
+      - kafka
+
+  config-server:
+    build: config-server
+    mem_limit: 512m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,native
+    volumes:
+      - $PWD/config-repo:/config-repo
+
+volumes:
+  db-data:
+  CMS-data:
+  OMS-data:
+  PMS-data:
+  SMS-data:
+  UMS-data:
+  Auth-data:

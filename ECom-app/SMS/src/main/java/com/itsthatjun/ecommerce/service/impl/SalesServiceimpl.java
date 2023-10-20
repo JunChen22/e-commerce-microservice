@@ -174,8 +174,8 @@ public class SalesServiceimpl implements SalesService {
 
         createSaleLog(newSaleId, promotionType, discountType, discountAmount, operator);
 
-        sendOmsSaleUpdateMessage("saleupdatetoOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
-        sendPmsSaleUpdateMessage("saleupdatetoPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
+        sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
+        sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
         return newPromotionSale;
     }
 
@@ -228,8 +228,8 @@ public class SalesServiceimpl implements SalesService {
 
         createSaleLog(newSaleId, promotionType, discountType, discountAmount, operator);
 
-        sendOmsSaleUpdateMessage("saleupdatetoOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
-        sendPmsSaleUpdateMessage("saleupdatetoPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
+        sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
+        sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
         return Mono.just(newPromotionSale);
          */
         return Mono.empty();
@@ -284,8 +284,8 @@ public class SalesServiceimpl implements SalesService {
 
         createSaleLog(newSaleId, promotionType, discountType, discountAmount, operator);
 
-        sendOmsSaleUpdateMessage("saleupdatetoOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
-        sendPmsSaleUpdateMessage("saleupdatetoPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
+        sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
+        sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
         return Mono.just(newPromotionSale);
         */
         return Mono.empty();
@@ -373,8 +373,8 @@ public class SalesServiceimpl implements SalesService {
 
         createSaleLog(saleId, promotionType, discountType, discountAmount, operator);
 
-        sendOmsSaleUpdateMessage("saleupdatetoOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
-        sendPmsSaleUpdateMessage("saleupdatetoPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
+        sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
+        sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
         return updatedSale;
     }
 
@@ -431,8 +431,8 @@ public class SalesServiceimpl implements SalesService {
 
                 createSaleLog(updateSaleId, promotionType, discountType, 0, operator);
 
-                sendOmsSaleUpdateMessage("saleupdatetoOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
-                sendPmsSaleUpdateMessage("saleupdatetoPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
+                sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
+                sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
             }
             return updatedSale;
         }).subscribeOn(jdbcScheduler);
@@ -485,8 +485,8 @@ public class SalesServiceimpl implements SalesService {
                 affectedSku.add(productSku);
             }
 
-            sendOmsSaleUpdateMessage("saleupdatetoOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
-            sendPmsSaleUpdateMessage("saleupdatetoPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
+            sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
+            sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
         }).subscribeOn(jdbcScheduler).then();
     }
 
@@ -494,7 +494,7 @@ public class SalesServiceimpl implements SalesService {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getEventType())
+                .setHeader("event-type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
     }
@@ -503,7 +503,7 @@ public class SalesServiceimpl implements SalesService {
         LOG.debug("Sending a {} message to {}", event.getEventType() , bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getEventType())
+                .setHeader("event-type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
     }

@@ -37,10 +37,16 @@ jwt:
   issuer: auth-server
 
 ---
-
 spring.config.activate.on-profile: docker
 
 spring:
   datasource.url: jdbc:postgresql://Auth-db:5432/authdb
 
+---
+spring.config.activate.on-profile: kafka
 
+spring.cloud.stream.bindings.userMessageProcessor-in-0.consumer:
+  partitioned: true
+
+spring.cloud.stream.bindings.authLog-out-0:
+  partition-key-expression: headers['event-type']

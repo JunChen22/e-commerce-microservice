@@ -35,10 +35,10 @@ spring.cloud:
         destination: productStockSMSUpdate
         group: productStockSMSUpdateGroup
 
-      saleupdatetoOMS-out-0:            # sending update to PMS and OMS for new sale
+      saleUpdateToOMS-out-0:            # sending update to PMS and OMS for new sale
         destination: saleStockOMSUpdate
         group: saleStockOMSUpdateGroup
-      saleupdatetoPms-out-0:
+      saleUpdateToPms-out-0:
         destination: saleStockPMSUpdate
         group: saleStockPMSUpdateGroup
 
@@ -57,3 +57,29 @@ server.port: 8080
 spring:
   datasource:
     url: jdbc:postgresql://SMS-db:5432/salesdb
+
+
+---
+
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.bindings.adminCouponMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.adminSalesStockMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.couponMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.salesStockMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.productStockMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.saleUpdateToOMS-out-0:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.saleUpdateToPms-out-0:
+  partition-key-expression: headers['event-type']

@@ -88,7 +88,7 @@ public class ReviewServiceImpl implements ReviewService {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)
-                .setHeader("partitionKey", event.getUserId())
+                .setHeader("event-type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
     }

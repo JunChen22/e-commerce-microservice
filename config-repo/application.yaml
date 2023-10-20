@@ -24,6 +24,7 @@ spring.cloud.stream.defaultBinder: rabbit
 spring.zipkin.sender.type: rabbit
 spring.sleuth.sampler.probability: 1.0
 
+# WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
 
@@ -51,4 +52,15 @@ spring.rabbitmq.host: rabbitmq
 app.eureka-server: eureka
 
 ---
+spring.config.activate.on-profile: kafka
 
+spring.cloud.stream.defaultBinder: kafka
+spring.zipkin.sender.type: kafka
+
+spring.cloud.stream.kafka.binder:
+  brokers: kafka
+  defaultBrokerPort: 9092
+
+management.health.rabbit.enabled: false
+spring.kafka.bootstrap-servers: kafka:9092
+spring.cloud.stream.kafka.binder.replication-factor: 1

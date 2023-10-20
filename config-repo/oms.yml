@@ -98,3 +98,39 @@ paypal:
     id: ${PAYPAL_CLIENT_ID}
     secret: ${PAYPAL_CLIENT_SECRET}
 
+
+---
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.bindings.cartMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.returnMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.orderMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.orderCompleteMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.adminOrderMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.adminReturnMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.updateFromPmsMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.updateFromSmsMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.coupon-out-0:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.salesStock-out-0:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.product-out-0:
+  partition-key-expression: headers['event-type']

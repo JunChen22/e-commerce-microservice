@@ -70,3 +70,20 @@ spring:
       host: mongodb
   redis:
     host: redis
+
+---
+
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.bindings.adminUserMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.userMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.authMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.authUpdate-out-0:
+  partition-key-expression: headers['event-type']
+

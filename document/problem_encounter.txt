@@ -270,3 +270,38 @@ A: having trouble with nested data for query, getting multiple object instead a 
 Q: using select by primary key can't find anything even though i can search it in database,Product product = productMapper.selectByPrimaryKey(productId);.
 A: docker remove volume did fixed for me. i reloaded the data and it should be same as new but only delete volume fixed for me. IntelliJ behaving funny.
 
+
+
+
+Q:  getting error with kafka.
+***************************
+cms_1            | APPLICATION FAILED TO START
+cms_1            | ***************************
+cms_1            |
+cms_1            | Description:
+cms_1            |
+cms_1            | An attempt was made to call a method that does not exist. The attempt was made from the following location:
+cms_1            |
+cms_1            |     org.springframework.cloud.stream.binder.kafka.KafkaMessageChannelBinder.createConsumerEndpoint(KafkaMessageChannelBinder.java:708)
+cms_1            |
+cms_1            | The following method did not exist:
+cms_1            |
+cms_1            |     'void org.springframework.kafka.listener.ContainerProperties.setAckOnError(boolean)'
+cms_1            |
+cms_1            | The method's class, org.springframework.kafka.listener.ContainerProperties, is available from the following locations:
+cms_1            |
+cms_1            |     jar:file:/app.jar!/BOOT-INF/lib/spring-kafka-2.7.3.jar!/org/springframework/kafka/listener/ContainerProperties.class
+cms_1            |
+cms_1            | The class hierarchy was loaded from the following locations:
+cms_1            |
+cms_1            |     org.springframework.kafka.listener.ContainerProperties: jar:file:/app.jar!/BOOT-INF/lib/spring-kafka-2.7.3.jar!/
+cms_1            |     org.springframework.kafka.listener.ConsumerProperties: jar:file:/app.jar!/BOOT-INF/lib/spring-kafka-2.7.3.jar!/
+cms_1            |
+cms_1            |
+cms_1            | Action:
+cms_1            |
+cms_1            | Correct the classpath of your application so that it contains a single, compatible version of org.springframework.kafka.listener.ContainerProperties
+
+
+A: version compatibility issues. with spring boot 2.5.2, java 1.8 and spring cloud 2020.0.2 having issue
+with kafka:2.12-2.5.0 image. Change spring cloud version to 2020.0.3

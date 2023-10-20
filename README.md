@@ -8,6 +8,7 @@ E-commerce for medium to large business. The microservice version is multi-vendo
 E-commerece 
 ├── Authuthorization server  -- could replace it with OAuth2 but not implement here
 ├── config-repo  -- centralized config
+├── config-server  -- configuration server/ serverices retrieves their application.yml
 ├── gateway  -- gateway for connection / not needed in kubernetes
 ├── eureka   -- service registration and discovery capabilities / not needed in kubernetes
 ├── kubernetes
@@ -79,6 +80,12 @@ ps : Remove docker volume so the new data.sql can function properly and update.
  To deploy 
  $ docker-compose build
  $ docker-compose up
+ 
+ or if you want to use Kafka instead of Rabbit MQ
+ $ export COMPOSE_FILE=docker-compose-kafka.yml
+ unset compose file when you want to switch back to Rabbit MQ
+ $ unset COMPOSE_FILE
+ 
 
 * can not deploy locally(IDE) only Docker or Kubernetes
 * also need PayPal sandbox credential to run OMS.

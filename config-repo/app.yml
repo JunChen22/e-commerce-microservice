@@ -101,5 +101,25 @@ spring:
   redis:
     host: redis
 
+---
 
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.bindings.order-out-0:
+  partition-key-expression: headers['partitionKey']
+
+spring.cloud.stream.bindings.orderComplete-out-0:
+  partition-key-expression: headers['partitionKey']
+
+spring.cloud.stream.bindings.cart-out-0:
+  partition-key-expression: headers['partitionKey']
+
+spring.cloud.stream.bindings.return-out-0:
+  partition-key-expression: headers['partitionKey']
+
+spring.cloud.stream.bindings.review-out-0:
+  partition-key-expression: headers['partitionKey']
+
+spring.cloud.stream.bindings.user-out-0:
+  partition-key-expression: headers['partitionKey']
 

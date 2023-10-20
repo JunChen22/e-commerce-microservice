@@ -49,6 +49,8 @@ spring:
     password: guest
     publisher-confirms: true
 
+spring.cloud.stream.defaultBinder: rabbit
+
 # outputs
 # CMS does not need message queue, they only have read operations.
 spring.cloud.stream:
@@ -90,7 +92,6 @@ spring.cloud.stream:
       producer:
         required-groups: adminArticleGroup
 
-
 # tells spring mybatis mapper's xml(sql) located
 mybatis:
   mapper-locations:
@@ -123,3 +124,43 @@ spring:
     host: redis
   rabbitmq:
     host: rabbitmq
+
+---
+
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.kafka.binder.brokers: kafka
+
+management.health.rabbit.enabled: false
+spring.cloud.stream.defaultBinder: kafka
+spring.kafka.bootstrap-servers: kafka:9092
+spring.cloud.stream.kafka.binder.replication-factor: 1
+spring.zipkin.sender.type: kafka
+
+spring.cloud.stream.bindings.user-out-0.producer:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.order-out-0.producer:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.return-out-0.producer:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.review-out-0.producer:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.product-out-0.producer:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.brand-out-0.producer:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.coupon-out-0.producer:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.sales-out-0.producer:
+  partition-key-expression: headers['event-type']
+
+spring.cloud.stream.bindings.article-out-0.producer:
+  partition-key-expression: headers['event-type']
+

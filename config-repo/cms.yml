@@ -38,3 +38,11 @@ spring:
   datasource:
     url: jdbc:postgresql://CMS-db:5432/contentdb
 
+---
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.bindings.articleMessageProcessor-in-0.consumer:
+  partitioned: true
+
+
+
