@@ -27,5 +27,5 @@ public class OrderParam {
     private double discountAmount;
 
     @ApiModelProperty("paypal, g pay, or finance. currently just paypal")
-    private String payType;
+    private int payType;
 }

@@ -162,13 +162,6 @@ services:
     environment:
       - KAFKA_ADVERTISED_HOST_NAME=zookeeper
 
-  kafka-manager:
-    image: hlebalbau/kafka-manager
-    ports:
-      - "9000:9000"
-    environment:
-      - ZK_HOSTS=zookeeper:2181
-
   elasticsearch:
     image: elasticsearch:7.12.0
     environment:

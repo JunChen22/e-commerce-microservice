@@ -125,12 +125,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Orders internalGenerateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId) {
-        String orderSn = generateOrderSn();
         String couponCode = orderParam.getCoupon();
         Address address = orderParam.getAddress();
-        String payType = orderParam.getPayType();
+        int payType = orderParam.getPayType();  // TODO: make a payType enum and change postman
 
         Orders newOrder = new Orders();
+        newOrder.setPayType(payType);
+        newOrder.setSourceType(1);  // TODO: add source type from request, web or mobile
+        String orderSn = generateOrderSn(newOrder);
+
         List<OrderItem> orderItemList = new ArrayList<>();
 
         Map<String, Integer> skuQuantity = orderParam.getOrderProductSku(); // sku and quantity for order
@@ -466,25 +469,23 @@ public class OrderServiceImpl implements OrderService {
         return Mono.empty();
     }
 
-    // TODO: generate id with redis: date + source type + pay type + today's order % 6
-    private String generateOrderSn() {
+    // generate id with redis: date + source type + pay type + today's order % 6
+    private String generateOrderSn(Orders newOrder) {
         StringBuilder sb = new StringBuilder();
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String key = REDIS_DATABASE + ":"+ REDIS_KEY_ORDER_ID + date;
-        Long increment = redisService.increment(key, 1);
-        sb.append(date + Math.random() +  increment);
-        /*
+        Long increment = redisService.incr(key, 1);
+        sb.append(date + increment);
+
         sb.append(String.format("%02d", newOrder.getSourceType()));
         sb.append(String.format("%02d", newOrder.getPayType()));
         String incrementStr = increment.toString();
-
 
         if (incrementStr.length() <= 6) {
             sb.append(String.format("%06d", increment));
         } else {
             sb.append(incrementStr);
         }
-         */
         return sb.toString();
     }
 
@@ -616,8 +617,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Orders internalCreateOrder(Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator) {
-        //  TODO: need to generate order serial number
-        String orderSn = generateOrderSn();
+        String orderSn = generateOrderSn(newOrder);
         newOrder.setOrderSn(orderSn);
         newOrder.setCreatedAt(new Date());
         newOrder.setAdminNote(reason);
