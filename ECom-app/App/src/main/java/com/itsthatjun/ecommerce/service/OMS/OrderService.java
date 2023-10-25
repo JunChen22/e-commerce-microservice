@@ -20,9 +20,6 @@ public interface OrderService {
     @ApiOperation("after success paypal payment, actual processing the order , unlock stocks and update info's like coupon and stocks")
     Mono<String> successPay(String paymentId, String payerId);
 
-    @ApiOperation("Payment failure feedback")
-    Mono<String> payFail(String orderSn,String token);
-
     @ApiOperation("Cancel order if before sending the order out.")
     Mono<Void> cancelUserOrder(String orderSn, int userId);
 }

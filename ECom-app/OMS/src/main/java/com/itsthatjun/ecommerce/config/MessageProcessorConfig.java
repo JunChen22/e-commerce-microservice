@@ -161,7 +161,7 @@ public class MessageProcessorConfig {
                     break;
 
                 case PAYMENT_FAILURE:
-                    orderService.payFail(event.getOrderSN(), event.getPaymentId()).subscribe();
+                    orderService.delayedCancelOrder(event.getOrderSN()).subscribe();
                     break;
 
                 default:

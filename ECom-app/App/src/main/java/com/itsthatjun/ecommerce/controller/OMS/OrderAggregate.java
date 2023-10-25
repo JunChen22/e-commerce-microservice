@@ -65,12 +65,6 @@ public class OrderAggregate {
         return orderService.successPay(paymentId, payerId);
     }
 
-    @GetMapping("/payment/cancel/{orderSn}")
-    @ApiOperation("Payment failure feedback")
-    public Mono<String> payFail(@PathVariable String orderSn, @RequestParam("token") String token) {
-        return orderService.payFail(orderSn, token);
-    }
-
     @PostMapping("/cancelOrder/{orderSn}")
     @ApiOperation("Cancel order if before sending the order out.")
     public Mono<Void> cancelUserOrder(@PathVariable String orderSn) {

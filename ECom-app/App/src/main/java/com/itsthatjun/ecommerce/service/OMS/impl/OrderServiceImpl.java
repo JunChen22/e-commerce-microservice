@@ -37,8 +37,6 @@ public class OrderServiceImpl implements OrderService {
 
     public static final String PAYPAL_SUCCESS_URL = "order/payment/success";
 
-    public static final String PAYPAL_CANCEL_URL = "order/payment/cancel";
-
     private final String OMS_SERVICE_URL = "http://oms/order";
 
     @Autowired
@@ -71,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
     public Mono<OrderParam> generateOrder(OrderParam orderParam, String requestUrl, int userId) {
         return Mono.fromCallable(() -> {
             String successUrl = requestUrl + "/" + PAYPAL_SUCCESS_URL;
-            String cancelUrl = requestUrl + "/" + PAYPAL_CANCEL_URL;
+            String cancelUrl = requestUrl + "/";
             sendOrderMessage("order-out-0", new OmsOrderEvent(GENERATE_ORDER, userId, null, orderParam, successUrl, cancelUrl));
             return orderParam;
         }).subscribeOn(publishEventScheduler);
@@ -82,17 +80,6 @@ public class OrderServiceImpl implements OrderService {
         return Mono.fromCallable(() -> {
             sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_SUCCESS, "", paymentId, payerId));
             return "payment success";
-        }).subscribeOn(publishEventScheduler);
-    }
-
-    @Override
-    public Mono<String> payFail(String orderSn, String token) {
-        // TODO: make pay later feature with message queue TTL, store the token for later payment.
-        //     example https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-2LX47521TW024812X
-        //     and need to set in Payment object for how long the transaction will stay up.
-        return Mono.fromCallable(() -> {
-            sendOrderCompleteMessage("orderComplete-out-0", new OmsCompletionEvent(PAYMENT_FAILURE, orderSn, token, ""));
-            return "payment fail";
         }).subscribeOn(publishEventScheduler);
     }
 

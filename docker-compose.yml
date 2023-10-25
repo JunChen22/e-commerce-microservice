@@ -148,6 +148,8 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    volumes:
+      - rabbit-data:/var/lib/rabbitmq
     healthcheck:
       test: [ "CMD", "rabbitmqctl", "status" ]
       interval: 10s
@@ -355,3 +357,4 @@ volumes:
   SMS-data:
   UMS-data:
   Auth-data:
+  rabbit-data:

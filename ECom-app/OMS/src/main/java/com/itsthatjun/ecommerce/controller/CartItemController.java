@@ -6,16 +6,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-import java.util.List;
-
-import static java.util.logging.Level.FINE;
 
 @RestController
 @RequestMapping("/cart")
@@ -25,6 +20,12 @@ public class CartItemController {
     private static final Logger LOG = LoggerFactory.getLogger(CartItemController.class);
 
     private final CartItemServiceImpl cartItemService;
+
+    @Autowired
+    private StreamBridge streamBridge;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     @Autowired
     public CartItemController(CartItemServiceImpl cartItemService) {

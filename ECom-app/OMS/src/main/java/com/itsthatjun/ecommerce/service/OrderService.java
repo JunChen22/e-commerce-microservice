@@ -8,7 +8,6 @@ import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -31,7 +30,7 @@ public interface OrderService {
     Mono<Orders> paySuccess(String paymentId, String payerId);
 
     @ApiOperation("payment unsuccessful, redirected from paypal, store token to pay later, 30 minute ttl")
-    Mono<Void> payFail(String orderSN, String token);
+    Mono<Void> delayedCancelOrder(String orderSN);
 
     @ApiOperation("Member cancel order")
     Mono<Orders> cancelOrder(String orderSN);

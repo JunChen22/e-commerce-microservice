@@ -60,6 +60,12 @@ spring.cloud:
         producer:
           required-groups: orderProductStockUpdateGroup
 
+      orderCancelTTL-out-0:               # queue with TTL, act as scheduled task or delayed task
+        destination: orderCancelQueue
+        producer:
+          required-groups: orderGroup
+
+
 # tells spring mybatis mapper's xml(sql) located
 mybatis:
   mapper-locations:

@@ -5,6 +5,7 @@ import com.itsthatjun.ecommerce.config.PaypalPaymentIntent;
 import com.itsthatjun.ecommerce.config.PaypalPaymentMethod;
 import com.itsthatjun.ecommerce.dao.OrderDao;
 import com.itsthatjun.ecommerce.dto.OrderDetail;
+import com.itsthatjun.ecommerce.dto.event.incoming.OmsCompletionEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.PmsProductOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsSalesStockOutEvent;
@@ -37,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 
+import static com.itsthatjun.ecommerce.dto.event.incoming.OmsCompletionEvent.Type.PAYMENT_FAILURE;
 import static com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent.Type.*;
 
 @Service
@@ -220,14 +222,25 @@ public class OrderServiceImpl implements OrderService {
         // clear cart
         cartItemService.clearCartItem(userId).subscribe();
 
+        // scheduled order to be cancel if order not being paid with in time.
+        sendOrderCancelMessage("orderCancelTTL-out-0", new OmsCompletionEvent(PAYMENT_FAILURE, orderSn));
+
         updateChangeLog(newOrderId, 0, "generate order","user");
 
         try {
             Payment payment = paypalService.createPayment(orderTotal, "USD", PaypalPaymentMethod.paypal,
-                    PaypalPaymentIntent.sale, "payment description", cancelUrl + "/" +  orderSn,
-                    successUrl, orderSn);
+                    PaypalPaymentIntent.sale, "payment description", cancelUrl, successUrl, orderSn);
             for(Links links : payment.getLinks()) {
                 if (links.getRel().equals("approval_url")) {
+                    String paymentURL = links.getHref();
+                    String searchTerm = "token=";
+                    int index = paymentURL.indexOf(searchTerm);
+                    String paymentToken = paymentURL.substring(index + searchTerm.length());
+
+                    // store payment token for later payment option
+                    newOrder.setPaymentId(paymentToken);
+                    ordersMapper.updateByPrimaryKeySelective(newOrder);
+
                     System.out.println("redirect:" + links.getHref());
                 }
             }
@@ -346,22 +359,36 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Void> payFail(String orderSn, String token) {
+    public Mono<Void> delayedCancelOrder(String orderSn) {
+        System.out.println("at pay fail " + orderSn +  new Date());
+        System.out.println("at pay fail " + orderSn +  new Date());
+        System.out.println("at pay fail " + orderSn +  new Date());
+        System.out.println("at pay fail " + orderSn +  new Date());
+        System.out.println("at pay fail " + orderSn +  new Date());
+
+        return Mono.empty();
+        /*
         return Mono.fromRunnable(() -> {
-            internalPayFail(orderSn, token);
+            internalDelayedCancelOrder(orderSn);
         }).subscribeOn(jdbcScheduler).then();
+         */
     }
 
-    private void internalPayFail(String orderSn, String token) {
-        // TODO: change it to cancel after 10 minutes not pay.
-        //    have waiting for payment status, and use messagequeue
-        //   with TTL like 10 miuntes to cancel
+    private void internalDelayedCancelOrder(String orderSn, String token) {
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
-        Orders newOrder = ordersMapper.selectByExample(ordersExample).get(0);
+        List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+        if (ordersList.isEmpty()) throw new RuntimeException("order serial number does not exist: " + orderSn);
+
+        Orders newOrder = ordersList.get(0);
+
+        // Order being paid, waiting for payment 0 , fulfilling(paid) 1
+        if (newOrder.getStatus() == 1) return;
 
         newOrder.setPaymentId(token);   // store token to pay later
         newOrder.setUpdatedAt(new Date());
+        newOrder.setStatus(5);
         ordersMapper.updateByPrimaryKeySelective(newOrder);
 
         int orderId = newOrder.getId();
@@ -372,7 +399,7 @@ public class OrderServiceImpl implements OrderService {
 
         Map<String, Integer> itemOrderQuantity = new HashMap<>();
 
-        // free up locked stock
+        // free up locked stock on local OMS
         for (OrderItem item : orderItemList) {
             int productId = item.getProductId();
             String skuCode = item.getProductSkuCode();
@@ -388,11 +415,21 @@ public class OrderServiceImpl implements OrderService {
 
             itemOrderQuantity.put(skuCode, quantityNeeded);
         }
-        // Generated order and failure payment, decrease sku lock stock
+
+        // send stock update to PMS and SMS
         sendProductStockUpdateMessage("product-out-0",new PmsProductOutEvent(PmsProductOutEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
         sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_FAIL_PAYMENT, orderSn, itemOrderQuantity));
 
         updateChangeLog(orderId, 5, "payment fail","user");
+    }
+
+    private void sendOrderCancelMessage(String bindingName, OmsCompletionEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName + " " + event.getEventCreatedAt());
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 
     @Override

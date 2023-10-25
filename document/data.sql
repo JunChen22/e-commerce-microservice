@@ -839,9 +839,17 @@ VALUES
 (20, 'DUU2720Q', 89, '2022', NULL), -- year
 
 -- Nike Air Max 270
-(21, 'NAM270', 40, '10', NULL), -- Size
-(21, 'NAM270', 37, 'Black/White', NULL), -- Color
-(21, 'NAM270', 41, 'Athletic', NULL), -- Style
+(21, 'NAM270-105', 40, '10', NULL), -- Size
+(21, 'NAM270-105', 37, 'Black/White', NULL), -- Color
+(21, 'NAM270-105', 41, 'Athletic', NULL), -- Style
+
+(21, 'NAM270-90', 40, '10', NULL), -- Size
+(21, 'NAM270-90', 37, 'Black/White', NULL), -- Color
+(21, 'NAM270-90', 41, 'Athletic', NULL), -- Style
+
+(21, 'NAM270-75', 40, '10', NULL), -- Size
+(21, 'NAM270-75', 37, 'Black/White', NULL), -- Color
+(21, 'NAM270-75', 41, 'Athletic', NULL), -- Style
 
 -- Nike ZoomX Vaporfly NEXT
 (22, 'NZVNEXT', 4, '9.5', NULL),
@@ -864,9 +872,17 @@ VALUES
 (25, 'NDFTS', 3, 'Short Sleeve', NULL),
 
 -- Calvin Klein Logo T-Shirt
-(26, 'CKLTS', 1, 'L/M/S', NULL),
-(26, 'CKLTS', 2, 'Black', NULL),
-(26, 'CKLTS', 3, 'Short Sleeve', NULL),
+(26, 'CKLTS-L', 1, 'L', NULL),
+(26, 'CKLTS-L', 2, 'Black', NULL),
+(26, 'CKLTS-L', 3, 'Short Sleeve', NULL),
+
+(26, 'CKLTS-M', 1, 'M', NULL),
+(26, 'CKLTS-M', 2, 'Black', NULL),
+(26, 'CKLTS-M', 3, 'Short Sleeve', NULL),
+
+(26, 'CKLTS-S', 1, 'S', NULL),
+(26, 'CKLTS-S', 2, 'Black', NULL),
+(26, 'CKLTS-S', 3, 'Short Sleeve', NULL),
 
 -- Adidas Essential Track Pants
 (27, 'AEPTP', 1, 'XL', NULL),
@@ -1517,7 +1533,7 @@ CREATE TABLE cart_item (
 
 INSERT INTO cart_item (cart_id, product_id, product_name, product_sku, product_pic, quantity, price) VALUES
 
-(2, 21, 'Nike Air Max 270', 'NAM270', 'nikeairmax270.jpg', 1, 129.99),
+(2, 21, 'Nike Air Max 270', 'NAM270-90', 'nikeairmax270.jpg', 1, 129.99),
 (2, 29, 'To Kill a Mockingbird ', 'TKAM', 'tokillamockingbird.jpg', 1, 12.99),
 
 (3, 25, 'Nike Dri-FIT T-Shirt ', 'NDFTS', 'nikeDriFitShirt.jpg', 2, 29.99),
@@ -1623,7 +1639,7 @@ VALUES
   -- xps13 $15 off
   (3, '1003', 14, 'xps13.jpg', 'XPS 13', 'Dell', 'SN-456', 1399.99, 1, 17, 'XPS13', 17, 'All laptop 100 off', 100, 0, 1299.99),
   -- sneaker, no coupon
-  (4, '1004', 21, 'nikeairmax270.jpg', 'Nike Air Max 270', 'Nike', 'SN-001', 129.99, 1, 24, 'NAM270', 8, '', 0, 0, 129.99),
+  (4, '1004', 21, 'nikeairmax270.jpg', 'Nike Air Max 270', 'Nike', 'SN-001', 129.99, 1, 24, 'NAM270-90', 8, '', 0, 0, 129.99),
   -- 10 macbook invalid free coupon
   (5, '1005', 13, 'macBookPro.jpg', 'MacBook Pro', 'Apple', 'SN-678', 1999.99, 10, 16, 'MBP', 17, 'All laptop 100 off', 1000, 0, 18999.90);
 
