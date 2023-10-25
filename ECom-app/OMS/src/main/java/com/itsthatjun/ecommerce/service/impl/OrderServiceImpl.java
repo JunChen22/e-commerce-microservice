@@ -360,21 +360,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Mono<Void> delayedCancelOrder(String orderSn) {
-        System.out.println("at pay fail " + orderSn +  new Date());
-        System.out.println("at pay fail " + orderSn +  new Date());
-        System.out.println("at pay fail " + orderSn +  new Date());
-        System.out.println("at pay fail " + orderSn +  new Date());
-        System.out.println("at pay fail " + orderSn +  new Date());
-
-        return Mono.empty();
-        /*
         return Mono.fromRunnable(() -> {
             internalDelayedCancelOrder(orderSn);
         }).subscribeOn(jdbcScheduler).then();
-         */
     }
 
-    private void internalDelayedCancelOrder(String orderSn, String token) {
+    private void internalDelayedCancelOrder(String orderSn) {
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
         List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
@@ -386,7 +377,6 @@ public class OrderServiceImpl implements OrderService {
         // Order being paid, waiting for payment 0 , fulfilling(paid) 1
         if (newOrder.getStatus() == 1) return;
 
-        newOrder.setPaymentId(token);   // store token to pay later
         newOrder.setUpdatedAt(new Date());
         newOrder.setStatus(5);
         ordersMapper.updateByPrimaryKeySelective(newOrder);

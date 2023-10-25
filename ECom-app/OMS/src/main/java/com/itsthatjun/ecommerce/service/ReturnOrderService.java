@@ -17,13 +17,16 @@ public interface ReturnOrderService {
     Mono<ReturnRequest> getStatus(String orderSn, int userId);
 
     @ApiOperation(value = "apply for return, waiting for admin approve/reject")
-    Mono<ReturnRequest> applyForReturn(ReturnRequest returnRequest, List<ReturnReasonPictures> picturesList, Map<String, Integer> skuQuantity, int userId );
+    Mono<ReturnRequest> applyForReturn(ReturnRequest returnRequest, List<ReturnReasonPictures> picturesList, Map<String, Integer> skuQuantity, int userId);
 
     @ApiOperation(value = "update or add in more info for return")
     Mono<ReturnRequest> updateReturnInfo(ReturnRequest returnRequest, List<ReturnReasonPictures> picturesList, String orderSn, int userId);
 
     @ApiOperation(value = "cancel the return request")
     Mono<ReturnRequest> cancelReturn(String orderSn, int userId);
+
+    @ApiOperation(value = "automatically reject after a set time, not review by admin")
+    Mono<ReturnRequest> delayedRejectReturn(String orderSn, int userId);
 
     @ApiOperation(value = "return request based on status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(with reason) 3")
     Flux<ReturnRequest> getAllReturnRequest(int statusCode);

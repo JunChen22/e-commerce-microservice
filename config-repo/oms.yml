@@ -64,7 +64,10 @@ spring.cloud:
         destination: orderCancelQueue
         producer:
           required-groups: orderGroup
-
+      returnRequestTTL-out-0:
+        destination: returnRequestQueue
+        producer:
+          required-groups: returnGroup
 
 # tells spring mybatis mapper's xml(sql) located
 mybatis:
@@ -86,6 +89,10 @@ redis:
   expire:
     common: 7200    # 120 minutes, measured in seconds
 
+custom:
+  rabbitMQ:
+    orderCancelTTL-time: 120000     # in milliseconds, 120 seconds
+    returnRequestTTL-time: 120000   # 3 days  259200000
 ---
 
 spring.config.activate.on-profile: docker

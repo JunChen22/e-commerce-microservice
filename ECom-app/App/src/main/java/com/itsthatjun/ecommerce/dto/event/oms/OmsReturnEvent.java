@@ -14,7 +14,8 @@ public class OmsReturnEvent {
     public enum Type {
         APPLY,
         UPDATE,
-        CANCEL
+        CANCEL,
+        REJECT
     }
 
     private final Type eventType;

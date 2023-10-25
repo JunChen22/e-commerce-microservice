@@ -2,7 +2,10 @@ package com.itsthatjun.ecommerce.service.impl;
 
 import com.itsthatjun.ecommerce.dao.ReturnDao;
 import com.itsthatjun.ecommerce.dto.ReturnDetail;
+import com.itsthatjun.ecommerce.dto.ReturnParam;
 import com.itsthatjun.ecommerce.dto.ReturnRequestDecision;
+import com.itsthatjun.ecommerce.dto.event.incoming.OmsCompletionEvent;
+import com.itsthatjun.ecommerce.dto.event.incoming.OmsReturnEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.PmsProductOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsSalesStockOutEvent;
 import com.itsthatjun.ecommerce.exceptions.ReturnRequestException;
@@ -27,6 +30,8 @@ import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
 import java.util.*;
+
+import static com.itsthatjun.ecommerce.dto.event.incoming.OmsReturnEvent.Type.REJECT;
 
 @Service
 public class ReturnOrderServiceImpl implements ReturnOrderService {
@@ -134,7 +139,19 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             picture.setReturnRequestId(returnRequestId);
             picturesMapper.insert(picture);
         }
+
+        // send out automatically reply, currently setup to be rejection after 3 days.
+        sendReturnRequestMessage("returnRequestTTL-out-0", new OmsReturnEvent(REJECT, userId, returnRequest, null));
         return returnRequest;
+    }
+
+    private void sendReturnRequestMessage(String bindingName, OmsReturnEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName + " " + event.getEventCreatedAt());
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 
     @Override
@@ -158,6 +175,31 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             foundReturnRequest.setUpdatedAt(new Date());
             returnRequestMapper.updateByPrimaryKey(foundReturnRequest);
             return foundReturnRequest;
+        }).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Mono<ReturnRequest> delayedRejectReturn(String orderSn, int userId) {
+        return Mono.fromCallable(() -> {
+            ReturnRequest returnRequest = getUserReturnRequest(orderSn, userId);
+
+            // return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3
+            if (returnRequest.getStatus() != 0) return returnRequest;
+
+            returnRequest.setStatus(3);
+            returnRequest.setHandleNote("Automatically rejection, no admin");  // TODO: might need to change rejection reason
+            returnRequest.setHandleOperator("Automatically");
+            returnRequest.setUpdatedAt(new Date());
+            returnRequestMapper.updateByPrimaryKey(returnRequest);
+
+            ReturnLog returnUpdateLog = new ReturnLog();
+            returnUpdateLog.setReturnRequestId(returnRequest.getId());
+            returnUpdateLog.setAction("Rejected return Request request");
+            returnUpdateLog.setOperator("Automatically");
+            returnUpdateLog.setCreatedAt(new Date());
+            logMapper.insert(returnUpdateLog);
+
+            return returnRequest;
         }).subscribeOn(jdbcScheduler);
     }
 
@@ -324,6 +366,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             returnRequestMapper.updateByPrimaryKey(returnRequest);
 
             ReturnLog returnUpdateLog = new ReturnLog();
+            returnUpdateLog.setReturnRequestId(returnRequest.getId());
             returnUpdateLog.setAction("Rejected return Request request");
             returnUpdateLog.setOperator(operator);
             returnUpdateLog.setCreatedAt(new Date());

@@ -114,6 +114,16 @@ public class MessageProcessorConfig {
                     returnOrderService.cancelReturn(orderSn, userId).subscribe();
                     break;
 
+                case REJECT:
+                    System.out.println("at reject");
+                    System.out.println("at reject");
+                    System.out.println("at reject");
+                    System.out.println("at reject");
+                    System.out.println("at reject");
+                    System.out.println("at reject");
+                    System.out.println("at reject");
+                    returnOrderService.delayedRejectReturn(orderSn, userId).subscribe();
+
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE and CANCEL event";
                     LOG.warn(errorMessage);
