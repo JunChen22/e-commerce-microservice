@@ -28,7 +28,7 @@
             oi.product_quantity oi_product_quantity
         FROM orders o
         LEFT JOIN order_item oi ON o.id = oi.order_id
-        WHERE o.id = #{orderId}
+        WHERE o.order_sn = #{orderSn} AND o.member_id = #{userId}
     </select>
 
     <update id="updateSkuStock">

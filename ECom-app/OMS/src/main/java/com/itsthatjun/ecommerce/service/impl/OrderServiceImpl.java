@@ -16,6 +16,7 @@ import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.OrderService;
 import com.itsthatjun.ecommerce.service.PaypalService;
 import com.paypal.api.payments.Links;
+import com.paypal.api.payments.Order;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
@@ -72,6 +73,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final String SMS_SERVICE_URL = "http://sms:8080/coupon";
 
+    private final String PAYPAL_PAYMENT_LINK = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=";
+
     @Value("${redis.key.orderId}")
     private String REDIS_KEY_ORDER_ID;
     @Value("${redis.database}")
@@ -99,9 +102,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<OrderDetail> getOrdeDetail(String orderSn) {
+    public Mono<OrderDetail> getOrdeDetail(String orderSn, int userId) {
         return Mono.fromCallable(() -> {
-            OrderDetail orderDetail = orderDao.getDetail(orderSn);
+            OrderDetail orderDetail = orderDao.getDetail(orderSn, userId);
             return orderDetail;
         }).subscribeOn(jdbcScheduler);
     }
@@ -277,6 +280,24 @@ public class OrderServiceImpl implements OrderService {
             discountAmount = 0;
         }
         return discountAmount;
+    }
+
+    @Override
+    public Mono<String> getPaymentLink(String orderSn, int userId) {
+        return Mono.fromCallable(() -> {
+            OrdersExample ordersExample = new OrdersExample();
+            ordersExample.createCriteria().andOrderSnEqualTo(orderSn).andMemberIdEqualTo(userId).andStatusEqualTo(0);
+            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+            if (ordersList.isEmpty()) return "order serial number does not exist: " + orderSn;
+
+            Orders orders = ordersList.get(0);
+
+            String paymentToken = orders.getPaymentId();
+            String paymentLink = PAYPAL_PAYMENT_LINK + paymentToken;
+
+            return "redirect:" + paymentLink;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
@@ -636,6 +657,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Mono<String> getUserOrderPaymentLink(String orderSn) {
+        return Mono.fromCallable(() -> {
+            OrdersExample ordersExample = new OrdersExample();
+            ordersExample.createCriteria().andOrderSnEqualTo(orderSn).andStatusEqualTo(0);
+            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+            if (ordersList.isEmpty()) return "order serial number does not exist: " + orderSn;
+
+            Orders orders = ordersList.get(0);
+
+            String paymentToken = orders.getPaymentId();
+            String paymentLink = PAYPAL_PAYMENT_LINK + paymentToken;
+
+            return "redirect:" + paymentLink;
+        }).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
     public Mono<Orders> createOrder(Orders order, List<OrderItem> orderItemList, Address address, String reason, String operator) {
         return Mono.fromCallable(() -> {
             Orders newOrder = internalCreateOrder(order, orderItemList, address, reason, operator);
@@ -701,10 +740,18 @@ public class OrderServiceImpl implements OrderService {
         if (newOrder.getStatus() == 0) { // waiting for payment
             try {
                 Payment payment = paypalService.createPayment(orderTotal, "USD", PaypalPaymentMethod.paypal,
-                        PaypalPaymentIntent.sale, "payment description",   "/" +  orderSn,
-                        "/", orderSn);
+                        PaypalPaymentIntent.sale, "payment description",   "/", "/", orderSn);
                 for(Links links : payment.getLinks()) {
                     if (links.getRel().equals("approval_url")) {
+                        String paymentURL = links.getHref();
+                        String searchTerm = "token=";
+                        int index = paymentURL.indexOf(searchTerm);
+                        String paymentToken = paymentURL.substring(index + searchTerm.length());
+
+                        // store payment token for later payment option
+                        newOrder.setPaymentId(paymentToken);
+                        ordersMapper.updateByPrimaryKeySelective(newOrder);
+
                         System.out.println("redirect:" + links.getHref());
                     }
                 }

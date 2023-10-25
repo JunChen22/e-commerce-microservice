@@ -42,8 +42,14 @@ public class OrderController {
 
     @ApiOperation("Get Order Detail by serial number")
     @GetMapping("/detail/{orderSn}")
-    public Mono<OrderDetail> detail(@PathVariable String orderSn) {
-        return orderService.getOrdeDetail(orderSn);
+    public Mono<OrderDetail> detail(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId) {
+        return orderService.getOrdeDetail(orderSn, userId);
+    }
+
+    @ApiOperation("Get payment link to pay later")
+    @GetMapping("/payment/getPaymentLink/{orderSn}")
+    public Mono<String> getPaymentLink(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId) {
+        return orderService.getPaymentLink(orderSn, userId);
     }
 
     @GetMapping("/admin/all")
@@ -62,5 +68,11 @@ public class OrderController {
     @ApiOperation(value = "get user order detail")
     public Flux<Orders> getUserOrderDetail(@PathVariable int userId) {
         return orderService.getUserOrders(userId);
+    }
+
+    @ApiOperation("Get payment link to pay later")
+    @GetMapping("/admin/payment/getPaymentLink/{orderSn}")
+    public Mono<String> getUserPaymentLink(@PathVariable String orderSn) {
+        return orderService.getUserOrderPaymentLink(orderSn);
     }
 }

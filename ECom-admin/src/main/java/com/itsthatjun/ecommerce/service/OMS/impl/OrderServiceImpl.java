@@ -76,6 +76,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Mono<String> getPaymentLink(String orderSn) {
+        String url = OMS_SERVICE_URL + "/admin/payment/getPaymentLink/" + orderSn;
+        LOG.debug("Will call the list API on URL: {}", url);
+
+        return webClient.get().uri(url).retrieve().bodyToMono(String.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
+    }
+
+    @Override
     public Mono<OrderDetail> updateOrder(OrderDetail orderDetail, String reason, String operatorName) {
         return Mono.fromCallable(() -> {
             sendMessage("order-out-0", new OmsAdminOrderEvent(UPDATE_ORDER, orderDetail, reason, operatorName));

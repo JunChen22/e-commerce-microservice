@@ -22,6 +22,9 @@ public interface OrderService {
     @ApiOperation(value = "create order")
     Mono<OrderDetail> createOrder(OrderDetail orderDetail, String reason, String operatorName);
 
+    @ApiOperation(value = "get payment link to make payment in different time")
+    Mono<String> getPaymentLink(String orderSn);
+
     @ApiOperation(value = "update a order")
     Mono<OrderDetail> updateOrder(OrderDetail orderDetail, String reason, String operatorName);
 

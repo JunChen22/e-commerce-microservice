@@ -57,6 +57,12 @@ public class OrderController {
         return orderService.createOrder(orderDetail, reason, operatorName);
     }
 
+    @GetMapping("/payment/getPaymentLink/{orderSn}")
+    @ApiOperation("Pay order payment at a different time than generating order.")
+    public Mono<String> getPaymentLink(@PathVariable String orderSn) {
+        return orderService.getPaymentLink(orderSn);
+    }
+
     @PostMapping("/update")
     @ApiOperation(value = "update a order")
     public Mono<OrderDetail> updateOrder(@RequestBody OrderParam orderParam, HttpSession session) {

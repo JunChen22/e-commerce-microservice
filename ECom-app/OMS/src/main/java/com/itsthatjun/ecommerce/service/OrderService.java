@@ -16,7 +16,7 @@ import java.util.List;
 public interface OrderService {
 
     @ApiOperation(value = "")
-    Mono<OrderDetail> getOrdeDetail(String orderSn);
+    Mono<OrderDetail> getOrdeDetail(String orderSn, int userId);
 
     @ApiOperation("list all user orders")
     Flux<Orders> list(int status, int pageNum, int pageSize, int userId);
@@ -24,6 +24,9 @@ public interface OrderService {
     @Transactional
     @ApiOperation("Create the actual transaction and payment")
     Mono<Orders> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId);
+
+    @ApiOperation(value = "get payment link to make payment in different time")
+    Mono<String> getPaymentLink(String orderSn, int userId);
 
     @Transactional
     @ApiOperation("payment successful, redirected from paypal")
@@ -49,6 +52,9 @@ public interface OrderService {
 
     @ApiOperation(value = "get all orders from user")
     Flux<Orders> getUserOrders(int memberId);
+
+    @ApiOperation(value = "get payment link to make payment in different time")
+    Mono<String> getUserOrderPaymentLink(String orderSn);
 
     @ApiOperation(value = "Admin created order for user, to fix mistake on order or order a replacement. free or pay later")
     Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator);

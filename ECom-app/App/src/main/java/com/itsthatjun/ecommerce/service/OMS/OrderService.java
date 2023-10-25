@@ -14,6 +14,9 @@ public interface OrderService {
     @ApiOperation("Get member order based on status code and page size")
     Flux<Orders> list(int status, Integer pageNum, Integer pageSize, int userId);
 
+    @ApiOperation(value = "get payment link to make payment in different time")
+    Mono<String> getPaymentLink(String orderSn, int userId);
+
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
     Mono<OrderParam> generateOrder(OrderParam orderParam, String requestUrl, int userId);
 

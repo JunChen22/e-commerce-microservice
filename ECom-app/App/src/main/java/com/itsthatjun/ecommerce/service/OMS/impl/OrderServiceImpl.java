@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         String url = OMS_SERVICE_URL + "/detail/" + orderSn;
         LOG.debug("Will call the detail API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToMono(Orders.class)
+        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToMono(Orders.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
@@ -73,6 +73,15 @@ public class OrderServiceImpl implements OrderService {
             sendOrderMessage("order-out-0", new OmsOrderEvent(GENERATE_ORDER, userId, null, orderParam, successUrl, cancelUrl));
             return orderParam;
         }).subscribeOn(publishEventScheduler);
+    }
+
+    @Override
+    public Mono<String> getPaymentLink(String orderSn, int userId) {
+        String url = OMS_SERVICE_URL + "/payment/getPaymentLink/" + orderSn;
+        LOG.debug("Will call the list API on URL: {}", url);
+
+        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToMono(String.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
     @Override

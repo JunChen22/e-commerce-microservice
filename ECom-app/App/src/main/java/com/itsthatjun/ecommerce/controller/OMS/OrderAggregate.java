@@ -65,6 +65,13 @@ public class OrderAggregate {
         return orderService.successPay(paymentId, payerId);
     }
 
+    @GetMapping("/payment/getPaymentLink/{orderSn}")
+    @ApiOperation("Pay order payment at a different time than generating order.")
+    public Mono<String> getPaymentLink(@PathVariable String orderSn) {
+        int userId = getUserId();
+        return orderService.getPaymentLink(orderSn, userId);
+    }
+
     @PostMapping("/cancelOrder/{orderSn}")
     @ApiOperation("Cancel order if before sending the order out.")
     public Mono<Void> cancelUserOrder(@PathVariable String orderSn) {

@@ -255,7 +255,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"orderProductSku\": {\n        \"IP12-RED-128\": 1,\n        \"IPSE-BLUE-64\": 2,\n        \"GS21\": 3\n    },\n    \"payType\": \"paypal\",\n    \"coupon\": \"10OFF\",\n    \"discountAmount\": 10.5,\n    \"amount\": 5099.94,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
+											"raw": "{\n    \"orderProductSku\": {\n        \"IP12-RED-128\": 1,\n        \"IPSE-BLUE-64\": 2,\n        \"GS21\": 3\n    },\n    \"payType\": 1,\n    \"coupon\": \"10OFF\",\n    \"discountAmount\": 10,\n    \"amount\": 5099.94,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -290,6 +290,27 @@
 											"path": [
 												"order",
 												"list"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - Get payment link",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/order/payment/getPaymentLink/2023102530101000003",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"payment",
+												"getPaymentLink",
+												"2023102530101000003"
 											]
 										}
 									},
@@ -347,7 +368,36 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"returnRequest\": {\n    \"orderSn\": \"20231003A BETTER WAY TO GENERATE SN\",\n    \"returnQuantity\": 2,\n    \"returnName\": \"John Doe\",\n    \"returnPhone\": \"123-456-7890\",\n    \"askingAmount\": 142.98,\n    \"reason\": \"Product damaged\",\n    \"description\": \"Received damaged goods\"\n  },\n  \"skuQuantity\": {\n    \"NAM270\": 1,\n    \"TKAM\": 1\n  },\n  \"picturesList\": [\n  ]\n}\n",
+											"raw": "{\n  \"returnRequest\": {\n    \"orderSn\": \"2023102520101000002\",\n    \"returnQuantity\": 1,\n    \"returnName\": \"John Doe\",\n    \"returnPhone\": \"123-456-7890\",\n    \"askingAmount\": 449.99,\n    \"reason\": \"Product damaged\",\n    \"description\": \"Received damaged goods\"\n  },\n  \"skuQuantity\": {\n    \"IPSE-BLUE-64\": 1\n  },\n  \"picturesList\": [\n  ]\n}\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8080/order/return/apply",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"order",
+												"return",
+												"apply"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "OrderReturn -apply for return Copy",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"returnRequest\": {\n    \"orderSn\": \"2023102530101000003\",\n    \"returnQuantity\": 2,\n    \"returnName\": \"John Doe\",\n    \"returnPhone\": \"123-456-7890\",\n    \"askingAmount\": 142.98,\n    \"reason\": \"Product damaged\",\n    \"description\": \"Received damaged goods\"\n  },\n  \"skuQuantity\": {\n    \"NAM270-90\": 1,\n    \"TKAM\": 1\n  },\n  \"picturesList\": [\n  ]\n}\n",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -375,7 +425,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "localhost:8080/order/return/status/OR789012",
+											"raw": "localhost:8080/order/return/status/2023102520101000001",
 											"host": [
 												"localhost"
 											],
@@ -384,7 +434,7 @@
 												"order",
 												"return",
 												"status",
-												"OR789012"
+												"2023102520101000001"
 											]
 										}
 									},
@@ -1035,7 +1085,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTc2OTE4NzAsImlhdCI6MTY5NzY4Mjg3MDY3NywiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.pjvhpof-Ed3yK7OC80PMtbGjrYu5Qp4bH85ztHS4caG7pMzmtKLHLZZX_O_0_VRpqcGhtJbllCzu_BlSdMY4sg",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTgyNjk1MjEsImlhdCI6MTY5ODI2MDUyMTI3MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Cx5aHU4ZA0n1tfTcolgQWYKclCmZnEGm2aQ3Wf35EQw8CQMeZQ2ye9iLv262yk7H4MriAjBJUyPKo6REP4P-9Q",
 						"type": "string"
 					}
 				]
@@ -1349,13 +1399,34 @@
 									"response": []
 								},
 								{
+									"name": "Order - Get payment link",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8082/order/payment/getPaymentLink/2023102540101000004",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"order",
+												"payment",
+												"getPaymentLink",
+												"2023102540101000004"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Order - create order",
 									"request": {
 										"method": "POST",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"memberId\": 1,\n            \"status\": 0\n        },\n        \"orderItemList\": [\n            {\n                \"productSkuCode\": \"IP12-RED-128\",\n                \"productQuantity\": 1\n            },\n            {\n                \"productSkuCode\": \"IPSE-BLUE-64\",\n                \"productQuantity\": 2\n            },\n            {\n                \"productSkuCode\": \"GS21\",\n                \"productQuantity\": 3\n            }\n        ],\n        \"address\": {\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Custom order\"\n}",
+											"raw": "{\n    \"orderDetail\": {\n        \"orders\": {\n            \"memberId\": 1,\n            \"status\": 0,\n            \"payType\" : 1,\n            \"sourceType\": 1\n        },\n        \"orderItemList\": [\n            {\n                \"productSkuCode\": \"IP12-RED-128\",\n                \"productQuantity\": 1\n            },\n            {\n                \"productSkuCode\": \"IPSE-BLUE-64\",\n                \"productQuantity\": 2\n            },\n            {\n                \"productSkuCode\": \"GS21\",\n                \"productQuantity\": 3\n            }\n        ],\n        \"address\": {\n            \"receiverName\": \"Jane Smith\",\n            \"phoneNumber\": \"555-789-1234\",\n            \"detailAddress\": \"456 Elm St\",\n            \"city\": \"Townsville\",\n            \"state\": \"Regionville\",\n            \"zipCode\": \"54321\",\n            \"note\": \"Leave at the doorstep if no one is home.\"\n        }\n    },\n    \"reason\": \"Custom order\"\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2975,7 +3046,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk3NDA1NTgyNzIxLCJhZG1pbklkIjoxLCJleHAiOjE2OTc0MTQ1ODJ9.yyLZ09vozJFNiMQdKi-7GhFW8OkeGnxTtbNOPyGMGbTJsljqhvBsCRN-mYF_jGME40MB1K9Z-yGnU19Kan-Baw",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk4MjYyMzIyNTA3LCJhZG1pbklkIjoxLCJleHAiOjE2OTgyNzEzMjJ9.rWVNpfuqCxm47UxJZ99NsfeEQU0LTHhM2-sN7MscONY4vMonjoMXCsA7MapU6RQZT4BBoqLzagWhjoG7q24V_g",
 						"type": "string"
 					}
 				]
