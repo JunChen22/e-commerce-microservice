@@ -93,12 +93,12 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            String orderSn = event.getReturnRequest().getOrderSn();
             int userId = event.getUserId();
 
             ReturnParam returnParam = event.getReturnParam();
             ReturnRequest returnRequest = returnParam.getReturnRequest();
             List<ReturnReasonPictures> pictures = returnParam.getPicturesList();
+            String orderSn = returnParam.getReturnRequest().getOrderSn();
 
             switch (event.getEventType()) {
                 case APPLY:
@@ -115,17 +115,11 @@ public class MessageProcessorConfig {
                     break;
 
                 case REJECT:
-                    System.out.println("at reject");
-                    System.out.println("at reject");
-                    System.out.println("at reject");
-                    System.out.println("at reject");
-                    System.out.println("at reject");
-                    System.out.println("at reject");
-                    System.out.println("at reject");
                     returnOrderService.delayedRejectReturn(orderSn, userId).subscribe();
+                    break;
 
                 default:
-                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE and CANCEL event";
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE, CANCEL and REJECT event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage); // TODO: create event exception
             }

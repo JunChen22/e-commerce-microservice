@@ -4,7 +4,6 @@ import com.itsthatjun.ecommerce.dao.ReturnDao;
 import com.itsthatjun.ecommerce.dto.ReturnDetail;
 import com.itsthatjun.ecommerce.dto.ReturnParam;
 import com.itsthatjun.ecommerce.dto.ReturnRequestDecision;
-import com.itsthatjun.ecommerce.dto.event.incoming.OmsCompletionEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.OmsReturnEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.PmsProductOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsSalesStockOutEvent;
@@ -141,7 +140,10 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         }
 
         // send out automatically reply, currently setup to be rejection after 3 days.
-        sendReturnRequestMessage("returnRequestTTL-out-0", new OmsReturnEvent(REJECT, userId, returnRequest, null));
+        ReturnParam returnParam = new ReturnParam();
+        returnParam.setReturnRequest(returnRequest);
+        sendReturnRequestMessage("returnRequestTTL-out-0", new OmsReturnEvent(REJECT, userId, returnParam));
+
         return returnRequest;
     }
 

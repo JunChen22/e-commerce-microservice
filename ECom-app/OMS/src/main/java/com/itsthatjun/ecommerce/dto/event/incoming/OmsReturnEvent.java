@@ -20,7 +20,6 @@ public class OmsReturnEvent {
 
     private final Type eventType;
     private final int userId;
-    private final ReturnRequest returnRequest;
     private final ReturnParam returnParam;
     private final ZonedDateTime eventCreatedAt;
 
@@ -28,15 +27,13 @@ public class OmsReturnEvent {
     public OmsReturnEvent() {
         this.eventType = null;
         this.userId = 0;
-        this.returnRequest = null;
         this.returnParam = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsReturnEvent(Type eventType, int userId, ReturnRequest returnRequest, ReturnParam returnParam) {
+    public OmsReturnEvent(Type eventType, int userId, ReturnParam returnParam) {
         this.eventType = eventType;
         this.userId = userId;
-        this.returnRequest = returnRequest;
         this.returnParam = returnParam;
         this.eventCreatedAt = now();
     }

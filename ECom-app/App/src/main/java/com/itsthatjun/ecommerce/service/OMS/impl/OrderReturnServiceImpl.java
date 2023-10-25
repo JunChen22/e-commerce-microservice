@@ -49,7 +49,7 @@ public class OrderReturnServiceImpl implements OrderReturnService {
     @Override
     public Mono<ReturnParam> applyForReturn(ReturnParam returnParam, int userId) {
         return Mono.fromCallable(() -> {
-            sendMessage("return-out-0", new OmsReturnEvent(APPLY, userId, returnParam.getReturnRequest(), returnParam));
+            sendMessage("return-out-0", new OmsReturnEvent(APPLY, userId, returnParam));
             return returnParam;
         }).subscribeOn(publishEventScheduler);
     }
@@ -58,7 +58,7 @@ public class OrderReturnServiceImpl implements OrderReturnService {
     public Mono<ReturnParam> updateReturn(ReturnParam returnParam, int userId) {
         return Mono.fromCallable(() -> {
             ReturnRequest returnRequest = returnParam.getReturnRequest();
-            sendMessage("return-out-0", new OmsReturnEvent(UPDATE, userId, returnRequest, returnParam));
+            sendMessage("return-out-0", new OmsReturnEvent(UPDATE, userId, returnParam));
             return returnParam;
         }).subscribeOn(publishEventScheduler);
     }
@@ -68,7 +68,9 @@ public class OrderReturnServiceImpl implements OrderReturnService {
         return Mono.fromRunnable(() -> {
             ReturnRequest returnRequest = new ReturnRequest();
             returnRequest.setOrderSn(orderSn);
-            sendMessage("return-out-0", new OmsReturnEvent(CANCEL, userId, returnRequest, null));
+            ReturnParam requestParam = new ReturnParam();
+            requestParam.setReturnRequest(returnRequest);
+            sendMessage("return-out-0", new OmsReturnEvent(CANCEL, userId, requestParam));
         }).subscribeOn(publishEventScheduler).then();
     }
 
