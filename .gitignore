@@ -113,3 +113,6 @@ yarn-error.log*
 #maven script
 /mvnw
 /mvnwmvnw.cmd
+
+# enviroment variable
+.env

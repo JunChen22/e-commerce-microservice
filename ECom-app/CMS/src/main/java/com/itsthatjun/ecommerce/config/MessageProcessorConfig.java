@@ -30,18 +30,20 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             ArticleInfo articleInfo = event.getArticleInfo();
+            String operator = event.getOperator();
+
             switch (event.getEventType()) {
                 case CREATE:
-                    articleService.createArticle(articleInfo).subscribe();
+                    articleService.createArticle(articleInfo, operator).subscribe();
                     break;
 
                 case UPDATE:
-                    articleService.updateArticle(articleInfo).subscribe();
+                    articleService.updateArticle(articleInfo, operator).subscribe();
                     break;
 
                 case DELETE:
-                    int articleId = event.getArticleID();
-                    articleService.deleteArticle(articleId).subscribe();
+                    int articleId = articleInfo.getArticle().getId();
+                    articleService.deleteArticle(articleId, operator).subscribe();
                     break;
 
                 default:

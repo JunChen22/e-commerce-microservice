@@ -252,7 +252,6 @@ public class MessageProcessorConfig {
             List<ProductSku> productSkuList = event.getProductSkuList();
 
             switch (event.getEventType()) {
-
                 case NEW_PRODUCT:
                     pmsEventUpdateService.addProduct(newProduct, productSkuList).subscribe();
                     break;

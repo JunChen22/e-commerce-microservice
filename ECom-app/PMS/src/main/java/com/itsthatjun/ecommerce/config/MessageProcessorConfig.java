@@ -82,30 +82,29 @@ public class MessageProcessorConfig {
         };
     }
 
-
     @Bean
     public Consumer<PmsAdminBrandEvent> adminBrandMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             Brand brand = event.getBrand();
-            switch (event.getEventType()) {
+            String operator = event.getOperator();
 
+            switch (event.getEventType()) {
                 case CREATE:
-                    brandService.adminCreateBrand(brand).subscribe();
+                    brandService.adminCreateBrand(brand, operator).subscribe();
                     break;
 
                 case UPDATE:
-                    brandService.adminUpdateBrand(brand).subscribe();
+                    brandService.adminUpdateBrand(brand, operator).subscribe();
                     break;
 
                 case DELETE:
-                    int brandId = event.getBrandId();
-                    brandService.adminDeleteBrand(brandId).subscribe();
+                    int brandId = brand.getId();
+                    brandService.adminDeleteBrand(brandId, operator).subscribe();
                     break;
 
                 default:
-
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", CREATE, UPDATE, and DELETE event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
@@ -120,43 +119,44 @@ public class MessageProcessorConfig {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             Product product = event.getProductDetail().getProduct();
             List<ProductSku> skuList = event.getProductDetail().getSkuVariants();
-            switch (event.getEventType()) {
+            String operator = event.getOperator();
 
+            switch (event.getEventType()) {
                 case NEW_PRODUCT:
-                    productService.createProduct(product, skuList).subscribe();
+                    productService.createProduct(product, skuList, operator).subscribe();
                     break;
 
                 case NEW_PRODUCT_SKU:
-                    productService.addProductSku(product, skuList.get(0)).subscribe();
+                    productService.addProductSku(product, skuList.get(0), operator).subscribe();
                     break;
 
                 case UPDATE_PRODUCT_INFO:
-                    productService.updateProductInfo(product).subscribe();
+                    productService.updateProductInfo(product, operator).subscribe();
                     break;
 
                 case UPDATE_PRODUCT_STATUS:
-                    productService.updateProductStatus(product).subscribe();
+                    productService.updateProductStatus(product, operator).subscribe();
                     break;
 
                 case UPDATE_PRODUCT_SKU_STATUS:
-                    productService.updateProductSkuStatus(skuList.get(0)).subscribe();
+                    productService.updateProductSkuStatus(skuList.get(0), operator).subscribe();
                     break;
 
                 case UPDATE_STOCK:
                     int addedStock = event.getProductDetail().getStock();
-                    productService.updateProductStock(skuList.get(0), addedStock).subscribe();
+                    productService.updateProductStock(skuList.get(0), addedStock, operator).subscribe();
                     break;
 
                 case UPDATE_PRODUCT_PRICE:
-                    productService.updateProductPrice(skuList).subscribe();
+                    productService.updateProductPrice(skuList, operator).subscribe();
                     break;
 
                 case REMOVE_PRODUCT_SKU:
-                    productService.removeProductSku(skuList.get(0)).subscribe();
+                    productService.removeProductSku(skuList.get(0), operator).subscribe();
                     break;
 
                 case DELETE_PRODUCT:
-                    productService.deleteProduct(product.getId()).subscribe();
+                    productService.deleteProduct(product.getId(), operator).subscribe();
                     break;
 
                 default:
@@ -172,22 +172,23 @@ public class MessageProcessorConfig {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
+            Review review = event.getReview().getReview();
+            String operator = event.getOperator();
             switch (event.getEventType()) {
                 case CREATE:
-                    reviewService.adminCreateReview(event.getReview().getReview(), event.getReview().getPicturesList()).subscribe();
+                    reviewService.adminCreateReview(review, event.getReview().getPicturesList(), operator).subscribe();
                     break;
 
                 case UPDATE:
-                    reviewService.adminUpdateReview(event.getReview().getReview(), event.getReview().getPicturesList()).subscribe();
+                    reviewService.adminUpdateReview(review, event.getReview().getPicturesList(), operator).subscribe();
                     break;
 
                 case DELETE:
-                    int reviewId = event.getReviewId();
-                    reviewService.adminDeleteReview(reviewId).subscribe();
+                    int reviewId = review.getId();
+                    reviewService.adminDeleteReview(reviewId, operator).subscribe();
                     break;
 
                 default:
-
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", CREATE, UPDATE, and DELETE event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
@@ -203,7 +204,6 @@ public class MessageProcessorConfig {
 
             Map<String, Integer> skuQuantityMap = event.getProductMap();
             switch (event.getEventType()) {
-
                 case UPDATE_PURCHASE:
                     omsEventUpdateService.updatePurchase(skuQuantityMap).subscribe();
                     break;
@@ -221,7 +221,6 @@ public class MessageProcessorConfig {
                     break;
 
                 default:
-
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_PURCHASE, " +
                             "UPDATE_PURCHASE_PAYMENT, UPDATE_RETURN and UPDATE_FAIL_PAYMENT event";
                     LOG.warn(errorMessage);

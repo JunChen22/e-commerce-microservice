@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "Login")
-    public ResponseEntity<?>  login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 
         String token = memberService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (token.isEmpty()) {

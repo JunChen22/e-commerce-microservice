@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ArticleMapper">
-  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Article">
+<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ArticleChangeLogMapper">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="body" jdbcType="VARCHAR" property="body" />
-    <result column="publish_status" jdbcType="INTEGER" property="publishStatus" />
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
+    <result column="change_operator" jdbcType="VARCHAR" property="changeOperator" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
-    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, body, publish_status, created_at, updated_at
+    id, article_id, update_action, change_operator, created_at
   </sql>
-  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from article
+    from article_change_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,88 +86,79 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from article
+    from article_change_log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from article
+    delete from article_change_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleExample">
-    delete from article
+  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLogExample">
+    delete from article_change_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Article" useGeneratedKeys="true">
-    insert into article (title, body, publish_status, 
-      created_at, updated_at)
-    values (#{title,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{publishStatus,jdbcType=INTEGER}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog" useGeneratedKeys="true">
+    insert into article_change_log (article_id, update_action, change_operator, 
+      created_at)
+    values (#{articleId,jdbcType=INTEGER}, #{updateAction,jdbcType=VARCHAR}, #{changeOperator,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Article" useGeneratedKeys="true">
-    insert into article
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog" useGeneratedKeys="true">
+    insert into article_change_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        title,
+      <if test="articleId != null">
+        article_id,
       </if>
-      <if test="body != null">
-        body,
+      <if test="updateAction != null">
+        update_action,
       </if>
-      <if test="publishStatus != null">
-        publish_status,
+      <if test="changeOperator != null">
+        change_operator,
       </if>
       <if test="createdAt != null">
         created_at,
       </if>
-      <if test="updatedAt != null">
-        updated_at,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
+      <if test="articleId != null">
+        #{articleId,jdbcType=INTEGER},
       </if>
-      <if test="body != null">
-        #{body,jdbcType=VARCHAR},
+      <if test="updateAction != null">
+        #{updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="publishStatus != null">
-        #{publishStatus,jdbcType=INTEGER},
+      <if test="changeOperator != null">
+        #{changeOperator,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedAt != null">
-        #{updatedAt,jdbcType=TIMESTAMP},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleExample" resultType="java.lang.Long">
-    select count(*) from article
+  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLogExample" resultType="java.lang.Long">
+    select count(*) from article_change_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update article
+    update article_change_log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.title != null">
-        title = #{record.title,jdbcType=VARCHAR},
+      <if test="record.articleId != null">
+        article_id = #{record.articleId,jdbcType=INTEGER},
       </if>
-      <if test="record.body != null">
-        body = #{record.body,jdbcType=VARCHAR},
+      <if test="record.updateAction != null">
+        update_action = #{record.updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="record.publishStatus != null">
-        publish_status = #{record.publishStatus,jdbcType=INTEGER},
+      <if test="record.changeOperator != null">
+        change_operator = #{record.changeOperator,jdbcType=VARCHAR},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -176,45 +166,40 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update article
+    update article_change_log
     set id = #{record.id,jdbcType=INTEGER},
-      title = #{record.title,jdbcType=VARCHAR},
-      body = #{record.body,jdbcType=VARCHAR},
-      publish_status = #{record.publishStatus,jdbcType=INTEGER},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+      article_id = #{record.articleId,jdbcType=INTEGER},
+      update_action = #{record.updateAction,jdbcType=VARCHAR},
+      change_operator = #{record.changeOperator,jdbcType=VARCHAR},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.Article">
-    update article
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog">
+    update article_change_log
     <set>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
+      <if test="articleId != null">
+        article_id = #{articleId,jdbcType=INTEGER},
       </if>
-      <if test="body != null">
-        body = #{body,jdbcType=VARCHAR},
+      <if test="updateAction != null">
+        update_action = #{updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="publishStatus != null">
-        publish_status = #{publishStatus,jdbcType=INTEGER},
+      <if test="changeOperator != null">
+        change_operator = #{changeOperator,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updatedAt != null">
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Article">
-    update article
-    set title = #{title,jdbcType=VARCHAR},
-      body = #{body,jdbcType=VARCHAR},
-      publish_status = #{publishStatus,jdbcType=INTEGER},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog">
+    update article_change_log
+    set article_id = #{articleId,jdbcType=INTEGER},
+      update_action = #{updateAction,jdbcType=VARCHAR},
+      change_operator = #{changeOperator,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -36,25 +36,25 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            int userId = event.getUserId();
+            int userId = event.getMember().getId();
             Member member = event.getMember();
+            String operator = event.getOperator();
 
             switch (event.getEventType()) {
-
                 case NEW_ACCOUNT:
-                    memberService.createMember(member).subscribe();
+                    memberService.createMember(member, operator).subscribe();
                     break;
 
                 case UPDATE_ACCOUNT_INFO:
-                    memberService.updateMemberInfo(member).subscribe();
+                    memberService.updateMemberInfo(member, operator).subscribe();
                     break;
 
                 case UPDATE_ACCOUNT_STATUS:
-                    memberService.updateMemberStatus(member).subscribe();
+                    memberService.updateMemberStatus(member, operator).subscribe();
                     break;
 
                 case DELETE_ACCOUNT:
-                    memberService.deleteMember(userId).subscribe();
+                    memberService.deleteMember(userId, operator).subscribe();
                     break;
 
                 default:
@@ -73,7 +73,6 @@ public class MessageProcessorConfig {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
             MemberDetail memberDetail = event.getMemberDetail();
-
             switch (event.getEventType()) {
                 case NEW_ACCOUNT:
                     memberService.register(memberDetail).subscribe();

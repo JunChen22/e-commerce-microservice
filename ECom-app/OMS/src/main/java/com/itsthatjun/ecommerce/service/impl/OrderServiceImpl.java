@@ -521,7 +521,7 @@ public class OrderServiceImpl implements OrderService {
     private String generateOrderSn(Orders newOrder) {
         StringBuilder sb = new StringBuilder();
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String key = REDIS_DATABASE + ":"+ REDIS_KEY_ORDER_ID + date;
+        String key = REDIS_DATABASE + ":" + REDIS_KEY_ORDER_ID + date;
         Long increment = redisService.incr(key, 1);
         sb.append(date + increment);
 
@@ -690,8 +690,14 @@ public class OrderServiceImpl implements OrderService {
 
         double orderTotal = 0;
 
-        // TODO: address in here
+        // set address
         newOrder.setReceiverName(address.getReceiverName());
+        newOrder.setReceiverPhone(address.getPhoneNumber());
+        newOrder.setReceiverDetailAddress(address.getDetailAddress());
+        newOrder.setReceiverCity(address.getCity());
+        newOrder.setReceiverState(address.getState());
+        newOrder.setReceiverZipCode(address.getZipCode());
+        newOrder.setComment(address.getNote());  // special instruction like leave the package between the door
 
         // fill in order item info
         for (OrderItem item : orderItemList) {

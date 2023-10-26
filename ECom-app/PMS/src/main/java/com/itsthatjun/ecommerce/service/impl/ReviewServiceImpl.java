@@ -68,7 +68,6 @@ public class ReviewServiceImpl implements ReviewService {
         reviewPicturesExample.createCriteria().andReviewAlbumIdEqualTo(albumId);
         List<ReviewPictures> reviewPicturesList = picturesMapper.selectByExample(reviewPicturesExample);
 
-        productReview.setAlbumId(albumId);
         productReview.setPicturesList(reviewPicturesList);
 
         return productReview;

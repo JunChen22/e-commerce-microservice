@@ -3,10 +3,7 @@ package com.itsthatjun.ecommerce.service.impl;
 import com.itsthatjun.ecommerce.dao.ArticleDao;
 import com.itsthatjun.ecommerce.dto.ArticleInfo;
 import com.itsthatjun.ecommerce.exceptions.ArticleException;
-import com.itsthatjun.ecommerce.mbg.mapper.ArticleImageMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.ArticleMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.ArticleQaMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.ArticleVideoMapper;
+import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.ArticleService;
 import org.slf4j.Logger;
@@ -38,18 +35,21 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleDao articleDao;
 
+    private final ArticleChangeLogMapper logMapper;
+
     private final Scheduler jdbcScheduler;
 
     private final Random randomNumberGenerator = new Random();
 
     @Autowired
     public ArticleServiceImpl(ArticleMapper articleMapper, ArticleVideoMapper videoMapper, ArticleQaMapper qaMapper,
-                              ArticleImageMapper imageMapper, ArticleDao articleDao,
+                              ArticleImageMapper imageMapper, ArticleChangeLogMapper logMapper, ArticleDao articleDao,
                               @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.articleMapper = articleMapper;
         this.videoMapper = videoMapper;
         this.qaMapper = qaMapper;
         this.imageMapper = imageMapper;
+        this.logMapper = logMapper;
         this.articleDao = articleDao;
         this.jdbcScheduler = jdbcScheduler;
     }
@@ -68,7 +68,8 @@ public class ArticleServiceImpl implements ArticleService {
         ).map(e -> throwErrorIfBadLuck(e, faultPercent)).delayElement(Duration.ofSeconds(delay)).subscribeOn(jdbcScheduler);
     }
 
-    /*  use to test/simulate circuit breaker. fault percent.
+    /*
+        use to test/simulate circuit breaker. fault percent.
     */
     private ArticleInfo throwErrorIfBadLuck(ArticleInfo articleInfo, int faultPercent) {
         if (faultPercent == 0) return articleInfo;
@@ -86,14 +87,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Mono<ArticleInfo> createArticle(ArticleInfo articleInfo) {
+    public Mono<ArticleInfo> createArticle(ArticleInfo articleInfo, String operator) {
         return Mono.fromCallable(() ->
             // Offload the blocking operation to the specified scheduler
-            internalCreateArticle(articleInfo)
+            internalCreateArticle(articleInfo, operator)
         ).subscribeOn(jdbcScheduler);
     }
 
-    private ArticleInfo internalCreateArticle(ArticleInfo articleInfo) {
+    private ArticleInfo internalCreateArticle(ArticleInfo articleInfo, String operator) {
         //TODO: optimize this
         Article exist = articleMapper.selectByPrimaryKey(articleInfo.getArticle().getId());
         if (exist != null) {
@@ -104,10 +105,10 @@ public class ArticleServiceImpl implements ArticleService {
         Date currentDate = new Date();
         articleInfo.getArticle().setCreatedAt(currentDate);
         articleMapper.insert(articleInfo.getArticle());
-        int articleID = articleInfo.getArticle().getId();
+        int articleId = articleInfo.getArticle().getId();
         if (!articleInfo.getQA().isEmpty()) {
             for (ArticleQa qa : articleInfo.getQA()) {
-                qa.setArticleId(articleID);
+                qa.setArticleId(articleId);
                 qa.setCreatedAt(currentDate);
                 qaMapper.insert(qa);
             }
@@ -115,7 +116,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         if (!articleInfo.getImages().isEmpty()) {
             for (ArticleImage image : articleInfo.getImages()) {
-                image.setArticleId(articleID);
+                image.setArticleId(articleId);
                 image.setCreatedAt(currentDate);
                 imageMapper.insert(image);
             }
@@ -123,35 +124,32 @@ public class ArticleServiceImpl implements ArticleService {
 
         if (!articleInfo.getVideos().isEmpty()) {
             for (ArticleVideo video : articleInfo.getVideos()) {
-                video.setArticleId(articleID);
+                video.setArticleId(articleId);
                 video.setCreatedAt(currentDate);
                 videoMapper.insert(video);
             }
         }
+        articleLog(articleId, "create article", operator);
         return articleInfo;
     }
 
-    @Override
-    public Mono<ArticleInfo> updateArticle(ArticleInfo articleInfo) {
-        return Mono.fromCallable(() ->
+    @Override    // TODO: update when deleting one of the element
+    public Mono<ArticleInfo> updateArticle(ArticleInfo articleInfo, String operator) {
+        return Mono.fromCallable(() -> {
             // Offload the blocking operation to the specified scheduler
-            internalUpdateArticle(articleInfo)
-        ).subscribeOn(jdbcScheduler);
-    }
+            int articleId = articleInfo.getArticle().getId();
 
-    // TODO: update when deleting one of the element
-    private ArticleInfo internalUpdateArticle(ArticleInfo articleInfo) {
-        int articleId = articleInfo.getArticle().getId();
+            Article article = articleInfo.getArticle();
+            article.setUpdatedAt(new Date());
 
-        Article article = articleInfo.getArticle();
-        article.setUpdatedAt(new Date());
+            articleMapper.updateByPrimaryKeySelective(article);
+            updateQA(articleId, articleInfo.getQA());
+            updateImage(articleId, articleInfo.getImages());
+            updateVideo(articleId, articleInfo.getVideos());
 
-        articleMapper.updateByPrimaryKeySelective(article);
-        updateQA(articleId, articleInfo.getQA());
-        updateImage(articleId, articleInfo.getImages());
-        updateVideo(articleId, articleInfo.getVideos());
-
-        return articleInfo;
+            articleLog(articleId, "update article", operator);
+            return articleInfo;
+        }).subscribeOn(jdbcScheduler);
     }
 
     // TODO: newly created won't have primary key, only update existing pic not newly added
@@ -183,31 +181,38 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Mono<Void> deleteArticle(int articleId) {
-        return Mono.fromRunnable(() ->
-                internalDeleteArticle(articleId)
-        ).subscribeOn(jdbcScheduler).then();
+    public Mono<Void> deleteArticle(int articleId, String operator) {
+        return Mono.fromRunnable(() -> {
+            if (articleMapper.selectByPrimaryKey(articleId) == null) {
+                throw new ArticleException("Article not found with ID: " + articleId);
+            }
+
+            ArticleInfo article = articleDao.getArticle(articleId);
+
+            articleMapper.deleteByPrimaryKey(articleId);
+
+            for (ArticleQa qa : article.getQA()) {
+                qaMapper.deleteByPrimaryKey(qa.getId());
+            }
+
+            for (ArticleVideo video : article.getVideos()) {
+                videoMapper.deleteByPrimaryKey(video.getId());
+            }
+
+            for (ArticleImage image : article.getImages()) {
+                imageMapper.deleteByPrimaryKey(image.getId());
+            }
+
+            articleLog(articleId, "delete article", operator);
+        }).subscribeOn(jdbcScheduler).then();
     }
 
-    public void internalDeleteArticle(int articleId) {
-        if (articleMapper.selectByPrimaryKey(articleId) == null) {
-            throw new ArticleException("Article not found with ID: " + articleId);
-        }
-
-        ArticleInfo article = articleDao.getArticle(articleId);
-
-        articleMapper.deleteByPrimaryKey(articleId);
-
-        for (ArticleQa qa : article.getQA()) {
-            qaMapper.deleteByPrimaryKey(qa.getId());
-        }
-
-        for (ArticleVideo video : article.getVideos()) {
-            videoMapper.deleteByPrimaryKey(video.getId());
-        }
-
-        for (ArticleImage image : article.getImages()) {
-            imageMapper.deleteByPrimaryKey(image.getId());
-        }
+    private void articleLog(int articleId, String updateAction, String operator) {
+        ArticleChangeLog changeLog = new ArticleChangeLog();
+        changeLog.setArticleId(articleId);
+        changeLog.setUpdateAction(updateAction);
+        changeLog.setChangeOperator(operator);
+        changeLog.setCreatedAt(new Date());
+        logMapper.insert(changeLog);
     }
 }

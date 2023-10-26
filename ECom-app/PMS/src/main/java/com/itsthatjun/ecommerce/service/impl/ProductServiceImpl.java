@@ -311,6 +311,13 @@ public class ProductServiceImpl implements ProductService {
         return updatedProduct;
     }
 
+    private void createUpdateLog() {
+        ProductUpdateLog updateLog = new ProductUpdateLog();
+
+        logMapper.insert(updateLog);
+    }
+
+
     @Override
     public Mono<ProductSku> updateProductSkuStatus(ProductSku updateSku) {
         return Mono.fromCallable(() ->

@@ -56,7 +56,6 @@ public class MessageProcessorConfig {
             Coupon coupon = event.getCouponSale().getCoupon();
             Map<String, Integer> skuQuantity = event.getCouponSale().getSkuQuantity();
             switch (event.getEventType()) {
-
                 case CREATE_COUPON:
                     couponService.createCoupon(coupon, skuQuantity).subscribe();
                     break;
@@ -71,7 +70,6 @@ public class MessageProcessorConfig {
                     break;
 
                 default:
-
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected CREATE_COUPON, " +
                             "UPDATE_COUPON, and DELETE_COUPON event";
                     LOG.warn(errorMessage);
@@ -89,7 +87,6 @@ public class MessageProcessorConfig {
             OnSaleRequest saleRequest = event.getSaleRequest();
             String operator = event.getSaleRequest().getOperator();
             switch (event.getEventType()) {
-
                 case CREATE_SALE_LIST:
                     salesService.createListSale(saleRequest, operator).subscribe();
                     break;
@@ -120,7 +117,6 @@ public class MessageProcessorConfig {
                     break;
 
                 default:
-
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected CREATE_SALE, " +
                             "UPDATE_SALE_INFO, UPDATE_SALE_PRICE, UPDATE_SALE_STATUS and DELETE_SALE event";
                     LOG.warn(errorMessage);
@@ -153,7 +149,6 @@ public class MessageProcessorConfig {
 
             Map<String, Integer> skuQuantityMap = event.getProductMap();
             switch (event.getEventType()) {
-
                 case UPDATE_PURCHASE:
                     omsEventUpdateService.updatePurchase(skuQuantityMap).subscribe();
                     break;
@@ -171,7 +166,6 @@ public class MessageProcessorConfig {
                     break;
 
                 default:
-
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_PURCHASE, " +
                             "UPDATE_PURCHASE_PAYMENT, UPDATE_RETURN and UPDATE_FAIL_PAYMENT event";
                     LOG.warn(errorMessage);
@@ -189,7 +183,6 @@ public class MessageProcessorConfig {
             Product product = event.getProduct();
             List<ProductSku> productSkuList = event.getProductSkuList();
             switch (event.getEventType()) {
-
                 case NEW_PRODUCT:
                     pmsEventUpdateService.addProduct(product, productSkuList).subscribe();
                     break;
@@ -211,7 +204,6 @@ public class MessageProcessorConfig {
                     break;
 
                 default:
-
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_PRODUCT, " +
                             "NEW_PRODUCT_SKU, UPDATE_PRODUCT, REMOVE_PRODUCT and REMOVE_PRODUCT_SKU event";
                     LOG.warn(errorMessage);

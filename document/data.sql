@@ -1817,14 +1817,15 @@ CREATE TABLE article (
   id SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   body TEXT NOT NULL,
+  publish_status integer NOT NULL DEFAULT 0,  -- article online status
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT NULL
 );
 
-INSERT INTO article (title, body) VALUES
-('Buyer''s guide', 'This article provides a comprehensive guide for buyers.'),
-('Product Comparison', 'This article compares different products and their features.'),
-('How to Choose the Right Product', 'This article provides tips on how to choose the right product for your needs.');
+INSERT INTO article (title, body, publish_status) VALUES
+('Buyer''s guide', 'This article provides a comprehensive guide for buyers.', 1),
+('Product Comparison', 'This article compares different products and their features.', 1),
+('How to Choose the Right Product', 'This article provides tips on how to choose the right product for your needs.', 0);
 
 DROP TABLE IF EXISTS article_QA;
 CREATE TABLE article_QA (
@@ -1874,7 +1875,14 @@ INSERT INTO article_video (article_id, url) VALUES
 (2, 'https://youtu.be/dQw4w9WgXcQ');
 
 
-
+DROP TABLE IF EXISTS article_change_log;
+CREATE TABLE article_change_log (
+  id SERIAL PRIMARY KEY,
+  article_id INT NOT NULL,
+  update_action VARCHAR(255) NOT NULL,
+  change_operator VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 --------------
 ---  SMS  ----

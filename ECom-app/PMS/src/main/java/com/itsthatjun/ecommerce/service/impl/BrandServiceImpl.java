@@ -27,7 +27,6 @@ public class BrandServiceImpl implements BrandService {
 
     private final BrandMapper brandMapper;
 
-    // TODO: add update log
     private final BrandUpdateLogMapper brandUpdateLogMapper;
 
     private final Scheduler jdbcScheduler;
@@ -44,34 +43,28 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Flux<Brand> listAllBrand() {
         return Mono.fromCallable(() -> {
-                    List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
-                    return brandList;
-                })
-                .flatMapMany(Flux::fromIterable)
-                .subscribeOn(jdbcScheduler);
+            List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
+            return brandList;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Flux<Brand> listBrand(int pageNum, int pageSize) {
         return Mono.fromCallable(() -> {
-                    PageHelper.startPage(pageNum, pageSize);
-                    List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
-                    return brandList;
-                })
-                .flatMapMany(Flux::fromIterable)
-                .subscribeOn(jdbcScheduler);
+            PageHelper.startPage(pageNum, pageSize);
+            List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
+            return brandList;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Flux<Product> listAllBrandProduct(int brandId) {
         return Mono.fromCallable(() -> {
-                    ProductExample example = new ProductExample();
-                    example.createCriteria().andBrandIdEqualTo(brandId);
-                    List<Product> productList = productMapper.selectByExample(example);
-                    return productList;
-                })
-                .flatMapMany(Flux::fromIterable)
-                .subscribeOn(jdbcScheduler);
+            ProductExample example = new ProductExample();
+            example.createCriteria().andBrandIdEqualTo(brandId).andPublishStatusEqualTo(1);
+            List<Product> productList = productMapper.selectByExample(example);
+            return productList;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 
     @Override
@@ -83,7 +76,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Brand> adminCreateBrand(Brand brand) {
+    public Mono<Brand> adminCreateBrand(Brand brand, String operator) {
         return Mono.fromCallable(() -> {
             brandMapper.insert(brand);
             return brand; // Use Mono.justOrEmpty to handle potential null values
@@ -91,7 +84,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Brand> adminUpdateBrand(Brand brand) {
+    public Mono<Brand> adminUpdateBrand(Brand brand, String operator) {
         return Mono.fromCallable(() -> {
             brandMapper.updateByPrimaryKeySelective(brand);
             return brand; // Use Mono.justOrEmpty to handle potential null values
@@ -99,9 +92,9 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Void> adminDeleteBrand(int id) {
-        return Mono.fromRunnable(() ->
-                brandMapper.deleteByPrimaryKey(id)
-        ).subscribeOn(jdbcScheduler).then();
+    public Mono<Void> adminDeleteBrand(int brandId, String operator) {
+        return Mono.fromRunnable(() -> {
+            brandMapper.deleteByPrimaryKey(brandId);
+        }).subscribeOn(jdbcScheduler).then();
     }
 }

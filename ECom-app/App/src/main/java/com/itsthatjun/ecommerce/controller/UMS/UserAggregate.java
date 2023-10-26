@@ -1,9 +1,7 @@
 package com.itsthatjun.ecommerce.controller.UMS;
 
 import com.itsthatjun.ecommerce.dto.MemberDetail;
-import com.itsthatjun.ecommerce.dto.event.ums.UmsUserEvent;
 import com.itsthatjun.ecommerce.mbg.model.Address;
-import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
@@ -11,19 +9,10 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-import static com.itsthatjun.ecommerce.dto.event.ums.UmsUserEvent.Type.*;
-import static java.util.logging.Level.FINE;
 
 @RestController
 @Api(tags = "User controller", description = "user controller")

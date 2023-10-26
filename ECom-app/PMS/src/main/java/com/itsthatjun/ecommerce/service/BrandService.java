@@ -21,11 +21,11 @@ public interface BrandService {
     Mono<Brand> getBrand(int id);
 
     @ApiOperation(value = "")
-    Mono<Brand> adminCreateBrand(Brand brand);
+    Mono<Brand> adminCreateBrand(Brand brand, String operator);
 
     @ApiOperation(value = "")
-    Mono<Brand> adminUpdateBrand(Brand brand);
+    Mono<Brand> adminUpdateBrand(Brand brand, String operator);
 
     @ApiOperation(value = "")
-    Mono<Void> adminDeleteBrand(int id);
+    Mono<Void> adminDeleteBrand(int brandId, String operator);
 }

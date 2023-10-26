@@ -17,22 +17,22 @@ public class PmsAdminReviewEvent {
     }
 
     private final Type eventType;
-    private final Integer reviewId;
     private final ProductReview review;
+    private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public PmsAdminReviewEvent() {
         this.eventType = null;
         this.review = null;
-        this.reviewId = null;
+        this.operator = null;
         this.eventCreatedAt = null;
     }
 
-    public PmsAdminReviewEvent(Type eventType, ProductReview review, Integer reviewId) {
+    public PmsAdminReviewEvent(Type eventType, ProductReview review, String operator) {
         this.eventType = eventType;
         this.review = review;
-        this.reviewId = reviewId;
+        this.operator = operator;
         this.eventCreatedAt = now();
     }
 }

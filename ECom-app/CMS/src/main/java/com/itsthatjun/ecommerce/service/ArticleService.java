@@ -16,11 +16,11 @@ public interface ArticleService {
     Mono<ArticleInfo> getArticle(int articleId, int delay, int faultPercent);
 
     @ApiOperation(value = "create article")
-    Mono<ArticleInfo> createArticle(ArticleInfo article);
+    Mono<ArticleInfo> createArticle(ArticleInfo article, String operator);
 
     @ApiOperation(value = "update/add article and its media content")
-    Mono<ArticleInfo> updateArticle(ArticleInfo article);
+    Mono<ArticleInfo> updateArticle(ArticleInfo article, String operator);
 
     @ApiOperation(value = "delete article and all of its media content")
-    Mono<Void> deleteArticle(int articleId);
+    Mono<Void> deleteArticle(int articleId, String operator);
 }
