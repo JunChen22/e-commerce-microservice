@@ -75,7 +75,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected CREATE_COUPON, " +
                             "UPDATE_COUPON, and DELETE_COUPON event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -124,7 +124,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected CREATE_SALE, " +
                             "UPDATE_SALE_INFO, UPDATE_SALE_PRICE, UPDATE_SALE_STATUS and DELETE_SALE event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -140,7 +140,7 @@ public class MessageProcessorConfig {
             } else {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_COUPON_USAGE event";
                 LOG.warn(errorMessage);
-                throw new RuntimeException(errorMessage); // TODO: create event exception
+                throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -175,7 +175,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_PURCHASE, " +
                             "UPDATE_PURCHASE_PAYMENT, UPDATE_RETURN and UPDATE_FAIL_PAYMENT event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -215,7 +215,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_PRODUCT, " +
                             "NEW_PRODUCT_SKU, UPDATE_PRODUCT, REMOVE_PRODUCT and REMOVE_PRODUCT_SKU event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }

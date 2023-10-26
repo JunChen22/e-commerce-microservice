@@ -48,7 +48,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected CREATE, " +
                             "UPDATE, and DELETE event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }

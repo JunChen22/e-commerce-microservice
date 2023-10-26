@@ -77,7 +77,7 @@ public class MessageProcessorConfig {
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected CREATE_REVIEW, UPDATE_REVIEW, DELETE_REVIEW event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -108,7 +108,7 @@ public class MessageProcessorConfig {
 
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", CREATE, UPDATE, and DELETE event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -162,7 +162,7 @@ public class MessageProcessorConfig {
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", CREATE, UPDATE, and DELETE event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -190,7 +190,7 @@ public class MessageProcessorConfig {
 
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", CREATE, UPDATE, and DELETE event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -225,7 +225,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_PURCHASE, " +
                             "UPDATE_PURCHASE_PAYMENT, UPDATE_RETURN and UPDATE_FAIL_PAYMENT event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -244,7 +244,7 @@ public class MessageProcessorConfig {
             } else {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_SALE_PRICE and REMOVE_SALE event";
                 LOG.warn(errorMessage);
-                throw new RuntimeException(errorMessage); // TODO: create event exception
+                throw new RuntimeException(errorMessage);
             }
         };
     }

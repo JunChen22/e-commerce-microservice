@@ -24,13 +24,13 @@ public class JwtTokenUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", userDetails.getUserId());
         claims.put("username", userDetails.getUsername());
-        claims.put("authorities", userDetails.getAuthorities());  // TODO: add getAuthorities
+        claims.put("authorities", userDetails.getAuthorities());  // TODO: add getAuthorities maybe, even for members
         claims.put("iat", new Date());
         claims.put("name", userDetails.getName());
         claims.put("iss", issuer);
 
         return Jwts.builder()
-                .setIssuer(issuer)          // TODO: idk why it won't set issuer, need to user claim.put("iss", issuer) instead
+                .setIssuer(issuer)          // IDK why it won't set issuer, need to user claim.put("iss", issuer) instead
                 .setClaims(claims)
                 .setExpiration(generateExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, secret)

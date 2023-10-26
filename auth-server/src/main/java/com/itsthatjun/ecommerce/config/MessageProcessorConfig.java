@@ -55,7 +55,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_ACCOUNT, " +
                             "UPDATE_ACCOUNT_INFO, UPDATE_ACCOUNT_STATUS and DELETE_ACCOUNT event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }

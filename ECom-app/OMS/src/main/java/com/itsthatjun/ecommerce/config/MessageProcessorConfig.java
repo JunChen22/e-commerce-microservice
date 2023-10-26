@@ -82,7 +82,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected ADD_ONE, ADD_ALL, " +
                             "UPDATE, DELETE, and CLEAR event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -121,7 +121,7 @@ public class MessageProcessorConfig {
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE, CANCEL and REJECT event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -148,7 +148,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected GENERATE_ORDER, CANCEL_ORDER, " +
                             "and UPDATE_ORDER event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -171,7 +171,7 @@ public class MessageProcessorConfig {
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected PAYMENT_SUCCESS and PAYMENT_FAILURE event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -206,7 +206,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected GENERATE_ORDER, CANCEL_ORDER, " +
                             "and UPDATE_ORDER event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -237,7 +237,7 @@ public class MessageProcessorConfig {
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE and CANCEL event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -279,7 +279,7 @@ public class MessageProcessorConfig {
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_PRODUCT, NEW_PRODUCT_SKU, UPDATE_PRODUCT, " +
                             " REMOVE_PRODUCT_SKU and REMOVE_PRODUCT event";
                     LOG.warn(errorMessage);
-                    throw new RuntimeException(errorMessage); // TODO: create event exception
+                    throw new RuntimeException(errorMessage);
             }
         };
     }
@@ -299,7 +299,7 @@ public class MessageProcessorConfig {
                 String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected UPDATE_SALE_PRICE" +
                             " event";
                 LOG.warn(errorMessage);
-                throw new RuntimeException(errorMessage); // TODO: create event exception
+                throw new RuntimeException(errorMessage);
             }
         };
     }

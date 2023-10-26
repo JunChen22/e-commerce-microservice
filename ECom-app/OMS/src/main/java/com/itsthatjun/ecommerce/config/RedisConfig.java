@@ -46,7 +46,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     @Bean
-    public RedisService redisService(){
+    public RedisService redisService() {
         return new RedisServiceImpl();
     }
 

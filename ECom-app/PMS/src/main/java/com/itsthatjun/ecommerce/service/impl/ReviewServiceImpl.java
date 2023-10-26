@@ -154,7 +154,7 @@ public class ReviewServiceImpl implements ReviewService {
         deleteAlbumAndPicture(reviewId);
         createAlbumAndPicture(reviewId, picturesList);
 
-        reviewMapper.updateByExample(updatedReview, example);
+        reviewMapper.updateByExampleSelective(updatedReview, example);
 
         return updatedReview;
     }
@@ -255,66 +255,54 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Mono<Review> adminCreateReview(Review newReview, List<ReviewPictures> picturesList) {
-        return Mono.fromCallable(() ->
+        return Mono.fromCallable(() -> {
             // Offload the blocking operation to the specified scheduler
-             internalAdminCreateReview(newReview, picturesList)
-        ).subscribeOn(jdbcScheduler);
-    }
+            newReview.setCreatedAt(new Date());
+            reviewMapper.insert(newReview);
 
-    private Review internalAdminCreateReview(Review newReview, List<ReviewPictures> picturesList) {
-        newReview.setCreatedAt(new Date());
-        reviewMapper.insert(newReview);
+            int reviewId = newReview.getId();
 
-        int reviewId = newReview.getId();
-
-        createAlbumAndPicture(reviewId, picturesList);
-        return newReview;
+            createAlbumAndPicture(reviewId, picturesList);
+            return newReview;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Mono<Review> adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList) {
-        return Mono.fromCallable(() ->
+        return Mono.fromCallable(() -> {
             // Offload the blocking operation to the specified scheduler
-            internalAdminUpdateReview(updatedReview, picturesList)
-        ).subscribeOn(jdbcScheduler);
-    }
+            Date currentTime = new Date();
+            updatedReview.setUpdatedAt(currentTime);
 
-    private Review internalAdminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList) {
-        Date currentTime = new Date();
-        updatedReview.setUpdatedAt(currentTime);
+            int reviewId = updatedReview.getId();
+            deleteAlbumAndPicture(reviewId);
+            createAlbumAndPicture(reviewId, picturesList);
 
-        int reviewId = updatedReview.getId();
-        deleteAlbumAndPicture(reviewId);
-        createAlbumAndPicture(reviewId, picturesList);
-
-        reviewMapper.updateByPrimaryKeySelective(updatedReview);
-        return updatedReview;
+            reviewMapper.updateByPrimaryKeySelective(updatedReview);
+            return updatedReview;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
     public Mono<Void> adminDeleteReview(int reviewId) {
-        return Mono.fromRunnable(() ->
-                internalAdminDeleteReview(reviewId)
-        ).subscribeOn(jdbcScheduler).then();
-    }
+        return Mono.fromRunnable(() -> {
+            reviewMapper.deleteByPrimaryKey(reviewId);
 
-    private void internalAdminDeleteReview(int reviewId) {
-        reviewMapper.deleteByPrimaryKey(reviewId);
+            ReviewAlbumExample albumExample = new ReviewAlbumExample();
+            albumExample.createCriteria().andReviewIdEqualTo(reviewId);
+            ReviewAlbum foundAlbum = albumMapper.selectByExample(albumExample).get(0);
 
-        ReviewAlbumExample albumExample = new ReviewAlbumExample();
-        albumExample.createCriteria().andReviewIdEqualTo(reviewId);
-        ReviewAlbum foundAlbum = albumMapper.selectByExample(albumExample).get(0);
+            int albumId = foundAlbum.getId();
 
-        int albumId = foundAlbum.getId();
+            albumMapper.deleteByPrimaryKey(albumId);
 
-        albumMapper.deleteByPrimaryKey(albumId);
+            ReviewPicturesExample picturesExample = new ReviewPicturesExample();
+            picturesExample.createCriteria().andReviewAlbumIdEqualTo(albumId);
+            List<ReviewPictures> picturesList = picturesMapper.selectByExample(picturesExample);
 
-        ReviewPicturesExample picturesExample = new ReviewPicturesExample();
-        picturesExample.createCriteria().andReviewAlbumIdEqualTo(albumId);
-        List<ReviewPictures> picturesList = picturesMapper.selectByExample(picturesExample);
-
-        for (ReviewPictures picture: picturesList) {
-            picturesMapper.deleteByPrimaryKey(picture.getId());
-        }
+            for (ReviewPictures picture: picturesList) {
+                picturesMapper.deleteByPrimaryKey(picture.getId());
+            }
+        }).subscribeOn(jdbcScheduler).then();
     }
 }

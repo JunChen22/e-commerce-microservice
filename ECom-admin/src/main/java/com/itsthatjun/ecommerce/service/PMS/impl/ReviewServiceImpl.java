@@ -58,7 +58,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Mono<ProductReview> createProductReview(ProductReview review) {
-        // TODO: review created time did not create automatically
         return Mono.fromCallable(() -> {
             sendMessage("review-out-0", new PmsAdminReviewEvent(CREATE, review, null));
             return review;

@@ -45,7 +45,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisService redisService(){
+    public RedisService redisService() {
         return new RedisServiceImpl();
     }
 

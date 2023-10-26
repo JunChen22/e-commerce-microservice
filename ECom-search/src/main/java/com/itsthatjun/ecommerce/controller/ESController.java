@@ -31,7 +31,7 @@ public class ESController {
     @ApiImplicitParam(name = "sort", value = "order:0->relevance；1->new listed；2->top seller；3->price low；4->price hight",
             defaultValue = "0", allowableValues = "0,1,2,3,4", paramType = "query", dataType = "integer")
     public List<EsProduct> search(@RequestParam(required = false) String keyword,
-                                  //@RequestParam(required = false, defaultValue = "0") int category,
+                                  @RequestParam(required = false, defaultValue = "0") int category,
                                   @RequestParam(required = false, defaultValue = "0") int pageNum,
                                   @RequestParam(required = false, defaultValue = "5") int pageSize,
                                   @RequestParam(required = false, defaultValue = "0") int sort) {

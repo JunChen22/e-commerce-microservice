@@ -97,7 +97,7 @@ public class ArticleServiceImpl implements ArticleService {
         //TODO: optimize this
         Article exist = articleMapper.selectByPrimaryKey(articleInfo.getArticle().getId());
         if (exist != null) {
-            // TODO: return exception tobe added in ECom-common
+            // TODO: return exception to be added in ECom-common
             throw new RuntimeException("Article id already exist:" + exist.getId());
         }
 
@@ -146,7 +146,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = articleInfo.getArticle();
         article.setUpdatedAt(new Date());
 
-        articleMapper.updateByPrimaryKey(article);
+        articleMapper.updateByPrimaryKeySelective(article);
         updateQA(articleId, articleInfo.getQA());
         updateImage(articleId, articleInfo.getImages());
         updateVideo(articleId, articleInfo.getVideos());
