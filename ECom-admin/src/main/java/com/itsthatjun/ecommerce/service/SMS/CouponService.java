@@ -18,7 +18,7 @@ public interface CouponService {
     Flux<Coupon> getCouponForProduct(int productId);
 
     @ApiOperation(value = "create a coupon")
-    Mono<CouponSale>  create(CouponSale couponSale, String operator);
+    Mono<CouponSale> create(CouponSale couponSale, String operator);
 
     @ApiOperation(value = "update a coupon")
     Mono<CouponSale> update(CouponSale updatedCouponSale, String operator);

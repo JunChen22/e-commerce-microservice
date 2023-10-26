@@ -2,6 +2,8 @@ package com.itsthatjun.ecommerce.service.PMS.impl;
 
 import com.itsthatjun.ecommerce.dto.pms.ProductReview;
 import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminReviewEvent;
+import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.mbg.model.Review;
 import com.itsthatjun.ecommerce.service.PMS.ReviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,27 +59,32 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Mono<ProductReview> createProductReview(ProductReview review) {
+    public Mono<ProductReview> createProductReview(ProductReview review, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("review-out-0", new PmsAdminReviewEvent(CREATE, review, null));
+            sendMessage("review-out-0", new PmsAdminReviewEvent(CREATE, review, operator));
             return review;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductReview> updateProductReviews(ProductReview updatedReview) {
+    public Mono<ProductReview> updateProductReviews(ProductReview updatedReview, String operator) {
         return Mono.fromCallable(() -> {
             int reviewId = updatedReview.getReview().getId();
-            sendMessage("review-out-0", new PmsAdminReviewEvent(UPDATE, updatedReview, reviewId));
+            sendMessage("review-out-0", new PmsAdminReviewEvent(UPDATE, updatedReview, operator));
             return updatedReview;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> deleteProductReviews(int reviewId) {
-        return Mono.fromRunnable(() ->
-            sendMessage("review-out-0", new PmsAdminReviewEvent(DELETE, null, reviewId))
-        ).subscribeOn(publishEventScheduler).then();
+    public Mono<Void> deleteProductReviews(int reviewId, String operator) {
+        return Mono.fromRunnable(() -> {
+            Review review = new Review();
+            review.setId(reviewId);
+            ProductReview productReview = new ProductReview();
+            productReview.setReview(review);
+
+            sendMessage("review-out-0", new PmsAdminReviewEvent(DELETE, productReview, operator));
+        }).subscribeOn(publishEventScheduler).then();
     }
 
     private void sendMessage(String bindingName, PmsAdminReviewEvent event) {

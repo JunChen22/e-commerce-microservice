@@ -18,29 +18,29 @@ public interface ProductService {
     Mono<ProductDetail> listProduct(int productId);
 
     @ApiOperation(value = "create a product with at least one sku variant")
-    Mono<ProductDetail> createProduct(ProductDetail productDetail);
+    Mono<ProductDetail> createProduct(ProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Add a sku to existing product.")
-    Mono<ProductDetail> addProductSku(ProductDetail productDetail);
+    Mono<ProductDetail> addProductSku(ProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Update product info like category, name, description, subtitle and etc non-price affecting.")
-    Mono<ProductDetail> updateProductInfo(ProductDetail productDetail);
+    Mono<ProductDetail> updateProductInfo(ProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Update product publish status.")
-    Mono<ProductDetail> updateProductStatus(ProductDetail productDetail);
+    Mono<ProductDetail> updateProductStatus(ProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Update product publish status.")
-    Mono<ProductDetail> updateProductSkuStatus(ProductDetail productDetail);
+    Mono<ProductDetail> updateProductSkuStatus(ProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Adding stock to sku with newly added stock.")
-    Mono<ProductDetail> updateProductStock(ProductDetail productDetail);
+    Mono<ProductDetail> updateProductStock(ProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Update product and its sku prices of existing product.")
-    Mono<ProductDetail> updateProductPrice(ProductDetail productDetail);
+    Mono<ProductDetail> updateProductPrice(ProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Remove/actual delete a sku from product. Product can have no sku, just holding information.")
-    Mono<ProductDetail> removeProductSku(ProductDetail productDetail);
+    Mono<ProductDetail> removeProductSku(ProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Delete just means status changed for archive, not actual delete from database")
-    Mono<Void> deleteProduct(int productId);
+    Mono<Void> deleteProduct(int productId, String operator);
 }

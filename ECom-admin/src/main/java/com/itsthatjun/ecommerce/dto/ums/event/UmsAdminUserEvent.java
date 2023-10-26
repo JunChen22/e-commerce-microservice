@@ -18,7 +18,6 @@ public class UmsAdminUserEvent {
     }
 
     private final Type eventType;
-    private final int userId;
     private final Member member;
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
@@ -26,15 +25,13 @@ public class UmsAdminUserEvent {
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public UmsAdminUserEvent() {
         this.eventType = null;
-        this.userId = 0;
         this.member = null;
         this.operator = null;
         this.eventCreatedAt = null;
     }
 
-    public UmsAdminUserEvent(Type eventType, int userId, Member member, String operator) {
+    public UmsAdminUserEvent(Type eventType, Member member, String operator) {
         this.eventType = eventType;
-        this.userId = userId;
         this.member = member;
         this.operator = operator;
         this.eventCreatedAt = now();

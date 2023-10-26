@@ -1,27 +1,19 @@
 package com.itsthatjun.ecommerce.controller.CMS;
 
 import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
-import com.itsthatjun.ecommerce.dto.cms.event.CmsAdminArticleEvent;
+import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.CMS.impl.ArticleServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-import static com.itsthatjun.ecommerce.dto.cms.event.CmsAdminArticleEvent.Type.*;
-import static java.util.logging.Level.FINE;
 
 @RestController
 @RequestMapping("/article")
@@ -53,20 +45,30 @@ public class ArticleController {
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "create an article(buyer's guide, comparison, and etc)")
     public Mono<ArticleInfo> createArticle(@RequestBody ArticleInfo articleInfo) {
-        return articleService.createArticle(articleInfo);
+        String operatorName = getAdminName();
+        return articleService.createArticle(articleInfo, operatorName);
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "update an article and it's content")
     public Mono<ArticleInfo> updateArticle(@RequestBody ArticleInfo articleInfo) {
-        return articleService.updateArticle(articleInfo);
+        String operatorName = getAdminName();
+        return articleService.updateArticle(articleInfo, operatorName);
     }
 
     @DeleteMapping("/delete/{articleId}")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "delete article and it's related content(QA, videos, and images)")
     public Mono<Void> deleteArticle(@PathVariable int articleId) {
-        return articleService.deleteArticle(articleId);
+        String operatorName = getAdminName();
+        return articleService.deleteArticle(articleId, operatorName);
+    }
+
+    private String getAdminName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+        String adminName = userDetail.getAdmin().getName();
+        return adminName;
     }
 }

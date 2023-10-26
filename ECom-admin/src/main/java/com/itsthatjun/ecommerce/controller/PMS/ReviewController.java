@@ -1,28 +1,18 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
 import com.itsthatjun.ecommerce.dto.pms.ProductReview;
-import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminReviewEvent;
-import com.itsthatjun.ecommerce.mbg.model.Review;
+import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.PMS.impl.ReviewServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-
-import static com.itsthatjun.ecommerce.dto.pms.event.PmsAdminReviewEvent.Type.*;
-import static java.util.logging.Level.FINE;
 
 @RestController
 @RequestMapping("/review")
@@ -53,18 +43,28 @@ public class ReviewController {
     @PostMapping("/create")
     @ApiOperation(value = "create review for a product")
     public Mono<ProductReview> createProductReview(@RequestBody ProductReview review) {
-        return reviewService.createProductReview(review);
+        String operatorName = getAdminName();
+        return reviewService.createProductReview(review, operatorName);
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "update a review")
     public Mono<ProductReview> updateProductReviews(@RequestBody ProductReview updatedReview) {
-        return reviewService.updateProductReviews(updatedReview);
+        String operatorName = getAdminName();
+        return reviewService.updateProductReviews(updatedReview, operatorName);
     }
 
     @DeleteMapping("/delete/{reviewId}")
     @ApiOperation(value = "Get product with page and size")
     public Mono<Void> deleteProductReviews(@PathVariable int reviewId) {
-        return reviewService.deleteProductReviews(reviewId);
+        String operatorName = getAdminName();
+        return reviewService.deleteProductReviews(reviewId, operatorName);
+    }
+
+    private String getAdminName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+        String adminName = userDetail.getAdmin().getName();
+        return adminName;
     }
 }

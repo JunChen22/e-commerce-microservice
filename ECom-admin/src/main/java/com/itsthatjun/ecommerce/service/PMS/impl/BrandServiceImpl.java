@@ -74,27 +74,28 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Brand> createBrand(Brand brand) {
+    public Mono<Brand> createBrand(Brand brand, String operatorName) {
         return Mono.fromCallable(() -> {
-            sendMessage("brand-out-0", new PmsAdminBrandEvent(CREATE, brand, null));
+            sendMessage("brand-out-0", new PmsAdminBrandEvent(CREATE, brand, operatorName));
             return brand;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Brand> updateBrand(Brand brand) {
-        int brandId = brand.getId();
+    public Mono<Brand> updateBrand(Brand brand, String operatorName) {
         return Mono.fromCallable(() -> {
-            sendMessage("brand-out-0", new PmsAdminBrandEvent(UPDATE, brand, brandId));
+            sendMessage("brand-out-0", new PmsAdminBrandEvent(UPDATE, brand, operatorName));
             return brand;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void>  deleteBrand(int brandId) {
-        return Mono.fromRunnable(() ->
-                sendMessage("brand-out-0", new PmsAdminBrandEvent(DELETE, null, brandId))
-        ).subscribeOn(publishEventScheduler).then();
+    public Mono<Void> deleteBrand(int brandId, String operatorName) {
+        return Mono.fromRunnable(() -> {
+            Brand brand = new Brand();
+            brand.setId(brandId);
+            sendMessage("brand-out-0", new PmsAdminBrandEvent(DELETE, brand, operatorName));
+        }).subscribeOn(publishEventScheduler).then();
     }
 
     private void sendMessage(String bindingName, PmsAdminBrandEvent event) {

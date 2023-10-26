@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.service.CMS.impl;
 
 import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
 import com.itsthatjun.ecommerce.dto.cms.event.CmsAdminArticleEvent;
+import com.itsthatjun.ecommerce.mbg.model.Article;
 import com.itsthatjun.ecommerce.service.CMS.ArticleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,27 +60,31 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Mono<ArticleInfo> createArticle(ArticleInfo articleInfo) {
+    public Mono<ArticleInfo> createArticle(ArticleInfo articleInfo, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("article-out-0", new CmsAdminArticleEvent(CREATE, articleInfo, null));
+            sendMessage("article-out-0", new CmsAdminArticleEvent(CREATE, articleInfo, operator));
             return articleInfo;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ArticleInfo> updateArticle(ArticleInfo articleInfo) {
-        int articleId = articleInfo.getArticle().getId();
+    public Mono<ArticleInfo> updateArticle(ArticleInfo articleInfo, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("article-out-0", new CmsAdminArticleEvent(UPDATE, articleInfo, articleId));
+            sendMessage("article-out-0", new CmsAdminArticleEvent(UPDATE, articleInfo, operator));
             return articleInfo;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> deleteArticle(int articleId) {
-        return Mono.fromRunnable(() ->
-                sendMessage("article-out-0", new CmsAdminArticleEvent(DELETE, null, articleId))
-        ).subscribeOn(publishEventScheduler).then();
+    public Mono<Void> deleteArticle(int articleId, String operator) {
+        return Mono.fromRunnable(() -> {
+            Article article = new Article();
+            article.setId(articleId);
+            ArticleInfo articleInfo = new ArticleInfo();
+            articleInfo.setArticle(article);
+
+            sendMessage("article-out-0", new CmsAdminArticleEvent(DELETE, articleInfo, operator));
+        }).subscribeOn(publishEventScheduler).then();
     }
 
     private void sendMessage(String bindingName, CmsAdminArticleEvent event) {

@@ -66,77 +66,77 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> createProduct(ProductDetail productDetail) {
+    public Mono<ProductDetail> createProduct(ProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT, productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductDetail> addProductSku(ProductDetail productDetail) {
+    public Mono<ProductDetail> addProductSku(ProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT_SKU, productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT_SKU, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductDetail> updateProductInfo(ProductDetail productDetail) {
+    public Mono<ProductDetail> updateProductInfo(ProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_INFO, productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_INFO, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductDetail> updateProductStatus(ProductDetail productDetail) {
+    public Mono<ProductDetail> updateProductStatus(ProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_STATUS, productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_STATUS, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductDetail> updateProductSkuStatus(ProductDetail productDetail) {
+    public Mono<ProductDetail> updateProductSkuStatus(ProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_SKU_STATUS, productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_SKU_STATUS, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductDetail> updateProductStock(ProductDetail productDetail) {
+    public Mono<ProductDetail> updateProductStock(ProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_STOCK, productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_STOCK, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductDetail> updateProductPrice(ProductDetail productDetail) {
+    public Mono<ProductDetail> updateProductPrice(ProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("product-out-0", new PmsAdminProductEvent( UPDATE_PRODUCT_PRICE, productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_PRICE, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductDetail> removeProductSku(ProductDetail productDetail) {
+    public Mono<ProductDetail> removeProductSku(ProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
-            sendMessage("product-out-0", new PmsAdminProductEvent(REMOVE_PRODUCT_SKU ,productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(REMOVE_PRODUCT_SKU, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> deleteProduct(int productId) {
+    public Mono<Void> deleteProduct(int productId, String operator) {
         return Mono.fromRunnable(() -> {
             ProductDetail productDetail = new ProductDetail();
             Product product = new Product();
             product.setId(productId);
             productDetail.setProduct(product);
-            sendMessage("product-out-0", new PmsAdminProductEvent(DELETE_PRODUCT, productDetail));
+            sendMessage("product-out-0", new PmsAdminProductEvent(DELETE_PRODUCT, productDetail, operator));
         }).subscribeOn(publishEventScheduler).then();
     }
 

@@ -4,17 +4,18 @@ import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
+import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/order")
@@ -50,8 +51,8 @@ public class OrderController {
 
     @PostMapping("/create")
     @ApiOperation(value = "create order")
-    public Mono<OrderDetail> createOrder(@RequestBody OrderParam orderParam, HttpSession session) {
-        String operatorName  = (String) session.getAttribute("adminName");
+    public Mono<OrderDetail> createOrder(@RequestBody OrderParam orderParam) {
+        String operatorName = getAdminName();
         OrderDetail orderDetail = orderParam.getOrderDetail();
         String reason = orderParam.getReason();
         return orderService.createOrder(orderDetail, reason, operatorName);
@@ -65,8 +66,8 @@ public class OrderController {
 
     @PostMapping("/update")
     @ApiOperation(value = "update a order")
-    public Mono<OrderDetail> updateOrder(@RequestBody OrderParam orderParam, HttpSession session) {
-        String operatorName  = (String) session.getAttribute("adminName");
+    public Mono<OrderDetail> updateOrder(@RequestBody OrderParam orderParam) {
+        String operatorName = getAdminName();
         OrderDetail orderDetail = orderParam.getOrderDetail();
         String reason = orderParam.getReason();
         return orderService.updateOrder(orderDetail, reason, operatorName);
@@ -74,10 +75,17 @@ public class OrderController {
 
     @DeleteMapping("/cancel")
     @ApiOperation(value = "cancel a order by serial number")
-    public Mono<Void> cancelOrder(@RequestBody OrderParam orderParam, HttpSession session) {
+    public Mono<Void> cancelOrder(@RequestBody OrderParam orderParam) {
         String orderSn = orderParam.getOrderDetail().getOrders().getOrderSn();
-        String operatorName  = (String) session.getAttribute("adminName");
+        String operatorName = getAdminName();
         String reason = orderParam.getReason();
         return orderService.cancelOrder(orderSn, reason, operatorName);
+    }
+
+    private String getAdminName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+        String adminName = userDetail.getAdmin().getName();
+        return adminName;
     }
 }

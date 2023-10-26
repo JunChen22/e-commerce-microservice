@@ -1,30 +1,20 @@
 package com.itsthatjun.ecommerce.controller.UMS;
 
 import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
-import com.itsthatjun.ecommerce.dto.ums.event.UmsAdminUserEvent;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
+import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-import javax.servlet.http.HttpSession;
-
-import static com.itsthatjun.ecommerce.dto.ums.event.UmsAdminUserEvent.Type.*;
-import static java.util.logging.Level.FINE;
 
 @RestController
 @RequestMapping("/user")
@@ -60,29 +50,36 @@ public class UserController {
 
     @PostMapping("/createMember")
     @ApiOperation(value = "")
-    public Mono<Member> createMember(@RequestBody Member member, HttpSession session) {
-        String operatorName  = (String) session.getAttribute("adminName");
+    public Mono<Member> createMember(@RequestBody Member member) {
+        String operatorName = getAdminName();
         return userService.createMember(member, operatorName);
     }
 
     @PostMapping("/updateMemberInfo")
     @ApiOperation(value = "")
-    public Mono<Member> updateMemberInfo(@RequestBody Member member, HttpSession session) {
-        String operatorName  = (String) session.getAttribute("adminName");
+    public Mono<Member> updateMemberInfo(@RequestBody Member member) {
+        String operatorName = getAdminName();
         return userService.updateMemberInfo(member, operatorName);
     }
 
     @PostMapping("/updateMemberStatus")
     @ApiOperation(value = "")
-    public Mono<Member> updateMemberStatus(@RequestBody Member member, HttpSession session) {
-        String operatorName  = (String) session.getAttribute("adminName");
+    public Mono<Member> updateMemberStatus(@RequestBody Member member) {
+        String operatorName = getAdminName();
         return userService.updateMemberStatus(member, operatorName);
     }
 
     @DeleteMapping("/delete/{memberId}")
     @ApiOperation(value = "")
-    public Mono<Void> delete(@PathVariable int memberId, HttpSession session) {
-        String operatorName  = (String) session.getAttribute("adminName");
+    public Mono<Void> delete(@PathVariable int memberId) {
+        String operatorName = getAdminName();
         return userService.delete(memberId, operatorName);
+    }
+
+    private String getAdminName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+        String adminName = userDetail.getAdmin().getName();
+        return adminName;
     }
 }

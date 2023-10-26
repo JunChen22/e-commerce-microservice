@@ -69,8 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<Member> createMember(Member member, String operator) {
         return Mono.fromCallable(() -> {
-            int memberId = member.getId();
-            sendMessage("user-out-0", new UmsAdminUserEvent(NEW_ACCOUNT, memberId, member, operator));
+            sendMessage("user-out-0", new UmsAdminUserEvent(NEW_ACCOUNT, member, operator));
             return member;
         }).subscribeOn(publishEventScheduler);
     }
@@ -78,8 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<Member> updateMemberInfo(Member member, String operator) {
         return Mono.fromCallable(() -> {
-            int memberId = member.getId();
-            sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_INFO, memberId, member, operator));
+            sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_INFO, member, operator));
             return member;
         }).subscribeOn(publishEventScheduler);
     }
@@ -87,17 +85,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<Member> updateMemberStatus(Member member, String operator) {
         return Mono.fromCallable(() -> {
-            int memberId = member.getId();
-            sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_STATUS, memberId, member, operator));
+            sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_STATUS, member, operator));
             return member;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
     public Mono<Void> delete(int memberId, String operator) {
-        return Mono.fromRunnable(() ->
-                sendMessage("user-out-0", new UmsAdminUserEvent(DELETE_ACCOUNT, memberId, null, operator))
-        ).subscribeOn(publishEventScheduler).then();
+        return Mono.fromRunnable(() -> {
+            Member member = new Member();
+            member.setId(memberId);
+            sendMessage("user-out-0", new UmsAdminUserEvent(DELETE_ACCOUNT, member, operator));
+        }).subscribeOn(publishEventScheduler).then();
     }
 
     private void sendMessage(String bindingName, UmsAdminUserEvent event) {
