@@ -5,8 +5,8 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="brand_id" jdbcType="NUMERIC" property="brandId" />
     <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
-    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, brand_id, update_action, updated_at, operator
+    id, brand_id, update_action, operator, created_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.BrandUpdateLogExample" resultMap="BaseResultMap">
     select
@@ -100,10 +100,10 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.BrandUpdateLog" useGeneratedKeys="true">
-    insert into brand_update_log (brand_id, update_action, updated_at, 
-      operator)
-    values (#{brandId,jdbcType=NUMERIC}, #{updateAction,jdbcType=VARCHAR}, #{updatedAt,jdbcType=TIMESTAMP}, 
-      #{operator,jdbcType=VARCHAR})
+    insert into brand_update_log (brand_id, update_action, operator, 
+      created_at)
+    values (#{brandId,jdbcType=NUMERIC}, #{updateAction,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.BrandUpdateLog" useGeneratedKeys="true">
     insert into brand_update_log
@@ -114,11 +114,11 @@
       <if test="updateAction != null">
         update_action,
       </if>
-      <if test="updatedAt != null">
-        updated_at,
-      </if>
       <if test="operator != null">
         operator,
+      </if>
+      <if test="createdAt != null">
+        created_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -128,11 +128,11 @@
       <if test="updateAction != null">
         #{updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="updatedAt != null">
-        #{updatedAt,jdbcType=TIMESTAMP},
-      </if>
       <if test="operator != null">
         #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -154,11 +154,11 @@
       <if test="record.updateAction != null">
         update_action = #{record.updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.operator != null">
         operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdAt != null">
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -170,8 +170,8 @@
     set id = #{record.id,jdbcType=INTEGER},
       brand_id = #{record.brandId,jdbcType=NUMERIC},
       update_action = #{record.updateAction,jdbcType=VARCHAR},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
-      operator = #{record.operator,jdbcType=VARCHAR}
+      operator = #{record.operator,jdbcType=VARCHAR},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -185,11 +185,11 @@
       <if test="updateAction != null">
         update_action = #{updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="updatedAt != null">
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      </if>
       <if test="operator != null">
         operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -198,8 +198,8 @@
     update brand_update_log
     set brand_id = #{brandId,jdbcType=NUMERIC},
       update_action = #{updateAction,jdbcType=VARCHAR},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      operator = #{operator,jdbcType=VARCHAR}
+      operator = #{operator,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

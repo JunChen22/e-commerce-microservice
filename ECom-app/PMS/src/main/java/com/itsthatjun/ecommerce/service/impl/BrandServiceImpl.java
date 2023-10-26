@@ -16,6 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -79,6 +80,7 @@ public class BrandServiceImpl implements BrandService {
     public Mono<Brand> adminCreateBrand(Brand brand, String operator) {
         return Mono.fromCallable(() -> {
             brandMapper.insert(brand);
+            createUpdateLog(brand.getId(), "update brand", operator);
             return brand; // Use Mono.justOrEmpty to handle potential null values
         }).subscribeOn(jdbcScheduler);
     }
@@ -87,6 +89,7 @@ public class BrandServiceImpl implements BrandService {
     public Mono<Brand> adminUpdateBrand(Brand brand, String operator) {
         return Mono.fromCallable(() -> {
             brandMapper.updateByPrimaryKeySelective(brand);
+            createUpdateLog(brand.getId(), "update brand", operator);
             return brand; // Use Mono.justOrEmpty to handle potential null values
         }).subscribeOn(jdbcScheduler);
     }
@@ -94,7 +97,20 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Mono<Void> adminDeleteBrand(int brandId, String operator) {
         return Mono.fromRunnable(() -> {
+            Brand brand = brandMapper.selectByPrimaryKey(brandId);
+            if (brand == null) throw new BrandException("brand does not exist: " + brandId);
+
+            createUpdateLog(brandId, "delete brand: " +  brand.getName(), operator);
             brandMapper.deleteByPrimaryKey(brandId);
         }).subscribeOn(jdbcScheduler).then();
+    }
+
+    private void createUpdateLog(int brandId, String updateAction, String operator) {
+        BrandUpdateLog updateLog = new BrandUpdateLog();
+        updateLog.setBrandId(brandId);
+        updateLog.setUpdateAction(updateAction);
+        updateLog.setOperator(operator);
+        updateLog.setCreatedAt(new Date());
+        brandUpdateLogMapper.insert(updateLog);
     }
 }

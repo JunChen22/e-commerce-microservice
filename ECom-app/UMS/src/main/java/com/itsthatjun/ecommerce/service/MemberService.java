@@ -27,7 +27,7 @@ public interface MemberService {
     @ApiOperation(value = "")
     Mono<Member> updatePassword(int userId, String newPassword);
 
-    @ApiOperation(value = "passowrd, name, icon")
+    @ApiOperation(value = "password, name, icon")
     Mono<Member> updateInfo(MemberDetail memberDetail);
 
     @ApiOperation(value = "")
@@ -42,9 +42,6 @@ public interface MemberService {
     // ================= Admin operations ==================
 
     @ApiOperation(value = "")
-    Mono<Member> createMember(Member newMember);
-
-    @ApiOperation(value = "")
     Flux<Member> getAllUser();
 
     @ApiOperation(value = "")
@@ -54,11 +51,14 @@ public interface MemberService {
     Flux<MemberLoginLog> getMemberLoginFrequency(int userId);
 
     @ApiOperation(value = "")
-    Mono<Member> updateMemberInfo(Member updatedMember);
+    Mono<Member> createMember(Member newMember, String operator);
 
     @ApiOperation(value = "")
-    Mono<Member> updateMemberStatus(Member updatedMember);
+    Mono<Member> updateMemberInfo(Member updatedMember, String operator);
 
     @ApiOperation(value = "")
-    Mono<Member> deleteMember(int userId);
+    Mono<Member> updateMemberStatus(Member updatedMember, String operator);
+
+    @ApiOperation(value = "")
+    Mono<Member> deleteMember(int userId, String operator);
 }

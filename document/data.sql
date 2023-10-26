@@ -19,9 +19,22 @@ CREATE TABLE brand_update_log
     id SERIAL PRIMARY KEY,
     brand_id   NUMERIC,
     update_action TEXT,
-    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    operator     TEXT
+    operator     TEXT,
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO brand_update_log (brand_id, update_action, operator) VALUES
+(1, 'Update', 'John Doe'),
+(2, 'Create', 'Alice Smith'),
+(3, 'Delete', 'Bob Johnson'),
+(4, 'Update', 'Eve Wilson'),
+(5, 'Create', 'Charlie Brown'),
+(6, 'Update', 'Grace Davis'),
+(7, 'Delete', 'Frank Miller'),
+(8, 'Create', 'Lucy Adams'),
+(9, 'Update', 'David Clark'),
+(10, 'Create', 'Sarah White');
+
 
 -- phone/computer/electronic brand
 INSERT INTO brand(name, alphabet, logo, status) VALUES
@@ -1095,21 +1108,22 @@ CREATE TABLE product_update_log
      price_new   NUMERIC,
      sale_price_old    NUMERIC,
      sale_price_new    NUMERIC,
-     operate_man TEXT,          -- who changed it
-     old_stock NUMERIC,
-     added_stock NUMERIC,
-     total_stock NUMERIC,
+     old_stock INTEGER,
+     added_stock INTEGER,
+     total_stock INTEGER,
+     update_action TEXT NOT NULL,
+     change_operator TEXT NOT NULL,
      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 
-INSERT INTO product_update_log (product_id, price_old, price_new, sale_price_old, sale_price_new, old_stock, added_stock, total_stock, operate_man)
+INSERT INTO product_update_log (product_id, price_old, price_new, sale_price_old, sale_price_new, old_stock, added_stock, total_stock, update_action, change_operator)
 VALUES
-(1, 899.99, 899.99, 899.99, 899.99, 100, 0, 100, 'jun'),
-(2, 499.99, 499.99, 499.99, 499.99, 50, 0, 50, 'jun'),
-(3, 249.99, 249.99, 249.99, 249.99, 200, 0, 200, 'jun'),
-(4, 1099.99, 1099.99, 1099.99, 1099.99, 150, 0, 150, 'jun'),
-(5, 349.99, 349.99, 349.99, 349.99, 100, 0, 100, 'jun'),
-(6, 179.99, 179.99, 179.99, 179.99, 250, 0, 250, 'jun');
+(1, 899.99, 899.99, 899.99, 899.99, 100, 0, 100, '', 'jun'),
+(2, 499.99, 499.99, 499.99, 499.99, 50, 0, 50, '', 'jun'),
+(3, 249.99, 249.99, 249.99, 249.99, 200, 0, 200, '', 'jun'),
+(4, 1099.99, 1099.99, 1099.99, 1099.99, 150, 0, '', 150, 'jun'),
+(5, 349.99, 349.99, 349.99, 349.99, 100, 0, 100, '', 'jun'),
+(6, 179.99, 179.99, 179.99, 179.99, 250, 0, 250, '', 'jun');
 
 
 DROP TABLE IF EXISTS review;
@@ -1121,12 +1135,12 @@ CREATE TABLE review
      member_name TEXT,
      member_icon TEXT,
      star        NUMERIC,
-     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-     updated_at TIMESTAMP DEFAULT NULL,
      tittle      TEXT,
      likes       NUMERIC DEFAULT 1,
      verified  boolean,
-     content     TEXT
+     content     TEXT,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP DEFAULT NULL
   );
 
 -- TODO: should I just store picture in one review and separation by semi-colon or continue to use album
@@ -1201,9 +1215,24 @@ CREATE TABLE review_update_log
     id SERIAL PRIMARY KEY,
     review_id  NUMERIC,
     update_action TEXT,
-    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    operator     TEXT
+    operator     TEXT,
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO review_update_log (review_id, update_action, operator, created_at)
+VALUES
+(1, 'created', 'David', '2023-10-26 14:30:00'),
+(2, 'updated', 'Sarah', '2023-10-26 11:20:00'),
+(3, 'created', 'Alice', '2023-10-26 09:30:00'),
+(4, 'deleted', 'Chris', '2023-10-26 16:10:00'),
+(5, 'created', 'John', '2023-10-26 09:15:00'),
+(6, 'updated', 'Mike', '2023-10-26 12:05:00'),
+(7, 'created', 'Bob', '2023-10-26 10:45:00'),
+(8, 'updated', 'Linda', '2023-10-26 15:45:00'),
+(9, 'created', 'Sophia', '2023-10-26 17:25:00'),
+(10, 'deleted', 'Emily', '2023-10-26 13:15:00');
+
+
 
 -------------------------------
 ---------- UMS ----------------

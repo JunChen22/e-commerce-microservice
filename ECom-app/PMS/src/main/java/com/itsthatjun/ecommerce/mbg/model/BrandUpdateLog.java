@@ -9,9 +9,9 @@ public class BrandUpdateLog {
 
     private String updateAction;
 
-    private Date updatedAt;
-
     private String operator;
+
+    private Date createdAt;
 
     public Integer getId() {
         return id;
@@ -37,19 +37,19 @@ public class BrandUpdateLog {
         this.updateAction = updateAction;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public String getOperator() {
         return operator;
     }
 
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

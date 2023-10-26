@@ -195,33 +195,6 @@ public class MemberServiceImpl implements MemberService {
 
     // ================= Admin actions ===================
     @Override
-    public Mono<Member> createMember(Member newMember) {
-        return Mono.fromCallable(() -> {
-            String newUserName = newMember.getUsername();
-            MemberExample example = new MemberExample();
-            example.createCriteria().andUsernameEqualTo(newUserName);
-            List<Member> existing = memberMapper.selectByExample(example);
-
-            if (!existing.isEmpty()) {
-                System.out.println("existing account");
-                return null; // TODO: make exception for existing account
-            }
-
-            String passWord = newMember.getPassword();
-            newMember.setPassword(passwordEncoder().encode(passWord));
-
-            newMember.setCreatedAt(new Date());
-            newMember.setStatus(1);
-
-            memberMapper.insert(newMember);
-            int userId = newMember.getId();
-
-            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(NEW_ACCOUNT, userId, newMember));
-            return newMember;
-        }).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
     public Flux<Member> getAllUser() {
         return Mono.fromCallable(() -> {
             List<Member> memberList = memberMapper.selectByExample(new MemberExample());
@@ -257,7 +230,34 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Mono<Member> updateMemberInfo(Member updatedMember) {
+    public Mono<Member> createMember(Member newMember, String operator) {
+        return Mono.fromCallable(() -> {
+            String newUserName = newMember.getUsername();
+            MemberExample example = new MemberExample();
+            example.createCriteria().andUsernameEqualTo(newUserName);
+            List<Member> existing = memberMapper.selectByExample(example);
+
+            if (!existing.isEmpty()) {
+                System.out.println("existing account");
+                return null; // TODO: make exception for existing account
+            }
+
+            String passWord = newMember.getPassword();
+            newMember.setPassword(passwordEncoder().encode(passWord));
+
+            newMember.setCreatedAt(new Date());
+            newMember.setStatus(1);
+
+            memberMapper.insert(newMember);
+            int userId = newMember.getId();
+
+            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(NEW_ACCOUNT, userId, newMember));
+            return newMember;
+        }).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Mono<Member> updateMemberInfo(Member updatedMember, String operator) {
         return Mono.fromCallable(() -> {
             int userId = updatedMember.getId();
             memberMapper.updateByPrimaryKey(updatedMember);
@@ -267,7 +267,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Mono<Member> updateMemberStatus(Member updatedMember) {
+    public Mono<Member> updateMemberStatus(Member updatedMember, String operator) {
         return Mono.fromCallable(() -> {
             int userId = updatedMember.getId();
             memberMapper.updateByPrimaryKey(updatedMember);
@@ -277,7 +277,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Mono<Member> deleteMember(int userId) {
+    public Mono<Member> deleteMember(int userId, String operator) {
         return Mono.fromCallable(() -> {
             Member member = memberMapper.selectByPrimaryKey(userId);
             member.setStatus(0);

@@ -115,4 +115,4 @@ yarn-error.log*
 /mvnwmvnw.cmd
 
 # enviroment variable
-.env
+./.env

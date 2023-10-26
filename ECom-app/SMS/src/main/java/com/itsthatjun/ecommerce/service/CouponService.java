@@ -23,18 +23,18 @@ public interface  CouponService {
     @ApiOperation("update used coupon count and history")
     Mono<Void> updateUsedCoupon(String code, int orderId, int memberId);
 
-    @ApiOperation(value = "")
-    Mono<Coupon> createCoupon(Coupon newCoupon, Map<String, Integer> skuQuantity);
-
     @ApiOperation(value = "Get all coupon")
     Flux<Coupon> getAllCoupon();
 
     @ApiOperation(value = "Get detail of a coupon by id")
     Mono<Coupon> getACoupon(int id);
 
+    @ApiOperation(value = "")
+    Mono<Coupon> createCoupon(Coupon newCoupon, Map<String, Integer> skuQuantity, String operator);
+
     @ApiOperation(value = "Update coupon info's like discount type, amount, date, count, status, and name")
-    Mono<Coupon> updateCoupon(Coupon updateCoupon, Map<String, Integer> skuMap);
+    Mono<Coupon> updateCoupon(Coupon updateCoupon, Map<String, Integer> skuMap, String operator);
 
     @ApiOperation(value = "")
-    Mono<Void> deleteCoupon(int couponId);
+    Mono<Void> deleteCoupon(int couponId, String operator);
 }

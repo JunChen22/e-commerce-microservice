@@ -30,11 +30,11 @@ public interface ReviewService {
     Flux<ProductReview> listAllReviewByUser(int userId);
 
     @ApiOperation(value = "")
-    Mono<Review> adminCreateReview(Review newReview, List<ReviewPictures> picturesList);
+    Mono<Review> adminCreateReview(Review newReview, List<ReviewPictures> picturesList, String operator);
 
     @ApiOperation(value = "")
-    Mono<Review> adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList);
+    Mono<Review> adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList, String operator);
 
     @ApiOperation(value = "")
-    Mono<Void> adminDeleteReview(int reviewId);
+    Mono<Void> adminDeleteReview(int reviewId, String operator);
 }

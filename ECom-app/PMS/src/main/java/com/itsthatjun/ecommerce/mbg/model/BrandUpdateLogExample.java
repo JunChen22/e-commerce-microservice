@@ -295,66 +295,6 @@ public class BrandUpdateLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andUpdatedAtIsNull() {
-            addCriterion("updated_at is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtIsNotNull() {
-            addCriterion("updated_at is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtEqualTo(Date value) {
-            addCriterion("updated_at =", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotEqualTo(Date value) {
-            addCriterion("updated_at <>", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtGreaterThan(Date value) {
-            addCriterion("updated_at >", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("updated_at >=", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtLessThan(Date value) {
-            addCriterion("updated_at <", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtLessThanOrEqualTo(Date value) {
-            addCriterion("updated_at <=", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtIn(List<Date> values) {
-            addCriterion("updated_at in", values, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotIn(List<Date> values) {
-            addCriterion("updated_at not in", values, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtBetween(Date value1, Date value2) {
-            addCriterion("updated_at between", value1, value2, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotBetween(Date value1, Date value2) {
-            addCriterion("updated_at not between", value1, value2, "updatedAt");
-            return (Criteria) this;
-        }
-
         public Criteria andOperatorIsNull() {
             addCriterion("operator is null");
             return (Criteria) this;
@@ -422,6 +362,66 @@ public class BrandUpdateLogExample {
 
         public Criteria andOperatorNotBetween(String value1, String value2) {
             addCriterion("operator not between", value1, value2, "operator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIsNull() {
+            addCriterion("created_at is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIsNotNull() {
+            addCriterion("created_at is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtEqualTo(Date value) {
+            addCriterion("created_at =", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotEqualTo(Date value) {
+            addCriterion("created_at <>", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtGreaterThan(Date value) {
+            addCriterion("created_at >", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("created_at >=", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtLessThan(Date value) {
+            addCriterion("created_at <", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtLessThanOrEqualTo(Date value) {
+            addCriterion("created_at <=", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIn(List<Date> values) {
+            addCriterion("created_at in", values, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotIn(List<Date> values) {
+            addCriterion("created_at not in", values, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtBetween(Date value1, Date value2) {
+            addCriterion("created_at between", value1, value2, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotBetween(Date value1, Date value2) {
+            addCriterion("created_at not between", value1, value2, "createdAt");
             return (Criteria) this;
         }
     }

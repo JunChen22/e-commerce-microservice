@@ -16,10 +16,6 @@ public class Review {
 
     private BigDecimal star;
 
-    private Date createdAt;
-
-    private Date updatedAt;
-
     private String tittle;
 
     private BigDecimal likes;
@@ -27,6 +23,10 @@ public class Review {
     private Boolean verified;
 
     private String content;
+
+    private Date createdAt;
+
+    private Date updatedAt;
 
     public Integer getId() {
         return id;
@@ -76,22 +76,6 @@ public class Review {
         this.star = star;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public String getTittle() {
         return tittle;
     }
@@ -122,5 +106,21 @@ public class Review {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

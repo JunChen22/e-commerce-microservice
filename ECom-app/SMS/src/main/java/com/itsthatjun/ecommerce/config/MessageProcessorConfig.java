@@ -55,18 +55,19 @@ public class MessageProcessorConfig {
 
             Coupon coupon = event.getCouponSale().getCoupon();
             Map<String, Integer> skuQuantity = event.getCouponSale().getSkuQuantity();
+            String operator = event.getOperator();
             switch (event.getEventType()) {
                 case CREATE_COUPON:
-                    couponService.createCoupon(coupon, skuQuantity).subscribe();
+                    couponService.createCoupon(coupon, skuQuantity, operator).subscribe();
                     break;
 
                 case UPDATE_COUPON:
-                    couponService.updateCoupon(coupon, skuQuantity).subscribe();
+                    couponService.updateCoupon(coupon, skuQuantity, operator).subscribe();
                     break;
 
                 case DELETE_COUPON:
                     int couponId = event.getCouponSale().getCouponId();
-                    couponService.deleteCoupon(couponId).subscribe();
+                    couponService.deleteCoupon(couponId, operator).subscribe();
                     break;
 
                 default:

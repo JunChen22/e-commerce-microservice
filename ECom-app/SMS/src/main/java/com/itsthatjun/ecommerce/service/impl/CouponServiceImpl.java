@@ -231,7 +231,25 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Mono<Coupon> createCoupon(Coupon newCoupon, Map<String, Integer> skuMap) {
+    public Flux<Coupon> getAllCoupon() {
+        return Mono.fromCallable(() -> {
+            LocalDate localDate = LocalDate.now();
+            java.sql.Date date = java.sql.Date.valueOf(localDate);
+            CouponExample example = new CouponExample();
+            example.createCriteria().andEndTimeGreaterThan(date);
+            return couponMapper.selectByExample(example);
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Mono<Coupon> getACoupon(int id) {
+        return Mono.fromCallable(() ->
+            couponMapper.selectByPrimaryKey(id)
+        ).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Mono<Coupon> createCoupon(Coupon newCoupon, Map<String, Integer> skuMap, String operator) {
         // TODO: create create brand or category discount by pass brand name or category id
         return Mono.fromCallable(() -> {
             Coupon coupon = internalCreateCoupon(newCoupon, skuMap);
@@ -281,25 +299,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Flux<Coupon> getAllCoupon() {
-        return Mono.fromCallable(() -> {
-            LocalDate localDate = LocalDate.now();
-            java.sql.Date date = java.sql.Date.valueOf(localDate);
-            CouponExample example = new CouponExample();
-            example.createCriteria().andEndTimeGreaterThan(date);
-            return couponMapper.selectByExample(example);
-        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Mono<Coupon> getACoupon(int id) {
-        return Mono.fromCallable(() ->
-            couponMapper.selectByPrimaryKey(id)
-        ).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Mono<Coupon> updateCoupon(Coupon updateCoupon, Map<String, Integer> skuMap) {
+    public Mono<Coupon> updateCoupon(Coupon updateCoupon, Map<String, Integer> skuMap, String operator) {
         return Mono.fromCallable(() -> {
             int couponId = updateCoupon.getId();
             Coupon foundCoupon = couponMapper.selectByPrimaryKey(couponId);
@@ -332,7 +332,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Mono<Void> deleteCoupon(int couponId) {
+    public Mono<Void> deleteCoupon(int couponId, String operator) {
         return Mono.fromRunnable(() -> {
             couponMapper.deleteByPrimaryKey(couponId);
 
