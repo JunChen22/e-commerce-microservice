@@ -1,12 +1,11 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ReviewPictures {
     private Integer id;
 
-    private BigDecimal reviewAlbumId;
+    private Integer reviewAlbumId;
 
     private String filename;
 
@@ -20,11 +19,11 @@ public class ReviewPictures {
         this.id = id;
     }
 
-    public BigDecimal getReviewAlbumId() {
+    public Integer getReviewAlbumId() {
         return reviewAlbumId;
     }
 
-    public void setReviewAlbumId(BigDecimal reviewAlbumId) {
+    public void setReviewAlbumId(Integer reviewAlbumId) {
         this.reviewAlbumId = reviewAlbumId;
     }
 

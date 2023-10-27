@@ -1,17 +1,16 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class ReviewPicturesExample {
+public class MemberIconExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ReviewPicturesExample() {
+    public MemberIconExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -165,63 +164,63 @@ public class ReviewPicturesExample {
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdIsNull() {
-            addCriterion("review_album_id is null");
+        public Criteria andMemberIdIsNull() {
+            addCriterion("member_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdIsNotNull() {
-            addCriterion("review_album_id is not null");
+        public Criteria andMemberIdIsNotNull() {
+            addCriterion("member_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdEqualTo(Integer value) {
-            addCriterion("review_album_id =", value, "reviewAlbumId");
+        public Criteria andMemberIdEqualTo(Integer value) {
+            addCriterion("member_id =", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdNotEqualTo(Integer value) {
-            addCriterion("review_album_id <>", value, "reviewAlbumId");
+        public Criteria andMemberIdNotEqualTo(Integer value) {
+            addCriterion("member_id <>", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdGreaterThan(Integer value) {
-            addCriterion("review_album_id >", value, "reviewAlbumId");
+        public Criteria andMemberIdGreaterThan(Integer value) {
+            addCriterion("member_id >", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("review_album_id >=", value, "reviewAlbumId");
+        public Criteria andMemberIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("member_id >=", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdLessThan(Integer value) {
-            addCriterion("review_album_id <", value, "reviewAlbumId");
+        public Criteria andMemberIdLessThan(Integer value) {
+            addCriterion("member_id <", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdLessThanOrEqualTo(Integer value) {
-            addCriterion("review_album_id <=", value, "reviewAlbumId");
+        public Criteria andMemberIdLessThanOrEqualTo(Integer value) {
+            addCriterion("member_id <=", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdIn(List<Integer> values) {
-            addCriterion("review_album_id in", values, "reviewAlbumId");
+        public Criteria andMemberIdIn(List<Integer> values) {
+            addCriterion("member_id in", values, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdNotIn(List<Integer> values) {
-            addCriterion("review_album_id not in", values, "reviewAlbumId");
+        public Criteria andMemberIdNotIn(List<Integer> values) {
+            addCriterion("member_id not in", values, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdBetween(Integer value1, Integer value2) {
-            addCriterion("review_album_id between", value1, value2, "reviewAlbumId");
+        public Criteria andMemberIdBetween(Integer value1, Integer value2) {
+            addCriterion("member_id between", value1, value2, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andReviewAlbumIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("review_album_id not between", value1, value2, "reviewAlbumId");
+        public Criteria andMemberIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("member_id not between", value1, value2, "memberId");
             return (Criteria) this;
         }
 
@@ -292,66 +291,6 @@ public class ReviewPicturesExample {
 
         public Criteria andFilenameNotBetween(String value1, String value2) {
             addCriterion("filename not between", value1, value2, "filename");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtIsNull() {
-            addCriterion("created_at is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtIsNotNull() {
-            addCriterion("created_at is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtEqualTo(Date value) {
-            addCriterion("created_at =", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtNotEqualTo(Date value) {
-            addCriterion("created_at <>", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtGreaterThan(Date value) {
-            addCriterion("created_at >", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("created_at >=", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtLessThan(Date value) {
-            addCriterion("created_at <", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtLessThanOrEqualTo(Date value) {
-            addCriterion("created_at <=", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtIn(List<Date> values) {
-            addCriterion("created_at in", values, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtNotIn(List<Date> values) {
-            addCriterion("created_at not in", values, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtBetween(Date value1, Date value2) {
-            addCriterion("created_at between", value1, value2, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtNotBetween(Date value1, Date value2) {
-            addCriterion("created_at not between", value1, value2, "createdAt");
             return (Criteria) this;
         }
     }

@@ -305,3 +305,15 @@ cms_1            | Correct the classpath of your application so that it contains
 
 A: version compatibility issues. with spring boot 2.5.2, java 1.8 and spring cloud 2020.0.2 having issue
 with kafka:2.12-2.5.0 image. Change spring cloud version to 2020.0.3
+
+
+
+Q: getting warning in my batis generator/script.
+[WARNING] Column review_id, specified for override in table review_pictures, does not exist in the table.
+[WARNING] Column product_sku_id, specified for override in table promotion_sale_product, does not exist in the table.
+
+or not it's not generating mapper and model.
+
+A: there's error creating the table, could be that insert data wrong and causing rest of the tables being created.
+and generatorConfig overriding coloum that does not exist, could be you updated the data.sql script and did not change
+it in generatorConfig.

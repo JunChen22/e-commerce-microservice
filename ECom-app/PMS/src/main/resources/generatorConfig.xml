@@ -111,7 +111,6 @@
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />
-            <columnOverride column="album_id" javaType="java.lang.Integer" />
         </table>
 
         <table tableName= "review_album">
@@ -125,7 +124,6 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="review_album_id" javaType="java.lang.Integer" />
-            <columnOverride column="review_id" javaType="java.lang.Integer" />
         </table>
 
         <table tableName= "review_update_log">

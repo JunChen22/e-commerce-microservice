@@ -70,7 +70,6 @@
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="promotion_sale_id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
-            <columnOverride column="product_sku_id" javaType="java.lang.Integer" />
         </table>
 
         <table tableName="promotion_sale_log">

@@ -7,13 +7,15 @@ public class OrderChangeHistory {
 
     private Integer orderId;
 
-    private String changeOperator;
-
-    private Date createdAt;
+    private String updateAction;
 
     private Integer orderStatus;
 
     private String note;
+
+    private String operator;
+
+    private Date createdAt;
 
     public Integer getId() {
         return id;
@@ -31,20 +33,12 @@ public class OrderChangeHistory {
         this.orderId = orderId;
     }
 
-    public String getChangeOperator() {
-        return changeOperator;
+    public String getUpdateAction() {
+        return updateAction;
     }
 
-    public void setChangeOperator(String changeOperator) {
-        this.changeOperator = changeOperator;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setUpdateAction(String updateAction) {
+        this.updateAction = updateAction;
     }
 
     public Integer getOrderStatus() {
@@ -61,5 +55,21 @@ public class OrderChangeHistory {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
