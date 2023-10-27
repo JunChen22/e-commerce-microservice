@@ -17,20 +17,20 @@ public class OmsUpdateIncomingEvent {
     }
 
     private final Type eventType;
-    private final String orderSN;                         // order serial number associated with this stock update
+    private final String orderSn;                         // order serial number associated with this stock update
     private final Map<String, Integer> productMap;   // sku and quantity
     private final ZonedDateTime eventCreatedAt;
 
     public OmsUpdateIncomingEvent() {
         this.eventType = null;
-        this.orderSN = null;
+        this.orderSn = null;
         this.productMap = null;
         this.eventCreatedAt = null;
     }
 
-    public OmsUpdateIncomingEvent(Type eventType, String orderSN, Map<String, Integer> productMap) {
+    public OmsUpdateIncomingEvent(Type eventType, String orderSn, Map<String, Integer> productMap) {
         this.eventType = eventType;
-        this.orderSN = orderSN;
+        this.orderSn = orderSn;
         this.productMap = productMap;
         this.eventCreatedAt = now();
     }

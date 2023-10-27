@@ -64,7 +64,7 @@ public class PaypalService {
     @ApiOperation(value = "The actual transaction part, even though the GUI payment is complete, but they"
                         + "just return PaymentId , PayerID and token. These are saying the buyer and PayPal are"
                         + "agreed to pay the set amount. You take these \"receipt\" to PayPal and cash out.")
-    public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException{
+    public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException {
         Payment payment = new Payment();
         payment.setId(paymentId);
         PaymentExecution paymentExecute = new PaymentExecution();
@@ -85,6 +85,5 @@ public class PaypalService {
 
         // Use the Sale object and RefundRequest to initiate the refund
         return sale.refund(apiContext, refund);
-
     }
 }

@@ -324,6 +324,5 @@
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="article_id" javaType="java.lang.Integer" />
         </table>
-
     </context>
 </generatorConfiguration>

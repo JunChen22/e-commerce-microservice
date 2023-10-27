@@ -16,7 +16,7 @@ public class OmsCompletionEvent {
 
     // TODO:might make a smaller DTO
     private final Type eventType;
-    private final String orderSN;
+    private final String orderSn;
     private final String paymentId;
     private final String payerId;
     private final ZonedDateTime eventCreatedAt;
@@ -24,25 +24,25 @@ public class OmsCompletionEvent {
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public OmsCompletionEvent() {
         this.eventType = null;
-        this.orderSN = null;
+        this.orderSn = null;
         this.paymentId = null;
         this.payerId = null;
         this.eventCreatedAt = null;
     }
 
     // success payment
-    public OmsCompletionEvent(Type eventType, String orderSN, String paymentId, String payerId) {
+    public OmsCompletionEvent(Type eventType, String orderSn, String paymentId, String payerId) {
         this.eventType = eventType;
-        this.orderSN = orderSN;
+        this.orderSn = orderSn;
         this.paymentId = paymentId;
         this.payerId = payerId;
         this.eventCreatedAt = now();
     }
 
     // fail payment
-    public OmsCompletionEvent(Type eventType, String orderSN) {
+    public OmsCompletionEvent(Type eventType, String orderSn) {
         this.eventType = eventType;
-        this.orderSN = orderSN;
+        this.orderSn = orderSn;
         this.paymentId = null;
         this.payerId = null;
         this.eventCreatedAt = now();

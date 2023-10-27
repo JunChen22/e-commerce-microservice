@@ -33,10 +33,10 @@ public interface OrderService {
     Mono<Orders> paySuccess(String paymentId, String payerId);
 
     @ApiOperation("payment unsuccessful, redirected from paypal, store token to pay later, 30 minute ttl")
-    Mono<Void> delayedCancelOrder(String orderSN);
+    Mono<Void> delayedCancelOrder(String orderSn);
 
     @ApiOperation("Member cancel order")
-    Mono<Orders> cancelOrder(String orderSN);
+    Mono<Orders> cancelOrder(String orderSn);
 
     // TODO: redis or like Quartz or spring task
     // timed/schedule depend on the deliver time and check UPS
