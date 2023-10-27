@@ -131,7 +131,6 @@ public class SalesServiceimpl implements SalesService {
 
         int newSaleId = newPromotionSale.getId();
         int discountType = newPromotionSale.getDiscountType();
-        int promotionType = newPromotionSale.getPromotionType();
         double discountAmount = newPromotionSale.getAmount().doubleValue();
 
         List<ProductSku> affectedSku = new ArrayList<>();
@@ -172,7 +171,7 @@ public class SalesServiceimpl implements SalesService {
             affectedSku.add(productSku);
         }
 
-        createSaleLog(newSaleId, promotionType, discountType, discountAmount, operator);
+        createUpdateLog(newPromotionSale, "create sale", operator);
 
         sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
         sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
@@ -290,16 +289,6 @@ public class SalesServiceimpl implements SalesService {
         */
         return Mono.empty();
     }
-    private void createSaleLog(int newSaleId, int promotionType, int discountType, double discountAmount, String operator) {
-        PromotionSaleLog newLog = new PromotionSaleLog();
-        newLog.setPromotionSaleId(newSaleId);
-        newLog.setPromotionType(promotionType);
-        newLog.setDiscountType(discountType);
-        newLog.setAmount(BigDecimal.valueOf(discountAmount));
-        newLog.setOperateMan(operator);
-        newLog.setCreatedAt(new Date());
-        promotionSaleLogMapper.insert(newLog);
-    }
 
     @Override
     public Mono<PromotionSale> updateSaleInfo(OnSaleRequest updateSaleRequest, String operator) {
@@ -312,7 +301,8 @@ public class SalesServiceimpl implements SalesService {
             for (PromotionSaleProduct promotionSaleProduct : productList) {
                 promotionSaleProductMapper.updateByPrimaryKeySelective(promotionSaleProduct);
             }
-            // TODO:new logs
+
+            createUpdateLog(updatedPromotionSale, "update sale information", operator);
             return updatedPromotionSale;
         }).subscribeOn(jdbcScheduler);
     }
@@ -331,7 +321,6 @@ public class SalesServiceimpl implements SalesService {
 
         int saleId = updatedSale.getId();
         int discountType = updatedSale.getDiscountType();
-        int promotionType = updatedSale.getPromotionType();
         double discountAmount = updatedSale.getAmount().doubleValue();
 
         List<ProductSku> affectedSku = new ArrayList<>();
@@ -371,7 +360,7 @@ public class SalesServiceimpl implements SalesService {
             affectedSku.add(productSku);
         }
 
-        createSaleLog(saleId, promotionType, discountType, discountAmount, operator);
+        createUpdateLog(updatedSale, "update sale price", operator);
 
         sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
         sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
@@ -426,10 +415,7 @@ public class SalesServiceimpl implements SalesService {
                     affectedSku.add(productSku);
                 }
 
-                int promotionType = updatedSale.getPromotionType();
-                int discountType = updatedSale.getDiscountType();
-
-                createSaleLog(updateSaleId, promotionType, discountType, 0, operator);
+                createUpdateLog(updatedSale,"update sale status", operator);
 
                 sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
                 sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
@@ -442,12 +428,7 @@ public class SalesServiceimpl implements SalesService {
     public Mono<Void> delete(int promotionSaleId, String operator) {
         return Mono.fromRunnable(() -> {
             PromotionSale toBeDeleteSale = promotionSaleMapper.selectByPrimaryKey(promotionSaleId);
-            int promotionType = toBeDeleteSale.getPromotionType();
-            int discountType = toBeDeleteSale.getDiscountType();
-
             promotionSaleMapper.deleteByPrimaryKey(promotionSaleId);
-
-            createSaleLog(promotionSaleId, promotionType, discountType, 0, operator);
 
             List<ProductSku> affectedSku = new ArrayList<>();
 
@@ -484,10 +465,22 @@ public class SalesServiceimpl implements SalesService {
 
                 affectedSku.add(productSku);
             }
-
+            createUpdateLog(toBeDeleteSale, "delete sale", operator);
             sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
             sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.DELETE_SALE, affectedSku));
         }).subscribeOn(jdbcScheduler).then();
+    }
+
+    private void createUpdateLog(PromotionSale sale, String updateAction, String operator) {
+        PromotionSaleLog updateLog = new PromotionSaleLog();
+        updateLog.setPromotionSaleId(sale.getId());
+        updateLog.setSaleAction(updateAction);
+        updateLog.setPromotionType(sale.getPromotionType());
+        updateLog.setDiscountType(sale.getDiscountType());
+        updateLog.setAmount(sale.getAmount());
+        updateLog.setOperator(operator);
+        updateLog.setCreatedAt(new Date());
+        promotionSaleLogMapper.insert(updateLog);
     }
 
     private void sendPmsSaleUpdateMessage(String bindingName, PmsSaleOutEvent event) {

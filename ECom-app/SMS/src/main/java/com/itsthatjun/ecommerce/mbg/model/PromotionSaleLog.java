@@ -16,7 +16,7 @@ public class PromotionSaleLog {
 
     private BigDecimal amount;
 
-    private String operateMan;
+    private String operator;
 
     private Date createdAt;
 
@@ -68,12 +68,12 @@ public class PromotionSaleLog {
         this.amount = amount;
     }
 
-    public String getOperateMan() {
-        return operateMan;
+    public String getOperator() {
+        return operator;
     }
 
-    public void setOperateMan(String operateMan) {
-        this.operateMan = operateMan;
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     public Date getCreatedAt() {

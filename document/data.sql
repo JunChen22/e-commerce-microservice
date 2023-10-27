@@ -246,7 +246,7 @@ VALUES
 
 -- Instrument
 (8, 'material'),
-(8, 'type'),  -- guitar , piano, jazz
+(8, 'type'),  -- guitar, piano, jazz
 
 -- Smartphones
 (9, 'storage capacity'),
@@ -319,8 +319,8 @@ VALUES
 (15, 'year model'),
 
 -- Storage
-(16, 'storage type'),     -- NVME, SATA , HDD, USB flash drive, or tape
-(16, 'connection port'),  -- USB-A, USB-C , m.2, SATA connection and etc
+(16, 'storage type'),     -- NVME, SATA, HDD, USB flash drive, or tape
+(16, 'connection port'),  -- USB-A, USB-C, m.2, SATA connection and etc
 (16, 'storage size'),
 (16, 'storage speed'),    -- read/write speed
 (16, 'year model'),
@@ -459,54 +459,54 @@ CREATE TABLE product_sku (    -- all product have one default sku variant
     low_stock INTEGER,     -- low stock alarm, default is about 10% alarm
     lock_stock INTEGER DEFAULT 0, -- lock stock is updated from lock stock + order quantity, can't order when current stock is less than lock stock. update lock stock to 0 after ordered.
     unit_sold INTEGER,
-    status INTEGER DEFAULT 1      -- product sku online status , 0 - offline  1 - online ready for purchase
+    status INTEGER DEFAULT 1      -- product sku online status, 0 - offline  1 - online ready for purchase
 );
 
 INSERT INTO product_sku (product_id, sku_code, picture, price, promotion_price, stock, low_stock, unit_sold)
 VALUES
 -- iphone/electronics
-(1, 'IP12-RED-128', 'iphone12-red.jpg', 899.99 ,  899.99 , 35 , 4 , 20),
-(1, 'IP12-WHITE-128', 'iphone12-white.jpg', 899.99 , 899.99 , 35 , 4 , 20),
-(1, 'IP12-BLACK-128', 'iphone12-black.jpg', 899.99 , 899.99 , 30 , 2 , 10),
-(2, 'IPSE-BLUE-64', 'iphonese-blue.jpg', 499.99 ,  499.99 , 25 ,  3 , 25),
-(2, 'IPSE-RED-64', 'iphonese-red.jpg', 499.99 , 499.99 , 25 , 3 , 5),
-(3, 'PX5', 'pixel5.jpg', 799.99 ,  799.99 , 80 ,  8 , 40),
-(4, 'OP9P', 'oneplus9pro.jpg', 1099.99 , 1099.99 , 100 , 10 , 60),
-(5, 'GS21', 'galaxys21.jpg', 1099.99 , 1099.99 , 150 , 15 , 70),
-(6, 'APRO1', 'airpodspro.jpg', 249.99 ,  249.99 , 200 , 20 , 150),
-(7, 'APO2', 'airpods2.jpg', 249.99 ,  249.99 , 200 , 20 , 100),
-(8, 'OBPRO', 'oneplusbudspro.jpg', 149.99 ,  149.99 , 150 , 15 , 90),
-(9, 'IPPRO', 'ipadpro.jpg', 799.99 ,  799.99 , 150 , 15 , 100),
-(10, 'OPW3', 'onepluswatch.jpg', 199.99 ,  199.99 , 80 ,  8 , 50),
-(11, 'GW3', 'galaxywatch3.jpg', 349.99 ,  349.99 , 100 , 10 , 50),
-(12, 'T5SSD', 't5portablessd.jpg', 179.99 ,  179.99 , 250 , 25 , 120),
-(13, 'MBP', 'macbookpro.jpg', 1999.99 , 1999.99 , 80 ,  8 , 40),
-(14, 'XPS13', 'xps13.jpg', 1399.99 , 1399.99 , 150 , 15 , 90),
-(15, 'TPX1C', 'thinkpadx1carbon.jpg', 1499.99 , 1499.99 , 200 , 20 , 100),
-(16, 'YC940', 'yogac940.jpg', 1299.99 , 1299.99 , 150 , 15 , 80),
-(17, 'IPG3', 'ideapadgaming3.jpg', 999.99 ,  999.99 , 100 , 10 , 50),
-(18, 'AM15R5', 'alienwarem15r5.jpg', 1999.99 , 1999.99 , 80 ,  8 , 50),
-(19, 'XSX', 'xboxseriesx.jpg', 499.99 ,  499.99 , 80 ,  8 , 50),
-(20, 'DUU2720Q', 'dellultrasharp.jpg', 599.99 ,  599.99 , 120 , 12 , 70),
+(1, 'IP12-RED-128', 'iphone12-red.jpg', 899.99, 899.99, 35, 4, 20),
+(1, 'IP12-WHITE-128', 'iphone12-white.jpg', 899.99, 899.99, 35, 4, 20),
+(1, 'IP12-BLACK-128', 'iphone12-black.jpg', 899.99, 899.99, 30, 2, 10),
+(2, 'IPSE-BLUE-64', 'iphonese-blue.jpg', 499.99, 499.99, 25, 3, 25),
+(2, 'IPSE-RED-64', 'iphonese-red.jpg', 499.99, 499.99, 25, 3, 5),
+(3, 'PX5', 'pixel5.jpg', 799.99, 799.99, 80, 8, 40),
+(4, 'OP9P', 'oneplus9pro.jpg', 1099.99, 1099.99, 100, 10, 60),
+(5, 'GS21', 'galaxys21.jpg', 1099.99, 1099.99, 150, 15, 70),
+(6, 'APRO1', 'airpodspro.jpg', 249.99, 249.99, 200, 20, 150),
+(7, 'APO2', 'airpods2.jpg', 249.99, 249.99, 200, 20, 100),
+(8, 'OBPRO', 'oneplusbudspro.jpg', 149.99, 149.99, 150, 15, 90),
+(9, 'IPPRO', 'ipadpro.jpg', 799.99, 799.99, 150, 15, 100),
+(10, 'OPW3', 'onepluswatch.jpg', 199.99, 199.99, 80, 8, 50),
+(11, 'GW3', 'galaxywatch3.jpg', 349.99, 349.99, 100, 10, 50),
+(12, 'T5SSD', 't5portablessd.jpg', 179.99, 179.99, 250, 25, 120),
+(13, 'MBP', 'macbookpro.jpg', 1999.99, 1999.99, 80, 8, 40),
+(14, 'XPS13', 'xps13.jpg', 1399.99, 1399.99, 150, 15, 90),
+(15, 'TPX1C', 'thinkpadx1carbon.jpg', 1499.99, 1499.99, 200, 20, 100),
+(16, 'YC940', 'yogac940.jpg', 1299.99, 1299.99, 150, 15, 80),
+(17, 'IPG3', 'ideapadgaming3.jpg', 999.99, 999.99, 100, 10, 50),
+(18, 'AM15R5', 'alienwarem15r5.jpg', 1999.99, 1999.99, 80, 8, 50),
+(19, 'XSX', 'xboxseriesx.jpg', 499.99, 499.99, 80, 8, 50),
+(20, 'DUU2720Q', 'dellultrasharp.jpg', 599.99, 599.99, 120, 12, 70),
 -- clothing and shoes
-(21, 'NAM270-105', 'nikeairmax270.jpg', 129.99 ,  129.99 , 40 , 10 , 50),
-(21, 'NAM270-90', 'nikeairmax270.jpg', 129.99 ,  119.99 , 30 , 10 , 50),
-(21, 'NAM270-75', 'nikeairmax270.jpg', 129.99 ,  109.99 , 30 , 10 , 50),
+(21, 'NAM270-105', 'nikeairmax270.jpg', 129.99, 129.99, 40, 10, 50),
+(21, 'NAM270-90', 'nikeairmax270.jpg', 129.99, 119.99, 30, 10, 50),
+(21, 'NAM270-75', 'nikeairmax270.jpg', 129.99, 109.99, 30, 10, 50),
 
-(22, 'NZVNEXT', 'nikezoomx.jpg', 249.99 ,  249.99 , 80 ,  8 , 30),
-(23, 'AUB', 'adidasultraboost.jpg', 149.99 ,  149.99 , 150 , 15 , 60),
-(24, 'AAS', 'adidasadilette.jpg', 29.99 ,  29.99 , 200 , 20 , 120),
-(25, 'NDFTS', 'nikedrifit.jpg', 29.99 ,  29.99 , 200 , 20 , 100),
+(22, 'NZVNEXT', 'nikezoomx.jpg', 249.99, 249.99, 80, 8, 30),
+(23, 'AUB', 'adidasultraboost.jpg', 149.99, 149.99, 150, 15, 60),
+(24, 'AAS', 'adidasadilette.jpg', 29.99, 29.99, 200, 20, 120),
+(25, 'NDFTS', 'nikedrifit.jpg', 29.99, 29.99, 200, 20, 100),
 
-(26, 'CKLTS-L', 'calvinkleintshirt.jpg', 39.99 ,  39.99 , 100 , 10 , 70),
-(26, 'CKLTS-M', 'calvinkleintshirt.jpg', 39.99 ,  39.99 , 100 , 10 , 70),
-(26, 'CKLTS-S', 'calvinkleintshirt.jpg', 39.99 ,  39.99 , 100 , 10 , 70),
+(26, 'CKLTS-L', 'calvinkleintshirt.jpg', 39.99, 39.99, 100, 10, 70),
+(26, 'CKLTS-M', 'calvinkleintshirt.jpg', 39.99, 39.99, 100, 10, 70),
+(26, 'CKLTS-S', 'calvinkleintshirt.jpg', 39.99, 39.99, 100, 10, 70),
 
-(27, 'AEPTP', 'adidasessentialpants.jpg', 49.99 ,  49.99 , 100 , 10 , 80),
+(27, 'AEPTP', 'adidasessentialpants.jpg', 49.99, 49.99, 100, 10, 80),
 
-(28, 'TGG', 'thegreatgatsby.jpg', 14.99 ,  14.99 , 200 , 20 , 150),
-(29, 'TKAM', 'tokillamockingbird.jpg', 12.99 ,  12.99 , 150 , 15 , 120),
-(30, 'HPSS', 'harrypotter.jpg', 19.99 ,  19.99 , 100 , 10 , 200);
+(28, 'TGG', 'thegreatgatsby.jpg', 14.99, 14.99, 200, 20, 150),
+(29, 'TKAM', 'tokillamockingbird.jpg', 12.99, 12.99, 150, 15, 120),
+(30, 'HPSS', 'harrypotter.jpg', 19.99, 19.99, 100, 10, 200);
 
 
 DROP TABLE IF EXISTS product_attribute;
@@ -1020,11 +1020,11 @@ CREATE TABLE product_update_log (
     added_stock INTEGER,
     total_stock INTEGER,
     update_action TEXT NOT NULL,
-    change_operator TEXT NOT NULL,
+    operator TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO product_update_log (product_id, price_old, price_new, sale_price_old, sale_price_new, old_stock, added_stock, total_stock, update_action, change_operator)
+INSERT INTO product_update_log (product_id, price_old, price_new, sale_price_old, sale_price_new, old_stock, added_stock, total_stock, update_action, operator)
 VALUES
 (1, 899.99, 899.99, 899.99, 899.99, 100, 0, 100, 'UPDATE', 'jun'),
 (2, 499.99, 499.99, 499.99, 499.99, 50, 0, 50, 'UPDATE', 'jun'),
@@ -1153,7 +1153,7 @@ CREATE TABLE member (
     delete_status       INTEGER DEFAULT 0,
     created_at  TIMESTAMP,
     last_login   TIMESTAMP,
-    source_type  TEXT          -- web user -> 0 , mobile user -> 1
+    source_type  TEXT          -- web user -> 0, mobile user -> 1
 );
 
 DROP TABLE IF EXISTS member_icon;
@@ -1190,10 +1190,24 @@ CREATE TABLE member_change_log (
     id SERIAL PRIMARY KEY,
     member_id  NUMERIC NOT NULL,
     update_action VARCHAR(255) NOT NULL,
-    change_operator VARCHAR(255) NOT NULL,
+    operator VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO member_change_log (member_id, update_action, operator)
+VALUES
+(1, 'Update', 'John Doe'),
+(2, 'Create', 'Alice Smith'),
+(3, 'Update', 'Bob Johnson'),
+(4, 'Delete', 'Eve Wilson'),
+(5, 'Create', 'Charlie Brown'),
+(6, 'Update', 'Grace Davis'),
+(7, 'Delete', 'Frank Miller'),
+(8, 'Create', 'Lucy Adams'),
+(9, 'Update', 'David Clark'),
+(10, 'Create', 'Sarah White'),
+
+(7, 'Update', 'Admin - Jun');
 
 
 ---------------User  all password is password
@@ -1214,10 +1228,10 @@ VALUES
 INSERT INTO address (member_id, receiver_name, phone_number, detail_address, city, state, zip_code, note)
 VALUES
 (1, 'Jun',  '212-212-2222', '1 1st street 2nd ave', 'Chicago','Illinois','60007',''),
-(2, 'John', '111-111-1111', '2 2nd street 3rd ave Apt 4F', 'Dallas','Texas', '75001' ,'please call, door bell broken'),
+(2, 'John', '111-111-1111', '2 2nd street 3rd ave Apt 4F', 'Dallas','Texas', '75001','please call, door bell broken'),
 (3, 'Jane', '212-212-2222', '3 4st street 5nd ave', 'San Francisco','California','94016','');
 
---- login type ,pc/andriod/IOS   = 0/1/2
+--- login type,pc/andriod/IOS   = 0/1/2
 INSERT INTO member_login_log (member_id, login_time, ip_address, login_type)
 VALUES
 (1,'2020-03-18 22:18:40','127.0.0.1','0'),
@@ -1393,7 +1407,7 @@ VALUES
 (3, 3);
 
 
--- user_agent 1 -> pc , 2 -> mobile users
+-- user_agent 1 -> pc, 2 -> mobile users
 insert into admin_login_log (admin_id, login_date, login_time, ip_address, user_agent)
 VALUES
 (2, '2022-06-22', '9:37', '134.163.118.46', 2),
@@ -1466,7 +1480,7 @@ VALUES
 (2, 29, 'To Kill a Mockingbird ', 'TKAM', 'tokillamockingbird.jpg', 1, 12.99),
 
 (3, 25, 'Nike Dri-FIT T-Shirt ', 'NDFTS', 'nikeDriFitShirt.jpg', 2, 29.99),
-(3, 2, 'iPhone SE','IPSE-RED-64' , 'iphonese-red.jpg', 1, 449.99),
+(3, 2, 'iPhone SE','IPSE-RED-64', 'iphonese-red.jpg', 1, 449.99),
 
 (5, 5, 'Galaxy S21', 'GS21', 'galaxyS21.jpg', 2, 1099.99),
 (5, 19, 'Xbox Series X', 'XSX', 'xboxSeriesX.jpg', 1, 499.99);
@@ -1486,8 +1500,8 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
     shipping_cost NUMERIC(10,2),
     pay_amount NUMERIC(10,2),
     pay_type INTEGER,              -- credit card -> 0, paypal -> 1, google pay -> 2
-    source_type INTEGER,           -- pc -> 0 , mobile -> 1
-    status INTEGER DEFAULT 0,                -- waiting for payment 0 , fulfilling(paid) 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid/cancel 5
+    source_type INTEGER,           -- pc -> 0, mobile -> 1
+    status INTEGER DEFAULT 0,                -- waiting for payment 0, fulfilling(paid) 1,  send 2, complete(received) 3, closed(out of return period) 4,invalid/cancel 5
     delivery_company VARCHAR(64),
     delivery_tracking_number VARCHAR(64),
     receiver_phone VARCHAR(32),
@@ -1559,10 +1573,10 @@ INSERT INTO
   order_item (order_id, order_sn, product_id, product_pic, product_name, product_brand, product_sn, product_price, product_quantity,
                 product_sku_id, product_sku_code, product_category_id, promotion_name, promotion_amount, coupon_amount, real_amount)
 VALUES
--- 1 iphone se red and a macbook , 15$ off
+-- 1 iphone se red and a macbook, 15$ off
 (1, '1001', 2, 'iphoneSE.jpg', 'iPhone SE', 'Apple', 'SN-456', 499.99, 1, 5, 'IPSE-RED-64', 15, 'iphone-SE 10% OFF', 49.99, 0, 450),
 (1, '1001', 13, 'macBookPro.jpg', 'MacBook Pro', 'Apple', 'SN-678', 1999.99, 1, 16, 'MBP', 17, 'All laptop 100 off', 100, 0, 1899.99),
--- 2 OnePlus 9 , 10 % off
+-- 2 OnePlus 9, 10 % off
 (2, '1002', 4, 'oneplus9Pro.jpg', 'OnePlus 9 Pro', 'OnePlus', 'SN-789', 1099.99, 2, 7, 'OP9P', 15, 'OnePlus product $10 off', 20, 0, 2179.98),
 -- xps13 $15 off
 (3, '1003', 14, 'xps13.jpg', 'XPS 13', 'Dell', 'SN-456', 1399.99, 1, 17, 'XPS13', 17, 'All laptop 100 off', 100, 0, 1299.99),
@@ -1578,7 +1592,7 @@ CREATE TABLE order_change_history (
     id SERIAL PRIMARY KEY,
     order_id numeric,
     update_action TEXT NOT NULL,
-    order_status INTEGER NULL DEFAULT NULL ,              -- waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
+    order_status INTEGER NULL DEFAULT NULL,              -- waiting for payment 0, fulfilling 1,  send 2, complete(received) 3, closed(out of return period) 4,invalid 5
     note varchar(500) NULL DEFAULT NULL,
     operator TEXT,
     created_at timestamp NULL DEFAULT NULL
@@ -1612,33 +1626,33 @@ CREATE TABLE company_address (
     detail_address VARCHAR(200) NULL DEFAULT NULL
 );
 
-INSERT INTO company_address(address_name, send_status, receive_status, receiver_name ,  receiver_phone , state, city, zip_code, detail_address)
+INSERT INTO company_address(address_name, send_status, receive_status, receiver_name,  receiver_phone, state, city, zip_code, detail_address)
 VALUES
-('111 over there send out avenue 2nd floor', 1, 0, 'Jun' , 1800000000, 'New York', 'New York', 11220, '222 over there avenue 2nd floor, go through the gate in north east corner to unload'),
-('222 right here return avenue', 0, 1, 'Jun' , 1800000000, 'Nevada', 'Las Vegas', 88901, 'Next to the casino'),
-('333 backup warehouse avenue', 1, 1, 'Jun' , 1800000000, 'Pennsylvania', 'Philadelphia', 19019, 'Big red sign turn left and ring bell to enter');
+('111 over there send out avenue 2nd floor', 1, 0, 'Jun', 1800000000, 'New York', 'New York', 11220, '222 over there avenue 2nd floor, go through the gate in north east corner to unload'),
+('222 right here return avenue', 0, 1, 'Jun', 1800000000, 'Nevada', 'Las Vegas', 88901, 'Next to the casino'),
+('333 backup warehouse avenue', 1, 1, 'Jun', 1800000000, 'Pennsylvania', 'Philadelphia', 19019, 'Big red sign turn left and ring bell to enter');
 
 
 --- when admin/operator determined if the product can be return, one item(s) return at a time
 DROP TABLE IF EXISTS return_request;
 CREATE TABLE return_request  (
     id SERIAL PRIMARY KEY,
-    order_id bigint ,
-    company_address_id bigint ,                   -- return to you(owner), return center or warehouse
-    order_sn varchar(64) ,
-    member_id bigint ,
+    order_id bigint,
+    company_address_id bigint,                   -- return to you(owner), return center or warehouse
+    order_sn varchar(64),
+    member_id bigint,
     return_quantity bigint,                       -- number of items to be returned
-    return_name varchar(100) ,
-    return_phone varchar(100) ,
-    status int,                -- return status,  waiting to process 0 , returning(sending) 1, complete 2, rejected(not matching reason) 3
+    return_name varchar(100),
+    return_phone varchar(100),
+    status int,                -- return status,  waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
     handle_time timestamp,                        -- how long to return this item, e.g 2 weeks to return this or return is voided.
     asking_amount decimal(10, 2),
     refunded_amount decimal(10, 2),
-    reason varchar(200) ,                         -- pre-set reasons
-    description varchar(500) ,
-    handle_note varchar(500) ,                    -- notes from admin to customer or rejection reason
-    handle_operator varchar(100) ,                -- who processed this return
-    receive_operator varchar(100) ,               -- who received the return item
+    reason varchar(200),                         -- pre-set reasons
+    description varchar(500),
+    handle_note varchar(500),                    -- notes from admin to customer or rejection reason
+    handle_operator varchar(100),                -- who processed this return
+    receive_operator varchar(100),               -- who received the return item
     receive_time timestamp,
     receive_note varchar(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -1731,7 +1745,7 @@ VALUES
 --------------
 -- Content management system
 -- articles(Buying Guide, product comparison, other MISC if you're specialized shop),
--- images(Store as images urls but it will be store somewhere else like Amazon s3) ,
+-- images(Store as images urls but it will be store somewhere else like Amazon s3),
 -- and video(as in links(youtube private(unlisted or published in your channel) or public video) or store somewhere)
 DROP TABLE IF EXISTS article;
 CREATE TABLE article (
@@ -1808,11 +1822,11 @@ CREATE TABLE article_change_log (
     id SERIAL PRIMARY KEY,
     article_id INT NOT NULL,
     update_action VARCHAR(255) NOT NULL,
-    change_operator VARCHAR(255) NOT NULL,
+    operator VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO article_change_log (article_id, update_action, change_operator)
+INSERT INTO article_change_log (article_id, update_action, operator)
 VALUES
 (1, 'Update', 'John Doe'),
 (2, 'Create', 'Alice Smith'),
@@ -1832,9 +1846,9 @@ VALUES
 DROP TABLE IF EXISTS coupon;
 CREATE TABLE coupon (
     id SERIAL PRIMARY KEY,
-    coupon_type integer NULL DEFAULT NULL,           -- discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item
+    coupon_type integer NULL DEFAULT NULL,           -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
     name varchar(100),
-    discount_type  integer NULL DEFAULT NULL,   -- 0 -> by amount , 1->  by percent off
+    discount_type integer NULL DEFAULT NULL,   -- 0 -> by amount, 1->  by percent off
     amount numeric(10,2) NULL DEFAULT NULL,   -- amount discounted
     start_time timestamp NULL DEFAULT NULL,
     end_time timestamp NULL DEFAULT NULL,
@@ -1843,18 +1857,18 @@ CREATE TABLE coupon (
     publish_count integer NULL DEFAULT NULL,  -- number of send/publish coupons to users
     used_count integer NULL DEFAULT NULL,      -- number of used coupons
     code varchar(64) NULL DEFAULT NULL,
-    status integer NULL DEFAULT 1          -- is the coupon active or disable ,  0 -> disable, 1 -> active
+    status integer NULL DEFAULT 1          -- is the coupon active or disable,  0 -> disable, 1 -> active
 );
 
 -- TODO: make sure free coupon don't go negative
 INSERT INTO coupon(coupon_type, name, discount_type, amount, start_time, end_time, count, publish_count, used_count, code, status)
 VALUES
-(0, '$15 off whole order', 0, 15.00, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 20, 10 , 0, '15OFF', 1),
-(0, '10% off whole order', 1, 10, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 20, 10 , 0, '10OFF', 1),
-(0, 'All free', 0, 999999.99, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1 , 1, 'FREE', 1),
-(1, '$50 off Apple product', 0, 50.00, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1 , 0, '50OFFAPPLE', 1),
-(2, '60% off shirts', 1, 60, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1 , 0, '60OFFSHIRTS', 1),
-(3, '20% off Galaxy S21', 1, 20, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1 , 1, '20OFFS21', 1);
+(0, '$15 off whole order', 0, 15.00, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 20, 10, 0, '15OFF', 1),
+(0, '10% off whole order', 1, 10, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 20, 10, 0, '10OFF', 1),
+(0, 'All free', 0, 999999.99, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1, 1, 'FREE', 1),
+(1, '$50 off Apple product', 0, 50.00, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1, 0, '50OFFAPPLE', 1),
+(2, '60% off shirts', 1, 60, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1, 0, '60OFFSHIRTS', 1),
+(3, '20% off Galaxy S21', 1, 20, '2019-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1, 1, '20OFFS21', 1);
 
 
 -- the product that are affected by the coupon, coupon type 1-3 will use this. 0 type will not.
@@ -1896,8 +1910,8 @@ DROP TABLE IF EXISTS coupon_history;
 CREATE TABLE coupon_history (
     id SERIAL PRIMARY KEY,
     coupon_id bigint NOT NULL,
-    member_id  bigint NOT NULL,
-    order_id  bigint NOT NULL,
+    member_id bigint NOT NULL,
+    order_id bigint NOT NULL,
     used_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     code varchar(64) NULL DEFAULT NULL
 );
@@ -1913,12 +1927,31 @@ VALUES
 (4, 1, 7, '2023-02-25 08:45:00', '50OFFAPPLE');
 
 
+DROP TABLE IF EXISTS coupon_change_log;
+CREATE TABLE coupon_change_log (
+    id SERIAL PRIMARY KEY,
+    coupon_id INT NOT NULL,
+    update_action VARCHAR(255) NOT NULL,
+    operator VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO coupon_change_log (coupon_id, update_action, operator)
+VALUES
+(1, 'Update', 'John Doe'),
+(2, 'Create', 'Alice Smith'),
+(3, 'Update', 'Bob Johnson'),
+(4, 'Delete', 'Eve Wilson'),
+(5, 'Create', 'Charlie Brown'),
+(6, 'Update', 'Grace Davis');
+
+
 DROP TABLE IF EXISTS promotion_sale;
 CREATE TABLE promotion_sale (
     id SERIAL PRIMARY KEY,
-    name varchar(100) ,
-    promotion_type integer ,      -- discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item
-    discount_type  integer,       -- 0 -> by amount , 1->  by percent off
+    name varchar(100),
+    promotion_type integer,      -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
+    discount_type integer,       -- 0 -> by amount, 1->  by percent off
     amount numeric,
     status integer,               -- 0-> not active, 1-> active is it active
     start_time TIMESTAMP,
@@ -1945,13 +1978,13 @@ CREATE TABLE promotion_sale_product (
     product_id bigint NOT NULL,
     product_sku_code TEXT,
     promotion_price numeric NOT NULL,       -- what the price - promotion sale amount = promotion_price
-    promotion_limit_item  integer NOT NULL,      -- how many allowed to sell at discount, need to check sku stock
-    promotion_limit_per_user  integer NOT NULL       -- number of limit per member/account
+    promotion_limit_item integer NOT NULL,      -- how many allowed to sell at discount, need to check sku stock
+    promotion_limit_per_user integer NOT NULL       -- number of limit per member/account
 );
 
 -- TODO: need to check when stock/sold meet limit before canceling the discount
 -- does it have priority for discount? like all > category -> brand -> specific product and do they stack?
-INSERT INTO promotion_sale_product (promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
+INSERT INTO promotion_sale_product (promotion_sale_id, product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
 VALUES
 -- All laptop 100 off
 (3, 13, 'MBP', 1899.99, 80, 3),
@@ -1982,7 +2015,7 @@ UPDATE product_sku SET promotion_price = 1899.99 WHERE product_id = 18 AND sku_c
 
 
 -- OnePlus product $10 off
-INSERT INTO promotion_sale_product (promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
+INSERT INTO promotion_sale_product (promotion_sale_id, product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
 VALUES
 (2, 13, 'OP9P', 1089.99, 100, 3),
 (2, 14, 'OBPRO', 139.99, 150, 3),
@@ -1999,7 +2032,7 @@ UPDATE product_sku SET promotion_price = 189.99 WHERE product_id = 10 AND sku_co
 
 
 -- iphone-SE 10% OFF
-INSERT INTO promotion_sale_product (promotion_sale_id , product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
+INSERT INTO promotion_sale_product (promotion_sale_id, product_id, product_sku_code, promotion_price, promotion_limit_item, promotion_limit_per_user)
 VALUES
 (4, 2, 'IPSE-BLUE-64', 449.99, 25, 3),
 (4, 2, 'IPSE-RED-64', 449.99, 25, 3);
@@ -2017,14 +2050,14 @@ CREATE TABLE promotion_sale_log (
     id SERIAL PRIMARY KEY,
     promotion_sale_id numeric,
     sale_action TEXT,
-    promotion_type integer,    -- discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item
-    discount_type  integer,       -- 0 -> by amount , 1->  by percent off
+    promotion_type integer,    -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
+    discount_type integer,       -- 0 -> by amount, 1->  by percent off
     amount numeric,
-    operate_man TEXT,     -- who made the change
+    operator TEXT,     -- who made the change
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO promotion_sale_log(promotion_sale_id, sale_action, promotion_type, discount_type, amount, operate_man)
+INSERT INTO promotion_sale_log(promotion_sale_id, sale_action, promotion_type, discount_type, amount, operator)
 VALUES
 (1, 'update action', 0, 1, 20, 'admin'),
 (2, 'update action', 1, 1, 10, 'admin'),

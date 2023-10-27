@@ -32,6 +32,8 @@ public class CouponServiceImpl implements CouponService {
 
     private final CouponHistoryMapper couponHistoryMapper;
 
+    private final CouponChangeLogMapper logMapper;
+
     private final CouponProductRelationMapper productRelationMapper;
 
     private final ProductSkuMapper productSkuMapper;
@@ -44,17 +46,17 @@ public class CouponServiceImpl implements CouponService {
 
     @Autowired
     public CouponServiceImpl(CouponMapper couponMapper, ProductMapper productMapper, CouponHistoryMapper couponHistoryMapper,
-                             CouponProductRelationMapper productRelationMapper, ProductSkuMapper productSkuMapper,
+                             CouponProductRelationMapper productRelationMapper, ProductSkuMapper productSkuMapper, CouponChangeLogMapper logMapper,
                              WebClient.Builder webClient, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.couponMapper = couponMapper;
         this.productMapper = productMapper;
         this.couponHistoryMapper = couponHistoryMapper;
         this.productRelationMapper = productRelationMapper;
         this.productSkuMapper = productSkuMapper;
+        this.logMapper = logMapper;
         this.webClient = webClient.build();
         this.jdbcScheduler = jdbcScheduler;
     }
-
     @Override
     public Mono<Double> checkDiscount(String couponCode, int userId) {
         return Mono.fromCallable(() -> {
@@ -252,12 +254,12 @@ public class CouponServiceImpl implements CouponService {
     public Mono<Coupon> createCoupon(Coupon newCoupon, Map<String, Integer> skuMap, String operator) {
         // TODO: create create brand or category discount by pass brand name or category id
         return Mono.fromCallable(() -> {
-            Coupon coupon = internalCreateCoupon(newCoupon, skuMap);
+            Coupon coupon = internalCreateCoupon(newCoupon, skuMap, operator);
             return coupon;
         }).subscribeOn(jdbcScheduler);
     }
 
-    private Coupon internalCreateCoupon(Coupon newCoupon, Map<String, Integer> skuMap) {
+    private Coupon internalCreateCoupon(Coupon newCoupon, Map<String, Integer> skuMap,  String operator) {
         String couponCode = newCoupon.getCode();
         Coupon existingCoupon = checkCoupon(couponCode);
         if (existingCoupon != null) throw new CouponException("Coupon code already exist");
@@ -293,7 +295,7 @@ public class CouponServiceImpl implements CouponService {
             productRelationMapper.insert(newProduct);
         }
 
-        // TODO: create coupon log, different from used history.
+        createUpdateLog(newCoupon, "create new coupon", operator);
 
         return newCoupon;
     }
@@ -312,28 +314,23 @@ public class CouponServiceImpl implements CouponService {
             if (!foundCoupon.getCode().equals(updateCoupon.getCode())) {
                 throw new CouponException("Can not change coupon code");
             }
+
             // TODO: Update coupon info's like discount type, amount, date, count, status, and name
+            //      if pricing affecting coupon, will need to update affected product
             couponMapper.updateByPrimaryKeySelective(updateCoupon);
-            // TODO: add a log
+
+            createUpdateLog(updateCoupon, "update coupon", operator);
 
             return updateCoupon;
         }).subscribeOn(jdbcScheduler);
     }
 
-    private Coupon updateCouponProduct(Coupon updateCoupon) {
-        CouponExample example = new CouponExample();
-        example.createCriteria().andIdEqualTo(updateCoupon.getId());
-        couponMapper.updateByExample(updateCoupon, example);
-
-
-        // find existing
-
-        return updateCoupon;
-    }
-
     @Override
     public Mono<Void> deleteCoupon(int couponId, String operator) {
         return Mono.fromRunnable(() -> {
+            Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+            if (coupon == null) throw new RuntimeException("Coupon not found: " + couponId);
+
             couponMapper.deleteByPrimaryKey(couponId);
 
             CouponProductRelationExample productRelationExample = new CouponProductRelationExample();
@@ -344,6 +341,17 @@ public class CouponServiceImpl implements CouponService {
                 int productRelationId = product.getId();
                 productRelationMapper.deleteByPrimaryKey(productRelationId);
             }
+
+            createUpdateLog(coupon, "delete coupon", operator);
         }).subscribeOn(jdbcScheduler).then();
+    }
+
+    private void createUpdateLog(Coupon coupon, String updateAction, String operator) {
+        CouponChangeLog couponChangeLog = new CouponChangeLog();
+        couponChangeLog.setCouponId(coupon.getId());
+        couponChangeLog.setUpdateAction(updateAction);
+        couponChangeLog.setOperator(operator);
+        couponChangeLog.setCreatedAt(new Date());
+        logMapper.insert(couponChangeLog);
     }
 }

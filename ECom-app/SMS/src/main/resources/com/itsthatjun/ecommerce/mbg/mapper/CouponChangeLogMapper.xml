@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.PromotionSaleLogMapper">
-  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.PromotionSaleLog">
+<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.CouponChangeLogMapper">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.CouponChangeLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="promotion_sale_id" jdbcType="NUMERIC" property="promotionSaleId" />
-    <result column="sale_action" jdbcType="VARCHAR" property="saleAction" />
-    <result column="promotion_type" jdbcType="INTEGER" property="promotionType" />
-    <result column="discount_type" jdbcType="INTEGER" property="discountType" />
-    <result column="amount" jdbcType="NUMERIC" property="amount" />
+    <result column="coupon_id" jdbcType="INTEGER" property="couponId" />
+    <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
@@ -70,16 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, promotion_sale_id, sale_action, promotion_type, discount_type, amount, operator, 
-    created_at
+    id, coupon_id, update_action, operator, created_at
   </sql>
-  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleLogExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponChangeLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from promotion_sale_log
+    from coupon_change_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,44 +86,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from promotion_sale_log
+    from coupon_change_log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from promotion_sale_log
+    delete from coupon_change_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleLogExample">
-    delete from promotion_sale_log
+  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponChangeLogExample">
+    delete from coupon_change_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleLog" useGeneratedKeys="true">
-    insert into promotion_sale_log (promotion_sale_id, sale_action, promotion_type, 
-      discount_type, amount, operator, 
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponChangeLog" useGeneratedKeys="true">
+    insert into coupon_change_log (coupon_id, update_action, operator, 
       created_at)
-    values (#{promotionSaleId,jdbcType=NUMERIC}, #{saleAction,jdbcType=VARCHAR}, #{promotionType,jdbcType=INTEGER}, 
-      #{discountType,jdbcType=INTEGER}, #{amount,jdbcType=NUMERIC}, #{operator,jdbcType=VARCHAR}, 
+    values (#{couponId,jdbcType=INTEGER}, #{updateAction,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleLog" useGeneratedKeys="true">
-    insert into promotion_sale_log
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponChangeLog" useGeneratedKeys="true">
+    insert into coupon_change_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="promotionSaleId != null">
-        promotion_sale_id,
+      <if test="couponId != null">
+        coupon_id,
       </if>
-      <if test="saleAction != null">
-        sale_action,
-      </if>
-      <if test="promotionType != null">
-        promotion_type,
-      </if>
-      <if test="discountType != null">
-        discount_type,
-      </if>
-      <if test="amount != null">
-        amount,
+      <if test="updateAction != null">
+        update_action,
       </if>
       <if test="operator != null">
         operator,
@@ -137,20 +122,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="promotionSaleId != null">
-        #{promotionSaleId,jdbcType=NUMERIC},
+      <if test="couponId != null">
+        #{couponId,jdbcType=INTEGER},
       </if>
-      <if test="saleAction != null">
-        #{saleAction,jdbcType=VARCHAR},
-      </if>
-      <if test="promotionType != null">
-        #{promotionType,jdbcType=INTEGER},
-      </if>
-      <if test="discountType != null">
-        #{discountType,jdbcType=INTEGER},
-      </if>
-      <if test="amount != null">
-        #{amount,jdbcType=NUMERIC},
+      <if test="updateAction != null">
+        #{updateAction,jdbcType=VARCHAR},
       </if>
       <if test="operator != null">
         #{operator,jdbcType=VARCHAR},
@@ -160,32 +136,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleLogExample" resultType="java.lang.Long">
-    select count(*) from promotion_sale_log
+  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponChangeLogExample" resultType="java.lang.Long">
+    select count(*) from coupon_change_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update promotion_sale_log
+    update coupon_change_log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.promotionSaleId != null">
-        promotion_sale_id = #{record.promotionSaleId,jdbcType=NUMERIC},
+      <if test="record.couponId != null">
+        coupon_id = #{record.couponId,jdbcType=INTEGER},
       </if>
-      <if test="record.saleAction != null">
-        sale_action = #{record.saleAction,jdbcType=VARCHAR},
-      </if>
-      <if test="record.promotionType != null">
-        promotion_type = #{record.promotionType,jdbcType=INTEGER},
-      </if>
-      <if test="record.discountType != null">
-        discount_type = #{record.discountType,jdbcType=INTEGER},
-      </if>
-      <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=NUMERIC},
+      <if test="record.updateAction != null">
+        update_action = #{record.updateAction,jdbcType=VARCHAR},
       </if>
       <if test="record.operator != null">
         operator = #{record.operator,jdbcType=VARCHAR},
@@ -199,36 +166,24 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update promotion_sale_log
+    update coupon_change_log
     set id = #{record.id,jdbcType=INTEGER},
-      promotion_sale_id = #{record.promotionSaleId,jdbcType=NUMERIC},
-      sale_action = #{record.saleAction,jdbcType=VARCHAR},
-      promotion_type = #{record.promotionType,jdbcType=INTEGER},
-      discount_type = #{record.discountType,jdbcType=INTEGER},
-      amount = #{record.amount,jdbcType=NUMERIC},
+      coupon_id = #{record.couponId,jdbcType=INTEGER},
+      update_action = #{record.updateAction,jdbcType=VARCHAR},
       operator = #{record.operator,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleLog">
-    update promotion_sale_log
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponChangeLog">
+    update coupon_change_log
     <set>
-      <if test="promotionSaleId != null">
-        promotion_sale_id = #{promotionSaleId,jdbcType=NUMERIC},
+      <if test="couponId != null">
+        coupon_id = #{couponId,jdbcType=INTEGER},
       </if>
-      <if test="saleAction != null">
-        sale_action = #{saleAction,jdbcType=VARCHAR},
-      </if>
-      <if test="promotionType != null">
-        promotion_type = #{promotionType,jdbcType=INTEGER},
-      </if>
-      <if test="discountType != null">
-        discount_type = #{discountType,jdbcType=INTEGER},
-      </if>
-      <if test="amount != null">
-        amount = #{amount,jdbcType=NUMERIC},
+      <if test="updateAction != null">
+        update_action = #{updateAction,jdbcType=VARCHAR},
       </if>
       <if test="operator != null">
         operator = #{operator,jdbcType=VARCHAR},
@@ -239,13 +194,10 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleLog">
-    update promotion_sale_log
-    set promotion_sale_id = #{promotionSaleId,jdbcType=NUMERIC},
-      sale_action = #{saleAction,jdbcType=VARCHAR},
-      promotion_type = #{promotionType,jdbcType=INTEGER},
-      discount_type = #{discountType,jdbcType=INTEGER},
-      amount = #{amount,jdbcType=NUMERIC},
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponChangeLog">
+    update coupon_change_log
+    set coupon_id = #{couponId,jdbcType=INTEGER},
+      update_action = #{updateAction,jdbcType=VARCHAR},
       operator = #{operator,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
