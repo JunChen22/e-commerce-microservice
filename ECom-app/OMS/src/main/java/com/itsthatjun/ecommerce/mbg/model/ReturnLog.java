@@ -7,7 +7,7 @@ public class ReturnLog {
 
     private Integer returnRequestId;
 
-    private String action;
+    private String updateAction;
 
     private String operator;
 
@@ -29,12 +29,12 @@ public class ReturnLog {
         this.returnRequestId = returnRequestId;
     }
 
-    public String getAction() {
-        return action;
+    public String getUpdateAction() {
+        return updateAction;
     }
 
-    public void setAction(String action) {
-        this.action = action;
+    public void setUpdateAction(String updateAction) {
+        this.updateAction = updateAction;
     }
 
     public String getOperator() {

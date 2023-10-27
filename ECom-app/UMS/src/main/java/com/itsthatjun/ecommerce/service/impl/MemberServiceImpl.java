@@ -3,10 +3,7 @@ package com.itsthatjun.ecommerce.service.impl;
 import com.itsthatjun.ecommerce.dto.MemberDetail;
 import com.itsthatjun.ecommerce.dto.event.incoming.UmsUserEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsAuthUpdateEvent;
-import com.itsthatjun.ecommerce.mbg.mapper.AddressMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.MemberIconMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.MemberLoginLogMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.MemberMapper;
+import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.MemberService;
 import org.slf4j.Logger;
@@ -41,18 +38,21 @@ public class MemberServiceImpl implements MemberService {
 
     private final AddressMapper addressMapper;
 
+    private final MemberChangeLogMapper logMapper;
+
     private final StreamBridge streamBridge;
 
     private final Scheduler jdbcScheduler;
 
     @Autowired
     public MemberServiceImpl(MemberMapper memberMapper, MemberIconMapper iconMapper, MemberLoginLogMapper loginLogMapper,
-                             AddressMapper addressMapper, StreamBridge streamBridge,
+                             MemberChangeLogMapper logMapper, AddressMapper addressMapper, StreamBridge streamBridge,
                              @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
         this.memberMapper = memberMapper;
         this.iconMapper = iconMapper;
         this.loginLogMapper = loginLogMapper;
         this.addressMapper = addressMapper;
+        this.logMapper = logMapper;
         this.streamBridge = streamBridge;
         this.jdbcScheduler = jdbcScheduler;
     }
@@ -103,6 +103,7 @@ public class MemberServiceImpl implements MemberService {
         address.setMemberId(newMemberId);
         addressMapper.insert(address);
 
+        createUpdateLog(newMemberId, "create account", "user");
         sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(NEW_ACCOUNT, newMemberId, newMember));
         return memberDetail;
     }
@@ -135,6 +136,8 @@ public class MemberServiceImpl implements MemberService {
 
             member.setPassword(newEncodedPassword);
             memberMapper.updateByPrimaryKey(member);
+
+            createUpdateLog(member.getId(), "update account password", "user");
             sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_ACCOUNT_INFO, userId, member));
             return member;
         }).subscribeOn(jdbcScheduler);
@@ -153,6 +156,7 @@ public class MemberServiceImpl implements MemberService {
             }
 
             memberMapper.updateByPrimaryKey(updateMember);
+            createUpdateLog(member.getId(), "update account information", "user");
             return updateMember;
         }).subscribeOn(jdbcScheduler);
     }
@@ -161,7 +165,8 @@ public class MemberServiceImpl implements MemberService {
     public Mono<Address> updateAddress(int userId, Address newAddress) {
         return Mono.fromCallable(() -> {
             newAddress.setMemberId(userId);
-            addressMapper.updateByPrimaryKey(newAddress);
+            addressMapper.updateByPrimaryKeySelective(newAddress);
+            createUpdateLog(userId, "update account address", "user");
             return newAddress;
         }).subscribeOn(jdbcScheduler);
     }
@@ -174,6 +179,7 @@ public class MemberServiceImpl implements MemberService {
             member.setStatus(0);
 
             memberMapper.updateByPrimaryKey(member);
+            createUpdateLog(member.getId(), "delete account", "user");
             sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(DELETE_ACCOUNT, userId, member));
         }).subscribeOn(jdbcScheduler).then();
     }
@@ -185,7 +191,7 @@ public class MemberServiceImpl implements MemberService {
         ).subscribeOn(jdbcScheduler).then();
     }
 
-    // delete - status change, kept for archieve
+    // delete - status change, kept for archive
     // send update to auth to remove it, status change to 0 too
 
     // status change, kept on database but need to check status for login
@@ -244,13 +250,13 @@ public class MemberServiceImpl implements MemberService {
 
             String passWord = newMember.getPassword();
             newMember.setPassword(passwordEncoder().encode(passWord));
-
             newMember.setCreatedAt(new Date());
             newMember.setStatus(1);
 
             memberMapper.insert(newMember);
             int userId = newMember.getId();
 
+            createUpdateLog(userId, "create member", operator);
             sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(NEW_ACCOUNT, userId, newMember));
             return newMember;
         }).subscribeOn(jdbcScheduler);
@@ -260,7 +266,8 @@ public class MemberServiceImpl implements MemberService {
     public Mono<Member> updateMemberInfo(Member updatedMember, String operator) {
         return Mono.fromCallable(() -> {
             int userId = updatedMember.getId();
-            memberMapper.updateByPrimaryKey(updatedMember);
+            memberMapper.updateByPrimaryKeySelective(updatedMember);
+            createUpdateLog(userId, "update member information", operator);
             sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_ACCOUNT_INFO, userId, updatedMember));
             return updatedMember;
         }).subscribeOn(jdbcScheduler);
@@ -270,7 +277,8 @@ public class MemberServiceImpl implements MemberService {
     public Mono<Member> updateMemberStatus(Member updatedMember, String operator) {
         return Mono.fromCallable(() -> {
             int userId = updatedMember.getId();
-            memberMapper.updateByPrimaryKey(updatedMember);
+            memberMapper.updateByPrimaryKeySelective(updatedMember);
+            createUpdateLog(userId, "update member status", operator);
             sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_STATUS, userId, updatedMember));
             return updatedMember;
         }).subscribeOn(jdbcScheduler);
@@ -282,10 +290,21 @@ public class MemberServiceImpl implements MemberService {
             Member member = memberMapper.selectByPrimaryKey(userId);
             member.setStatus(0);
             member.setDeleteStatus(1);
-            memberMapper.updateByPrimaryKey(member);
+            memberMapper.updateByPrimaryKeySelective(member);
+
+            createUpdateLog(userId, "delete member", operator);
             sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(DELETE_ACCOUNT, userId, member));
             return member;
         }).subscribeOn(jdbcScheduler);
+    }
+
+    private void createUpdateLog(int userId, String updateAction, String operator) {
+        MemberChangeLog changeLog = new MemberChangeLog();
+        changeLog.setMemberId(userId);
+        changeLog.setUpdateAction(updateAction);
+        changeLog.setOperator(operator);
+        changeLog.setCreatedAt(new Date());
+        logMapper.insert(changeLog);
     }
 
     private PasswordEncoder passwordEncoder() {

@@ -25,7 +25,7 @@ public class ProductUpdateLog implements Serializable {
 
     private String updateAction;
 
-    private String changeOperator;
+    private String operator;
 
     private Date createdAt;
 
@@ -111,12 +111,12 @@ public class ProductUpdateLog implements Serializable {
         this.updateAction = updateAction;
     }
 
-    public String getChangeOperator() {
-        return changeOperator;
+    public String getOperator() {
+        return operator;
     }
 
-    public void setChangeOperator(String changeOperator) {
-        this.changeOperator = changeOperator;
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     public Date getCreatedAt() {

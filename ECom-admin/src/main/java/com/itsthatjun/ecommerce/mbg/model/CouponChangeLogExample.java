@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ReturnLogExample {
+public class CouponChangeLogExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ReturnLogExample() {
+    public CouponChangeLogExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -165,63 +165,63 @@ public class ReturnLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdIsNull() {
-            addCriterion("return_request_id is null");
+        public Criteria andCouponIdIsNull() {
+            addCriterion("coupon_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdIsNotNull() {
-            addCriterion("return_request_id is not null");
+        public Criteria andCouponIdIsNotNull() {
+            addCriterion("coupon_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdEqualTo(Integer value) {
-            addCriterion("return_request_id =", value, "returnRequestId");
+        public Criteria andCouponIdEqualTo(Integer value) {
+            addCriterion("coupon_id =", value, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdNotEqualTo(Integer value) {
-            addCriterion("return_request_id <>", value, "returnRequestId");
+        public Criteria andCouponIdNotEqualTo(Integer value) {
+            addCriterion("coupon_id <>", value, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdGreaterThan(Integer value) {
-            addCriterion("return_request_id >", value, "returnRequestId");
+        public Criteria andCouponIdGreaterThan(Integer value) {
+            addCriterion("coupon_id >", value, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("return_request_id >=", value, "returnRequestId");
+        public Criteria andCouponIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("coupon_id >=", value, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdLessThan(Integer value) {
-            addCriterion("return_request_id <", value, "returnRequestId");
+        public Criteria andCouponIdLessThan(Integer value) {
+            addCriterion("coupon_id <", value, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdLessThanOrEqualTo(Integer value) {
-            addCriterion("return_request_id <=", value, "returnRequestId");
+        public Criteria andCouponIdLessThanOrEqualTo(Integer value) {
+            addCriterion("coupon_id <=", value, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdIn(List<Integer> values) {
-            addCriterion("return_request_id in", values, "returnRequestId");
+        public Criteria andCouponIdIn(List<Integer> values) {
+            addCriterion("coupon_id in", values, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdNotIn(List<Integer> values) {
-            addCriterion("return_request_id not in", values, "returnRequestId");
+        public Criteria andCouponIdNotIn(List<Integer> values) {
+            addCriterion("coupon_id not in", values, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdBetween(Integer value1, Integer value2) {
-            addCriterion("return_request_id between", value1, value2, "returnRequestId");
+        public Criteria andCouponIdBetween(Integer value1, Integer value2) {
+            addCriterion("coupon_id between", value1, value2, "couponId");
             return (Criteria) this;
         }
 
-        public Criteria andReturnRequestIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("return_request_id not between", value1, value2, "returnRequestId");
+        public Criteria andCouponIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("coupon_id not between", value1, value2, "couponId");
             return (Criteria) this;
         }
 

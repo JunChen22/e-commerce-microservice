@@ -211,7 +211,7 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleChangeLog changeLog = new ArticleChangeLog();
         changeLog.setArticleId(articleId);
         changeLog.setUpdateAction(updateAction);
-        changeLog.setChangeOperator(operator);
+        changeLog.setOperator(operator);
         changeLog.setCreatedAt(new Date());
         logMapper.insert(changeLog);
     }

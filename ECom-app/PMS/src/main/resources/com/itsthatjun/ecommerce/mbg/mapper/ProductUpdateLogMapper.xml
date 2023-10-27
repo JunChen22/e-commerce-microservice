@@ -12,7 +12,7 @@
     <result column="added_stock" jdbcType="INTEGER" property="addedStock" />
     <result column="total_stock" jdbcType="INTEGER" property="totalStock" />
     <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
-    <result column="change_operator" jdbcType="VARCHAR" property="changeOperator" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -75,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, product_id, price_old, price_new, sale_price_old, sale_price_new, old_stock, 
-    added_stock, total_stock, update_action, change_operator, created_at
+    added_stock, total_stock, update_action, operator, created_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductUpdateLogExample" resultMap="BaseResultMap">
     select
@@ -111,11 +111,11 @@
     insert into product_update_log (product_id, price_old, price_new, 
       sale_price_old, sale_price_new, old_stock, 
       added_stock, total_stock, update_action, 
-      change_operator, created_at)
+      operator, created_at)
     values (#{productId,jdbcType=NUMERIC}, #{priceOld,jdbcType=NUMERIC}, #{priceNew,jdbcType=NUMERIC}, 
       #{salePriceOld,jdbcType=NUMERIC}, #{salePriceNew,jdbcType=NUMERIC}, #{oldStock,jdbcType=INTEGER}, 
       #{addedStock,jdbcType=INTEGER}, #{totalStock,jdbcType=INTEGER}, #{updateAction,jdbcType=VARCHAR}, 
-      #{changeOperator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
+      #{operator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductUpdateLog" useGeneratedKeys="true">
     insert into product_update_log
@@ -147,8 +147,8 @@
       <if test="updateAction != null">
         update_action,
       </if>
-      <if test="changeOperator != null">
-        change_operator,
+      <if test="operator != null">
+        operator,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -182,8 +182,8 @@
       <if test="updateAction != null">
         #{updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="changeOperator != null">
-        #{changeOperator,jdbcType=VARCHAR},
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -229,8 +229,8 @@
       <if test="record.updateAction != null">
         update_action = #{record.updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="record.changeOperator != null">
-        change_operator = #{record.changeOperator,jdbcType=VARCHAR},
+      <if test="record.operator != null">
+        operator = #{record.operator,jdbcType=VARCHAR},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -252,7 +252,7 @@
       added_stock = #{record.addedStock,jdbcType=INTEGER},
       total_stock = #{record.totalStock,jdbcType=INTEGER},
       update_action = #{record.updateAction,jdbcType=VARCHAR},
-      change_operator = #{record.changeOperator,jdbcType=VARCHAR},
+      operator = #{record.operator,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -288,8 +288,8 @@
       <if test="updateAction != null">
         update_action = #{updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="changeOperator != null">
-        change_operator = #{changeOperator,jdbcType=VARCHAR},
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -308,7 +308,7 @@
       added_stock = #{addedStock,jdbcType=INTEGER},
       total_stock = #{totalStock,jdbcType=INTEGER},
       update_action = #{updateAction,jdbcType=VARCHAR},
-      change_operator = #{changeOperator,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

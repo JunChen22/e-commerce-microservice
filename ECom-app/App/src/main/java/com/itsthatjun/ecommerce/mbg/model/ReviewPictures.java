@@ -1,13 +1,12 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ReviewPictures implements Serializable {
     private Integer id;
 
-    private BigDecimal reviewAlbumId;
+    private Integer reviewAlbumId;
 
     private String filename;
 
@@ -23,11 +22,11 @@ public class ReviewPictures implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getReviewAlbumId() {
+    public Integer getReviewAlbumId() {
         return reviewAlbumId;
     }
 
-    public void setReviewAlbumId(BigDecimal reviewAlbumId) {
+    public void setReviewAlbumId(Integer reviewAlbumId) {
         this.reviewAlbumId = reviewAlbumId;
     }
 

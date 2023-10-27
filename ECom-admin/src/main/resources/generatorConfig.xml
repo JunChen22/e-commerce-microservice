@@ -283,6 +283,12 @@
             <columnOverride column="order_id" javaType="java.lang.Integer" />
         </table>
 
+        <table tableName="coupon_change_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="coupon_id" javaType="java.lang.Integer" />
+        </table>
+
         <table tableName="promotion_sale">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />

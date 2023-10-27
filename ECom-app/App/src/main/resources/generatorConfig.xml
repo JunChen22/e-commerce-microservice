@@ -110,7 +110,7 @@
         <table tableName= "review_pictures">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="review_id" javaType="java.lang.Integer" />
+            <columnOverride column="review_album_id" javaType="java.lang.Integer" />
         </table>
 
         <table tableName= "review_update_log">
@@ -118,8 +118,6 @@
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="review_id" javaType="java.lang.Integer" />
         </table>
-
-
 
         <!--  UMS -->
 
@@ -133,6 +131,11 @@
             <columnOverride column="member_id" javaType="java.lang.Integer" />
         </table>
         <table tableName= "member_login_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="member_id" javaType="java.lang.Integer" />
+        </table>
+        <table tableName= "member_change_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />
@@ -266,6 +269,12 @@
             <columnOverride column="order_id" javaType="java.lang.Integer" />
         </table>
 
+        <table tableName="coupon_change_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="coupon_id" javaType="java.lang.Integer" />
+        </table>
+
         <table tableName="promotion_sale">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
@@ -276,7 +285,6 @@
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="promotion_sale_id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
-            <columnOverride column="product_sku_id" javaType="java.lang.Integer" />
         </table>
 
         <table tableName="promotion_sale_log">

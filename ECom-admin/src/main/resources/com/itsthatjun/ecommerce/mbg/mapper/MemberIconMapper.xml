@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ReturnLogMapper">
-  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ReturnLog">
+<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.MemberIconMapper">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.MemberIcon">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="return_request_id" jdbcType="BIGINT" property="returnRequestId" />
-    <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
-    <result column="operator" jdbcType="VARCHAR" property="operator" />
-    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="member_id" jdbcType="NUMERIC" property="memberId" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, return_request_id, update_action, operator, created_at
+    id, member_id, filename
   </sql>
-  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnLogExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIconExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from return_log
+    from member_icon
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,79 +84,59 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from return_log
+    from member_icon
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from return_log
+    delete from member_icon
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnLogExample">
-    delete from return_log
+  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIconExample">
+    delete from member_icon
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnLog" useGeneratedKeys="true">
-    insert into return_log (return_request_id, update_action, operator, 
-      created_at)
-    values (#{returnRequestId,jdbcType=BIGINT}, #{updateAction,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIcon" useGeneratedKeys="true">
+    insert into member_icon (member_id, filename)
+    values (#{memberId,jdbcType=NUMERIC}, #{filename,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnLog" useGeneratedKeys="true">
-    insert into return_log
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIcon" useGeneratedKeys="true">
+    insert into member_icon
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="returnRequestId != null">
-        return_request_id,
+      <if test="memberId != null">
+        member_id,
       </if>
-      <if test="updateAction != null">
-        update_action,
-      </if>
-      <if test="operator != null">
-        operator,
-      </if>
-      <if test="createdAt != null">
-        created_at,
+      <if test="filename != null">
+        filename,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="returnRequestId != null">
-        #{returnRequestId,jdbcType=BIGINT},
+      <if test="memberId != null">
+        #{memberId,jdbcType=NUMERIC},
       </if>
-      <if test="updateAction != null">
-        #{updateAction,jdbcType=VARCHAR},
-      </if>
-      <if test="operator != null">
-        #{operator,jdbcType=VARCHAR},
-      </if>
-      <if test="createdAt != null">
-        #{createdAt,jdbcType=TIMESTAMP},
+      <if test="filename != null">
+        #{filename,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnLogExample" resultType="java.lang.Long">
-    select count(*) from return_log
+  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIconExample" resultType="java.lang.Long">
+    select count(*) from member_icon
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update return_log
+    update member_icon
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.returnRequestId != null">
-        return_request_id = #{record.returnRequestId,jdbcType=BIGINT},
+      <if test="record.memberId != null">
+        member_id = #{record.memberId,jdbcType=NUMERIC},
       </if>
-      <if test="record.updateAction != null">
-        update_action = #{record.updateAction,jdbcType=VARCHAR},
-      </if>
-      <if test="record.operator != null">
-        operator = #{record.operator,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="record.filename != null">
+        filename = #{record.filename,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -166,40 +144,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update return_log
+    update member_icon
     set id = #{record.id,jdbcType=INTEGER},
-      return_request_id = #{record.returnRequestId,jdbcType=BIGINT},
-      update_action = #{record.updateAction,jdbcType=VARCHAR},
-      operator = #{record.operator,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
+      member_id = #{record.memberId,jdbcType=NUMERIC},
+      filename = #{record.filename,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnLog">
-    update return_log
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIcon">
+    update member_icon
     <set>
-      <if test="returnRequestId != null">
-        return_request_id = #{returnRequestId,jdbcType=BIGINT},
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=NUMERIC},
       </if>
-      <if test="updateAction != null">
-        update_action = #{updateAction,jdbcType=VARCHAR},
-      </if>
-      <if test="operator != null">
-        operator = #{operator,jdbcType=VARCHAR},
-      </if>
-      <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      <if test="filename != null">
+        filename = #{filename,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnLog">
-    update return_log
-    set return_request_id = #{returnRequestId,jdbcType=BIGINT},
-      update_action = #{updateAction,jdbcType=VARCHAR},
-      operator = #{operator,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP}
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIcon">
+    update member_icon
+    set member_id = #{memberId,jdbcType=NUMERIC},
+      filename = #{filename,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

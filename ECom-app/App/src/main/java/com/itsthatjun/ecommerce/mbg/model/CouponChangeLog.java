@@ -3,10 +3,10 @@ package com.itsthatjun.ecommerce.mbg.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ReturnLog implements Serializable {
+public class CouponChangeLog implements Serializable {
     private Integer id;
 
-    private Integer returnRequestId;
+    private Integer couponId;
 
     private String updateAction;
 
@@ -24,12 +24,12 @@ public class ReturnLog implements Serializable {
         this.id = id;
     }
 
-    public Integer getReturnRequestId() {
-        return returnRequestId;
+    public Integer getCouponId() {
+        return couponId;
     }
 
-    public void setReturnRequestId(Integer returnRequestId) {
-        this.returnRequestId = returnRequestId;
+    public void setCouponId(Integer couponId) {
+        this.couponId = couponId;
     }
 
     public String getUpdateAction() {

@@ -385,7 +385,7 @@ public class ProductServiceImpl implements ProductService {
 
         // update information
         updateLog.setUpdateAction(updateAction);
-        updateLog.setChangeOperator(operator);
+        updateLog.setOperator(operator);
         updateLog.setCreatedAt(new Date());
         logMapper.insert(updateLog);
     }

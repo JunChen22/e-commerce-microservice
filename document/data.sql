@@ -1728,12 +1728,12 @@ DROP TABLE IF EXISTS return_log;
 CREATE TABLE return_log (
     id SERIAL PRIMARY KEY,
     return_request_id bigint,
-    action       varchar(100),
+    update_action       varchar(100),
     operator     varchar(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO return_log (return_request_id, action, operator)
+INSERT INTO return_log (return_request_id, update_action, operator)
 VALUES
 (1, 'APPLY', 'Jun'),
 (1, 'APPLY', 'Jun'),

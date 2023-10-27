@@ -295,73 +295,73 @@ public class MemberChangeLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorIsNull() {
-            addCriterion("change_operator is null");
+        public Criteria andOperatorIsNull() {
+            addCriterion("operator is null");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorIsNotNull() {
-            addCriterion("change_operator is not null");
+        public Criteria andOperatorIsNotNull() {
+            addCriterion("operator is not null");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorEqualTo(String value) {
-            addCriterion("change_operator =", value, "changeOperator");
+        public Criteria andOperatorEqualTo(String value) {
+            addCriterion("operator =", value, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorNotEqualTo(String value) {
-            addCriterion("change_operator <>", value, "changeOperator");
+        public Criteria andOperatorNotEqualTo(String value) {
+            addCriterion("operator <>", value, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorGreaterThan(String value) {
-            addCriterion("change_operator >", value, "changeOperator");
+        public Criteria andOperatorGreaterThan(String value) {
+            addCriterion("operator >", value, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorGreaterThanOrEqualTo(String value) {
-            addCriterion("change_operator >=", value, "changeOperator");
+        public Criteria andOperatorGreaterThanOrEqualTo(String value) {
+            addCriterion("operator >=", value, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorLessThan(String value) {
-            addCriterion("change_operator <", value, "changeOperator");
+        public Criteria andOperatorLessThan(String value) {
+            addCriterion("operator <", value, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorLessThanOrEqualTo(String value) {
-            addCriterion("change_operator <=", value, "changeOperator");
+        public Criteria andOperatorLessThanOrEqualTo(String value) {
+            addCriterion("operator <=", value, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorLike(String value) {
-            addCriterion("change_operator like", value, "changeOperator");
+        public Criteria andOperatorLike(String value) {
+            addCriterion("operator like", value, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorNotLike(String value) {
-            addCriterion("change_operator not like", value, "changeOperator");
+        public Criteria andOperatorNotLike(String value) {
+            addCriterion("operator not like", value, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorIn(List<String> values) {
-            addCriterion("change_operator in", values, "changeOperator");
+        public Criteria andOperatorIn(List<String> values) {
+            addCriterion("operator in", values, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorNotIn(List<String> values) {
-            addCriterion("change_operator not in", values, "changeOperator");
+        public Criteria andOperatorNotIn(List<String> values) {
+            addCriterion("operator not in", values, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorBetween(String value1, String value2) {
-            addCriterion("change_operator between", value1, value2, "changeOperator");
+        public Criteria andOperatorBetween(String value1, String value2) {
+            addCriterion("operator between", value1, value2, "operator");
             return (Criteria) this;
         }
 
-        public Criteria andChangeOperatorNotBetween(String value1, String value2) {
-            addCriterion("change_operator not between", value1, value2, "changeOperator");
+        public Criteria andOperatorNotBetween(String value1, String value2) {
+            addCriterion("operator not between", value1, value2, "operator");
             return (Criteria) this;
         }
 

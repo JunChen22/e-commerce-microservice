@@ -14,7 +14,6 @@ import com.itsthatjun.ecommerce.service.PaypalService;
 import com.itsthatjun.ecommerce.service.ReturnOrderService;
 import com.paypal.api.payments.Refund;
 import com.paypal.base.rest.PayPalRESTException;
-import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,14 +191,9 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             returnRequest.setHandleNote("Automatically rejection, no admin");  // TODO: might need to change rejection reason
             returnRequest.setHandleOperator("Automatically");
             returnRequest.setUpdatedAt(new Date());
-            returnRequestMapper.updateByPrimaryKey(returnRequest);
+            returnRequestMapper.updateByPrimaryKeySelective(returnRequest);
 
-            ReturnLog returnUpdateLog = new ReturnLog();
-            returnUpdateLog.setReturnRequestId(returnRequest.getId());
-            returnUpdateLog.setAction("Rejected return Request request");
-            returnUpdateLog.setOperator("Automatically");
-            returnUpdateLog.setCreatedAt(new Date());
-            logMapper.insert(returnUpdateLog);
+            createUpdateLog(returnRequest.getId(), "Rejected return Request request", "Automatically rejection");
 
             return returnRequest;
         }).subscribeOn(jdbcScheduler);
@@ -336,11 +330,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         orderReturnRequest.setUpdatedAt(new Date());
         returnRequestMapper.updateByPrimaryKey(orderReturnRequest);
 
-        ReturnLog returnUpdateLog = new ReturnLog();
-        returnUpdateLog.setAction("Approve return Request request");
-        returnUpdateLog.setOperator(operator);
-        returnUpdateLog.setCreatedAt(new Date());
-        logMapper.insert(returnUpdateLog);
+        createUpdateLog(orderReturnRequest.getId(), "Approve return Request request", operator);
 
         // generate return label
         // using companyAddressId to get address
@@ -365,15 +355,9 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             returnRequest.setHandleNote(reason);
             returnRequest.setHandleOperator(operator);
             returnRequest.setUpdatedAt(new Date());
-            returnRequestMapper.updateByPrimaryKey(returnRequest);
+            returnRequestMapper.updateByPrimaryKeySelective(returnRequest);
 
-            ReturnLog returnUpdateLog = new ReturnLog();
-            returnUpdateLog.setReturnRequestId(returnRequest.getId());
-            returnUpdateLog.setAction("Rejected return Request request");
-            returnUpdateLog.setOperator(operator);
-            returnUpdateLog.setCreatedAt(new Date());
-            logMapper.insert(returnUpdateLog);
-
+            createUpdateLog(returnRequest.getId(), "Rejected return Request request", operator);
             return returnRequest;
         }).subscribeOn(jdbcScheduler);
     }
@@ -404,11 +388,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         returnRequest.setUpdatedAt(new Date());
         returnRequestMapper.updateByPrimaryKey(returnRequest);
 
-        ReturnLog returnUpdateLog = new ReturnLog();
-        returnUpdateLog.setAction("accepted return Request request");
-        returnUpdateLog.setOperator(operator);
-        returnUpdateLog.setCreatedAt(new Date());
-        logMapper.insert(returnUpdateLog);
+        createUpdateLog(returnRequestId, "accepted return Request request", operator);
 
         ReturnItemExample returnItemExample = new ReturnItemExample();
         returnItemExample.createCriteria().andReturnRequestIdEqualTo(returnRequestId).andOrderSnEqualTo(orderSn);
@@ -438,6 +418,15 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         }
 
         return returnRequest;
+    }
+
+    private void createUpdateLog(int returnRequestId, String updateAction, String operator) {
+        ReturnLog log = new ReturnLog();
+        log.setReturnRequestId(returnRequestId);
+        log.setUpdateAction(updateAction);
+        log.setOperator(operator);
+        log.setCreatedAt(new Date());
+        logMapper.insert(log);
     }
 
     private void sendProductStockUpdateMessage(String bindingName, PmsProductOutEvent event) {

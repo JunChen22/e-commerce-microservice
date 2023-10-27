@@ -17,7 +17,7 @@ public class PromotionSaleLog implements Serializable {
 
     private BigDecimal amount;
 
-    private String operateMan;
+    private String operator;
 
     private Date createdAt;
 
@@ -71,12 +71,12 @@ public class PromotionSaleLog implements Serializable {
         this.amount = amount;
     }
 
-    public String getOperateMan() {
-        return operateMan;
+    public String getOperator() {
+        return operator;
     }
 
-    public void setOperateMan(String operateMan) {
-        this.operateMan = operateMan;
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     public Date getCreatedAt() {
