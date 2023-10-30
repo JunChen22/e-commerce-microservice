@@ -372,7 +372,7 @@ CREATE TABLE product (
     category_id       NUMERIC,
     category_name TEXT,
     attribute_category_id NUMERIC,	--
-    sn  varchar(64),
+    sn  VARCHAR(64),
     new_status NUMERIC, -- 0->not new product; 1->new product
     recommend_status NUMERIC, -- 0->not recommend; 1->recommend
     verify_status NUMERIC, -- 0->not verified; 1->verified
@@ -380,13 +380,13 @@ CREATE TABLE product (
     cover_picture           TEXT,           --  preview picture, for like list all, search all picture when getting specific
     picture_album  NUMERIC,           -- collection of pictures
     description       TEXT,
-    original_price  decimal(10, 2),
+    original_price  DECIMAL(10, 2),
     on_sale_status INTEGER,  --  0-> not on sale; 1-> is on sale; 2-> flash sale/special sales/clarance/used item
-    sale_price        decimal(10, 2),     -- TODO: currently using it as lowest price of all sku variants. and using original price as highest, it changes with more sku variants added.
+    sale_price        DECIMAL(10, 2),     -- TODO: currently using it as lowest price of all sku variants. and using original price as highest, it changes with more sku variants added.
     stock             INTEGER,
     low_stock INTEGER, -- -- low stock alarm, default is about 10% alarm
     unit_sold INTEGER,
-    weight decimal(10,2), -- product weight in grams
+    weight DECIMAL(10,2), -- product weight in grams
     keywords TEXT,
     detail_title TEXT,                -- at the bottom of product with detail title, description and picture
     detail_desc TEXT,
@@ -1044,7 +1044,7 @@ CREATE TABLE review (
     star        NUMERIC,
     tittle      TEXT,
     likes       NUMERIC DEFAULT 1,
-    verified  boolean,
+    verified  INTEGER,
     content     TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT NULL
@@ -1449,7 +1449,7 @@ VALUES
 DROP TABLE IF EXISTS shopping_cart;
 CREATE TABLE shopping_cart (
     id SERIAL PRIMARY KEY,
-    member_id bigint,
+    member_id BIGINT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modify_date TIMESTAMP DEFAULT NULL
 );
@@ -1463,12 +1463,12 @@ INSERT INTO shopping_cart (member_id, created_at, modify_date) VALUES
 DROP TABLE IF EXISTS cart_item;
 CREATE TABLE cart_item (
     id SERIAL PRIMARY KEY,
-    cart_id bigint,
-    product_id bigint,
-    product_name varchar(500),
-    product_sku varchar(500),
-    product_pic varchar(1000),
-    quantity integer,
+    cart_id BIGINT,
+    product_id BIGINT,
+    product_name VARCHAR(500),
+    product_sku VARCHAR(500),
+    product_pic VARCHAR(1000),
+    quantity INTEGER,
     price numeric(10,2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modify_date TIMESTAMP DEFAULT NULL
@@ -1515,7 +1515,7 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
     payment_time TIMESTAMP,                  --
     delivery_time TIMESTAMP,                 -- TBD by UPS api/label and added in
     receive_time TIMESTAMP DEFAULT NULL,      -- update it after UPS said received, should be using redis to do this
-    comment varchar(200) DEFAULT NULL,        -- comment left customer like "leave the package under the rug"
+    comment VARCHAR(200) DEFAULT NULL,        -- comment left customer like "leave the package under the rug"
     admin_note VARCHAR(500) DEFAULT NULL,       -- note left by previous admin stating what's happening
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT NULL
@@ -1593,9 +1593,9 @@ CREATE TABLE order_change_history (
     order_id numeric,
     update_action TEXT NOT NULL,
     order_status INTEGER NULL DEFAULT NULL,              -- waiting for payment 0, fulfilling 1,  send 2, complete(received) 3, closed(out of return period) 4,invalid 5
-    note varchar(500) NULL DEFAULT NULL,
+    note VARCHAR(500) NULL DEFAULT NULL,
     operator TEXT,
-    created_at timestamp NULL DEFAULT NULL
+    created_at TIMESTAMP NULL DEFAULT NULL
 );
 
 INSERT INTO order_change_history (order_id, update_action, order_status, note, operator)
@@ -1637,24 +1637,24 @@ VALUES
 DROP TABLE IF EXISTS return_request;
 CREATE TABLE return_request  (
     id SERIAL PRIMARY KEY,
-    order_id bigint,
-    company_address_id bigint,                   -- return to you(owner), return center or warehouse
-    order_sn varchar(64),
-    member_id bigint,
-    return_quantity bigint,                       -- number of items to be returned
-    return_name varchar(100),
-    return_phone varchar(100),
-    status int,                -- return status,  waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
-    handle_time timestamp,                        -- how long to return this item, e.g 2 weeks to return this or return is voided.
-    asking_amount decimal(10, 2),
-    refunded_amount decimal(10, 2),
-    reason varchar(200),                         -- pre-set reasons
-    description varchar(500),
-    handle_note varchar(500),                    -- notes from admin to customer or rejection reason
-    handle_operator varchar(100),                -- who processed this return
-    receive_operator varchar(100),               -- who received the return item
-    receive_time timestamp,
-    receive_note varchar(500),
+    order_id BIGINT,
+    company_address_id BIGINT,                   -- return to you(owner), return center or warehouse
+    order_sn VARCHAR(64),
+    member_id BIGINT,
+    return_quantity BIGINT,                       -- number of items to be returned
+    return_name VARCHAR(100),
+    return_phone VARCHAR(100),
+    status INT,                -- return status,  waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
+    handle_time TIMESTAMP,                        -- how long to return this item, e.g 2 weeks to return this or return is voided.
+    asking_amount DECIMAL(10, 2),
+    refunded_amount DECIMAL(10, 2),
+    reason VARCHAR(200),                         -- pre-set reasons
+    description VARCHAR(500),
+    handle_note VARCHAR(500),                    -- notes from admin to customer or rejection reason
+    handle_operator VARCHAR(100),                -- who processed this return
+    receive_operator VARCHAR(100),               -- who received the return item
+    receive_time TIMESTAMP,
+    receive_note VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -1684,14 +1684,14 @@ VALUES
 DROP TABLE IF EXISTS return_item;
 CREATE TABLE return_item (
     id SERIAL PRIMARY KEY,
-    return_request_id bigint NOT NULL,
-    brand_id bigint,
-    order_id bigint,
-    order_sn varchar(64),
-    product_id bigint,
-    product_sku varchar(100),
-    purchased_price decimal(10, 2),
-    quantity bigint
+    return_request_id BIGINT NOT NULL,
+    brand_id BIGINT,
+    order_id BIGINT,
+    order_sn VARCHAR(64),
+    product_id BIGINT,
+    product_sku VARCHAR(100),
+    purchased_price DECIMAL(10, 2),
+    quantity BIGINT
 );
 
 INSERT INTO return_item (return_request_id, brand_id, order_id, order_sn, product_id, product_sku, quantity)
@@ -1709,7 +1709,7 @@ VALUES
 DROP TABLE IF EXISTS return_reason_pictures;
 CREATE TABLE return_reason_pictures (
     id SERIAL PRIMARY KEY,
-    return_request_id bigint NOT NULL,
+    return_request_id BIGINT NOT NULL,
     filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -1727,9 +1727,9 @@ VALUES
 DROP TABLE IF EXISTS return_log;
 CREATE TABLE return_log (
     id SERIAL PRIMARY KEY,
-    return_request_id bigint,
-    update_action       varchar(100),
-    operator     varchar(100),
+    return_request_id BIGINT,
+    update_action       VARCHAR(100),
+    operator     VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -1752,7 +1752,7 @@ CREATE TABLE article (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     body TEXT NOT NULL,
-    publish_status integer NOT NULL DEFAULT 0,  -- article online status
+    publish_status INTEGER NOT NULL DEFAULT 0,  -- article online status
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT NULL
 );
@@ -1846,18 +1846,18 @@ VALUES
 DROP TABLE IF EXISTS coupon;
 CREATE TABLE coupon (
     id SERIAL PRIMARY KEY,
-    coupon_type integer NULL DEFAULT NULL,           -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
-    name varchar(100),
-    discount_type integer NULL DEFAULT NULL,   -- 0 -> by amount, 1->  by percent off
+    coupon_type INTEGER NULL DEFAULT NULL,           -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
+    name VARCHAR(100),
+    discount_type INTEGER NULL DEFAULT NULL,   -- 0 -> by amount, 1->  by percent off
     amount numeric(10,2) NULL DEFAULT NULL,   -- amount discounted
-    start_time timestamp NULL DEFAULT NULL,
-    end_time timestamp NULL DEFAULT NULL,
-    note varchar(200) NULL DEFAULT NULL,
-    count integer NULL DEFAULT NULL,          -- number of this coupon
-    publish_count integer NULL DEFAULT NULL,  -- number of send/publish coupons to users
-    used_count integer NULL DEFAULT NULL,      -- number of used coupons
-    code varchar(64) NULL DEFAULT NULL,
-    status integer NULL DEFAULT 1          -- is the coupon active or disable,  0 -> disable, 1 -> active
+    start_time TIMESTAMP NULL DEFAULT NULL,
+    end_time TIMESTAMP NULL DEFAULT NULL,
+    note VARCHAR(200) NULL DEFAULT NULL,
+    count INTEGER NULL DEFAULT NULL,          -- number of this coupon
+    publish_count INTEGER NULL DEFAULT NULL,  -- number of send/publish coupons to users
+    used_count INTEGER NULL DEFAULT NULL,      -- number of used coupons
+    code VARCHAR(64) NULL DEFAULT NULL,
+    status INTEGER NULL DEFAULT 1          -- is the coupon active or disable,  0 -> disable, 1 -> active
 );
 
 -- TODO: make sure free coupon don't go negative
@@ -1875,11 +1875,11 @@ VALUES
 DROP TABLE IF EXISTS coupon_product_relation;
 CREATE TABLE coupon_product_relation(
     id SERIAL PRIMARY KEY,
-    coupon_id integer,
-    product_id integer,
-    product_name varchar(100),
-    product_sn varchar(100),
-    product_sku_code varchar(100)
+    coupon_id INTEGER,
+    product_id INTEGER,
+    product_name VARCHAR(100),
+    product_sn VARCHAR(100),
+    product_sku_code VARCHAR(100)
 );
 
 INSERT INTO coupon_product_relation(coupon_id, product_id, product_name, product_sn, product_sku_code)
@@ -1909,11 +1909,11 @@ VALUES
 DROP TABLE IF EXISTS coupon_history;
 CREATE TABLE coupon_history (
     id SERIAL PRIMARY KEY,
-    coupon_id bigint NOT NULL,
-    member_id bigint NOT NULL,
-    order_id bigint NOT NULL,
+    coupon_id BIGINT NOT NULL,
+    member_id BIGINT NOT NULL,
+    order_id BIGINT NOT NULL,
     used_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    code varchar(64) NULL DEFAULT NULL
+    code VARCHAR(64) NULL DEFAULT NULL
 );
 
 INSERT INTO coupon_history (coupon_id, member_id, order_id, used_time, code)
@@ -1949,11 +1949,11 @@ VALUES
 DROP TABLE IF EXISTS promotion_sale;
 CREATE TABLE promotion_sale (
     id SERIAL PRIMARY KEY,
-    name varchar(100),
-    promotion_type integer,      -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
-    discount_type integer,       -- 0 -> by amount, 1->  by percent off
+    name VARCHAR(100),
+    promotion_type INTEGER,      -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
+    discount_type INTEGER,       -- 0 -> by amount, 1->  by percent off
     amount numeric,
-    status integer,               -- 0-> not active, 1-> active is it active
+    status INTEGER,               -- 0-> not active, 1-> active is it active
     start_time TIMESTAMP,
     end_time   TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -1974,12 +1974,12 @@ VALUES
 DROP TABLE IF EXISTS promotion_sale_product;
 CREATE TABLE promotion_sale_product (
     id SERIAL PRIMARY KEY,
-    promotion_sale_id bigint NOT NULL,
-    product_id bigint NOT NULL,
+    promotion_sale_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
     product_sku_code TEXT,
     promotion_price numeric NOT NULL,       -- what the price - promotion sale amount = promotion_price
-    promotion_limit_item integer NOT NULL,      -- how many allowed to sell at discount, need to check sku stock
-    promotion_limit_per_user integer NOT NULL       -- number of limit per member/account
+    promotion_limit_item INTEGER NOT NULL,      -- how many allowed to sell at discount, need to check sku stock
+    promotion_limit_per_user INTEGER NOT NULL       -- number of limit per member/account
 );
 
 -- TODO: need to check when stock/sold meet limit before canceling the discount
@@ -2050,8 +2050,8 @@ CREATE TABLE promotion_sale_log (
     id SERIAL PRIMARY KEY,
     promotion_sale_id numeric,
     sale_action TEXT,
-    promotion_type integer,    -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
-    discount_type integer,       -- 0 -> by amount, 1->  by percent off
+    promotion_type INTEGER,    -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
+    discount_type INTEGER,       -- 0 -> by amount, 1->  by percent off
     amount numeric,
     operator TEXT,     -- who made the change
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
