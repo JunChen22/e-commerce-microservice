@@ -33,7 +33,7 @@ public class BrandServiceImpl implements BrandService {
         String url = PMS_SERVICE_URL + "/listAll/";
         LOG.debug("Will call the getAllBrand API on URL: {}", url);
 
-        return  webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
+        return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 

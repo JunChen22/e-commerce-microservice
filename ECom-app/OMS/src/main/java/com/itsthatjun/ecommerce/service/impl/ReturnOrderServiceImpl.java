@@ -79,8 +79,8 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
     @Override
     public Mono<ReturnRequest> getStatus(String orderSn, int userId) {
         return Mono.fromCallable( () -> {
-                    ReturnRequest returnRquest = getUserReturnRequest(orderSn, userId);
-                    return returnRquest;
+            ReturnRequest returnRquest = getUserReturnRequest(orderSn, userId);
+            return returnRquest;
         }).subscribeOn(jdbcScheduler);
     }
 
@@ -207,7 +207,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         if (orderReturnRequestList.isEmpty()) {
             throw new ReturnRequestException("Can't find return Request with order serial number: " + orderSn);
         } else {
-            return  orderReturnRequestList.get(0);
+            return orderReturnRequestList.get(0);
         }
     }
 
@@ -366,7 +366,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
     public Mono<ReturnRequest> completeReturnRequest(ReturnRequestDecision returnRequestDecision, String operator) {
         return Mono.fromCallable(() -> {
             ReturnRequest returnRequest = internalCompleteReturnRequest(returnRequestDecision, operator);
-            return  returnRequest;
+            return returnRequest;
         }).subscribeOn(jdbcScheduler);
     }
 

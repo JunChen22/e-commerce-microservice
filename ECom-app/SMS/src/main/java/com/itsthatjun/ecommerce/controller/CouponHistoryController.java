@@ -42,6 +42,6 @@ public class CouponHistoryController {
     @GetMapping("/getUserCoupon/{userId}")
     @ApiOperation(value = "shows how many coupon(amount saved) a user used")
     public Flux<CouponHistory> getUserCoupon(@PathVariable int userId) {
-        return  historyService.getUserCouponUsage(userId);
+        return historyService.getUserCouponUsage(userId);
     }
 }

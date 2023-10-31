@@ -53,7 +53,7 @@ kept together and will separate it later.
 API calls and documentations
 - get the whole landscape running then
 - go to http://localhost:8080/swagger-ui.html
-- in API_calls.txt, there's a examples for simples apis.
+- in API_calls.txt, there's an examples for simples apis.
 
 Set up/installation:
 
@@ -75,7 +75,7 @@ ps : Remove docker volume so the new data.sql can function properly and update.
 
 
   Start whole landscape
- $ mvn package
+ $ mvn clean package
  
  To deploy 
  $ docker-compose build

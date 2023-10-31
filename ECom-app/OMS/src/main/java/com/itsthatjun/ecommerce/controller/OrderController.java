@@ -2,9 +2,7 @@ package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
-import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.impl.OrderServiceImpl;
-import com.paypal.api.payments.Order;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -40,14 +38,14 @@ public class OrderController {
         return orderService.list(status,pageNum,pageSize, userId);
     }
 
-    @ApiOperation("Get Order Detail by serial number")
     @GetMapping("/detail/{orderSn}")
+    @ApiOperation("Get Order Detail by serial number")
     public Mono<OrderDetail> detail(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId) {
-        return orderService.getOrdeDetail(orderSn, userId);
+        return orderService.getOrderDetail(orderSn, userId);
     }
 
-    @ApiOperation("Get payment link to pay later")
     @GetMapping("/payment/getPaymentLink/{orderSn}")
+    @ApiOperation("Get payment link to pay later")
     public Mono<String> getPaymentLink(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId) {
         return orderService.getPaymentLink(orderSn, userId);
     }

@@ -102,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<OrderDetail> getOrdeDetail(String orderSn, int userId) {
+    public Mono<OrderDetail> getOrderDetail(String orderSn, int userId) {
         return Mono.fromCallable(() -> {
             OrderDetail orderDetail = orderDao.getDetail(orderSn, userId);
             return orderDetail;
@@ -119,6 +119,24 @@ public class OrderServiceImpl implements OrderService {
             List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
             return ordersList;
         }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Mono<String> getPaymentLink(String orderSn, int userId) {
+        return Mono.fromCallable(() -> {
+            OrdersExample ordersExample = new OrdersExample();
+            ordersExample.createCriteria().andOrderSnEqualTo(orderSn).andMemberIdEqualTo(userId).andStatusEqualTo(0);
+            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+            if (ordersList.isEmpty()) return "order serial number does not exist: " + orderSn;
+
+            Orders orders = ordersList.get(0);
+
+            String paymentToken = orders.getPaymentId();
+            String paymentLink = PAYPAL_PAYMENT_LINK + paymentToken;
+
+            return "redirect:" + paymentLink;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
@@ -283,24 +301,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<String> getPaymentLink(String orderSn, int userId) {
-        return Mono.fromCallable(() -> {
-            OrdersExample ordersExample = new OrdersExample();
-            ordersExample.createCriteria().andOrderSnEqualTo(orderSn).andMemberIdEqualTo(userId).andStatusEqualTo(0);
-            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
-
-            if (ordersList.isEmpty()) return "order serial number does not exist: " + orderSn;
-
-            Orders orders = ordersList.get(0);
-
-            String paymentToken = orders.getPaymentId();
-            String paymentLink = PAYPAL_PAYMENT_LINK + paymentToken;
-
-            return "redirect:" + paymentLink;
-        }).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
     public Mono<Orders> paySuccess(String paymentId, String payerId) {
         return Mono.fromCallable(() -> {
             Orders newOrder = internalPaySuccess(paymentId, payerId);
@@ -376,6 +376,7 @@ public class OrderServiceImpl implements OrderService {
         } catch (PayPalRESTException e) {
             LOG.error(e.getMessage());
         }
+        // TODO: will cause a loop when try to pay more than once
         throw new OrderException("Error payment after success URL");
     }
 

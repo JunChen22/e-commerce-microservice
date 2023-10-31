@@ -1,6 +1,21 @@
 
 - deploy it to kubernetes
 - helm for kubernetes deployment
-- change from single to multi vendor e-commerce
+- change from single to multi-vendor e-commerce
+    - will need to add role and permission.
 
 - kafka don't support rabbit mq's TTL, need to add a config for kafka in OMS's cancel TTL order and return request TTL rejection
+  The workaround is to use Kafka's topic(queue) retention policies.
+  Main consumer will check if the message expiration is up, if it's up then it will be process as normal. or else send
+  off message to delayed topic. The delayed topic will have a scheduled delayed consumer to consume from topic.
+  Delayed Consumer will check/consume from delayed topic, with default consume amount of 500, max.poll.records = 500.
+  So to put this delayed consumer on Spring task to consume a max or 500 message a minute, when message expiration is up,
+  it will be sent off back to main topic and main consumer will process as normal.
+
+  This will introduce more complexity. and need to avoid message duplication. You should also consider error-handling scenarios
+  and implement mechanisms to prevent infinite loops in case a message repeatedly fails its expiration checks.
+
+- email notification
+- auth code store in redis for registration
+- UPS API
+- Amazon S3 bucket to store product, review, return and other misc pictures. Currently using just Imgur.

@@ -57,7 +57,6 @@ public class OrderReturnServiceImpl implements OrderReturnService {
     @Override
     public Mono<ReturnParam> updateReturn(ReturnParam returnParam, int userId) {
         return Mono.fromCallable(() -> {
-            ReturnRequest returnRequest = returnParam.getReturnRequest();
             sendMessage("return-out-0", new OmsReturnEvent(UPDATE, userId, returnParam));
             return returnParam;
         }).subscribeOn(publishEventScheduler);

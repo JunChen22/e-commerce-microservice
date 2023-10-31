@@ -16,17 +16,17 @@ import java.util.List;
 public interface OrderService {
 
     @ApiOperation(value = "")
-    Mono<OrderDetail> getOrdeDetail(String orderSn, int userId);
+    Mono<OrderDetail> getOrderDetail(String orderSn, int userId);
 
     @ApiOperation("list all user orders")
     Flux<Orders> list(int status, int pageNum, int pageSize, int userId);
 
+    @ApiOperation(value = "get payment link to make payment in different time")
+    Mono<String> getPaymentLink(String orderSn, int userId);
+
     @Transactional
     @ApiOperation("Create the actual transaction and payment")
     Mono<Orders> generateOrder(OrderParam orderParam, String successUrl, String cancelUrl, int userId);
-
-    @ApiOperation(value = "get payment link to make payment in different time")
-    Mono<String> getPaymentLink(String orderSn, int userId);
 
     @Transactional
     @ApiOperation("payment successful, redirected from paypal")
