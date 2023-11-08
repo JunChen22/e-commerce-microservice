@@ -12,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {
-		"management.health.rabbit.enabled=false",
-		"spring.cloud.config.enabled=false"
+		"management.health.rabbit.enabled=false"
 })
 class EurekaserverApplicationTests {
 

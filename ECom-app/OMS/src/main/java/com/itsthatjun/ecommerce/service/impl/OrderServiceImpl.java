@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final double SHIPPING_COST = 15;  // default shipping cost for order less than 50
 
-    private final String SMS_SERVICE_URL = "http://sms:8080/coupon";
+    private final String SMS_SERVICE_URL = "http://sms/coupon";
 
     private final String PAYPAL_PAYMENT_LINK = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=";
 

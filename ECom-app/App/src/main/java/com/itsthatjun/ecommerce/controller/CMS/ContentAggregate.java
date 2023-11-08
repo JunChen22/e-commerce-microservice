@@ -29,7 +29,6 @@ public class ContentAggregate {
     }
 
     @GetMapping("/all")
-    @Cacheable(value = "articlesCache", key = "'getAllArticle'")
     @ApiOperation(value = "Get all articles")
     public List<Articles> getAllArticle() {
         Flux<Articles> articlesFlux = articleService.getAllArticle();

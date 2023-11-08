@@ -32,7 +32,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     private final Scheduler publishEventScheduler;
 
-    private final String SMS_SERVICE_URL = "http://sms:8080/sale";
+    private final String SMS_SERVICE_URL = "http://sms/sale";
 
     @Autowired
     public PromotionServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,

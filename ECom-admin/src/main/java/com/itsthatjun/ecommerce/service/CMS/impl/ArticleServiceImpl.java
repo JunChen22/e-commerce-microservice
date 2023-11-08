@@ -31,7 +31,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final Scheduler publishEventScheduler;
 
-    private final String CMS_SERVICE_URL = "http://cms:8080/article";
+    private final String CMS_SERVICE_URL = "http://cms/article";
 
     @Autowired
     public ArticleServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,

@@ -31,7 +31,7 @@ public class CouponServiceImpl implements CouponService {
 
     private final Scheduler publishEventScheduler;
 
-    private final String SMS_SERVICE_URL = "http://sms:8080/coupon";
+    private final String SMS_SERVICE_URL = "http://sms/coupon";
 
     @Autowired
     public CouponServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,

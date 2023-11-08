@@ -38,7 +38,7 @@ public class CouponServiceImpl implements CouponService {
 
     private final ProductSkuMapper productSkuMapper;
 
-    private final String OMS_SERVICE_URL = "http://oms:8080/cart";
+    private final String OMS_SERVICE_URL = "http://oms/cart";
 
     private final WebClient webClient;
 

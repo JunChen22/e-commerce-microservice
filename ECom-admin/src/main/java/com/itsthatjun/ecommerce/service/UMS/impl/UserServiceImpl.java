@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     private final Scheduler publishEventScheduler;
 
-    private final String UMS_SERVICE_URL = "http://ums:8080/user";
+    private final String UMS_SERVICE_URL = "http://ums/user";
 
     @Autowired
     public UserServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,

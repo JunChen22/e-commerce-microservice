@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final Scheduler publishEventScheduler;
 
-    private final String OMS_SERVICE_URL = "http://oms:8080/order";
+    private final String OMS_SERVICE_URL = "http://oms/order";
 
     @Autowired
     public OrderServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,

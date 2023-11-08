@@ -197,8 +197,11 @@ services:
     build: ECom-search
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/search.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
     depends_on:
       - mongodb
       - kibana
@@ -210,8 +213,11 @@ services:
     build: ECom-app/App
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/app.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
     depends_on:
       mongodb:
         condition: service_healthy
@@ -224,8 +230,11 @@ services:
     build: ECom-app/CMS
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/cms.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
     depends_on:
       CMS-db:
         condition: service_healthy
@@ -240,9 +249,12 @@ services:
     build: ECom-app/OMS
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/oms.yml
       - PAYPAL_MODE=${paypal_mode}
       - PAYPAL_CLIENT_ID=${paypal_client_id}
       - PAYPAL_CLIENT_SECRET=${paypal_client_secret}
+    volumes:
+      - $PWD/config-repo:/config-repo
     depends_on:
       OMS-db:
         condition: service_healthy
@@ -253,8 +265,11 @@ services:
     build: ECom-app/PMS
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/pms.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
     depends_on:
       PMS-db:
         condition: service_healthy
@@ -269,8 +284,11 @@ services:
     build: ECom-app/SMS
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/sms.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
     depends_on:
       SMS-db:
         condition: service_healthy
@@ -283,8 +301,11 @@ services:
     build: ECom-app/UMS
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/ums.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
     depends_on:
       UMS-db:
         condition: service_healthy
@@ -312,6 +333,9 @@ services:
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/gateway.yml
+    volumes:
+      - $PWD/config-repo:/config-repo
     ports:
       - "8080:8080"
 
@@ -320,12 +344,18 @@ services:
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/eureka-server.yml
+    volumes:
+      - $PWD/config-repo:/config-repo
 
   auth-server:
     build: auth-server
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
+    volumes:
+      - $PWD/config-repo:/config-repo
     healthcheck:
       test: ["CMD", "curl", "-fs", "http://localhost:9999/actuator/health"]
       interval: 5s
@@ -345,14 +375,6 @@ services:
       - "9411:9411"
     depends_on:
       - kafka
-
-  config-server:
-    build: config-server
-    mem_limit: 512m
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker,native
-    volumes:
-      - $PWD/config-repo:/config-repo
 
 volumes:
   db-data:

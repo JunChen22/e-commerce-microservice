@@ -19,7 +19,7 @@ public class CouponHistoryServiceImpl implements CouponHistoryService {
 
     private final WebClient webClient;
 
-    private final String SMS_SERVICE_URL = "http://sms:8080/coupon/history";
+    private final String SMS_SERVICE_URL = "http://sms/coupon/history";
 
     @Autowired
     public CouponHistoryServiceImpl(WebClient.Builder webClient) {

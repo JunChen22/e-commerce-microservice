@@ -34,7 +34,7 @@ public class OrderReturnServiceImpl implements OrderReturnService {
 
     private final Scheduler publishEventScheduler;
 
-    private final String OMS_SERVICE_URL = "http://oms:8080/order/return";
+    private final String OMS_SERVICE_URL = "http://oms/order/return";
 
     @Autowired
     public OrderReturnServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,

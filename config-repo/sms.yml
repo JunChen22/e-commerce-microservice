@@ -52,12 +52,11 @@ mybatis:
 
 spring.config.activate.on-profile: docker
 
-server.port: 8080
+server.port: 80
 
 spring:
   datasource:
     url: jdbc:postgresql://SMS-db:5432/salesdb
-
 
 ---
 

@@ -31,7 +31,7 @@ public class BrandServiceImpl implements BrandService {
 
     private final Scheduler publishEventScheduler;
 
-    private final String PMS_SERVICE_URL = "http://pms:8080/brand";
+    private final String PMS_SERVICE_URL = "http://pms/brand";
 
     @Autowired
     public BrandServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
