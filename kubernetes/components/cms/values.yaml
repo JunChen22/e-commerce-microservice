@@ -1,0 +1,13 @@
+fullnameOverride: cms
+
+image:
+  name: cms
+
+env:
+  SPRING_PROFILES_ACTIVE: "docker"
+  SPRING_CONFIG_LOCATION: file:/config-repo/application.yml,file:/config-repo/cms.yml
+
+configmap:
+  enabled: true
+  volumeMounts:
+    mountPath: /config-repo

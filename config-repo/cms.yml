@@ -36,7 +36,7 @@ server.port: 80
 
 spring:
   datasource:
-    url: jdbc:postgresql://CMS-db:5432/contentdb
+    url: jdbc:postgresql://cms-db:5432/contentdb
 
 ---
 spring.config.activate.on-profile: kafka

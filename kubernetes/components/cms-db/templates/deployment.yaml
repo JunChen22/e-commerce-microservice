@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-db
+  namespace: e-com
+  labels:
+    app: cms-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cms-db
+  template:
+    metadata:
+      labels:
+        app: cms-db
+    spec:
+      containers:
+        - name: cms-db
+          image: postgres:9.6.10
+          imagePullPolicy: Never
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: contentdb
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: password
+          volumeMounts:
+            - name: data-volume
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: data-volume
+          configMap:
+            name: postgres-data

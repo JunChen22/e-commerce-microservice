@@ -133,7 +133,7 @@ services:
       retries: 60
 
   redis:
-    image: redis:7
+    image: redis:7.0.14
     ports:
       - "6379:6379"
     healthcheck:

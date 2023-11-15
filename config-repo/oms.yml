@@ -101,7 +101,7 @@ server.port: 80
 
 spring:
   datasource:
-    url: jdbc:postgresql://OMS-db:5432/orderdb
+    url: jdbc:postgresql://oms-db:5432/orderdb
   redis:
     host: redis
 

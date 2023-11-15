@@ -24,32 +24,32 @@ spring.cloud.gateway.routes:
       - Path=/eureka/**
 
   - id: app-homepage
-    uri: lb://app:8080
+    uri: lb://app
     predicates:
       - Path=/
 
   - id: app-cms
-    uri: lb://app:8080
+    uri: lb://app
     predicates:
       - Path=/article/**
 
   - id: app-oms
-    uri: lb://app:8080
+    uri: lb://app
     predicates:
       - Path=/cart/**, /order/**, /return/**
 
   - id: app-pms
-    uri: lb://app:8080
+    uri: lb://app
     predicates:
       - Path=/brand/**, /product/**, /review/**
 
   - id: app-sms
-    uri: lb://app:8080
+    uri: lb://app
     predicates:
       - Path=/coupon/**, /sale/**
 
   - id: app-ums
-    uri: lb://app:8080
+    uri: lb://app
     predicates:
       - Path=/user/**
 
@@ -66,27 +66,27 @@ spring.cloud.gateway.routes:
       - Path=/esProduct/importAll
 
   - id: swagger
-    uri: http://app:8080
+    uri: http://app
     predicates:
       - Path=/swagger/**
 
   - id: swagger-ui
-    uri: http://app:8080
+    uri: http://app
     predicates:
       - Path=/swagger-ui.html
 
   - id: swagger-resource
-    uri: http://app:8080
+    uri: http://app
     predicates:
       - Path=/swagger-resources/**
 
   - id: swagger-webjars
-    uri: http://app:8080
+    uri: http://app
     predicates:
       - Path=/webjars/**
 
   - id: swagger-definition
-    uri: http://app:8080
+    uri: http://app
     predicates:
       - Path=/v2/api-docs**
 

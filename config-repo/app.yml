@@ -95,6 +95,8 @@ resilience4j:
 
 spring.config.activate.on-profile: docker
 
+server.port: 80
+
 spring:
   datasource:
     url: jdbc:postgresql://postgres/springecommerece

@@ -64,7 +64,7 @@ server.port: 80
 
 spring:
   datasource:
-    url: jdbc:postgresql://UMS-db:5432/userdb
+    url: jdbc:postgresql://ums-db:5432/userdb
   data:
     mongodb:
       host: mongodb

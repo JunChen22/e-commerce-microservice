@@ -18,7 +18,7 @@ services:
       interval: 10s
       retries: 5
 
-  CMS-db:
+  cms-db:
     image: postgres:9.6.10
     restart: always
     environment:
@@ -28,14 +28,14 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - CMS-data:/var/lib/postgresql/data
+      - cms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       retries: 5
 
-  OMS-db:
+  oms-db:
     image: postgres:9.6.10
     restart: always
     environment:
@@ -45,14 +45,14 @@ services:
     ports:
       - 5434:5432
     volumes:
-      - OMS-data:/var/lib/postgresql/data
+      - oms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       retries: 5
 
-  PMS-db:
+  pms-db:
     image: postgres:9.6.10
     restart: always
     environment:
@@ -62,14 +62,14 @@ services:
     ports:
       - 5435:5432
     volumes:
-      - PMS-data:/var/lib/postgresql/data
+      - pms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       retries: 5
 
-  SMS-db:
+  sms-db:
     image: postgres:9.6.10
     restart: always
     environment:
@@ -79,14 +79,14 @@ services:
     ports:
       - 5436:5432
     volumes:
-      - SMS-data:/var/lib/postgresql/data
+      - sms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       retries: 5
 
-  UMS-db:
+  ums-db:
     image: postgres:9.6.10
     restart: always
     environment:
@@ -96,14 +96,14 @@ services:
     ports:
       - 5437:5432
     volumes:
-      - UMS-data:/var/lib/postgresql/data
+      - ums-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       retries: 5
 
-  Auth-db:
+  auth-db:
     image: postgres:9.6.10
     restart: always
     environment:
@@ -113,7 +113,7 @@ services:
     ports:
       - 5438:5432
     volumes:
-      - Auth-data:/var/lib/postgresql/data
+      - auth-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
@@ -133,7 +133,7 @@ services:
       retries: 60
 
   redis:
-    image: redis:7
+    image: redis:7.0.14
     ports:
       - "6379:6379"
     healthcheck:
@@ -189,8 +189,9 @@ services:
 
   search:
     build: ECom-search
+    image: e-com/search
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/search.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
@@ -201,13 +202,13 @@ services:
       - kibana
       - logstash
       - elasticsearch
-      - PMS-db
+      - pms-db
 
   app:
     build: ECom-app/App
     image: e-com/app
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/app.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
@@ -221,15 +222,16 @@ services:
 
   cms:
     build: ECom-app/CMS
+    image: e-com/cms
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/cms.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
-      CMS-db:
+      cms-db:
         condition: service_healthy
       mongodb:
         condition: service_healthy
@@ -240,8 +242,9 @@ services:
 
   oms:
     build: ECom-app/OMS
+    image: e-com/oms
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/oms.yml
       - PAYPAL_MODE=${paypal_mode}
       - PAYPAL_CLIENT_ID=${paypal_client_id}
@@ -249,22 +252,23 @@ services:
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
-      OMS-db:
+      oms-db:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
 
   pms:
     build: ECom-app/PMS
+    image: e-com/pms
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/pms.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
-      PMS-db:
+      pms-db:
         condition: service_healthy
       mongodb:
         condition: service_healthy
@@ -275,15 +279,16 @@ services:
 
   sms:
     build: ECom-app/SMS
+    image: e-com/sms
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/sms.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
-      SMS-db:
+      sms-db:
         condition: service_healthy
       mongodb:
         condition: service_healthy
@@ -292,15 +297,16 @@ services:
 
   ums:
     build: ECom-app/UMS
+    image: e-com/ums
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/ums.yml
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
-      UMS-db:
+      ums-db:
         condition: service_healthy
       mongodb:
         condition: service_healthy
@@ -325,7 +331,7 @@ services:
     build: gateway
     mem_limit: 512m
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/gateway.yml
     volumes:
       - $PWD/config-repo:/config-repo
@@ -336,16 +342,17 @@ services:
     build: eureka-server
     mem_limit: 512m
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/eureka-server.yml
     volumes:
       - $PWD/config-repo:/config-repo
 
   auth-server:
     build: auth-server
+    image: e-com/auth-server
     mem_limit: 512m
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
     volumes:
       - $PWD/config-repo:/config-repo
@@ -355,7 +362,7 @@ services:
       timeout: 2s
       retries: 60
     depends_on:
-      Auth-db:
+      auth-db:
         condition: service_healthy
 
   zipkin:
@@ -372,10 +379,10 @@ services:
 
 volumes:
   db-data:
-  CMS-data:
-  OMS-data:
-  PMS-data:
-  SMS-data:
-  UMS-data:
-  Auth-data:
+  cms-data:
+  oms-data:
+  pms-data:
+  sms-data:
+  ums-data:
+  auth-data:
   rabbit-data:

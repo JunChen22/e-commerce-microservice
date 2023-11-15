@@ -1,4 +1,4 @@
-# message queue related and distributed tracing/Zipkin/Slueth needed to collect logs
+# message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
 spring:
   rabbitmq:
     host: localhost
@@ -8,18 +8,6 @@ spring:
     password: guest
     publisher-confirms: true
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
-    initialInstanceInfoReplicationIntervalSeconds: 5
-    registryFetchIntervalSeconds: 5
-  instance:
-    leaseRenewalIntervalInSeconds: 5
-    leaseExpirationDurationInSeconds: 5
-
-app.eureka-server: localhost
-
 spring.cloud.stream.defaultBinder: rabbit
 spring.zipkin.sender.type: rabbit
 spring.sleuth.sampler.probability: 1.0
@@ -27,7 +15,6 @@ spring.sleuth.sampler.probability: 1.0
 # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
-
 
 #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
 #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
@@ -43,17 +30,16 @@ logging:
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
     com.itsthatjun.ecommerce: DEBUG
 
----
+server.shutdown: graceful
+spring.lifecycle.timeout-per-shutdown-phase: 10s
 
+---
 spring.config.activate.on-profile: docker
 
 spring.rabbitmq.host: rabbitmq
 
-app.eureka-server: eureka
-
-eureka:   # TODO: disabled for now
-  client:
-    enabled: true
+# Disabled for kubernetes, use eureka profile to deploy on docker
+eureka.client.enabled: false
 
 ---
 spring.config.activate.on-profile: kafka
@@ -68,3 +54,19 @@ spring.cloud.stream.kafka.binder:
 management.health.rabbit.enabled: false
 spring.kafka.bootstrap-servers: kafka:9092
 spring.cloud.stream.kafka.binder.replication-factor: 1
+
+---
+spring.config.activate.on-profile: eureka
+
+app.eureka-server: eureka
+
+eureka:
+  client:
+    enabled: true
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5

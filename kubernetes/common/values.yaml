@@ -1,0 +1,26 @@
+replicaCount: 1
+
+image:
+  repository: e-com
+  tag: latest
+  pullPolicy: Never
+  args: []
+
+ports:
+  - name: http
+    containerPort: 80
+    protocol: TCP
+
+configmap:
+  enabled: true
+
+service:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+
+namespace:
+  name: e-com

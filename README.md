@@ -35,7 +35,7 @@ The .env file stores login infos for easier change. Gets read in during run time
 
 
 ```
-![alt text](./document/ECom-microservice.png)
+![alt text](./document/ECom-microservice-docker.png)
 
 Hibernate is an ORM framework that provides a high-level, declarative way to define your data model in Java and have
 Hibernate generate the database schema for you, while MyBatis is a SQL mapper framework that provides a low-level,
@@ -58,6 +58,35 @@ API calls and documentations
 Set up/installation:
 
 ```
+  Start whole landscape in docker
+ $ mvn clean install
+ 
+ To deploy on docker
+ $ docker-compose build       
+ $ docker-compose up
+ 
+ or if you want to use Kafka instead of Rabbit MQ
+ $ export COMPOSE_FILE=docker-compose-kafka.yml
+ unset compose file when you want to switch back to Rabbit MQ
+ $ unset COMPOSE_FILE
+ 
+  Import data into elastic search
+  
+ $ curl -GET 'http://localhost:9200/_cat/indices?v'         // list all the indices
+ $ curl -X DELETE 'http://localhost:9200/products'          // delete existing ones
+ $ curl -X POST http://localhost:8080/esProduct/importAll   // should return number of items imported
+
+To deploy on kubernetes
+ $ chmod +x clean_up.sh && chmod +x setup.sh && chmod +x start.sh && chmod +x update.sh   // enable scripts for common helm commands
+ $ cd ./kubernetes
+ $ ./setup.sh    // build images and config setting in minikube
+ $ ./update.sh   // update helm dependency
+ $ ./start.sh    // start and deploy on dev-environment by default
+ $ minikube ip   // using this ip address that minikube is on to interact at port 80 plus end points.
+ 
+* can not deploy locally(IDE) only Docker or Kubernetes/Minikube
+* also need PayPal sandbox credential to run OMS.
+
 Database and mybatis generator
 
   Generate mybatis files
@@ -72,30 +101,6 @@ or generate the file manually.
  $ docker-compose down
  
 ps : Remove docker volume so the new data.sql can function properly and update.
-
-
-  Start whole landscape
- $ mvn clean package
- 
- To deploy 
- $ docker-compose build
- $ docker-compose up
- 
- or if you want to use Kafka instead of Rabbit MQ
- $ export COMPOSE_FILE=docker-compose-kafka.yml
- unset compose file when you want to switch back to Rabbit MQ
- $ unset COMPOSE_FILE
- 
-
-* can not deploy locally(IDE) only Docker or Kubernetes
-* also need PayPal sandbox credential to run OMS.
- 
-  Import data into elastic search
-  
- $ curl -GET 'http://localhost:9200/_cat/indices?v'         // list all the indices
- $ curl -X DELETE 'http://localhost:9200/products'          // delete existing ones
- $ curl -X POST http://localhost:8080/esProduct/importAll   // should return number of items imported
- 
 ```
 ### Tech stack
 | Tech                                                                                   | role                                  | version | How is it being used here                               |
@@ -189,8 +194,6 @@ Content management system(CMS) - create, manage, and publish digital content, su
 User management system(UMS) - manage user accounts and permissions, including authentication, authorization, and access control.
 - User
 - admin
-
-
 
 
 ### Order process flow

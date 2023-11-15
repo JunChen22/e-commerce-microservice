@@ -1,0 +1,24 @@
+secrets:
+
+  postgres-server-credentials:
+    POSTGRES_DB: springecommerece
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: password
+
+  postgres-credentials:
+    SPRING_DATASOURCE_USERNAME: postgres
+    SPRING_DATASOURCE_PASSWORD: password
+
+  paypal-credentials:
+    PAYPAL_MODE: sandbox
+    PAYPAL_CLIENT_ID: SOME_ID
+    PAYPAL_CLIENT_SECRET: SOME_SECRET
+
+postgres:
+  envFromSecretRefs:
+    - postgres-server-credentials
+
+app:
+  envFromSecretRefs:
+    - rabbitmq-credentials
+    - mongodb-credentials

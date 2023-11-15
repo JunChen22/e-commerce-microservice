@@ -40,7 +40,7 @@ jwt:
 spring.config.activate.on-profile: docker
 
 spring:
-  datasource.url: jdbc:postgresql://Auth-db:5432/authdb
+  datasource.url: jdbc:postgresql://auth-db:5432/authdb
 
 ---
 spring.config.activate.on-profile: kafka

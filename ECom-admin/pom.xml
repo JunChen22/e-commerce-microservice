@@ -72,7 +72,7 @@
             <version>2.3.1</version>
         </dependency>
 
-        <!-- mybatis and paging addon from github -->
+        <!-- mybatis and paging addon from GitHub -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>

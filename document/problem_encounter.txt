@@ -317,3 +317,28 @@ or not it's not generating mapper and model.
 A: there's error creating the table, could be that insert data wrong and causing rest of the tables being created.
 and generatorConfig overriding coloum that does not exist, could be you updated the data.sql script and did not change
 it in generatorConfig.
+
+
+Q: getting ImagePullBackOff or ErrImagePull or anything related to image error can't be pull or resolve that are not on docker hub.
+A: need to have image on kubernetes first.
+
+    $ eval $(minikube docker-env)  // to connect docker to kubernetes
+    $ docker-compose build  // build or pull image you need.
+    $ docker pull IMAGE_YOU_NEED
+
+
+Q: can not connect/replace gateway in kubernetes environment. The Kubernetes Ingress Controller can not be connected.
+
+A: the default profile is causing problem for me. I need to create and switch profile other than default profile to solve it.
+
+
+
+Q: the config repository in kubernetes is linked with the config-repo in the main directory.
+
+    it's done using soft link or syslink.
+     $ mkdir config-repo
+     $ cd config-repo
+     $ ln -s ../../../../config-repo/application.yml
+     $ ln -s ../../../../config-repo/app.yml
+
+     $ rm SOFT_LINKED_FILES.yml    // to un-soft link the file, it will not delete the original file.

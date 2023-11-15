@@ -60,7 +60,7 @@ server.port: 80
 
 spring:
   datasource:
-    url: jdbc:postgresql://PMS-db:5432/productdb
+    url: jdbc:postgresql://pms-db:5432/productdb
 
 ---
 
