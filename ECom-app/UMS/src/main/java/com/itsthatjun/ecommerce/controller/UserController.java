@@ -1,15 +1,14 @@
 package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.MemberDetail;
-import com.itsthatjun.ecommerce.mbg.model.Address;
-import com.itsthatjun.ecommerce.mbg.model.Member;
-import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
 import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController

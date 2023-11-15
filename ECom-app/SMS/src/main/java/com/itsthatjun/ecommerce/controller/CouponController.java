@@ -1,10 +1,6 @@
 package com.itsthatjun.ecommerce.controller;
 
-import com.itsthatjun.ecommerce.dto.CouponDiscount;
-import com.itsthatjun.ecommerce.dto.CouponSale;
-import com.itsthatjun.ecommerce.mbg.mapper.CouponMapper;
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
-import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.impl.CouponServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,10 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import javax.ws.rs.PathParam;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/coupon")

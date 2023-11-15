@@ -2,20 +2,15 @@ package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.ProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import com.itsthatjun.ecommerce.service.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/product")

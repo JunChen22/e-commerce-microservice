@@ -16,6 +16,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
 		</dependency>
@@ -48,24 +53,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-
-	<profiles>
-		<profile>
-			<id>eureka</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.springframework.cloud</groupId>
-					<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
-
-
 
 	<build>
 		<plugins>
