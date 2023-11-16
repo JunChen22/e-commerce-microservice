@@ -7,20 +7,21 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: release-name-dev-env
-  namespace: e-com
+  name: {{ .Values.ingress.name }}
   labels:
-    app.kubernetes.io/name: dev-env
+    app: {{ .Values.ingress.name }}
 spec:
   rules:
     - http:
         paths:
-          - path: /
-            pathType: Prefix
+        {{- range .Values.ingress.paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
-                name: app
+                name: {{ .service }}
                 port:
-                  number: 80
+                  number: {{ .port }}
+        {{- end }}
 {{- end }}
 {{- end -}}

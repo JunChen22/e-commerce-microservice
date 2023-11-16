@@ -1,0 +1,18 @@
+dependencies:
+- name: common
+  repository: file://../../common
+  version: 1.0.0
+- name: app
+  repository: file://../../components/app
+  version: 1.0.0
+- name: cms
+  repository: file://../../components/cms
+  version: 1.0.0
+- name: cms-db
+  repository: file://../../components/cms-db
+  version: 1.0.0
+- name: rabbitmq
+  repository: file://../../components/rabbitmq
+  version: 1.0.0
+digest: sha256:cf23e1577d8590b18fef97b8215a3f5c1427d290731801a74562f8bb5b82f6e3
+generated: "2023-11-15T15:20:36.151423815-05:00"

@@ -1,3 +1,16 @@
+ingress:
+  name: dev-env
+  host: minikube.me
+  paths:
+    - path: /
+      pathType: ImplementationSpecific
+      service: app
+      port: 80
+    - path: /article
+      pathType: Prefix
+      service: app
+      port: 80
+
 secrets:
 
   postgres-server-credentials:

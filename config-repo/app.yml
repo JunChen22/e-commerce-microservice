@@ -1,6 +1,6 @@
 server.port: 8080
 
-server.forward-headers-strategy: framework #
+server.forward-headers-strategy: framework
 
 jwt:
   HEADER_STRING: Authorization

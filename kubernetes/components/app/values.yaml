@@ -7,7 +7,9 @@ env:
   SPRING_PROFILES_ACTIVE: "docker"
   SPRING_CONFIG_LOCATION: file:/config-repo/application.yml,file:/config-repo/app.yml
 
+service:
+  type: ClusterIP
+
 configmap:
-  enabled: true
   volumeMounts:
     mountPath: /config-repo

@@ -4,23 +4,15 @@ image:
   repository: e-com
   tag: latest
   pullPolicy: Never
-  args: []
 
-ports:
-  - name: http
-    containerPort: 80
-    protocol: TCP
-
-configmap:
-  enabled: true
+containerPorts:
+  - containerPort: 80
 
 service:
-  type: ClusterIP
   ports:
   - port: 80
-    targetPort: 8080
     protocol: TCP
-    name: http
+    targetPort: 80
 
 namespace:
   name: e-com

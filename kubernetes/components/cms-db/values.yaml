@@ -7,17 +7,20 @@ image:
   pullPolicy: IfNotPresent
 
 ports:
-  - containerPort: 5432
+  containerPort: 5432
 
 service:
+  type: ClusterIP
   ports:
-    - name: cms-db
-      port: 5432
+    - port: 5432
 
-postgresql:
-  postgresDatabase: contentdb
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+  POSTGRES_DB: contentdb
 
-postgres:
-  env:
-    - name: POSTGRES_DB
-      value: contentdb
+volume:
+  name: cms-data
+  dataInitializerMountPath: /docker-entrypoint-initdb.d
+  dataInitializerConfigmap: postgres-data
+
