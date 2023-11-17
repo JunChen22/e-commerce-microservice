@@ -1,0 +1,20 @@
+fullnameOverride: zipkin
+
+image:
+  repository: registry.hub.docker.com/library
+  name: openzipkin/zipkin
+  tag: 2.23.2
+  pullPolicy: IfNotPresent
+
+ports:
+  containerPort: 9411
+
+service:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 9411
+      targetPort: 9411
+
+limits:
+  memory: "1024Mi"

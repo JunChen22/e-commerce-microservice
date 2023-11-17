@@ -6,10 +6,82 @@ ingress:
       pathType: ImplementationSpecific
       service: app
       port: 80
+
     - path: /article
       pathType: Prefix
       service: app
       port: 80
+
+    - path: /brand
+      pathType: Prefix
+      service: app
+      port: 80
+    - path: /product
+      pathType: Prefix
+      service: app
+      port: 80
+    - path: /review
+      pathType: Prefix
+      service: app
+      port: 80
+
+    - path: /cart
+      pathType: Prefix
+      service: app
+      port: 80
+    - path: /order
+      pathType: Prefix
+      service: app
+      port: 80
+    - path: /return
+      pathType: Prefix
+      service: app
+      port: 80
+
+    - path: /coupon
+      pathType: Prefix
+      service: app
+      port: 80
+    - path: /sale
+      pathType: Prefix
+      service: app
+      port: 80
+
+    - path: /user
+      pathType: Prefix
+      service: app
+      port: 80
+
+    - path: /search
+      pathType: Prefix
+      service: search
+      port: 81
+    - path: /esProduct/importAll
+      pathType: Prefix
+      service: app
+      port: 81
+
+    - path: /swagger
+      pathType: Prefix
+      service: app
+      port: 80
+    - path: /swagger-ui.html
+      pathType: Prefix
+      service: app
+      port: 80
+    - path: /webjars
+      pathType: Prefix
+      service: app
+      port: 80
+    - path: /v2/api-docs
+      pathType: Prefix
+      service: app
+      port: 80
+
+    - path: /login
+      pathType: Prefix
+      service: app
+      port: 9999
 
 secrets:
 

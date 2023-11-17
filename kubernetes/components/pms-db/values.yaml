@@ -1,0 +1,26 @@
+fullnameOverride: pms-db
+
+image:
+  repository: registry.hub.docker.com/library
+  name: postgres
+  tag: 9.6.10
+  pullPolicy: IfNotPresent
+
+ports:
+  containerPort: 5432
+
+service:
+  type: ClusterIP
+  ports:
+    - port: 5432
+
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+  POSTGRES_DB: productdb
+
+volume:
+  name: pms-data
+  dataInitializerMountPath: /docker-entrypoint-initdb.d
+  dataInitializerConfigmap: postgres-data
+

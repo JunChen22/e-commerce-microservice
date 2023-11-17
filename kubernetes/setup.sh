@@ -21,13 +21,13 @@ eval $(minikube docker-env)
 docker-compose build cms pms oms ums sms app auth-server search
 
 docker pull postgres:9.6.10
-#docker pull mongo:5.0.0
+docker pull mongo:5.0.0
 docker pull redis:7.0.14
 docker pull rabbitmq:3.8.11-management
-#docker pull elasticsearch:7.12.0
-#docker pull logstash:7.12.0
-#docker pull kibana:7.12.0
-#docker pull openzipkin/zipkin:2.23.2
+docker pull elasticsearch:7.12.0
+docker pull logstash:7.12.0
+docker pull kibana:7.12.0
+docker pull openzipkin/zipkin:2.23.2
 
 # just to show current addon list
 minikube addons list

@@ -22,7 +22,59 @@ dependencies:
     version: 1.0.0
     repository: file://../../components/cms-db
 
+  - name: pms
+    version: 1.0.0
+    repository: file://../../components/pms
+
+  - name: pms-db
+    version: 1.0.0
+    repository: file://../../components/pms-db
+
+  - name: oms
+    version: 1.0.0
+    repository: file://../../components/oms
+
+  - name: oms-db
+    version: 1.0.0
+    repository: file://../../components/oms-db
+
+  - name: sms
+    version: 1.0.0
+    repository: file://../../components/sms
+
+  - name: sms-db
+    version: 1.0.0
+    repository: file://../../components/sms-db
+
+  - name: ums
+    version: 1.0.0
+    repository: file://../../components/ums
+
+  - name: ums-db
+    version: 1.0.0
+    repository: file://../../components/ums-db
+
+  - name: auth-server
+    version: 1.0.0
+    repository: file://../../components/auth-server
+
+  - name: auth-db
+    version: 1.0.0
+    repository: file://../../components/auth-db
+
   - name: rabbitmq
     version: 1.0.0
     repository: file://../../components/rabbitmq
+
+  - name: redis
+    version: 1.0.0
+    repository: file://../../components/redis
+
+  - name: mongodb
+    version: 1.0.0
+    repository: file://../../components/mongodb
+
+  - name: zipkin
+    version: 1.0.0
+    repository: file://../../components/zipkin
 
