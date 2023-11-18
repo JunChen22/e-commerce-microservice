@@ -59,7 +59,7 @@ Set up/installation:
 
 ```
   Start whole landscape in docker
- $ mvn clean install
+ $ mvn clean install -Peureka          // eureka profile
  
  To deploy on docker
  $ docker-compose build       

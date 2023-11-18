@@ -1,6 +1,6 @@
 ingress:
   name: dev-env
-  host: minikube.me
+  host: ecom.me
   paths:
     - path: /
       pathType: ImplementationSpecific
@@ -55,11 +55,11 @@ ingress:
     - path: /search
       pathType: Prefix
       service: search
-      port: 81
+      port: 8081
     - path: /esProduct/importAll
       pathType: Prefix
-      service: app
-      port: 81
+      service: search
+      port: 8081
 
     - path: /swagger
       pathType: Prefix
@@ -80,15 +80,22 @@ ingress:
 
     - path: /login
       pathType: Prefix
-      service: app
-      port: 9999
+      service: auth-server
+      port: 80
 
 secrets:
 
   postgres-server-credentials:
-    POSTGRES_DB: springecommerece
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: password
+
+  rabbitmq-server-credentials:  # not used yet
+    RABBITMQ_DEFAULT_USER: guest
+    RABBITMQ_DEFAULT_PASS: guest
+
+  mongodb-server-credentials:   # not used yet
+    username: username
+    password: password
 
   postgres-credentials:
     SPRING_DATASOURCE_USERNAME: postgres
@@ -96,14 +103,83 @@ secrets:
 
   paypal-credentials:
     PAYPAL_MODE: sandbox
-    PAYPAL_CLIENT_ID: SOME_ID
-    PAYPAL_CLIENT_SECRET: SOME_SECRET
+    PAYPAL_CLIENT_ID: YOUR_PAYPAL_ID
+    PAYPAL_CLIENT_SECRET: YOUR_PAYPAL_SECRET
+
+  rabbitmq-credentials:
+    username: guest
+    password: guest
+
+  mongodb-credentials:
+    username: username
+    password: password
 
 postgres:
   envFromSecretRefs:
     - postgres-server-credentials
 
+cms-db:
+  envFromSecretRefs:
+    - postgres-server-credentials
+
+pms-db:
+  envFromSecretRefs:
+    - postgres-server-credentials
+
+oms-db:
+  envFromSecretRefs:
+    - postgres-server-credentials
+
+sms-db:
+  envFromSecretRefs:
+    - postgres-server-credentials
+
+ums-db:
+  envFromSecretRefs:
+    - postgres-server-credentials
+
+auth-db:
+  envFromSecretRefs:
+    - postgres-server-credentials
+
 app:
   envFromSecretRefs:
+    - postgres-credentials
     - rabbitmq-credentials
     - mongodb-credentials
+
+oms:
+  envFromSecretRefs:
+    - paypal-credentials
+    - postgres-credentials
+    - rabbitmq-credentials
+
+cms:
+  envFromSecretRefs:
+    - postgres-credentials
+    - rabbitmq-credentials
+
+pms:
+  envFromSecretRefs:
+    - postgres-credentials
+    - rabbitmq-credentials
+
+sms:
+  envFromSecretRefs:
+    - postgres-credentials
+    - rabbitmq-credentials
+
+ums:
+  envFromSecretRefs:
+    - postgres-credentials
+    - rabbitmq-credentials
+
+search:
+  envFromSecretRefs:
+    - postgres-credentials
+    - rabbitmq-credentials
+
+auth-server:
+  envFromSecretRefs:
+    - postgres-credentials
+    - rabbitmq-credentials

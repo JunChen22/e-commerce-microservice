@@ -5,18 +5,17 @@ import com.itsthatjun.ecommerce.config.PaypalPaymentIntent;
 import com.itsthatjun.ecommerce.config.PaypalPaymentMethod;
 import com.itsthatjun.ecommerce.dao.OrderDao;
 import com.itsthatjun.ecommerce.dto.OrderDetail;
+import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.dto.event.incoming.OmsCompletionEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.PmsProductOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsSalesStockOutEvent;
-import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.exceptions.OrderException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.OrderService;
 import com.itsthatjun.ecommerce.service.PaypalService;
 import com.paypal.api.payments.Links;
-import com.paypal.api.payments.Order;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
@@ -40,7 +39,7 @@ import java.time.Duration;
 import java.util.*;
 
 import static com.itsthatjun.ecommerce.dto.event.incoming.OmsCompletionEvent.Type.PAYMENT_FAILURE;
-import static com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent.Type.*;
+import static com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent.Type.UPDATE_COUPON_USAGE;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -541,6 +540,7 @@ public class OrderServiceImpl implements OrderService {
     private void updateChangeLog(int orderId, int status, String note, String operator) {
         OrderChangeHistory changeLog = new OrderChangeHistory();
         changeLog.setOrderId(orderId);
+        changeLog.setUpdateAction(note);
         changeLog.setOrderStatus(status);
         changeLog.setOperator(operator);
         changeLog.setNote(note);

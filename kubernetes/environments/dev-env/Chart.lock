@@ -53,5 +53,17 @@ dependencies:
 - name: zipkin
   repository: file://../../components/zipkin
   version: 1.0.0
-digest: sha256:b0a9121f73242557c98138ac07b27ead6ac7c20a717216190dae6e17e887ea56
-generated: "2023-11-16T23:29:11.740138521-05:00"
+- name: elasticsearch
+  repository: file://../../components/elasticsearch
+  version: 1.0.0
+- name: kibana
+  repository: file://../../components/kibana
+  version: 1.0.0
+- name: logstash
+  repository: file://../../components/logstash
+  version: 1.0.0
+- name: search
+  repository: file://../../components/search
+  version: 1.0.0
+digest: sha256:f50a7280ac4e7f0806b67f3617297b59e67dd879739a81902b4c58e434f9aa57
+generated: "2023-11-17T18:01:29.168907145-05:00"

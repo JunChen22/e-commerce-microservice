@@ -78,3 +78,18 @@ dependencies:
     version: 1.0.0
     repository: file://../../components/zipkin
 
+  - name: elasticsearch
+    version: 1.0.0
+    repository: file://../../components/elasticsearch
+
+  - name: kibana
+    version: 1.0.0
+    repository: file://../../components/kibana
+
+  - name: logstash
+    version: 1.0.0
+    repository: file://../../components/logstash
+
+  - name: search
+    version: 1.0.0
+    repository: file://../../components/search

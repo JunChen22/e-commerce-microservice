@@ -8,8 +8,6 @@ spring:
     name: auth-server
   datasource:
     url: jdbc:postgresql://localhost:5438/authdb
-    username: postgres
-    password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
 
@@ -38,6 +36,8 @@ jwt:
 
 ---
 spring.config.activate.on-profile: docker
+
+server.port: 80
 
 spring:
   datasource.url: jdbc:postgresql://auth-db:5432/authdb

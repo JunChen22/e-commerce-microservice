@@ -6,12 +6,17 @@ image:
 env:
   SPRING_PROFILES_ACTIVE: "docker"
   SPRING_CONFIG_LOCATION: file:/config-repo/application.yml,file:/config-repo/search.yml
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: password
 
 service:
   type: ClusterIP
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
 
 configmap:
   volumeMounts:
     mountPath: /config-repo
+
+containerPorts:
+  - containerPort: 8081

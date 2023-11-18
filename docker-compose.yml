@@ -171,10 +171,8 @@ services:
   logstash:
     image: logstash:7.12.0
     ports:
-      - 4560:4560
-      - 4561:4561
-      - 4562:4562
-      - 4563:4563
+      - 5044:5044
+      - 9600:9600
     depends_on:
       - elasticsearch
 
@@ -246,6 +244,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/oms.yml
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
       - PAYPAL_MODE=${paypal_mode}
       - PAYPAL_CLIENT_ID=${paypal_client_id}
       - PAYPAL_CLIENT_SECRET=${paypal_client_secret}
@@ -300,9 +300,9 @@ services:
     image: e-com/ums
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/ums.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
-      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/ums.yml
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
@@ -354,10 +354,12 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     healthcheck:
-      test: ["CMD", "curl", "-fs", "http://localhost:9999/actuator/health"]
+      test: ["CMD", "curl", "-fs", "http://auth-server/actuator/health"]
       interval: 5s
       timeout: 2s
       retries: 60

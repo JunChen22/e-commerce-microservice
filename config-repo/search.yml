@@ -5,9 +5,7 @@ spring:
   application:
     name: search
   datasource:
-    url: jdbc:postgresql://localhost/springecommerece # need to change localhost for docker-compose
-    username: postgres
-    password: password
+    url: jdbc:postgresql://localhost/productdb # need to change localhost for docker-compose
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
   data:
@@ -34,7 +32,7 @@ mybatis:
 spring.config.activate.on-profile: docker
 
 spring:
-  datasource.url: jdbc:postgresql://postgres/springecommerece
+  datasource.url: jdbc:postgresql://pms-db:5432/productdb
   elasticsearch:
     rest:
       uris: http://elasticsearch:9200

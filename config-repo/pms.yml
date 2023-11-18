@@ -6,8 +6,6 @@ spring:
     name: pms
   datasource:
     url: jdbc:postgresql://localhost:5435/productdb
-    username: postgres
-    password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
 

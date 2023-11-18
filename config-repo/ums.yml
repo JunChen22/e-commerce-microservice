@@ -6,8 +6,6 @@ spring:
     name: ums
   datasource:
     url: jdbc:postgresql://localhost:5437/userdb
-    username: postgres
-    password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
   data:

@@ -91,7 +91,7 @@ spring.cloud.gateway.routes:
       - Path=/v2/api-docs**
 
   - id: local-auth-login
-    uri: http://auth-server:9999
+    uri: http://auth-server
     predicates:
       - Path=/login
 

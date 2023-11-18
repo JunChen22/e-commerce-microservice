@@ -22,18 +22,25 @@ spec:
     spec:
       containers:
         - name: {{ include "common.fullname" . }}
-          image: {{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           {{- range $key, $val := .Values.env }}
           - name: {{ $key }}
             value: {{ $val }}
           {{- end }}
+          {{- if .Values.envFromSecretRefs }}
+          envFrom:
+          {{- range .Values.envFromSecretRefs }}
+          - secretRef:
+              name: {{ . }}
+          {{- end }}
+          {{- end }}
           volumeMounts:
             - name: {{ .Values.volume.name }}
               mountPath: {{ .Values.volume.dataInitializerMountPath }}
           ports:
-{{ toYaml .Values.containerPorts | indent 12 }}
+{{ toYaml .Values.ports | indent 12 }}
       volumes:
         - name: {{ .Values.volume.name }}
           configMap:

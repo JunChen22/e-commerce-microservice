@@ -1,13 +1,12 @@
 fullnameOverride: cms-db
 
 image:
-  repository: registry.hub.docker.com/library
   name: postgres
   tag: 9.6.10
   pullPolicy: IfNotPresent
 
 ports:
-  containerPort: 5432
+  - containerPort: 5432
 
 service:
   type: ClusterIP
@@ -15,8 +14,6 @@ service:
     - port: 5432
 
 env:
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: password
   POSTGRES_DB: contentdb
 
 volume:

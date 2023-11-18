@@ -6,8 +6,6 @@ spring:
     name: sms
   datasource:
     url: jdbc:postgresql://localhost:5436/salesdb
-    username: postgres
-    password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
 

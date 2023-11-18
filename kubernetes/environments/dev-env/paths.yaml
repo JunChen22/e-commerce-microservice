@@ -1,8 +1,0 @@
-- path: /
-  pathType: ImplementationSpecific
-  service: app
-  port: 80
-- path: /
-  pathType: ImplementationSpecific
-  service: app
-  port: 80

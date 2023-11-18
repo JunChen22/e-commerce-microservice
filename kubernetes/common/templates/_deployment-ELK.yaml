@@ -1,4 +1,4 @@
-{{- define "common.deployment" -}}
+{{- define "common.deployment-ELK" -}}
 {{- $common := dict "Values" .Values.common -}} 
 {{- $noCommon := omit .Values "common" -}} 
 {{- $overrides := dict "Values" $noCommon -}} 
@@ -22,30 +22,16 @@ spec:
     spec:
       containers:
         - name: {{ include "common.fullname" . }}
-          image: {{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           {{- range $key, $val := .Values.env }}
           - name: {{ $key }}
             value: {{ $val }}
           {{- end }}
-          {{- if .Values.envFromSecretRefs }}
-          envFrom:
-          {{- range .Values.envFromSecretRefs }}
-          - secretRef:
-              name: {{ . }}
-          {{- end }}
-          {{- end }}
-          volumeMounts:
-            - name: {{ include "common.fullname" . }}
-              mountPath: {{ .Values.configmap.volumeMounts.mountPath }}
           ports:
           {{- range .Values.containerPorts }}
             - containerPort: {{ .containerPort }}
           {{- end }}
-      volumes:
-        - name: {{ include "common.fullname" . }}
-          configMap:
-            name: {{ include "common.fullname" . }}
 {{- end -}}
 {{- end -}}

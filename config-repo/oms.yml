@@ -6,8 +6,6 @@ spring:
     name: oms
   datasource:
     url: jdbc:postgresql://localhost:5434/orderdb
-    username: postgres
-    password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
   redis:

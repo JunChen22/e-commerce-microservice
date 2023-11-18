@@ -1,18 +1,22 @@
 fullnameOverride: rabbitmq
 
 image:
-  repository: registry.hub.docker.com/library
   name: rabbitmq
   tag: 3.8.11-management
   pullPolicy: IfNotPresent
 
-ports:
+containerPorts:
   - containerPort: 5672
   - containerPort: 15672
 
 service:
+  type: LoadBalancer
   ports:
-    - name: tcp-not-secure
+    - name: rabbitmq
+      protocol: TCP
       port: 5672
-    - name: http-mgm-ui
+      targetPort: 5672
+    - name: rabbitmq-management
+      protocol: TCP
       port: 15672
+      targetPort: 15672

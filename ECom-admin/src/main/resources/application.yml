@@ -20,8 +20,6 @@ logging:
 spring:
   datasource:
     url: jdbc:postgresql://localhost/springecommerece
-    username: postgres
-    password: password
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
   data:

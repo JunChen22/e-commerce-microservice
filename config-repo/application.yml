@@ -4,8 +4,6 @@ spring:
     host: localhost
     port: 5672
     virtual-host: /
-    username: guest
-    password: guest
     publisher-confirms: true
 
 spring.cloud.stream.defaultBinder: rabbit
@@ -39,7 +37,7 @@ spring.config.activate.on-profile: docker
 spring.rabbitmq.host: rabbitmq
 
 # Disabled for kubernetes, use eureka profile to deploy on docker
-eureka.client.enabled: false
+# eureka.client.enabled: false
 
 ---
 spring.config.activate.on-profile: kafka
@@ -64,7 +62,7 @@ eureka:
   client:
     enabled: true
     serviceUrl:
-      defaultZone: http://eureka:8761/eureka/
+      defaultZone: http://${app.eureka-server}:8761/eureka/
     initialInstanceInfoReplicationIntervalSeconds: 5
     registryFetchIntervalSeconds: 5
   instance:
