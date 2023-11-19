@@ -1,6 +1,6 @@
 ingress:
   name: dev-env
-  host: ecom.me
+  host: springecom.me
   paths:
     - path: /
       pathType: ImplementationSpecific
@@ -52,7 +52,7 @@ ingress:
       service: app
       port: 80
 
-    - path: /search
+    - path: /esProduct/search
       pathType: Prefix
       service: search
       port: 8081

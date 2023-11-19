@@ -118,7 +118,8 @@ yarn-error.log*
 ./.env
 
 # ignore helm generated files.
-./kubernetes/*/charts/
-./kubernetes/*/.Chart.lock
+./kubernetes/*/*/charts/
+./kubernetes/*/*/Chart.lock
 /charts
 /Chart.lock
+Chart.lock

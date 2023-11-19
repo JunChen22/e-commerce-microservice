@@ -39,3 +39,5 @@ minikube addons enable metrics-server
 # just to show current addon list
 minikube addons list
 
+# Map springecom.me to the IP address we can use to reach the Minikube instance by adding a line to the /etc/hosts file:
+sudo bash -c "echo $(minikube ip) springecom.me | tee -a /etc/hosts"
