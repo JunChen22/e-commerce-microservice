@@ -2,9 +2,11 @@ package com.itsthatjun.ecommerce.service.impl;
 
 import com.itsthatjun.ecommerce.dao.ArticleDao;
 import com.itsthatjun.ecommerce.dto.ArticleInfo;
-import com.itsthatjun.ecommerce.exceptions.ArticleException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
-import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog;
+import com.itsthatjun.ecommerce.mbg.model.ArticleImage;
+import com.itsthatjun.ecommerce.mbg.model.ArticleQa;
+import com.itsthatjun.ecommerce.mbg.model.ArticleVideo;
 import com.itsthatjun.ecommerce.service.ArticleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +98,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private ArticleInfo internalCreateArticle(ArticleInfo articleInfo, String operator) {
         //TODO: optimize this
+        /* TODO:
         Article exist = articleMapper.selectByPrimaryKey(articleInfo.getArticle().getId());
         if (exist != null) {
             // TODO: return exception to be added in ECom-common
@@ -130,12 +133,14 @@ public class ArticleServiceImpl implements ArticleService {
             }
         }
         articleLog(articleId, "create article", operator);
+         */
         return articleInfo;
     }
 
     @Override    // TODO: update when deleting one of the element
     public Mono<ArticleInfo> updateArticle(ArticleInfo articleInfo, String operator) {
         return Mono.fromCallable(() -> {
+            /* TODO:
             // Offload the blocking operation to the specified scheduler
             int articleId = articleInfo.getArticle().getId();
 
@@ -148,6 +153,7 @@ public class ArticleServiceImpl implements ArticleService {
             updateVideo(articleId, articleInfo.getVideos());
 
             articleLog(articleId, "update article", operator);
+             */
             return articleInfo;
         }).subscribeOn(jdbcScheduler);
     }
@@ -183,6 +189,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Mono<Void> deleteArticle(int articleId, String operator) {
         return Mono.fromRunnable(() -> {
+            /* TODO:
             if (articleMapper.selectByPrimaryKey(articleId) == null) {
                 throw new ArticleException("Article not found with ID: " + articleId);
             }
@@ -202,7 +209,7 @@ public class ArticleServiceImpl implements ArticleService {
             for (ArticleImage image : article.getImages()) {
                 imageMapper.deleteByPrimaryKey(image.getId());
             }
-
+             */
             articleLog(articleId, "delete article", operator);
         }).subscribeOn(jdbcScheduler).then();
     }

@@ -2,7 +2,6 @@ package com.itsthatjun.ecommerce.config;
 
 import com.itsthatjun.ecommerce.dto.ArticleInfo;
 import com.itsthatjun.ecommerce.dto.event.CmsAdminArticleEvent;
-import com.itsthatjun.ecommerce.mbg.model.Article;
 import com.itsthatjun.ecommerce.service.impl.ArticleServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +41,9 @@ public class MessageProcessorConfig {
                     break;
 
                 case DELETE:
-                    int articleId = articleInfo.getArticle().getId();
-                    articleService.deleteArticle(articleId, operator).subscribe();
+                    // TODO:
+                    //int articleId = articleInfo.getArticle().getId();
+                    //articleService.deleteArticle(articleId, operator).subscribe();
                     break;
 
                 default:

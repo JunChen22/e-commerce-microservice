@@ -13,5 +13,4 @@ public interface ArticleDao {
 
     @ApiModelProperty(value = "get one article and its media content")
     ArticleInfo getArticle(@Param("id") int id);
-
 }
