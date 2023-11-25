@@ -1,13 +1,13 @@
 package com.itsthatjun.ecommerce.config;
 
-import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.dto.ReturnParam;
 import com.itsthatjun.ecommerce.dto.ReturnRequestDecision;
-import com.itsthatjun.ecommerce.dto.event.admin.OmsAdminOrderEvent;
 import com.itsthatjun.ecommerce.dto.event.admin.OmsAdminOrderReturnEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
-import com.itsthatjun.ecommerce.service.*;
+import com.itsthatjun.ecommerce.service.CartItemService;
+import com.itsthatjun.ecommerce.service.OrderService;
+import com.itsthatjun.ecommerce.service.ReturnOrderService;
 import com.itsthatjun.ecommerce.service.eventupdate.PmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.eventupdate.SmsEventUpdateService;
 import org.slf4j.Logger;
@@ -175,7 +175,7 @@ public class MessageProcessorConfig {
             }
         };
     }
-
+    /*
     @Bean
     public Consumer<OmsAdminOrderEvent> adminOrderMessageProcessor() {
         // lambda expression of override method accept
@@ -210,6 +210,8 @@ public class MessageProcessorConfig {
             }
         };
     }
+
+     */
 
     @Bean
     public Consumer<OmsAdminOrderReturnEvent> adminReturnMessageProcessor() {

@@ -10,7 +10,7 @@ public class ShoppingCart implements Serializable {
 
     private Date createdAt;
 
-    private Date modifyDate;
+    private Date updatedAt;
 
     private static final long serialVersionUID = 1L;
 
@@ -38,11 +38,11 @@ public class ShoppingCart implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Date getModifyDate() {
-        return modifyDate;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

@@ -512,9 +512,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Void> confirmReceiveOrder(int orderId) {
-        // TODO: with spring task to check from UPS/FedEx for package delivery update.
-        return Mono.empty();
+    public List<Orders> getAllSendingOrder() {
+        OrdersExample ordersExample = new OrdersExample();
+        ordersExample.createCriteria().andStatusEqualTo(2);
+        List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+        return ordersList;
+    }
+
+    @Override
+    public void confirmReceiveOrder(String orderSn) {
+        OrdersExample ordersExample = new OrdersExample();
+        ordersExample.createCriteria().andOrderSnEqualTo(orderSn);
+        List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+
+        if (ordersList.isEmpty()) return;
+
+        Orders order = ordersList.get(0);
+
+        order.setStatus(3);
+        order.setUpdatedAt(new Date());
+        order.setReceiveTime(new Date());
+
+        ordersMapper.updateByPrimaryKeySelective(order);
+
+        updateChangeLog(order.getId(), 3, "System check delivery status", "System");
     }
 
     // generate id with redis: date + source type + pay type + today's order % 6
@@ -640,9 +662,10 @@ public class OrderServiceImpl implements OrderService {
             List<OrderItem> orderItemList = orderItemMapper.selectByExample(orderItemExample);
 
             OrderDetail result = new OrderDetail();
+            /* TODO: fix
             result.setOrders(order);
-            result.setOrderItemList( orderItemList);
-
+            result.setOrderItemList(orderItemList);
+             */
             return result;
         }).subscribeOn(jdbcScheduler);
     }

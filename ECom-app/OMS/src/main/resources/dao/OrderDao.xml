@@ -1,78 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.dao.OrderDao">
-    <resultMap id="orderDetailMap" type="com.itsthatjun.ecommerce.dto.OrderDetail" autoMapping="true">
-        <association property="orders" javaType="com.itsthatjun.ecommerce.mbg.model.Orders">
-            <id property="id" column="id"/>
-            <result property="orderSn" column="order_sn"/>
-            <result property="memberId" column="member_id"/>
-        </association>
-        <collection property="orderItemList" ofType="com.itsthatjun.ecommerce.mbg.model.OrderItem">
-            <id property="id" column="oi_id"/>
-            <result property="productName" column="oi_product_name"/>
-            <result property="productSkuId" column="oi_product_sku_id"/>
-            <result property="productSkuCode" column="oi_product_sku_code"/>
-            <result property="productQuantity" column="oi_product_quantity"/>
+    <resultMap id="orderDetailMap" type="com.itsthatjun.ecommerce.dto.OrderDetail" extends="orderDTOMap">
+
+        <collection property="orderItemList" ofType="com.itsthatjun.ecommerce.dto.outgoing.OrderItemDTO" columnPrefix="oi_"
+                    resultMap="orderItemDTOMap">
         </collection>
+    </resultMap>
+
+    <resultMap id="orderDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.OrderDTO">
+        <result property="orderSn" column="o_order_sn"/>
+        <result property="memberEmail" column="o_member_email"/>
+        <result property="totalAmount" column="o_total_amount"/>
+        <result property="promotionAmount" column="o_promotion_amount"/>
+        <result property="couponAmount" column="o_coupon_amount"/>
+        <result property="discountAmount" column="o_discount_amount"/>
+        <result property="shippingCost" column="o_shipping_cost"/>
+        <result property="payAmount" column="o_pay_amount"/>
+        <result property="receiverPhone" column="o_receiver_phone"/>
+        <result property="receiverName" column="o_receiver_name"/>
+        <result property="receiverDetailAddress" column="o_receiver_detail_address"/>
+        <result property="receiverCity" column="o_receiver_city"/>
+        <result property="receiverState" column="o_receiver_state"/>
+        <result property="receiverZipCode" column="o_receiver_zip_code"/>
+        <result property="deliveryCompany" column="o_delivery_company"/>
+        <result property="deliveryTrackingNumber" column="o_delivery_tracking_number"/>
+        <result property="deliveryTime" column="o_delivery_time"/>
+        <result property="comment" column="o_comment"/>
+    </resultMap>
+
+    <resultMap id="orderItemDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.OrderItemDTO">
+        <result property="productPic" column="product_pic"/>
+        <result property="productName" column="product_name"/>
+        <result property="productBrand" column="product_brand"/>
+        <result property="productSn" column="product_sn"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="productQuantity" column="product_quantity"/>
+        <result property="productSkuCode" column="product_sku_code"/>
+        <result property="promotionAmount" column="promotion_amount"/>
+        <result property="couponAmount" column="coupon_amount"/>
+        <result property="realAmount" column="real_amount"/>
     </resultMap>
 
     <select id="getDetail" resultMap="orderDetailMap">
         SELECT
-            o.id,
-            o.order_sn,
-            o.member_id,
-            oi.id oi_id,
+            o.order_sn o_order_sn,
+            o.member_email o_member_email,
+            o.total_amount o_total_amount,
+            o.promotion_amount o_promotion_amount,
+            o.coupon_amount o_coupon_amount,
+            o.discount_amount o_discount_amount,
+            o.shipping_cost o_shipping_cost,
+            o.pay_amount o_pay_amount,
+            o.delivery_company o_delivery_company,
+            o.delivery_tracking_number o_delivery_tracking_number,
+            o.receiver_phone o_receiver_phone,
+            o.receiver_name o_receiver_name,
+            o.receiver_detail_address o_receiver_detail_address,
+            o.receiver_city o_receiver_city,
+            o.receiver_state o_receiver_state,
+            o.receiver_zip_code o_receiver_zip_code,
+            o.delivery_time o_delivery_time,
+            o.comment o_comment,
+
+            oi.product_pic oi_product_pic,
             oi.product_name oi_product_name,
-            oi.product_sku_id oi_product_sku_id,
+            oi.product_brand oi_product_brand,
+            oi.product_sn oi_product_sn,
+            oi.product_price oi_product_price,
+            oi.product_quantity oi_product_quantity,
             oi.product_sku_code oi_product_sku_code,
-            oi.product_quantity oi_product_quantity
+            oi.promotion_amount oi_promotion_amount,
+            oi.coupon_amount oi_coupon_amount,
+            oi.real_amount oi_real_amount
+
         FROM orders o
         LEFT JOIN order_item oi ON o.id = oi.order_id
         WHERE o.order_sn = #{orderSn} AND o.member_id = #{userId}
     </select>
-
-    <update id="updateSkuStock">
-        UPDATE pms_sku_stock
-        SET
-        stock = CASE id
-        <foreach collection="itemList" item="item">
-            WHEN #{item.productSkuId} THEN stock - #{item.productQuantity}
-        </foreach>
-        END,
-        lock_stock = CASE id
-        <foreach collection="itemList" item="item">
-            WHEN #{item.productSkuId} THEN lock_stock - #{item.productQuantity}
-        </foreach>
-        END
-        WHERE
-        id IN
-        <foreach collection="itemList" item="item" separator="," open="(" close=")">
-            #{item.productSkuId}
-        </foreach>
-    </update>
-
-    <update id="updateOrderStatus">
-        update oms_order
-        set status=#{status}
-        where id in
-        <foreach collection="ids" item="id" separator="," open="(" close=")">
-            #{id}
-        </foreach>
-    </update>
-
-    <update id="releaseSkuStockLock">
-        UPDATE pms_sku_stock
-        SET
-        lock_stock = CASE id
-        <foreach collection="itemList" item="item">
-            WHEN #{item.productSkuId} THEN lock_stock - #{item.productQuantity}
-        </foreach>
-        END
-        WHERE
-        id IN
-        <foreach collection="itemList" item="item" separator="," open="(" close=")">
-            #{item.productSkuId}
-        </foreach>
-    </update>
-
 </mapper>

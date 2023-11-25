@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.service.OMS;
 
 import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
@@ -9,7 +10,7 @@ import reactor.core.publisher.Mono;
 public interface OrderService {
 
     @ApiOperation("Get Order Detail by serial number")
-    Mono<Orders> detail(String orderSn, int userId);
+    Mono<OrderDetail> detail(String orderSn, int userId);
 
     @ApiOperation("Get member order based on status code and page size")
     Flux<Orders> list(int status, Integer pageNum, Integer pageSize, int userId);

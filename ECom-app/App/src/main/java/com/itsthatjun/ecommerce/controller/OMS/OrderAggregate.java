@@ -1,7 +1,8 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.config.URLUtils;
+import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
@@ -35,7 +36,7 @@ public class OrderAggregate {
 
     @GetMapping("/detail/{orderSn}")
     @ApiOperation("Get Order Detail by serial number")
-    public Mono<Orders> detail(@PathVariable String orderSn) {
+    public Mono<OrderDetail> detail(@PathVariable String orderSn) {
         int userId = getUserId();
         return orderService.detail(orderSn, userId);
     }

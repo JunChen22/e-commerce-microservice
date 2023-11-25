@@ -1,22 +1,15 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.mbg.model.Address;
-import com.itsthatjun.ecommerce.mbg.model.OrderItem;
-import com.itsthatjun.ecommerce.mbg.model.Orders;
+import com.itsthatjun.ecommerce.dto.outgoing.OrderDTO;
+import com.itsthatjun.ecommerce.dto.outgoing.OrderItemDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class OrderDetail {
+public class OrderDetail extends OrderDTO{
 
     @ApiModelProperty("order item list")
-    private Orders orders;
-
-    @ApiModelProperty("order item list")
-    private List<OrderItem> orderItemList;
-
-    @ApiModelProperty("Member deliver address")
-    private Address address;
+    private List<OrderItemDTO> orderItemList;
 }

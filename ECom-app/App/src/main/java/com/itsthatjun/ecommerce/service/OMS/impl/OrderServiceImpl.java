@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.service.OMS.impl;
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsCompletionEvent;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent;
+import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.service.OMS.OrderService;
 import org.slf4j.Logger;
@@ -18,7 +19,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
-import static com.itsthatjun.ecommerce.dto.event.oms.OmsCompletionEvent.Type.PAYMENT_FAILURE;
 import static com.itsthatjun.ecommerce.dto.event.oms.OmsCompletionEvent.Type.PAYMENT_SUCCESS;
 import static com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent.Type.CANCEL_ORDER;
 import static com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent.Type.GENERATE_ORDER;
@@ -48,11 +48,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Orders> detail(String orderSn, int userId) {
+    public Mono<OrderDetail> detail(String orderSn, int userId) {
         String url = OMS_SERVICE_URL + "/detail/" + orderSn;
         LOG.debug("Will call the detail API on URL: {}", url);
 
-        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToMono(Orders.class)
+        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToMono(OrderDetail.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 

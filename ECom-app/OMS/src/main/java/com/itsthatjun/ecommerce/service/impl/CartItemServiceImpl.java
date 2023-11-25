@@ -14,7 +14,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class CartItemServiceImpl implements CartItemService {
             if (item.getProductSku().equals(productSkuCode)) {
                 int currentQuantity = item.getQuantity();
                 item.setQuantity(currentQuantity + newItem.getQuantity());
-                item.setModifyDate(new Date());
+                item.setUpdatedAt(new Date());
                 cartItemMapper.updateByPrimaryKeySelective(item);
                 existingInCart = true;
                 break;

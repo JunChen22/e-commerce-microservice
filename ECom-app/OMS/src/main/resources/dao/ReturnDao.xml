@@ -16,7 +16,7 @@
             <result property="filename" column="filename"/>
         </collection>
         <collection property="logList" ofType="com.itsthatjun.ecommerce.mbg.model.ReturnLog">
-            <result property="action" column="action"/>
+            <result property="updateAction" column="updateAction"/>
             <result property="operator" column="last_updated_by" />
             <result property="createdAt" column="last_update_time"/>
         </collection>
@@ -51,7 +51,7 @@
 
             picture.filename,
 
-            log.action,
+            log.updateAction,
             log.operator last_update_time,
             log.created_at last_updated_by
         FROM return_request request
