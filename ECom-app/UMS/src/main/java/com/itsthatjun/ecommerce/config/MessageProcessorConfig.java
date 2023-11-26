@@ -4,7 +4,7 @@ import com.itsthatjun.ecommerce.dto.MemberDetail;
 import com.itsthatjun.ecommerce.dto.event.admin.UmsAdminUserEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.UmsLogUpdateEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.UmsUserEvent;
-import com.itsthatjun.ecommerce.mbg.model.Address;
+import com.itsthatjun.ecommerce.dto.outgoing.AddressDTO;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
 import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;
@@ -73,28 +73,29 @@ public class MessageProcessorConfig {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
             MemberDetail memberDetail = event.getMemberDetail();
+            Integer userId = event.getUserId();
             switch (event.getEventType()) {
                 case NEW_ACCOUNT:
                     memberService.register(memberDetail).subscribe();
                     break;
 
                 case UPDATE_PASSWORD:
-                    int userId = memberDetail.getMember().getId();
-                    String newPassword = memberDetail.getMember().getPassword();
+
+                    String newPassword = memberDetail.getPassword();
                     memberService.updatePassword(userId, newPassword).subscribe();
                     break;
 
                 case UPDATE_ACCOUNT_INFO:
-                    memberService.updateInfo(memberDetail).subscribe();
+                    memberService.updateInfo(memberDetail, userId).subscribe();
                     break;
 
                 case UPDATE_ADDRESS:
-                    Address newAddress = memberDetail.getAddress();
-                    memberService.updateAddress(memberDetail.getMember().getId(), newAddress).subscribe();
+                    AddressDTO newAddress = memberDetail.getAddress();
+                    memberService.updateAddress(event.getUserId(), newAddress).subscribe();
                     break;
 
                 case DELETE_ACCOUNT:
-                    memberService.deleteAccount(memberDetail.getMember().getId()).subscribe();
+                    memberService.deleteAccount(event.getUserId()).subscribe();
                     break;
 
                 default:

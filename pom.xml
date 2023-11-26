@@ -23,6 +23,7 @@
         <module>ECom-app/SMS</module>
         <module>ECom-app/UMS</module>
         <module>auth-server</module>
+        <module>Notification</module>
     </modules>
 
     <parent>
@@ -35,11 +36,12 @@
     <properties>            <!-- dependencies versions -->
         <java.version>1.8</java.version>
         <skipTests>true</skipTests>
+        <spring.version>2.5.2</spring.version>
         <spring.cloud-version>2020.0.3</spring.cloud-version>
         <resilience4jVersion>1.7.0</resilience4jVersion>
     </properties>
 
-    <dependencies>          <!-- all child module will used -->
+    <dependencies>          <!-- all child module will be used -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -48,36 +50,46 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>0.2.0</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>  <!-- optional dependencies that child module can choose -->
         <dependencies>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
-                <version>2.5.2</version>
+                <version>${spring.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-webflux</artifactId>
-                <version>2.5.2</version>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-mail</artifactId>
+                <version>${spring.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-aop</artifactId>
-                <version>2.5.2</version>
+                <version>${spring.version}</version>
             </dependency>
 
             <!-- security -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security</artifactId>
-                <version>2.5.2</version>
+                <version>${spring.version}</version>
             </dependency>
 
             <dependency>
@@ -90,21 +102,14 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>2.5.2</version>
-            </dependency>
-
-            <!-- rabbitmq -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-amqp</artifactId>
-                <version>2.5.2</version>
+                <version>${spring.version}</version>
             </dependency>
 
             <!-- mongodb -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-mongodb</artifactId>
-                <version>2.5.2</version>
+                <version>${spring.version}</version>
             </dependency>
 
             <!-- database -->
@@ -135,7 +140,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-                <version>2.5.2</version>
+                <version>${spring.version}</version>
             </dependency>
 
             <dependency>
@@ -167,16 +172,23 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
-                <version>2.5.2</version>
+                <version>${spring.version}</version>
                 <scope>test</scope>
             </dependency>
 
+            <!-- spring cloud. message -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring.cloud-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-batch</artifactId>
+                <version>${spring.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

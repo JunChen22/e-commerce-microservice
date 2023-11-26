@@ -1,5 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.dao.MemberDao">
+    <resultMap id="memberDetailMap" type="com.itsthatjun.ecommerce.dto.MemberDetail" extends="memberDTOMap">
 
+        <collection property="address" ofType="com.itsthatjun.ecommerce.dto.outgoing.AddressDTO"
+                    resultMap="adderssDTOMap">
+        </collection>
+
+        <collection property="icon" ofType="com.itsthatjun.ecommerce.dto.outgoing.MemberIconDTO"
+                    resultMap="memberIconDTOMap">
+        </collection>
+
+        <collection property="loginLogList" ofType="com.itsthatjun.ecommerce.dto.outgoing.MemberLoginLogDTO"
+                    resultMap="memberLoginLogDTOMap">
+        </collection>
+    </resultMap>
+
+    <resultMap id="memberDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.MemberDTO">
+        <result property="username" column="m_username"/>
+        <result property="password" column="m_password"/>
+        <result property="name" column="m_name"/>
+        <result property="phoneNumber" column="m_phone_number"/>
+        <result property="email" column="m_email"/>
+        <result property="emailSubscription" column="m_email_subscription"/>
+        <result property="status" column="m_status"/>
+        <result property="createdAt" column="m_created_at"/>
+        <result property="lastLogin" column="m_last_login"/>
+    </resultMap>
+
+    <resultMap id="adderssDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.AddressDTO">
+        <result property="receiverName" column="a_receiver_name"/>
+        <result property="phoneNumber" column="a_phone_number"/>
+        <result property="detailAddress" column="a_detail_address"/>
+        <result property="city" column="a_city"/>
+        <result property="state" column="a_state"/>
+        <result property="zipCode" column="a_zip_code"/>
+    </resultMap>
+
+    <resultMap id="memberIconDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.MemberIconDTO">
+        <result property="filename" column="mi_filename"/>
+    </resultMap>
+
+    <resultMap id="memberLoginLogDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.MemberLoginLogDTO">
+        <result property="loginTime" column="mll_login_time"/>
+        <result property="ipAddress" column="mll_ip_address"/>
+        <result property="loginType" column="mll_login_type"/>
+    </resultMap>
+
+    <resultMap id="userInfoDTOMap" type="com.itsthatjun.ecommerce.dto.UserInfo">
+        <result property="name" column=""/>
+        <result property="email" column=""/>
+    </resultMap>
+
+    <select id="getUserDetail" resultMap="memberDetailMap">
+        SELECT
+            m.username m_username,
+            m.password m_password,
+            m.name m_name,
+            m.phone_number m_phone_number,
+            m.email m_email,
+            m.email_subscription m_email_subscription,
+            m.status m_status,
+            m.created_at m_created_at,
+            m.last_login m_last_login,
+
+            a.receiver_name a_receiver_name,
+            a.phone_number a_phone_number,
+            a.detail_address a_detail_address,
+            a.city a_city,
+            a.state a_state,
+            a.zip_code a_zip_code,
+
+            mi.filename mi_filename,
+
+            mll.login_time mll_login_time,
+            mll.ip_address mll_ip_address,
+            mll.login_type mll_login_type
+        FROM member m
+        LEFT JOIN address a ON a.member_id = m.id
+        LEFT JOIN member_icon mi ON mi.member_id = m.id
+        LEFT JOIN member_login_log mll ON mll.member_id = m.id
+        WHERE m.id = #{userId};
+    </select>
+
+    <select id="getAllUserInfo" resultMap="userInfoDTOMap">
+        SELECT
+            name,
+            email
+        FROM member
+        WHERE status = 1
+    </select>
+
+    <select id="getAllUserInfoSalePromo" resultMap="userInfoDTOMap">
+        SELECT
+            name,
+            email
+        FROM member
+        WHERE status = 1 AND email_subscription = 1
+    </select>
 </mapper>

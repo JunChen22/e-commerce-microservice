@@ -1,6 +1,8 @@
 package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.dto.MemberDetail;
+import com.itsthatjun.ecommerce.dto.admin.AdminMemberDetail;
+import com.itsthatjun.ecommerce.dto.outgoing.AddressDTO;
 import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
@@ -8,57 +10,55 @@ import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 public interface MemberService {
 
-    @ApiOperation(value = "")       // TODO: with redis and sending email
+    @ApiOperation("")       // TODO: with redis and sending email
     String generateAuthCode(String telephone);
 
-    @ApiOperation(value = "")      // TODO: use redis to send out auth code
+    @ApiOperation("")      // TODO: use redis to send out auth code
     String verifyAuthCode(String telephone, String authCode);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<MemberDetail> register(MemberDetail memberDetail);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<MemberDetail> getInfo(int userId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Member> updatePassword(int userId, String newPassword);
 
-    @ApiOperation(value = "password, name, icon")
-    Mono<Member> updateInfo(MemberDetail memberDetail);
+    @ApiOperation("password, name, icon")
+    Mono<Member> updateInfo(MemberDetail memberDetail, int userId);
 
-    @ApiOperation(value = "")
-    Mono<Address> updateAddress(int userId, Address newAddress);
+    @ApiOperation("")
+    Mono<Address> updateAddress(int userId, AddressDTO newAddress);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Void> deleteAccount(int userId);
 
-    @ApiOperation(value = "Update from Auth server")
+    @ApiOperation("Update from Auth server")
     Mono<Void> createLoginLog(MemberLoginLog loginLog);
 
     // ================= Admin operations ==================
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Flux<Member> getAllUser();
 
-    @ApiOperation(value = "")
-    Mono<MemberDetail> getMemberDetailByUserId(int userId);
+    @ApiOperation("")
+    Mono<AdminMemberDetail> getMemberDetailByUserId(int userId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Flux<MemberLoginLog> getMemberLoginFrequency(int userId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Member> createMember(Member newMember, String operator);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Member> updateMemberInfo(Member updatedMember, String operator);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Member> updateMemberStatus(Member updatedMember, String operator);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Member> deleteMember(int userId, String operator);
 }

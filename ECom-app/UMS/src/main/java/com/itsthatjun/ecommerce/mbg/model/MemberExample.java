@@ -515,6 +515,66 @@ public class MemberExample {
             return (Criteria) this;
         }
 
+        public Criteria andEmailSubscriptionIsNull() {
+            addCriterion("email_subscription is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionIsNotNull() {
+            addCriterion("email_subscription is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionEqualTo(Integer value) {
+            addCriterion("email_subscription =", value, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionNotEqualTo(Integer value) {
+            addCriterion("email_subscription <>", value, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionGreaterThan(Integer value) {
+            addCriterion("email_subscription >", value, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionGreaterThanOrEqualTo(Integer value) {
+            addCriterion("email_subscription >=", value, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionLessThan(Integer value) {
+            addCriterion("email_subscription <", value, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionLessThanOrEqualTo(Integer value) {
+            addCriterion("email_subscription <=", value, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionIn(List<Integer> values) {
+            addCriterion("email_subscription in", values, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionNotIn(List<Integer> values) {
+            addCriterion("email_subscription not in", values, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionBetween(Integer value1, Integer value2) {
+            addCriterion("email_subscription between", value1, value2, "emailSubscription");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailSubscriptionNotBetween(Integer value1, Integer value2) {
+            addCriterion("email_subscription not between", value1, value2, "emailSubscription");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -572,6 +632,66 @@ public class MemberExample {
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusIsNull() {
+            addCriterion("verified_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusIsNotNull() {
+            addCriterion("verified_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusEqualTo(Integer value) {
+            addCriterion("verified_status =", value, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusNotEqualTo(Integer value) {
+            addCriterion("verified_status <>", value, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusGreaterThan(Integer value) {
+            addCriterion("verified_status >", value, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("verified_status >=", value, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusLessThan(Integer value) {
+            addCriterion("verified_status <", value, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("verified_status <=", value, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusIn(List<Integer> values) {
+            addCriterion("verified_status in", values, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusNotIn(List<Integer> values) {
+            addCriterion("verified_status not in", values, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusBetween(Integer value1, Integer value2) {
+            addCriterion("verified_status between", value1, value2, "verifiedStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andVerifiedStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("verified_status not between", value1, value2, "verifiedStatus");
             return (Criteria) this;
         }
 

@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.MemberDetail;
+import com.itsthatjun.ecommerce.dto.UserInfo;
 import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -25,7 +28,12 @@ public class UserController {
 
     @GetMapping("/getInfo")
     @ApiOperation(value = "")
-    Mono<MemberDetail> getInfo(@RequestHeader("X-UserId")int userId) {
+    public Mono<MemberDetail> getInfo(@RequestHeader("X-UserId")int userId) {
         return memberService.getInfo(userId);
+    }
+
+    @GetMapping("/getAllUserInfo") // TODO: change it to mTLS. Currently is dangerously wide open.
+    public List<UserInfo> getAllUserInfo() {
+        return memberService.getAllUserInfo();
     }
 }

@@ -1,8 +1,12 @@
 package com.itsthatjun.ecommerce.service.impl;
 
+import com.itsthatjun.ecommerce.dao.MemberDao;
+import com.itsthatjun.ecommerce.dto.DTOMapper;
 import com.itsthatjun.ecommerce.dto.MemberDetail;
-import com.itsthatjun.ecommerce.dto.event.incoming.UmsUserEvent;
+import com.itsthatjun.ecommerce.dto.UserInfo;
+import com.itsthatjun.ecommerce.dto.admin.AdminMemberDetail;
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsAuthUpdateEvent;
+import com.itsthatjun.ecommerce.dto.outgoing.AddressDTO;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.MemberService;
@@ -44,10 +48,14 @@ public class MemberServiceImpl implements MemberService {
 
     private final Scheduler jdbcScheduler;
 
+    private final MemberDao memberDao;
+
+    private final DTOMapper dtoMapper;
+
     @Autowired
     public MemberServiceImpl(MemberMapper memberMapper, MemberIconMapper iconMapper, MemberLoginLogMapper loginLogMapper,
                              MemberChangeLogMapper logMapper, AddressMapper addressMapper, StreamBridge streamBridge,
-                             @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
+                             @Qualifier("jdbcScheduler") Scheduler jdbcScheduler, MemberDao memberDao, DTOMapper dtoMapper) {
         this.memberMapper = memberMapper;
         this.iconMapper = iconMapper;
         this.loginLogMapper = loginLogMapper;
@@ -55,11 +63,13 @@ public class MemberServiceImpl implements MemberService {
         this.logMapper = logMapper;
         this.streamBridge = streamBridge;
         this.jdbcScheduler = jdbcScheduler;
+        this.memberDao = memberDao;
+        this.dtoMapper = dtoMapper;
     }
 
     @Override
     public String generateAuthCode(String telephone) {
-        // TODO: redis
+        // TODO: redis and notification
         return null;
     }
 
@@ -78,8 +88,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private MemberDetail internalRegister(MemberDetail memberDetail) {
-        Member newMember = memberDetail.getMember();
-        Address address = memberDetail.getAddress();
+        Member newMember = dtoMapper.memberDetailToMember(memberDetail);
+        Address address = dtoMapper.addressDTOToAddress(memberDetail.getAddress(), null);
 
         String newUserName = newMember.getUsername();
         MemberExample example = new MemberExample();
@@ -105,22 +115,14 @@ public class MemberServiceImpl implements MemberService {
 
         createUpdateLog(newMemberId, "create account", "user");
         sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(NEW_ACCOUNT, newMemberId, newMember));
+
         return memberDetail;
     }
 
     @Override
     public Mono<MemberDetail> getInfo(int userId) {
         return Mono.fromCallable(() -> {
-            MemberDetail memberDetail = new MemberDetail();
-            Member member = memberMapper.selectByPrimaryKey(userId);
-            memberDetail.setMember(member);
-
-            AddressExample addressExample = new AddressExample();
-            addressExample.createCriteria().andMemberIdEqualTo(userId);
-            List<Address> addressList = addressMapper.selectByExample(addressExample);
-
-            if (!addressList.isEmpty()) memberDetail.setAddress(addressList.get(0));
-
+            MemberDetail memberDetail = memberDao.getUserDetail(userId);
             return memberDetail;
         }).subscribeOn(jdbcScheduler);
     }
@@ -144,28 +146,33 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Mono<Member> updateInfo(MemberDetail memberDetail) {
+    public Mono<Member> updateInfo(MemberDetail memberDetail, int userId) {
         return Mono.fromCallable(() -> {
-            int userId = memberDetail.getMember().getId();
             Member member = memberMapper.selectByPrimaryKey(userId);
-
-            Member updateMember = memberDetail.getMember();
+            Member updateMember = dtoMapper.memberDetailToMember(memberDetail);
+            updateMember.setId(userId);
 
             if (!member.getName().equals(updateMember.getName())) {
                 sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_ACCOUNT_INFO, userId, updateMember));
             }
 
-            memberMapper.updateByPrimaryKey(updateMember);
+            memberMapper.updateByPrimaryKeySelective(updateMember);
             createUpdateLog(member.getId(), "update account information", "user");
+
             return updateMember;
         }).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public Mono<Address> updateAddress(int userId, Address newAddress) {
+    public Mono<Address> updateAddress(int userId, AddressDTO addressDTO) {
         return Mono.fromCallable(() -> {
-            newAddress.setMemberId(userId);
+            AddressExample addressExample = new AddressExample();
+            addressExample.createCriteria().andMemberIdEqualTo(userId);
+            Address address = addressMapper.selectByExample(addressExample).get(0);
+
+            Address newAddress = dtoMapper.addressDTOToAddress(addressDTO, address.getId());
             addressMapper.updateByPrimaryKeySelective(newAddress);
+
             createUpdateLog(userId, "update account address", "user");
             return newAddress;
         }).subscribeOn(jdbcScheduler);
@@ -187,7 +194,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Mono<Void> createLoginLog(MemberLoginLog loginLog) {
         return Mono.fromRunnable(
-                () ->loginLogMapper.insert(loginLog)
+                () -> loginLogMapper.insert(loginLog)
         ).subscribeOn(jdbcScheduler).then();
     }
 
@@ -209,10 +216,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Mono<MemberDetail> getMemberDetailByUserId(int userId) {
+    public Mono<AdminMemberDetail> getMemberDetailByUserId(int userId) {
         return Mono.fromCallable(() -> {
-            // TODO: might make a DAO for this
-            MemberDetail memberDetail = new MemberDetail();
+            AdminMemberDetail memberDetail = new AdminMemberDetail();
             Member member = memberMapper.selectByPrimaryKey(userId);
             memberDetail.setMember(member);
 
@@ -318,5 +324,10 @@ public class MemberServiceImpl implements MemberService {
                 .setHeader("event-type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
+    }
+
+    public List<UserInfo> getAllUserInfo() {
+        List<UserInfo> userInfoList = memberDao.getAllUserInfo();
+        return userInfoList;
     }
 }
