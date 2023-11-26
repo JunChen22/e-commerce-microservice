@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsCompletionEvent;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
+import com.itsthatjun.ecommerce.dto.oms.outgoing.OrderDTO;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.service.OMS.OrderService;
 import org.slf4j.Logger;
@@ -57,11 +58,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Flux<Orders> list(int status, Integer pageNum, Integer pageSize, int userId) {
+    public Flux<OrderDTO> list(int status, Integer pageNum, Integer pageSize, int userId) {
         String url = OMS_SERVICE_URL + "/list";
         LOG.debug("Will call the list API on URL: {}", url);
 
-        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToFlux(Orders.class)
+        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToFlux(OrderDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 

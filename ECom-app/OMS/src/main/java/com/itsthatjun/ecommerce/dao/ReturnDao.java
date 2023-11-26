@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface ReturnDao {
 
-    @ApiModelProperty(value = "Get the order detail by order ID", example = "12345")
-    ReturnDetail getDetail(@Param("orderSn") String orderSn);
+    @ApiModelProperty(value = "Get the order detail by order ID")
+    ReturnDetail getDetail(@Param("orderSn") String orderSn, @Param("userId") int userId);
 
 }

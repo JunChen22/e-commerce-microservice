@@ -10,6 +10,7 @@ import com.itsthatjun.ecommerce.dto.event.incoming.OmsCompletionEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.PmsProductOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsCouponOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsSalesStockOutEvent;
+import com.itsthatjun.ecommerce.dto.outgoing.OrderDTO;
 import com.itsthatjun.ecommerce.exceptions.OrderException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
@@ -109,13 +110,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Flux<Orders> list(int status, int pageNum, int pageSize, int userId) {
+    public Flux<OrderDTO> list(int status, int pageNum, int pageSize, int userId) {
         return Mono.fromCallable(() -> {
             PageHelper.startPage(pageNum, pageSize);
-            OrdersExample ordersExample = new OrdersExample();
             // TODO: the status code. currently just return all
-            ordersExample.createCriteria().andMemberIdEqualTo(userId);
-            List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);
+            List<OrderDTO> ordersList = orderDao.getAllOrders(userId);
             return ordersList;
         }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }

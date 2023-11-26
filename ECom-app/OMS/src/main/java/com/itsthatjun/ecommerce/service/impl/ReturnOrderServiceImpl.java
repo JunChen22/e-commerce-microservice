@@ -77,10 +77,10 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
     }
 
     @Override
-    public Mono<ReturnRequest> getStatus(String orderSn, int userId) {
+    public Mono<ReturnDetail> getStatus(String orderSn, int userId) {
         return Mono.fromCallable( () -> {
-            ReturnRequest returnRquest = getUserReturnRequest(orderSn, userId);
-            return returnRquest;
+            ReturnDetail returnDetail = returnDao.getDetail(orderSn, userId);
+            return returnDetail;
         }).subscribeOn(jdbcScheduler);
     }
 
@@ -243,9 +243,9 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
                 List<ReturnReasonPictures> returnReasonPicturesList = picturesMapper.selectByExample(picturesExample);
 
                 ReturnDetail returnDetail = new ReturnDetail();
-                returnDetail.setReturnRequest(returnRequest);
-                returnDetail.setReturnItemList(returnItemList);
-                returnDetail.setPicturesList(returnReasonPicturesList);
+                //returnDetail.setReturnRequest(returnRequest); TODO:
+                //returnDetail.setReturnItemList(returnItemList);
+                //returnDetail.setPicturesList(returnReasonPicturesList);
 
                 returnDetailList.add(returnDetail);
             }
@@ -264,8 +264,10 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
             if (returnRequestList.isEmpty()) return null;
 
+
             ReturnRequest returnRequest = returnRequestList.get(0);
             ReturnDetail returnDetail = new ReturnDetail();
+            /* TODO:
             int returnRequestId = returnRequest.getId();
 
             ReturnItemExample returnItemExample = new ReturnItemExample();
@@ -279,7 +281,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
             returnDetail.setReturnRequest(returnRequest);
             returnDetail.setReturnItemList(returnItemList);
             returnDetail.setPicturesList(returnReasonPicturesList);
-
+            */
             return returnDetail;
         }).subscribeOn(jdbcScheduler);
     }

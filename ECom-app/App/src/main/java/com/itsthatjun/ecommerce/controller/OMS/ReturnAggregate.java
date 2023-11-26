@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
 import com.itsthatjun.ecommerce.dto.ReturnParam;
-import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
+import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
 import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderReturnServiceImpl;
 import io.swagger.annotations.Api;
@@ -30,7 +30,7 @@ public class ReturnAggregate {
 
     @GetMapping("/status/{orderSn}")
     @ApiOperation(value = "check status of the return request")
-    public Mono<ReturnRequest> checkStatus(@PathVariable String orderSn) {
+    public Mono<ReturnDetail> checkStatus(@PathVariable String orderSn) {
         int userId = getUserId();
         return returnService.checkStatus(orderSn, userId);
     }

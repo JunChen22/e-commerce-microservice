@@ -2,7 +2,7 @@ package com.itsthatjun.ecommerce.service.OMS;
 
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
-import com.itsthatjun.ecommerce.mbg.model.Orders;
+import com.itsthatjun.ecommerce.dto.oms.outgoing.OrderDTO;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,7 +13,7 @@ public interface OrderService {
     Mono<OrderDetail> detail(String orderSn, int userId);
 
     @ApiOperation("Get member order based on status code and page size")
-    Flux<Orders> list(int status, Integer pageNum, Integer pageSize, int userId);
+    Flux<OrderDTO> list(int status, Integer pageNum, Integer pageSize, int userId);
 
     @ApiOperation(value = "get payment link to make payment in different time")
     Mono<String> getPaymentLink(String orderSn, int userId);

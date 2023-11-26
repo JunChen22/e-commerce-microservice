@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.dto.outgoing.OrderDTO;
 import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.mbg.model.OrderItem;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
@@ -18,7 +19,7 @@ public interface OrderService {
     Mono<OrderDetail> getOrderDetail(String orderSn, int userId);
 
     @ApiOperation("list all user orders")
-    Flux<Orders> list(int status, int pageNum, int pageSize, int userId);
+    Flux<OrderDTO> list(int status, int pageNum, int pageSize, int userId);
 
     @ApiOperation(value = "get payment link to make payment in different time")
     Mono<String> getPaymentLink(String orderSn, int userId);

@@ -78,4 +78,28 @@
         LEFT JOIN order_item oi ON o.id = oi.order_id
         WHERE o.order_sn = #{orderSn} AND o.member_id = #{userId}
     </select>
+
+    <select id="getAllOrders" resultMap="orderDTOMap">
+        SELECT
+            o.order_sn o_order_sn,
+            o.member_email o_member_email,
+            o.total_amount o_total_amount,
+            o.promotion_amount o_promotion_amount,
+            o.coupon_amount o_coupon_amount,
+            o.discount_amount o_discount_amount,
+            o.shipping_cost o_shipping_cost,
+            o.pay_amount o_pay_amount,
+            o.delivery_company o_delivery_company,
+            o.delivery_tracking_number o_delivery_tracking_number,
+            o.receiver_phone o_receiver_phone,
+            o.receiver_name o_receiver_name,
+            o.receiver_detail_address o_receiver_detail_address,
+            o.receiver_city o_receiver_city,
+            o.receiver_state o_receiver_state,
+            o.receiver_zip_code o_receiver_zip_code,
+            o.delivery_time o_delivery_time,
+            o.comment o_comment
+        FROM orders o
+        WHERE o.member_id = #{userId}
+    </select>
 </mapper>

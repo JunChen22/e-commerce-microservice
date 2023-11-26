@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.service.OMS.impl;
 
 import com.itsthatjun.ecommerce.dto.ReturnParam;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsReturnEvent;
+import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
 import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.OMS.OrderReturnService;
 import org.slf4j.Logger;
@@ -38,11 +39,11 @@ public class OrderReturnServiceImpl implements OrderReturnService {
         this.publishEventScheduler = publishEventScheduler;
     }
 
-    public Mono<ReturnRequest> checkStatus(String orderSn, int userId) {
+    public Mono<ReturnDetail> checkStatus(String orderSn, int userId) {
         String url = OMS_SERVICE_URL + "/status/" + orderSn;
         LOG.debug("Will call the checkStatus API on URL: {}", url);
 
-        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToMono(ReturnRequest.class)
+        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToMono(ReturnDetail.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 

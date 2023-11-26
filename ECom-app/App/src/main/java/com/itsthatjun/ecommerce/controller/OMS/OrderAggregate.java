@@ -3,7 +3,7 @@ package com.itsthatjun.ecommerce.controller.OMS;
 import com.itsthatjun.ecommerce.config.URLUtils;
 import com.itsthatjun.ecommerce.dto.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
-import com.itsthatjun.ecommerce.mbg.model.Orders;
+import com.itsthatjun.ecommerce.dto.oms.outgoing.OrderDTO;
 import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
 import io.swagger.annotations.Api;
@@ -45,9 +45,9 @@ public class OrderAggregate {
     @ApiOperation("Get member order based on status code and page size")
     @ApiImplicitParam(name = "status", value = "Order status：-1->All；0->wait for payment；1-> fulfilling；2->send；3->complete；4->closed",
             defaultValue = "-1", allowableValues = "-1,0,1,2,3,4", paramType = "query", dataType = "int")
-    public Flux<Orders> list(@RequestParam(required = false, defaultValue = "-1")  int status,
-                             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                             @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
+    public Flux<OrderDTO> list(@RequestParam(required = false, defaultValue = "-1")  int status,
+                               @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                               @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
         int userId = getUserId();
         return orderService.list(status, pageNum, pageSize, userId);
     }

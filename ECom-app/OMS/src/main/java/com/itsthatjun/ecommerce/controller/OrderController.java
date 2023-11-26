@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.OrderDetail;
+import com.itsthatjun.ecommerce.dto.outgoing.OrderDTO;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.service.impl.OrderServiceImpl;
 import io.swagger.annotations.Api;
@@ -31,11 +32,11 @@ public class OrderController {
     @ApiImplicitParam(name = "status", value = "Order status：-1->All；0->wait for payment；1-> fulfilling；2->send；3->complete；4->closed",
             defaultValue = "-1", allowableValues = "-1,0,1,2,3,4", paramType = "query", dataType = "int")
     @GetMapping("/list")
-    public Flux<Orders> list(@RequestParam(required = false, defaultValue = "-1")  int status,
-                             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
-                             @RequestParam(required = false, defaultValue = "5") Integer pageSize,
-                             @RequestHeader("X-UserId") int userId) {
-        return orderService.list(status,pageNum,pageSize, userId);
+    public Flux<OrderDTO> list(@RequestParam(required = false, defaultValue = "-1")  int status,
+                               @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                               @RequestParam(required = false, defaultValue = "5") Integer pageSize,
+                               @RequestHeader("X-UserId") int userId) {
+        return orderService.list(status, pageNum, pageSize, userId);
     }
 
     @GetMapping("/detail/{orderSn}")

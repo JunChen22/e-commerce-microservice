@@ -28,7 +28,7 @@ public class ReturnController {
 
     @GetMapping("/status/{orderSn}")
     @ApiOperation(value = "check status of the return request")
-    public Mono<ReturnRequest> checkStatus(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId) {
+    public Mono<ReturnDetail> checkStatus(@PathVariable String orderSn, @RequestHeader("X-UserId") int userId) {
         return returnOrderService.getStatus(orderSn, userId);
     }
 
