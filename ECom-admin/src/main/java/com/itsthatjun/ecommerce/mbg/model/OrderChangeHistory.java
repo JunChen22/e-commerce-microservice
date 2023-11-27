@@ -1,8 +1,9 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class OrderChangeHistory {
+public class OrderChangeHistory implements Serializable {
     private Integer id;
 
     private Integer orderId;
@@ -16,6 +17,8 @@ public class OrderChangeHistory {
     private String operator;
 
     private Date createdAt;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;

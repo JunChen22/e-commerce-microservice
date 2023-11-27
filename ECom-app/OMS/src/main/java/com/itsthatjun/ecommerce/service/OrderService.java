@@ -15,13 +15,13 @@ import java.util.List;
 
 public interface OrderService {
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<OrderDetail> getOrderDetail(String orderSn, int userId);
 
     @ApiOperation("list all user orders")
     Flux<OrderDTO> list(int status, int pageNum, int pageSize, int userId);
 
-    @ApiOperation(value = "get payment link to make payment in different time")
+    @ApiOperation("get payment link to make payment in different time")
     Mono<String> getPaymentLink(String orderSn, int userId);
 
     @Transactional
@@ -38,30 +38,30 @@ public interface OrderService {
     @ApiOperation("Member cancel order")
     Mono<Orders> cancelOrder(String orderSn);
 
-    @ApiOperation(value = "get all order that are still in status 2, send/transitioning")
+    @ApiOperation("get all order that are still in status 2, send/transitioning")
     List<Orders> getAllSendingOrder();
 
     @ApiOperation("Member received deliver, update order status by scheduled task")
     void confirmReceiveOrder(String orderSn);
 
-    @ApiOperation(value = "waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5")
+    @ApiOperation("waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5")
     Flux<Orders> getAllOrderByStatus(int statusCode);
 
-    @ApiOperation(value = "get user detail order")
+    @ApiOperation("get user detail order")
     Mono<OrderDetail> getUserOrderDetail(String orderSn);
 
-    @ApiOperation(value = "get all orders from user")
+    @ApiOperation("get all orders from user")
     Flux<Orders> getUserOrders(int memberId);
 
-    @ApiOperation(value = "get payment link to make payment in different time")
+    @ApiOperation("get payment link to make payment in different time")
     Mono<String> getUserOrderPaymentLink(String orderSn);
 
-    @ApiOperation(value = "Admin created order for user, to fix mistake on order or order a replacement. free or pay later")
+    @ApiOperation("Admin created order for user, to fix mistake on order or order a replacement. free or pay later")
     Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator);
 
-    @ApiOperation(value = "Update order status")
+    @ApiOperation("Update order status")
     Mono<Orders> updateOrder(Orders updateOrder, String reason, String operator);
 
-    @ApiOperation(value = "delete an order")
+    @ApiOperation("delete an order")
     Mono<Void> adminCancelOrder(Orders updateOrder, String reason, String operator);
 }

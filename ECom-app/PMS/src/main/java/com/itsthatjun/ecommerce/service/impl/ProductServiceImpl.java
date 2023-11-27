@@ -67,8 +67,9 @@ public class ProductServiceImpl implements ProductService {
             skuExample.createCriteria().andProductIdEqualTo(product.getId());
             List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
 
-            productDetail.setProduct(product);  // TODO: set dao to get product detail and attribute and review
-            productDetail.setSkuVariants(skuList);
+            // TODO:
+            //productDetail.setProduct(product);  // TODO: set dao to get product detail and attribute and review
+            //productDetail.setSkuVariants(skuList);
             return productDetail;
         }).subscribeOn(jdbcScheduler);
     }

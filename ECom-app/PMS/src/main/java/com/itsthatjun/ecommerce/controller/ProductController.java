@@ -27,20 +27,20 @@ public class ProductController {
     }
 
     @GetMapping("/listAll")
-    @ApiOperation(value = "Get all product")
+    @ApiOperation("Get all product")
     public Flux<Product> listAllProduct() {
         return productService.listAllProduct();
     }
 
     @GetMapping("/list")
-    @ApiOperation(value = "Get product with page and size")
+    @ApiOperation("Get product with page and size")
     public Flux<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                         @RequestParam(value = "size", defaultValue = "5") int pageSize) {
         return productService.listProduct(pageNum, pageSize);
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get product by id")
+    @ApiOperation("Get product by id")
     public Mono<ProductDetail> listProduct(@PathVariable int id) {
         return productService.getProduct(id);
     }

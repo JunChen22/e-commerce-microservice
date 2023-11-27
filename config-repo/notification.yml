@@ -1,0 +1,64 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: notification
+  datasource:
+    url: jdbc:postgresql://localhost:5439/emaildb
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+  batch:
+    job:
+      enabled: false  # need to disable job runs at application start
+
+spring.cloud:
+  function:   # can't have space between, tells spring which to use
+    definition: orderMessageProcessor;saleMessageProcessor;userMessageProcessor;adminMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      orderMessageProcessor-in-0:   # message from services
+        destination: orderEmail
+        group: orderEmailGroup
+      saleMessageProcessor-in-0:
+        destination: saleEmail
+        group: saleEmailGroup
+      userMessageProcessor-in-0:
+        destination: userEmail
+        group: userEmailGroup
+
+      adminMessageProcessor-in-0:  # directly message from admin
+        destination: adminMessage
+        group: userEmailGroup
+
+spring.mail:
+  host: smtp.gmail.com
+  port: 587
+  username: YOU_GMAIL_LOGIN
+  password: YOU_APP_PASSWORD
+  properties:
+    mail:
+      transport:
+        protocol: smtp
+      smtp:
+        auth: true
+        starttls.enable: true
+
+---
+spring.config.activate.on-profile: docker
+
+server.port: 80
+
+spring:
+  datasource.url: jdbc:postgresql://email-db:5432/emaildb
+
+---
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.bindings.userMessageProcessor-in-0.consumer:
+  partitioned: true
+
+spring.cloud.stream.bindings.authLog-out-0:
+  partition-key-expression: headers['event-type']

@@ -9,7 +9,7 @@ public class ShoppingCart {
 
     private Date createdAt;
 
-    private Date modifyDate;
+    private Date updatedAt;
 
     public Integer getId() {
         return id;
@@ -35,11 +35,11 @@ public class ShoppingCart {
         this.createdAt = createdAt;
     }
 
-    public Date getModifyDate() {
-        return modifyDate;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

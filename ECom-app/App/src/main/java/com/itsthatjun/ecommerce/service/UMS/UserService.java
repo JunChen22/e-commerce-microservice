@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.UMS;
 
-import com.itsthatjun.ecommerce.dto.MemberDetail;
-import com.itsthatjun.ecommerce.mbg.model.Address;
+import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
+import com.itsthatjun.ecommerce.dto.ums.outgoing.AddressDTO;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Mono;
 
@@ -20,7 +20,7 @@ public interface UserService {
     Mono<MemberDetail> updateInfo(MemberDetail memberDetail, int userId);
 
     @ApiOperation(value = "")
-    Mono<Address> updateAddress(Address newAddress, int userId);
+    Mono<AddressDTO> updateAddress(AddressDTO newAddress, int userId);
 
     @ApiOperation(value = "")
     Mono<Void> deleteAccount(int userId);

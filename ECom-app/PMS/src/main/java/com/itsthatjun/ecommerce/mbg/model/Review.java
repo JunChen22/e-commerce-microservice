@@ -20,7 +20,7 @@ public class Review {
 
     private BigDecimal likes;
 
-    private Boolean verified;
+    private Integer verified;
 
     private String content;
 
@@ -92,11 +92,11 @@ public class Review {
         this.likes = likes;
     }
 
-    public Boolean getVerified() {
+    public Integer getVerified() {
         return verified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(Integer verified) {
         this.verified = verified;
     }
 

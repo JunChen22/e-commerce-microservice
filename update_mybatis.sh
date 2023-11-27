@@ -5,23 +5,28 @@ docker-compose down
 
 # Remove Docker volumes
 docker volume rm e-commerce-microservice_db-data
-docker volume rm e-commerce-microservice_SMS-data
-docker volume rm e-commerce-microservice_OMS-data
-docker volume rm e-commerce-microservice_UMS-data
-docker volume rm e-commerce-microservice_CMS-data
-docker volume rm e-commerce-microservice_PMS-data
+docker volume rm e-commerce-microservice_sms-data
+docker volume rm e-commerce-microservice_oms-data
+docker volume rm e-commerce-microservice_ums-data
+docker volume rm e-commerce-microservice_cms-data
+docker volume rm e-commerce-microservice_pms-data
+docker volume rm e-commerce-microservice_auth-data
+docker volume rm e-commerce-microservice_email-data
+docker volume rm e-commerce-microservice_rabbit-data
 
 # Start Docker containers for databases
-docker-compose up -d OMS-db CMS-db UMS-db PMS-db SMS-db postgres
+docker-compose up -d oms-db cms-db ums-db pms-db sms-db auth-db postgres email-db
 
 # Wait for the containers to be healthy
 echo "Waiting for containers to be healthy..."
 while true; do
-    if docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "OMS-db" && \
-       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "CMS-db" && \
-       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "UMS-db" && \
-       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "PMS-db" && \
-       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "SMS-db" && \
+    if docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "oms-db" && \
+       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "cms-db" && \
+       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "ums-db" && \
+       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "pms-db" && \
+       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "sms-db" && \
+       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "email-db" && \
+       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "auth-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "postgres"
     then
         echo "Containers are healthy."
@@ -74,4 +79,15 @@ cd ./ECom-app/UMS
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../..
 
+echo "Generating MyBatis files for auth-server"
+cd ./auth-server
+mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
+cd ../
+
+echo "Generating MyBatis files for Notification"
+cd ./Notification
+mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
+cd ../
+
+docker-compose down
 echo "MyBatis generation completed for all modules"

@@ -1,8 +1,9 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Member {
+public class Member implements Serializable {
     private Integer id;
 
     private String username;
@@ -15,7 +16,11 @@ public class Member {
 
     private String email;
 
+    private Integer emailSubscription;
+
     private Integer status;
+
+    private Integer verifiedStatus;
 
     private Integer deleteStatus;
 
@@ -24,6 +29,8 @@ public class Member {
     private Date lastLogin;
 
     private String sourceType;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -73,12 +80,28 @@ public class Member {
         this.email = email;
     }
 
+    public Integer getEmailSubscription() {
+        return emailSubscription;
+    }
+
+    public void setEmailSubscription(Integer emailSubscription) {
+        this.emailSubscription = emailSubscription;
+    }
+
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getVerifiedStatus() {
+        return verifiedStatus;
+    }
+
+    public void setVerifiedStatus(Integer verifiedStatus) {
+        this.verifiedStatus = verifiedStatus;
     }
 
     public Integer getDeleteStatus() {

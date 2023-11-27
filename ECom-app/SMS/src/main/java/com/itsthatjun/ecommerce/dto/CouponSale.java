@@ -1,5 +1,8 @@
 package com.itsthatjun.ecommerce.dto;
 
+import com.itsthatjun.ecommerce.dto.types.DiscountType;
+import com.itsthatjun.ecommerce.dto.types.PromotionType;
+import com.itsthatjun.ecommerce.dto.types.UpdateType;
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
 import lombok.Data;
 
@@ -7,7 +10,6 @@ import java.util.Map;
 
 @Data
 public class CouponSale {
-
     private Integer couponId;
     private UpdateType updateType;
     private PromotionType promotionType;  //-- discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item(s)

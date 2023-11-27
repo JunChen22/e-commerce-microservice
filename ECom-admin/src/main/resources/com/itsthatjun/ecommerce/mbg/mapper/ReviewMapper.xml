@@ -10,7 +10,7 @@
     <result column="star" jdbcType="NUMERIC" property="star" />
     <result column="tittle" jdbcType="VARCHAR" property="tittle" />
     <result column="likes" jdbcType="NUMERIC" property="likes" />
-    <result column="verified" jdbcType="BIT" property="verified" />
+    <result column="verified" jdbcType="INTEGER" property="verified" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
@@ -114,7 +114,7 @@
       created_at, updated_at)
     values (#{productId,jdbcType=NUMERIC}, #{memberId,jdbcType=NUMERIC}, #{memberName,jdbcType=VARCHAR}, 
       #{memberIcon,jdbcType=VARCHAR}, #{star,jdbcType=NUMERIC}, #{tittle,jdbcType=VARCHAR}, 
-      #{likes,jdbcType=NUMERIC}, #{verified,jdbcType=BIT}, #{content,jdbcType=VARCHAR}, 
+      #{likes,jdbcType=NUMERIC}, #{verified,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Review" useGeneratedKeys="true">
@@ -177,7 +177,7 @@
         #{likes,jdbcType=NUMERIC},
       </if>
       <if test="verified != null">
-        #{verified,jdbcType=BIT},
+        #{verified,jdbcType=INTEGER},
       </if>
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
@@ -224,7 +224,7 @@
         likes = #{record.likes,jdbcType=NUMERIC},
       </if>
       <if test="record.verified != null">
-        verified = #{record.verified,jdbcType=BIT},
+        verified = #{record.verified,jdbcType=INTEGER},
       </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=VARCHAR},
@@ -250,7 +250,7 @@
       star = #{record.star,jdbcType=NUMERIC},
       tittle = #{record.tittle,jdbcType=VARCHAR},
       likes = #{record.likes,jdbcType=NUMERIC},
-      verified = #{record.verified,jdbcType=BIT},
+      verified = #{record.verified,jdbcType=INTEGER},
       content = #{record.content,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
@@ -283,7 +283,7 @@
         likes = #{likes,jdbcType=NUMERIC},
       </if>
       <if test="verified != null">
-        verified = #{verified,jdbcType=BIT},
+        verified = #{verified,jdbcType=INTEGER},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
@@ -306,7 +306,7 @@
       star = #{star,jdbcType=NUMERIC},
       tittle = #{tittle,jdbcType=VARCHAR},
       likes = #{likes,jdbcType=NUMERIC},
-      verified = #{verified,jdbcType=BIT},
+      verified = #{verified,jdbcType=INTEGER},
       content = #{content,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP}

@@ -11,30 +11,30 @@ import java.util.List;
 
 public interface ReviewService {
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<ProductReview> getDetailReview(int reviewId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Flux<ProductReview> listProductAllReview(int productId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Review> createReview(Review newReview, List<ReviewPictures> picturesList, int userId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Review> updateReview(Review updatedReview, List<ReviewPictures> picturesList, int userId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Void> deleteReview(int reviewId, int userId);
 
-    @ApiOperation(value = "Admin retrieves all reviews made one user")
+    @ApiOperation("Admin retrieves all reviews made one user")
     Flux<ProductReview> listAllReviewByUser(int userId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Review> adminCreateReview(Review newReview, List<ReviewPictures> picturesList, String operator);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Review> adminUpdateReview(Review updatedReview, List<ReviewPictures> picturesList, String operator);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Void> adminDeleteReview(int reviewId, String operator);
 }

@@ -91,6 +91,11 @@ custom:
   rabbitMQ:
     orderCancelTTL-time: 120000     # in milliseconds, 120 seconds
     returnRequestTTL-time: 120000   # 3 days  259200000
+
+usps:
+  userid: YOUR_USPS_USERID
+  password: YOUR_USPS_PASSWORD
+
 ---
 
 spring.config.activate.on-profile: docker
@@ -109,6 +114,9 @@ paypal:
     id: ${PAYPAL_CLIENT_ID}
     secret: ${PAYPAL_CLIENT_SECRET}
 
+usps:
+  userid: ${USPS_USERID}
+  password: ${USPS_PASSWORD}
 
 ---
 spring.config.activate.on-profile: kafka

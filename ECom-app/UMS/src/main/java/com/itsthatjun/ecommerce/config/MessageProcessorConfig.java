@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.config;
 
 import com.itsthatjun.ecommerce.dto.MemberDetail;
+import com.itsthatjun.ecommerce.dto.event.admin.UmsAdminEmailEvent;
 import com.itsthatjun.ecommerce.dto.event.admin.UmsAdminUserEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.UmsLogUpdateEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.UmsUserEvent;
@@ -60,6 +61,33 @@ public class MessageProcessorConfig {
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_ACCOUNT, " +
                             "UPDATE_ACCOUNT_INFO, UPDATE_ACCOUNT_STATUS and DELETE_ACCOUNT event";
+                    LOG.warn(errorMessage);
+                    throw new RuntimeException(errorMessage);
+            }
+        };
+    }
+
+    @Bean
+    public Consumer<UmsAdminEmailEvent> adminEmailProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+
+            String message = event.getMessage();
+            String operator = event.getOperator();
+
+            switch (event.getEventType()) {
+                case ONE_USER:
+                    int userId = event.getUserId();
+                    memberService.sendUserNotification(userId, message, operator).subscribe();
+                    break;
+
+                case ALL_USER:
+                    memberService.sendAllUserNotification(message, operator).subscribe();
+                    break;
+
+                default:
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected" + "ONE_USER and ALL_USER event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
             }

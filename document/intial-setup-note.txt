@@ -1,0 +1,35 @@
+base
+- use update_batis.sh, if you made changes to data.sql, and to generatorConfig.xml of which service associated to.
+- IntelliJ
+- maven
+
+docker
+- download docker from their website
+- optional: minikube/kubernetes using docker as driver(deploying inside docker instead of full scale kubernetes)
+
+kubernetes
+- download minikube from docker hub
+- download Helm from their official website
+- variable setups
+    - in ~/.bashrc, create a alias named kubectl, easier to interact with minikube.
+      $ echo 'alias kubectl="minikube kubectl --"' >> ~/.bashrc
+
+      to undo this.
+      $ sed -i '/alias kubectl="minikube kubectl --"/d' ~/.bashrc
+
+    - in /etc/hosts, map a hostname to a minikube profile ip. minikube will need to be started with right profile(spring)
+      $ sudo bash -c "echo $(minikube ip) springecom.me | tee -a /etc/hosts"
+
+      to undo this.
+      $ sudo sed -i "\~^$(minikube ip)\\s*springecom\.me\$~d" /etc/hosts    # does need permission to remove it
+
+
+
+
+
+
+
+
+
+
+

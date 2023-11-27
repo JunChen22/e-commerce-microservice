@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.controller.UMS;
 
-import com.itsthatjun.ecommerce.dto.MemberDetail;
+import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
+import com.itsthatjun.ecommerce.dto.ums.outgoing.AddressDTO;
 import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
@@ -57,7 +58,7 @@ public class UserAggregate {
 
     @PostMapping("/updateAddress")
     @ApiOperation(value = "")
-    public Mono<Address> updateAddress(@RequestBody Address newAddress) {
+    public Mono<AddressDTO> updateAddress(@RequestBody AddressDTO newAddress) {
         int userId = getUserId();
         return userService.updateAddress(newAddress, userId);
     }

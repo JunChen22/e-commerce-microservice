@@ -7,7 +7,6 @@ import com.itsthatjun.ecommerce.dto.event.incoming.OmsUpdateIncomingEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.PmsReviewEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent;
 import com.itsthatjun.ecommerce.mbg.model.Brand;
-import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import com.itsthatjun.ecommerce.mbg.model.Review;
 import com.itsthatjun.ecommerce.service.eventupdate.OmsEventUpdateService;
@@ -116,6 +115,7 @@ public class MessageProcessorConfig {
     public Consumer<PmsAdminProductEvent> adminProductMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
+            /* TODO:
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             Product product = event.getProductDetail().getProduct();
             List<ProductSku> skuList = event.getProductDetail().getSkuVariants();
@@ -164,6 +164,7 @@ public class MessageProcessorConfig {
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
             }
+             */
         };
     }
 
@@ -171,6 +172,7 @@ public class MessageProcessorConfig {
     public Consumer<PmsAdminReviewEvent> adminReviewMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
+            /* TODO:
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             Review review = event.getReview().getReview();
             String operator = event.getOperator();
@@ -193,6 +195,7 @@ public class MessageProcessorConfig {
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
             }
+             */
         };
     }
 

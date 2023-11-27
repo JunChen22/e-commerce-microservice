@@ -1,17 +1,18 @@
 package com.itsthatjun.ecommerce.dto;
 
+import com.itsthatjun.ecommerce.dto.outgoing.ProductDTO;
+import com.itsthatjun.ecommerce.dto.outgoing.ProductSkuDTO;
+import com.itsthatjun.ecommerce.dto.outgoing.ReviewDTO;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ProductDetail {
+public class ProductDetail extends ProductDTO {
 
-    private Product product;
-    private List<Review> reviews;
-    private List<ProductSku> skuVariants;
-    private Integer stock;
+    private List<ReviewDTO> reviews;
+    private List<ProductSkuDTO> skuVariants;
 
     private List<ProductPictures> picturesList;
     private List<String> productCategory;  // TODO: there's sub level for product category

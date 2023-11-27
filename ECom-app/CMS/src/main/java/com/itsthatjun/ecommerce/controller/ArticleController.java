@@ -5,13 +5,9 @@ import com.itsthatjun.ecommerce.service.impl.ArticleServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/article")
@@ -26,13 +22,13 @@ public class ArticleController {
     }
 
     @GetMapping("/all")
-    @ApiOperation(value = "get all articles")
+    @ApiOperation("get all articles")
     public Flux<ArticleInfo> getAllArticle() {
         return articleService.getAllArticles();
     }
 
     @GetMapping("/{articleId}")
-    @ApiOperation(value = "")
+    @ApiOperation("")
     public Mono<ArticleInfo> getArticle(@PathVariable int articleId,
                                         @RequestParam(value = "delay", required = false, defaultValue = "0") int delay,
                                         @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent) {

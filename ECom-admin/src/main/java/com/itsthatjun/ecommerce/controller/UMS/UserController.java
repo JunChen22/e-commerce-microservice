@@ -76,6 +76,20 @@ public class UserController {
         return userService.delete(memberId, operatorName);
     }
 
+    @PostMapping("/message/{memberId}")
+    @ApiOperation(value = "")
+    public Mono<Void> sendUserEmail(@PathVariable int memberId, @RequestBody String message) {
+        String operatorName = getAdminName();
+        return userService.sendUserEmail(memberId, message, operatorName);
+    }
+
+    @PostMapping("/message/all")
+    @ApiOperation(value = "")
+    public Mono<Void> sendAllUserEmail(@RequestBody String message) {
+        String operatorName = getAdminName();
+        return userService.sendAllUserEmail(message, operatorName);
+    }
+
     private String getAdminName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();

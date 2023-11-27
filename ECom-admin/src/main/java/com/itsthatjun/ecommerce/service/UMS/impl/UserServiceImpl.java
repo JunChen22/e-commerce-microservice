@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.service.UMS.impl;
 
 import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
+import com.itsthatjun.ecommerce.dto.ums.event.UmsAdminEmailEvent;
 import com.itsthatjun.ecommerce.dto.ums.event.UmsAdminUserEvent;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
@@ -18,6 +19,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import static com.itsthatjun.ecommerce.dto.ums.event.UmsAdminEmailEvent.Type.ALL_USER;
+import static com.itsthatjun.ecommerce.dto.ums.event.UmsAdminEmailEvent.Type.ONE_USER;
 import static com.itsthatjun.ecommerce.dto.ums.event.UmsAdminUserEvent.Type.*;
 import static java.util.logging.Level.FINE;
 
@@ -100,6 +103,29 @@ public class UserServiceImpl implements UserService {
     }
 
     private void sendMessage(String bindingName, UmsAdminUserEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
+    }
+
+    public Mono<Void> sendUserEmail(int memberId, String message, String operator) {
+        return Mono.fromRunnable(() -> {
+            UmsAdminEmailEvent event =  new UmsAdminEmailEvent(ONE_USER, memberId, message, operator);
+            sendEmailMessage("userEmail-out-0", event);
+        }).subscribeOn(publishEventScheduler).then();
+    }
+
+    public Mono<Void> sendAllUserEmail(String message, String operator) {
+        return Mono.fromRunnable(() -> {
+            UmsAdminEmailEvent event =  new UmsAdminEmailEvent(ALL_USER, null, message, operator);
+            sendEmailMessage("userEmail-out-0", event);
+        }).subscribeOn(publishEventScheduler).then();
+    }
+
+    private void sendEmailMessage(String bindingName, UmsAdminEmailEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)

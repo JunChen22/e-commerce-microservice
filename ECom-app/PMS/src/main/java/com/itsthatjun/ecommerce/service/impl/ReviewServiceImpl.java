@@ -48,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
             // Offload the blocking operation to the specified scheduler
             Review review = reviewMapper.selectByPrimaryKey(reviewId);
             ProductReview productReview = new ProductReview();
-            productReview.setReview(review);
+            //productReview.setReview(review); TODO:
 
             ReviewAlbumExample albumExample = new ReviewAlbumExample();
             albumExample.createCriteria().andReviewIdEqualTo(reviewId);
@@ -85,7 +85,7 @@ public class ReviewServiceImpl implements ReviewService {
         for (Review review: productReviews) {
             // copy over information
             ProductReview productReview = new ProductReview();
-            productReview.setReview(review);
+            //productReview.setReview(review); TODO:
 
             int reviewId = review.getId();
 
@@ -221,7 +221,7 @@ public class ReviewServiceImpl implements ReviewService {
         for (Review review: reviews) {
             // copy over infomation
             ProductReview productReview = new ProductReview();
-            productReview.setReview(review);
+            //productReview.setReview(review); TODO:
 
             int reviewId = review.getId();
 

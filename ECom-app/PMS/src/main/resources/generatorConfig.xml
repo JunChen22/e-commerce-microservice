@@ -52,8 +52,6 @@
         </table>
 
 
-
-
         <table tableName= "product_category">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />

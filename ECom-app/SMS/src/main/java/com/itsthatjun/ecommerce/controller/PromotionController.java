@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
+import com.itsthatjun.ecommerce.dto.OnSale;
 import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.PromotionSale;
 import com.itsthatjun.ecommerce.service.impl.SalesServiceimpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +29,7 @@ public class PromotionController {
 
     @GetMapping("/AllPromotionSale")
     @ApiOperation("")
-    public Flux<PromotionSale> getAllPromotionSale() {
+    public Flux<OnSale> getAllPromotionSale() {
         return salesServiceimpl.getAllPromotionalSale();
     }
 

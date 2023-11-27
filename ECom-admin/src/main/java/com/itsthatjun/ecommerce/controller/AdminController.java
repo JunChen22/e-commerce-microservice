@@ -57,7 +57,7 @@ public class AdminController {
 
     @PostMapping("/register")
     @PreAuthorize("hasRole('ROLE_admin-root')")
-    @ApiOperation(value = "Register a admin account, only main admin can create another admin and assign role and permission")
+    @ApiOperation("Register a admin account, only main admin can create another admin and assign role and permission")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
 
         // TODO: register a admin
@@ -67,7 +67,7 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ROLE_admin-user')")
     @GetMapping("/roles/{id}")
-    @ApiOperation(value = "")
+    @ApiOperation("")
     public List<Roles> getRole(@PathVariable int id) {
         List<Roles> roles = adminDao.getRolesList(id);
         return roles;
@@ -75,7 +75,7 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ROLE_admin-user')")
     @GetMapping("/permission/{id}")
-    @ApiOperation(value = "")
+    @ApiOperation("")
     public List<Permission> getPermission(@PathVariable int id) {
         List<Permission> permissions = adminDao.getPermissionList(id);
         return permissions;
@@ -83,7 +83,7 @@ public class AdminController {
 
     @GetMapping("/logs/{id}")
     @PreAuthorize("hasAuthority('user:read')")
-    @ApiOperation(value = "")
+    @ApiOperation("")
     public List<AdminLoginLog> getLoginLogs(@PathVariable int id) {
         List<AdminLoginLog> logs = adminDao.getLoginLog(id);
         return logs;

@@ -61,4 +61,10 @@ public interface MemberService {
 
     @ApiOperation("")
     Mono<Member> deleteMember(int userId, String operator);
+
+    @ApiOperation("Send message to user from admin")
+    Mono<Void> sendUserNotification(int userId, String message, String operator);
+
+    @ApiOperation("Send message to user from admin")
+    Mono<Void> sendAllUserNotification(String message, String operator);
 }

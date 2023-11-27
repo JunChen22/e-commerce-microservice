@@ -1,9 +1,10 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CartItem {
+public class CartItem implements Serializable {
     private Integer id;
 
     private Integer cartId;
@@ -22,7 +23,9 @@ public class CartItem {
 
     private Date createdAt;
 
-    private Date modifyDate;
+    private Date updatedAt;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -96,11 +99,11 @@ public class CartItem {
         this.createdAt = createdAt;
     }
 
-    public Date getModifyDate() {
-        return modifyDate;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

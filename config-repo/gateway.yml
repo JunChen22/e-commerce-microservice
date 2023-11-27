@@ -95,6 +95,11 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/login
 
+  - id: all
+    uri: http://notification
+    predicates:
+      - Path=/nof
+
 management.endpoint.gateway.enabled: true
 
 logging:

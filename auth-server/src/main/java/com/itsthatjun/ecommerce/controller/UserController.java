@@ -31,13 +31,13 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    @ApiOperation(value = "Login landing page")
+    @ApiOperation("Login landing page")
     public String login() {
         return "at auth login, showLoginForm:true";
     }
 
     @PostMapping("/login")
-    @ApiOperation(value = "Login")
+    @ApiOperation("Login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 
         String token = memberService.login(loginRequest.getUsername(), loginRequest.getPassword());

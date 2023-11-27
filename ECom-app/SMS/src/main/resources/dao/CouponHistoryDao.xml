@@ -31,5 +31,4 @@
     <select id="couponUserUsageCount" resultType="int">
         SELECT COUNT(DISTINCT member_id) FROM coupon_history WHERE coupon_id = #{couponId};
     </select>
-
 </mapper>

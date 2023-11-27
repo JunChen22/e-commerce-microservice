@@ -8,7 +8,9 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="email_subscription" jdbcType="INTEGER" property="emailSubscription" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="verified_status" jdbcType="INTEGER" property="verifiedStatus" />
     <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin" />
@@ -73,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, name, phone_number, email, status, delete_status, created_at, 
-    last_login, source_type
+    id, username, password, name, phone_number, email, email_subscription, status, verified_status, 
+    delete_status, created_at, last_login, source_type
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberExample" resultMap="BaseResultMap">
     select
@@ -108,13 +110,15 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Member" useGeneratedKeys="true">
     insert into member (username, password, name, 
-      phone_number, email, status, 
-      delete_status, created_at, last_login, 
-      source_type)
+      phone_number, email, email_subscription, 
+      status, verified_status, delete_status, 
+      created_at, last_login, source_type
+      )
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{deleteStatus,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{lastLogin,jdbcType=TIMESTAMP}, 
-      #{sourceType,jdbcType=VARCHAR})
+      #{phoneNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{emailSubscription,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{verifiedStatus,jdbcType=INTEGER}, #{deleteStatus,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{lastLogin,jdbcType=TIMESTAMP}, #{sourceType,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Member" useGeneratedKeys="true">
     insert into member
@@ -134,8 +138,14 @@
       <if test="email != null">
         email,
       </if>
+      <if test="emailSubscription != null">
+        email_subscription,
+      </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="verifiedStatus != null">
+        verified_status,
       </if>
       <if test="deleteStatus != null">
         delete_status,
@@ -166,8 +176,14 @@
       <if test="email != null">
         #{email,jdbcType=VARCHAR},
       </if>
+      <if test="emailSubscription != null">
+        #{emailSubscription,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="verifiedStatus != null">
+        #{verifiedStatus,jdbcType=INTEGER},
       </if>
       <if test="deleteStatus != null">
         #{deleteStatus,jdbcType=INTEGER},
@@ -210,8 +226,14 @@
       <if test="record.email != null">
         email = #{record.email,jdbcType=VARCHAR},
       </if>
+      <if test="record.emailSubscription != null">
+        email_subscription = #{record.emailSubscription,jdbcType=INTEGER},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.verifiedStatus != null">
+        verified_status = #{record.verifiedStatus,jdbcType=INTEGER},
       </if>
       <if test="record.deleteStatus != null">
         delete_status = #{record.deleteStatus,jdbcType=INTEGER},
@@ -238,7 +260,9 @@
       name = #{record.name,jdbcType=VARCHAR},
       phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
+      email_subscription = #{record.emailSubscription,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
+      verified_status = #{record.verifiedStatus,jdbcType=INTEGER},
       delete_status = #{record.deleteStatus,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       last_login = #{record.lastLogin,jdbcType=TIMESTAMP},
@@ -265,8 +289,14 @@
       <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
       </if>
+      <if test="emailSubscription != null">
+        email_subscription = #{emailSubscription,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="verifiedStatus != null">
+        verified_status = #{verifiedStatus,jdbcType=INTEGER},
       </if>
       <if test="deleteStatus != null">
         delete_status = #{deleteStatus,jdbcType=INTEGER},
@@ -290,7 +320,9 @@
       name = #{name,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
+      email_subscription = #{emailSubscription,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
+      verified_status = #{verifiedStatus,jdbcType=INTEGER},
       delete_status = #{deleteStatus,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       last_login = #{lastLogin,jdbcType=TIMESTAMP},

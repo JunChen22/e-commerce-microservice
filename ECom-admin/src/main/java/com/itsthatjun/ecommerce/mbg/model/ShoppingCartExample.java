@@ -285,63 +285,63 @@ public class ShoppingCartExample {
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateIsNull() {
-            addCriterion("modify_date is null");
+        public Criteria andUpdatedAtIsNull() {
+            addCriterion("updated_at is null");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateIsNotNull() {
-            addCriterion("modify_date is not null");
+        public Criteria andUpdatedAtIsNotNull() {
+            addCriterion("updated_at is not null");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateEqualTo(Date value) {
-            addCriterion("modify_date =", value, "modifyDate");
+        public Criteria andUpdatedAtEqualTo(Date value) {
+            addCriterion("updated_at =", value, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateNotEqualTo(Date value) {
-            addCriterion("modify_date <>", value, "modifyDate");
+        public Criteria andUpdatedAtNotEqualTo(Date value) {
+            addCriterion("updated_at <>", value, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateGreaterThan(Date value) {
-            addCriterion("modify_date >", value, "modifyDate");
+        public Criteria andUpdatedAtGreaterThan(Date value) {
+            addCriterion("updated_at >", value, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateGreaterThanOrEqualTo(Date value) {
-            addCriterion("modify_date >=", value, "modifyDate");
+        public Criteria andUpdatedAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("updated_at >=", value, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateLessThan(Date value) {
-            addCriterion("modify_date <", value, "modifyDate");
+        public Criteria andUpdatedAtLessThan(Date value) {
+            addCriterion("updated_at <", value, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateLessThanOrEqualTo(Date value) {
-            addCriterion("modify_date <=", value, "modifyDate");
+        public Criteria andUpdatedAtLessThanOrEqualTo(Date value) {
+            addCriterion("updated_at <=", value, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateIn(List<Date> values) {
-            addCriterion("modify_date in", values, "modifyDate");
+        public Criteria andUpdatedAtIn(List<Date> values) {
+            addCriterion("updated_at in", values, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateNotIn(List<Date> values) {
-            addCriterion("modify_date not in", values, "modifyDate");
+        public Criteria andUpdatedAtNotIn(List<Date> values) {
+            addCriterion("updated_at not in", values, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateBetween(Date value1, Date value2) {
-            addCriterion("modify_date between", value1, value2, "modifyDate");
+        public Criteria andUpdatedAtBetween(Date value1, Date value2) {
+            addCriterion("updated_at between", value1, value2, "updatedAt");
             return (Criteria) this;
         }
 
-        public Criteria andModifyDateNotBetween(Date value1, Date value2) {
-            addCriterion("modify_date not between", value1, value2, "modifyDate");
+        public Criteria andUpdatedAtNotBetween(Date value1, Date value2) {
+            addCriterion("updated_at not between", value1, value2, "updatedAt");
             return (Criteria) this;
         }
     }

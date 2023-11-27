@@ -120,6 +120,23 @@ services:
       interval: 10s
       retries: 5
 
+  email-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: emaildb
+    ports:
+      - 5439:5432
+    volumes:
+      - email-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
+
   mongodb:
     image: mongo:5.0.0
     restart: always
@@ -365,6 +382,20 @@ services:
       retries: 60
     depends_on:
       auth-db:
+        condition: service_healthy
+
+  notification:
+    build: Notification
+    image: e-com/notification
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,eureka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/notification.yml
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
+    depends_on:
+      email-db:
         condition: service_healthy
 
   zipkin:

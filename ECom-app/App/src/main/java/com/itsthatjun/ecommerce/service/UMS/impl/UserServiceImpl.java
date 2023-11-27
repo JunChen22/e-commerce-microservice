@@ -1,9 +1,8 @@
 package com.itsthatjun.ecommerce.service.UMS.impl;
 
-import com.itsthatjun.ecommerce.dto.MemberDetail;
 import com.itsthatjun.ecommerce.dto.event.ums.UmsUserEvent;
-import com.itsthatjun.ecommerce.mbg.model.Address;
-import com.itsthatjun.ecommerce.mbg.model.Member;
+import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
+import com.itsthatjun.ecommerce.dto.ums.outgoing.AddressDTO;
 import com.itsthatjun.ecommerce.service.UMS.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<MemberDetail> register(MemberDetail memberDetail) {
         return Mono.fromCallable(() -> {
-            sendMessage("user-out-0", new UmsUserEvent(NEW_ACCOUNT, memberDetail));
+            sendMessage("user-out-0", new UmsUserEvent(NEW_ACCOUNT, null, memberDetail));
             return memberDetail;
         }).subscribeOn(publishEventScheduler);
     }
@@ -61,14 +60,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<String> updatePassword(String newPassword, int userId) {
         return Mono.fromCallable(() -> {
-            Member member = new Member();
-            member.setPassword(newPassword);
-            member.setId(userId);
-
             MemberDetail memberDetail = new MemberDetail();
-            memberDetail.setMember(member);
-
-            sendMessage("user-out-0", new UmsUserEvent(UPDATE_PASSWORD, memberDetail));
+            memberDetail.setPassword(newPassword);
+            sendMessage("user-out-0", new UmsUserEvent(UPDATE_PASSWORD, userId, memberDetail));
             return newPassword;
         }).subscribeOn(publishEventScheduler);
     }
@@ -76,23 +70,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<MemberDetail> updateInfo(MemberDetail memberDetail, int userId) {
         return Mono.fromCallable(() -> {
-            Member member = new Member();
-            member.setId(userId);
-            memberDetail.setMember(member);
-            sendMessage("user-out-0", new UmsUserEvent(UPDATE_ACCOUNT_INFO, memberDetail));
+            sendMessage("user-out-0", new UmsUserEvent(UPDATE_ACCOUNT_INFO, userId, memberDetail));
             return memberDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Address> updateAddress(Address newAddress, int userId) {
+    public Mono<AddressDTO> updateAddress(AddressDTO newAddress, int userId) {
         return Mono.fromCallable(() -> {
             MemberDetail memberDetail = new MemberDetail();
             memberDetail.setAddress(newAddress);
-            Member member = new Member();
-            member.setId(userId);
-            memberDetail.setMember(member);
-            sendMessage("user-out-0", new UmsUserEvent(UPDATE_ADDRESS, memberDetail));
+            sendMessage("user-out-0", new UmsUserEvent(UPDATE_ADDRESS, userId, memberDetail));
             return newAddress;
         }).subscribeOn(publishEventScheduler);
     }
@@ -100,11 +88,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<Void> deleteAccount(int userId) {
         return Mono.fromRunnable(() -> {
-            Member member = new Member();
-            member.setId(userId);
             MemberDetail memberDetail = new MemberDetail();
-            memberDetail.setMember(member);
-            sendMessage("user-out-0", new UmsUserEvent(DELETE_ACCOUNT, memberDetail));
+            sendMessage("user-out-0", new UmsUserEvent(DELETE_ACCOUNT, userId, memberDetail));
         }).subscribeOn(publishEventScheduler).then();
     }
 

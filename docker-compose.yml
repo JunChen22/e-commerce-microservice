@@ -120,6 +120,23 @@ services:
       interval: 10s
       retries: 5
 
+  email-db:
+    image: postgres:9.6.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: emaildb
+    ports:
+      - 5439:5432
+    volumes:
+      - email-data:/var/lib/postgresql/data
+      - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
+
   mongodb:
     image: mongo:5.0.0
     restart: always
@@ -246,9 +263,12 @@ services:
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/oms.yml
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
-      - PAYPAL_MODE=${paypal_mode}
-      - PAYPAL_CLIENT_ID=${paypal_client_id}
-      - PAYPAL_CLIENT_SECRET=${paypal_client_secret}
+      - PAYPAL_MODE=${PAYPAL_MODE}
+      - PAYPAL_CLIENT_ID=${PAYPAL_CLIENT_ID}
+      - PAYPAL_CLIENT_SECRET=${PAYPAL_CLIENT_SECRET}
+      - USPS_USERID=${USPS_USERID}
+      - USPS_PASSWORD=${USPS_PASSWORD}
+
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
@@ -350,7 +370,6 @@ services:
   auth-server:
     build: auth-server
     image: e-com/auth-server
-    mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
@@ -365,6 +384,22 @@ services:
       retries: 60
     depends_on:
       auth-db:
+        condition: service_healthy
+
+  notification:
+    build: Notification
+    image: e-com/notification
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,eureka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/notification.yml
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_MAIL_USERNAME=${MAIL_USERNAME}
+      - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
+    volumes:
+      - $PWD/config-repo:/config-repo
+    depends_on:
+      email-db:
         condition: service_healthy
 
   zipkin:
@@ -387,4 +422,5 @@ volumes:
   sms-data:
   ums-data:
   auth-data:
+  email-data:
   rabbit-data:

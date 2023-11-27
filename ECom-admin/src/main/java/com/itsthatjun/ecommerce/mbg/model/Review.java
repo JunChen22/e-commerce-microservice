@@ -1,9 +1,10 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Review {
+public class Review implements Serializable {
     private Integer id;
 
     private Integer productId;
@@ -20,13 +21,15 @@ public class Review {
 
     private BigDecimal likes;
 
-    private Boolean verified;
+    private Integer verified;
 
     private String content;
 
     private Date createdAt;
 
     private Date updatedAt;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -92,11 +95,11 @@ public class Review {
         this.likes = likes;
     }
 
-    public Boolean getVerified() {
+    public Integer getVerified() {
         return verified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(Integer verified) {
         this.verified = verified;
     }
 

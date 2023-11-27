@@ -1,5 +1,7 @@
 package com.itsthatjun.ecommerce.service.impl;
 
+import com.itsthatjun.ecommerce.dao.PromotionSaleDao;
+import com.itsthatjun.ecommerce.dto.OnSale;
 import com.itsthatjun.ecommerce.dto.OnSaleRequest;
 import com.itsthatjun.ecommerce.dto.event.outgoing.OmsSaleOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.PmsSaleOutEvent;
@@ -42,10 +44,12 @@ public class SalesServiceimpl implements SalesService {
 
     private final Scheduler jdbcScheduler;
 
+    private final PromotionSaleDao saleDao;
+
     @Autowired
     public SalesServiceimpl(PromotionSaleMapper promotionSaleMapper, PromotionSaleProductMapper promotionSaleProductMapper,
                             PromotionSaleLogMapper promotionSaleLogMapper, ProductMapper productMapper, ProductSkuMapper productSkuMapper,
-                            StreamBridge streamBridge, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
+                            StreamBridge streamBridge, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler, PromotionSaleDao saleDao) {
         this.promotionSaleMapper = promotionSaleMapper;
         this.promotionSaleProductMapper = promotionSaleProductMapper;
         this.promotionSaleLogMapper = promotionSaleLogMapper;
@@ -53,14 +57,24 @@ public class SalesServiceimpl implements SalesService {
         this.productSkuMapper = productSkuMapper;
         this.streamBridge = streamBridge;
         this.jdbcScheduler = jdbcScheduler;
+        this.saleDao = saleDao;
     }
 
     @Override
-    public Flux<PromotionSale> getAllPromotionalSale() {
+    public Flux<OnSale> getAllPromotionalSale() {
         return Mono.fromCallable(() -> {
             PromotionSaleExample saleExample = new PromotionSaleExample();
             saleExample.createCriteria().andStatusEqualTo(1);  // default active sales TODO: reduce returning infos
-            List<PromotionSale> result = promotionSaleMapper.selectByExample(saleExample);
+            List<PromotionSale> promotionSaleList = promotionSaleMapper.selectByExample(saleExample);
+
+            List<OnSale> result = new ArrayList<>();
+            for (PromotionSale promotionSale : promotionSaleList) {
+                OnSale onSale = new OnSale();
+                onSale.setName(promotionSale.getName());
+                onSale.setStartTime(promotionSale.getStartTime());
+                onSale.setEndTime(promotionSale.getEndTime());
+                result.add(onSale);
+            }
             return result;
         }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }

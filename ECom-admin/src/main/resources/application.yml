@@ -57,6 +57,11 @@ spring.cloud.stream:
       destination: adminUser
       producer:
         required-groups: adminUserGroup
+    userEmail-out-0:
+      destination: adminUserEmail
+      producer:
+        required-groups: adminUserEmailGroup
+
     order-out-0:  # OMS
       destination: adminOrder
       producer:
@@ -65,6 +70,7 @@ spring.cloud.stream:
       destination: adminReturn
       producer:
         required-groups: adminReturnGroup
+
     review-out-0: # PMS
       destination: adminReview
       producer:
@@ -77,6 +83,7 @@ spring.cloud.stream:
       destination: adminBrand
       producer:
         required-groups: adminBrandGroup
+
     coupon-out-0:   # SMS
       destination: adminCoupon
       producer:
@@ -85,6 +92,7 @@ spring.cloud.stream:
       destination: adminSales
       producer:
         required-groups: adminSalesGroup
+
     article-out-0:   # CMS
       destination: adminArticle
       producer:

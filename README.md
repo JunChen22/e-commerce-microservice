@@ -78,7 +78,6 @@ Set up/installation:
 
 To deploy on kubernetes
  $ cd ./kubernetes
- $ chmod +x clean_up.sh && chmod +x setup.sh && chmod +x start.sh && chmod +x update.sh   // enable scripts for common helm commands
  $ ./setup.sh    // build images and config setting in minikube
  $ ./update.sh   // update helm dependency
  $ ./start.sh    // start and deploy on dev-environment by default

@@ -19,14 +19,17 @@ spring:
 
 spring.cloud:
   function:   # can't have space between, tells spring which to use
-    definition: adminUserMessageProcessor;userMessageProcessor;authMessageProcessor
+    definition: adminUserMessageProcessor;adminEmailProcessor;userMessageProcessor;authMessageProcessor
   stream:
     default:
       contentType: application/json
     bindings:
       adminUserMessageProcessor-in-0:      # admin
-        destination: adminUmsUpdate
-        group: adminUmsUpdateGroup
+        destination: adminUser
+        group: adminUserGroup
+      adminEmailProcessor-in-0:
+        destination: adminUserEmail
+        group: adminUserEmailGroup
 
       userMessageProcessor-in-0:        # user and auth update
         destination: user
@@ -39,6 +42,11 @@ spring.cloud:
         destination: umsUserUpdate
         producer:
           required-groups: auditGroup
+
+      umsEmail-out-0: # sending event to notification service
+        destination: userEmail
+        producer:
+          required-groups: userEmailGroup
 
 
 # tells spring mybatis mapper's xml(sql) located

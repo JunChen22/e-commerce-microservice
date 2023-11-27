@@ -8,24 +8,24 @@ import reactor.core.publisher.Mono;
 
 public interface BrandService {
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Flux<Brand> listAllBrand();
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Flux<Brand> listBrand(int pageNum, int pageSize);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Flux<Product> listAllBrandProduct(int brandId);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Brand> getBrand(int id);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Brand> adminCreateBrand(Brand brand, String operator);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Brand> adminUpdateBrand(Brand brand, String operator);
 
-    @ApiOperation(value = "")
+    @ApiOperation("")
     Mono<Void> adminDeleteBrand(int brandId, String operator);
 }

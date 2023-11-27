@@ -48,8 +48,8 @@
     </resultMap>
 
     <resultMap id="userInfoDTOMap" type="com.itsthatjun.ecommerce.dto.UserInfo">
-        <result property="name" column=""/>
-        <result property="email" column=""/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
     </resultMap>
 
     <select id="getUserDetail" resultMap="memberDetailMap">
@@ -89,6 +89,14 @@
             email
         FROM member
         WHERE status = 1
+    </select>
+
+    <select id="getUserInfo" resultMap="userInfoDTOMap">
+        SELECT
+            name,
+            email
+        FROM member
+        WHERE status = 1 and id = #{userId};
     </select>
 
     <select id="getAllUserInfoSalePromo" resultMap="userInfoDTOMap">

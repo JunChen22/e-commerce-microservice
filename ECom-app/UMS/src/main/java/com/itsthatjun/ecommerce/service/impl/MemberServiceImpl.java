@@ -6,6 +6,7 @@ import com.itsthatjun.ecommerce.dto.MemberDetail;
 import com.itsthatjun.ecommerce.dto.UserInfo;
 import com.itsthatjun.ecommerce.dto.admin.AdminMemberDetail;
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsAuthUpdateEvent;
+import com.itsthatjun.ecommerce.dto.event.outgoing.UmsEmailEvent;
 import com.itsthatjun.ecommerce.dto.outgoing.AddressDTO;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
@@ -28,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsAuthUpdateEvent.Type.*;
+import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsEmailEvent.Type.ALL_USER;
+import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsEmailEvent.Type.ONE_USER;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -329,5 +332,31 @@ public class MemberServiceImpl implements MemberService {
     public List<UserInfo> getAllUserInfo() {
         List<UserInfo> userInfoList = memberDao.getAllUserInfo();
         return userInfoList;
+    }
+
+    @Override
+    public Mono<Void> sendUserNotification(int userId, String message, String operator) {
+        return Mono.fromRunnable(() -> {
+            UserInfo userInfo = memberDao.getUserInfo(userId);
+            UmsEmailEvent event = new UmsEmailEvent(ONE_USER, userInfo, message, operator);
+            sendUserNotificationMessage("umsEmail-out-0", event);
+        }).subscribeOn(jdbcScheduler).then();
+    }
+
+    @Override
+    public Mono<Void> sendAllUserNotification(String message, String operator) {
+        return Mono.fromRunnable(() -> {
+            UmsEmailEvent event = new UmsEmailEvent(ALL_USER, null, message, operator);
+            sendUserNotificationMessage("umsEmail-out-0", event);
+        }).subscribeOn(jdbcScheduler).then();
+    }
+
+    private void sendUserNotificationMessage(String bindingName, UmsEmailEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
     }
 }

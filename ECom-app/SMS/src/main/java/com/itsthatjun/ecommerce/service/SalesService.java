@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.service;
 
+import com.itsthatjun.ecommerce.dto.OnSale;
 import com.itsthatjun.ecommerce.dto.OnSaleRequest;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.PromotionSale;
@@ -7,15 +8,13 @@ import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 public interface SalesService {
 
     // 0-> not on sale; 1-> is on sale; 2-> flash sale/special sales/clarance/used item
     // promotional sale and flash sale is similar
     // promotion sale is the "normal" discount. flash sale for clearance/used
     @ApiOperation(value = "get all promotion list that is on sale")  // TODO: add date interval, active status
-    Flux<PromotionSale> getAllPromotionalSale();
+    Flux<OnSale> getAllPromotionalSale();
 
     @ApiOperation(value = "get all promotion items on sale")
     Flux<Product> getAllPromotionalSaleItems();

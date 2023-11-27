@@ -342,3 +342,10 @@ Q: the config repository in kubernetes is linked with the config-repo in the mai
      $ ln -s ../../../../config-repo/app.yml
 
      $ rm SOFT_LINKED_FILES.yml    // to un-soft link the file, it will not delete the original file.
+
+
+
+Q: problem with lombok and MapStruct.
+
+A: need to have binding and can't use @data, change it to @Getter and @Setter
+

@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto;
+package com.itsthatjun.ecommerce.dto.types;
 
 public enum UpdateType {
     STATUS,

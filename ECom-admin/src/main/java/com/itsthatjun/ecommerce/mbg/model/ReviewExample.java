@@ -626,52 +626,52 @@ public class ReviewExample {
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedEqualTo(Boolean value) {
+        public Criteria andVerifiedEqualTo(Integer value) {
             addCriterion("verified =", value, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedNotEqualTo(Boolean value) {
+        public Criteria andVerifiedNotEqualTo(Integer value) {
             addCriterion("verified <>", value, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedGreaterThan(Boolean value) {
+        public Criteria andVerifiedGreaterThan(Integer value) {
             addCriterion("verified >", value, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andVerifiedGreaterThanOrEqualTo(Integer value) {
             addCriterion("verified >=", value, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedLessThan(Boolean value) {
+        public Criteria andVerifiedLessThan(Integer value) {
             addCriterion("verified <", value, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedLessThanOrEqualTo(Boolean value) {
+        public Criteria andVerifiedLessThanOrEqualTo(Integer value) {
             addCriterion("verified <=", value, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedIn(List<Boolean> values) {
+        public Criteria andVerifiedIn(List<Integer> values) {
             addCriterion("verified in", values, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedNotIn(List<Boolean> values) {
+        public Criteria andVerifiedNotIn(List<Integer> values) {
             addCriterion("verified not in", values, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedBetween(Boolean value1, Boolean value2) {
+        public Criteria andVerifiedBetween(Integer value1, Integer value2) {
             addCriterion("verified between", value1, value2, "verified");
             return (Criteria) this;
         }
 
-        public Criteria andVerifiedNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andVerifiedNotBetween(Integer value1, Integer value2) {
             addCriterion("verified not between", value1, value2, "verified");
             return (Criteria) this;
         }

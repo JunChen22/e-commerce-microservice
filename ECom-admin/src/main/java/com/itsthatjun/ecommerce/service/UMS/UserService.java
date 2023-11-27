@@ -9,24 +9,24 @@ import reactor.core.publisher.Mono;
 
 public interface UserService {
 
-    @ApiOperation(value ="")
+    @ApiOperation("")
     Mono<MemberDetail> getUser(int userId);
 
-    @ApiOperation(value ="")
+    @ApiOperation("")
     Flux<Member> getAllUser();
 
-    @ApiOperation(value ="")
+    @ApiOperation("")
     Flux<MemberLoginLog> listAllLoginFrequency(int userId);
 
-    @ApiOperation(value ="")
+    @ApiOperation("")
     Mono<Member> createMember(Member member, String operator);
 
-    @ApiOperation(value ="")
+    @ApiOperation("")
     Mono<Member> updateMemberInfo(Member member, String operator);
 
-    @ApiOperation(value ="")
+    @ApiOperation("")
     Mono<Member> updateMemberStatus(Member member, String operator);
 
-    @ApiOperation(value ="")
+    @ApiOperation("")
     Mono<Void> delete(int memberId, String operator);
 }

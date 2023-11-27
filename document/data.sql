@@ -75,9 +75,9 @@ DROP TABLE IF EXISTS brand_update_log;
 CREATE TABLE brand_update_log (
     id SERIAL PRIMARY KEY,
     brand_id   NUMERIC,
-    update_action TEXT,
-    operator     TEXT,
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    update_action TEXT NOT NULL,
+    operator VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO brand_update_log (brand_id, update_action, operator)
@@ -373,9 +373,9 @@ CREATE TABLE product (
     category_name TEXT,
     attribute_category_id NUMERIC,	--
     sn  VARCHAR(64),
-    new_status NUMERIC, -- 0->not new product; 1->new product
-    recommend_status NUMERIC, -- 0->not recommend; 1->recommend
-    verify_status NUMERIC, -- 0->not verified; 1->verified
+    new_status INTEGER, -- 0->not new product; 1->new product
+    recommend_status INTEGER, -- 0->not recommend; 1->recommend
+    verify_status INTEGER, -- 0->not verified; 1->verified
     sub_title TEXT,
     cover_picture           TEXT,           --  preview picture, for like list all, search all picture when getting specific
     picture_album  NUMERIC,           -- collection of pictures
@@ -1020,7 +1020,7 @@ CREATE TABLE product_update_log (
     added_stock INTEGER,
     total_stock INTEGER,
     update_action TEXT NOT NULL,
-    operator TEXT NOT NULL,
+    operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -1041,10 +1041,10 @@ CREATE TABLE review (
     member_id NUMERIC,
     member_name TEXT,
     member_icon TEXT,
-    star        NUMERIC,
+    star        INTEGER,
     tittle      TEXT,
-    likes       NUMERIC DEFAULT 1,
-    verified  INTEGER,
+    likes       INTEGER DEFAULT 1,
+    verified  INTEGER, -- TODO: might change it to boolean instead for all the verify status
     content     TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT NULL
@@ -1118,9 +1118,9 @@ DROP TABLE IF EXISTS review_update_log;
 CREATE TABLE review_update_log (
     id SERIAL PRIMARY KEY,
     review_id  NUMERIC,
-    update_action TEXT,
-    operator     TEXT,
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    update_action TEXT NOT NULL,
+    operator VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO review_update_log (review_id, update_action, operator, created_at)
@@ -1148,8 +1148,10 @@ CREATE TABLE member (
     password     TEXT,
     name        TEXT,
     phone_number TEXT,
-    email       TEXT,
+    email       TEXT NOT NULL,
+    email_subscription INTEGER DEFAULT 1,
     status       INTEGER DEFAULT 1,
+    verified_status INTEGER DEFAULT 0,
     delete_status       INTEGER DEFAULT 0,
     created_at  TIMESTAMP,
     last_login   TIMESTAMP,
@@ -1190,7 +1192,7 @@ CREATE TABLE member_change_log (
     id SERIAL PRIMARY KEY,
     member_id  NUMERIC NOT NULL,
     update_action VARCHAR(255) NOT NULL,
-    operator VARCHAR(255) NOT NULL,
+    operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -1211,11 +1213,11 @@ VALUES
 
 
 ---------------User  all password is password
-INSERT INTO member (username, password, name, phone_number, created_at, last_login)
+INSERT INTO member (username, password, name, phone_number, email, verified_status, created_at, last_login)
 VALUES
-('user1','$2a$10$PHcLPlJod/fKyjMUsGuSVeVnI0.EKudDleRT9vM9jqCJzL9QvC5Ju', 'Jun', '212-212-2222', '2020-03-18 22:18:40', '2020-03-18 22:20:24'),
-('user2','$2a$10$pSHd2ngUssBZYRlHQQaKu.rb0me5ZAgld0fVASB50vrMslLb8md0a', 'John', '877-393-4448', '2020-03-19 14:02:32', '2020-03-19 22:18:40'),
-('user3', '$2a$10$xEbGJ1QHr/CZ.ltRIP4A9.K27Sq3HJ4Dh/sN0ssd5GwkaPbjPRW9S', 'Jane', '112-323-1111', '2020-03-18 04:20:52', '2020-03-20 05:01:02');
+('user1','$2a$10$PHcLPlJod/fKyjMUsGuSVeVnI0.EKudDleRT9vM9jqCJzL9QvC5Ju', 'Jun', '212-212-2222', 'Jun@gmail.com', 1, '2020-03-18 22:18:40', '2020-03-18 22:20:24'),
+('user2','$2a$10$pSHd2ngUssBZYRlHQQaKu.rb0me5ZAgld0fVASB50vrMslLb8md0a', 'John', '877-393-4448', 'John@gmail.com', 1, '2020-03-19 14:02:32', '2020-03-19 22:18:40'),
+('user3', '$2a$10$xEbGJ1QHr/CZ.ltRIP4A9.K27Sq3HJ4Dh/sN0ssd5GwkaPbjPRW9S', 'Jane', '112-323-1111', 'Jane@gmail.com', 1, '2020-03-18 04:20:52', '2020-03-20 05:01:02');
 
 
 INSERT INTO member_icon (member_id, filename)
@@ -1451,10 +1453,10 @@ CREATE TABLE shopping_cart (
     id SERIAL PRIMARY KEY,
     member_id BIGINT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modify_date TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT NULL
 );
 
-INSERT INTO shopping_cart (member_id, created_at, modify_date) VALUES
+INSERT INTO shopping_cart (member_id, created_at, updated_at) VALUES
 (1, '2023-04-25 08:30:00', '2023-04-25 08:30:00'),
 (2, '2023-04-25 08:30:00', '2023-04-25 08:30:00'),
 (3, '2023-04-25 08:30:00', '2023-04-25 08:30:00');
@@ -1471,7 +1473,7 @@ CREATE TABLE cart_item (
     quantity INTEGER,
     price numeric(10,2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modify_date TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT NULL
 );
 
 INSERT INTO cart_item (cart_id, product_id, product_name, product_sku, product_pic, quantity, price)
@@ -1594,7 +1596,7 @@ CREATE TABLE order_change_history (
     update_action TEXT NOT NULL,
     order_status INTEGER NULL DEFAULT NULL,              -- waiting for payment 0, fulfilling 1,  send 2, complete(received) 3, closed(out of return period) 4,invalid 5
     note VARCHAR(500) NULL DEFAULT NULL,
-    operator TEXT,
+    operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP NULL DEFAULT NULL
 );
 
@@ -1728,8 +1730,8 @@ DROP TABLE IF EXISTS return_log;
 CREATE TABLE return_log (
     id SERIAL PRIMARY KEY,
     return_request_id BIGINT,
-    update_action       VARCHAR(100),
-    operator     VARCHAR(100),
+    update_action VARCHAR(100),
+    operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -1822,7 +1824,7 @@ CREATE TABLE article_change_log (
     id SERIAL PRIMARY KEY,
     article_id INT NOT NULL,
     update_action VARCHAR(255) NOT NULL,
-    operator VARCHAR(255) NOT NULL,
+    operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -1932,7 +1934,7 @@ CREATE TABLE coupon_change_log (
     id SERIAL PRIMARY KEY,
     coupon_id INT NOT NULL,
     update_action VARCHAR(255) NOT NULL,
-    operator VARCHAR(255) NOT NULL,
+    operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -2053,7 +2055,7 @@ CREATE TABLE promotion_sale_log (
     promotion_type INTEGER,    -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
     discount_type INTEGER,       -- 0 -> by amount, 1->  by percent off
     amount numeric,
-    operator TEXT,     -- who made the change
+    operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -2063,3 +2065,172 @@ VALUES
 (2, 'update action', 1, 1, 10, 'admin'),
 (3, 'update action', 2, 0, 100, 'admin'),
 (4, 'update action', 3, 1, 10, 'admin');
+
+
+
+-----------------------
+---  Notification  ----
+-----------------------
+DROP TABLE IF EXISTS email;
+CREATE TABLE email (
+    id SERIAL PRIMARY KEY,
+    service_type VARCHAR(255),
+    action_type    VARCHAR(255),
+    sender_email VARCHAR(255) NOT NULL,
+    recipient_email VARCHAR(255) NOT NULL,
+    subject VARCHAR(255),
+    body TEXT,
+    operator VARCHAR(100) NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Admin Actions
+INSERT INTO email (service_type, action_type, sender_email, recipient_email, subject, body, operator)
+VALUES
+('admin', 'product_update', 'admin@example.com', 'user1@example.com', 'Product Update', 'Dear User, we have updated information about a product you purchased.', 'jun'),
+('admin', 'message_to_all', 'admin@example.com', 'all_users@example.com', 'Important Announcement', 'Dear Users, we have an important announcement for you. Please read carefully.', 'jun'),
+('admin', 'message_to_one', 'admin@example.com', 'user2@example.com', 'Personalized Message', 'Dear User, here is a personalized message just for you.', 'jun'),
+
+-- Sales Actions
+('sms', 'new_sale_notification', 'sales@example.com', 'all_users@example.com', 'New Sale Notification', 'Exciting news! We have a new sale happening. Check out the latest deals.', 'system'),
+
+-- Order Actions
+('oms', 'new_order_confirmation', 'order@example.com', 'user3@example.com', 'New Order Confirmation', 'Thank you for your new order! Here are the details of your purchase.', 'system'),
+('oms', 'return_request_update', 'order@example.com', 'user4@example.com', 'Return Request Update', 'Your return request has been approved. Please follow the instructions to complete the return process.', 'system'),
+('oms', 'order_canceled', 'order@example.com', 'user5@example.com', 'Order Canceled', 'We regret to inform you that your order has been canceled. Please contact customer support for more information.', 'system'),
+
+-- User Actions
+('ums', 'user_creation', 'user_management@example.com', 'new_user@example.com', 'Welcome to Our Platform', 'Welcome to our platform! We are excited to have you as a new user.', 'system'),
+('ums', 'password_reset_request', 'user_management@example.com', 'user6@example.com', 'Password Reset Request', 'You have requested to reset your password. Click the link below to proceed with the password reset process.', 'system');
+
+
+DROP TABLE IF EXISTS email_templates;
+CREATE TABLE email_templates (
+    id SERIAL PRIMARY KEY,
+    service_name VARCHAR(50),
+    template_text TEXT,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT NULL
+);
+
+INSERT INTO email_templates (service_name, template_text)
+VALUES
+('user_service', 'Hello {name}, your account has been created successfully.'),
+('sale_service', 'There is a sale is going on through #{start_time} and #{end_time} on #{name}'),
+('order_service', 'Your order #{order_number} is confirmed. Expected delivery date is {delivery_date}.');
+
+
+DROP TABLE IF EXISTS email_templates_history;
+CREATE TABLE email_templates_history (
+    id SERIAL PRIMARY KEY,
+    template_id NUMERIC,
+    update_action TEXT NOT NULL,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    operator VARCHAR(100) NOT NULL
+);
+
+INSERT INTO email_templates_history (template_id, update_action, operator)
+VALUES
+(1, 'create', 'Jun'),
+(2, 'create', 'Jun'),
+(3, 'create', 'Jun');
+
+
+--- Spring Batch schema, needed to store jobs. Took it from their Jar file. SQL file. ---
+--- from spring-batch-core-4.3.3.jar file in /home/.m2/repository/... ---
+--- https://github.com/spring-projects/spring-batch/blob/main/spring-batch-core/src/main/resources/org/springframework/batch/core/schema-postgresql.sql ---
+DROP TABLE  IF EXISTS BATCH_JOB_INSTANCE;
+CREATE TABLE BATCH_JOB_INSTANCE  (
+    JOB_INSTANCE_ID BIGINT  NOT NULL PRIMARY KEY ,
+    VERSION BIGINT ,
+    JOB_NAME VARCHAR(100) NOT NULL,
+    JOB_KEY VARCHAR(32) NOT NULL,
+    constraint JOB_INST_UN unique (JOB_NAME, JOB_KEY)
+);
+
+DROP TABLE  IF EXISTS BATCH_JOB_EXECUTION;
+CREATE TABLE BATCH_JOB_EXECUTION  (
+    JOB_EXECUTION_ID BIGINT  NOT NULL PRIMARY KEY ,
+    VERSION BIGINT  ,
+    JOB_INSTANCE_ID BIGINT NOT NULL,
+    CREATE_TIME TIMESTAMP NOT NULL,
+    START_TIME TIMESTAMP DEFAULT NULL ,
+    END_TIME TIMESTAMP DEFAULT NULL ,
+    STATUS VARCHAR(10) ,
+    EXIT_CODE VARCHAR(2500) ,
+    EXIT_MESSAGE VARCHAR(2500) ,
+    LAST_UPDATED TIMESTAMP,
+    JOB_CONFIGURATION_LOCATION VARCHAR(2500) NULL,
+    constraint JOB_INST_EXEC_FK foreign key (JOB_INSTANCE_ID)
+    references BATCH_JOB_INSTANCE(JOB_INSTANCE_ID)
+);
+
+DROP TABLE  IF EXISTS BATCH_JOB_EXECUTION_PARAMS;
+CREATE TABLE BATCH_JOB_EXECUTION_PARAMS  (
+    JOB_EXECUTION_ID BIGINT NOT NULL ,
+    TYPE_CD VARCHAR(6) NOT NULL ,
+    KEY_NAME VARCHAR(100) NOT NULL ,
+    STRING_VAL VARCHAR(250) ,
+    DATE_VAL TIMESTAMP DEFAULT NULL ,
+    LONG_VAL BIGINT ,
+    DOUBLE_VAL DOUBLE PRECISION ,
+    IDENTIFYING CHAR(1) NOT NULL ,
+    constraint JOB_EXEC_PARAMS_FK foreign key (JOB_EXECUTION_ID)
+    references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
+);
+
+DROP TABLE  IF EXISTS BATCH_STEP_EXECUTION;
+CREATE TABLE BATCH_STEP_EXECUTION  (
+    STEP_EXECUTION_ID BIGINT  NOT NULL PRIMARY KEY ,
+    VERSION BIGINT NOT NULL,
+    STEP_NAME VARCHAR(100) NOT NULL,
+    JOB_EXECUTION_ID BIGINT NOT NULL,
+    START_TIME TIMESTAMP NOT NULL ,
+    END_TIME TIMESTAMP DEFAULT NULL ,
+    STATUS VARCHAR(10) ,
+    COMMIT_COUNT BIGINT ,
+    READ_COUNT BIGINT ,
+    FILTER_COUNT BIGINT ,
+    WRITE_COUNT BIGINT ,
+    READ_SKIP_COUNT BIGINT ,
+    WRITE_SKIP_COUNT BIGINT ,
+    PROCESS_SKIP_COUNT BIGINT ,
+    ROLLBACK_COUNT BIGINT ,
+    EXIT_CODE VARCHAR(2500) ,
+    EXIT_MESSAGE VARCHAR(2500) ,
+    LAST_UPDATED TIMESTAMP,
+    constraint JOB_EXEC_STEP_FK foreign key (JOB_EXECUTION_ID)
+    references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
+);
+
+DROP TABLE  IF EXISTS BATCH_STEP_EXECUTION_CONTEXT;
+CREATE TABLE BATCH_STEP_EXECUTION_CONTEXT  (
+    STEP_EXECUTION_ID BIGINT NOT NULL PRIMARY KEY,
+    SHORT_CONTEXT VARCHAR(2500) NOT NULL,
+    SERIALIZED_CONTEXT TEXT ,
+    constraint STEP_EXEC_CTX_FK foreign key (STEP_EXECUTION_ID)
+    references BATCH_STEP_EXECUTION(STEP_EXECUTION_ID)
+);
+
+DROP TABLE  IF EXISTS BATCH_JOB_EXECUTION_CONTEXT;
+CREATE TABLE BATCH_JOB_EXECUTION_CONTEXT  (
+    JOB_EXECUTION_ID BIGINT NOT NULL PRIMARY KEY,
+    SHORT_CONTEXT VARCHAR(2500) NOT NULL,
+    SERIALIZED_CONTEXT TEXT ,
+    constraint JOB_EXEC_CTX_FK foreign key (JOB_EXECUTION_ID)
+    references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
+);
+
+DROP SEQUENCE  IF EXISTS BATCH_STEP_EXECUTION_SEQ ;
+CREATE SEQUENCE BATCH_STEP_EXECUTION_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
+
+DROP SEQUENCE  IF EXISTS BATCH_JOB_EXECUTION_SEQ ;
+CREATE SEQUENCE BATCH_JOB_EXECUTION_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
+
+DROP SEQUENCE  IF EXISTS BATCH_JOB_SEQ ;
+CREATE SEQUENCE BATCH_JOB_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
+
+
+
+
+

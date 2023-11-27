@@ -5,7 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="member_id" jdbcType="BIGINT" property="memberId" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
-    <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, member_id, created_at, modify_date
+    id, member_id, created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ShoppingCartExample" resultMap="BaseResultMap">
     select
@@ -99,9 +99,9 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ShoppingCart" useGeneratedKeys="true">
-    insert into shopping_cart (member_id, created_at, modify_date
+    insert into shopping_cart (member_id, created_at, updated_at
       )
-    values (#{memberId,jdbcType=BIGINT}, #{createdAt,jdbcType=TIMESTAMP}, #{modifyDate,jdbcType=TIMESTAMP}
+    values (#{memberId,jdbcType=BIGINT}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ShoppingCart" useGeneratedKeys="true">
@@ -113,8 +113,8 @@
       <if test="createdAt != null">
         created_at,
       </if>
-      <if test="modifyDate != null">
-        modify_date,
+      <if test="updatedAt != null">
+        updated_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -124,8 +124,8 @@
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="modifyDate != null">
-        #{modifyDate,jdbcType=TIMESTAMP},
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -147,8 +147,8 @@
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.modifyDate != null">
-        modify_date = #{record.modifyDate,jdbcType=TIMESTAMP},
+      <if test="record.updatedAt != null">
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -160,7 +160,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       member_id = #{record.memberId,jdbcType=BIGINT},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      modify_date = #{record.modifyDate,jdbcType=TIMESTAMP}
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -174,8 +174,8 @@
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="modifyDate != null">
-        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -184,7 +184,7 @@
     update shopping_cart
     set member_id = #{memberId,jdbcType=BIGINT},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
-      modify_date = #{modifyDate,jdbcType=TIMESTAMP}
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

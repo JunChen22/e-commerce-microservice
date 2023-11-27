@@ -1,8 +1,9 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CouponChangeLog {
+public class CouponChangeLog implements Serializable {
     private Integer id;
 
     private Integer couponId;
@@ -12,6 +13,8 @@ public class CouponChangeLog {
     private String operator;
 
     private Date createdAt;
+
+    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
