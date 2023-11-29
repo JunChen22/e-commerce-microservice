@@ -5,7 +5,7 @@ import com.itsthatjun.ecommerce.dto.event.admin.UmsAdminEmailEvent;
 import com.itsthatjun.ecommerce.dto.event.admin.UmsAdminUserEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.UmsLogUpdateEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.UmsUserEvent;
-import com.itsthatjun.ecommerce.dto.outgoing.AddressDTO;
+import com.itsthatjun.ecommerce.dto.model.AddressDTO;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
 import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;

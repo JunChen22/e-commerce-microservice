@@ -14,7 +14,7 @@ spring:
 
 spring.cloud:
   function:   # can't have space between, tells spring which to use
-    definition: orderMessageProcessor;saleMessageProcessor;userMessageProcessor;adminMessageProcessor
+    definition: orderMessageProcessor;orderItemMessageProcessor;orderReturnMessageProcessor;saleMessageProcessor;userMessageProcessor;adminMessageProcessor
   stream:
     default:
       contentType: application/json
@@ -22,6 +22,12 @@ spring.cloud:
       orderMessageProcessor-in-0:   # message from services
         destination: orderEmail
         group: orderEmailGroup
+      orderItemMessageProcessor-in-0:
+        destination: orderItemEmail
+        group: orderItemEmailGroup
+      orderReturnMessageProcessor-in-0:
+        destination: orderReturnEmail
+        group: orderReturnEmailGroup
       saleMessageProcessor-in-0:
         destination: saleEmail
         group: saleEmailGroup

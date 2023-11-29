@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.dto.outgoing.OrderDTO;
-import com.itsthatjun.ecommerce.dto.outgoing.OrderItemDTO;
+import com.itsthatjun.ecommerce.dto.model.OrderDTO;
+import com.itsthatjun.ecommerce.dto.model.OrderItemDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

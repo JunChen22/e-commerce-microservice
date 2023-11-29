@@ -1,9 +1,9 @@
 package com.itsthatjun.ecommerce.dto.oms;
 
-import com.itsthatjun.ecommerce.dto.oms.outgoing.ReturnItemDTO;
-import com.itsthatjun.ecommerce.dto.oms.outgoing.ReturnLogDTO;
-import com.itsthatjun.ecommerce.dto.oms.outgoing.ReturnPictureDTO;
-import com.itsthatjun.ecommerce.dto.oms.outgoing.ReturnRequestDTO;
+import com.itsthatjun.ecommerce.dto.oms.model.ReturnItemDTO;
+import com.itsthatjun.ecommerce.dto.oms.model.ReturnLogDTO;
+import com.itsthatjun.ecommerce.dto.oms.model.ReturnPictureDTO;
+import com.itsthatjun.ecommerce.dto.oms.model.ReturnRequestDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

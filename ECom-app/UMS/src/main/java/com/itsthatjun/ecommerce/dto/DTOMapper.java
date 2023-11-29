@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.dto.outgoing.AddressDTO;
-import com.itsthatjun.ecommerce.dto.outgoing.MemberDTO;
+import com.itsthatjun.ecommerce.dto.model.AddressDTO;
+import com.itsthatjun.ecommerce.dto.model.MemberDTO;
 import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import org.mapstruct.Mapper;

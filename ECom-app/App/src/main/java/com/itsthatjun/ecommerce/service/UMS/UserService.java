@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.UMS;
 
 import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
-import com.itsthatjun.ecommerce.dto.ums.outgoing.AddressDTO;
+import com.itsthatjun.ecommerce.dto.ums.model.AddressDTO;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Mono;
 

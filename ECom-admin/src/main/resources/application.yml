@@ -66,6 +66,10 @@ spring.cloud.stream:
       destination: adminOrder
       producer:
         required-groups: adminOrderGroup
+    orderMessage-out-0:             # send out message regarding a certain product like recall or invalid item.
+      destination: adminOrderItem
+      producer:
+        required-groups: adminOrderItemGroup
     return-out-0:
       destination: adminReturn
       producer:

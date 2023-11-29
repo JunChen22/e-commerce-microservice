@@ -1,8 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.OrderDetail;
-import com.itsthatjun.ecommerce.dto.outgoing.OrderDTO;
-import com.itsthatjun.ecommerce.mbg.model.Orders;
+import com.itsthatjun.ecommerce.dto.model.OrderDTO;
 import com.itsthatjun.ecommerce.service.impl.OrderServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -13,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -51,27 +52,9 @@ public class OrderController {
         return orderService.getPaymentLink(orderSn, userId);
     }
 
-    @GetMapping("/admin/all")
-    @ApiOperation(value = "get all of the return request based on status code")
-    public Flux<Orders> getAllOrderByStatus(@RequestParam int statusCode) {
-        return orderService.getAllOrderByStatus(statusCode);
-    }
-
-    @GetMapping("/admin/detail/{orderSn}")
-    @ApiOperation(value = "get user order detail")
-    public Mono<OrderDetail> getUserOrderDetail(@PathVariable String orderSn) {
-        return orderService.getUserOrderDetail(orderSn);
-    }
-
-    @GetMapping("/admin/user/{userId}")
-    @ApiOperation(value = "get user order detail")
-    public Flux<Orders> getUserOrderDetail(@PathVariable int userId) {
-        return orderService.getUserOrders(userId);
-    }
-
-    @ApiOperation("Get payment link to pay later")
-    @GetMapping("/admin/payment/getPaymentLink/{orderSn}")
-    public Mono<String> getUserPaymentLink(@PathVariable String orderSn) {
-        return orderService.getUserOrderPaymentLink(orderSn);
+    @ApiOperation("get all orders that are affected by product")
+    @GetMapping("/getUserPurchasedItem")
+    public List<OrderDetail> getUserPurchasedItem(@RequestParam String productSku) {
+        return orderService.getUserPurchasedItem(productSku);
     }
 }

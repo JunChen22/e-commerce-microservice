@@ -8,6 +8,8 @@ import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.CartItemService;
 import com.itsthatjun.ecommerce.service.OrderService;
 import com.itsthatjun.ecommerce.service.ReturnOrderService;
+import com.itsthatjun.ecommerce.service.admin.AdminOrderServiceImpl;
+import com.itsthatjun.ecommerce.service.admin.AdminReturnServiceImpl;
 import com.itsthatjun.ecommerce.service.eventupdate.PmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.eventupdate.SmsEventUpdateService;
 import org.slf4j.Logger;
@@ -38,14 +40,21 @@ public class MessageProcessorConfig {
 
     private final SmsEventUpdateService smsEventUpdateService;
 
+    private final AdminOrderServiceImpl adminOrderService;
+
+    private final AdminReturnServiceImpl adminReturnService;
+
     @Autowired
     public MessageProcessorConfig(CartItemService cartItemService, OrderService orderService, ReturnOrderService returnOrderService,
-                                  PmsEventUpdateService pmsEventUpdateService, SmsEventUpdateService smsEventUpdateService) {
+                                  PmsEventUpdateService pmsEventUpdateService, SmsEventUpdateService smsEventUpdateService,
+                                  AdminOrderServiceImpl adminOrderService, AdminReturnServiceImpl adminReturnService) {
         this.cartItemService = cartItemService;
         this.orderService = orderService;
         this.returnOrderService = returnOrderService;
         this.pmsEventUpdateService = pmsEventUpdateService;
         this.smsEventUpdateService = smsEventUpdateService;
+        this.adminOrderService = adminOrderService;
+        this.adminReturnService = adminReturnService;
     }
 
     @Bean
@@ -175,6 +184,8 @@ public class MessageProcessorConfig {
             }
         };
     }
+
+    // TODO: fix the from DTO change, add generic MapStruct mapper to map the DTO models
     /*
     @Bean
     public Consumer<OmsAdminOrderEvent> adminOrderMessageProcessor() {
@@ -191,15 +202,15 @@ public class MessageProcessorConfig {
                 case GENERATE_ORDER:
                     List<OrderItem> orderItemList = orderDetail.getOrderItemList();
                     Address address = orderDetail.getAddress();
-                    orderService.createOrder(order, orderItemList, address, reason, operator).subscribe();
+                    adminOrderService.createOrder(order, orderItemList, address, reason, operator).subscribe();
                     break;
 
                 case UPDATE_ORDER:
-                    orderService.updateOrder(order, reason, operator).subscribe();
+                    adminOrderService.updateOrder(order, reason, operator).subscribe();
                     break;
 
                 case CANCEL_ORDER:
-                    orderService.adminCancelOrder(order, reason, operator).subscribe();
+                    adminOrderService.adminCancelOrder(order, reason, operator).subscribe();
                     break;
 
                 default:
@@ -210,8 +221,7 @@ public class MessageProcessorConfig {
             }
         };
     }
-
-     */
+   */
 
     @Bean
     public Consumer<OmsAdminOrderReturnEvent> adminReturnMessageProcessor() {
@@ -224,16 +234,16 @@ public class MessageProcessorConfig {
 
             switch (event.getEventType()) {
                 case APPROVED:
-                    returnOrderService.approveReturnRequest(returnRequestDecision, operator).subscribe();
+                    adminReturnService.approveReturnRequest(returnRequestDecision, operator).subscribe();
                     break;
 
                 case REJECTED:
                     String rejectionReason = returnRequestDecision.getReason();
-                    returnOrderService.rejectReturnRequest(returnRequestDecision, rejectionReason, operator).subscribe();
+                    adminReturnService.rejectReturnRequest(returnRequestDecision, rejectionReason, operator).subscribe();
                     break;
 
                 case COMPLETED_RETURN:
-                    returnOrderService.completeReturnRequest(returnRequestDecision, operator).subscribe();
+                    adminReturnService.completeReturnRequest(returnRequestDecision, operator).subscribe();
                     break;
 
                 default:
@@ -243,6 +253,39 @@ public class MessageProcessorConfig {
             }
         };
     }
+
+    /* // TODO:
+    @Bean
+    public Consumer<OmsAdminOrderAnnouncementEvent> adminOrderItemAnnouncementProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+
+            String operator = event.getAdminName();
+            ReturnRequestDecision returnRequestDecision = event.getReturnRequestDecision();
+
+            switch (event.getEventType()) {
+                case APPROVED:
+                    adminReturnService.approveReturnRequest(returnRequestDecision, operator).subscribe();
+                    break;
+
+                case REJECTED:
+                    String rejectionReason = returnRequestDecision.getReason();
+                    adminReturnService.rejectReturnRequest(returnRequestDecision, rejectionReason, operator).subscribe();
+                    break;
+
+                case COMPLETED_RETURN:
+                    adminReturnService.completeReturnRequest(returnRequestDecision, operator).subscribe();
+                    break;
+
+                default:
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE and CANCEL event";
+                    LOG.warn(errorMessage);
+                    throw new RuntimeException(errorMessage);
+            }
+        };
+    }
+     */
 
     @Bean
     public Consumer<PmsUpdateIncomingEvent> updateFromPmsMessageProcessor() {

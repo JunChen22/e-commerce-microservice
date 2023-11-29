@@ -5,12 +5,15 @@ import lombok.Getter;
 
 import java.time.ZonedDateTime;
 
+import static java.time.ZonedDateTime.now;
+
 @Getter
 public class OmsOrderEvent {
 
     public enum Type {
+        ORDER_NEW,
         ORDER_UPDATE,
-        RETURN_UPDATE,
+        ORDER_CANCEL
     }
 
     private final Type eventType;
@@ -24,9 +27,9 @@ public class OmsOrderEvent {
         this.eventCreatedAt = null;
     }
 
-    public OmsOrderEvent(Type eventType, OrderDetail orderDetail, ZonedDateTime eventCreatedAt) {
+    public OmsOrderEvent(Type eventType, OrderDetail orderDetail) {
         this.eventType = eventType;
         this.orderDetail = orderDetail;
-        this.eventCreatedAt = eventCreatedAt;
+        this.eventCreatedAt = now();
     }
 }

@@ -1,11 +1,9 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.dto.model.AddressDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -18,7 +16,7 @@ public class OrderParam {
     private double amount;
 
     @ApiModelProperty("Member deliver address")
-    private Address address;
+    private AddressDTO address;
 
     @ApiModelProperty("coupon for discount")
     private String coupon;

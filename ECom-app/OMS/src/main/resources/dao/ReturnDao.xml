@@ -3,20 +3,20 @@
 <mapper namespace="com.itsthatjun.ecommerce.dao.ReturnDao">
     <resultMap id="returnDetailMap" type="com.itsthatjun.ecommerce.dto.ReturnDetail" extends="returnRequestDTOMap">
 
-        <collection property="returnItemList" ofType="com.itsthatjun.ecommerce.dto.outgoing.ReturnItemDTO"
+        <collection property="returnItemList" ofType="com.itsthatjun.ecommerce.dto.model.ReturnItemDTO"
                 resultMap="returnItemDTOMap">
         </collection>
 
-        <collection property="picturesList" ofType="com.itsthatjun.ecommerce.dto.outgoing.ReturnPictureDTO"
+        <collection property="picturesList" ofType="com.itsthatjun.ecommerce.dto.model.ReturnPictureDTO"
                     resultMap="returnPictureDTOMap">
         </collection>
 
-        <collection property="logList" ofType="com.itsthatjun.ecommerce.dto.outgoing.ReturnLogDTO"
+        <collection property="logList" ofType="com.itsthatjun.ecommerce.dto.model.ReturnLogDTO"
                     resultMap="returnLogDTOMap">
         </collection>
     </resultMap>
 
-    <resultMap id="returnRequestDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.ReturnRequestDTO">
+    <resultMap id="returnRequestDTOMap" type="com.itsthatjun.ecommerce.dto.model.ReturnRequestDTO">
         <result property="orderSn" column="r_order_sn" />
         <result property="returnQuantity" column="r_return_quantity" />
         <result property="returnName" column="r_return_name" />
@@ -36,23 +36,23 @@
         <result property="updatedAt" column="r_update" />
     </resultMap>
 
-    <resultMap id="returnItemDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.ReturnItemDTO">
+    <resultMap id="returnItemDTOMap" type="com.itsthatjun.ecommerce.dto.model.ReturnItemDTO">
         <result property="productSku" column="i_product_sku"/>
         <result property="purchasedPrice" column="i_purchased_price"/>
         <result property="quantity" column="i_quantity"/>
     </resultMap>
 
-    <resultMap id="returnPictureDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.ReturnPictureDTO">
+    <resultMap id="returnPictureDTOMap" type="com.itsthatjun.ecommerce.dto.model.ReturnPictureDTO">
         <result property="filename" column="p_filename"/>
     </resultMap>
 
-    <resultMap id="returnLogDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.ReturnLogDTO">
+    <resultMap id="returnLogDTOMap" type="com.itsthatjun.ecommerce.dto.model.ReturnLogDTO">
         <result property="updateAction" column="l_update_action"/>
         <result property="operator" column="l_operator" />
         <result property="createdAt" column="l_created_at"/>
     </resultMap>
 
-    <select id="getDetail" resultMap="returnDetailMap">
+    <select id="getReturnDetail" resultMap="returnDetailMap">
         SELECT
             request.order_sn r_order_sn,
             request.return_quantity r_return_quantity,
@@ -86,5 +86,41 @@
         LEFT JOIN return_reason_pictures picture ON picture.return_request_id = request.id
         LEFT JOIN return_log log ON log.return_request_id = request.id
         WHERE request.order_sn = #{orderSn} AND request.member_id = #{userId}
+    </select>
+
+    <select id="getReturnForNotification" resultMap="returnDetailMap">
+        SELECT
+            request.order_sn r_order_sn,
+            request.return_quantity r_return_quantity,
+            request.return_name r_return_name,
+            request.return_phone r_return_phone,
+            request.status r_status,
+            request.handle_time r_handle_time,
+            request.asking_amount r_asking_amount,
+            request.refunded_amount r_refunded_amount,
+            request.reason r_reason,
+            request.description r_description,
+            request.handle_note r_handle_note,
+            request.handle_operator r_handle_operator,
+            request.receive_operator r_receive_operator,
+            request.receive_time r_receive_time,
+            request.receive_note r_receive_note,
+            request.created_at r_created_at,
+            request.updated_at r_update,
+
+            item.product_sku i_product_sku,
+            item.purchased_price i_purchased_price,
+            item.quantity i_quantity,
+
+            picture.filename p_filename,
+
+            log.update_action l_update_action,
+            log.operator l_operator,
+            log.created_at l_created_at
+        FROM return_request request
+        LEFT JOIN return_item item ON return_request_id = request.id
+        LEFT JOIN return_reason_pictures picture ON picture.return_request_id = request.id
+        LEFT JOIN return_log log ON log.return_request_id = request.id
+        WHERE request.order_sn = #{orderSn}
     </select>
 </mapper>

@@ -1,9 +1,9 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.dto.outgoing.ArticleDTO;
-import com.itsthatjun.ecommerce.dto.outgoing.ImageDTO;
-import com.itsthatjun.ecommerce.dto.outgoing.QaDTO;
-import com.itsthatjun.ecommerce.dto.outgoing.VideoDTO;
+import com.itsthatjun.ecommerce.dto.model.ArticleDTO;
+import com.itsthatjun.ecommerce.dto.model.ImageDTO;
+import com.itsthatjun.ecommerce.dto.model.QaDTO;
+import com.itsthatjun.ecommerce.dto.model.VideoDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

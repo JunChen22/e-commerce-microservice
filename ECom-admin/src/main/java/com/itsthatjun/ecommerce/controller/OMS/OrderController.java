@@ -82,6 +82,20 @@ public class OrderController {
         return orderService.cancelOrder(orderSn, reason, operatorName);
     }
 
+    @DeleteMapping("/notification")
+    @ApiOperation(value = "")
+    public Mono<Void> sendOrderItemNotification(@RequestParam String productSku, @RequestBody String message) {
+        String operatorName = getAdminName();
+        return orderService.sendOrderItemNotification(productSku, message, operatorName);
+    }
+
+    @DeleteMapping("/notification")
+    @ApiOperation(value = "")
+    public Mono<Void> sendOrderProductNotification(@RequestParam String productName, @RequestBody String message) {
+        String operatorName = getAdminName();
+        return orderService.sendOrderProductNotification(productName, message, operatorName);
+    }
+
     private String getAdminName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();

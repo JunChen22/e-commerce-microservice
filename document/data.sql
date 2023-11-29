@@ -2115,9 +2115,13 @@ CREATE TABLE email_templates (
 
 INSERT INTO email_templates (service_name, template_text)
 VALUES
-('user_service', 'Hello {name}, your account has been created successfully.'),
-('sale_service', 'There is a sale is going on through #{start_time} and #{end_time} on #{name}'),
-('order_service', 'Your order #{order_number} is confirmed. Expected delivery date is {delivery_date}.');
+('user_service', 'Hello {name}, this is a message for {name} only'),
+('user_service_all', 'Hello {name}, this is a message for all customer.'),
+('sale_service', 'There is a sale is going on through #{start_time} and #{end_time} on #{sale_name}'),
+('order_service', 'Your order #{order_number} is confirmed. Expected delivery date is #{delivery_date}.'),
+('order_service_update', 'Your order #{order_number} has been updated. Current status is #{status}'),
+('order_service_return', 'Your return request for #{order_number} have started. Current status is #{status} '),
+('order_service_return_update', 'Your return request for #{order_number} have updated. Current status is #{status}');
 
 
 DROP TABLE IF EXISTS email_templates_history;

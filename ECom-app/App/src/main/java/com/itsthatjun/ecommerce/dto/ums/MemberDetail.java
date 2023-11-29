@@ -1,9 +1,9 @@
 package com.itsthatjun.ecommerce.dto.ums;
 
-import com.itsthatjun.ecommerce.dto.ums.outgoing.AddressDTO;
-import com.itsthatjun.ecommerce.dto.ums.outgoing.MemberDTO;
-import com.itsthatjun.ecommerce.dto.ums.outgoing.MemberIconDTO;
-import com.itsthatjun.ecommerce.dto.ums.outgoing.MemberLoginLogDTO;
+import com.itsthatjun.ecommerce.dto.ums.model.AddressDTO;
+import com.itsthatjun.ecommerce.dto.ums.model.MemberDTO;
+import com.itsthatjun.ecommerce.dto.ums.model.MemberIconDTO;
+import com.itsthatjun.ecommerce.dto.ums.model.MemberLoginLogDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

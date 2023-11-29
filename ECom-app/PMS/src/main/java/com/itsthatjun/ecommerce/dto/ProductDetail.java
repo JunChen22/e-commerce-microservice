@@ -1,8 +1,8 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.dto.outgoing.ProductDTO;
-import com.itsthatjun.ecommerce.dto.outgoing.ProductSkuDTO;
-import com.itsthatjun.ecommerce.dto.outgoing.ReviewDTO;
+import com.itsthatjun.ecommerce.dto.model.ProductDTO;
+import com.itsthatjun.ecommerce.dto.model.ProductSkuDTO;
+import com.itsthatjun.ecommerce.dto.model.ReviewDTO;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import lombok.Data;
 

@@ -14,23 +14,23 @@
         </collection>
     </resultMap>
 
-    <resultMap id="articleDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.ArticleDTO">
+    <resultMap id="articleDTOMap" type="com.itsthatjun.ecommerce.dto.model.ArticleDTO">
         <result property="title" column="a_title"/>
         <result property="body" column="a_body"/>
         <result property="createdAt" column="a_created_at"/>
         <result property="updatedAt" column="a_updated_at"/>
     </resultMap>
 
-    <resultMap id="ImageDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.ImageDTO">
+    <resultMap id="ImageDTOMap" type="com.itsthatjun.ecommerce.dto.model.ImageDTO">
         <result property="filename" column="i_filename"/>
     </resultMap>
 
-    <resultMap id="QaDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.QaDTO">
+    <resultMap id="QaDTOMap" type="com.itsthatjun.ecommerce.dto.model.QaDTO">
         <result property="question" column="qa_question"/>
         <result property="answer" column="qa_answer"/>
     </resultMap>
 
-    <resultMap id="VideoDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.VideoDTO">
+    <resultMap id="VideoDTOMap" type="com.itsthatjun.ecommerce.dto.model.VideoDTO">
         <result property="url" column="v_url"/>
     </resultMap>
 

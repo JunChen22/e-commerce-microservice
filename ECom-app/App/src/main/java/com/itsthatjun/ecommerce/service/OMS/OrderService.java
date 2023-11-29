@@ -1,8 +1,8 @@
 package com.itsthatjun.ecommerce.service.OMS;
 
-import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
-import com.itsthatjun.ecommerce.dto.oms.outgoing.OrderDTO;
+import com.itsthatjun.ecommerce.dto.oms.model.OrderDTO;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

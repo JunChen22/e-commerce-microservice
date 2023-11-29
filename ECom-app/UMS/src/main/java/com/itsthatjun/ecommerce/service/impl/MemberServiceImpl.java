@@ -7,7 +7,7 @@ import com.itsthatjun.ecommerce.dto.UserInfo;
 import com.itsthatjun.ecommerce.dto.admin.AdminMemberDetail;
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsAuthUpdateEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsEmailEvent;
-import com.itsthatjun.ecommerce.dto.outgoing.AddressDTO;
+import com.itsthatjun.ecommerce.dto.model.AddressDTO;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.MemberService;

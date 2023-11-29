@@ -14,7 +14,7 @@ spring:
 
 spring.cloud:
   function: # can't have space between, tells spring which to use, using a pipe character allow multi-line.
-    definition: cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;adminOrderMessageProcessor;adminReturnMessageProcessor;updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
+    definition: cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;adminOrderMessageProcessor;adminReturnMessageProcessor;adminOrderItemAnnouncementProcessor;updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
   stream:
     default:
       contentType: application/json
@@ -31,9 +31,13 @@ spring.cloud:
       orderCompleteMessageProcessor-in-0:
         destination: orderComplete
         group: orderGroup
+
       adminOrderMessageProcessor-in-0: # admin CRUD order or return
         destination: adminOrder
         group: adminOrderGroup
+      adminOrderItemAnnouncementProcessor-in-0:
+        destination: adminOrderItem
+        group: adminOrderItemGroup
       adminReturnMessageProcessor-in-0:
         destination: adminReturn
         group: adminReturnGroup
@@ -66,6 +70,19 @@ spring.cloud:
         destination: returnRequestQueue
         producer:
           required-groups: returnGroup
+
+      orderMessage-out-0:            # send out system and update message to use regarding order
+        destination: orderEmail
+        producer:
+          required-groups: orderEmailGroup
+      orderItemMessage-out-0:
+        destination: orderItemEmail
+        producer:
+          required-groups: orderItemEmailGroup
+      orderReturnMessage-out-0:
+        destination: orderReturnEmail
+        producer:
+          required-groups: orderReturnEmailGroup
 
 # tells spring mybatis mapper's xml(sql) located
 mybatis:

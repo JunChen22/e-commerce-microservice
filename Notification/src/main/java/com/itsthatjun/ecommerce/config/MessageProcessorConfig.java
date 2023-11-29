@@ -1,9 +1,10 @@
 package com.itsthatjun.ecommerce.config;
 
+import com.itsthatjun.ecommerce.dto.OrderDetail;
+import com.itsthatjun.ecommerce.dto.ReturnDetail;
 import com.itsthatjun.ecommerce.dto.UserInfo;
-import com.itsthatjun.ecommerce.dto.event.OmsOrderEvent;
-import com.itsthatjun.ecommerce.dto.event.SmsEvent;
-import com.itsthatjun.ecommerce.dto.event.UmsEmailEvent;
+import com.itsthatjun.ecommerce.dto.event.*;
+import com.itsthatjun.ecommerce.service.OmsService;
 import com.itsthatjun.ecommerce.service.UmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +21,12 @@ public class MessageProcessorConfig {
 
     private final UmsService umsService;
 
+    private final OmsService omsService;
+
     @Autowired
-    public MessageProcessorConfig(UmsService umsService) {
+    public MessageProcessorConfig(UmsService umsService, OmsService omsService) {
         this.umsService = umsService;
+        this.omsService = omsService;
     }
 
     @Bean
@@ -30,14 +34,72 @@ public class MessageProcessorConfig {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
-
+            OrderDetail orderDetail = event.getOrderDetail();
             switch (event.getEventType()) {
-                case ORDER:
+                case ORDER_NEW:
+                    omsService.newOrderMessage(orderDetail);
+                    break;
+
+                case ORDER_UPDATE:
+                    omsService.updateOrderMessage(orderDetail);
+                    break;
+
+                case ORDER_CANCEL:
                     break;
 
                 default:
-                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_ACCOUNT, " +
-                            "UPDATE_ACCOUNT_INFO, UPDATE_ACCOUNT_STATUS and DELETE_ACCOUNT event";
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected " +
+                            "ORDER_NEW, ORDER_UPDATE and ORDER_ITEM_ANNOUNCEMENT event";
+                    LOG.warn(errorMessage);
+                    throw new RuntimeException(errorMessage);
+            }
+        };
+    }
+
+    @Bean
+    public Consumer<OmsOrderAnnouncementEvent> orderItemMessageProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+            String productName = event.getProductName();;
+            String message = event.getMessage();
+            switch (event.getEventType()) {
+                case ORDER_ITEM_SKU:
+                    omsService.sendAllItemMessage(productName, message);
+                    break;
+
+                case ORDER_ITEM_PRODUCT:
+                    //omsService.sendAllItemMessage(productName, message);
+                    break;
+
+                default:
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected " +
+                            "ORDER_ITEM_SKU and ORDER_ITEM_PRODUCT event";
+                    LOG.warn(errorMessage);
+                    throw new RuntimeException(errorMessage);
+            }
+        };
+    }
+
+    @Bean
+    public Consumer<OmsReturnEvent> orderReturnMessageProcessor() {
+        // lambda expression of override method accept
+        return event -> {
+            LOG.info("Process message created at {}...", event.getEventCreatedAt());
+            ReturnDetail returnDetail = event.getReturnDetail();
+            UserInfo userInfo = event.getUserInfo();
+            switch (event.getEventType()) {
+                case NEW_RETURN:
+                    omsService.newReturnMessage(returnDetail, userInfo);
+                    break;
+
+                case RETURN_UPDATE:
+                    omsService.updateReturnMessage(returnDetail, userInfo);
+                    break;
+
+                default:
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected " +
+                            "NEW_RETURN and RETURN_UPDATE event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
             }
@@ -51,12 +113,12 @@ public class MessageProcessorConfig {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
             switch (event.getEventType()) {
-                case ORDER:
+                case NEW_SALE:
                     break;
 
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_ACCOUNT, " +
-                            "UPDATE_ACCOUNT_INFO, UPDATE_ACCOUNT_STATUS and DELETE_ACCOUNT event";
+                            "NEW_SALE event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
             }

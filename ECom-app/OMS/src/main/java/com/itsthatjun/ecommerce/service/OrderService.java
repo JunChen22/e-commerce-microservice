@@ -2,9 +2,7 @@ package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.dto.OrderParam;
-import com.itsthatjun.ecommerce.dto.outgoing.OrderDTO;
-import com.itsthatjun.ecommerce.mbg.model.Address;
-import com.itsthatjun.ecommerce.mbg.model.OrderItem;
+import com.itsthatjun.ecommerce.dto.model.OrderDTO;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,30 +36,12 @@ public interface OrderService {
     @ApiOperation("Member cancel order")
     Mono<Orders> cancelOrder(String orderSn);
 
+    @ApiOperation("get all orders that are affected by product")
+    List<OrderDetail> getUserPurchasedItem(String productSku);
+
     @ApiOperation("get all order that are still in status 2, send/transitioning")
     List<Orders> getAllSendingOrder();
 
     @ApiOperation("Member received deliver, update order status by scheduled task")
     void confirmReceiveOrder(String orderSn);
-
-    @ApiOperation("waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5")
-    Flux<Orders> getAllOrderByStatus(int statusCode);
-
-    @ApiOperation("get user detail order")
-    Mono<OrderDetail> getUserOrderDetail(String orderSn);
-
-    @ApiOperation("get all orders from user")
-    Flux<Orders> getUserOrders(int memberId);
-
-    @ApiOperation("get payment link to make payment in different time")
-    Mono<String> getUserOrderPaymentLink(String orderSn);
-
-    @ApiOperation("Admin created order for user, to fix mistake on order or order a replacement. free or pay later")
-    Mono<Orders> createOrder(Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator);
-
-    @ApiOperation("Update order status")
-    Mono<Orders> updateOrder(Orders updateOrder, String reason, String operator);
-
-    @ApiOperation("delete an order")
-    Mono<Void> adminCancelOrder(Orders updateOrder, String reason, String operator);
 }

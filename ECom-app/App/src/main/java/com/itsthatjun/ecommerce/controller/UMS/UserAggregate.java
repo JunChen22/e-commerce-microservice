@@ -1,8 +1,7 @@
 package com.itsthatjun.ecommerce.controller.UMS;
 
 import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
-import com.itsthatjun.ecommerce.dto.ums.outgoing.AddressDTO;
-import com.itsthatjun.ecommerce.mbg.model.Address;
+import com.itsthatjun.ecommerce.dto.ums.model.AddressDTO;
 import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import io.swagger.annotations.Api;

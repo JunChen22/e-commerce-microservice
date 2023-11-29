@@ -2,7 +2,7 @@ package com.itsthatjun.ecommerce.service.UMS.impl;
 
 import com.itsthatjun.ecommerce.dto.event.ums.UmsUserEvent;
 import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
-import com.itsthatjun.ecommerce.dto.ums.outgoing.AddressDTO;
+import com.itsthatjun.ecommerce.dto.ums.model.AddressDTO;
 import com.itsthatjun.ecommerce.service.UMS.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

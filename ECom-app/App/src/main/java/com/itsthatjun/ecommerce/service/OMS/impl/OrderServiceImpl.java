@@ -1,11 +1,10 @@
 package com.itsthatjun.ecommerce.service.OMS.impl;
 
-import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsCompletionEvent;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
-import com.itsthatjun.ecommerce.dto.oms.outgoing.OrderDTO;
-import com.itsthatjun.ecommerce.mbg.model.Orders;
+import com.itsthatjun.ecommerce.dto.oms.model.OrderDTO;
 import com.itsthatjun.ecommerce.service.OMS.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

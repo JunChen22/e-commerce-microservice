@@ -2,7 +2,7 @@ package com.itsthatjun.ecommerce.service.OMS.impl;
 
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
-import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
+import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderAnnouncementEvent;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderEvent;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.service.OMS.OrderService;
@@ -19,6 +19,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import static com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderAnnouncementEvent.Type.ORDER_ITEM_PRODUCT;
+import static com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderAnnouncementEvent.Type.ORDER_ITEM_SKU;
 import static com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderEvent.Type.*;
 import static java.util.logging.Level.FINE;
 
@@ -104,6 +106,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void sendMessage(String bindingName, OmsAdminOrderEvent event) {
+        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+        System.out.println("sending to binding: " + bindingName);
+        Message message = MessageBuilder.withPayload(event)
+                .setHeader("event-type", event.getEventType())
+                .build();
+        streamBridge.send(bindingName, message);
+    }
+
+    @Override
+    public Mono<Void> sendOrderItemNotification(String productSku, String message, String operatorName) {
+        return Mono.fromRunnable(() -> {
+            OmsAdminOrderAnnouncementEvent event = new OmsAdminOrderAnnouncementEvent(ORDER_ITEM_SKU, productSku, message, operatorName);
+            sendOrderItemMessage("orderMessage-out", event);
+        }).subscribeOn(publishEventScheduler).then();
+    }
+
+    @Override
+    public Mono<Void> sendOrderProductNotification(String productName, String message, String operatorName) {
+        return Mono.fromRunnable(() -> {
+            OmsAdminOrderAnnouncementEvent event = new OmsAdminOrderAnnouncementEvent(ORDER_ITEM_PRODUCT, productName, message, operatorName);
+            sendOrderItemMessage("orderMessage-out", event);
+        }).subscribeOn(publishEventScheduler).then();
+    }
+
+    private void sendOrderItemMessage(String bindingName, OmsAdminOrderAnnouncementEvent event) {
         LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
         System.out.println("sending to binding: " + bindingName);
         Message message = MessageBuilder.withPayload(event)

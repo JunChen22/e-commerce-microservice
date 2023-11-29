@@ -1,9 +1,9 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
 import com.itsthatjun.ecommerce.config.URLUtils;
-import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
-import com.itsthatjun.ecommerce.dto.oms.outgoing.OrderDTO;
+import com.itsthatjun.ecommerce.dto.oms.model.OrderDTO;
 import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
 import io.swagger.annotations.Api;

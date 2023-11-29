@@ -2,7 +2,6 @@ package com.itsthatjun.ecommerce.service.OMS;
 
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
-import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
@@ -30,4 +29,10 @@ public interface OrderService {
 
     @ApiOperation(value = "delete a order by serial number")
     Mono<Void> cancelOrder(String serialNumber, String reason, String operatorName);
+
+    @ApiOperation(value = "Send message to users that are affected by purchased product sku")
+    Mono<Void> sendOrderItemNotification(String productSku, String message, String operatorName);
+
+    @ApiOperation(value = "Send message to users that are affected by purchased product")
+    Mono<Void> sendOrderProductNotification(String productSku, String message, String operatorName);
 }

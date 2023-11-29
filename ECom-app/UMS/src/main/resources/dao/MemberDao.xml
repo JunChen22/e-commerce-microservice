@@ -3,20 +3,20 @@
 <mapper namespace="com.itsthatjun.ecommerce.dao.MemberDao">
     <resultMap id="memberDetailMap" type="com.itsthatjun.ecommerce.dto.MemberDetail" extends="memberDTOMap">
 
-        <collection property="address" ofType="com.itsthatjun.ecommerce.dto.outgoing.AddressDTO"
+        <collection property="address" ofType="com.itsthatjun.ecommerce.dto.model.AddressDTO"
                     resultMap="adderssDTOMap">
         </collection>
 
-        <collection property="icon" ofType="com.itsthatjun.ecommerce.dto.outgoing.MemberIconDTO"
+        <collection property="icon" ofType="com.itsthatjun.ecommerce.dto.model.MemberIconDTO"
                     resultMap="memberIconDTOMap">
         </collection>
 
-        <collection property="loginLogList" ofType="com.itsthatjun.ecommerce.dto.outgoing.MemberLoginLogDTO"
+        <collection property="loginLogList" ofType="com.itsthatjun.ecommerce.dto.model.MemberLoginLogDTO"
                     resultMap="memberLoginLogDTOMap">
         </collection>
     </resultMap>
 
-    <resultMap id="memberDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.MemberDTO">
+    <resultMap id="memberDTOMap" type="com.itsthatjun.ecommerce.dto.model.MemberDTO">
         <result property="username" column="m_username"/>
         <result property="password" column="m_password"/>
         <result property="name" column="m_name"/>
@@ -28,7 +28,7 @@
         <result property="lastLogin" column="m_last_login"/>
     </resultMap>
 
-    <resultMap id="adderssDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.AddressDTO">
+    <resultMap id="adderssDTOMap" type="com.itsthatjun.ecommerce.dto.model.AddressDTO">
         <result property="receiverName" column="a_receiver_name"/>
         <result property="phoneNumber" column="a_phone_number"/>
         <result property="detailAddress" column="a_detail_address"/>
@@ -37,11 +37,11 @@
         <result property="zipCode" column="a_zip_code"/>
     </resultMap>
 
-    <resultMap id="memberIconDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.MemberIconDTO">
+    <resultMap id="memberIconDTOMap" type="com.itsthatjun.ecommerce.dto.model.MemberIconDTO">
         <result property="filename" column="mi_filename"/>
     </resultMap>
 
-    <resultMap id="memberLoginLogDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.MemberLoginLogDTO">
+    <resultMap id="memberLoginLogDTOMap" type="com.itsthatjun.ecommerce.dto.model.MemberLoginLogDTO">
         <result property="loginTime" column="mll_login_time"/>
         <result property="ipAddress" column="mll_ip_address"/>
         <result property="loginType" column="mll_login_type"/>

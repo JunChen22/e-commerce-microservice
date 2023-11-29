@@ -3,12 +3,12 @@
 <mapper namespace="com.itsthatjun.ecommerce.dao.OrderDao">
     <resultMap id="orderDetailMap" type="com.itsthatjun.ecommerce.dto.OrderDetail" extends="orderDTOMap">
 
-        <collection property="orderItemList" ofType="com.itsthatjun.ecommerce.dto.outgoing.OrderItemDTO" columnPrefix="oi_"
+        <collection property="orderItemList" ofType="com.itsthatjun.ecommerce.dto.model.OrderItemDTO" columnPrefix="oi_"
                     resultMap="orderItemDTOMap">
         </collection>
     </resultMap>
 
-    <resultMap id="orderDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.OrderDTO">
+    <resultMap id="orderDTOMap" type="com.itsthatjun.ecommerce.dto.model.OrderDTO">
         <result property="orderSn" column="o_order_sn"/>
         <result property="memberEmail" column="o_member_email"/>
         <result property="totalAmount" column="o_total_amount"/>
@@ -26,10 +26,11 @@
         <result property="deliveryCompany" column="o_delivery_company"/>
         <result property="deliveryTrackingNumber" column="o_delivery_tracking_number"/>
         <result property="deliveryTime" column="o_delivery_time"/>
+        <result property="status" column="o_status"/>
         <result property="comment" column="o_comment"/>
     </resultMap>
 
-    <resultMap id="orderItemDTOMap" type="com.itsthatjun.ecommerce.dto.outgoing.OrderItemDTO">
+    <resultMap id="orderItemDTOMap" type="com.itsthatjun.ecommerce.dto.model.OrderItemDTO">
         <result property="productPic" column="product_pic"/>
         <result property="productName" column="product_name"/>
         <result property="productBrand" column="product_brand"/>
@@ -61,6 +62,7 @@
             o.receiver_state o_receiver_state,
             o.receiver_zip_code o_receiver_zip_code,
             o.delivery_time o_delivery_time,
+            o.status o_status,
             o.comment o_comment,
 
             oi.product_pic oi_product_pic,
@@ -79,7 +81,45 @@
         WHERE o.order_sn = #{orderSn} AND o.member_id = #{userId}
     </select>
 
-    <select id="getAllOrders" resultMap="orderDTOMap">
+    <select id="getOrderForNotification" resultMap="orderDetailMap">
+        SELECT
+        o.order_sn o_order_sn,
+        o.member_email o_member_email,
+        o.total_amount o_total_amount,
+        o.promotion_amount o_promotion_amount,
+        o.coupon_amount o_coupon_amount,
+        o.discount_amount o_discount_amount,
+        o.shipping_cost o_shipping_cost,
+        o.pay_amount o_pay_amount,
+        o.delivery_company o_delivery_company,
+        o.delivery_tracking_number o_delivery_tracking_number,
+        o.receiver_phone o_receiver_phone,
+        o.receiver_name o_receiver_name,
+        o.receiver_detail_address o_receiver_detail_address,
+        o.receiver_city o_receiver_city,
+        o.receiver_state o_receiver_state,
+        o.receiver_zip_code o_receiver_zip_code,
+        o.delivery_time o_delivery_time,
+        o.status o_status,
+        o.comment o_comment,
+
+        oi.product_pic oi_product_pic,
+        oi.product_name oi_product_name,
+        oi.product_brand oi_product_brand,
+        oi.product_sn oi_product_sn,
+        oi.product_price oi_product_price,
+        oi.product_quantity oi_product_quantity,
+        oi.product_sku_code oi_product_sku_code,
+        oi.promotion_amount oi_promotion_amount,
+        oi.coupon_amount oi_coupon_amount,
+        oi.real_amount oi_real_amount
+
+        FROM orders o
+        LEFT JOIN order_item oi ON o.id = oi.order_id
+        WHERE o.order_sn = #{orderSn}
+    </select>
+
+    <select id="getUserAllOrders" resultMap="orderDTOMap">
         SELECT
             o.order_sn o_order_sn,
             o.member_email o_member_email,
@@ -98,8 +138,48 @@
             o.receiver_state o_receiver_state,
             o.receiver_zip_code o_receiver_zip_code,
             o.delivery_time o_delivery_time,
+            o.status o_status,
             o.comment o_comment
         FROM orders o
         WHERE o.member_id = #{userId}
+    </select>
+
+
+    <select id="getUserPurchasedItem" resultMap="orderDetailMap">
+        SELECT
+            o.order_sn o_order_sn,
+            o.member_email o_member_email,
+            o.total_amount o_total_amount,
+            o.promotion_amount o_promotion_amount,
+            o.coupon_amount o_coupon_amount,
+            o.discount_amount o_discount_amount,
+            o.shipping_cost o_shipping_cost,
+            o.pay_amount o_pay_amount,
+            o.delivery_company o_delivery_company,
+            o.delivery_tracking_number o_delivery_tracking_number,
+            o.receiver_phone o_receiver_phone,
+            o.receiver_name o_receiver_name,
+            o.receiver_detail_address o_receiver_detail_address,
+            o.receiver_city o_receiver_city,
+            o.receiver_state o_receiver_state,
+            o.receiver_zip_code o_receiver_zip_code,
+            o.delivery_time o_delivery_time,
+            o.status o_status,
+            o.comment o_comment,
+
+            oi.product_pic oi_product_pic,
+            oi.product_name oi_product_name,
+            oi.product_brand oi_product_brand,
+            oi.product_sn oi_product_sn,
+            oi.product_price oi_product_price,
+            oi.product_quantity oi_product_quantity,
+            oi.product_sku_code oi_product_sku_code,
+            oi.promotion_amount oi_promotion_amount,
+            oi.coupon_amount oi_coupon_amount,
+            oi.real_amount oi_real_amount
+
+        FROM orders o
+        LEFT JOIN order_item oi ON o.id = oi.order_id
+        WHERE oi.product_sku_code = #{productSku}
     </select>
 </mapper>
