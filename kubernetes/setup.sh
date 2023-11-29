@@ -18,7 +18,7 @@ mvn clean install
 # connect docker to minikube/kubernetes, the build will strictly on minikube/kubernetes and not on docker image list
 eval $(minikube docker-env)
 
-docker-compose build cms pms oms ums sms app auth-server search
+docker-compose build cms pms oms ums sms app auth-server search notification
 
 docker pull postgres:9.6.10
 docker pull mongo:5.0.0
@@ -40,4 +40,7 @@ minikube addons enable metrics-server
 minikube addons list
 
 # Map springecom.me to the IP address we can use to reach the Minikube instance by adding a line to the /etc/hosts file:
+echo Will mapping springeecom.me to $(minikube ip) in /etc/hosts
 sudo bash -c "echo $(minikube ip) springecom.me | tee -a /etc/hosts"
+
+echo 'alias kubectl="minikube kubectl --"' >> ~/.bashrc

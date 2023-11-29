@@ -101,10 +101,18 @@ secrets:
     SPRING_DATASOURCE_USERNAME: postgres
     SPRING_DATASOURCE_PASSWORD: password
 
+  usps-credentials:
+    USPS_USERID: YOUR_USPS_CREDENTIAL
+    USPS_PASSWORD: YOUR_USPS_PASSWORD
+
+  email-credentials:
+    MAIL_USERNAME: YOUR_EMAIL_USERNAME
+    MAIL_PASSWORD: YOUR_EMAIL_APP_PASSWORD
+
   paypal-credentials:
     PAYPAL_MODE: sandbox
-    PAYPAL_CLIENT_ID: YOUR_PAYPAL_ID
-    PAYPAL_CLIENT_SECRET: YOUR_PAYPAL_SECRET
+    PAYPAL_CLIENT_ID: YOUR_CLIENT_ID
+    PAYPAL_CLIENT_SECRET: YOUR_CLIENT_SECRET
 
   rabbitmq-credentials:
     username: guest
@@ -142,6 +150,10 @@ auth-db:
   envFromSecretRefs:
     - postgres-server-credentials
 
+email-db:
+  envFromSecretRefs:
+    - postgres-server-credentials
+
 app:
   envFromSecretRefs:
     - postgres-credentials
@@ -153,6 +165,7 @@ oms:
     - paypal-credentials
     - postgres-credentials
     - rabbitmq-credentials
+    - usps-credentials
 
 cms:
   envFromSecretRefs:
@@ -183,3 +196,9 @@ auth-server:
   envFromSecretRefs:
     - postgres-credentials
     - rabbitmq-credentials
+
+notification:
+  envFromSecretRefs:
+    - postgres-credentials
+    - rabbitmq-credentials
+    - email-credentials

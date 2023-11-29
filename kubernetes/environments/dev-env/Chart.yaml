@@ -93,3 +93,11 @@ dependencies:
   - name: search
     version: 1.0.0
     repository: file://../../components/search
+
+  - name: notification
+    version: 1.0.0
+    repository: file://../../components/notification
+
+  - name: email-db
+    version: 1.0.0
+    repository: file://../../components/email-db

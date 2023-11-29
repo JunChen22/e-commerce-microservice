@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
@@ -31,6 +32,7 @@ import java.util.*;
 import static com.itsthatjun.ecommerce.dto.event.outgoing.OmsReturnEvent.Type.NEW_RETURN;
 import static com.itsthatjun.ecommerce.dto.event.outgoing.OmsReturnEvent.Type.RETURN_UPDATE;
 
+@Service
 public class AdminReturnServiceImpl implements AdminReturnService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReturnOrderServiceImpl.class);

@@ -1,0 +1,15 @@
+fullnameOverride: notification
+
+image:
+  name: notification
+
+env:
+  SPRING_PROFILES_ACTIVE: "docker"
+  SPRING_CONFIG_LOCATION: file:/config-repo/application.yml,file:/config-repo/notification.yml
+
+service:
+  type: ClusterIP
+
+configmap:
+  volumeMounts:
+    mountPath: /config-repo

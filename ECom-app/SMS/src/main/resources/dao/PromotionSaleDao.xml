@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itsthatjun.ecommerce.dao.CouponHistoryDao">
+<mapper namespace="com.itsthatjun.ecommerce.dao.PromotionSaleDao">
 
-    <resultMap id="userCouponUsageMap" type="com.itsthatjun.ecommerce.dto.OnSale">
-            <id property="id" column="id"/>
-            <result property="couponType" column="coupon_type"/>
-            <result property="name" column="name"/>
+    <resultMap id="onSaleMap" type="com.itsthatjun.ecommerce.dto.OnSale">
+        <result property="name" column="name"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
     </resultMap>
 
-    <select id="couponUserUsageCount" resultType="int">
-        SELECT COUNT(DISTINCT member_id) FROM coupon_history WHERE coupon_id = #{couponId};
+    <select id="getOnPromotionSale" resultMap="onSaleMap">
+        SELECT
+            name,
+            start_time,
+            end_time
+        FROM promotion_sale
     </select>
 </mapper>

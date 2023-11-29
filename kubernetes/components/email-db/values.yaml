@@ -1,0 +1,23 @@
+fullnameOverride: email-db
+
+image:
+  name: postgres
+  tag: 9.6.10
+  pullPolicy: IfNotPresent
+
+ports:
+  - containerPort: 5432
+
+service:
+  type: ClusterIP
+  ports:
+    - port: 5432
+
+env:
+  POSTGRES_DB: emaildb
+
+volume:
+  name: email-data
+  dataInitializerMountPath: /docker-entrypoint-initdb.d
+  dataInitializerConfigmap: postgres-data
+

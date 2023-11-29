@@ -1,7 +1,5 @@
 #!/bin/bash
 
-alias kubectl="minikube kubectl --"
-
 kubectl create namespace e-com
 
 # initialization data.q
