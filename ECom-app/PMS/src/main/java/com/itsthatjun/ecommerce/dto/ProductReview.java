@@ -12,5 +12,5 @@ import java.util.List;
 public class ProductReview extends ReviewDTO {
 
     private List<ReviewPictures> picturesList;
-
+    //private List<ReviewDTO> reviews;
 }

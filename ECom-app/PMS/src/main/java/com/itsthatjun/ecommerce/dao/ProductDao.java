@@ -1,26 +1,40 @@
 package com.itsthatjun.ecommerce.dao;
 
 import com.itsthatjun.ecommerce.dto.ProductDetail;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.dto.model.ProductDTO;
+import com.itsthatjun.ecommerce.dto.model.ProductPictureDTO;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductDao {
 
-    @ApiModelProperty("get one")
-    Product getProduct(@Param("id") int id);
+    @ApiModelProperty("get all product")
+    List<ProductDTO> getAllProduct();
 
+    @ApiModelProperty("get a product detail, sku/variants, attribute , category and etc")
+    ProductDetail getProductDetail(@Param("id") int id);
+
+    @ApiModelProperty("get a pictures for product detail")
+    List<ProductPictureDTO> getProductPictures(@Param("id") int id);
+
+    @ApiModelProperty("get a pictures for product detail")
+    List<Map<String, String>> getProductAttributes(@Param("id") int id);
+
+    /*
     @ApiModelProperty("get a list")
     List<Product> getAllProduct();
 
     @ApiModelProperty("one with a list")
-    ProductDetail getProductWithAtrribute(@Param("id") int id);
+    ProductDetail getProductWithAttribute(@Param("id") int id);
 
     @ApiModelProperty("list with a list")
-    List<ProductDetail> getProductListWithAtrribute();
+    List<ProductDetail> getProductListWithAttribute();
+     */
 
+    /*
     @ApiModelProperty("update one")
     void updateProduct(@Param("id") int id, @Param("stock") int stock);
 
@@ -38,4 +52,6 @@ public interface ProductDao {
 
     @ApiModelProperty("delete all")
     void deleteProductList(@Param("productList") List<Product> productList);
+
+     */
 }

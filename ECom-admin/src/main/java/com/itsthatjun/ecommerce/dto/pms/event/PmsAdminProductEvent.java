@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.dto.pms.event;
 
-import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.dto.pms.AdminProductDetail;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -24,7 +23,7 @@ public class PmsAdminProductEvent {
     }
 
     private final Type eventType;
-    private final ProductDetail productDetail;
+    private final AdminProductDetail productDetail;
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
@@ -36,7 +35,7 @@ public class PmsAdminProductEvent {
         this.eventCreatedAt = null;
     }
 
-    public PmsAdminProductEvent(Type eventType, ProductDetail productDetail, String operator) {
+    public PmsAdminProductEvent(Type eventType, AdminProductDetail productDetail, String operator) {
         this.eventType = eventType;
         this.productDetail = productDetail;
         this.operator = operator;

@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
-import com.itsthatjun.ecommerce.dto.ProductDetail;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
+import com.itsthatjun.ecommerce.dto.pms.model.ProductDTO;
 import com.itsthatjun.ecommerce.service.PMS.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,10 +38,10 @@ public class ProductAggregate {
     @GetMapping("/listAll")
     @Cacheable(value = "productsCache", key = "'listAllProduct'")
     @ApiOperation(value = "Get all product")
-    public List<Product> listAllProduct() {
-        Flux<Product> productFlux = productService.listAllProduct();
+    public List<ProductDTO> listAllProduct() {
+        Flux<ProductDTO> productFlux = productService.listAllProduct();
         // Collect the elements of the Flux into a List
-        List<Product> productList = productFlux.collectList().block();
+        List<ProductDTO> productList = productFlux.collectList().block();
 
         // Return the List<Product>
         return productList;
@@ -49,7 +49,7 @@ public class ProductAggregate {
 
     @GetMapping("/list")
     @ApiOperation(value = "Get product with page and size")
-    public Flux<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+    public Flux<ProductDTO> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                         @RequestParam(value = "size", defaultValue = "5") int pageSize) {
         return productService.listAllProduct(pageNum, pageSize);
     }

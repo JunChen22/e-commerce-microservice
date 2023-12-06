@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service.PMS.impl;
 
-import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
+import com.itsthatjun.ecommerce.dto.pms.AdminProductDetail;
 import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminProductEvent;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.PMS.ProductService;
@@ -58,15 +58,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> listProduct(int productId) {
+    public Mono<AdminProductDetail> listProduct(int productId) {
         String url = PMS_SERVICE_URL + "/" + productId;
 
-        return webClient.get().uri(url).retrieve().bodyToMono(ProductDetail.class)
+        return webClient.get().uri(url).retrieve().bodyToMono(AdminProductDetail.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
     @Override
-    public Mono<ProductDetail> createProduct(ProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> createProduct(AdminProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT, productDetail, operator));
             return productDetail;
@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> addProductSku(ProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> addProductSku(AdminProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT_SKU, productDetail, operator));
             return productDetail;
@@ -82,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> updateProductInfo(ProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductInfo(AdminProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_INFO, productDetail, operator));
             return productDetail;
@@ -90,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> updateProductStatus(ProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductStatus(AdminProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_STATUS, productDetail, operator));
             return productDetail;
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> updateProductSkuStatus(ProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductSkuStatus(AdminProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_SKU_STATUS, productDetail, operator));
             return productDetail;
@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> updateProductStock(ProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductStock(AdminProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_STOCK, productDetail, operator));
             return productDetail;
@@ -114,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> updateProductPrice(ProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductPrice(AdminProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_PRICE, productDetail, operator));
             return productDetail;
@@ -122,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> removeProductSku(ProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> removeProductSku(AdminProductDetail productDetail, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("product-out-0", new PmsAdminProductEvent(REMOVE_PRODUCT_SKU, productDetail, operator));
             return productDetail;
@@ -132,7 +132,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Mono<Void> deleteProduct(int productId, String operator) {
         return Mono.fromRunnable(() -> {
-            ProductDetail productDetail = new ProductDetail();
+            AdminProductDetail productDetail = new AdminProductDetail();
             Product product = new Product();
             product.setId(productId);
             productDetail.setProduct(product);

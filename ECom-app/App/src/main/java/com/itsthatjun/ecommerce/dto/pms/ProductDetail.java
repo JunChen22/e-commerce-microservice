@@ -1,8 +1,8 @@
-package com.itsthatjun.ecommerce.dto;
+package com.itsthatjun.ecommerce.dto.pms;
 
-import com.itsthatjun.ecommerce.dto.model.ProductDTO;
-import com.itsthatjun.ecommerce.dto.model.ProductPictureDTO;
-import com.itsthatjun.ecommerce.dto.model.ProductSkuDTO;
+import com.itsthatjun.ecommerce.dto.pms.model.ProductDTO;
+import com.itsthatjun.ecommerce.dto.pms.model.ProductPictureDTO;
+import com.itsthatjun.ecommerce.dto.pms.model.ProductSkuDTO;
 import lombok.Getter;
 import lombok.Setter;
 

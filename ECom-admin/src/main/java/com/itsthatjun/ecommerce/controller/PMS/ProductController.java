@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
-import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
+import com.itsthatjun.ecommerce.dto.pms.AdminProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.PMS.impl.ProductServiceImpl;
@@ -45,14 +45,14 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     @ApiOperation(value = "Get product by id")
-    public Mono<ProductDetail> listProduct(@PathVariable int productId) {
+    public Mono<AdminProductDetail> listProduct(@PathVariable int productId) {
         return productService.listProduct(productId);
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "create a product with at least one sku variant")
-    public Mono<ProductDetail> createProduct(@RequestBody ProductDetail productDetail) {
+    public Mono<AdminProductDetail> createProduct(@RequestBody AdminProductDetail productDetail) {
         String operatorName = getAdminName();
         return productService.createProduct(productDetail, operatorName);
     }
@@ -60,7 +60,7 @@ public class ProductController {
     @PostMapping("/addProductSku")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Add a sku to existing product.")
-    public Mono<ProductDetail> addProductSku(@RequestBody ProductDetail productDetail) {
+    public Mono<AdminProductDetail> addProductSku(@RequestBody AdminProductDetail productDetail) {
         String operatorName = getAdminName();
         return productService.addProductSku(productDetail, operatorName);
     }
@@ -68,7 +68,7 @@ public class ProductController {
     @PostMapping("/updateProductInfo")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update product info like category, name, description, subtitle and etc non-price affecting.")
-    public Mono<ProductDetail> updateProductInfo(@RequestBody ProductDetail productDetail) {
+    public Mono<AdminProductDetail> updateProductInfo(@RequestBody AdminProductDetail productDetail) {
         String operatorName = getAdminName();
         return productService.updateProductInfo(productDetail, operatorName);
     }
@@ -76,7 +76,7 @@ public class ProductController {
     @PostMapping("/updateProductStatus")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update product publish status.")
-    public Mono<ProductDetail> updateProductStatus(@RequestBody ProductDetail productDetail) {
+    public Mono<AdminProductDetail> updateProductStatus(@RequestBody AdminProductDetail productDetail) {
         String operatorName = getAdminName();
         return productService.updateProductStatus(productDetail, operatorName);
     }
@@ -84,7 +84,7 @@ public class ProductController {
     @PostMapping("/updateProductSkuStatus")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update product publish status.")
-    public Mono<ProductDetail> updateProductSkuStatus(@RequestBody ProductDetail productDetail) {
+    public Mono<AdminProductDetail> updateProductSkuStatus(@RequestBody AdminProductDetail productDetail) {
         String operatorName = getAdminName();
         return productService.updateProductSkuStatus(productDetail, operatorName);
     }
@@ -92,7 +92,7 @@ public class ProductController {
     @PostMapping("/updateProductStock")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Adding stock to sku with newly added stock.")
-    public Mono<ProductDetail> updateProductStock(@RequestBody ProductDetail productDetail) {
+    public Mono<AdminProductDetail> updateProductStock(@RequestBody AdminProductDetail productDetail) {
         String operatorName = getAdminName();
         return productService.updateProductStock(productDetail, operatorName);
     }
@@ -100,7 +100,7 @@ public class ProductController {
     @PostMapping("/updateProductPrice")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Update product and its sku prices of existing product.")
-    public Mono<ProductDetail> updateProductPrice(@RequestBody ProductDetail productDetail) {
+    public Mono<AdminProductDetail> updateProductPrice(@RequestBody AdminProductDetail productDetail) {
         String operatorName = getAdminName();
         return productService.updateProductPrice(productDetail, operatorName);
     }
@@ -108,7 +108,7 @@ public class ProductController {
     @PostMapping("/removeProductSku")
     @PreAuthorize("hasRole('ROLE_admin-product')")
     @ApiOperation(value = "Remove/actual delete a sku from product. Product can have no sku, just holding information.")
-    public Mono<ProductDetail> removeProductSku(@RequestBody ProductDetail productDetail) {
+    public Mono<AdminProductDetail> removeProductSku(@RequestBody AdminProductDetail productDetail) {
         String operatorName = getAdminName();
         return productService.removeProductSku(productDetail, operatorName);
     }

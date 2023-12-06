@@ -908,7 +908,6 @@ DROP TABLE IF EXISTS product_pictures;
 CREATE TABLE product_pictures (
     id SERIAL PRIMARY KEY,
     product_album_id NUMERIC,
-    product_id  NUMERIC,
     filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

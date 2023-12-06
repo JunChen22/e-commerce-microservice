@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service.PMS;
 
-import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
+import com.itsthatjun.ecommerce.dto.pms.AdminProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
@@ -15,31 +15,31 @@ public interface ProductService {
     Flux<Product> listAllProduct(int pageNum, int pageSize);
 
     @ApiOperation(value = "Get product by id")
-    Mono<ProductDetail> listProduct(int productId);
+    Mono<AdminProductDetail> listProduct(int productId);
 
     @ApiOperation(value = "create a product with at least one sku variant")
-    Mono<ProductDetail> createProduct(ProductDetail productDetail, String operator);
+    Mono<AdminProductDetail> createProduct(AdminProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Add a sku to existing product.")
-    Mono<ProductDetail> addProductSku(ProductDetail productDetail, String operator);
+    Mono<AdminProductDetail> addProductSku(AdminProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Update product info like category, name, description, subtitle and etc non-price affecting.")
-    Mono<ProductDetail> updateProductInfo(ProductDetail productDetail, String operator);
+    Mono<AdminProductDetail> updateProductInfo(AdminProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Update product publish status.")
-    Mono<ProductDetail> updateProductStatus(ProductDetail productDetail, String operator);
+    Mono<AdminProductDetail> updateProductStatus(AdminProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Update product publish status.")
-    Mono<ProductDetail> updateProductSkuStatus(ProductDetail productDetail, String operator);
+    Mono<AdminProductDetail> updateProductSkuStatus(AdminProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Adding stock to sku with newly added stock.")
-    Mono<ProductDetail> updateProductStock(ProductDetail productDetail, String operator);
+    Mono<AdminProductDetail> updateProductStock(AdminProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Update product and its sku prices of existing product.")
-    Mono<ProductDetail> updateProductPrice(ProductDetail productDetail, String operator);
+    Mono<AdminProductDetail> updateProductPrice(AdminProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Remove/actual delete a sku from product. Product can have no sku, just holding information.")
-    Mono<ProductDetail> removeProductSku(ProductDetail productDetail, String operator);
+    Mono<AdminProductDetail> removeProductSku(AdminProductDetail productDetail, String operator);
 
     @ApiOperation(value = "Delete just means status changed for archive, not actual delete from database")
     Mono<Void> deleteProduct(int productId, String operator);

@@ -1,10 +1,8 @@
 package com.itsthatjun.ecommerce.dto.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class BrandDTO {
 
     private String name;

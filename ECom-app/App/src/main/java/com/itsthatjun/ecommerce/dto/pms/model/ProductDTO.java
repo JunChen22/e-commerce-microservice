@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.model;
+package com.itsthatjun.ecommerce.dto.pms.model;
 
 import lombok.Data;
 

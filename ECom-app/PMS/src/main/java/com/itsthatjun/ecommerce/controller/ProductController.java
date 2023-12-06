@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.ProductDetail;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.dto.model.ProductDTO;
 import com.itsthatjun.ecommerce.service.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,20 +28,20 @@ public class ProductController {
 
     @GetMapping("/listAll")
     @ApiOperation("Get all product")
-    public Flux<Product> listAllProduct() {
+    public Flux<ProductDTO> listAllProduct() {
         return productService.listAllProduct();
     }
 
     @GetMapping("/list")
     @ApiOperation("Get product with page and size")
-    public Flux<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
-                                        @RequestParam(value = "size", defaultValue = "5") int pageSize) {
+    public Flux<ProductDTO> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+                                           @RequestParam(value = "size", defaultValue = "5") int pageSize) {
         return productService.listProduct(pageNum, pageSize);
     }
 
     @GetMapping("/{id}")
     @ApiOperation("Get product by id")
     public Mono<ProductDetail> listProduct(@PathVariable int id) {
-        return productService.getProduct(id);
+        return productService.getProductDetail(id);
     }
 }

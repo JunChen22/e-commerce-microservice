@@ -1,8 +1,6 @@
-package com.itsthatjun.ecommerce.dto.model;
+package com.itsthatjun.ecommerce.dto.pms.model;
 
 import lombok.Data;
-
-import java.util.Map;
 
 @Data
 public class ProductSkuDTO {
@@ -16,6 +14,4 @@ public class ProductSkuDTO {
     private double promotionPrice;
 
     private Integer stock;
-
-    private Map<String, String> attribute;
 }

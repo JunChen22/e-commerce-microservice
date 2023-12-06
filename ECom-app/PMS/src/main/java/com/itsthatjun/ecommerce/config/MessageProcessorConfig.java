@@ -7,12 +7,13 @@ import com.itsthatjun.ecommerce.dto.event.incoming.OmsUpdateIncomingEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.PmsReviewEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent;
 import com.itsthatjun.ecommerce.mbg.model.Brand;
+import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import com.itsthatjun.ecommerce.mbg.model.Review;
+import com.itsthatjun.ecommerce.service.admin.AdminProductServiceImpl;
 import com.itsthatjun.ecommerce.service.eventupdate.OmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.eventupdate.SmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.impl.BrandServiceImpl;
-import com.itsthatjun.ecommerce.service.impl.ProductServiceImpl;
 import com.itsthatjun.ecommerce.service.impl.ReviewServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class MessageProcessorConfig {
 
     private final BrandServiceImpl brandService;
 
-    private final ProductServiceImpl productService;
+    private final AdminProductServiceImpl productService;
 
     private final ReviewServiceImpl reviewService;
 
@@ -43,7 +44,7 @@ public class MessageProcessorConfig {
     private final SmsEventUpdateService smsEventUpdateService;
 
     @Autowired
-    public MessageProcessorConfig(BrandServiceImpl brandService, ProductServiceImpl productService, ReviewServiceImpl reviewService,
+    public MessageProcessorConfig(BrandServiceImpl brandService, AdminProductServiceImpl productService, ReviewServiceImpl reviewService,
                                   OmsEventUpdateService omsEventUpdateService, SmsEventUpdateService smsEventUpdateService) {
         this.brandService = brandService;
         this.productService = productService;
@@ -115,7 +116,6 @@ public class MessageProcessorConfig {
     public Consumer<PmsAdminProductEvent> adminProductMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
-            /* TODO:
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             Product product = event.getProductDetail().getProduct();
             List<ProductSku> skuList = event.getProductDetail().getSkuVariants();
@@ -164,7 +164,6 @@ public class MessageProcessorConfig {
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
             }
-             */
         };
     }
 
