@@ -1,13 +1,17 @@
 package com.itsthatjun.ecommerce;
 
+import com.itsthatjun.ecommerce.config.MyBatisConfig;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-class UMSApplicationTests {
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@Import(MyBatisConfig.class)
+@ActiveProfiles("test")
+class UMSApplicationTests extends TestContainerConfig {
 
     @Test
     void contextLoads() {

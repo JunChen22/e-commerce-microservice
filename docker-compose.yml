@@ -268,7 +268,6 @@ services:
       - PAYPAL_CLIENT_SECRET=${PAYPAL_CLIENT_SECRET}
       - USPS_USERID=${USPS_USERID}
       - USPS_PASSWORD=${USPS_PASSWORD}
-
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:

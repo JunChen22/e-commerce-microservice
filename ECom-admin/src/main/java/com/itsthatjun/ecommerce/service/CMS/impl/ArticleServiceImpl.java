@@ -1,8 +1,7 @@
 package com.itsthatjun.ecommerce.service.CMS.impl;
 
-import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
+import com.itsthatjun.ecommerce.dto.cms.AdminArticleInfo;
 import com.itsthatjun.ecommerce.dto.cms.event.CmsAdminArticleEvent;
-import com.itsthatjun.ecommerce.mbg.model.Article;
 import com.itsthatjun.ecommerce.service.CMS.ArticleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,25 +41,25 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Flux<ArticleInfo> getAllArticle() {
-        String url = CMS_SERVICE_URL + "/all";
+    public Flux<AdminArticleInfo> getAllArticle() {
+        String url = CMS_SERVICE_URL + "/admin/all";
         LOG.debug("Will call the getAllArticle API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(ArticleInfo.class)
+        return webClient.get().uri(url).retrieve().bodyToFlux(AdminArticleInfo.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @Override
-    public Mono<ArticleInfo> getArticle(int articleId) {
-        String url = CMS_SERVICE_URL + "/" + articleId;
+    public Mono<AdminArticleInfo> getArticle(int articleId) {
+        String url = CMS_SERVICE_URL + "/admin/" + articleId;
         LOG.debug("Will call the getArticle API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToMono(ArticleInfo.class)
+        return webClient.get().uri(url).retrieve().bodyToMono(AdminArticleInfo.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
     @Override
-    public Mono<ArticleInfo> createArticle(ArticleInfo articleInfo, String operator) {
+    public Mono<AdminArticleInfo> createArticle(AdminArticleInfo articleInfo, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("article-out-0", new CmsAdminArticleEvent(CREATE, articleInfo, operator));
             return articleInfo;
@@ -68,7 +67,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Mono<ArticleInfo> updateArticle(ArticleInfo articleInfo, String operator) {
+    public Mono<AdminArticleInfo> updateArticle(AdminArticleInfo articleInfo, String operator) {
         return Mono.fromCallable(() -> {
             sendMessage("article-out-0", new CmsAdminArticleEvent(UPDATE, articleInfo, operator));
             return articleInfo;
@@ -78,10 +77,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Mono<Void> deleteArticle(int articleId, String operator) {
         return Mono.fromRunnable(() -> {
-            Article article = new Article();
-            article.setId(articleId);
-            ArticleInfo articleInfo = new ArticleInfo();
-            articleInfo.setArticle(article);
+            AdminArticleInfo articleInfo = new AdminArticleInfo();
+            articleInfo.setId(articleId);
 
             sendMessage("article-out-0", new CmsAdminArticleEvent(DELETE, articleInfo, operator));
         }).subscribeOn(publishEventScheduler).then();

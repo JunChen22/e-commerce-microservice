@@ -1,8 +1,8 @@
 package com.itsthatjun.ecommerce.config;
 
-import com.itsthatjun.ecommerce.dto.ArticleInfo;
+import com.itsthatjun.ecommerce.dto.admin.AdminArticleInfo;
 import com.itsthatjun.ecommerce.dto.event.CmsAdminArticleEvent;
-import com.itsthatjun.ecommerce.service.impl.ArticleServiceImpl;
+import com.itsthatjun.ecommerce.service.impl.AdminArticleServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ public class MessageProcessorConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageProcessorConfig.class);
 
-    private final ArticleServiceImpl articleService;
+    private final AdminArticleServiceImpl articleService;
 
     @Autowired
-    public MessageProcessorConfig(ArticleServiceImpl articleService) {
+    public MessageProcessorConfig(AdminArticleServiceImpl articleService) {
         this.articleService = articleService;
     }
 
@@ -28,7 +28,7 @@ public class MessageProcessorConfig {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
-            ArticleInfo articleInfo = event.getArticleInfo();
+            AdminArticleInfo articleInfo = event.getArticleInfo();
             String operator = event.getOperator();
 
             switch (event.getEventType()) {
@@ -41,9 +41,8 @@ public class MessageProcessorConfig {
                     break;
 
                 case DELETE:
-                    // TODO:
-                    //int articleId = articleInfo.getArticle().getId();
-                    //articleService.deleteArticle(articleId, operator).subscribe();
+                    int articleId = articleInfo.getId();
+                    articleService.deleteArticle(articleId, operator).subscribe();
                     break;
 
                 default:

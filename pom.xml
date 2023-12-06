@@ -35,10 +35,11 @@
 
     <properties>            <!-- dependencies versions -->
         <java.version>1.8</java.version>
-        <skipTests>true</skipTests>
         <spring.version>2.5.2</spring.version>
         <spring.cloud-version>2020.0.3</spring.cloud-version>
         <resilience4jVersion>1.7.0</resilience4jVersion>
+        <skipTests>true</skipTests>         <!-- to perform test or not -->
+        <testcontainer.version>1.17.6</testcontainer.version>
     </properties>
 
     <dependencies>          <!-- all child module will be used -->
@@ -190,9 +191,40 @@
                 <artifactId>spring-boot-starter-batch</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+
+            <!-- test containers -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers</artifactId>
+                <version>${testcontainer.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${testcontainer.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>rabbitmq</artifactId>
+                <version>${testcontainer.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>mongodb</artifactId>
+                <version>${testcontainer.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${testcontainer.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-
 
     <build>
         <plugins>
@@ -202,5 +234,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

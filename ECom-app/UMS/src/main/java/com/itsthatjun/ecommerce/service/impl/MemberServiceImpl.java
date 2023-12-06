@@ -55,10 +55,19 @@ public class MemberServiceImpl implements MemberService {
 
     private final DTOMapper dtoMapper;
 
+    private final RedisServiceImpl redisService;
+
+    //@Value("${redis.key.orderId}")
+    //private String REDIS_KEY_ORDER_ID;
+
+    //@Value("${redis.database}")
+    //private String REDIS_DATABASE;
+
     @Autowired
     public MemberServiceImpl(MemberMapper memberMapper, MemberIconMapper iconMapper, MemberLoginLogMapper loginLogMapper,
                              MemberChangeLogMapper logMapper, AddressMapper addressMapper, StreamBridge streamBridge,
-                             @Qualifier("jdbcScheduler") Scheduler jdbcScheduler, MemberDao memberDao, DTOMapper dtoMapper) {
+                             @Qualifier("jdbcScheduler") Scheduler jdbcScheduler, MemberDao memberDao, DTOMapper dtoMapper,
+                             RedisServiceImpl redisService) {
         this.memberMapper = memberMapper;
         this.iconMapper = iconMapper;
         this.loginLogMapper = loginLogMapper;
@@ -68,11 +77,16 @@ public class MemberServiceImpl implements MemberService {
         this.jdbcScheduler = jdbcScheduler;
         this.memberDao = memberDao;
         this.dtoMapper = dtoMapper;
+        this.redisService = redisService;
     }
 
     @Override
-    public String generateAuthCode(String telephone) {
+    public String generateAuthCode(String email) {
         // TODO: redis and notification
+
+        long AUTH_CODE_DURATION = 600; // 600 seconds or 10 minutes
+        //redisService.set(email, , AUTH_CODE_DURATION);
+
         return null;
     }
 

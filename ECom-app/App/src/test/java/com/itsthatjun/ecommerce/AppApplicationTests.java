@@ -1,13 +1,14 @@
 package com.itsthatjun.ecommerce;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-class AppApplicationTests {
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@ActiveProfiles("test")
+class AppApplicationTests extends TestContainerConfig {
 
     @Test
     void contextLoads() {

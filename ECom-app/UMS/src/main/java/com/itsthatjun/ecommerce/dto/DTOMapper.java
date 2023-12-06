@@ -26,5 +26,9 @@ public interface DTOMapper {
     @Mapping(target = "sourceType", ignore = true)
     Member memberDTOToMember(MemberDTO memberDTO, Integer id);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "verifiedStatus", ignore = true)
+    @Mapping(target = "deleteStatus", ignore = true)
+    @Mapping(target = "sourceType", ignore = true)
     Member memberDetailToMember(MemberDetail memberDetail);
 }

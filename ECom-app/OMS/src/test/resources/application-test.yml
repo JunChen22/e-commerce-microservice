@@ -1,0 +1,40 @@
+server.error.include-message: always
+
+spring.cloud.stream.defaultBinder: rabbit
+eureka.client.enabled: false
+spring.sleuth.integration.enabled: false
+
+logging:
+  level:
+    #root: ERROR
+    root: INFO
+    org.springframework.security: DEBUG
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+    com.itsthatjun.ecommerce: DEBUG
+
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath:dao/*.xml
+
+paypal:
+  mode: ${PAYPAL_MODE}
+  client:
+    id: ${PAYPAL_CLIENT_ID}
+    secret: ${PAYPAL_CLIENT_SECRET}
+
+usps:
+  userid: ${USPS_USERID}
+  password: ${USPS_PASSWORD}
+
+redis:
+  key:
+    orderId: oms
+  database: ECom
+  expire:
+    common: 7200    # 120 minutes, measured in seconds
+
+custom:
+  rabbitMQ:
+    orderCancelTTL-time: 120000     # in milliseconds, 120 seconds
+    returnRequestTTL-time: 120000   # 3 days  259200000

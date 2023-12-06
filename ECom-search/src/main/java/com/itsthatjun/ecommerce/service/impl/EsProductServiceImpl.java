@@ -30,7 +30,6 @@ public class EsProductServiceImpl implements EsProductService {
     @Autowired
     private SearchRepository searchRepository;
 
-
     @Override
     public int importAll() {
         List<EsProduct> esProductList = productDao.getAllEsProductList(null);

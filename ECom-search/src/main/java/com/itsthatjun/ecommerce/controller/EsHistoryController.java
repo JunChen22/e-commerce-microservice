@@ -13,7 +13,4 @@ public class EsHistoryController {
 
     @Autowired
     private EsHistoryServiceImpl searchHistoryService;
-
-
-
 }

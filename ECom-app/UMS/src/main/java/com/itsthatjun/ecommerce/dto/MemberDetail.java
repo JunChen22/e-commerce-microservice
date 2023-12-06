@@ -5,11 +5,13 @@ import com.itsthatjun.ecommerce.dto.model.MemberDTO;
 import com.itsthatjun.ecommerce.dto.model.MemberIconDTO;
 import com.itsthatjun.ecommerce.dto.model.MemberLoginLogDTO;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class MemberDetail extends MemberDTO {
 
     @ApiModelProperty("")

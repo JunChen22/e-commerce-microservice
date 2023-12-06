@@ -1124,7 +1124,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"article\": {\n        \"title\": \"new article\",\n        \"body\": \"some some\"\n    },\n    \"images\": [\n        {\n            \"articleId\": null,\n            \"filename\": \"buyer_guide_infographic.png\"\n        },\n        {\n            \"articleId\": null,\n            \"filename\": \"buyer_guide_cover.jpg\"\n        }\n    ],\n    \"videos\": [\n        {\n            \"url\": \"https://i.imgur.com/tovhDTo.mp4\"\n        }\n    ],\n    \"qa\": [\n        {\n            \"question\": \"What is a buyer's guide?\",\n            \"answer\": \"A buyer's guide is a document or article that provides information about a particular product or service to help potential buyers make informed decisions.\"\n        }\n    ]\n}",
+									"raw": "{\n    \"title\": \"new article\",\n    \"body\": \"some some\",\n    \"publishStatus\": 1,\n    \"images\": [\n        {\n            \"articleId\": null,\n            \"filename\": \"buyer_guide_infographic.png\"\n        },\n        {\n            \"articleId\": null,\n            \"filename\": \"buyer_guide_cover.jpg\"\n        }\n    ],\n    \"videos\": [\n        {\n            \"url\": \"https://i.imgur.com/tovhDTo.mp4\"\n        }\n    ],\n    \"qa\": [\n        {\n            \"question\": \"What is a buyer's guide?\",\n            \"answer\": \"A buyer's guide is a document or article that provides information about a particular product or service to help potential buyers make informed decisions.\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"

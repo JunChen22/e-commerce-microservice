@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.controller.CMS;
 
-import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
+import com.itsthatjun.ecommerce.dto.cms.AdminArticleInfo;
 import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.CMS.impl.ArticleServiceImpl;
 import io.swagger.annotations.Api;
@@ -31,20 +31,20 @@ public class ArticleController {
 
     @GetMapping("/all")
     @ApiOperation(value = "Get all the articles")
-    public Flux<ArticleInfo> getAllArticle() {
+    public Flux<AdminArticleInfo> getAllArticle() {
         return articleService.getAllArticle();
     }
 
     @GetMapping("/{articleId}")
     @ApiOperation(value = "Get a specific article by article id")
-    public Mono<ArticleInfo> getArticle(@PathVariable int articleId) {
+    public Mono<AdminArticleInfo> getArticle(@PathVariable int articleId) {
         return articleService.getArticle(articleId);
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "create an article(buyer's guide, comparison, and etc)")
-    public Mono<ArticleInfo> createArticle(@RequestBody ArticleInfo articleInfo) {
+    public Mono<AdminArticleInfo> createArticle(@RequestBody AdminArticleInfo articleInfo) {
         String operatorName = getAdminName();
         return articleService.createArticle(articleInfo, operatorName);
     }
@@ -52,7 +52,7 @@ public class ArticleController {
     @PostMapping("/update")
     @PreAuthorize("hasRole('ROLE_admin-content')")
     @ApiOperation(value = "update an article and it's content")
-    public Mono<ArticleInfo> updateArticle(@RequestBody ArticleInfo articleInfo) {
+    public Mono<AdminArticleInfo> updateArticle(@RequestBody AdminArticleInfo articleInfo) {
         String operatorName = getAdminName();
         return articleService.updateArticle(articleInfo, operatorName);
     }

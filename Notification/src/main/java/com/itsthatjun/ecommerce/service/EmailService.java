@@ -14,7 +14,7 @@ public class EmailService {
         System.out.println("send email to : "  + to);
         System.out.println("subject : " + subject);
         System.out.println("body : "  + text);
-        /*
+        /*  comment out to actual send email out
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);

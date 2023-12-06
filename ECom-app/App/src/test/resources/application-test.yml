@@ -1,0 +1,17 @@
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings:
+    articleMessageProcessor-in-0:
+      destination: adminArticle
+      group: adminArticleGroup
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+jwt:
+  HEADER_STRING: Authorization
+  tokenPrefix: Bearer
+  secretKey: JunChen522
+  issuer: auth-server

@@ -82,16 +82,16 @@ public class OrderController {
         return orderService.cancelOrder(orderSn, reason, operatorName);
     }
 
-    @DeleteMapping("/notification")
+    @PostMapping("/notification/")
     @ApiOperation(value = "")
     public Mono<Void> sendOrderItemNotification(@RequestParam String productSku, @RequestBody String message) {
         String operatorName = getAdminName();
         return orderService.sendOrderItemNotification(productSku, message, operatorName);
     }
 
-    @DeleteMapping("/notification")
+    @PostMapping("/notification/{productName}")
     @ApiOperation(value = "")
-    public Mono<Void> sendOrderProductNotification(@RequestParam String productName, @RequestBody String message) {
+    public Mono<Void> sendOrderProductNotification(@PathVariable String productName, @RequestBody String message) {
         String operatorName = getAdminName();
         return orderService.sendOrderProductNotification(productName, message, operatorName);
     }

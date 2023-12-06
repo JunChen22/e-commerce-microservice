@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "942b095d-2b7e-45a7-bc65-7273b2da7111",
-		"name": "E-commerece microservice",
+		"_postman_id": "f285c751-eefe-4594-b320-9f0c5b5aaeba",
+		"name": "E-com microservice",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6779692"
 	},
@@ -43,14 +43,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/article/1",
+									"raw": "localhost:8080/article/4",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
 										"article",
-										"1"
+										"4"
 									]
 								}
 							},
@@ -322,7 +322,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "localhost:8080/order/detail/20231013s",
+											"raw": "localhost:8080/order/detail/1001",
 											"host": [
 												"localhost"
 											],
@@ -330,7 +330,7 @@
 											"path": [
 												"order",
 												"detail",
-												"20231013s"
+												"1001"
 											]
 										}
 									},
@@ -425,7 +425,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "localhost:8080/order/return/status/2023102520101000001",
+											"raw": "localhost:8080/order/return/status/1001",
 											"host": [
 												"localhost"
 											],
@@ -434,7 +434,7 @@
 												"order",
 												"return",
 												"status",
-												"2023102520101000001"
+												"1001"
 											]
 										}
 									},
@@ -980,7 +980,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\" : \"user5\",\n\t\"password\": \"password\"\n}",
+									"raw": "{\n    \"receiverName\": \"Jun2\",\n    \"phoneNumber\": \"12\",\n    \"detailAddress\": \"main street\",\n    \"city\": \"ny\",\n    \"state\": \"ny\",\n    \"zipCode\": \"11220\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1059,7 +1059,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"username\": \"user2\",\n  \"password\": \"password\"\n}\n",
+							"raw": "{\n  \"username\": \"user1\",\n  \"password\": \"password\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1085,7 +1085,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE2OTgyNjk1MjEsImlhdCI6MTY5ODI2MDUyMTI3MCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.Cx5aHU4ZA0n1tfTcolgQWYKclCmZnEGm2aQ3Wf35EQw8CQMeZQ2ye9iLv262yk7H4MriAjBJUyPKo6REP4P-9Q",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjEsIm5hbWUiOiJKdW4iLCJpc3MiOiJhdXRoLXNlcnZlciIsImV4cCI6MTcwMTIxMjc5MiwiaWF0IjoxNzAxMjAzNzkyMDE5LCJhdXRob3JpdGllcyI6bnVsbCwidXNlcm5hbWUiOiJ1c2VyMSJ9.5jlbMLEBvgocQqHDpApiTgQcDlKiIXTupJZkdtkUrODtYlezHaVQRaSWE37u_he6wjv1YonwFxqUGCd47IXsbA",
 						"type": "string"
 					}
 				]
@@ -1124,7 +1124,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"article\": {\n        \"title\": \"new article\",\n        \"body\": \"some some\"\n    },\n    \"images\": [\n        {\n            \"articleId\": null,\n            \"filename\": \"buyer_guide_infographic.png\"\n        },\n        {\n            \"articleId\": null,\n            \"filename\": \"buyer_guide_cover.jpg\"\n        }\n    ],\n    \"videos\": [\n        {\n            \"url\": \"https://i.imgur.com/tovhDTo.mp4\"\n        }\n    ],\n    \"qa\": [\n        {\n            \"question\": \"What is a buyer's guide?\",\n            \"answer\": \"A buyer's guide is a document or article that provides information about a particular product or service to help potential buyers make informed decisions.\"\n        }\n    ]\n}",
+									"raw": "{\n    \"title\": \"new article\",\n    \"body\": \"some some\",\n    \"publishStatus\": 1,\n    \"images\": [\n        {\n            \"articleId\": null,\n            \"filename\": \"buyer_guide_infographic.png\"\n        },\n        {\n            \"articleId\": null,\n            \"filename\": \"buyer_guide_cover.jpg\"\n        }\n    ],\n    \"videos\": [\n        {\n            \"url\": \"https://i.imgur.com/tovhDTo.mp4\"\n        }\n    ],\n    \"qa\": [\n        {\n            \"question\": \"What is a buyer's guide?\",\n            \"answer\": \"A buyer's guide is a document or article that provides information about a particular product or service to help potential buyers make informed decisions.\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1190,7 +1190,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"article\": {\n        \"id\": 5,\n        \"title\": \"update new article\",\n        \"body\": \"update some\"\n    },\n    \"images\": [\n        {\n            \"filename\": \"new.png\"\n        },\n        {\n            \"filename\": \"new2.jpg\"\n        }\n    ],\n    \"videos\": [\n        {\n            \"url\": \"new.mp4\"\n        }\n    ],\n    \"qa\": [\n        {\n            \"question\": \"new\",\n            \"answer\": \"new.\"\n        }\n    ]\n}",
+									"raw": "{\n    \"article\": {\n        \"id\": 5,\n        \"title\": \"update new article\",\n        \"body\": \"update some\",\n        \"publishStatus\" : 1\n    },\n    \"images\": [\n        {\n            \"filename\": \"new.png\"\n        },\n        {\n            \"filename\": \"new2.jpg\"\n        }\n    ],\n    \"videos\": [\n        {\n            \"url\": \"new.mp4\"\n        }\n    ],\n    \"qa\": [\n        {\n            \"question\": \"new\",\n            \"answer\": \"new.\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2771,10 +2771,60 @@
 					"name": "UMS",
 					"item": [
 						{
-							"name": "User -",
+							"name": "User - send all use message",
 							"request": {
-								"method": "GET",
-								"header": []
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"message\" : \"test message\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8082/user/message/all",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"user",
+										"message",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User - send one use message",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"message\" : \"test message\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8082/user/message/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8082",
+									"path": [
+										"user",
+										"message",
+										"1"
+									]
+								}
 							},
 							"response": []
 						}
@@ -3046,7 +3096,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNjk4MjYyMzIyNTA3LCJhZG1pbklkIjoxLCJleHAiOjE2OTgyNzEzMjJ9.rWVNpfuqCxm47UxJZ99NsfeEQU0LTHhM2-sN7MscONY4vMonjoMXCsA7MapU6RQZT4BBoqLzagWhjoG7q24V_g",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNzAxODAyNTY5OTk0LCJhZG1pbklkIjoxLCJleHAiOjE3MDE4MTE1Njl9.yyeXE6fyFPE5oFrgZOcWBGfJdHEaE3u7smh0o1OhT6e6pW3MPUEzw9KnkUsG48gksI5yY1FO6PvyFMJifPmWYg",
 						"type": "string"
 					}
 				]
@@ -3215,6 +3265,88 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Order - test",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjIsIm5hbWUiOiJKb2huIiwiaXNzIjoiYXV0aC1zZXJ2ZXIiLCJleHAiOjE3MDA3MjUyNDIsImlhdCI6MTcwMDcxNjI0MjE3OCwiYXV0aG9yaXRpZXMiOm51bGwsInVzZXJuYW1lIjoidXNlcjIifQ.AbC0MgEedun1IgvcptI9ijkMgW0sd2nYBbywRGSIRiqstSMYpb25-UEtuCIZbeMAk82V4nitnDBSNl1dh96AUg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderProductSku\": {\n        \"IP12-RED-128\": 1,\n        \"IPSE-BLUE-64\": 2,\n        \"GS21\": 3\n    },\n    \"payType\": 1,\n    \"coupon\": \"10OFF\",\n    \"discountAmount\": 10,\n    \"amount\": 5099.94,\n    \"address\": {\n        \"receiverName\": \"John\",\n        \"phoneNumber\": \"212-121-1212\",\n        \"detailAddress\": \"123 Main St\",\n        \"city\": \"Cityville\",\n        \"state\": \"CA\",\n        \"zipCode\": \"12345\",\n        \"note\": \"\"\n    }\n}\n\n\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9999/",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:9999/",
+					"host": [
+						"localhost"
+					],
+					"port": "9999",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/nof?productSku=MBP",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nof"
+					],
+					"query": [
+						{
+							"key": "productSku",
+							"value": "MBP"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

@@ -148,6 +148,20 @@
             <groupId>io.github.resilience4j</groupId>
             <artifactId>resilience4j-circularbuffer</artifactId>
         </dependency>
+
+        <!-- test container -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>rabbitmq</artifactId>
+        </dependency>
     </dependencies>
 
     <profiles>

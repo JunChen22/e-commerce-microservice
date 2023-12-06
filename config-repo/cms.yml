@@ -5,7 +5,7 @@ spring:
   application:
     name: cms
   datasource:
-    url: jdbc:postgresql://localhost:5433/contentdb
+    url: jdbc:postgresql://localhost/contentdb
     driverClassName: org.postgresql.Driver
     #initialization-mode: always
 

@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dto.cms.event;
 
-import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
+import com.itsthatjun.ecommerce.dto.cms.AdminArticleInfo;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -17,7 +17,7 @@ public class CmsAdminArticleEvent {
     }
 
     private final Type eventType;
-    private final ArticleInfo articleInfo;
+    private final AdminArticleInfo articleInfo;
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
@@ -29,7 +29,7 @@ public class CmsAdminArticleEvent {
         this.eventCreatedAt = null;
     }
 
-    public CmsAdminArticleEvent(Type eventType, ArticleInfo articleInfo, String operator) {
+    public CmsAdminArticleEvent(Type eventType, AdminArticleInfo articleInfo, String operator) {
         this.eventType = eventType;
         this.articleInfo = articleInfo;
         this.operator = operator;
