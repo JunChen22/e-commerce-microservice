@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -305,52 +304,52 @@ public class ProductAttributeExample {
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdEqualTo(BigDecimal value) {
+        public Criteria andAttributeTypeIdEqualTo(Integer value) {
             addCriterion("attribute_type_id =", value, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdNotEqualTo(BigDecimal value) {
+        public Criteria andAttributeTypeIdNotEqualTo(Integer value) {
             addCriterion("attribute_type_id <>", value, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdGreaterThan(BigDecimal value) {
+        public Criteria andAttributeTypeIdGreaterThan(Integer value) {
             addCriterion("attribute_type_id >", value, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andAttributeTypeIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("attribute_type_id >=", value, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdLessThan(BigDecimal value) {
+        public Criteria andAttributeTypeIdLessThan(Integer value) {
             addCriterion("attribute_type_id <", value, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andAttributeTypeIdLessThanOrEqualTo(Integer value) {
             addCriterion("attribute_type_id <=", value, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdIn(List<BigDecimal> values) {
+        public Criteria andAttributeTypeIdIn(List<Integer> values) {
             addCriterion("attribute_type_id in", values, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdNotIn(List<BigDecimal> values) {
+        public Criteria andAttributeTypeIdNotIn(List<Integer> values) {
             addCriterion("attribute_type_id not in", values, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andAttributeTypeIdBetween(Integer value1, Integer value2) {
             addCriterion("attribute_type_id between", value1, value2, "attributeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeTypeIdNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andAttributeTypeIdNotBetween(Integer value1, Integer value2) {
             addCriterion("attribute_type_id not between", value1, value2, "attributeTypeId");
             return (Criteria) this;
         }

@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ProductPictures">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="product_album_id" jdbcType="NUMERIC" property="productAlbumId" />
-    <result column="product_id" jdbcType="NUMERIC" property="productId" />
     <result column="filename" jdbcType="VARCHAR" property="filename" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
@@ -67,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, product_album_id, product_id, filename, created_at
+    id, product_album_id, filename, created_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductPicturesExample" resultMap="BaseResultMap">
     select
@@ -100,19 +99,16 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductPictures" useGeneratedKeys="true">
-    insert into product_pictures (product_album_id, product_id, filename, 
-      created_at)
-    values (#{productAlbumId,jdbcType=NUMERIC}, #{productId,jdbcType=NUMERIC}, #{filename,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP})
+    insert into product_pictures (product_album_id, filename, created_at
+      )
+    values (#{productAlbumId,jdbcType=NUMERIC}, #{filename,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductPictures" useGeneratedKeys="true">
     insert into product_pictures
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="productAlbumId != null">
         product_album_id,
-      </if>
-      <if test="productId != null">
-        product_id,
       </if>
       <if test="filename != null">
         filename,
@@ -124,9 +120,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="productAlbumId != null">
         #{productAlbumId,jdbcType=NUMERIC},
-      </if>
-      <if test="productId != null">
-        #{productId,jdbcType=NUMERIC},
       </if>
       <if test="filename != null">
         #{filename,jdbcType=VARCHAR},
@@ -151,9 +144,6 @@
       <if test="record.productAlbumId != null">
         product_album_id = #{record.productAlbumId,jdbcType=NUMERIC},
       </if>
-      <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=NUMERIC},
-      </if>
       <if test="record.filename != null">
         filename = #{record.filename,jdbcType=VARCHAR},
       </if>
@@ -169,7 +159,6 @@
     update product_pictures
     set id = #{record.id,jdbcType=INTEGER},
       product_album_id = #{record.productAlbumId,jdbcType=NUMERIC},
-      product_id = #{record.productId,jdbcType=NUMERIC},
       filename = #{record.filename,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -181,9 +170,6 @@
     <set>
       <if test="productAlbumId != null">
         product_album_id = #{productAlbumId,jdbcType=NUMERIC},
-      </if>
-      <if test="productId != null">
-        product_id = #{productId,jdbcType=NUMERIC},
       </if>
       <if test="filename != null">
         filename = #{filename,jdbcType=VARCHAR},
@@ -197,7 +183,6 @@
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductPictures">
     update product_pictures
     set product_album_id = #{productAlbumId,jdbcType=NUMERIC},
-      product_id = #{productId,jdbcType=NUMERIC},
       filename = #{filename,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

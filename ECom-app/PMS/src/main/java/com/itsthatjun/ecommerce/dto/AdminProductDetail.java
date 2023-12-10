@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.dto;
 
+import com.itsthatjun.ecommerce.dto.model.Attribute;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.ProductPictures;
 import com.itsthatjun.ecommerce.mbg.model.ProductSku;
@@ -13,11 +14,12 @@ public class AdminProductDetail {
 
     private Product product;
 
-    private List<ProductSku> skuVariants;
+    private ProductSku skuVariants;
 
     private List<ProductPictures> picturesList;
 
-    private Map<String, String> attributes;
+    private Map<String, Attribute> attributes;
 
     private Integer stock;
+
 }

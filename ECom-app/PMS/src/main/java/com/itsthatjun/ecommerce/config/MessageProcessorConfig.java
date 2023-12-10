@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.config;
 
+import com.itsthatjun.ecommerce.dto.AdminProductDetail;
 import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminBrandEvent;
 import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminProductEvent;
 import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminReviewEvent;
@@ -117,17 +118,18 @@ public class MessageProcessorConfig {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
-            Product product = event.getProductDetail().getProduct();
-            List<ProductSku> skuList = event.getProductDetail().getSkuVariants();
+            AdminProductDetail productDetail = event.getProductDetail();
+            Product product = productDetail.getProduct();
+            ProductSku sku = productDetail.getSkuVariants();
             String operator = event.getOperator();
 
             switch (event.getEventType()) {
                 case NEW_PRODUCT:
-                    productService.createProduct(product, skuList, operator).subscribe();
+                    productService.createProduct(productDetail, operator).subscribe();
                     break;
 
                 case NEW_PRODUCT_SKU:
-                    productService.addProductSku(product, skuList.get(0), operator).subscribe();
+                    productService.addProductSku(productDetail, operator).subscribe();
                     break;
 
                 case UPDATE_PRODUCT_INFO:
@@ -139,20 +141,20 @@ public class MessageProcessorConfig {
                     break;
 
                 case UPDATE_PRODUCT_SKU_STATUS:
-                    productService.updateProductSkuStatus(skuList.get(0), operator).subscribe();
+                    productService.updateProductSkuStatus(sku, operator).subscribe();
                     break;
 
                 case UPDATE_STOCK:
                     int addedStock = event.getProductDetail().getStock();
-                    productService.updateProductStock(skuList.get(0), addedStock, operator).subscribe();
+                    productService.updateProductStock(sku, addedStock, operator).subscribe();
                     break;
 
                 case UPDATE_PRODUCT_PRICE:
-                    productService.updateProductPrice(skuList, operator).subscribe();
+                    productService.updateProductPrice(sku, operator).subscribe();
                     break;
 
                 case REMOVE_PRODUCT_SKU:
-                    productService.removeProductSku(skuList.get(0), operator).subscribe();
+                    productService.removeProductSku(sku, operator).subscribe();
                     break;
 
                 case DELETE_PRODUCT:

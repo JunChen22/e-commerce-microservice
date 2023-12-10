@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final Scheduler publishEventScheduler;
 
-    private final String PMS_SERVICE_URL = "http://pms/product";
+    private final String PMS_SERVICE_URL = "http://pms/product/admin";
 
     @Autowired
     public ProductServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,

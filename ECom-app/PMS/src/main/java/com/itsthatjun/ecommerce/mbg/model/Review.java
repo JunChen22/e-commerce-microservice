@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class Review {
@@ -14,11 +13,11 @@ public class Review {
 
     private String memberIcon;
 
-    private BigDecimal star;
+    private Integer star;
 
     private String tittle;
 
-    private BigDecimal likes;
+    private Integer likes;
 
     private Integer verified;
 
@@ -68,11 +67,11 @@ public class Review {
         this.memberIcon = memberIcon;
     }
 
-    public BigDecimal getStar() {
+    public Integer getStar() {
         return star;
     }
 
-    public void setStar(BigDecimal star) {
+    public void setStar(Integer star) {
         this.star = star;
     }
 
@@ -84,11 +83,11 @@ public class Review {
         this.tittle = tittle;
     }
 
-    public BigDecimal getLikes() {
+    public Integer getLikes() {
         return likes;
     }
 
-    public void setLikes(BigDecimal likes) {
+    public void setLikes(Integer likes) {
         this.likes = likes;
     }
 

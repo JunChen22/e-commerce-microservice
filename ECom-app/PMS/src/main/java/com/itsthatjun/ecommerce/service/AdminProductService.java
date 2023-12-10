@@ -1,19 +1,28 @@
 package com.itsthatjun.ecommerce.service;
 
+import com.itsthatjun.ecommerce.dto.AdminProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import io.swagger.annotations.ApiOperation;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 public interface AdminProductService {
 
+    @ApiOperation("")
+    Mono<AdminProductDetail> getProductDetail(int id);
+
+    @ApiOperation("")
+    Flux<Product> listAllProduct();
+
+    @ApiOperation("")
+    Flux<Product> listProduct(int pageNum, int pageSize);
+
     @ApiOperation("create a product with at least one sku variant")
-    Mono<Product> createProduct(Product product, List<ProductSku> skuList, String operator);
+    Mono<Product> createProduct(AdminProductDetail productDetail, String operator);
 
     @ApiOperation("Add a sku to existing product.")
-    Mono<Product> addProductSku(Product currentProduct, ProductSku newSKu, String operator);
+    Mono<Product> addProductSku(AdminProductDetail productDetail, String operator);
 
     @ApiOperation("Update product info like category, name, description, subtitle and etc non-price affecting.")
     Mono<Product> updateProductInfo(Product updatedProduct, String operator);
@@ -28,7 +37,7 @@ public interface AdminProductService {
     Mono<ProductSku> updateProductStock(ProductSku sku, int addedStock, String operator);
 
     @ApiOperation("Update product and its sku prices of existing product.")
-    Mono<Product> updateProductPrice(List<ProductSku> productSkuList, String operator);
+    Mono<Product> updateProductPrice(ProductSku sku, String operator);
 
     @ApiOperation("Remove/actual delete a sku from product. Product can have no sku, just holding information.")
     Mono<ProductSku> removeProductSku(ProductSku removeSku, String operator);

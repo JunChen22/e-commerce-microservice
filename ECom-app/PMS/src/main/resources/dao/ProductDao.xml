@@ -85,7 +85,7 @@
 
         FROM product p
         LEFT JOIN product_sku sku ON sku.product_id = p.id
-        WHERE p.id = #{id}
+        WHERE p.id = #{productId}
     </select>
 
     <select id="getProductPictures" resultMap="productPicuturelMap">
@@ -94,17 +94,26 @@
         FROM product p
         LEFT JOIN product_album a ON p.picture_album = a.id
         LEFT JOIN product_pictures pp ON a.id = pp.product_album_id
-        WHERE p.id = #{id}
+        WHERE p.id = #{productId}
     </select>
 
     <select id="getProductAttributes" resultType="java.util.Map">
         SELECT
-            pa.sku_code AS key,
-            STRING_AGG(CONCAT(pat.name, ':', pa.attribute_value, ' ', pa.attribute_unit), ';') AS value
+            pa.sku_code AS sku_codes,
+            STRING_AGG(CONCAT(pat.name, ':', pa.attribute_value, ' ', pa.attribute_unit), ';') AS attributes
         FROM product_attribute_category pac
         LEFT JOIN product_attribute_type pat ON pat.attribute_category_id = pac.id
         LEFT JOIN product_attribute pa ON pa.attribute_type_id = pat.id
-        WHERE pa.product_id = #{id}
+        WHERE pa.product_id = #{productId}
         GROUP BY pa.sku_code;
+    </select>
+
+    <select id="getAttributeType" resultType="java.util.Map">
+        SELECT
+            pat.name AS attribute_type_name,
+            pat.id AS attribute_type_id
+        FROM product_attribute_category pac
+        LEFT JOIN product_attribute_type pat ON pat.attribute_category_id = pac.id
+        WHERE pac.name = #{categoryName}
     </select>
 </mapper>

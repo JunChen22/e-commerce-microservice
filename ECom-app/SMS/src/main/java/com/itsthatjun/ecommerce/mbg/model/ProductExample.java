@@ -636,52 +636,52 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusEqualTo(BigDecimal value) {
+        public Criteria andNewStatusEqualTo(Integer value) {
             addCriterion("new_status =", value, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusNotEqualTo(BigDecimal value) {
+        public Criteria andNewStatusNotEqualTo(Integer value) {
             addCriterion("new_status <>", value, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusGreaterThan(BigDecimal value) {
+        public Criteria andNewStatusGreaterThan(Integer value) {
             addCriterion("new_status >", value, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andNewStatusGreaterThanOrEqualTo(Integer value) {
             addCriterion("new_status >=", value, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusLessThan(BigDecimal value) {
+        public Criteria andNewStatusLessThan(Integer value) {
             addCriterion("new_status <", value, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andNewStatusLessThanOrEqualTo(Integer value) {
             addCriterion("new_status <=", value, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusIn(List<BigDecimal> values) {
+        public Criteria andNewStatusIn(List<Integer> values) {
             addCriterion("new_status in", values, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusNotIn(List<BigDecimal> values) {
+        public Criteria andNewStatusNotIn(List<Integer> values) {
             addCriterion("new_status not in", values, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andNewStatusBetween(Integer value1, Integer value2) {
             addCriterion("new_status between", value1, value2, "newStatus");
             return (Criteria) this;
         }
 
-        public Criteria andNewStatusNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andNewStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("new_status not between", value1, value2, "newStatus");
             return (Criteria) this;
         }
@@ -696,52 +696,52 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusEqualTo(BigDecimal value) {
+        public Criteria andRecommendStatusEqualTo(Integer value) {
             addCriterion("recommend_status =", value, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusNotEqualTo(BigDecimal value) {
+        public Criteria andRecommendStatusNotEqualTo(Integer value) {
             addCriterion("recommend_status <>", value, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusGreaterThan(BigDecimal value) {
+        public Criteria andRecommendStatusGreaterThan(Integer value) {
             addCriterion("recommend_status >", value, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andRecommendStatusGreaterThanOrEqualTo(Integer value) {
             addCriterion("recommend_status >=", value, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusLessThan(BigDecimal value) {
+        public Criteria andRecommendStatusLessThan(Integer value) {
             addCriterion("recommend_status <", value, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andRecommendStatusLessThanOrEqualTo(Integer value) {
             addCriterion("recommend_status <=", value, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusIn(List<BigDecimal> values) {
+        public Criteria andRecommendStatusIn(List<Integer> values) {
             addCriterion("recommend_status in", values, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusNotIn(List<BigDecimal> values) {
+        public Criteria andRecommendStatusNotIn(List<Integer> values) {
             addCriterion("recommend_status not in", values, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andRecommendStatusBetween(Integer value1, Integer value2) {
             addCriterion("recommend_status between", value1, value2, "recommendStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecommendStatusNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andRecommendStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("recommend_status not between", value1, value2, "recommendStatus");
             return (Criteria) this;
         }
@@ -756,52 +756,52 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusEqualTo(BigDecimal value) {
+        public Criteria andVerifyStatusEqualTo(Integer value) {
             addCriterion("verify_status =", value, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusNotEqualTo(BigDecimal value) {
+        public Criteria andVerifyStatusNotEqualTo(Integer value) {
             addCriterion("verify_status <>", value, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusGreaterThan(BigDecimal value) {
+        public Criteria andVerifyStatusGreaterThan(Integer value) {
             addCriterion("verify_status >", value, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andVerifyStatusGreaterThanOrEqualTo(Integer value) {
             addCriterion("verify_status >=", value, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusLessThan(BigDecimal value) {
+        public Criteria andVerifyStatusLessThan(Integer value) {
             addCriterion("verify_status <", value, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andVerifyStatusLessThanOrEqualTo(Integer value) {
             addCriterion("verify_status <=", value, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusIn(List<BigDecimal> values) {
+        public Criteria andVerifyStatusIn(List<Integer> values) {
             addCriterion("verify_status in", values, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusNotIn(List<BigDecimal> values) {
+        public Criteria andVerifyStatusNotIn(List<Integer> values) {
             addCriterion("verify_status not in", values, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andVerifyStatusBetween(Integer value1, Integer value2) {
             addCriterion("verify_status between", value1, value2, "verifyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andVerifyStatusNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andVerifyStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("verify_status not between", value1, value2, "verifyStatus");
             return (Criteria) this;
         }

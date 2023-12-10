@@ -650,14 +650,14 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "localhost:8080/product/3",
+											"raw": "localhost:8080/product/1",
 											"host": [
 												"localhost"
 											],
 											"port": "8080",
 											"path": [
 												"product",
-												"3"
+												"1"
 											]
 										}
 									},
@@ -1994,13 +1994,13 @@
 									"response": []
 								},
 								{
-									"name": "Create a product",
+									"name": "Create a product - Smarphone",
 									"request": {
 										"method": "POST",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"product\": {\n        \"brandId\": 3,\n        \"brandName\": \"Google\",\n        \"name\": \"Pixel 55\",\n        \"categoryId\": 15,\n        \"categoryName\": \"Smartphones\",\n        \"attributeCategoryId\": 9,\n        \"sn\": \"SN-345\",\n        \"newStatus\": null,\n        \"recommendStatus\": null,\n        \"subTitle\": \"Capture the perfect shot\",\n        \"coverPicture\": \"pixel5.jpg\",\n        \"description\": \"The Pixel 5 features an exceptional camera and advanced AI capabilities.\",\n        \"originalPrice\": 799.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 799.99,\n        \"stock\": 160,\n        \"lowStock\": 8,\n        \"weight\": 140.00,\n        \"keywords\": \"Google, Pixel, smartphone\",\n        \"detailTitle\": \"Product Details\",\n        \"detailDesc\": \"Capture stunning photos with the Pixel 5.\",\n        \"createdAt\": \"2023-10-08T16:18:19.340+00:00\",\n        \"note\": null\n    },\n        \"skuVariants\": [\n        {\n            \"skuCode\": \"PX5\",\n            \"picture\": \"pixel5.jpg\",\n            \"price\": 799.99,\n            \"promotionPrice\": 799.99,\n            \"stock\": 80,\n            \"lowStock\": 8,\n            \"lockStock\": 0,\n            \"unitSold\": 40,\n            \"status\": 1\n        },\n        {\n            \"skuCode\": \"PX6\",\n            \"picture\": \"pixel6.jpg\",\n            \"price\": 799.99,\n            \"promotionPrice\": 599.99,\n            \"stock\": 80,\n            \"lowStock\": 8,\n            \"lockStock\": 0,\n            \"unitSold\": 40,\n            \"status\": 1\n        }\n    ]\n}",
+											"raw": "{\n    \"product\": {\n        \"brandId\": 3,\n        \"brandName\": \"Google\",\n        \"name\": \"Pixel 55\",\n        \"categoryId\": 15,\n        \"categoryName\": \"Smartphones\",\n        \"attributeCategoryId\": 9,\n        \"sn\": \"SN-345\",\n        \"newStatus\": null,\n        \"recommendStatus\": null,\n        \"subTitle\": \"Capture the perfect shot\",\n        \"coverPicture\": \"pixel5.jpg\",\n        \"description\": \"The Pixel 5 features an exceptional camera and advanced AI capabilities.\",\n        \"originalPrice\": 799.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 799.99,\n        \"stock\": 160,\n        \"lowStock\": 8,\n        \"weight\": 140.00,\n        \"keywords\": \"Google, Pixel, smartphone\",\n        \"detailTitle\": \"Product Details\",\n        \"detailDesc\": \"Capture stunning photos with the Pixel 5.\",\n        \"createdAt\": \"2023-10-08T16:18:19.340+00:00\",\n        \"note\": null\n    },\n    \"skuVariants\": {\n        \"skuCode\": \"PX5\",\n        \"picture\": \"pixel5.jpg\",\n        \"price\": 799.99,\n        \"promotionPrice\": 799.99,\n        \"stock\": 80,\n        \"lowStock\": 8,\n        \"lockStock\": 0,\n        \"unitSold\": 40,\n        \"status\": 1\n    },\n    \"attributes\": {\n        \"storage capacity\": {\n            \"value\": \"14\",\n            \"unit\": \"GB\"\n        },\n        \"camera resolution\": {\n            \"value\": \"12\",\n            \"unit\": \"MP\"\n        },\n        \"screen size\": {\n            \"value\": \"6.1\",\n            \"unit\": \"inches\"\n        },\n        \"ram size\": {\n            \"value\": \"4\",\n            \"unit\": \"GB\"\n        },\n        \"screen resolution\": {\n            \"value\": \"2532 x 1170\",\n            \"unit\": \"pixels\"\n        },\n        \"battery capacity\": {\n            \"value\": \"2815\",\n            \"unit\": \"mAh\"\n        },\n        \"processor\": {\n            \"value\": \"Apple A14 Bionic\",\n            \"unit\": null\n        },\n        \"color\": {\n            \"value\": \"Black\",\n            \"unit\": null\n        },\n        \"ports\": {\n            \"value\": \"Lightning\",\n            \"unit\": null\n        },\n        \"year model\": {\n            \"value\": \"2022\",\n            \"unit\": null\n        }\n    },\n    \"picturesList\": [\n        {\n            \"filename\" : \"new picture.jpg\"\n        },\n        {\n            \"filename\" : \"second pic.jpg\"\n        }\n    ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2022,13 +2022,69 @@
 									"response": []
 								},
 								{
-									"name": "Add a product sku",
+									"name": "Create a product - sneaker",
 									"request": {
 										"method": "POST",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"product\": {\n        \"id\" : 3,\n        \"originalPrice\": 799.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 799.99\n    },\n        \"skuVariants\": [\n        {\n            \"skuCode\": \"PX5\",\n            \"picture\": \"pixel5.jpg\",\n            \"price\": 799.99,\n            \"promotionPrice\": 799.99,\n            \"stock\": 80,\n            \"lowStock\": 8,\n            \"lockStock\": 0,\n            \"unitSold\": 40,\n            \"status\": 1\n        }\n    ]\n}",
+											"raw": "{\n    \"product\": {\n        \"brandId\": 23,\n        \"brandName\": \"Nike\",\n        \"name\": \"React Infinity Run Flyknit\",\n        \"categoryId\": 8,\n        \"categoryName\": \"Men shoes\",\n        \"attributeCategoryId\": 2,\n        \"sn\": \"SN-888\",\n        \"newStatus\": null,\n        \"recommendStatus\": null,\n        \"subTitle\": \"Unlimited comfort for your run\",\n        \"coverPicture\": \"react_infinity_run.jpg\",\n        \"description\": \"The React Infinity Run Flyknit provides cushioning and support for a smooth running experience.\",\n        \"originalPrice\": 149.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 129.99,\n        \"stock\": 90,\n        \"lowStock\": 10,\n        \"weight\": 270.00,\n        \"keywords\": \"Nike, React Infinity Run, sneakers\",\n        \"detailTitle\": \"Product Details\",\n        \"detailDesc\": \"Experience endless comfort with the React Infinity Run Flyknit during your running sessions.\",\n        \"createdAt\": \"2023-10-20T14:22:55.890+00:00\",\n        \"note\": null\n    },\n    \"skuVariants\": {\n        \"skuCode\": \"RI-001\",\n        \"picture\": \"react_infinity_run_black.jpg\",\n        \"price\": 129.99,\n        \"promotionPrice\": 119.99,\n        \"stock\": 50,\n        \"lowStock\": 5,\n        \"lockStock\": 0,\n        \"unitSold\": 20,\n        \"status\": 1\n    },\n    \"attributes\": {\n        \"size\": {\n            \"value\": \"8.5\",\n            \"unit\": \"US\"\n        },\n        \"color\": {\n            \"value\": \"Black\",\n            \"unit\": null\n        },\n        \"style\": {\n            \"value\": \"Running\",\n            \"unit\": null\n        }\n    },\n    \"picturesList\": [\n        {\n            \"filename\": \"new picture.jpg\"\n        },\n        {\n            \"filename\": \"second pic.jpg\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/create",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"create"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add a product sku - smartphone",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product\": {\n        \"id\": 3,\n        \"originalPrice\": 799.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 799.99\n    },\n    \"skuVariants\": [\n        \"skuCode\": \"PX5\",\n        \"picture\": \"pixel5.jpg\",\n        \"price\": 799.99,\n        \"promotionPrice\": 799.99,\n        \"stock\": 80,\n        \"lowStock\": 8,\n        \"lockStock\": 0,\n        \"unitSold\": 40,\n        \"status\": 1\n    ],\n    \"attributes\": [\n        {\n            \"name\": \"storage capacity\",\n            \"value\": \"14\",\n            \"unit\": \"GB\"\n        },\n        {\n            \"name\": \"camera resolution\",\n            \"value\": \"12\",\n            \"unit\": \"MP\"\n        },\n        {\n            \"name\": \"screen size\",\n            \"value\": \"6.1\",\n            \"unit\": \"inches\"\n        },\n        {\n            \"name\": \"ram size\",\n            \"value\": \"4\",\n            \"unit\": \"GB\"\n        },\n        {\n            \"name\": \"screen resolution\",\n            \"value\": \"2532 x 1170\",\n            \"unit\": \"pixels\"\n        },\n        {\n            \"name\": \"battery capacity\",\n            \"value\": \"2815\",\n            \"unit\": \"mAh\"\n        },\n        {\n            \"name\": \"processor\",\n            \"value\": \"Apple A14 Bionic\",\n            \"unit\": null\n        },\n        {\n            \"name\": \"color\",\n            \"value\": \"Black\",\n            \"unit\": null\n        },\n        {\n            \"name\": \"ports\",\n            \"value\": \"Lightning\",\n            \"unit\": null\n        },\n        {\n            \"name\": \"year model\",\n            \"value\": \"2022\",\n            \"unit\": null\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8082/product/addProductSku",
+											"host": [
+												"localhost"
+											],
+											"port": "8082",
+											"path": [
+												"product",
+												"addProductSku"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add a product sku - sneaker",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product\": {\n        \"id\": 3,\n        \"originalPrice\": 799.99,\n        \"onSaleStatus\": 1,\n        \"salePrice\": 799.99\n    },\n    \"skuVariants\": [\n        \"skuCode\": \"PX5\",\n        \"picture\": \"pixel5.jpg\",\n        \"price\": 799.99,\n        \"promotionPrice\": 799.99,\n        \"stock\": 80,\n        \"lowStock\": 8,\n        \"lockStock\": 0,\n        \"unitSold\": 40,\n        \"status\": 1\n    ],\n    \"attributes\": [\n        {\n            \"name\": \"size\",\n            \"value\": \"8.5\",\n            \"unit\": \"US\"\n        },\n        {\n            \"name\": \"color\",\n            \"value\": \"Black\",\n            \"unit\": null\n        },\n        {\n            \"name\": \"style\",\n            \"value\": \"Running\",\n            \"unit\": null\n        }\n    ]\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -3096,7 +3152,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNzAxODAyNTY5OTk0LCJhZG1pbklkIjoxLCJleHAiOjE3MDE4MTE1Njl9.yyeXE6fyFPE5oFrgZOcWBGfJdHEaE3u7smh0o1OhT6e6pW3MPUEzw9KnkUsG48gksI5yY1FO6PvyFMJifPmWYg",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNzAyMTgwOTM5NTkzLCJhZG1pbklkIjoxLCJleHAiOjE3MDIxODk5Mzl9.S7ZBMCib4wZCTtxia5bKhpD9qKo2Ly5VEeYcX4GG6ELeHkfy5qsgMpuO6UuB40BfQMs4WkfVLqvVcjMEsgMsqA",
 						"type": "string"
 					}
 				]

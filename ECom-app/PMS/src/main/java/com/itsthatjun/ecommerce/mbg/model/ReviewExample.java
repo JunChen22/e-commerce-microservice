@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -436,52 +435,52 @@ public class ReviewExample {
             return (Criteria) this;
         }
 
-        public Criteria andStarEqualTo(BigDecimal value) {
+        public Criteria andStarEqualTo(Integer value) {
             addCriterion("star =", value, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarNotEqualTo(BigDecimal value) {
+        public Criteria andStarNotEqualTo(Integer value) {
             addCriterion("star <>", value, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarGreaterThan(BigDecimal value) {
+        public Criteria andStarGreaterThan(Integer value) {
             addCriterion("star >", value, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andStarGreaterThanOrEqualTo(Integer value) {
             addCriterion("star >=", value, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarLessThan(BigDecimal value) {
+        public Criteria andStarLessThan(Integer value) {
             addCriterion("star <", value, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andStarLessThanOrEqualTo(Integer value) {
             addCriterion("star <=", value, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarIn(List<BigDecimal> values) {
+        public Criteria andStarIn(List<Integer> values) {
             addCriterion("star in", values, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarNotIn(List<BigDecimal> values) {
+        public Criteria andStarNotIn(List<Integer> values) {
             addCriterion("star not in", values, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andStarBetween(Integer value1, Integer value2) {
             addCriterion("star between", value1, value2, "star");
             return (Criteria) this;
         }
 
-        public Criteria andStarNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andStarNotBetween(Integer value1, Integer value2) {
             addCriterion("star not between", value1, value2, "star");
             return (Criteria) this;
         }
@@ -566,52 +565,52 @@ public class ReviewExample {
             return (Criteria) this;
         }
 
-        public Criteria andLikesEqualTo(BigDecimal value) {
+        public Criteria andLikesEqualTo(Integer value) {
             addCriterion("likes =", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesNotEqualTo(BigDecimal value) {
+        public Criteria andLikesNotEqualTo(Integer value) {
             addCriterion("likes <>", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesGreaterThan(BigDecimal value) {
+        public Criteria andLikesGreaterThan(Integer value) {
             addCriterion("likes >", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andLikesGreaterThanOrEqualTo(Integer value) {
             addCriterion("likes >=", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesLessThan(BigDecimal value) {
+        public Criteria andLikesLessThan(Integer value) {
             addCriterion("likes <", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andLikesLessThanOrEqualTo(Integer value) {
             addCriterion("likes <=", value, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesIn(List<BigDecimal> values) {
+        public Criteria andLikesIn(List<Integer> values) {
             addCriterion("likes in", values, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesNotIn(List<BigDecimal> values) {
+        public Criteria andLikesNotIn(List<Integer> values) {
             addCriterion("likes not in", values, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andLikesBetween(Integer value1, Integer value2) {
             addCriterion("likes between", value1, value2, "likes");
             return (Criteria) this;
         }
 
-        public Criteria andLikesNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andLikesNotBetween(Integer value1, Integer value2) {
             addCriterion("likes not between", value1, value2, "likes");
             return (Criteria) this;
         }

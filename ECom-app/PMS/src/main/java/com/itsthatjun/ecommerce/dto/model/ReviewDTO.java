@@ -24,4 +24,5 @@ public class ReviewDTO {
     private Date createdAt;
 
     private Date updatedAt;
+
 }

@@ -1,19 +1,14 @@
 package com.itsthatjun.ecommerce.service.admin;
 
-import com.itsthatjun.ecommerce.dao.ProductDao;
-import com.itsthatjun.ecommerce.dto.DTOMapper;
+import com.itsthatjun.ecommerce.dao.AdminProductDao;
+import com.itsthatjun.ecommerce.dto.AdminProductDetail;
 import com.itsthatjun.ecommerce.dto.event.outgoing.OmsProductOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsProductOutEvent;
+import com.itsthatjun.ecommerce.dto.model.Attribute;
 import com.itsthatjun.ecommerce.exceptions.ProductException;
-import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.ProductUpdateLogMapper;
-import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.ProductSku;
-import com.itsthatjun.ecommerce.mbg.model.ProductSkuExample;
-import com.itsthatjun.ecommerce.mbg.model.ProductUpdateLog;
+import com.itsthatjun.ecommerce.mbg.mapper.*;
+import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.AdminProductService;
-import com.itsthatjun.ecommerce.service.impl.ProductServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +17,17 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AdminProductServiceImpl implements AdminProductService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AdminProductServiceImpl.class);
 
     private final ProductMapper productMapper;
 
@@ -41,97 +35,208 @@ public class AdminProductServiceImpl implements AdminProductService {
 
     private final ProductUpdateLogMapper logMapper;
 
-    private final ProductDao dao;
+    private final AdminProductDao productDao;
 
     private final StreamBridge streamBridge;
 
     private final Scheduler jdbcScheduler;
 
-    private final DTOMapper dtoMapper;
+    private final ProductAttributeMapper attributeMapper;
+
+    private final ProductPicturesMapper picturesMapper;
+
+    private final ProductAlbumMapper albumMapper;
 
     @Autowired
     public AdminProductServiceImpl(ProductMapper productMapper, ProductSkuMapper skuMapper, ProductUpdateLogMapper logMapper,
-                              ProductDao dao, StreamBridge streamBridge, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler,
-                              DTOMapper dtoMapper) {
+                                   AdminProductDao dao, StreamBridge streamBridge, @Qualifier("jdbcScheduler") Scheduler jdbcScheduler,
+                                   ProductAttributeMapper attributeMapper, ProductPicturesMapper picturesMapper, ProductAlbumMapper albumMapper) {
         this.productMapper = productMapper;
         this.skuMapper = skuMapper;
         this.logMapper = logMapper;
-        this.dao = dao;
+        this.productDao = dao;
         this.streamBridge = streamBridge;
         this.jdbcScheduler = jdbcScheduler;
-        this.dtoMapper = dtoMapper;
+        this.attributeMapper = attributeMapper;
+        this.picturesMapper = picturesMapper;
+        this.albumMapper = albumMapper;
     }
 
     @Override
-    public Mono<Product> createProduct(Product newProduct, List<ProductSku> skuList, String operator) {
+    public Mono<AdminProductDetail> getProductDetail(int id) {
         return Mono.fromCallable(() -> {
-            newProduct.setCreatedAt(new Date());
+            AdminProductDetail productDetail = new AdminProductDetail();
+            productDetail.setProduct(productDao.getProduct(id));
+            productDetail.setPicturesList(productDao.getProductPictures(id));
+
+            // productDetail.setSkuVariants(productDao.getAllSku(id));
+            /* TODO: add on dao to get detail
+            List<Map<String, String>> attributeList = dao.getProductAttributes(id);
+            Map<String, String> attribute = new HashMap<>();
+            for (Map<String, String> entry : attributeList) {
+                String name = entry.get("key");
+                String att = entry.get("value");
+                attribute.put(name, att);
+            }
+
+            productDetail.setPicturesList(pictureList);
+            productDetail.setAttributes(attribute);
+            return productDetail;
+
+             */
+            return productDetail;
+        }).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Flux<Product> listAllProduct() {
+        return Mono.fromCallable(() -> {
+            List<Product> productList = productDao.getAllProduct();
+            return productList;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Flux<Product> listProduct(int pageNum, int pageSize) {
+        return Mono.fromCallable(() -> {
+            /*
+            PageHelper.startPage(pageNum, pageSize);
+            ProductExample productExample = new ProductExample();
+            productExample.createCriteria().andPublishStatusEqualTo(1);
+            List<Product> productList = productMapper.selectByExample(productExample);
+            List<ProductDTO> dtoList = dtoMapper.productToProductDTO(productList);
+
+            return dtoList;
+             */
+
+            List<Product> productList = new ArrayList<>();
+            return productList;
+        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
+    }
+
+    @Override
+    public Mono<Product> createProduct(AdminProductDetail productDetail, String operator) {
+        return Mono.fromCallable(() -> {
+            Date currentTime = new Date();
+
+            Product newProduct = productDetail.getProduct();
+            ProductSku newSku = productDetail.getSkuVariants();
+            List<ProductPictures> picturesList = productDetail.getPicturesList();
+            Map<String, Attribute> attributes = productDetail.getAttributes();
+            String categoryName = newProduct.getCategoryName();
+
+            newProduct.setCreatedAt(currentTime);
             productMapper.insert(newProduct);
 
             int newProductId = newProduct.getId();
 
-            for (ProductSku sku : skuList) {
-                sku.setProductId(newProductId);
-                skuMapper.insert(sku);
-            }
+            newSku.setProductId(newProductId);
+            skuMapper.insert(newSku);
+            String skuCode = newSku.getSkuCode();
+
+            addAttribute(newProductId, skuCode, attributes, categoryName);
+            addPicture(newProductId, picturesList);
 
             createUpdateLog(newProduct, newProduct, "create product", operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT, newProduct, skuList));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT, newProduct, skuList));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT, newProduct, newSku));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT, newProduct, newSku));
 
             return newProduct;
         }).subscribeOn(jdbcScheduler);
     }
 
-    @Override
-    public Mono<Product> addProductSku(Product currentProduct, ProductSku newSKu, String operator) {
-        return Mono.fromCallable(() ->
-                internalAddProductSku(currentProduct, newSKu, operator)
-        ).subscribeOn(jdbcScheduler);
+    private void addAttribute(int productId, String skuCode, Map<String, Attribute> attributes, String categoryName) {
+        // get attribute types by category name, MyBatis won't map directly it behave a little different.
+        // each row is a map and multiple row is a list. alias or colum name became key and colum became value.
+        List<Map<String, Object>> attributeListMap = productDao.getAttributeType(categoryName);
+        Map<String, Integer> attributeTypes = new HashMap<>();
+
+        for (Map<String, Object> map : attributeListMap) {
+            attributeTypes.put((String) map.get("attribute_type_name"), (Integer) map.get("attribute_type_id"));
+        }
+
+        ProductAttribute attribute = new ProductAttribute();
+        attribute.setProductId(productId);
+        attribute.setSkuCode(skuCode);
+
+        // insert attributeList
+        for (String type : attributeTypes.keySet()) {
+            String value = attributes.get(type).getValue();
+            String unit = attributes.get(type).getUnit();
+            int attributeTypeId = attributeTypes.get(type);
+
+            attribute.setAttributeValue(value);
+            attribute.setAttributeUnit(unit);
+            attribute.setAttributeTypeId(attributeTypeId);
+
+            attributeMapper.insert(attribute);
+        }
     }
 
-    private Product internalAddProductSku(Product currentProduct, ProductSku newSKu, String operator) {
-        int productId = currentProduct.getId();
-        Product foundProduct = productMapper.selectByPrimaryKey(productId);
+    private void addPicture(int productId, List<ProductPictures> picturesList) {
+        // find if album exist, if not create one
+        Date currentTime = new Date();
 
-        if (foundProduct == null) throw new ProductException("Product does not exist, product id: " + productId);
+        ProductAlbumExample albumExample = new ProductAlbumExample();
+        albumExample.createCriteria().andProductIdEqualTo(productId);
+        List<ProductAlbum> albumList = albumMapper.selectByExample(albumExample);
 
-        ProductSkuExample skuExample = new ProductSkuExample();
-        skuExample.createCriteria().andProductIdEqualTo(productId);
-        List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
+        ProductAlbum album = !albumList.isEmpty() ? albumList.get(0) : null;
 
-        newSKu.setProductId(productId);
-        skuMapper.insert(newSKu);
-        skuList.add(newSKu);
+        if (albumList.isEmpty()) {
+            ProductAlbum newAlbum = new ProductAlbum();
+            newAlbum.setProductId(productId);
+            newAlbum.setCreatedAt(currentTime);
+            newAlbum.setPicCount(picturesList.size());
+            newAlbum.setName("new album");
+            newAlbum.setDescription("new desc");
+            albumMapper.insert(newAlbum);
 
-        double currentPrice = currentProduct.getOriginalPrice().doubleValue();
-        double currentSalePrice = currentProduct.getSalePrice().doubleValue();
-        double skuPrice = newSKu.getPrice().doubleValue();
-
-        // update price to highest, sku is just a variant of product.
-        if (skuPrice > currentPrice) {
-            currentProduct.setOriginalPrice(BigDecimal.valueOf(skuPrice));
-
-            for (ProductSku productSku : skuList) {
-                productSku.setPrice(BigDecimal.valueOf(skuPrice));
-                skuMapper.updateByPrimaryKey(productSku);
-            }
-            currentProduct.setOriginalPrice(BigDecimal.valueOf(skuPrice));
-            productMapper.updateByPrimaryKey(currentProduct);
+            album = newAlbum;
         }
 
-        // new lowest price
-        if (skuPrice < currentSalePrice) {
-            currentProduct.setSalePrice(BigDecimal.valueOf(skuPrice));
-            productMapper.updateByPrimaryKey(currentProduct);
+        int albumId = album.getId();
+
+        for (ProductPictures picture : picturesList) {
+            picture.setProductAlbumId(albumId);
+            picture.setCreatedAt(currentTime);
+
+            picturesMapper.insert(picture);
         }
 
-        createUpdateLog(foundProduct, foundProduct, "add new sku", operator);
+        Product product = productMapper.selectByPrimaryKey(productId);
+        product.setPictureAlbum(albumId);
+        productMapper.updateByPrimaryKey(product);
+    }
 
-        sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT_SKU, currentProduct, skuList));
-        sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT_SKU, currentProduct, skuList));
-        return currentProduct;
+    @Override
+    public Mono<Product> addProductSku(AdminProductDetail productDetail, String operator) {
+        return Mono.fromCallable(() -> {
+            int productId = productDetail.getProduct().getId();
+            Product foundProduct = productMapper.selectByPrimaryKey(productId);
+            if (foundProduct == null) throw new ProductException("Product does not exist, product id: " + productId);
+
+            ProductSku newSKu = productDetail.getSkuVariants();
+            newSKu.setProductId(productId);
+            skuMapper.insert(newSKu);
+            String skuCode = newSKu.getSkuCode();
+
+            List<ProductPictures> picturesList = productDetail.getPicturesList();
+            if (!picturesList.isEmpty()) addPicture(productId, picturesList);
+
+            Map<String, Attribute> attributes = productDetail.getAttributes();
+            addAttribute(productId, skuCode, attributes, foundProduct.getCategoryName());
+
+            // update product price
+            Product updateProduct = productSkuPriceUpdate(productId);
+
+            createUpdateLog(foundProduct, updateProduct, "add new sku", operator);
+
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT_SKU, foundProduct, newSKu));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT_SKU, foundProduct, newSKu));
+            return foundProduct;
+        }).subscribeOn(jdbcScheduler);
     }
 
     @Override
@@ -169,38 +274,38 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             productMapper.updateByPrimaryKey(foundProduct);
 
-            List<ProductSku> skuList = new ArrayList<>();
-            skuList.add(foundSku);
-
             createUpdateLog(foundProduct, foundProduct, "update product stock: " + foundProduct.getStock(), operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, sku));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, sku));
 
             return sku;
         }).subscribeOn(jdbcScheduler);
     }
 
     @Override
-    public Mono<Product> updateProductPrice(List<ProductSku> productSkuList, String operator) {
+    public Mono<Product> updateProductPrice(ProductSku sku, String operator) {
         return Mono.fromCallable(() -> {
+            skuMapper.updateByPrimaryKeySelective(sku);
+
+            // update product price
+            int productId = sku.getProductId();
+            Product foundProduct = productMapper.selectByPrimaryKey(productId);
+
+            ProductSkuExample skuExample = new ProductSkuExample();
+            skuExample.createCriteria().andProductIdEqualTo(foundProduct.getId());
+            List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
+
             double newHighestPrice = 0;
             double newLowPrice = 0;
-            for (ProductSku sku : productSkuList) {
-                double skuSalePrice = sku.getPromotionPrice().doubleValue();
-                double skuPrice = sku.getPrice().doubleValue();
+
+            for (ProductSku productSku : skuList) {
+                double skuSalePrice = productSku.getPromotionPrice().doubleValue();
+                double skuPrice = productSku.getPrice().doubleValue();
                 newHighestPrice = Math.max(newHighestPrice, skuPrice);
                 newLowPrice = Math.min(newLowPrice, skuSalePrice);
             }
 
-            // update highest/original price
-            for (ProductSku sku : productSkuList) {
-                sku.setPrice(BigDecimal.valueOf(newHighestPrice));
-                skuMapper.updateByPrimaryKeySelective(sku);
-            }
-
-            int productId = productSkuList.get(0).getProductId();
-            Product foundProduct = productMapper.selectByPrimaryKey(productId);
             foundProduct.setSalePrice(BigDecimal.valueOf(newLowPrice));
             foundProduct.setOriginalPrice(BigDecimal.valueOf(newHighestPrice));
 
@@ -208,8 +313,8 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             createUpdateLog(foundProduct, foundProduct, "update product price : " + foundProduct.getSalePrice(), operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, productSkuList));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, productSkuList));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, null));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, null));
 
             return foundProduct;
         }).subscribeOn(jdbcScheduler);
@@ -249,8 +354,8 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             createUpdateLog(foundProduct, foundProduct, "update product status : " + updatedProduct.getPublishStatus(), operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, affectedSkuList));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, affectedSkuList));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, null));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, null));
 
             return updatedProduct;
         }).subscribeOn(jdbcScheduler);
@@ -267,15 +372,13 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             if (foundProduct.getPublishStatus() == 0) throw new ProductException("Product is not active, sku can not be set until product id: " + productId + "is active");
 
-            List<ProductSku> skuList = new ArrayList<>();
-            skuList.add(updateSku);
             // TODO: when there's no more sku, might want to notify admin or just take the product off line too
             skuMapper.updateByPrimaryKeySelective(updateSku);
 
             createUpdateLog(foundProduct, foundProduct, "update product sku status: " + updateSku.getStatus(), operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, skuList));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, updateSku));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, updateSku));
 
             return updateSku;
         }).subscribeOn(jdbcScheduler);
@@ -285,32 +388,58 @@ public class AdminProductServiceImpl implements AdminProductService {
     public Mono<ProductSku> removeProductSku(ProductSku removeSku, String operator) {
         return Mono.fromCallable(() -> {
             int productId = removeSku.getProductId();
+            Product foundProduct = productMapper.selectByPrimaryKey(productId);
 
             ProductSkuExample skuExample = new ProductSkuExample();
             skuExample.createCriteria().andProductIdEqualTo(productId);
             List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
-
             if (!skuList.contains(removeSku)) throw new ProductException("Sku does not exist or belong to product id: " + productId);
 
-            int skuId = removeSku.getId();
-            skuList.remove(removeSku);
-            skuMapper.deleteByPrimaryKey(skuId);
-            Product foundProduct = productMapper.selectByPrimaryKey(productId);
+            skuMapper.deleteByPrimaryKey(removeSku.getId());
 
-            // update product price info.
-            if (!skuList.isEmpty()) {
-                updateProductPrice(skuList, operator);
-            }
+            // update product price.
+            Product updatedProduct = productSkuPriceUpdate(productId);
 
-            List<ProductSku> removedSkuList = new ArrayList<>();
-            removedSkuList.add(removeSku);
+            createUpdateLog(foundProduct, updatedProduct,"Remove product sku: " + removeSku.getSkuCode(), operator);
 
-            createUpdateLog(foundProduct, foundProduct,"Remove product sku: " + removeSku.getSkuCode(), operator);
-
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removedSkuList));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removedSkuList));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removeSku));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removeSku));
             return removeSku;
         }).subscribeOn(jdbcScheduler);
+    }
+
+    // update product and sku high and low price if there's any change
+    private Product productSkuPriceUpdate(int productId) {
+        Product product = productMapper.selectByPrimaryKey(productId);
+
+        ProductSkuExample skuExample = new ProductSkuExample();
+        skuExample.createCriteria().andProductIdEqualTo(productId);
+        List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
+
+        double newHighestPrice = 0;
+        double newLowPrice = 0;
+
+        // find low and high price of sku
+        for (ProductSku productSku : skuList) {
+            double skuSalePrice = productSku.getPromotionPrice().doubleValue();
+            double skuPrice = productSku.getPrice().doubleValue();
+            newHighestPrice = Math.max(newHighestPrice, skuPrice);
+            newLowPrice = Math.min(newLowPrice, skuSalePrice);
+        }
+
+        // update product price
+        product.setSalePrice(BigDecimal.valueOf(newLowPrice));
+        product.setOriginalPrice(BigDecimal.valueOf(newHighestPrice));
+        productMapper.updateByPrimaryKeySelective(product);
+
+        // update price to highest, sku is just a variant of product.
+        double skuPrice = product.getOriginalPrice().doubleValue();
+        for (ProductSku productSku : skuList) {
+            productSku.setPrice(BigDecimal.valueOf(skuPrice));
+            skuMapper.updateByPrimaryKey(productSku);
+        }
+
+        return product;
     }
 
     @Override
@@ -333,8 +462,8 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             createUpdateLog(foundProduct, foundProduct, "delete product", operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.DELETE_PRODUCT, foundProduct, skuList));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.DELETE_PRODUCT, foundProduct, skuList));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.DELETE_PRODUCT, foundProduct, null));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.DELETE_PRODUCT, foundProduct, null));
         }).subscribeOn(jdbcScheduler).then();
     }
 

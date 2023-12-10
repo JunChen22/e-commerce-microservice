@@ -5,7 +5,6 @@ import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 import static java.time.ZonedDateTime.now;
 
@@ -22,20 +21,20 @@ public class SmsProductOutEvent {
 
     private final OmsProductOutEvent.Type eventType;
     private final Product product;
-    private final List<ProductSku> productSkuList;
+    private final ProductSku productSku;
     private final ZonedDateTime eventCreatedAt;
 
     public SmsProductOutEvent() {
         this.eventType = null;
         this.product = null;
-        this.productSkuList = null;
+        this.productSku = null;
         this.eventCreatedAt = null;
     }
 
-    public SmsProductOutEvent(OmsProductOutEvent.Type eventType, Product product, List<ProductSku> productSkuList) {
+    public SmsProductOutEvent(OmsProductOutEvent.Type eventType, Product product, ProductSku productSku) {
         this.eventType = eventType;
         this.product = product;
-        this.productSkuList = productSkuList;
+        this.productSku = productSku;
         this.eventCreatedAt = now();
     }
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itsthatjun.ecommerce.dao.AdminProductDao">
+
+    <select id="getAllProduct" resultMap="com.itsthatjun.ecommerce.mbg.mapper.ProductMapper.BaseResultMap">
+        SELECT
+            *
+        FROM product p;
+    </select>
+
+    <select id="getProduct" resultMap="com.itsthatjun.ecommerce.mbg.mapper.ProductMapper.BaseResultMap">
+        SELECT
+            *
+        FROM product
+        WHERE id = #{productId}
+    </select>
+
+    <select id="getAllSku" resultMap="com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper.BaseResultMap">
+        SELECT
+            *
+        FROM product_sku
+        WHERE product_id = #{productId}
+    </select>
+
+    <select id="getProductPictures" resultMap="com.itsthatjun.ecommerce.mbg.mapper.ProductPicturesMapper.BaseResultMap">
+        SELECT
+            pp.id AS id,
+            pp.filename filename,
+            pp.product_album_id product_album_id,
+            pp.created_at created_at
+        FROM product p
+        LEFT JOIN product_album a ON p.picture_album = a.id
+        LEFT JOIN product_pictures pp ON a.id = pp.product_album_id
+        WHERE p.id = #{productId}
+    </select>
+
+    <select id="getProductAttributes" resultType="java.util.Map">
+        SELECT
+        pa.sku_code AS sku_codes,
+        STRING_AGG(CONCAT(pat.name, ':', pa.attribute_value, ' ', pa.attribute_unit), ';') AS attributes
+        FROM product_attribute_category pac
+        LEFT JOIN product_attribute_type pat ON pat.attribute_category_id = pac.id
+        LEFT JOIN product_attribute pa ON pa.attribute_type_id = pat.id
+        WHERE pa.product_id = #{productId}
+        GROUP BY pa.sku_code;
+    </select>
+
+    <select id="getAttributeType" resultType="java.util.Map">
+        SELECT
+        pat.name AS attribute_type_name,
+        pat.id AS attribute_type_id
+        FROM product_attribute_category pac
+        LEFT JOIN product_attribute_type pat ON pat.attribute_category_id = pac.id
+        WHERE pac.name = #{categoryName}
+    </select>
+</mapper>

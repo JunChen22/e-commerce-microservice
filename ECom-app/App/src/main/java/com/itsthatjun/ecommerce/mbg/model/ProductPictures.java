@@ -8,8 +8,6 @@ public class ProductPictures implements Serializable {
 
     private Integer productAlbumId;
 
-    private Integer productId;
-
     private String filename;
 
     private Date createdAt;
@@ -30,14 +28,6 @@ public class ProductPictures implements Serializable {
 
     public void setProductAlbumId(Integer productAlbumId) {
         this.productAlbumId = productAlbumId;
-    }
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
     }
 
     public String getFilename() {

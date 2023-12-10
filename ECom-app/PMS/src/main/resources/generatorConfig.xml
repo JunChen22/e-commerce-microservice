@@ -71,18 +71,21 @@
             <columnOverride column="brand_id" javaType="java.lang.Integer" />
             <columnOverride column="category_id" javaType="java.lang.Integer" />
             <columnOverride column="attribute_category_id" javaType="java.lang.Integer" />
+            <columnOverride column="picture_album" javaType="java.lang.Integer" />
         </table>
 
         <table tableName= "product_attribute">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="attribute_type_id" javaType="java.lang.Integer" />
         </table>
 
         <table tableName= "product_album">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="pic_count" javaType="java.lang.Integer" />
         </table>
 
         <table tableName= "product_pictures">

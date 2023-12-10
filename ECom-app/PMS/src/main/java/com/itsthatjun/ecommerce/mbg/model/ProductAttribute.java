@@ -1,7 +1,5 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
-
 public class ProductAttribute {
     private Integer id;
 
@@ -9,7 +7,7 @@ public class ProductAttribute {
 
     private Integer productId;
 
-    private BigDecimal attributeTypeId;
+    private Integer attributeTypeId;
 
     private String attributeValue;
 
@@ -39,11 +37,11 @@ public class ProductAttribute {
         this.productId = productId;
     }
 
-    public BigDecimal getAttributeTypeId() {
+    public Integer getAttributeTypeId() {
         return attributeTypeId;
     }
 
-    public void setAttributeTypeId(BigDecimal attributeTypeId) {
+    public void setAttributeTypeId(Integer attributeTypeId) {
         this.attributeTypeId = attributeTypeId;
     }
 

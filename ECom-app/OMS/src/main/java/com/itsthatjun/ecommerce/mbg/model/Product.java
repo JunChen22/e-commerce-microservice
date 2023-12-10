@@ -20,11 +20,11 @@ public class Product {
 
     private String sn;
 
-    private BigDecimal newStatus;
+    private Integer newStatus;
 
-    private BigDecimal recommendStatus;
+    private Integer recommendStatus;
 
-    private BigDecimal verifyStatus;
+    private Integer verifyStatus;
 
     private String subTitle;
 
@@ -128,27 +128,27 @@ public class Product {
         this.sn = sn;
     }
 
-    public BigDecimal getNewStatus() {
+    public Integer getNewStatus() {
         return newStatus;
     }
 
-    public void setNewStatus(BigDecimal newStatus) {
+    public void setNewStatus(Integer newStatus) {
         this.newStatus = newStatus;
     }
 
-    public BigDecimal getRecommendStatus() {
+    public Integer getRecommendStatus() {
         return recommendStatus;
     }
 
-    public void setRecommendStatus(BigDecimal recommendStatus) {
+    public void setRecommendStatus(Integer recommendStatus) {
         this.recommendStatus = recommendStatus;
     }
 
-    public BigDecimal getVerifyStatus() {
+    public Integer getVerifyStatus() {
         return verifyStatus;
     }
 
-    public void setVerifyStatus(BigDecimal verifyStatus) {
+    public void setVerifyStatus(Integer verifyStatus) {
         this.verifyStatus = verifyStatus;
     }
 

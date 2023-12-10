@@ -1,6 +1,8 @@
 package com.itsthatjun.ecommerce.dto.pms;
 
-import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.mbg.model.ProductPictures;
+import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import lombok.Data;
 
 import java.util.List;
@@ -11,11 +13,11 @@ public class AdminProductDetail {
 
     private Product product;
 
-    private List<ProductSku> skuVariants;
+    private ProductSku skuVariants;
 
     private List<ProductPictures> picturesList;
 
-    private Map<String, String> attributes;
+    private Map<String, Attribute> attributes;
 
     private Integer stock;
 

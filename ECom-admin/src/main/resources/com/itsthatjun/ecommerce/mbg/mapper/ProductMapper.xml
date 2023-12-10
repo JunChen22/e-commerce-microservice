@@ -10,9 +10,9 @@
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="attribute_category_id" jdbcType="NUMERIC" property="attributeCategoryId" />
     <result column="sn" jdbcType="VARCHAR" property="sn" />
-    <result column="new_status" jdbcType="NUMERIC" property="newStatus" />
-    <result column="recommend_status" jdbcType="NUMERIC" property="recommendStatus" />
-    <result column="verify_status" jdbcType="NUMERIC" property="verifyStatus" />
+    <result column="new_status" jdbcType="INTEGER" property="newStatus" />
+    <result column="recommend_status" jdbcType="INTEGER" property="recommendStatus" />
+    <result column="verify_status" jdbcType="INTEGER" property="verifyStatus" />
     <result column="sub_title" jdbcType="VARCHAR" property="subTitle" />
     <result column="cover_picture" jdbcType="VARCHAR" property="coverPicture" />
     <result column="picture_album" jdbcType="NUMERIC" property="pictureAlbum" />
@@ -141,8 +141,8 @@
       created_at, note)
     values (#{brandId,jdbcType=NUMERIC}, #{brandName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{categoryId,jdbcType=NUMERIC}, #{categoryName,jdbcType=VARCHAR}, #{attributeCategoryId,jdbcType=NUMERIC}, 
-      #{sn,jdbcType=VARCHAR}, #{newStatus,jdbcType=NUMERIC}, #{recommendStatus,jdbcType=NUMERIC}, 
-      #{verifyStatus,jdbcType=NUMERIC}, #{subTitle,jdbcType=VARCHAR}, #{coverPicture,jdbcType=VARCHAR}, 
+      #{sn,jdbcType=VARCHAR}, #{newStatus,jdbcType=INTEGER}, #{recommendStatus,jdbcType=INTEGER}, 
+      #{verifyStatus,jdbcType=INTEGER}, #{subTitle,jdbcType=VARCHAR}, #{coverPicture,jdbcType=VARCHAR}, 
       #{pictureAlbum,jdbcType=NUMERIC}, #{description,jdbcType=VARCHAR}, #{originalPrice,jdbcType=NUMERIC}, 
       #{onSaleStatus,jdbcType=INTEGER}, #{salePrice,jdbcType=NUMERIC}, #{stock,jdbcType=INTEGER}, 
       #{lowStock,jdbcType=INTEGER}, #{unitSold,jdbcType=INTEGER}, #{weight,jdbcType=NUMERIC}, 
@@ -264,13 +264,13 @@
         #{sn,jdbcType=VARCHAR},
       </if>
       <if test="newStatus != null">
-        #{newStatus,jdbcType=NUMERIC},
+        #{newStatus,jdbcType=INTEGER},
       </if>
       <if test="recommendStatus != null">
-        #{recommendStatus,jdbcType=NUMERIC},
+        #{recommendStatus,jdbcType=INTEGER},
       </if>
       <if test="verifyStatus != null">
-        #{verifyStatus,jdbcType=NUMERIC},
+        #{verifyStatus,jdbcType=INTEGER},
       </if>
       <if test="subTitle != null">
         #{subTitle,jdbcType=VARCHAR},
@@ -365,13 +365,13 @@
         sn = #{record.sn,jdbcType=VARCHAR},
       </if>
       <if test="record.newStatus != null">
-        new_status = #{record.newStatus,jdbcType=NUMERIC},
+        new_status = #{record.newStatus,jdbcType=INTEGER},
       </if>
       <if test="record.recommendStatus != null">
-        recommend_status = #{record.recommendStatus,jdbcType=NUMERIC},
+        recommend_status = #{record.recommendStatus,jdbcType=INTEGER},
       </if>
       <if test="record.verifyStatus != null">
-        verify_status = #{record.verifyStatus,jdbcType=NUMERIC},
+        verify_status = #{record.verifyStatus,jdbcType=INTEGER},
       </if>
       <if test="record.subTitle != null">
         sub_title = #{record.subTitle,jdbcType=VARCHAR},
@@ -445,9 +445,9 @@
       category_name = #{record.categoryName,jdbcType=VARCHAR},
       attribute_category_id = #{record.attributeCategoryId,jdbcType=NUMERIC},
       sn = #{record.sn,jdbcType=VARCHAR},
-      new_status = #{record.newStatus,jdbcType=NUMERIC},
-      recommend_status = #{record.recommendStatus,jdbcType=NUMERIC},
-      verify_status = #{record.verifyStatus,jdbcType=NUMERIC},
+      new_status = #{record.newStatus,jdbcType=INTEGER},
+      recommend_status = #{record.recommendStatus,jdbcType=INTEGER},
+      verify_status = #{record.verifyStatus,jdbcType=INTEGER},
       sub_title = #{record.subTitle,jdbcType=VARCHAR},
       cover_picture = #{record.coverPicture,jdbcType=VARCHAR},
       picture_album = #{record.pictureAlbum,jdbcType=NUMERIC},
@@ -496,13 +496,13 @@
         sn = #{sn,jdbcType=VARCHAR},
       </if>
       <if test="newStatus != null">
-        new_status = #{newStatus,jdbcType=NUMERIC},
+        new_status = #{newStatus,jdbcType=INTEGER},
       </if>
       <if test="recommendStatus != null">
-        recommend_status = #{recommendStatus,jdbcType=NUMERIC},
+        recommend_status = #{recommendStatus,jdbcType=INTEGER},
       </if>
       <if test="verifyStatus != null">
-        verify_status = #{verifyStatus,jdbcType=NUMERIC},
+        verify_status = #{verifyStatus,jdbcType=INTEGER},
       </if>
       <if test="subTitle != null">
         sub_title = #{subTitle,jdbcType=VARCHAR},
@@ -573,9 +573,9 @@
       category_name = #{categoryName,jdbcType=VARCHAR},
       attribute_category_id = #{attributeCategoryId,jdbcType=NUMERIC},
       sn = #{sn,jdbcType=VARCHAR},
-      new_status = #{newStatus,jdbcType=NUMERIC},
-      recommend_status = #{recommendStatus,jdbcType=NUMERIC},
-      verify_status = #{verifyStatus,jdbcType=NUMERIC},
+      new_status = #{newStatus,jdbcType=INTEGER},
+      recommend_status = #{recommendStatus,jdbcType=INTEGER},
+      verify_status = #{verifyStatus,jdbcType=INTEGER},
       sub_title = #{subTitle,jdbcType=VARCHAR},
       cover_picture = #{coverPicture,jdbcType=VARCHAR},
       picture_album = #{pictureAlbum,jdbcType=NUMERIC},
