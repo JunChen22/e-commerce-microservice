@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
@@ -40,52 +39,37 @@ public class SmsEventUpdateService {
     @Transactional
     @ApiOperation("Update sale price, logic is done already in SMS")
     public Mono<Void> updateSale(List<ProductSku> productSkuList) {
-        return Flux.fromIterable(productSkuList)
-                .flatMap(this::updateSaleForSku)
-                .then();
-    }
+        return Mono.fromRunnable(() -> {
+            for (ProductSku sku : productSkuList) {
+                skuMapper.updateByPrimaryKey(sku);
+                int productId = sku.getProductId();
+                Product affectedProduct = productMapper.selectByPrimaryKey(productId);
 
-    private Mono<Void> updateSaleForSku(ProductSku sku) {
-        return Mono.fromCallable(() -> {
-                    skuMapper.updateByPrimaryKey(sku);
+                double currentSalePrice = affectedProduct.getSalePrice().doubleValue();
+                double skuSalePrice = sku.getPromotionPrice().doubleValue();
 
-                    int productId = sku.getProductId();
-                    Product affectedProduct = productMapper.selectByPrimaryKey(productId);
-
-                    double currentSalePrice = affectedProduct.getSalePrice().doubleValue();
-                    double skuSalePrice = sku.getPromotionPrice().doubleValue();
-
-                    affectedProduct.setSalePrice(BigDecimal.valueOf(Math.min(currentSalePrice, skuSalePrice)));
-                    affectedProduct.setOnSaleStatus(1);
-                    productMapper.updateByPrimaryKey(affectedProduct);
-
-                    return null; // Return null since this helper method doesn't produce a result
-                }).subscribeOn(jdbcScheduler)
-                .then(); // Return an empty Mono<Void> to indicate completion
+                affectedProduct.setSalePrice(BigDecimal.valueOf(Math.min(currentSalePrice, skuSalePrice)));
+                affectedProduct.setOnSaleStatus(1);
+                productMapper.updateByPrimaryKeySelective(affectedProduct);
+            }
+        }).subscribeOn(jdbcScheduler).then();
     }
 
     @Transactional
     @ApiOperation("Remove sale price and update product")
     public Mono<Void> removeSale(List<ProductSku> productSkuList) {
-        return Flux.fromIterable(productSkuList)
-                .flatMap(this::removeSaleForSku)
-                .subscribeOn(jdbcScheduler)
-                .then();
-    }
+        return Mono.fromRunnable(() -> {
+            for (ProductSku sku : productSkuList) {
+                skuMapper.updateByPrimaryKey(sku);
 
-    private Mono<Void> removeSaleForSku(ProductSku sku) {
-        return Mono.fromCallable(() -> {
-            skuMapper.updateByPrimaryKey(sku);
+                int productId = sku.getProductId();
+                Product affectedProduct = productMapper.selectByPrimaryKey(productId);
 
-            int productId = sku.getProductId();
-            Product affectedProduct = productMapper.selectByPrimaryKey(productId);
+                affectedProduct.setSalePrice(affectedProduct.getOriginalPrice());
+                affectedProduct.setOnSaleStatus(0);
 
-            affectedProduct.setSalePrice(affectedProduct.getOriginalPrice());
-            affectedProduct.setOnSaleStatus(0);
-
-            productMapper.updateByPrimaryKey(affectedProduct);
-
-            return null; // Return null since this helper method doesn't produce a result
-        });
+                productMapper.updateByPrimaryKeySelective(affectedProduct);
+            }
+        }).subscribeOn(jdbcScheduler).then();
     }
 }

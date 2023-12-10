@@ -31,7 +31,7 @@ public abstract class TestContainerConfig {
 
     @DynamicPropertySource
     static void postgresProperties(DynamicPropertyRegistry registry) {
-        Startables.deepStart(postgres, redis).join();
+        Startables.deepStart(postgres, redis, rabbitMQ).join();
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);

@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -181,32 +180,37 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            Product product = event.getProduct();
-            List<ProductSku> productSkuList = event.getProductSkuList();
+            Product newProduct = event.getProduct();
+            ProductSku productSku = event.getProductSku();
+
             switch (event.getEventType()) {
                 case NEW_PRODUCT:
-                    pmsEventUpdateService.addProduct(product, productSkuList).subscribe();
+                    pmsEventUpdateService.addProduct(newProduct, productSku).subscribe();
                     break;
 
                 case NEW_PRODUCT_SKU:
-                    pmsEventUpdateService.addProductSku(productSkuList.get(0)).subscribe();
+                    pmsEventUpdateService.addProductSku(newProduct, productSku).subscribe();
                     break;
 
                 case UPDATE_PRODUCT:
-                    pmsEventUpdateService.updateProduct(product, productSkuList).subscribe();
+                    pmsEventUpdateService.updateProduct(newProduct, productSku).subscribe();
                     break;
 
-                case REMOVE_PRODUCT:
-                    pmsEventUpdateService.removeProductSku(productSkuList.get(0)).subscribe();
+                case UPDATE_PRODUCT_STATUS:
+                    pmsEventUpdateService.updateProductStatus(newProduct, productSku).subscribe();
                     break;
 
                 case REMOVE_PRODUCT_SKU:
-                    pmsEventUpdateService.removeProduct(product, productSkuList).subscribe();
+                    pmsEventUpdateService.removeProductSku(productSku).subscribe();
+                    break;
+
+                case REMOVE_PRODUCT:
+                    pmsEventUpdateService.removeProduct(newProduct).subscribe();
                     break;
 
                 default:
-                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_PRODUCT, " +
-                            "NEW_PRODUCT_SKU, UPDATE_PRODUCT, REMOVE_PRODUCT and REMOVE_PRODUCT_SKU event";
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected NEW_PRODUCT, NEW_PRODUCT_SKU, UPDATE_PRODUCT, " +
+                            " REMOVE_PRODUCT_SKU and REMOVE_PRODUCT event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
             }

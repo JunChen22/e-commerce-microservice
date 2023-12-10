@@ -5,7 +5,6 @@ import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 import static java.time.ZonedDateTime.now;
 
@@ -15,28 +14,29 @@ public class PmsUpdateIncomingEvent {
     public enum Type {
         NEW_PRODUCT,
         NEW_PRODUCT_SKU,
-        UPDATE_PRODUCT,   // Logic is already done in PMS, just need update current information.
-        REMOVE_PRODUCT,
-        REMOVE_PRODUCT_SKU
+        UPDATE_PRODUCT,     // Logic is already done in PMS, just need update current information.
+        UPDATE_PRODUCT_STATUS,
+        REMOVE_PRODUCT_SKU,
+        REMOVE_PRODUCT
     }
 
     private final Type eventType;
     private final Product product;
-    private final List<ProductSku> productSkuList;
+    private final ProductSku productSku;
     private final ZonedDateTime eventCreatedAt;
 
     // Jackson needs it, (the library used for JSON serialization/deserialization)
     public PmsUpdateIncomingEvent() {
         this.eventType = null;
         this.product = null;
-        this.productSkuList = null;
+        this.productSku = null;
         this.eventCreatedAt = null;
     }
 
-    public PmsUpdateIncomingEvent(Type eventType, Product product, List<ProductSku> productSkuList) {
+    public PmsUpdateIncomingEvent(Type eventType, Product product, ProductSku productSku) {
         this.eventType = eventType;
         this.product = product;
-        this.productSkuList = productSkuList;
+        this.productSku = productSku;
         this.eventCreatedAt = now();
     }
 }

@@ -59,11 +59,11 @@ public class ProductServiceImpl implements ProductService {
                 String attributes = entry.get("attributes");
                 attribute.put(skuCode, attributes);
             }
+            productDetail.setAttributes(attribute);
 
             List<ProductPictureDTO> pictureList = dao.getProductPictures(id);
             productDetail.setPicturesList(pictureList);
 
-            productDetail.setAttributes(attribute);
             return productDetail;
         }).subscribeOn(jdbcScheduler);
     }

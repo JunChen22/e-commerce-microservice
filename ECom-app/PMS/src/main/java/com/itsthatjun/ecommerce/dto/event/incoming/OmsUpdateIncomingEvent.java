@@ -9,6 +9,7 @@ import static java.time.ZonedDateTime.now;
 
 @Getter
 public class OmsUpdateIncomingEvent {
+
     public enum Type {
         UPDATE_PURCHASE,   // Generated order, increase sku lock stock
         UPDATE_PURCHASE_PAYMENT, // Generated order and success payment, decrease product stock, decrease sku stock and sku lock stock

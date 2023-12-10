@@ -15,15 +15,17 @@ public class SmsProductOutEvent {
         NEW_PRODUCT,
         NEW_PRODUCT_SKU,
         UPDATE_PRODUCT,
+        UPDATE_PRODUCT_STATUS,
         REMOVE_PRODUCT_SKU,
-        DELETE_PRODUCT
+        REMOVE_PRODUCT
     }
 
-    private final OmsProductOutEvent.Type eventType;
+    private final Type eventType;
     private final Product product;
     private final ProductSku productSku;
     private final ZonedDateTime eventCreatedAt;
 
+    // Jackson needs it, (the library used for JSON serialization/deserialization)
     public SmsProductOutEvent() {
         this.eventType = null;
         this.product = null;
@@ -31,7 +33,7 @@ public class SmsProductOutEvent {
         this.eventCreatedAt = null;
     }
 
-    public SmsProductOutEvent(OmsProductOutEvent.Type eventType, Product product, ProductSku productSku) {
+    public SmsProductOutEvent(Type eventType, Product product, ProductSku productSku) {
         this.eventType = eventType;
         this.product = product;
         this.productSku = productSku;

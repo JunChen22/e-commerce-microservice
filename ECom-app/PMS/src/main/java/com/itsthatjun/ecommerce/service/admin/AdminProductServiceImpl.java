@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.service.admin;
 
+import com.github.pagehelper.PageHelper;
 import com.itsthatjun.ecommerce.dao.AdminProductDao;
 import com.itsthatjun.ecommerce.dto.AdminProductDetail;
 import com.itsthatjun.ecommerce.dto.event.outgoing.OmsProductOutEvent;
@@ -69,21 +70,18 @@ public class AdminProductServiceImpl implements AdminProductService {
             productDetail.setProduct(productDao.getProduct(id));
             productDetail.setPicturesList(productDao.getProductPictures(id));
 
+            // TODO: add on dao to get detail
             // productDetail.setSkuVariants(productDao.getAllSku(id));
-            /* TODO: add on dao to get detail
-            List<Map<String, String>> attributeList = dao.getProductAttributes(id);
+
+            List<Map<String, String>> attributeList = productDao.getProductAttributes(id);
             Map<String, String> attribute = new HashMap<>();
             for (Map<String, String> entry : attributeList) {
-                String name = entry.get("key");
-                String att = entry.get("value");
-                attribute.put(name, att);
+                String skuCode = entry.get("sku_codes");
+                String attributes = entry.get("attributes");
+                attribute.put(skuCode, attributes);
             }
+            //productDetail.setAttributes(attribute);
 
-            productDetail.setPicturesList(pictureList);
-            productDetail.setAttributes(attribute);
-            return productDetail;
-
-             */
             return productDetail;
         }).subscribeOn(jdbcScheduler);
     }
@@ -99,17 +97,11 @@ public class AdminProductServiceImpl implements AdminProductService {
     @Override
     public Flux<Product> listProduct(int pageNum, int pageSize) {
         return Mono.fromCallable(() -> {
-            /*
             PageHelper.startPage(pageNum, pageSize);
             ProductExample productExample = new ProductExample();
             productExample.createCriteria().andPublishStatusEqualTo(1);
             List<Product> productList = productMapper.selectByExample(productExample);
-            List<ProductDTO> dtoList = dtoMapper.productToProductDTO(productList);
 
-            return dtoList;
-             */
-
-            List<Product> productList = new ArrayList<>();
             return productList;
         }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
@@ -139,7 +131,7 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             createUpdateLog(newProduct, newProduct, "create product", operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT, newProduct, newSku));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(SmsProductOutEvent.Type.NEW_PRODUCT, newProduct, newSku));
             sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT, newProduct, newSku));
 
             return newProduct;
@@ -233,7 +225,7 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             createUpdateLog(foundProduct, updateProduct, "add new sku", operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT_SKU, foundProduct, newSKu));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(SmsProductOutEvent.Type.NEW_PRODUCT_SKU, foundProduct, newSKu));
             sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.NEW_PRODUCT_SKU, foundProduct, newSKu));
             return foundProduct;
         }).subscribeOn(jdbcScheduler);
@@ -276,7 +268,7 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             createUpdateLog(foundProduct, foundProduct, "update product stock: " + foundProduct.getStock(), operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, sku));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(SmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, sku));
             sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, sku));
 
             return sku;
@@ -290,33 +282,15 @@ public class AdminProductServiceImpl implements AdminProductService {
 
             // update product price
             int productId = sku.getProductId();
-            Product foundProduct = productMapper.selectByPrimaryKey(productId);
+            Product oldProduct = productMapper.selectByPrimaryKey(productId);
+            Product updatedProduct = productSkuPriceUpdate(productId);
 
-            ProductSkuExample skuExample = new ProductSkuExample();
-            skuExample.createCriteria().andProductIdEqualTo(foundProduct.getId());
-            List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
+            createUpdateLog(oldProduct, updatedProduct, "update product price : " + updatedProduct.getSalePrice(), operator);
 
-            double newHighestPrice = 0;
-            double newLowPrice = 0;
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(SmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, sku));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, sku));
 
-            for (ProductSku productSku : skuList) {
-                double skuSalePrice = productSku.getPromotionPrice().doubleValue();
-                double skuPrice = productSku.getPrice().doubleValue();
-                newHighestPrice = Math.max(newHighestPrice, skuPrice);
-                newLowPrice = Math.min(newLowPrice, skuSalePrice);
-            }
-
-            foundProduct.setSalePrice(BigDecimal.valueOf(newLowPrice));
-            foundProduct.setOriginalPrice(BigDecimal.valueOf(newHighestPrice));
-
-            productMapper.updateByPrimaryKeySelective(foundProduct);
-
-            createUpdateLog(foundProduct, foundProduct, "update product price : " + foundProduct.getSalePrice(), operator);
-
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, null));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, null));
-
-            return foundProduct;
+            return updatedProduct;
         }).subscribeOn(jdbcScheduler);
     }
 
@@ -325,16 +299,11 @@ public class AdminProductServiceImpl implements AdminProductService {
         return Mono.fromCallable(() -> {
             int productId = updatedProduct.getId();
             Product foundProduct = productMapper.selectByPrimaryKey(productId);
-
             if (foundProduct == null) throw new ProductException("Product does not exist, product id: " + productId);
 
             int currentPublishStatus = foundProduct.getPublishStatus();
             int updateProductStatus = updatedProduct.getPublishStatus();
-
-            List<ProductSku> affectedSkuList = new ArrayList<>();
-            if (currentPublishStatus == updateProductStatus) {
-                return updatedProduct;
-            }
+            if (currentPublishStatus == updateProductStatus) return updatedProduct;  // same status no changes.
 
             // Turning product offline and all of its sku.
             // Turning online won't make the sku go on, need to use updateProductSkuStatus one by one.
@@ -342,7 +311,7 @@ public class AdminProductServiceImpl implements AdminProductService {
                 // changing to not active
                 ProductSkuExample productSkuExample = new ProductSkuExample();
                 productSkuExample.createCriteria().andProductIdEqualTo(productId).andStatusEqualTo(1);
-                affectedSkuList = skuMapper.selectByExample(productSkuExample);
+                List<ProductSku> affectedSkuList = skuMapper.selectByExample(productSkuExample);
 
                 for (ProductSku affectedSku : affectedSkuList) {
                     affectedSku.setStatus(0);
@@ -351,14 +320,49 @@ public class AdminProductServiceImpl implements AdminProductService {
             }
 
             productMapper.updateByPrimaryKey(updatedProduct);
-
             createUpdateLog(foundProduct, foundProduct, "update product status : " + updatedProduct.getPublishStatus(), operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, null));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(SmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, null));
             sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, updatedProduct, null));
 
             return updatedProduct;
         }).subscribeOn(jdbcScheduler);
+    }
+
+    // update product and sku high and low price if there's any change
+    private Product productSkuPriceUpdate(int productId) {
+        Product product = productMapper.selectByPrimaryKey(productId);
+
+        ProductSkuExample skuExample = new ProductSkuExample();
+        skuExample.createCriteria().andProductIdEqualTo(productId).andStatusEqualTo(1);
+        List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
+
+        double newHighestPrice = product.getOriginalPrice().doubleValue();
+        double newLowPrice = product.getSalePrice().doubleValue();
+
+        // find low and high price of sku
+        for (ProductSku productSku : skuList) {
+            double skuSalePrice = productSku.getPromotionPrice().doubleValue();
+            double skuPrice = productSku.getPrice().doubleValue();
+            newHighestPrice = Math.max(newHighestPrice, skuPrice);
+            newLowPrice = Math.min(newLowPrice, skuSalePrice);
+        }
+
+        // update price to highest, sku is just a variant of product.
+        double skuPrice = product.getOriginalPrice().doubleValue();
+        if (newHighestPrice > product.getOriginalPrice().doubleValue()) {
+            for (ProductSku productSku : skuList) {
+                productSku.setPrice(BigDecimal.valueOf(skuPrice));
+                skuMapper.updateByPrimaryKey(productSku);
+            }
+        }
+
+        // update product price
+        product.setSalePrice(BigDecimal.valueOf(newLowPrice));
+        product.setOriginalPrice(BigDecimal.valueOf(newHighestPrice));
+        productMapper.updateByPrimaryKeySelective(product);
+
+        return product;
     }
 
     @Override
@@ -367,18 +371,18 @@ public class AdminProductServiceImpl implements AdminProductService {
             // find out if the product is online first
             int productId = updateSku.getId();
             Product foundProduct = productMapper.selectByPrimaryKey(productId);
-
             if (foundProduct == null) throw new RuntimeException("Product does not exist, product id: " + productId);
 
-            if (foundProduct.getPublishStatus() == 0) throw new ProductException("Product is not active, sku can not be set until product id: " + productId + "is active");
+            int skuId = updateSku.getId();
+            ProductSku foundSku = skuMapper.selectByPrimaryKey(skuId);
+            if (foundSku == null) throw new RuntimeException("Product sku does not exist, sku code: " + foundSku.getSkuCode());
 
-            // TODO: when there's no more sku, might want to notify admin or just take the product off line too
             skuMapper.updateByPrimaryKeySelective(updateSku);
 
             createUpdateLog(foundProduct, foundProduct, "update product sku status: " + updateSku.getStatus(), operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, updateSku));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT, foundProduct, updateSku));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(SmsProductOutEvent.Type.UPDATE_PRODUCT_STATUS, foundProduct, updateSku));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.UPDATE_PRODUCT_STATUS, foundProduct, updateSku));
 
             return updateSku;
         }).subscribeOn(jdbcScheduler);
@@ -395,59 +399,26 @@ public class AdminProductServiceImpl implements AdminProductService {
             List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
             if (!skuList.contains(removeSku)) throw new ProductException("Sku does not exist or belong to product id: " + productId);
 
-            skuMapper.deleteByPrimaryKey(removeSku.getId());
+            skuMapper.updateByPrimaryKeySelective(removeSku);   // soft delete
 
             // update product price.
             Product updatedProduct = productSkuPriceUpdate(productId);
 
             createUpdateLog(foundProduct, updatedProduct,"Remove product sku: " + removeSku.getSkuCode(), operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removeSku));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(SmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removeSku));
             sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT_SKU, foundProduct, removeSku));
             return removeSku;
         }).subscribeOn(jdbcScheduler);
     }
 
-    // update product and sku high and low price if there's any change
-    private Product productSkuPriceUpdate(int productId) {
-        Product product = productMapper.selectByPrimaryKey(productId);
-
-        ProductSkuExample skuExample = new ProductSkuExample();
-        skuExample.createCriteria().andProductIdEqualTo(productId);
-        List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
-
-        double newHighestPrice = 0;
-        double newLowPrice = 0;
-
-        // find low and high price of sku
-        for (ProductSku productSku : skuList) {
-            double skuSalePrice = productSku.getPromotionPrice().doubleValue();
-            double skuPrice = productSku.getPrice().doubleValue();
-            newHighestPrice = Math.max(newHighestPrice, skuPrice);
-            newLowPrice = Math.min(newLowPrice, skuSalePrice);
-        }
-
-        // update product price
-        product.setSalePrice(BigDecimal.valueOf(newLowPrice));
-        product.setOriginalPrice(BigDecimal.valueOf(newHighestPrice));
-        productMapper.updateByPrimaryKeySelective(product);
-
-        // update price to highest, sku is just a variant of product.
-        double skuPrice = product.getOriginalPrice().doubleValue();
-        for (ProductSku productSku : skuList) {
-            productSku.setPrice(BigDecimal.valueOf(skuPrice));
-            skuMapper.updateByPrimaryKey(productSku);
-        }
-
-        return product;
-    }
-
     @Override
-    public Mono<Void> deleteProduct(int id, String operator) {
+    public Mono<Void> removeProduct(int productId, String operator) {
         return Mono.fromRunnable(() -> {
-            Product foundProduct = productMapper.selectByPrimaryKey(id);
+            Product foundProduct = productMapper.selectByPrimaryKey(productId);
             foundProduct.setPublishStatus(0);
             foundProduct.setDeleteStatus(1);
+            productMapper.updateByPrimaryKeySelective(foundProduct);
 
             ProductSkuExample example = new ProductSkuExample();
             example.createCriteria().andProductIdEqualTo(foundProduct.getId());
@@ -458,12 +429,10 @@ public class AdminProductServiceImpl implements AdminProductService {
                 skuMapper.updateByPrimaryKeySelective(sku);
             }
 
-            productMapper.updateByPrimaryKeySelective(foundProduct);
-
             createUpdateLog(foundProduct, foundProduct, "delete product", operator);
 
-            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(OmsProductOutEvent.Type.DELETE_PRODUCT, foundProduct, null));
-            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.DELETE_PRODUCT, foundProduct, null));
+            sendSalesStockUpdateMessage("smsProductUpdate-out-0", new SmsProductOutEvent(SmsProductOutEvent.Type.REMOVE_PRODUCT, foundProduct, null));
+            sendOmsStockUpdateMessage("omsProductUpdate-out-0", new OmsProductOutEvent(OmsProductOutEvent.Type.REMOVE_PRODUCT, foundProduct, null));
         }).subscribeOn(jdbcScheduler).then();
     }
 

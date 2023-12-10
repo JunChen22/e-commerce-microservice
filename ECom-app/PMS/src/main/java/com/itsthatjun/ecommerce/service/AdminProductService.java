@@ -42,6 +42,6 @@ public interface AdminProductService {
     @ApiOperation("Remove/actual delete a sku from product. Product can have no sku, just holding information.")
     Mono<ProductSku> removeProductSku(ProductSku removeSku, String operator);
 
-    @ApiOperation("Delete just means status changed for archive, not actual delete from database")
-    Mono<Void> deleteProduct(int id, String operator); // TODO: might add a method to undelete the product and moved from archive back to offline.
+    @ApiOperation("Soft delete. Delete just means status changed for archive, not actual delete from database")
+    Mono<Void> removeProduct(int id, String operator); // TODO: might add a method to undelete the product and moved from archive back to offline.
 }

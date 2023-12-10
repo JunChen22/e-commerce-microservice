@@ -158,7 +158,7 @@ public class MessageProcessorConfig {
                     break;
 
                 case DELETE_PRODUCT:
-                    productService.deleteProduct(product.getId(), operator).subscribe();
+                    productService.removeProduct(product.getId(), operator).subscribe();
                     break;
 
                 default:
