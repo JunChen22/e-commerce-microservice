@@ -1,8 +1,8 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
+import com.itsthatjun.ecommerce.dto.oms.admin.AdminOrderDetail;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
@@ -45,15 +45,15 @@ public class OrderController {
 
     @GetMapping("/{serialNumber}")
     @ApiOperation(value = "look up a order by serial number")
-    public Mono<OrderDetail> getOrder(@PathVariable String serialNumber) {
+    public Mono<AdminOrderDetail> getOrder(@PathVariable String serialNumber) {
         return orderService.getOrder(serialNumber);
     }
 
     @PostMapping("/create")
     @ApiOperation(value = "create order")
-    public Mono<OrderDetail> createOrder(@RequestBody OrderParam orderParam) {
+    public Mono<AdminOrderDetail> createOrder(@RequestBody OrderParam orderParam) {
         String operatorName = getAdminName();
-        OrderDetail orderDetail = orderParam.getOrderDetail();
+        AdminOrderDetail orderDetail = orderParam.getOrderDetail();
         String reason = orderParam.getReason();
         return orderService.createOrder(orderDetail, reason, operatorName);
     }
@@ -66,9 +66,9 @@ public class OrderController {
 
     @PostMapping("/update")
     @ApiOperation(value = "update a order")
-    public Mono<OrderDetail> updateOrder(@RequestBody OrderParam orderParam) {
+    public Mono<AdminOrderDetail> updateOrder(@RequestBody OrderParam orderParam) {
         String operatorName = getAdminName();
-        OrderDetail orderDetail = orderParam.getOrderDetail();
+        AdminOrderDetail orderDetail = orderParam.getOrderDetail();
         String reason = orderParam.getReason();
         return orderService.updateOrder(orderDetail, reason, operatorName);
     }
@@ -76,7 +76,7 @@ public class OrderController {
     @DeleteMapping("/cancel")
     @ApiOperation(value = "cancel a order by serial number")
     public Mono<Void> cancelOrder(@RequestBody OrderParam orderParam) {
-        String orderSn = orderParam.getOrderDetail().getOrders().getOrderSn();
+        String orderSn = orderParam.getOrderDetail().getOrder().getOrderSn();
         String operatorName = getAdminName();
         String reason = orderParam.getReason();
         return orderService.cancelOrder(orderSn, reason, operatorName);

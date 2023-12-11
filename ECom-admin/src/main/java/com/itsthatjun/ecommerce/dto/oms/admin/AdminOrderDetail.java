@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.oms;
+package com.itsthatjun.ecommerce.dto.oms.admin;
 
 import com.itsthatjun.ecommerce.mbg.model.Address;
 import com.itsthatjun.ecommerce.mbg.model.OrderItem;
@@ -7,17 +7,17 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
-public class OrderDetail{
+public class AdminOrderDetail {
 
-    @ApiModelProperty("order item list")
-    private Orders orders;
+    @ApiModelProperty("order")
+    private Orders order;
 
     @ApiModelProperty("order item list")
     private List<OrderItem> orderItemList;
 
-    @ApiModelProperty("Member deliver address")
+    @ApiModelProperty("")
     private Address address;
+
 }

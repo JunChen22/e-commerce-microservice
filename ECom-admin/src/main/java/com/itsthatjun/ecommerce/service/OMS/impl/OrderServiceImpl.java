@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.OMS.impl;
 
-import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
+import com.itsthatjun.ecommerce.dto.oms.admin.AdminOrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderAnnouncementEvent;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderEvent;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
@@ -62,15 +62,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<OrderDetail> getOrder(String serialNumber) {
+    public Mono<AdminOrderDetail> getOrder(String serialNumber) {
         String url = OMS_SERVICE_URL+ "/admin/detail/" + serialNumber;
 
-        return webClient.get().uri(url).retrieve().bodyToMono(OrderDetail.class)
+        return webClient.get().uri(url).retrieve().bodyToMono(AdminOrderDetail.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 
     @Override
-    public Mono<OrderDetail> createOrder(OrderDetail orderDetail, String reason, String operatorName) {
+    public Mono<AdminOrderDetail> createOrder(AdminOrderDetail orderDetail, String reason, String operatorName) {
         return Mono.fromCallable(() -> {
             sendMessage("order-out-0", new OmsAdminOrderEvent(GENERATE_ORDER, orderDetail, reason, operatorName));
             return orderDetail;
@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<OrderDetail> updateOrder(OrderDetail orderDetail, String reason, String operatorName) {
+    public Mono<AdminOrderDetail> updateOrder(AdminOrderDetail orderDetail, String reason, String operatorName) {
         return Mono.fromCallable(() -> {
             sendMessage("order-out-0", new OmsAdminOrderEvent(UPDATE_ORDER, orderDetail, reason, operatorName));
             return orderDetail;
@@ -97,10 +97,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Mono<Void> cancelOrder(String serialNumber, String reason, String operatorName) {
         return Mono.fromRunnable(() -> {
-            OrderDetail orderDetail = new OrderDetail();
+            AdminOrderDetail orderDetail = new AdminOrderDetail();
             Orders orderTobeCancelled = new Orders();
             orderTobeCancelled.setOrderSn(serialNumber);
-            orderDetail.setOrders(orderTobeCancelled);
+            orderDetail.setOrder(orderTobeCancelled);
             sendMessage("order-out-0", new OmsAdminOrderEvent(CANCEL_ORDER, orderDetail, reason, operatorName));
         }).subscribeOn(publishEventScheduler).then();
     }

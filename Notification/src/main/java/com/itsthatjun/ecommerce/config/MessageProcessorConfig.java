@@ -69,7 +69,7 @@ public class MessageProcessorConfig {
                     break;
 
                 case ORDER_ITEM_PRODUCT:
-                    //omsService.sendAllItemMessage(productName, message);
+                    //omsService.sendAllItemMessage(productName, message); TODO: might just do sku instead
                     break;
 
                 default:

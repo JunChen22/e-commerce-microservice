@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.dto.oms;
 
+import com.itsthatjun.ecommerce.dto.oms.admin.AdminOrderDetail;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
 public class OrderParam {
 
     @ApiModelProperty("")
-    private OrderDetail orderDetail;
+    private AdminOrderDetail orderDetail;
 
     @ApiModelProperty("")
     private String reason;

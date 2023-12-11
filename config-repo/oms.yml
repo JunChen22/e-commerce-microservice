@@ -32,15 +32,15 @@ spring.cloud:
         destination: orderComplete
         group: orderGroup
 
-      adminOrderMessageProcessor-in-0: # admin CRUD order or return
+      adminOrderMessageProcessor-in-0: # admin CRUD order or approve/reject return
         destination: adminOrder
         group: adminOrderGroup
-      adminOrderItemAnnouncementProcessor-in-0:
-        destination: adminOrderItem
-        group: adminOrderItemGroup
       adminReturnMessageProcessor-in-0:
         destination: adminReturn
         group: adminReturnGroup
+      adminOrderItemAnnouncementProcessor-in-0: # admin message to user with certain product purchased.
+        destination: adminOrderItem
+        group: adminOrderItemGroup
 
       updateFromPmsMessageProcessor-in-0:     #  update from SMS and PMS
         destination: productStockOMSUpdate

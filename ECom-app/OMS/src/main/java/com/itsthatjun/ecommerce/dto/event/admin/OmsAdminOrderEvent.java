@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.dto.event.admin;
 
-import com.itsthatjun.ecommerce.dto.OrderDetail;
-import com.itsthatjun.ecommerce.dto.OrderParam;
+import com.itsthatjun.ecommerce.dto.admin.AdminOrderDetail;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -18,7 +17,7 @@ public class OmsAdminOrderEvent {
     }
 
     private final Type eventType;
-    private final OrderDetail orderDetail;
+    private final AdminOrderDetail orderDetail;
     private final String reason;
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
@@ -32,7 +31,7 @@ public class OmsAdminOrderEvent {
         this.eventCreatedAt = null;
     }
 
-    public OmsAdminOrderEvent(Type eventType, OrderDetail OrderDetail, String reason, String operator) {
+    public OmsAdminOrderEvent(Type eventType, AdminOrderDetail OrderDetail, String reason, String operator) {
         this.eventType = eventType;
         this.orderDetail = OrderDetail;
         this.reason = reason;

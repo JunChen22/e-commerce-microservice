@@ -360,7 +360,6 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     }
 
     private void lockStock(List<OrderItem> orderItemList) {
-
         for (OrderItem item : orderItemList) {
             int productId = item.getProductId();
             String skuCode = item.getProductSkuCode();
@@ -378,7 +377,6 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     }
 
     private boolean hasStock(List<OrderItem> orderItemList) {
-
         for (OrderItem item : orderItemList) {
             int productId = item.getProductId();
             String skuCode = item.getProductSkuCode();
@@ -414,17 +412,18 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     @Override
     public Mono<Void> adminOrderItemAnnouncement(String productSku, String message, String operator) {
-        OmsOrderAnnouncementEvent event = new OmsOrderAnnouncementEvent(ORDER_ITEM_SKU, message, operator);
-        sendSalesAnnouncementMessage("orderItemMessage-out-0", event);
-        return null;
-
+        return Mono.fromRunnable(() -> {
+            OmsOrderAnnouncementEvent event = new OmsOrderAnnouncementEvent(ORDER_ITEM_SKU, message, operator);
+            sendSalesAnnouncementMessage("orderItemMessage-out-0", event);
+        }).subscribeOn(jdbcScheduler).then();
     }
 
     @Override
     public Mono<Void> adminOrderProductAnnouncement(String productName, String message, String operator) {
-        OmsOrderAnnouncementEvent event = new OmsOrderAnnouncementEvent(ORDER_ITEM_PRODUCT, message, operator);
-        sendSalesAnnouncementMessage("orderItemMessage-out-0", event);
-        return null;
+        return Mono.fromRunnable(() -> {
+            OmsOrderAnnouncementEvent event = new OmsOrderAnnouncementEvent(ORDER_ITEM_PRODUCT, message, operator);
+            sendSalesAnnouncementMessage("orderItemMessage-out-0", event);
+        }).subscribeOn(jdbcScheduler).then();
     }
 
     private void sendSalesAnnouncementMessage(String bindingName, OmsOrderAnnouncementEvent event) {

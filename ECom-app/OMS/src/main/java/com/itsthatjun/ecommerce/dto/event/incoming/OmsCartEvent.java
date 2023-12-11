@@ -1,14 +1,11 @@
 package com.itsthatjun.ecommerce.dto.event.incoming;
 
-import static java.time.ZonedDateTime.now;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import com.itsthatjun.ecommerce.mbg.model.CartItem;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.List;
+
+import static java.time.ZonedDateTime.now;
 
 @Getter
 public class OmsCartEvent {

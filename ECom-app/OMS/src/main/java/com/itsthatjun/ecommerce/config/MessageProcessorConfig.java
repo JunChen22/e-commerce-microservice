@@ -2,6 +2,9 @@ package com.itsthatjun.ecommerce.config;
 
 import com.itsthatjun.ecommerce.dto.ReturnParam;
 import com.itsthatjun.ecommerce.dto.ReturnRequestDecision;
+import com.itsthatjun.ecommerce.dto.admin.AdminOrderDetail;
+import com.itsthatjun.ecommerce.dto.event.admin.OmsAdminOrderAnnouncementEvent;
+import com.itsthatjun.ecommerce.dto.event.admin.OmsAdminOrderEvent;
 import com.itsthatjun.ecommerce.dto.event.admin.OmsAdminOrderReturnEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
@@ -185,16 +188,14 @@ public class MessageProcessorConfig {
         };
     }
 
-    // TODO: fix the from DTO change, add generic MapStruct mapper to map the DTO models
-    /*
     @Bean
     public Consumer<OmsAdminOrderEvent> adminOrderMessageProcessor() {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            OrderDetail orderDetail = event.getOrderDetail();
-            Orders order = orderDetail.getOrders();
+            AdminOrderDetail orderDetail = event.getOrderDetail();
+            Orders order = orderDetail.getOrder();
             String reason = event.getReason();
             String operator = event.getOperator();
 
@@ -221,7 +222,6 @@ public class MessageProcessorConfig {
             }
         };
     }
-   */
 
     @Bean
     public Consumer<OmsAdminOrderReturnEvent> adminReturnMessageProcessor() {
@@ -229,7 +229,7 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            String operator = event.getAdminName();
+            String operator = event.getOperator();
             ReturnRequestDecision returnRequestDecision = event.getReturnRequestDecision();
 
             switch (event.getEventType()) {
@@ -254,38 +254,33 @@ public class MessageProcessorConfig {
         };
     }
 
-    /* // TODO:
     @Bean
     public Consumer<OmsAdminOrderAnnouncementEvent> adminOrderItemAnnouncementProcessor() {
         // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            String operator = event.getAdminName();
-            ReturnRequestDecision returnRequestDecision = event.getReturnRequestDecision();
+            String productName = event.getProductName(); // product name + sku(if applicable)
+            String message = event.getMessage();
+            String operator = event.getOperator();
 
             switch (event.getEventType()) {
-                case APPROVED:
-                    adminReturnService.approveReturnRequest(returnRequestDecision, operator).subscribe();
+                case ORDER_ITEM_SKU:
+                    adminOrderService.adminOrderItemAnnouncement(productName, message, operator).subscribe();
                     break;
 
-                case REJECTED:
-                    String rejectionReason = returnRequestDecision.getReason();
-                    adminReturnService.rejectReturnRequest(returnRequestDecision, rejectionReason, operator).subscribe();
-                    break;
-
-                case COMPLETED_RETURN:
-                    adminReturnService.completeReturnRequest(returnRequestDecision, operator).subscribe();
+                case ORDER_ITEM_PRODUCT:
+                    adminOrderService.adminOrderProductAnnouncement(productName, message, operator).subscribe();
                     break;
 
                 default:
-                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected APPLY, UPDATE and CANCEL event";
+                    String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected ORDER_ITEM_SKU and " +
+                            "ORDER_ITEM_PRODUCT event";
                     LOG.warn(errorMessage);
                     throw new RuntimeException(errorMessage);
             }
         };
     }
-     */
 
     @Bean
     public Consumer<PmsUpdateIncomingEvent> updateFromPmsMessageProcessor() {
