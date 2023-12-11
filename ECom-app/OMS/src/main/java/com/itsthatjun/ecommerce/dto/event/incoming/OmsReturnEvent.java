@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.dto.event.incoming;
 
 import com.itsthatjun.ecommerce.dto.ReturnParam;
-import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -22,14 +21,6 @@ public class OmsReturnEvent {
     private final int userId;
     private final ReturnParam returnParam;
     private final ZonedDateTime eventCreatedAt;
-
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsReturnEvent() {
-        this.eventType = null;
-        this.userId = 0;
-        this.returnParam = null;
-        this.eventCreatedAt = null;
-    }
 
     public OmsReturnEvent(Type eventType, int userId, ReturnParam returnParam) {
         this.eventType = eventType;

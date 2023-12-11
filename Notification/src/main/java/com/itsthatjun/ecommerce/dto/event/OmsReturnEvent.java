@@ -21,14 +21,6 @@ public class OmsReturnEvent {
     private final UserInfo userInfo;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsReturnEvent() {
-        this.eventType = null;
-        this.returnDetail = null;
-        this.userInfo = null;
-        this.eventCreatedAt = null;
-    }
-
     public OmsReturnEvent(Type eventType, ReturnDetail returnDetail, UserInfo userInfo) {
         this.eventType = eventType;
         this.returnDetail = returnDetail;

@@ -20,15 +20,6 @@ public class OmsOrderAnnouncementEvent {
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsOrderAnnouncementEvent() {
-        this.eventType = null;
-        this.productName = null;
-        this.message = null;
-        this.operator = null;
-        this.eventCreatedAt = null;
-    }
-
     public OmsOrderAnnouncementEvent(Type eventType, String productName, String message, String operator) {
         this.eventType = eventType;
         this.productName = productName;

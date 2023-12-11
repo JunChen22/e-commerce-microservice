@@ -22,13 +22,6 @@ public class PmsSaleOutEvent {
     private final List<ProductSku> skuList;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public PmsSaleOutEvent() {
-        this.eventType = null;
-        this.skuList = null;
-        this.eventCreatedAt = null;
-    }
-
     public PmsSaleOutEvent(Type eventType, List<ProductSku> skuList) {
         this.eventType = eventType;
         this.skuList = skuList;

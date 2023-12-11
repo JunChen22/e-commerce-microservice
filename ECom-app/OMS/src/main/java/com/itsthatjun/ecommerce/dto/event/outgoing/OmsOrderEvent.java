@@ -20,13 +20,6 @@ public class OmsOrderEvent {
     private final OrderDetail orderDetail;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsOrderEvent() {
-        this.eventType = null;
-        this.orderDetail = null;
-        this.eventCreatedAt = null;
-    }
-
     public OmsOrderEvent(Type eventType, OrderDetail orderDetail) {
         this.eventType = eventType;
         this.orderDetail = orderDetail;

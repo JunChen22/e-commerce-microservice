@@ -23,17 +23,6 @@ public class OmsOrderEvent {
     private final String cancelUrl;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsOrderEvent() {
-        this.eventType = null;
-        this.userId = 0;
-        this.orderSn = null;
-        this.orderParam = null;
-        this.successUrl = null;
-        this.cancelUrl = null;
-        this.eventCreatedAt = null;
-    }
-
     public OmsOrderEvent(Type eventType, int userId, String orderSn, OrderParam orderParam, String successUrl, String cancelUrl) {
         this.eventType = eventType;
         this.userId = userId;

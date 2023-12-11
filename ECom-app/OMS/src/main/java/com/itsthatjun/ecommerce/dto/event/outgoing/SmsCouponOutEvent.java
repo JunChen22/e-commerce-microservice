@@ -19,15 +19,6 @@ public class SmsCouponOutEvent {
     private final int memberId;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public SmsCouponOutEvent() {
-        this.eventType = null;
-        this.coupon = null;
-        this.memberId = 0;
-        this.orderId = 0;
-        this.eventCreatedAt = null;
-    }
-
     // update coupon usage
     public SmsCouponOutEvent(Type eventType, String coupon, int memberId, int orderId) {
         this.eventType = eventType;

@@ -22,14 +22,6 @@ public class UmsAdminUserEvent {
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public UmsAdminUserEvent() {
-        this.eventType = null;
-        this.member = null;
-        this.operator = null;
-        this.eventCreatedAt = null;
-    }
-
     public UmsAdminUserEvent(Type eventType, Member member, String operator) {
         this.eventType = eventType;
         this.member = member;

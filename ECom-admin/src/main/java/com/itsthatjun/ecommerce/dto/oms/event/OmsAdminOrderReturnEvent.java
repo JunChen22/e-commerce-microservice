@@ -20,14 +20,6 @@ public class OmsAdminOrderReturnEvent {
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsAdminOrderReturnEvent() {
-        this.eventType = null;
-        this.returnRequestDecision = null;
-        this.operator = null;
-        this.eventCreatedAt = null;
-    }
-
     public OmsAdminOrderReturnEvent(Type eventType, ReturnRequestDecision returnRequestDecision, String operator) {
         this.eventType = eventType;
         this.operator = operator;

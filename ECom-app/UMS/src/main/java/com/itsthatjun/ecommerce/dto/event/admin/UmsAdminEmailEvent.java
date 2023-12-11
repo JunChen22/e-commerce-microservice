@@ -20,15 +20,6 @@ public class UmsAdminEmailEvent {
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public UmsAdminEmailEvent() {
-        this.eventType = null;
-        this.userId = null;
-        this.message = null;
-        this.operator = null;
-        this.eventCreatedAt = null;
-    }
-
     public UmsAdminEmailEvent(Type eventType, Integer userId, String message, String operator) {
         this.eventType = eventType;
         this.userId = userId;

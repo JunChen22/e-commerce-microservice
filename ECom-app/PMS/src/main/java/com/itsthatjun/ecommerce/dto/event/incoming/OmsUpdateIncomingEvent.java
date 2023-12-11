@@ -22,13 +22,6 @@ public class OmsUpdateIncomingEvent {
     private final Map<String, Integer> productMap;   // sku and quantity
     private final ZonedDateTime eventCreatedAt;
 
-    public OmsUpdateIncomingEvent() {
-        this.eventType = null;
-        this.orderSn = null;
-        this.productMap = null;
-        this.eventCreatedAt = null;
-    }
-
     public OmsUpdateIncomingEvent(Type eventType, String orderSn, Map<String, Integer> productMap) {
         this.eventType = eventType;
         this.orderSn = orderSn;

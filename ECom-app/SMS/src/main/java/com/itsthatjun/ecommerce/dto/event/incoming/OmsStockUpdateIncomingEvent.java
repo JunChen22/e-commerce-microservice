@@ -22,14 +22,6 @@ public class OmsStockUpdateIncomingEvent {
     private final Map<String, Integer> productMap;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsStockUpdateIncomingEvent() {
-        this.eventType = null;
-        this.orderSn = null;
-        this.productMap = null;
-        this.eventCreatedAt = null;
-    }
-
     // update sales stock
     public OmsStockUpdateIncomingEvent(Type eventType, String orderSn, Map<String, Integer> productMap) {
         this.eventType = eventType;

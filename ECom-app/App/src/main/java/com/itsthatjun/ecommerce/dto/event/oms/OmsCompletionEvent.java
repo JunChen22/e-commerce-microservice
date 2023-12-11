@@ -11,7 +11,7 @@ public class OmsCompletionEvent {
 
     public enum Type {
         PAYMENT_SUCCESS,
-        PAYMENT_FAILURE
+        PAYMENT_FAILURE // not used right now since it's TTL to cancel.
     }
 
     // TODO:might make a smaller DTO
@@ -20,15 +20,6 @@ public class OmsCompletionEvent {
     private final String paymentId;
     private final String payerId;
     private final ZonedDateTime eventCreatedAt;
-
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsCompletionEvent() {
-        this.eventType = null;
-        this.orderSn = null;
-        this.paymentId = null;
-        this.payerId = null;
-        this.eventCreatedAt = null;
-    }
 
     // success payment
     public OmsCompletionEvent(Type eventType, String orderSn, String paymentId, String payerId) {

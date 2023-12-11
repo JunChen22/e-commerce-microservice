@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.dto.event.outgoing;
 
-import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
 import lombok.Getter;
 
@@ -20,14 +19,6 @@ public class UmsLogUpdateEvent {
     private final int userId;
     private final MemberLoginLog loginLog;
     private final ZonedDateTime eventCreatedAt;
-
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public UmsLogUpdateEvent() {
-        this.eventType = null;
-        this.userId = 0;
-        this.loginLog = null;
-        this.eventCreatedAt = null;
-    }
 
     public UmsLogUpdateEvent(Type eventType, int userId, MemberLoginLog loginLog) {
         this.eventType = eventType;

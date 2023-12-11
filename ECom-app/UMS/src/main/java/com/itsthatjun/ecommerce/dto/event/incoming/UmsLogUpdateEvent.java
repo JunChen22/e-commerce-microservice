@@ -20,14 +20,6 @@ public class UmsLogUpdateEvent {
     private final MemberLoginLog loginLog;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public UmsLogUpdateEvent() {
-        this.eventType = null;
-        this.userId = 0;
-        this.loginLog = null;
-        this.eventCreatedAt = null;
-    }
-
     public UmsLogUpdateEvent(Type eventType, int userId, MemberLoginLog loginLog) {
         this.eventType = eventType;
         this.userId = userId;

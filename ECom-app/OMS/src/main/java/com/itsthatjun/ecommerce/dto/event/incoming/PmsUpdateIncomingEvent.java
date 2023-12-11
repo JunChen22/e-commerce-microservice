@@ -25,14 +25,6 @@ public class PmsUpdateIncomingEvent {
     private final ProductSku productSku;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public PmsUpdateIncomingEvent() {
-        this.eventType = null;
-        this.product = null;
-        this.productSku = null;
-        this.eventCreatedAt = null;
-    }
-
     public PmsUpdateIncomingEvent(Type eventType, Product product, ProductSku productSku) {
         this.eventType = eventType;
         this.product = product;

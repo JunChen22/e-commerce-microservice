@@ -21,14 +21,6 @@ public class CmsAdminArticleEvent {
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public CmsAdminArticleEvent() {
-        this.eventType = null;
-        this.articleInfo = null;
-        this.operator = null;
-        this.eventCreatedAt = null;
-    }
-
     public CmsAdminArticleEvent(Type eventType, AdminArticleInfo articleInfo, String operator) {
         this.eventType = eventType;
         this.articleInfo = articleInfo;

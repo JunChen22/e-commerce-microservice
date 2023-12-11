@@ -21,13 +21,6 @@ public class OmsSaleOutEvent {
     private final List<ProductSku> skuList;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsSaleOutEvent() {
-        this.eventType = null;
-        this.skuList = null;
-        this.eventCreatedAt = null;
-    }
-
     public OmsSaleOutEvent(Type eventType, List<ProductSku> skuList) {
         this.eventType = eventType;
         this.skuList = skuList;

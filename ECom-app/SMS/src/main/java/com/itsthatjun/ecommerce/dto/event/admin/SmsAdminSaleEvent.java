@@ -26,14 +26,6 @@ public class SmsAdminSaleEvent {
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public SmsAdminSaleEvent() {
-        this.eventType = null;
-        this.saleRequest = null;
-        this.operator = null;
-        this.eventCreatedAt = null;
-    }
-
     @Autowired
     public SmsAdminSaleEvent(Type eventType, OnSaleRequest saleRequest, String operator) {
         this.eventType = eventType;

@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.dto.event.incoming;
 
-import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.ProductSku;
 import lombok.Getter;
 
@@ -20,13 +19,6 @@ public class SmsUpdateIncomingEvent {
     private final Type eventType;
     private final List<ProductSku> skuList;
     private final ZonedDateTime eventCreatedAt;
-
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public SmsUpdateIncomingEvent() {
-        this.eventType = null;
-        this.skuList = null;
-        this.eventCreatedAt = null;
-    }
 
     public SmsUpdateIncomingEvent(Type eventType, List<ProductSku> skuList) {
         this.eventType = eventType;

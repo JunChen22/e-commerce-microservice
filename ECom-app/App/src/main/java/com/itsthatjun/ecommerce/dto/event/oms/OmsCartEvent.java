@@ -25,14 +25,6 @@ public class OmsCartEvent {
     private final CartItem cartItem;
     private final ZonedDateTime eventCreatedAt;
 
-    // Jackson needs it, (the library used for JSON serialization/deserialization)
-    public OmsCartEvent() {
-        this.eventType = null;
-        this.userId = null;
-        this.cartItem = null;
-        this.eventCreatedAt = null;
-    }
-
     public OmsCartEvent(Type eventType, Integer userId, CartItem cartItem) {
         this.eventType = eventType;
         this.userId = userId;
