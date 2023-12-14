@@ -203,7 +203,7 @@ services:
       - elasticsearch
 
   search:
-    build: ECom-search
+    build: ecom-search
     image: e-com/search
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
@@ -220,7 +220,7 @@ services:
       - pms-db
 
   app:
-    build: ECom-app/App
+    build: ecom-app/App
     image: e-com/app
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
@@ -236,7 +236,7 @@ services:
         condition: service_healthy
 
   cms:
-    build: ECom-app/CMS
+    build: ecom-app/CMS
     image: e-com/cms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
@@ -256,7 +256,7 @@ services:
         condition: service_healthy
 
   oms:
-    build: ECom-app/OMS
+    build: ecom-app/OMS
     image: e-com/oms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
@@ -277,7 +277,7 @@ services:
         condition: service_healthy
 
   pms:
-    build: ECom-app/PMS
+    build: ecom-app/PMS
     image: e-com/pms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
@@ -297,7 +297,7 @@ services:
         condition: service_healthy
 
   sms:
-    build: ECom-app/SMS
+    build: ecom-app/SMS
     image: e-com/sms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
@@ -315,7 +315,7 @@ services:
         condition: service_healthy
 
   ums:
-    build: ECom-app/UMS
+    build: ecom-app/UMS
     image: e-com/ums
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
@@ -335,7 +335,7 @@ services:
         condition: service_healthy
 
   admin:
-    build: ECom-admin
+    build: ecom-admin
     ports:
       - 8082:8082
     environment:
@@ -386,7 +386,7 @@ services:
         condition: service_healthy
 
   notification:
-    build: Notification
+    build: notification
     image: e-com/notification
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka

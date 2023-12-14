@@ -28,7 +28,7 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - CMS-data:/var/lib/postgresql/data
+      - cms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -45,7 +45,7 @@ services:
     ports:
       - 5434:5432
     volumes:
-      - OMS-data:/var/lib/postgresql/data
+      - oms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -62,7 +62,7 @@ services:
     ports:
       - 5435:5432
     volumes:
-      - PMS-data:/var/lib/postgresql/data
+      - pms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -79,7 +79,7 @@ services:
     ports:
       - 5436:5432
     volumes:
-      - SMS-data:/var/lib/postgresql/data
+      - sms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -96,7 +96,7 @@ services:
     ports:
       - 5437:5432
     volumes:
-      - UMS-data:/var/lib/postgresql/data
+      - ums-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -113,7 +113,7 @@ services:
     ports:
       - 5438:5432
     volumes:
-      - Auth-data:/var/lib/postgresql/data
+      - auth-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
@@ -209,7 +209,8 @@ services:
       - elasticsearch
 
   search:
-    build: ECom-search
+    build: ecom-search
+    image: e-com/search
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/search.yml
@@ -225,7 +226,8 @@ services:
       - pms-db
 
   app:
-    build: ECom-app/App
+    build: ecom-app/App
+    image: e-com/app
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/app.yml
@@ -242,7 +244,8 @@ services:
         condition: service_healthy
 
   cms:
-    build: ECom-app/CMS
+    build: ecom-app/CMS
+    image: e-com/cms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/cms.yml
@@ -251,7 +254,7 @@ services:
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
-      CMS-db:
+      cms-db:
         condition: service_healthy
       mongodb:
         condition: service_healthy
@@ -261,7 +264,8 @@ services:
         condition: service_healthy
 
   oms:
-    build: ECom-app/OMS
+    build: ecom-app/OMS
+    image: e-com/oms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/oms.yml
@@ -270,6 +274,8 @@ services:
       - PAYPAL_MODE=${paypal_mode}
       - PAYPAL_CLIENT_ID=${paypal_client_id}
       - PAYPAL_CLIENT_SECRET=${paypal_client_secret}
+      - USPS_USERID=${USPS_USERID}
+      - USPS_PASSWORD=${USPS_PASSWORD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
@@ -279,7 +285,8 @@ services:
         condition: service_started
 
   pms:
-    build: ECom-app/PMS
+    build: ecom-app/PMS
+    image: e-com/pms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/pms.yml
@@ -298,7 +305,8 @@ services:
         condition: service_healthy
 
   sms:
-    build: ECom-app/SMS
+    build: ecom-app/SMS
+    image: e-com/sms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/sms.yml
@@ -315,7 +323,8 @@ services:
         condition: service_started
 
   ums:
-    build: ECom-app/UMS
+    build: ecom-app/UMS
+    image: e-com/ums
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/ums.yml
@@ -334,7 +343,7 @@ services:
         condition: service_healthy
 
   admin:
-    build: ECom-admin
+    build: ecom-admin
     ports:
       - 8082:8082
     environment:
@@ -367,7 +376,7 @@ services:
 
   auth-server:
     build: auth-server
-    mem_limit: 512m
+    image: e-com/auth-server
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
@@ -385,7 +394,7 @@ services:
         condition: service_healthy
 
   notification:
-    build: Notification
+    build: notification
     image: e-com/notification
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
@@ -411,9 +420,10 @@ services:
 
 volumes:
   db-data:
-  CMS-data:
-  OMS-data:
-  PMS-data:
-  SMS-data:
-  UMS-data:
-  Auth-data:
+  cms-data:
+  oms-data:
+  pms-data:
+  sms-data:
+  ums-data:
+  auth-data:
+  email-data:

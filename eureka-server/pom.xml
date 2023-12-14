@@ -4,15 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.itsthatjun.ecommerce-microservice</groupId>
-		<artifactId>spring-ecommerce-microservice</artifactId>
+		<groupId>com.itsthatjun.e-commerce-microservice</groupId>
+		<artifactId>e-commerce-microservice</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>eureka-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>eureka-server</name>
+	<description>Demo project for Spring Boot</description>
 
 	<dependencies>
 		<dependency>

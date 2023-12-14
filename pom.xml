@@ -3,27 +3,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.itsthatjun.ecommerce-microservice</groupId>
-    <artifactId>spring-ecommerce-microservice</artifactId>
+    <groupId>com.itsthatjun.e-commerce-microservice</groupId>
+    <artifactId>e-commerce-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>spring-ecommerce-microservice</name>
-    <description> E-commerce microservice backend using Spring Boot</description>
+    <name>e-commerce-microservice</name>
+    <description> E-commerce microservice backend using Spring Boot </description>
 
     <modules>
         <module>gateway</module>
         <module>eureka-server</module>
-        <module>ECom-admin</module>
-        <module>ECom-search</module>
-        <module>ECom-app/App</module>           <!-- aggregated service -->
-        <module>ECom-app/CMS</module>
-        <module>ECom-app/OMS</module>
-        <module>ECom-app/PMS</module>
-        <module>ECom-app/SMS</module>
-        <module>ECom-app/UMS</module>
+        <module>ecom-admin</module>
+        <module>ecom-search</module>
+        <module>ecom-app/App</module>           <!-- aggregated service -->
+        <module>ecom-app/CMS</module>
+        <module>ecom-app/OMS</module>
+        <module>ecom-app/PMS</module>
+        <module>ecom-app/SMS</module>
+        <module>ecom-app/UMS</module>
         <module>auth-server</module>
-        <module>Notification</module>
+        <module>notification</module>
     </modules>
 
     <parent>
