@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ecom-search</artifactId>
+    <artifactId>search</artifactId>
     <description>Demo project for Spring Boot</description>
     <packaging>jar</packaging>
 

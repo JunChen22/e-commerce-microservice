@@ -14,14 +14,14 @@
     <modules>
         <module>gateway</module>
         <module>eureka-server</module>
-        <module>ecom-admin</module>
-        <module>ecom-search</module>
-        <module>ecom-app/App</module>           <!-- aggregated service -->
-        <module>ecom-app/CMS</module>
-        <module>ecom-app/OMS</module>
-        <module>ecom-app/PMS</module>
-        <module>ecom-app/SMS</module>
-        <module>ecom-app/UMS</module>
+        <module>admin</module>
+        <module>search</module>
+        <module>app/App</module>           <!-- aggregated service -->
+        <module>app/CMS</module>
+        <module>app/OMS</module>
+        <module>app/PMS</module>
+        <module>app/SMS</module>
+        <module>app/UMS</module>
         <module>auth-server</module>
         <module>notification</module>
     </modules>
@@ -103,8 +103,6 @@
                 <artifactId>jaxb-api</artifactId>
                 <version>2.3.1</version>
             </dependency>
-
-
 
             <!-- redis -->
             <dependency>

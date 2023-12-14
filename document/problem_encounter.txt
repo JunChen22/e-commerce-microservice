@@ -336,6 +336,14 @@ A: need to have image on kubernetes first.
 Q: can not connect/replace gateway in kubernetes environment. The Kubernetes Ingress Controller can not be connected.
 
 A: the default profile is causing problem for me. I need to create and switch profile other than default profile to solve it.
+    when using eureka profile, it will cause error in kubernetes. the service will put them in Eureka's control instead of
+    Kubernetes ingress causing other service to not find other service.
+
+    to deploy on docker
+    mvn clean install -Peureka
+
+    to deploy to kubernetes
+    mvn clean install
 
 
 
@@ -349,9 +357,60 @@ Q: the config repository in kubernetes is linked with the config-repo in the mai
 
      $ rm SOFT_LINKED_FILES.yml    // to un-soft link the file, it will not delete the original file.
 
+     $ ls -lrt  // to see what is being soft linked.
 
 
 Q: problem with lombok and MapStruct.
-
 A: need to have binding and can't use @data, change it to @Getter and @Setter
+
+Q:  jjwt version and xml binding problem.
+A:  Previously need to add default constructor to events even though don't need it but javaxml need it.
+    It's For Jackson to serialized/deserialization. And jjwt 0.9.x version needs javax.xml.bind to work. jjwt 0.12.x
+    version doesn't need it but I'll update it later. Currently still at 0.9.1.
+
+   <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt</artifactId>
+        <version>0.9.1</version>
+    </dependency>
+    <dependency>        <!-- jjwt 0.9.1 needs it. 0.12.0 doesn't. -->
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.3.1</version>
+    </dependency>
+
+Q: the update service event name is different from publisher and receiver.
+A: update services events are serialized so names don't matter
+
+Q: product category name use case.
+A: - get product category, and it's sub/super class.
+   	Electronics -> Smartphones
+   	Fashion -> Men clothing
+   - product_attribute_category to get pre-exist attribute template, product_attribute_type names then to attribute vales and unit, product_attribute.
+
+   product_attribute_category -> product_attribute_type -> product_attribute
+
+
+Q: map and hash map behavior is different in mybatis.
+A: alias or colum name became the key and the colum became the value.
+    Not just two colum with first became the key and the second became value. and multiple rows became
+    <key,value> in map.
+
+SELECT
+    name AS product_name,
+    price AS product_price
+FROM product;
+
+this became Map<String, object> with ["product_name" : name] and ["product_price" : product_price]
+and NOT Map<String, Double>,   ["iphone" : 1,200] and ["Air Jordan" : 120]
+
+Q: inject password/credential into values.yaml with .env.
+A: doesn't work, tried, and it's causing issues, need to just write into values.yaml in dev-env.
+
+Q: added tables at the bottom of data.sql.
+A: it's for batch processing. To use Spring Batch those tables are needed. but I'm not using or needed Spring batch yet.
+    the plan was to batch sending out emails if needed. There's limitation to that as there's limit of daily email for
+    free gmail and commercial(Google Workspace accounts) email. I think it's 500 a day 20 emails per minutes , and 2000 a day
+     for commercial email.
+    Spring batch will start on its own if job is in the same class as @EnableBatchProcessing annotation.
 

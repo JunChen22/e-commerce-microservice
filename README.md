@@ -18,15 +18,15 @@ E-commerece
 │   │    └── environment  -- different environment, devolopment vs production 
 │   │            └── istio  -- service mesh 
 │   └── monitor    -- grafana prometheus - performance metric monitor/visualizer
-├── E-commerece-admin  -- role based , keep it monolith first for single vendor
-├── E-commerece-app
+├── admin  -- role based , keep it monolith first for single vendor
+├── app
 │   ├── App - aggregated service          non-blocking synchronous API  to 
 │   ├── User mangament system/service              5 event driven asynchronous serivces
 │   ├── Product management system/service                      
 │   ├── Content management system/service
 │   ├── Sales mangement system/service
 │   └── Order management system/service
-└── E-commerece-search   -- searching related module, in-memory imported in data for fast search
+└── search   -- searching related module, in-memory imported in data for fast search
 
 Two way of deploying. One with Docker and one with Kubernetes.
 Docker by default will be smaller than deploying in Kubernetes. And Kuberentes will have features same as Spring Cloud

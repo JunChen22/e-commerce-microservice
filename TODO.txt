@@ -1,6 +1,22 @@
+short term
+- fix the dto in admin
+review message system in PMS
+- admin part might need to change too
+- fix the search in kubernetes ingress url.
+- add the admin redis controller
 
-- deploy it to kubernetes
-- helm for kubernetes deployment
+SMS change DTO
+- admin need to change too
+and after that SMS announcement to notification
+
+and change brand dto, it's show product instead of product dto
+and ProductReview wasn't change in app, and change/add a review picture dto
+and add shopping cart dto
+
+- find by some sort of id or name instead of just id
+
+later
+- change the datatype for price back to long instead of double.
 - change from single to multi-vendor e-commerce
     - will need to add role and permission.
 
@@ -15,7 +31,14 @@
   This will introduce more complexity. and need to avoid message duplication. You should also consider error-handling scenarios
   and implement mechanisms to prevent infinite loops in case a message repeatedly fails its expiration checks.
 
-- email notification
 - auth code store in redis for registration
-- UPS API
-- Amazon S3 bucket to store product, review, return and other misc pictures. Currently using just Imgur.
+- UPS or USPS API, check , estimate and create delivery or return labels.
+- Amazon S3 bucket to store product, review, return and other misc pictures. Currently, using just Imgur.
+
+- add admin to Kubernetes.
+- renew token too
+- add mTls between services.
+- oauth2
+
+- add Jenkin, maybe
+- change it to spring boot 3.x. currently at 2.5.2

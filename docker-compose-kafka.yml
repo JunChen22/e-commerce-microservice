@@ -209,7 +209,7 @@ services:
       - elasticsearch
 
   search:
-    build: ecom-search
+    build: search
     image: e-com/search
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -226,7 +226,7 @@ services:
       - pms-db
 
   app:
-    build: ecom-app/App
+    build: app/App
     image: e-com/app
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -244,7 +244,7 @@ services:
         condition: service_healthy
 
   cms:
-    build: ecom-app/CMS
+    build: app/CMS
     image: e-com/cms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -264,7 +264,7 @@ services:
         condition: service_healthy
 
   oms:
-    build: ecom-app/OMS
+    build: app/OMS
     image: e-com/oms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -285,7 +285,7 @@ services:
         condition: service_started
 
   pms:
-    build: ecom-app/PMS
+    build: app/PMS
     image: e-com/pms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -305,7 +305,7 @@ services:
         condition: service_healthy
 
   sms:
-    build: ecom-app/SMS
+    build: app/SMS
     image: e-com/sms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -323,7 +323,7 @@ services:
         condition: service_started
 
   ums:
-    build: ecom-app/UMS
+    build: app/UMS
     image: e-com/ums
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -343,7 +343,7 @@ services:
         condition: service_healthy
 
   admin:
-    build: ecom-admin
+    build: admin
     ports:
       - 8082:8082
     environment:
