@@ -45,37 +45,37 @@ echo "Containers are not healthy yet. Waiting..."
 
 # Run MyBatis generator for each module
 echo "Generating MyBatis files for ECom-admin"
-cd ./ECom-admin
+cd ./admin
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ..
 
 echo "Generating MyBatis files for ECom-app/App"
-cd ./ECom-app/App
+cd ./app/App
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../..
 
 echo "Generating MyBatis files for ECom-app/CMS"
-cd ./ECom-app/CMS
+cd ./app/CMS
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../../
 
 echo "Generating MyBatis files for ECom-app/OMS"
-cd ./ECom-app/OMS
+cd ./app/OMS
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../..
 
 echo "Generating MyBatis files for ECom-app/PMS"
-cd ./ECom-app/PMS
+cd ./app/PMS
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../..
 
 echo "Generating MyBatis files for ECom-app/SMS"
-cd ./ECom-app/SMS
+cd ./app/SMS
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../..
 
 echo "Generating MyBatis files for ECom-app/UMS"
-cd ./ECom-app/UMS
+cd ./app/UMS
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../..
 
@@ -85,7 +85,7 @@ mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../
 
 echo "Generating MyBatis files for Notification"
-cd ./Notification
+cd ./notification
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../
 
