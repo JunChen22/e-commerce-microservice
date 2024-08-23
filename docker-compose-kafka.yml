@@ -3,6 +3,7 @@ version: '3'
 services:
   postgres:
     image: postgres:9.6.10
+    container_name: e-com_postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -20,6 +21,7 @@ services:
 
   cms-db:
     image: postgres:9.6.10
+    container_name: e-com_cms-db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -37,6 +39,7 @@ services:
 
   oms-db:
     image: postgres:9.6.10
+    container_name: e-com_oms-db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -54,6 +57,7 @@ services:
 
   pms-db:
     image: postgres:9.6.10
+    container_name: e-com_pms-db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -71,6 +75,7 @@ services:
 
   sms-db:
     image: postgres:9.6.10
+    container_name: e-com_sms-db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -88,6 +93,7 @@ services:
 
   ums-db:
     image: postgres:9.6.10
+    container_name: e-com_ums-db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -105,6 +111,7 @@ services:
 
   auth-db:
     image: postgres:9.6.10
+    container_name: e-com_auth-db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -122,6 +129,7 @@ services:
 
   email-db:
     image: postgres:9.6.10
+    container_name: e-com_email-db
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -139,6 +147,7 @@ services:
 
   mongodb:
     image: mongo:5.0.0
+    container_name: e-com_mongodb
     restart: always
     ports:
       - 27017:27017
@@ -151,6 +160,7 @@ services:
 
   redis:
     image: redis:7.0.14
+    container_name: e-com_redis
     ports:
       - "6379:6379"
     healthcheck:
@@ -161,6 +171,7 @@ services:
 
   kafka:
     image: wurstmeister/kafka:2.12-2.5.0
+    container_name: e-com_kafka
     mem_limit: 512m
     ports:
       - "9092:9092"
@@ -173,6 +184,7 @@ services:
 
   zookeeper:
     image: wurstmeister/zookeeper:3.4.6
+    container_name: e-com_zookeeper
     mem_limit: 512m
     ports:
       - "2181:2181"
@@ -181,6 +193,7 @@ services:
 
   elasticsearch:
     image: elasticsearch:7.12.0
+    container_name: e-com_elastic-search
     environment:
       - "cluster.name=elasticsearch"
       - "discovery.type=single-node"
@@ -193,6 +206,7 @@ services:
 
   logstash:
     image: logstash:7.12.0
+    container_name: e-com_logstash
     ports:
       - 5044:5044
       - 9600:9600
@@ -201,6 +215,7 @@ services:
 
   kibana:
     image: kibana:7.12.0
+    container_name: e-com_kibana
     environment:
       - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
     ports:
@@ -211,6 +226,7 @@ services:
   search:
     build: search
     image: e-com/search
+    container_name: e-com_search
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/search.yml
@@ -228,6 +244,7 @@ services:
   app:
     build: app/App
     image: e-com/app
+    container_name: e-com_app
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/app.yml
@@ -246,6 +263,7 @@ services:
   cms:
     build: app/CMS
     image: e-com/cms
+    container_name: e-com_cms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/cms.yml
@@ -266,6 +284,7 @@ services:
   oms:
     build: app/OMS
     image: e-com/oms
+    container_name: e-com_oms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/oms.yml
@@ -287,6 +306,7 @@ services:
   pms:
     build: app/PMS
     image: e-com/pms
+    container_name: e-com_pms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/pms.yml
@@ -307,6 +327,7 @@ services:
   sms:
     build: app/SMS
     image: e-com/sms
+    container_name: e-com_sms
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/sms.yml
@@ -325,6 +346,7 @@ services:
   ums:
     build: app/UMS
     image: e-com/ums
+    container_name: e-com_ums
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/ums.yml
@@ -344,6 +366,8 @@ services:
 
   admin:
     build: admin
+    image: e-com/admin
+    container_name: e-com_admin
     ports:
       - 8082:8082
     environment:
@@ -353,9 +377,13 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      mongodb:
+        condition: service_healthy
 
   gateway:
     build: gateway
+    image: e-com/gateway
+    container_name: e-com_gateway
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -364,9 +392,14 @@ services:
       - $PWD/config-repo:/config-repo
     ports:
       - "8080:8080"
+    depends_on:
+      eureka:
+        condition: service_started
 
   eureka:
     build: eureka-server
+    image: e-com/eureka-server
+    container_name: e-com_eureka-server
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
@@ -377,6 +410,7 @@ services:
   auth-server:
     build: auth-server
     image: e-com/auth-server
+    container_name: e-com_auth-server
     environment:
       - SPRING_PROFILES_ACTIVE=docker,kafka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
@@ -396,6 +430,7 @@ services:
   notification:
     build: notification
     image: e-com/notification
+    container_name: e-com_notification
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/notification.yml
@@ -409,6 +444,7 @@ services:
 
   zipkin:
     image: openzipkin/zipkin:2.23.2
+    container_name: e-com_zipkin
     mem_limit: 1024m
     environment:
       - STORAGE_TYPE=mem

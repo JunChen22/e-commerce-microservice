@@ -4,7 +4,9 @@ Maven
 - sub-module structure
    - dependencies management
    - dependencies
-   - other module dependencies(ECom-Security, ECom-mbg, and ECom-common)
+   - other module dependencies(ECom-Security, ECom-mbg, and ECom-common).
+     need to set     <build><pluginManagement> or else it will try to build the module
+     even though the module doesn't need to be build.
 - Spring boot and dependencies version compatibility.
   For example, Spring boot 2.5.2 must have their dependencies version matching. Same
   for Spring Cloud.

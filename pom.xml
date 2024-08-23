@@ -24,6 +24,7 @@
         <module>app/UMS</module>
         <module>auth-server</module>
         <module>notification</module>
+        <module>common</module>
     </modules>
 
     <parent>
@@ -40,19 +41,17 @@
         <resilience4jVersion>1.7.0</resilience4jVersion>
         <skipTests>true</skipTests>         <!-- to perform test or not -->
         <testcontainer.version>1.17.6</testcontainer.version>
+        <common.version>0.0.1-SNAPSHOT</common.version>
+        <postgres.version>42.2.8</postgres.version>
     </properties>
 
     <dependencies>          <!-- all child module will be used -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-mapstruct-binding</artifactId>
@@ -62,6 +61,12 @@
 
     <dependencyManagement>  <!-- optional dependencies that child module can choose -->
         <dependencies>
+            <dependency>
+                <groupId>com.itsthatjun.e-commerce-microservice</groupId>
+                <artifactId>common</artifactId>
+                <version>${common.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
@@ -122,8 +127,16 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>42.2.8</version>
+                <version>${postgres.version}</version>
             </dependency>
+
+            <!-- paypal API -->
+            <dependency>
+                <groupId>com.paypal.sdk</groupId>
+                <artifactId>rest-api-sdk</artifactId>
+                <version>1.14.0</version>
+            </dependency>
+
 
             <!-- mybatis and paging addon from GitHub -->
             <dependency>
@@ -179,7 +192,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${spring.version}</version>
-                <scope>test</scope>
             </dependency>
 
             <!-- spring cloud. message -->
@@ -232,11 +244,13 @@
     </dependencyManagement>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

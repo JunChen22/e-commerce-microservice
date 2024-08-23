@@ -42,3 +42,4 @@ later
 
 - add Jenkin, maybe
 - change it to spring boot 3.x. currently at 2.5.2
+- Servlet-based Security Replace with Reactive Components
