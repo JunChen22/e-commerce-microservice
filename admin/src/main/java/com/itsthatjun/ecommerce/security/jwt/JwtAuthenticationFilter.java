@@ -10,10 +10,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
@@ -32,6 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.adminService = adminService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
+
+    /*
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -55,11 +53,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+     */
 
     private String getJWTFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(header);
         if (!bearerToken.isEmpty() && bearerToken.startsWith(tokenPrefix)) {
-            return bearerToken.substring(tokenPrefix.length() + 1); // "bearer " length is 7
+            return bearerToken.substring(tokenPrefix.length()).trim(); // "bearer " length is 7
         }
         return null;
     }

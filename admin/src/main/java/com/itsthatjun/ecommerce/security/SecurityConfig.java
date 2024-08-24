@@ -2,26 +2,18 @@ package com.itsthatjun.ecommerce.security;
 
 import com.itsthatjun.ecommerce.security.handler.CustomAccessDeniedHandler;
 import com.itsthatjun.ecommerce.security.handler.CustomAuthenticationEntryPoint;
-import com.itsthatjun.ecommerce.security.jwt.JwtAuthenticationFilter;
 import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
 import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebFluxSecurity
+public class SecurityConfig {
 
     private final AdminServiceImpl adminService;
     private final JwtTokenUtil jwtTokenUtil;
@@ -36,6 +28,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.accessDeniedHandler = accessDeniedHandler;
     }
 
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+
+
+    }
+
+    /*
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
@@ -65,4 +64,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationFilter(adminService, jwtTokenUtil);
     }
+     */
 }
