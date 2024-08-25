@@ -16,9 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -32,6 +31,8 @@ public class AdminController {
 
     private final JwtTokenUtil tokenUtil;
 
+    // TODO: add redis to store admin name,  "Admin: " + token : adminName
+
     @Autowired
     public AdminController(AdminServiceImpl adminService, AdminDao adminDao, JwtTokenUtil tokenUtil) {
         this.adminService = adminService;
@@ -41,18 +42,21 @@ public class AdminController {
 
     @PostMapping("/login")
     @ApiOperation("")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
-        String token = adminService.login(loginRequest.getUsername(), loginRequest.getPassword());
-        if (token.isEmpty()) {
-            return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED);
-        }
+    public Mono<ResponseEntity<?>> login(@RequestBody LoginRequest loginRequest) {
+        System.out.println("at admin controller");
+        System.out.println(loginRequest.getUsername() + " : " + loginRequest.getPassword());
 
-        String adminName = tokenUtil.getAdminNameFromToken(token);          // two approach, token = stateless for microservices,
-                                                                            // stateful approach is with session for monolith application.
-        HttpSession session = request.getSession();
-        session.setAttribute("adminName", adminName);
-
-        return ResponseEntity.ok(new LoginResponse(true, token));
+        // two approach, token = stateless for microservices,
+        // stateful approach is with session for monolith application.
+        return adminService.login(loginRequest.getUsername(), loginRequest.getPassword())
+                .flatMap(token -> {
+                    if (token.isEmpty()) {
+                        return Mono.just(new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED));
+                    }
+                    String adminName = tokenUtil.getAdminNameFromToken(token);
+                    System.out.println("at admin controller: " + adminName);
+                    return Mono.just(ResponseEntity.ok(new LoginResponse(true, token)));
+                });
     }
 
     @PostMapping("/register")

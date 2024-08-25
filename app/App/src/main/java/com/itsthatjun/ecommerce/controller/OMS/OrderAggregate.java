@@ -15,10 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @Api(tags = "Order controller", description = "Order controller")
@@ -54,9 +53,9 @@ public class OrderAggregate {
 
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
-    public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam, HttpServletRequest request) {
+    public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam, ServerRequest request) {
         int userId = getUserId();
-        String requestUrl = URLUtils.getBaseURl(request);
+        String requestUrl = URLUtils.getBaseUrl(request);
         return orderService.generateOrder(orderParam, requestUrl, userId);
     }
 

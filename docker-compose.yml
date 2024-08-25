@@ -318,7 +318,23 @@ services:
       rabbitmq:
         condition: service_healthy
 
-
+  admin:
+    build: admin
+    image: e-com/admin
+    container_name: e-com_admin
+    ports:
+      - 8082:8082
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
 
   gateway:
     build: gateway

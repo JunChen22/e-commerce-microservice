@@ -37,6 +37,9 @@ The .env file stores login infos for easier change. Gets read in during run time
 ```
 ![alt text](./document/ECom-microservice-docker.png)
 
+Non-blocking synchronous read operations, event driven asynchronous services for write operations.
+admin service can be both mvc or webflux model since it will experience low traffics. Kept it in webflux for uniformity.
+
 Hibernate is an ORM framework that provides a high-level, declarative way to define your data model in Java and have
 Hibernate generate the database schema for you, while MyBatis is a SQL mapper framework that provides a low-level,
 programmatic way to interact with a database using SQL statements. MyBatis Generator is a tool that generates Java
@@ -47,8 +50,6 @@ psudo non-blocking. Default is 10 threads, but I changed to 2 threads per servic
 for the blocking code avoids draining the available threads in the microservice(avoid affecting the non-blocking processing
 in the microservice).
 
-Tried separating mbg to another module but kept having problem with it. Either maven or IntelliJ error. Right now it's 
-kept together and will separate it later.
 
 API calls and documentations
 - get the whole landscape running then

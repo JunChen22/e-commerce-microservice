@@ -1,24 +1,16 @@
 package com.itsthatjun.ecommerce.security.handler;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.server.WebFilterExchange;
+import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
+import reactor.core.publisher.Mono;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-public class CustomAccessSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomAccessSuccessHandler implements ServerAuthenticationSuccessHandler {
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+    public Mono<Void> onAuthenticationSuccess(WebFilterExchange webFilterExchange, Authentication authentication) {
+        //AuthenticationSuccessHandler.super.onAuthenticationSuccess(, authentication);
 
-    }
-
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
+        return null;
     }
 }

@@ -1,17 +1,24 @@
 package com.itsthatjun.ecommerce.security.handler;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 @Component
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+public class CustomAccessDeniedHandler implements ServerAccessDeniedHandler {
 
+    @Override
+    public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
+        exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+        return exchange.getResponse()
+                .writeWith(Mono.just(exchange.getResponse()
+                .bufferFactory().wrap("Access Denied".getBytes())));
+    }
+
+    /*
     @Override
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
@@ -22,4 +29,5 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.sendRedirect("/admin/login");
         response.getWriter().flush();
     }
+     */
 }

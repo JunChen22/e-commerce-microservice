@@ -15,10 +15,14 @@ import java.util.stream.Collectors;
 
 public class CustomUserDetail implements UserDetails {
 
+    /*
+    * @Getter annotation is needed to get adminName, will be replaced with
+    *  redis to store admin name,  "Admin: " + token : adminName
+     */
     @Getter
-    private Admin admin;
-    private List<Roles> rolesList;
-    private List<Permission> permissionList;
+    private final Admin admin;
+    private final List<Roles> rolesList;
+    private final List<Permission> permissionList;
 
     public CustomUserDetail(Admin admin, List<Roles> rolesList, List<Permission> permissionList) {
         this.admin = admin;

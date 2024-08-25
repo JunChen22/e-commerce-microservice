@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.Date;
@@ -27,7 +28,6 @@ import java.util.List;
 @Service
 public class AdminServiceImpl implements UserDetailsService, AdminService {
 
-    @Autowired
     private final AdminMapper adminMapper;
 
     private final JwtTokenUtil jwtTokenUtil;
@@ -60,18 +60,19 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
     }
 
     @Override
-    public String login(String username, String password) {
+    public Mono<String> login(String username, String password) {
         String token = "";
         try{
             CustomUserDetail userDetails = loadUserByUsername(username);
             // decode password to compare
+            // TODO: might change it to return wrong pass or wrong username
             if (!passwordEncoder().matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("incorrect password");
             }
 
             // Authorities shouldn't be giving during validation
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, Collections.emptyList());   // provide empty list and will user userDetail's getAuthorities
+                    userDetails, null, Collections.emptyList());   // provide empty list and will use userDetail's getAuthorities
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             token = jwtTokenUtil.generateToken(userDetails);
@@ -79,7 +80,7 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
             // TODO: add a login error exception
             System.out.println("login error");
         }
-        return token;
+        return Mono.just(token);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class AdminServiceImpl implements UserDetailsService, AdminService {
         example.createCriteria().andUsernameEqualTo(username);
         List<Admin> AdminList = adminMapper.selectByExample(example);
 
-        if (AdminList != null && !AdminList.isEmpty()) {
+        if (!AdminList.isEmpty()) {
             return AdminList.get(0);
         }
         return null;
