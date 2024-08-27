@@ -15,7 +15,10 @@
         <module>admin</module>
         <module>gateway</module>
         <module>eureka-server</module>
+        <module>auth-server</module>
         <module>search</module>
+        <module>app/App</module>
+        <module>app/UMS</module>
         <module>app/CMS</module>
         <module>app/OMS</module>
         <module>app/PMS</module>

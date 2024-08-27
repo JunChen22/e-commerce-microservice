@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 public interface CouponService {
 
     @ApiOperation("Check coupon and return discount amount")
-    public Mono<Double> checkCoupon(String couponCode, int userId);
+    Mono<Double> checkCoupon(String couponCode, int userId);
 }

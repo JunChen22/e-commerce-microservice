@@ -1,11 +1,11 @@
 package com.itsthatjun.ecommerce.security.jwt;
 
-import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
+import com.itsthatjun.ecommerce.security.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -22,35 +22,35 @@ public class JwtAuthenticationWebFilter implements WebFilter {
     private String tokenPrefix;
 
     private final Logger log = LoggerFactory.getLogger(JwtAuthenticationWebFilter.class);
-
-    private final AdminServiceImpl adminService;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public JwtAuthenticationWebFilter(AdminServiceImpl adminService, JwtTokenUtil jwtTokenUtil) {
-        this.adminService = adminService;
+    public JwtAuthenticationWebFilter(JwtTokenUtil jwtTokenUtil) {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String authHeader = exchange.getRequest().getHeaders().getFirst(header);
-
         if (authHeader != null && authHeader.startsWith(tokenPrefix)) {
             String jwt = getJWTFromHeader(authHeader);
-            String username = jwtTokenUtil.getUsernameFromToken(jwt);
-            log.info("JWT: {}, Username: {}", jwt, username);
-            return Mono.justOrEmpty(adminService.loadUserByUsername(username))
-                    .filter(userDetails -> jwtTokenUtil.validateToken(jwt, userDetails))
-                    .flatMap(userDetails -> {
-                        log.info("JWT validated for user: {}", userDetails.getUsername());
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
-                        return chain.filter(exchange)
-                                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+            String username = jwtTokenUtil.getUserNameFromToken(jwt);
+            int userId = jwtTokenUtil.getUserIdFromToken(jwt);
+
+            return Mono.justOrEmpty(jwtTokenUtil.validateToken(jwt))
+                    .flatMap(isValid -> {
+                        if (isValid) {
+                            UserContext userContext = new UserContext(username, userId);
+                            Authentication authentication = new JwtAuthenticationToken(userContext, null, jwt);
+                            // Set the security context
+                            return chain.filter(exchange)
+                                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+                        } else {
+                            log.info("Invalid JWT");
+                            return Mono.error(new Exception("Invalid JWT"));
+                        }
                     });
         }
-        log.info("Proceeding without authentication");
         return chain.filter(exchange);
     }
 

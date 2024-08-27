@@ -14,7 +14,7 @@ public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken 
     private final List<GrantedAuthority> authorities;
     private final String token;
 
-    public JwtAuthenticationToken(UserContext userContext,List<GrantedAuthority> authorities, String token) {
+    public JwtAuthenticationToken(UserContext userContext, List<GrantedAuthority> authorities, String token) {
         super(userContext, token, authorities);
         this.userContext = userContext;
         this.authorities = authorities;

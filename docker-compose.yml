@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: springecommerece
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
@@ -28,7 +28,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: contentdb
     ports:
-      - 5433:5432
+      - "5433:5432"
     volumes:
       - cms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
@@ -46,7 +46,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: orderdb
     ports:
-      - 5434:5432
+      - "5434:5432"
     volumes:
       - oms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
@@ -64,7 +64,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: productdb
     ports:
-      - 5435:5432
+      - "5435:5432"
     volumes:
       - pms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
@@ -82,7 +82,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: salesdb
     ports:
-      - 5436:5432
+      - "5436:5432"
     volumes:
       - sms-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
@@ -100,7 +100,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: userdb
     ports:
-      - 5437:5432
+      - "5437:5432"
     volumes:
       - ums-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
@@ -118,7 +118,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: authdb
     ports:
-      - 5438:5432
+      - "5438:5432"
     volumes:
       - auth-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
@@ -136,7 +136,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: emaildb
     ports:
-      - 5439:5432
+      - "5439:5432"
     volumes:
       - email-data:/var/lib/postgresql/data
       - ./document/data.sql:/docker-entrypoint-initdb.d/data.sql
@@ -150,7 +150,7 @@ services:
     container_name: e-com_mongodb
     restart: always
     ports:
-      - 27017:27017
+      - "27017:27017"
     command: mongod
     healthcheck:
       test: "mongo --eval 'db.stats().ok'"
@@ -174,8 +174,8 @@ services:
     container_name: e-com_rabbitmq
     restart: always
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - rabbit-data:/var/lib/rabbitmq
     healthcheck:
@@ -194,15 +194,15 @@ services:
     #volumes:
     #  - /home/jun/Desktop/data/ELK/es:/usr/share/elasticsearch/data # data
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "9200:9200"
+      - "9300:9300"
 
   logstash:
     image: logstash:7.12.0
     container_name: e-com_logstash
     ports:
-      - 5044:5044
-      - 9600:9600
+      - "5044:5044"
+      - "9600:9600"
     depends_on:
       - elasticsearch
 
@@ -212,7 +212,7 @@ services:
     environment:
       - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
     ports:
-      - 5601:5601
+      - "5601:5601"
     depends_on:
       - elasticsearch
 
@@ -234,6 +234,22 @@ services:
       - elasticsearch
       - pms-db
 
+  app:
+    build: app/App
+    image: e-com/app
+    container_name: e-com_app
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,eureka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/app.yml
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   cms:
     build: app/CMS
@@ -323,7 +339,7 @@ services:
     image: e-com/admin
     container_name: e-com_admin
     ports:
-      - 8082:8082
+      - "8082:8082"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
@@ -363,6 +379,25 @@ services:
     volumes:
       - $PWD/config-repo:/config-repo
 
+  auth-server:
+    build: auth-server
+    image: e-com/auth-server
+    container_name: e-com_auth-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,eureka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://auth-server/actuator/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 60
+    depends_on:
+      auth-db:
+        condition: service_healthy
 
   notification:
     build: notification

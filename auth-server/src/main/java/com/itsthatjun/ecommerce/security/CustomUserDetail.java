@@ -11,7 +11,7 @@ import java.util.Collection;
 public class CustomUserDetail implements UserDetails {
 
     @Getter
-    private Member member;
+    private final Member member;
     // TODO: add authorities
     public CustomUserDetail(Member member) {
         this.member = member;

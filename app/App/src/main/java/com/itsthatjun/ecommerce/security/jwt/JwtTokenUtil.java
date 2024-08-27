@@ -81,7 +81,7 @@ public class JwtTokenUtil {
         } catch (Exception e) {
             userId = null;
         }
-        return (userId != null) ? userId.intValue() : 0;
+        return (userId != null) ? userId : 0;
     }
 
     private Claims getClaimsFromToken(String token) {

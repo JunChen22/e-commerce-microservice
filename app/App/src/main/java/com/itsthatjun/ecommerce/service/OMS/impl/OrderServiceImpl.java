@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Mono<String> getPaymentLink(String orderSn, int userId) {
         String url = OMS_SERVICE_URL + "/payment/getPaymentLink/" + orderSn;
-        LOG.debug("Will call the list API on URL: {}", url);
+        LOG.debug("Will call the payment API on URL: {}", url);
 
         return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToMono(String.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());

@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 public class CustomAccessDeniedHandler implements ServerAccessDeniedHandler {
 
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
+    public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException e) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.FORBIDDEN);
 
@@ -24,7 +24,7 @@ public class CustomAccessDeniedHandler implements ServerAccessDeniedHandler {
                 "You don't have required role to perform this action".getBytes(StandardCharsets.UTF_8)
         ))).then(Mono.fromRunnable(() -> {
             try {
-                response.getHeaders().setLocation(new URI("http://localhost:8080/login"));
+                response.getHeaders().setLocation(new URI("http://app/"));
             } catch (URISyntaxException ex) {
                 ex.printStackTrace();
             }

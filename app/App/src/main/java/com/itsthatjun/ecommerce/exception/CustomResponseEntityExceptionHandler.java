@@ -1,39 +1,45 @@
 package com.itsthatjun.ecommerce.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import reactor.core.publisher.Mono;
 
 @ControllerAdvice
-public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomResponseEntityExceptionHandler {
+
     /*
+    TODO: Implement exception handling
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleArticleIdException(ArticleException ex) {
-        return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public Mono<ResponseEntity<String>> handleArticleIdException(ArticleException ex) {
+        return Mono.just(new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleOrderException(OrderException ex) {
-        return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public Mono<ResponseEntity<String>> handleOrderException(OrderException ex) {
+        return Mono.just(new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleOrderReturnApplyException(OrderReturnApplyException ex) {
-        return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public Mono<ResponseEntity<String>> handleOrderReturnApplyException(OrderReturnApplyException ex) {
+        return Mono.just(new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleProductException(ProductException ex) {
-        return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public Mono<ResponseEntity<String>> handleProductException(ProductException ex) {
+        return Mono.just(new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST));
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleMemberException(MembersException ex) {
-        return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public Mono<ResponseEntity<String>> handleMemberException(MembersException ex) {
+        return Mono.just(new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST));
     }
 
      */

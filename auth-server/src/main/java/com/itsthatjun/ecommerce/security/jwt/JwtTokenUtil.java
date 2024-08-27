@@ -3,7 +3,6 @@ package com.itsthatjun.ecommerce.security.jwt;
 import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -37,25 +36,6 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        try {
-            String tokenUsername = getUsernameFromToken(token);
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-            return userDetails.getUsername().equals(tokenUsername) && !isTokenExpired(token);
-        } catch (SignatureException ex) {
-            System.out.println("Invalid JWT Signature");
-        } catch (MalformedJwtException ex) {
-            System.out.println("Invalid JWT Token");
-        } catch (ExpiredJwtException ex) {
-            System.out.println("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            System.out.println("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            System.out.println("JWT claims string is empty");
-        }
-        return false;
-    }
-
     private boolean isTokenExpired(String token) {
         Claims claims= getClaimsFromToken(token);
         Date date = claims.getExpiration();
@@ -75,28 +55,6 @@ public class JwtTokenUtil {
             username = null;
         }
         return username;
-    }
-
-    public String getNameFromToken(String token) {
-        String name;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            name =  (String) claims.get("name");
-        } catch (Exception e) {
-            name = null;
-        }
-        return name;
-    }
-
-    public int getUserIdFromToken(String token) {
-        Integer userId;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            userId = (Integer) claims.get("userId");
-        } catch (Exception e) {
-            userId = null;
-        }
-        return (userId != null) ? userId.intValue() : 0;
     }
 
     private Claims getClaimsFromToken(String token) {

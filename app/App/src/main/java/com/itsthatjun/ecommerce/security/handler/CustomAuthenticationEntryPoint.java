@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.security.handler;
 
-import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 @Component
@@ -21,10 +22,14 @@ public class CustomAuthenticationEntryPoint implements ServerAuthenticationEntry
         response.getHeaders().setContentType(MediaType.TEXT_PLAIN);
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
 
-        // Write the response body with the error message
-        byte[] bytes = "Unauthorized, you need to login first in order to perform this action.".getBytes(StandardCharsets.UTF_8);
-        DataBuffer buffer = response.bufferFactory().wrap(bytes);
-
-        return response.writeWith(Mono.just(buffer));
+        return response.writeWith(Mono.just(response.bufferFactory().wrap(
+                "Unauthorized, you need to login first in order to perform this action.".getBytes(StandardCharsets.UTF_8)
+        ))).then(Mono.fromRunnable(() -> {
+            try {
+                response.getHeaders().setLocation(new URI("http://auth-server/login"));
+            } catch (URISyntaxException ex) {
+                ex.printStackTrace();
+            }
+        }));
     }
 }

@@ -3,7 +3,6 @@ package com.itsthatjun.ecommerce.config;
 import com.itsthatjun.ecommerce.dto.event.Incoming.UmsUserEvent;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.service.eventupdate.UmsEventUpdateService;
-import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

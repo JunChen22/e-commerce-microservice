@@ -24,5 +24,5 @@ public interface EsProductService {
 
     // EsProductRelatedInfo searchRelatedInfo(String keyword);
 
-    public List<EsProduct> listImportedProduct();
+    List<EsProduct> listImportedProduct();
 }

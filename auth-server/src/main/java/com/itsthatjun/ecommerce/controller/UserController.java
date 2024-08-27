@@ -1,8 +1,9 @@
 package com.itsthatjun.ecommerce.controller;
 
-
 import com.itsthatjun.ecommerce.dto.LoginRequest;
 import com.itsthatjun.ecommerce.dto.LoginResponse;
+import com.itsthatjun.ecommerce.security.CustomReactiveAuthenticationManager;
+import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
 import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;
 import io.swagger.annotations.Api;
@@ -12,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
 @Api(tags = "User related", description = "retrieve user information")
@@ -20,31 +23,23 @@ public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
-    private final MemberServiceImpl memberService;
-
-    private final JwtTokenUtil tokenUtil;
+    private final CustomReactiveAuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserController(MemberServiceImpl memberService, JwtTokenUtil tokenUtil) {
-        this.memberService = memberService;
-        this.tokenUtil = tokenUtil;
-    }
-
-    @GetMapping("/login")
-    @ApiOperation("Login landing page")
-    public String login() {
-        return "at auth login, showLoginForm:true";
+    public UserController(CustomReactiveAuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @PostMapping("/login")
     @ApiOperation("Login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-
-        String token = memberService.login(loginRequest.getUsername(), loginRequest.getPassword());
-        if (token.isEmpty()) {
-            return new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED);
-        }
-
-        return ResponseEntity.ok(new LoginResponse(true, token));
+    public Mono<ResponseEntity<?>> login(@RequestBody LoginRequest loginRequest) {
+        return authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            ).flatMap(authentication -> {
+                String token = jwtTokenUtil.generateToken((CustomUserDetail) authentication.getPrincipal());
+                return Mono.just(ResponseEntity.ok(new LoginResponse(true, token)));
+            });
     }
 }
