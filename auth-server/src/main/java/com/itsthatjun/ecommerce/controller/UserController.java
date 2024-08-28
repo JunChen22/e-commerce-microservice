@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +23,14 @@ public class UserController {
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
     private final CustomReactiveAuthenticationManager authenticationManager;
+    private final MemberServiceImpl memberService;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserController(CustomReactiveAuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
+    public UserController(CustomReactiveAuthenticationManager authenticationManager, MemberServiceImpl memberService,
+                          JwtTokenUtil jwtTokenUtil) {
         this.authenticationManager = authenticationManager;
+        this.memberService = memberService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -38,7 +40,9 @@ public class UserController {
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             ).flatMap(authentication -> {
-                String token = jwtTokenUtil.generateToken((CustomUserDetail) authentication.getPrincipal());
+                CustomUserDetail user = (CustomUserDetail) authentication.getPrincipal();
+                String token = jwtTokenUtil.generateToken(user);
+                memberService.memberLoginLog(user.getUserId());
                 return Mono.just(ResponseEntity.ok(new LoginResponse(true, token)));
             });
     }

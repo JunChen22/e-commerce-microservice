@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
@@ -36,5 +37,10 @@ public class EComAdminApplication {
     public Scheduler publishEventScheduler() {
         LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
         return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

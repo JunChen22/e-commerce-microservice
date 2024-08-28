@@ -15,9 +15,6 @@
 						{
 							"name": "Article - Get all",
 							"request": {
-								"auth": {
-									"type": "noauth"
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -37,20 +34,17 @@
 						{
 							"name": "Article - Get one",
 							"request": {
-								"auth": {
-									"type": "noauth"
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/article/4",
+									"raw": "localhost:8080/article/1",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
 										"article",
-										"4"
+										"1"
 									]
 								}
 							},
@@ -1081,14 +1075,7 @@
 				}
 			],
 			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjEsIm5hbWUiOiJKdW4iLCJpc3MiOiJhdXRoLXNlcnZlciIsImV4cCI6MTcwMTIxMjc5MiwiaWF0IjoxNzAxMjAzNzkyMDE5LCJhdXRob3JpdGllcyI6bnVsbCwidXNlcm5hbWUiOiJ1c2VyMSJ9.5jlbMLEBvgocQqHDpApiTgQcDlKiIXTupJZkdtkUrODtYlezHaVQRaSWE37u_he6wjv1YonwFxqUGCd47IXsbA",
-						"type": "string"
-					}
-				]
+				"type": "noauth"
 			},
 			"event": [
 				{
@@ -1148,6 +1135,16 @@
 						{
 							"name": "Article - Get all",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3RvcmRlciIsImNyZWF0ZWQiOjE3MjQ2MTMxMjYxMTYsImFkbWluSWQiOjIsImV4cCI6MTcyNDYyMjEyNn0.UWedYj6q-FO0BQ3rkWUW8Wrg4tpCLjOzCD8fzyilXz7kfH6UqPxuu_tY6XU2RLN55lU2EHf2s2qWEiFrAWbOIQ",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1980,14 +1977,14 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "localhost:8082/product/2",
+											"raw": "localhost:8082/product/30",
 											"host": [
 												"localhost"
 											],
 											"port": "8082",
 											"path": [
 												"product",
-												"2"
+												"30"
 											]
 										}
 									},
@@ -2889,6 +2886,9 @@
 				{
 					"name": "Admin - login main admin",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -3148,14 +3148,7 @@
 				}
 			],
 			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJhZG1pbk5hbWUiOiJqdW4iLCJzdWIiOiJhZG1pbmFjY3QiLCJjcmVhdGVkIjoxNzAyMTgwOTM5NTkzLCJhZG1pbklkIjoxLCJleHAiOjE3MDIxODk5Mzl9.S7ZBMCib4wZCTtxia5bKhpD9qKo2Ly5VEeYcX4GG6ELeHkfy5qsgMpuO6UuB40BfQMs4WkfVLqvVcjMEsgMsqA",
-						"type": "string"
-					}
-				]
+				"type": "noauth"
 			},
 			"event": [
 				{
@@ -3319,6 +3312,31 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},

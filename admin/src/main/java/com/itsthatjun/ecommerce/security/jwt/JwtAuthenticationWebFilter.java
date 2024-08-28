@@ -40,16 +40,20 @@ public class JwtAuthenticationWebFilter implements WebFilter {
             String jwt = getJWTFromHeader(authHeader);
             String username = jwtTokenUtil.getUsernameFromToken(jwt);
             log.info("JWT: {}, Username: {}", jwt, username);
-            return Mono.justOrEmpty(adminService.loadUserByUsername(username))
+
+            return adminService.findByUsername(username)
                     .filter(userDetails -> jwtTokenUtil.validateToken(jwt, userDetails))
-                    .flatMap(userDetails -> {
+                    .map(userDetails -> {
                         log.info("JWT validated for user: {}", userDetails.getUsername());
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
-                        return chain.filter(exchange)
-                                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
-                    });
+                        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    })
+                    .flatMap(authentication ->
+                            chain.filter(exchange)
+                                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication))
+                    )
+                    .switchIfEmpty(chain.filter(exchange));
         }
+
         log.info("Proceeding without authentication");
         return chain.filter(exchange);
     }

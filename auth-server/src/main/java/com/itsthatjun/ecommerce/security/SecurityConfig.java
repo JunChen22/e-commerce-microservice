@@ -20,14 +20,14 @@ public class SecurityConfig {
 
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final MemberServiceImpl userDetailsService;
+    private final MemberServiceImpl memberService;
 
     @Autowired
     public SecurityConfig(CustomAuthenticationEntryPoint authenticationEntryPoint, CustomAccessDeniedHandler accessDeniedHandler,
                           MemberServiceImpl userDetailsService) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
-        this.userDetailsService = userDetailsService;
+        this.memberService = userDetailsService;
     }
 
     @Bean
@@ -39,8 +39,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges ->
                         exchanges
                                 .pathMatchers(HttpMethod.POST, "/login").permitAll()
-                                .pathMatchers("/actuator/health", "/actuator/info").permitAll()
-                                //.pathMatchers("/actuator/**").hasRole("ADMIN")
+                                .pathMatchers("/actuator/**").permitAll()
                                 //.pathMatchers("/**").permitAll() // for testing purposes. All endpoints are open. Remove when needed.
                                 .anyExchange().authenticated()
                 ).exceptionHandling(exceptionHandlingSpec -> exceptionHandlingSpec
@@ -51,7 +50,7 @@ public class SecurityConfig {
 
     @Bean
     public ReactiveAuthenticationManager authenticationManager() {
-        return new CustomReactiveAuthenticationManager(userDetailsService, passwordEncoder());
+        return new CustomReactiveAuthenticationManager(memberService, passwordEncoder());
     }
 
     @Bean

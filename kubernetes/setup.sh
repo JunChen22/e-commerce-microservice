@@ -20,7 +20,7 @@ eval $(minikube docker-env)
 
 docker-compose build cms pms oms ums sms app auth-server search notification
 
-docker pull postgres:9.6.10
+docker pull postgres:16-bullseye
 docker pull mongo:5.0.0
 docker pull redis:7.0.14
 docker pull rabbitmq:3.8.11-management

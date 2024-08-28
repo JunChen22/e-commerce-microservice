@@ -11,7 +11,10 @@ import java.util.List;
 @Data
 public class AdminDetail {
     private Admin admin;
+
     private List<Roles> roles;
+
     private List<Permission> permissions;
+
     private List<AdminLoginLog> loginLogs;
 }

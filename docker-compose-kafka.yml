@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:9.6.10
+    image: postgres:16-bullseye
     container_name: e-com_postgres
     restart: always
     environment:
@@ -20,7 +20,7 @@ services:
       retries: 5
 
   cms-db:
-    image: postgres:9.6.10
+    image: postgres:16-bullseye
     container_name: e-com_cms-db
     restart: always
     environment:
@@ -38,7 +38,7 @@ services:
       retries: 5
 
   oms-db:
-    image: postgres:9.6.10
+    image: postgres:16-bullseye
     container_name: e-com_oms-db
     restart: always
     environment:
@@ -56,7 +56,7 @@ services:
       retries: 5
 
   pms-db:
-    image: postgres:9.6.10
+    image: postgres:16-bullseye
     container_name: e-com_pms-db
     restart: always
     environment:
@@ -74,7 +74,7 @@ services:
       retries: 5
 
   sms-db:
-    image: postgres:9.6.10
+    image: postgres:16-bullseye
     container_name: e-com_sms-db
     restart: always
     environment:
@@ -92,7 +92,7 @@ services:
       retries: 5
 
   ums-db:
-    image: postgres:9.6.10
+    image: postgres:16-bullseye
     container_name: e-com_ums-db
     restart: always
     environment:
@@ -110,7 +110,7 @@ services:
       retries: 5
 
   auth-db:
-    image: postgres:9.6.10
+    image: postgres:16-bullseye
     container_name: e-com_auth-db
     restart: always
     environment:
@@ -128,7 +128,7 @@ services:
       retries: 5
 
   email-db:
-    image: postgres:9.6.10
+    image: postgres:16-bullseye
     container_name: e-com_email-db
     restart: always
     environment:

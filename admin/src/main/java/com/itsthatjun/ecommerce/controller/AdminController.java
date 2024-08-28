@@ -1,12 +1,10 @@
 package com.itsthatjun.ecommerce.controller;
 
-import com.itsthatjun.ecommerce.dao.AdminDao;
-import com.itsthatjun.ecommerce.mbg.model.AdminLoginLog;
-import com.itsthatjun.ecommerce.mbg.model.Permission;
-import com.itsthatjun.ecommerce.mbg.model.Roles;
+import com.itsthatjun.ecommerce.dao.domainmodel.AdminDetail;
+import com.itsthatjun.ecommerce.security.CustomReactiveAuthenticationManager;
+import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
 import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
-import com.itsthatjun.ecommerce.mbg.model.Admin;
 import com.itsthatjun.ecommerce.security.LoginRequest;
 import com.itsthatjun.ecommerce.security.LoginResponse;
 import io.swagger.annotations.Api;
@@ -15,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -27,69 +25,42 @@ public class AdminController {
 
     private final AdminServiceImpl adminService;
 
-    private final AdminDao adminDao;
+    private final CustomReactiveAuthenticationManager authenticationManager;
 
-    private final JwtTokenUtil tokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     // TODO: add redis to store admin name,  "Admin: " + token : adminName
 
     @Autowired
-    public AdminController(AdminServiceImpl adminService, AdminDao adminDao, JwtTokenUtil tokenUtil) {
+    public AdminController(AdminServiceImpl adminService, CustomReactiveAuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         this.adminService = adminService;
-        this.adminDao = adminDao;
-        this.tokenUtil = tokenUtil;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @PostMapping("/login")
     @ApiOperation("")
-    public Mono<ResponseEntity<?>> login(@RequestBody LoginRequest loginRequest) {
-        System.out.println("at admin controller");
-        System.out.println(loginRequest.getUsername() + " : " + loginRequest.getPassword());
-
+    public Mono<ResponseEntity<LoginResponse>> login(@RequestBody LoginRequest loginRequest) {
         // two approach, token = stateless for microservices,
         // stateful approach is with session for monolith application.
-        return adminService.login(loginRequest.getUsername(), loginRequest.getPassword())
-                .flatMap(token -> {
-                    if (token.isEmpty()) {
-                        return Mono.just(new ResponseEntity<>(new LoginResponse(false, token), HttpStatus.UNAUTHORIZED));
-                    }
-                    String adminName = tokenUtil.getAdminNameFromToken(token);
-                    System.out.println("at admin controller: " + adminName);
-                    return Mono.just(ResponseEntity.ok(new LoginResponse(true, token)));
-                });
+        return authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            ).map( auth -> {
+                CustomUserDetail user = (CustomUserDetail) auth.getPrincipal();
+                String token = jwtTokenUtil.generateToken(user);
+                return ResponseEntity.ok(new LoginResponse(true, token));
+            }).onErrorResume(BadCredentialsException.class, e ->
+                Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build())
+            );
     }
 
-    @PostMapping("/register")
+    //@PreAuthorize("hasAuthority('user:read')")
     @PreAuthorize("hasRole('ROLE_admin-root')")
-    @ApiOperation("Register a admin account, only main admin can create another admin and assign role and permission")
-    public ResponseEntity<?> register(@RequestBody Admin admin) {
-
-        // TODO: register a admin
-        //adminService.register(admin);
-        return null;
-    }
-
-    @PreAuthorize("hasRole('ROLE_admin-user')")
     @GetMapping("/roles/{id}")
     @ApiOperation("")
-    public List<Roles> getRole(@PathVariable int id) {
-        List<Roles> roles = adminDao.getRolesList(id);
-        return roles;
+    public Mono<AdminDetail> getRole(@PathVariable int id) {
+        return adminService.getAdminDetail(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_admin-user')")
-    @GetMapping("/permission/{id}")
-    @ApiOperation("")
-    public List<Permission> getPermission(@PathVariable int id) {
-        List<Permission> permissions = adminDao.getPermissionList(id);
-        return permissions;
-    }
-
-    @GetMapping("/logs/{id}")
-    @PreAuthorize("hasAuthority('user:read')")
-    @ApiOperation("")
-    public List<AdminLoginLog> getLoginLogs(@PathVariable int id) {
-        List<AdminLoginLog> logs = adminDao.getLoginLog(id);
-        return logs;
-    }
+    // TODO:update other admins role or permission or disable account
 }

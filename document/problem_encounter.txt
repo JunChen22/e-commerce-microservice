@@ -414,3 +414,18 @@ A: it's for batch processing. To use Spring Batch those tables are needed. but I
      for commercial email.
     Spring batch will start on its own if job is in the same class as @EnableBatchProcessing annotation.
 
+
+
+Q: when changing the database version from like 9.x.x to 16.x.x, there's error with creating the container.
+
+A: need to remove the volume completely or it will trying to use a different version of volume.
+    $ docker volume ls
+    $ docker volume rm VOLUME_NAME
+
+Q: getting errors with Postman and some time the API return code 500.
+A: the current Postman is using Authorization from parent. I set it to this so it's easier to use
+   after the token is obtained, I just need to update the parent Authorization and it will update all the child.
+   The authorization I used are:
+        - Inherit Auth from parent
+        - No Auth
+        - Bearer Token

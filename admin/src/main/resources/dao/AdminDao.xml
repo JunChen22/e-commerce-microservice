@@ -56,7 +56,7 @@
             roles.status role_status,
             rolePermission.name  permission_name,
             rolePermission.value permission_value,
-            rolePermission.status persmission_status
+            rolePermission.status permission_status
         FROM admin
         LEFT JOIN admin_role_relation arr ON admin.id = arr.admin_id
         LEFT JOIN roles ON arr.role_id = roles.id
