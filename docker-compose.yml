@@ -334,6 +334,28 @@ services:
       rabbitmq:
         condition: service_healthy
 
+  ums:
+    build: app/UMS
+    image: e-com/ums
+    container_name: e-com_ums
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,eureka
+      - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/ums.yml
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    volumes:
+      - $PWD/config-repo:/config-repo
+    depends_on:
+      ums-db:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+
   admin:
     build: admin
     image: e-com/admin

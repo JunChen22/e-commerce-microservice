@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.config;
+package com.itsthatjun.ecommerce.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +10,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2
 @Configuration
+@EnableSwagger2
 public class SwaggerConfig {
 
     @Bean
@@ -19,7 +19,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.spring.ecommerce.demo.springecommerce.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.itsthatjun.ecommerce.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
