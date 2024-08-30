@@ -3,7 +3,6 @@ package jun.chen.springcloud.gateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.health.CompositeReactiveHealthContributor;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.ReactiveHealthContributor;
@@ -24,8 +23,8 @@ public class HealthCheckConfiguration {
     private final WebClient webClient;
 
     @Autowired
-    public HealthCheckConfiguration(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
+    public HealthCheckConfiguration(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     @Bean

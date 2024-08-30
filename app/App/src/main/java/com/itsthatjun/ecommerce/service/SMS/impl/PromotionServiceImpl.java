@@ -24,8 +24,8 @@ public class PromotionServiceImpl implements PromotionService {
     private final String SMS_SERVICE_URL = "http://sms/sale";
 
     @Autowired
-    public PromotionServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
-        this.webClient = webClient.build();
+    public PromotionServiceImpl(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     @Override

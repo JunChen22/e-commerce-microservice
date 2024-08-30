@@ -34,9 +34,9 @@ public class CartServiceImpl implements CartService {
     private final String OMS_SERVICE_URL = "http://oms/cart";
 
     @Autowired
-    public CartServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient, StreamBridge streamBridge,
+    public CartServiceImpl(WebClient webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
+        this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }

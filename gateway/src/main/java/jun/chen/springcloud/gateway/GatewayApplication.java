@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class GatewayApplication {
 
 	@Bean
-	@LoadBalanced
+	@LoadBalanced // turn all the webclient to load balanced when sending, if there's more than one.
 	public WebClient.Builder loadBalancedWebClientBuilder() {
 		return WebClient.builder();
 	}

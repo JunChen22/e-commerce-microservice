@@ -34,9 +34,9 @@ public class ReviewServiceImpl implements ReviewService {
     private final String PMS_SERVICE_URL = "http://pms/review";
 
     @Autowired
-    public ReviewServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder  webClient, StreamBridge streamBridge,
+    public ReviewServiceImpl(WebClient webClient, StreamBridge streamBridge,
                              @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
+        this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }

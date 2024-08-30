@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.scheduler.Scheduler;
@@ -23,13 +24,18 @@ public class AppApplication {
 
     private final Integer taskQueueSize;
 
+    // Netflix Ribbon Load Balancer replaced with Spring Cloud Load Balancer
+    private ReactorLoadBalancerExchangeFilterFunction lbFunction;
+
     @Autowired
     public AppApplication(
             @Value("${app.threadPoolSize:2}") Integer threadPoolSize,
-            @Value("${app.taskQueueSize:100}") Integer taskQueueSize
+            @Value("${app.taskQueueSize:100}") Integer taskQueueSize,
+            ReactorLoadBalancerExchangeFilterFunction lbFunction
     ) {
         this.threadPoolSize = threadPoolSize;
         this.taskQueueSize = taskQueueSize;
+        this.lbFunction = lbFunction;
     }
 
     @Bean
@@ -38,10 +44,9 @@ public class AppApplication {
         return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
     }
 
-    @Bean                           // Ribbon
-    @LoadBalanced                   // turn all the webclient to load balanced when sending, if there's more than one.
-    public WebClient.Builder loadBalancedWebClientBuilder() {
-        return WebClient.builder();
+    @Bean   // turn all the webclient to load balanced when sending, if there's more than one.
+    public WebClient webClient(WebClient.Builder builder) {
+        return builder.filter(lbFunction).build();
     }
 
     public static void main(String[] args) {

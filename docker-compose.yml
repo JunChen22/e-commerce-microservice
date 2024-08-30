@@ -419,6 +419,8 @@ services:
     depends_on:
       auth-db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   notification:
     build: notification

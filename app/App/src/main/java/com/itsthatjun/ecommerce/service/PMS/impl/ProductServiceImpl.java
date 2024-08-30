@@ -24,8 +24,8 @@ public class ProductServiceImpl implements ProductService {
     private final String PMS_SERVICE_URL = "http://pms/product";
 
     @Autowired
-    public ProductServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
-        this.webClient = webClient.build();
+    public ProductServiceImpl(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     @Override

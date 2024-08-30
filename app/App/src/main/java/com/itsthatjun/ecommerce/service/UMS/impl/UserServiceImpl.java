@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService {
     private final String UMS_SERVICE_URL = "http://ums/user";
 
     @Autowired
-    public UserServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient, StreamBridge streamBridge,
+    public UserServiceImpl(WebClient webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
+        this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }

@@ -32,9 +32,9 @@ public class OrderReturnServiceImpl implements OrderReturnService {
 
     private final String OMS_SERVICE_URL = "http://oms/order/return";
 
-    public OrderReturnServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder  webClient, StreamBridge streamBridge,
+    public OrderReturnServiceImpl(WebClient webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
+        this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }

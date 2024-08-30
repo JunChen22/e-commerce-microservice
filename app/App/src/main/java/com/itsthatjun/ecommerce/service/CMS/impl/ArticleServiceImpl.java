@@ -32,8 +32,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final String CMS_SERVICE_URL = "http://cms/article";
 
     @Autowired
-    public ArticleServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
-        this.webClient = webClient.build();
+    public ArticleServiceImpl(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     @Override

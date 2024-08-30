@@ -21,8 +21,8 @@ public class CouponServiceImpl implements CouponService {
     private final String SMS_SERVICE_URL = "http://sms/coupon";
 
     @Autowired
-    public CouponServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
-        this.webClient = webClient.build();
+    public CouponServiceImpl(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     @Override

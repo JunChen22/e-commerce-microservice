@@ -24,8 +24,8 @@ public class BrandServiceImpl implements BrandService {
     private final String PMS_SERVICE_URL = "http://pms/brand";
 
     @Autowired
-    public BrandServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder webClient) {
-        this.webClient = webClient.build();
+    public BrandServiceImpl(WebClient webClient) {
+        this.webClient = webClient;
     }
 
     @Override

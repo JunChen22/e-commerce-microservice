@@ -40,9 +40,9 @@ public class OrderServiceImpl implements OrderService {
     private final String OMS_SERVICE_URL = "http://oms/order";
 
     @Autowired
-    public OrderServiceImpl(@Qualifier("loadBalancedWebClientBuilder") WebClient.Builder  webClient, StreamBridge streamBridge,
+    public OrderServiceImpl(WebClient webClient, StreamBridge streamBridge,
                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.webClient = webClient.build();
+        this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }
