@@ -31,8 +31,7 @@ public class UserAggregate {
     @GetMapping("/getInfo")
     @ApiOperation(value = "")
     public Mono<MemberDetail> getInfo() {
-        int userId = getUserId();
-        return userService.getInfo(userId);
+        return userService.getInfo();
     }
 
     @PostMapping("/register")
@@ -44,35 +43,24 @@ public class UserAggregate {
     @PostMapping("/updatePassword")
     @ApiOperation(value = "")
     public Mono<String> updatePassword(@RequestBody String newPassword) {
-        int userId = getUserId();
-        return userService.updatePassword(newPassword, userId);
+        return userService.updatePassword(newPassword);
     }
 
     @PostMapping("/updateInfo")
     @ApiOperation(value = "password, name, icon")
     public Mono<MemberDetail> updateInfo(@RequestBody MemberDetail memberDetail) {
-        int userId = getUserId();
-        return userService.updateInfo(memberDetail, userId);
+        return userService.updateInfo(memberDetail);
     }
 
     @PostMapping("/updateAddress")
     @ApiOperation(value = "")
     public Mono<AddressDTO> updateAddress(@RequestBody AddressDTO newAddress) {
-        int userId = getUserId();
-        return userService.updateAddress(newAddress, userId);
+        return userService.updateAddress(newAddress);
     }
 
     @PostMapping("/deleteAccount")
     @ApiOperation(value = "")
     public Mono<Void> deleteAccount() {
-        int userId = getUserId();
-        return userService.deleteAccount(userId);
-    }
-
-    private int getUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-        return userId;
+        return userService.deleteAccount();
     }
 }

@@ -24,8 +24,8 @@ logging:
   level:
     #root: ERROR
     root: INFO
-    #org.springframework.security: DEBUG
-    #org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
     com.itsthatjun.ecommerce: DEBUG
 
 server.shutdown: graceful

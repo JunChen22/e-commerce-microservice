@@ -51,7 +51,7 @@ public class SecurityConfig {
                                         "/v2/api**",
                                         "/webjars/**").permitAll()
                                 .pathMatchers("/").permitAll()
-                                .pathMatchers("/**").permitAll() // for testing purposes. All endpoints are open. Remove when needed.
+                                //.pathMatchers("/**").permitAll() // for testing purposes. All endpoints are open. Remove when needed.
                                 .anyExchange().authenticated()
                 ).exceptionHandling(exceptionHandlingSpec -> exceptionHandlingSpec
                         .authenticationEntryPoint(authenticationEntryPoint)

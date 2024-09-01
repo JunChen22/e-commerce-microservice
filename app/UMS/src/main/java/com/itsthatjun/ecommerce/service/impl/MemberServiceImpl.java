@@ -10,6 +10,7 @@ import com.itsthatjun.ecommerce.dto.event.outgoing.UmsEmailEvent;
 import com.itsthatjun.ecommerce.dto.model.AddressDTO;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.security.SecurityUtil;
 import com.itsthatjun.ecommerce.service.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final DTOMapper dtoMapper;
 
+    private final SecurityUtil securityUtil;
+
     private final RedisServiceImpl redisService;
 
     //@Value("${redis.key.orderId}")
@@ -67,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberServiceImpl(MemberMapper memberMapper, MemberIconMapper iconMapper, MemberLoginLogMapper loginLogMapper,
                              MemberChangeLogMapper logMapper, AddressMapper addressMapper, StreamBridge streamBridge,
                              @Qualifier("jdbcScheduler") Scheduler jdbcScheduler, MemberDao memberDao, DTOMapper dtoMapper,
-                             RedisServiceImpl redisService) {
+                             RedisServiceImpl redisService, SecurityUtil securityUtil) {
         this.memberMapper = memberMapper;
         this.iconMapper = iconMapper;
         this.loginLogMapper = loginLogMapper;
@@ -78,6 +81,7 @@ public class MemberServiceImpl implements MemberService {
         this.memberDao = memberDao;
         this.dtoMapper = dtoMapper;
         this.redisService = redisService;
+        this.securityUtil = securityUtil;
     }
 
     @Override
@@ -137,11 +141,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Mono<MemberDetail> getInfo(int userId) {
-        return Mono.fromCallable(() -> {
-            MemberDetail memberDetail = memberDao.getUserDetail(userId);
-            return memberDetail;
-        }).subscribeOn(jdbcScheduler);
+    public Mono<MemberDetail> getInfo() {
+        return securityUtil.getUserId()
+                .flatMap(userId ->
+                        Mono.fromCallable(() -> {
+                            MemberDetail memberDetail = memberDao.getUserDetail(userId);
+                            return memberDetail;
+                        }).subscribeOn(jdbcScheduler)
+                );
     }
 
     @Override

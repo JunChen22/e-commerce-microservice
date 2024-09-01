@@ -4,7 +4,7 @@
 sudo sed -i "\~^$(minikube ip)\\s*springecom\.me\$~d" /etc/hosts
 
 # remove alias from ~/.bashrc
-sed -i '/alias kubectl="minikube kubectl --"/d' ~/.bashrc
+# sed -i '/alias kubectl="minikube kubectl --"/d' ~/.bashrc
 
 # unsets the environment variables that were set by the minikube docker-env command. eval $(minikube docker-env)
 eval $(minikube docker-env --unset)

@@ -1,6 +1,13 @@
 server:
   port: 8085
 
+jwt:
+  HEADER_STRING: Authorization
+  tokenPrefix: Bearer
+  secretKey: JunChen522
+  expirationTimeMinute: 150
+  issuer: auth-server
+
 spring:
   application:
     name: ums

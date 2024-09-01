@@ -429,3 +429,33 @@ A: the current Postman is using Authorization from parent. I set it to this so i
         - Inherit Auth from parent
         - No Auth
         - Bearer Token
+
+
+Q: getting error when trying to communicate from app to other service in kubernetes. all services are up and have their endpoints.
+    and their pods up and running.
+
+org.springframework.web.reactive.function.client.WebClientResponseException$ServiceUnavailable: 503 Service Unavailable from UNKNOWN
+        at org.springframework.web.reactive.function.client.WebClientResponseException.create(WebClientResponseException.java:245) ~[spring-webflux-5.3.31.jar!/:5.3.31]
+        Suppressed: reactor.core.publisher.FluxOnAssembly$OnAssemblyException:
+Error has been observed at the following site(s):
+        *__checkpoint ⇢ 503 from GET http://cms/article/all [DefaultWebClient]
+
+A: this is caused by the load balanced webclient in app 's main application. It will try to connect to eureka server to find
+   services then connect to the service. But in kubernetes, it's not needed. I need to create a profile for kubernetes and
+    remove the load balanced webclient.
+
+    private ReactorLoadBalancerExchangeFilterFunction lbFunction;
+
+    @Bean   // turn all the webclient to load balanced when sending, if there's more than one.
+    @Profile("eureka")
+    public WebClient loadBalancedWebClient(WebClient.Builder builder) {
+        return builder.filter(lbFunction).build();
+    }
+
+    @Bean   // it doesn't work with Kubernetes
+    public WebClient webClient(WebClient.Builder builder) {
+        return builder.build();
+    }
+
+    I'm using two profile so I can keep the eureka profile for docker and kubernetes profile or the default for kubernetes.
+

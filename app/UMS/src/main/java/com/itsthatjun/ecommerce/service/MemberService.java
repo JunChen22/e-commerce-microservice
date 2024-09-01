@@ -22,7 +22,7 @@ public interface MemberService {
     Mono<MemberDetail> register(MemberDetail memberDetail);
 
     @ApiOperation("")
-    Mono<MemberDetail> getInfo(int userId);
+    Mono<MemberDetail> getInfo();
 
     @ApiOperation("")
     Mono<Member> updatePassword(int userId, String newPassword);

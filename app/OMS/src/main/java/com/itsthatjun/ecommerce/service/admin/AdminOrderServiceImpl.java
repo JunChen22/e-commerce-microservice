@@ -157,14 +157,15 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     @Override
     public Mono<Orders> createOrder(Orders order, List<OrderItem> orderItemList, Address address, String reason, String operator) {
-        return Mono.fromCallable(() -> {
-            Orders newOrder = internalCreateOrder(order, orderItemList, address, reason, operator);
-            return newOrder;
-        }).subscribeOn(jdbcScheduler);
+        return generateOrderSn(order.getPayType(), order.getSourceType())
+                .flatMap(orderSn ->
+                        Mono.fromCallable(() ->
+                            internalCreateOrder(orderSn, order, orderItemList, address, reason, operator))
+                                .subscribeOn(jdbcScheduler)
+                );
     }
 
-    private Orders internalCreateOrder(Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator) {
-        String orderSn = generateOrderSn(newOrder);
+    private Orders internalCreateOrder(String orderSn, Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator) {
         newOrder.setOrderSn(orderSn);
         newOrder.setCreatedAt(new Date());
         newOrder.setAdminNote(reason);
@@ -329,23 +330,31 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     }
 
     // generate id with redis: date + source type + pay type + today's order % 6
-    private String generateOrderSn(Orders newOrder) {
-        StringBuilder sb = new StringBuilder();
+    private Mono<String> generateOrderSn(int payType, int sourceType) {
+        // Generate the key for Redis
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String key = REDIS_DATABASE + ":" + REDIS_KEY_ORDER_ID + date;
-        Long increment = redisService.incr(key, 1);
-        sb.append(date + increment);
 
-        sb.append(String.format("%02d", newOrder.getSourceType()));
-        sb.append(String.format("%02d", newOrder.getPayType()));
-        String incrementStr = increment.toString();
+        // Increment the Redis value and process the result reactively
+        return redisService.incr(key, 1)
+                .map(increment -> {
+                    // Create the order SN
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(date)
+                            .append(increment);
 
-        if (incrementStr.length() <= 6) {
-            sb.append(String.format("%06d", increment));
-        } else {
-            sb.append(incrementStr);
-        }
-        return sb.toString();
+                    sb.append(String.format("%02d", payType));
+                    sb.append(String.format("%02d", sourceType));
+
+                    String incrementStr = increment.toString();
+                    if (incrementStr.length() <= 6) {
+                        sb.append(String.format("%06d", increment));
+                    } else {
+                        sb.append(incrementStr);
+                    }
+
+                    return sb.toString();
+                });
     }
 
     private void updateChangeLog(int orderId, int status, String note, String operator) {

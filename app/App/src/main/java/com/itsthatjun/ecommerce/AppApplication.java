@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -45,8 +45,14 @@ public class AppApplication {
     }
 
     @Bean   // turn all the webclient to load balanced when sending, if there's more than one.
-    public WebClient webClient(WebClient.Builder builder) {
+    @Profile("eureka")
+    public WebClient loadBalancedWebClient(WebClient.Builder builder) {
         return builder.filter(lbFunction).build();
+    }
+
+    @Bean   // it doesn't work with Kubernetes
+    public WebClient webClient(WebClient.Builder builder) {
+        return builder.build();
     }
 
     public static void main(String[] args) {

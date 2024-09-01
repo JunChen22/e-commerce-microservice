@@ -2,7 +2,7 @@ fullnameOverride: cms-db
 
 image:
   name: postgres
-  tag: 9.6.10
+  tag: 16-bullseye
   pullPolicy: IfNotPresent
 
 ports:

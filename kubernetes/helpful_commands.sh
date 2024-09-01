@@ -1,19 +1,32 @@
+# Set the alias to use Minikube's Kubectl.
+# to make it permanent add this line to ~/.bashrc or .bash_profile
+alias kubectl="minikube kubectl --"
 
+# reload the bashrc file
+source ~/.bashrc
+
+# Configures shell to use Minikube's Docker daemon.
 eval $(minikube docker-env)
+
+# Builds Docker images inside Minikube's Docker daemon.
 docker-compose build
 
-kubectl create namespace demotest
-kubectl config set-context $(kubectl config current-context) --namespace=demotest
+# Creates a new namespace called 'e-com'.
+kubectl create namespace e-com
+
+# Sets the current context to use 'e-com' namespace by default.
+kubectl config set-context $(kubectl config current-context) --namespace=e-com
 
 
-
+# Deploys resources defined
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 kubectl apply -f ingress.yaml
 
+# Lists all Pods in the 'e-com' namespace.
 kubectl get pods -n e-com
 
-
+# Retrieves endpoints for the 'app' Service in the 'e-com' namespace.
 kubectl get endpoints -n e-com app
 
 

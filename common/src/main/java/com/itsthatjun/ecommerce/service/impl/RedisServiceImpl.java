@@ -2,34 +2,37 @@ package com.itsthatjun.ecommerce.service.impl;
 
 import com.itsthatjun.ecommerce.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class RedisServiceImpl implements RedisService {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private ReactiveRedisTemplate<String, Object> redisTemplate;
 
     // shared operations
 
     @Override
-    public Boolean expire(String key, long time) {
-        return redisTemplate.expire(key, time, TimeUnit.SECONDS);
+    public Mono<Boolean> expire(String key, long time) {
+        return redisTemplate.expire(key, Duration.ofSeconds(time));
     }
 
     @Override
-    public Long getExpire(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    public Mono<Duration> getExpire(String key) {
+        return redisTemplate.getExpire(key);
     }
 
     @Override
-    public Boolean hasKey(String key) {
+    public Mono<Boolean> hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
 
@@ -37,84 +40,83 @@ public class RedisServiceImpl implements RedisService {
     // String related operations
 
     @Override
-    public void set(String key, Object value, long time) {
-        redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+    public Mono<Boolean> set(String key, Object value, long time) {
+        return redisTemplate.opsForValue().set(key, value, Duration.ofSeconds(time));
     }
 
     @Override
-    public void set(String key, Object value) {
-        redisTemplate.opsForValue().set(key, value);
+    public Mono<Boolean> set(String key, Object value) {
+        return redisTemplate.opsForValue().set(key, value);
     }
 
     @Override
-    public Object get(String key) {
+    public Mono<Object> get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
     @Override
-    public Boolean del(String key) {
+    public Mono<Long> del(String key) {
         return redisTemplate.delete(key);
     }
 
     @Override
-    public Long del(List<String> keys) {
-        return redisTemplate.delete(keys);
+    public Mono<Long> del(List<String> keys) {
+        // Convert List to Flux
+        Flux<String> keyFlux = Flux.fromIterable(keys);
+        return redisTemplate.delete(keyFlux);
     }
 
     @Override
-    public Long incr(String key, int delta) {
+    public Mono<Long> incr(String key, int delta) {
         return redisTemplate.opsForValue().increment(key, delta);
     }
 
     @Override
-    public Long decr(String key, int delta) {
+    public Mono<Long> decr(String key, int delta) {
         return redisTemplate.opsForValue().increment(key, -delta);
     }
-
 
     // List related operations
 
     @Override
-    public List<Object> lRange(String key, int start, int end) {
-        return redisTemplate.opsForList().range(key, start, end);
+    public Mono<List<Object>> lRange(String key, int start, int end) {
+        return redisTemplate.opsForList().range(key, start, end).collectList();
     }
 
     @Override
-    public Long lSize(String key) {
+    public Mono<Long> lSize(String key) {
         return redisTemplate.opsForList().size(key);
     }
 
     @Override
-    public Object lIndex(String key, int index) {
+    public Mono<Object> lIndex(String key, int index) {
         return redisTemplate.opsForList().index(key, index);
     }
 
     @Override
-    public Long lPush(String key, Object value) {
+    public Mono<Long> lPush(String key, Object value) {
         return redisTemplate.opsForList().rightPush(key, value);
     }
 
     @Override
-    public Long lPush(String key, Object value, long time) {
-        Long index = redisTemplate.opsForList().rightPush(key, value);
-        expire(key, time);
-        return index;
+    public Mono<Long> lPush(String key, Object value, long time) {
+        return redisTemplate.opsForList().rightPush(key, value)
+                .flatMap(index -> expire(key, time).thenReturn(index));
     }
 
     @Override
-    public Long lPushAll(String key, Object... values) {
+    public Mono<Long> lPushAll(String key, Object... values) {
         return redisTemplate.opsForList().rightPushAll(key, values);
     }
 
     @Override
-    public Long lPushAll(String key, Long time, Object... values) {
-        Long count = redisTemplate.opsForList().rightPushAll(key, values);
-        expire(key, time);
-        return count;
+    public Mono<Long> lPushAll(String key, Long time, Object... values) {
+        return redisTemplate.opsForList().rightPushAll(key, values)
+                .flatMap(count -> expire(key, time).thenReturn(count));
     }
 
     @Override
-    public Long lRemove(String key, int count, Object value) {
+    public Mono<Long> lRemove(String key, int count, Object value) {
         return redisTemplate.opsForList().remove(key, count, value);
     }
 
@@ -122,34 +124,35 @@ public class RedisServiceImpl implements RedisService {
     // Set operations related
 
     @Override
-    public Set<Object> sMembers(String key) {
-        return redisTemplate.opsForSet().members(key);
+    public Mono<Set<Object>> sMembers(String key) {
+        return redisTemplate.opsForSet()
+                .members(key)
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public Long sAdd(String key, Object... values) {
+    public Mono<Long> sAdd(String key, Object... values) {
         return redisTemplate.opsForSet().add(key, values);
     }
 
     @Override
-    public Long sAdd(String key, long time, Object... values) {
-        Long count = redisTemplate.opsForSet().add(key, values);
-        expire(key, time);
-        return count;
+    public Mono<Long> sAdd(String key, long time, Object... values) {
+        return redisTemplate.opsForSet().add(key, values)
+                .flatMap(count -> expire(key, time).thenReturn(count));
     }
 
     @Override
-    public Boolean sIsMember(String key, Object value) {
+    public Mono<Boolean> sIsMember(String key, Object value) {
         return redisTemplate.opsForSet().isMember(key, value);
     }
 
     @Override
-    public Long sSize(String key) {
+    public Mono<Long> sSize(String key) {
         return redisTemplate.opsForSet().size(key);
     }
 
     @Override
-    public Long sRemove(String key, Object... values) {
+    public Mono<Long> sRemove(String key, Object... values) {
         return redisTemplate.opsForSet().remove(key, values);
     }
 
@@ -157,54 +160,56 @@ public class RedisServiceImpl implements RedisService {
     // Hash or map related operations
 
     @Override
-    public Object hGet(String key, String hashKey) {
+    public Mono<Object> hGet(String key, String hashKey) {
         return redisTemplate.opsForHash().get(key, hashKey);
     }
 
     @Override
-    public Boolean hSet(String key, String hashKey, Object value, long time) {
-        redisTemplate.opsForHash().put(key, hashKey, value);
-        return expire(key, time);
+    public Mono<Boolean> hSet(String key, String hashKey, Object value, long time) {
+        return redisTemplate.opsForHash().put(key, hashKey, value)
+                .flatMap(result -> expire(key, time).thenReturn(result));
     }
 
     @Override
-    public void hSet(String key, String hashKey, Object value) {
-        redisTemplate.opsForHash().put(key, hashKey, value);
+    public Mono<Void> hSet(String key, String hashKey, Object value) {
+        return redisTemplate.opsForHash().put(key, hashKey, value).then();
     }
 
     @Override
-    public Map<Object, Object> hGetAll(String key) {
-        return redisTemplate.opsForHash().entries(key);
+    public Mono<Map<Object, Object>> hGetAll(String key) {
+        return redisTemplate.opsForHash()
+                .entries(key)
+                .collectMap(Map.Entry::getKey, Map.Entry::getValue);
     }
 
     @Override
-    public Boolean hSetAll(String key, Map<String, Object> map, long time) {
-        redisTemplate.opsForHash().putAll(key, map);
-        return expire(key, time);
+    public Mono<Boolean> hSetAll(String key, Map<String, Object> map, long time) {
+        return redisTemplate.opsForHash().putAll(key, map)
+                .flatMap(result -> expire(key, time).thenReturn(result));
     }
 
     @Override
-    public void hSetAll(String key, Map<String, ?> map) {
-        redisTemplate.opsForHash().putAll(key, map);
+    public Mono<Void> hSetAll(String key, Map<String, ?> map) {
+        return redisTemplate.opsForHash().putAll(key, map).then();
     }
 
     @Override
-    public void hDel(String key, Object... hashKey) {
-        redisTemplate.opsForHash().delete(key, hashKey);
+    public Mono<Boolean> hDel(String key) {
+        return redisTemplate.opsForHash().delete(key);
     }
 
     @Override
-    public Boolean hHasKey(String key, String hashKey) {
+    public Mono<Boolean> hHasKey(String key, String hashKey) {
         return redisTemplate.opsForHash().hasKey(key, hashKey);
     }
 
     @Override
-    public Long hIncr(String key, String hashKey, Long delta) {
+    public Mono<Long> hIncr(String key, String hashKey, Long delta) {
         return redisTemplate.opsForHash().increment(key, hashKey, delta);
     }
 
     @Override
-    public Long hDecr(String key, String hashKey, Long delta) {
+    public Mono<Long> hDecr(String key, String hashKey, Long delta) {
         return redisTemplate.opsForHash().increment(key, hashKey, -delta);
     }
 }

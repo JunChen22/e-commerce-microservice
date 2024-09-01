@@ -8,20 +8,20 @@ import reactor.core.publisher.Mono;
 public interface UserService {
 
     @ApiOperation(value = "")
-    Mono<MemberDetail> getInfo(int userId);
+    Mono<MemberDetail> getInfo();
 
     @ApiOperation(value = "Register")
     Mono<MemberDetail> register(MemberDetail memberDetail);
 
     @ApiOperation(value = "")
-    Mono<String> updatePassword(String newPassword, int userId);
+    Mono<String> updatePassword(String newPassword);
 
     @ApiOperation(value = "password, name, icon")
-    Mono<MemberDetail> updateInfo(MemberDetail memberDetail, int userId);
+    Mono<MemberDetail> updateInfo(MemberDetail memberDetail);
 
     @ApiOperation(value = "")
-    Mono<AddressDTO> updateAddress(AddressDTO newAddress, int userId);
+    Mono<AddressDTO> updateAddress(AddressDTO newAddress);
 
     @ApiOperation(value = "")
-    Mono<Void> deleteAccount(int userId);
+    Mono<Void> deleteAccount();
 }

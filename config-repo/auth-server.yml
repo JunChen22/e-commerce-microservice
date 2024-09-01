@@ -1,8 +1,6 @@
 server:
   port: 9999
 
-server.forward-headers-strategy: framework
-
 spring:
   application:
     name: auth-server

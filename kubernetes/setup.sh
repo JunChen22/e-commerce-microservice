@@ -13,6 +13,7 @@ minikube addons enable ingress
 
 cd ../
 
+# maven build
 mvn clean install
 
 # connect docker to minikube/kubernetes, the build will strictly on minikube/kubernetes and not on docker image list
@@ -43,4 +44,7 @@ minikube addons list
 echo Will mapping springeecom.me to $(minikube ip) in /etc/hosts
 sudo bash -c "echo $(minikube ip) springecom.me | tee -a /etc/hosts"
 
-echo 'alias kubectl="minikube kubectl --"' >> ~/.bashrc
+# echo 'alias kubectl="minikube kubectl --"' >> ~/.bashrc
+
+# reload the bashrc file
+# source ~/.bashrc

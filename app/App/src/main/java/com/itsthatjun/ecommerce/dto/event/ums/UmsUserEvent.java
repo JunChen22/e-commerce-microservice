@@ -21,12 +21,14 @@ public class UmsUserEvent {
     private final Type eventType;
     private final Integer userId;
     private final MemberDetail memberDetail;
+    private final String jwtToken;
     private final ZonedDateTime eventCreatedAt;
 
-    public UmsUserEvent(Type eventType, Integer userId, MemberDetail memberDetail) {
+    public UmsUserEvent(Type eventType, Integer userId, MemberDetail memberDetail, String jwtToken) {
         this.eventType = eventType;
         this.userId = userId;
         this.memberDetail = memberDetail;
+        this.jwtToken = jwtToken;
         this.eventCreatedAt = now();
     }
 }
