@@ -1,0 +1,54 @@
+{{- define "common.istio_base" -}}
+
+{{- range .Values.gateway }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ .name }}
+spec:
+  selector:
+    istio: {{ .selector }}
+  servers:
+  - hosts:
+    - {{ .host }}
+    port:
+      name: {{ .port.name }}
+      number: {{ .port.number }}
+      protocol: {{ .port.protocol }}
+    #tls:
+      #credentialName: {{ .tls.credentialName }}
+      #mode: {{ .tls.mode }}
+---
+{{- end }}
+
+{{- range .Values.gateway }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .virtualService.name }}
+spec:
+  gateways:
+    - {{ .name }}
+  hosts:
+    - {{ .host }}
+  http:
+  {{- range .virtualService.http }}
+    - match:
+        {{- if .exact }}
+        - uri:
+            exact: {{ .exact }}
+        {{- else if .prefix }}
+        - uri:
+            prefix: {{ .prefix }}
+        {{- end }}
+      route:
+      - destination:
+          host: {{ .destination.host }}
+          port:
+            number: {{ .destination.port }}
+    {{- end }}
+---
+{{- end }}
+
+{{- end -}}
+

@@ -5,10 +5,13 @@ image:
   tag: latest
   pullPolicy: Never
 
-containerPorts:
-  - containerPort: 80
+ports:
+  - name: http
+    containerPort: 80
+    protocol: TCP
 
 service:
+  type: ClusterIP
   ports:
   - name: http
     port: 80

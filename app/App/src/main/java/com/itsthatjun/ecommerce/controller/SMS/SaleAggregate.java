@@ -31,32 +31,23 @@ public class SaleAggregate {
     }
 
     @GetMapping("/AllPromotionSale")
-    @Cacheable(value = "promotionSale", key = "'getAllPromotionSale'")
     @ApiOperation("All sales including promotional sale(regular discount) and flash sale(could clearance or limited time discount")
-    public List<PromotionSale> getAllPromotionSale() {
+    public Flux<PromotionSale> getAllPromotionSale() {
         Flux<PromotionSale> promotionSaleFlux = promotionService.getAllPromotionSale();
-        List<PromotionSale> promotionSaleList = promotionSaleFlux.collectList().block();
-
-        return promotionSaleList;
+        return promotionSaleFlux;
     }
 
     @GetMapping("/AllPromotionSaleItem")
-    @Cacheable(value = "promotionSaleCache", key = "'getAllPromotionSaleItem'")
     @ApiOperation("get all the item that is on regular sale discount")
-    public List<Product> getAllPromotionSaleItem() {
+    public Flux<Product> getAllPromotionSaleItem() {
         Flux<Product> productFlux = promotionService.getAllPromotionSaleItem();
-        List<Product> productList = productFlux.collectList().block();
-
-        return productList;
+        return productFlux;
     }
 
     @GetMapping("/AllFlashSaleItem")
-    @Cacheable(value = "flashSaleCache", key = "'getAllFlashSaleItem'")
     @ApiOperation("get all item that is on short term sale like clearance or special sale")
-    public List<Product> getAllFlashSaleItem() {
+    public Flux<Product> getAllFlashSaleItem() {
         Flux<Product> productFlux = promotionService.getAllFlashSaleItem();
-        List<Product> productList = productFlux.collectList().block();
-
-        return productList;
+        return productFlux;
     }
 }

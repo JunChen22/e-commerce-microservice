@@ -1,0 +1,38 @@
+modify  in database
+service:
+  type: ClusterIP
+  ports:
+    - port: 5432
+
+there's already default in common
+
+
+
+download minikube and set it to docker
+
+download helm?
+
+
+#
+
+livenessProbe_enabled: true
+
+readinessProbe_enabled: true
+
+service:
+  ports:
+    - port: 80
+      name: http
+      targetPort: 80
+    - port: 4004
+      name: http-mgm
+      targetPort: 4004
+
+
+ports:
+  - name: http
+    containerPort: 80
+    protocol: TCP
+  - name: http-mgm
+    containerPort: 4004
+    protocol: TCP

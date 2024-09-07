@@ -165,7 +165,7 @@ and replica set is generated
 
 
 minikube ip
-192.128.12.63:30080 will work but not http://localhost:30080
+192.138.42.53:30080 will work but not http://localhost:30080
 
 
 
@@ -197,3 +197,12 @@ NGINX Ingress controller
 
 
 // TODO: fix these commands and comments.
+
+
+
+
+
+helm template . > template_output.txt
+
+
+

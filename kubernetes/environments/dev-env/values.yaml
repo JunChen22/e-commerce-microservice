@@ -1,88 +1,3 @@
-ingress:
-  name: dev-env
-  host: springecom.me
-  paths:
-    - path: /
-      pathType: ImplementationSpecific
-      service: app
-      port: 80
-
-    - path: /article
-      pathType: Prefix
-      service: app
-      port: 80
-
-    - path: /brand
-      pathType: Prefix
-      service: app
-      port: 80
-    - path: /product
-      pathType: Prefix
-      service: app
-      port: 80
-    - path: /review
-      pathType: Prefix
-      service: app
-      port: 80
-
-    - path: /cart
-      pathType: Prefix
-      service: app
-      port: 80
-    - path: /order
-      pathType: Prefix
-      service: app
-      port: 80
-    - path: /return
-      pathType: Prefix
-      service: app
-      port: 80
-
-    - path: /coupon
-      pathType: Prefix
-      service: app
-      port: 80
-    - path: /sale
-      pathType: Prefix
-      service: app
-      port: 80
-
-    - path: /user
-      pathType: Prefix
-      service: app
-      port: 80
-
-    - path: /esProduct/search
-      pathType: Prefix
-      service: search
-      port: 8081
-    - path: /esProduct/importAll
-      pathType: Prefix
-      service: search
-      port: 8081
-
-    - path: /swagger
-      pathType: Prefix
-      service: app
-      port: 80
-    - path: /swagger-ui.html
-      pathType: Prefix
-      service: app
-      port: 80
-    - path: /webjars
-      pathType: Prefix
-      service: app
-      port: 80
-    - path: /v2/api-docs
-      pathType: Prefix
-      service: app
-      port: 80
-
-    - path: /login
-      pathType: Prefix
-      service: auth-server
-      port: 80
-
 secrets:
 
   postgres-server-credentials:
@@ -111,8 +26,8 @@ secrets:
 
   paypal-credentials:
     PAYPAL_MODE: sandbox
-    PAYPAL_CLIENT_ID: YOUR_CLIENT_ID
-    PAYPAL_CLIENT_SECRET: YOUR_CLIENT_SECRET
+    PAYPAL_CLIENT_ID: CLIENT_ID
+    PAYPAL_CLIENT_SECRET: CLIENT_SECRET
 
   rabbitmq-credentials:
     username: guest
@@ -121,6 +36,7 @@ secrets:
   mongodb-credentials:
     username: username
     password: password
+
 
 postgres:
   envFromSecretRefs:
@@ -202,3 +118,131 @@ notification:
     - postgres-credentials
     - rabbitmq-credentials
     - email-credentials
+
+
+gateway:
+  - name: e-com-gw
+    type: ingress
+    selector: ingressgateway
+    host: springecom.me
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+    tls:
+      credentialName: e-com-certificate
+      mode: SIMPLE
+    virtualService:
+      name: e-com-vs
+      http:
+        - exact: /
+          destination:
+            host: app
+            port: 80
+
+        - prefix: /article
+          destination:
+            host: app
+            port: 80
+
+        - prefix: /brand
+          destination:
+            host: app
+            port: 80
+        - prefix: /product
+          destination:
+            host: app
+            port: 80
+        - prefix: /review
+          destination:
+            host: app
+            port: 80
+
+        - prefix: /cart
+          destination:
+            host: app
+            port: 80
+        - prefix: /order
+          destination:
+            host: app
+            port: 80
+        - prefix: /return
+          destination:
+            host: app
+            port: 80
+
+
+        - prefix: /coupon
+          destination:
+            host: app
+            port: 80
+        - prefix: /sale
+          destination:
+            host: app
+            port: 80
+
+        - prefix: /user
+          destination:
+            host: app
+            port: 80
+
+        - prefix: /esProduct/search
+          destination:
+            host: search
+            port: 8081
+        - prefix: /esProduct/importAll
+          destination:
+            host: search
+            port: 8081
+
+        - prefix: /swagger
+          destination:
+            host: app
+            port: 80
+        - prefix: /swagger-ui.html
+          destination:
+            host: app
+            port: 80
+        - prefix: /webjars
+          destination:
+            host: app
+            port: 80
+        - prefix: /v2/api-docs
+          destination:
+            host: app
+            port: 80
+
+        - prefix: /login
+          destination:
+            host: auth-server
+            port: 80
+
+#  - name: e-com-health-gw
+#    type: health
+#    selector: ingressgateway
+#    host: springecom.me
+#    port:
+#      name: https
+#      number: 443
+#      protocol: HTTPS
+#    tls:
+#      credentialName: e-com-certificate
+#      mode: SIMPLE
+#    virtualService:
+#      name: e-com-health-vs
+#      http:
+#        - prefix: /health
+#          destination:
+#            host: app
+#            port: 80
+
+destinationRules:
+  - name: auth-server
+  - name: app
+  - name: cms
+  - name: pms
+  - name: oms
+  - name: sms
+  - name: ums
+  - name: search
+  - name: notification

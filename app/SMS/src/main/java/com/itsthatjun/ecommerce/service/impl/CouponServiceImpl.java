@@ -63,6 +63,7 @@ public class CouponServiceImpl implements CouponService {
             Coupon foundCoupon = checkCoupon(couponCode);
             if (foundCoupon == null) return 0.0;
 
+            // TODO: change it to fit more reactive way
             List<CartItem> cartItemList = getCartFromOms(userId);
             if (cartItemList.isEmpty()) return 0.0;
 
@@ -95,7 +96,7 @@ public class CouponServiceImpl implements CouponService {
                     .bodyToFlux(CartItem.class) // Use bodyToFlux for a list of CartItem
                     .timeout(Duration.ofMillis(timeoutMilliseconds))
                     .collectList(); // Collect the items into a list
-            cartItems = cartItemListMono.block();
+            cartItems = cartItemListMono.block();   // not recommended for production code
         } catch (Exception e) {
             // Handle errors, including timeouts, here
             cartItems = Collections.emptyList();

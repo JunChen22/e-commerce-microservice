@@ -40,9 +40,7 @@ spec:
             - name: {{ include "common.fullname" . }}
               mountPath: {{ .Values.configmap.volumeMounts.mountPath }}
           ports:
-          {{- range .Values.containerPorts }}
-            - containerPort: {{ .containerPort }}
-          {{- end }}
+{{ toYaml .Values.ports | indent 12 }}
       volumes:
         - name: {{ include "common.fullname" . }}
           configMap:

@@ -17,6 +17,8 @@ spec:
       app: {{ include "common.fullname" . }}
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
       labels:
         app: {{ include "common.fullname" . }}
     spec:

@@ -1,0 +1,3120 @@
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: email-credentials
+  labels:
+    app: email-credentials
+type: Opaque
+data:
+  MAIL_PASSWORD: WU9VUl9FTUFJTF9BUFBfUEFTU1dPUkQ=
+  MAIL_USERNAME: WU9VUl9FTUFJTF9VU0VSTkFNRQ==
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-credentials
+  labels:
+    app: mongodb-credentials
+type: Opaque
+data:
+  password: cGFzc3dvcmQ=
+  username: dXNlcm5hbWU=
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongodb-server-credentials
+  labels:
+    app: mongodb-server-credentials
+type: Opaque
+data:
+  password: cGFzc3dvcmQ=
+  username: dXNlcm5hbWU=
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: paypal-credentials
+  labels:
+    app: paypal-credentials
+type: Opaque
+data:
+  PAYPAL_CLIENT_ID: QWJFZkF4ZzVpVXVBaXBUMDNPeDR5RkF5RllfWnR1UFJwTGpXSXpGVFFxd1dTU1d4UjdkSXRWWG1hdy1taFRiZWNGNFFGbTh2eUZqZ3dxMHI=
+  PAYPAL_CLIENT_SECRET: RUd4ajNIQTNvVURJVkJBWElKODVYWTdZNUR2VWh5MFduZjU2aHVWcWlxemdvTm5LSGVTd2xPSDhiYWtRZlhqYjA5cURKWGFTS29IZWVaeWw=
+  PAYPAL_MODE: c2FuZGJveA==
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-credentials
+  labels:
+    app: postgres-credentials
+type: Opaque
+data:
+  SPRING_DATASOURCE_PASSWORD: cGFzc3dvcmQ=
+  SPRING_DATASOURCE_USERNAME: cG9zdGdyZXM=
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-server-credentials
+  labels:
+    app: postgres-server-credentials
+type: Opaque
+data:
+  POSTGRES_PASSWORD: cGFzc3dvcmQ=
+  POSTGRES_USER: cG9zdGdyZXM=
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq-credentials
+  labels:
+    app: rabbitmq-credentials
+type: Opaque
+data:
+  password: Z3Vlc3Q=
+  username: Z3Vlc3Q=
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq-server-credentials
+  labels:
+    app: rabbitmq-server-credentials
+type: Opaque
+data:
+  RABBITMQ_DEFAULT_PASS: Z3Vlc3Q=
+  RABBITMQ_DEFAULT_USER: Z3Vlc3Q=
+---
+# Source: dev-env/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: usps-credentials
+  labels:
+    app: usps-credentials
+type: Opaque
+data:
+  USPS_PASSWORD: WU9VUl9VU1BTX1BBU1NXT1JE
+  USPS_USERID: WU9VUl9VU1BTX0NSRURFTlRJQUw=
+---
+# Source: dev-env/charts/app/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app
+  labels:
+    app: app
+data:
+  app.yml: |+
+    server.port: 8080
+  
+    server.forward-headers-strategy: framework
+  
+    jwt:
+      HEADER_STRING: Authorization
+      tokenPrefix: Bearer
+      secretKey: JunChen522
+      issuer: auth-server
+  
+    spring:
+      main:
+        allow-bean-definition-overriding: true
+      application:
+        name: app
+      datasource:
+        url: jdbc:postgresql://localhost/springecommerece
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+      redis:
+        host: localhost
+        port: 6379
+  
+    # outputs
+    # CMS and SMS does not need message queue, they only have read operations.
+    spring.cloud.stream:
+      bindings:             # only OMS,PMS,UMS have write operations. Read operations don't need to message queue, non-blocking synchronous.
+        order-out-0:  # OMS
+          destination: order
+          producer:
+            required-groups: auditGroup
+        orderComplete-out-0: # OMS
+          destination: orderComplete
+          producer:
+            required-groups: auditGroup
+        cart-out-0:
+          destination: cart
+          producer:
+            required-groups: auditGroup
+        return-out-0:
+          destination: return
+          producer:
+            required-groups: auditGroup
+        review-out-0: # PMS
+          destination: review
+          producer:
+            required-groups: auditGroup
+        user-out-0:    # UMS
+          destination: user
+          producer:
+            required-groups: auditGroup
+  
+    management.health.circuitbreakers.enabled: true
+  
+    resilience4j:
+      timelimiter:
+        instances:
+          genericTimeLimiter:
+            timeoutDuration: 2s
+  
+      retry:
+        instances:
+          genericRetry:
+            maxAttempts: 3
+            waitDuration: 1000
+            retryExceptions:
+              - org.springframework.web.reactive.function.client.WebClientResponseException$InternalServerError
+  
+      circuitbreaker:
+        instances:
+          genericCircuitBreaker:
+            allowHealthIndicatorToFail: false
+            registerHealthIndicator: true
+            slidingWindowType: COUNT_BASED
+            slidingWindowSize: 5
+            failureRateThreshold: 50
+            waitDurationInOpenState: 10000
+            permittedNumberOfCallsInHalfOpenState: 3
+            automaticTransitionFromOpenToHalfOpenEnabled: true
+            ignoreExceptions:
+              - com.itsthatjun.ecommerce.exception.InvalidInputException
+              - com.itsthatjun.ecommerce.exception.NotFoundException
+  
+      rateLimiter:
+        instances:
+          genericRateLimiter:
+            limitForPeriod: 5
+            limitRefreshPeriod: 10000
+            timeoutDuration: 1000
+            enableExpiry: false
+  
+    ---
+  
+    spring.config.activate.on-profile: docker
+  
+    server.port: 80
+  
+    spring:
+      datasource:
+        url: jdbc:postgresql://postgres/springecommerece
+      redis:
+        host: redis
+  
+    ---
+  
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.bindings.order-out-0:
+      partition-key-expression: headers['partitionKey']
+  
+    spring.cloud.stream.bindings.orderComplete-out-0:
+      partition-key-expression: headers['partitionKey']
+  
+    spring.cloud.stream.bindings.cart-out-0:
+      partition-key-expression: headers['partitionKey']
+  
+    spring.cloud.stream.bindings.return-out-0:
+      partition-key-expression: headers['partitionKey']
+  
+    spring.cloud.stream.bindings.review-out-0:
+      partition-key-expression: headers['partitionKey']
+  
+    spring.cloud.stream.bindings.user-out-0:
+      partition-key-expression: headers['partitionKey']
+  
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+---
+# Source: dev-env/charts/auth-server/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-server
+  labels:
+    app: auth-server
+data:
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+  auth-server.yml: |-
+    server:
+      port: 9999
+  
+    spring:
+      application:
+        name: auth-server
+      datasource:
+        url: jdbc:postgresql://localhost:5438/authdb
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+  
+    spring.cloud:
+      function:   # can't have space between, tells spring which to use
+        definition: userMessageProcessor
+      stream:
+        default:
+          contentType: application/json
+        bindings:
+          userMessageProcessor-in-0:
+            destination: umsUserUpdate
+            group: umsUserUpdateGroup
+  
+          authLog-out-0: # sending update to UMS to update login log
+            destination: authLogUpdate
+            producer:
+              required-groups: authLogUpdateGroup
+  
+    jwt:
+      HEADER_STRING: Authorization
+      tokenPrefix: Bearer
+      secretKey: JunChen522
+      expirationTimeMinute: 150
+      issuer: auth-server
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    server.port: 80
+  
+    spring:
+      datasource.url: jdbc:postgresql://auth-db:5432/authdb
+      redis:
+        host: redis
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.bindings.userMessageProcessor-in-0.consumer:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.authLog-out-0:
+      partition-key-expression: headers['event-type']
+---
+# Source: dev-env/charts/cms/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cms
+  labels:
+    app: cms
+data:
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+  cms.yml: |+
+    server:
+      port: 8081
+  
+    spring:
+      application:
+        name: cms
+      datasource:
+        url: jdbc:postgresql://localhost/contentdb
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+  
+    spring.cloud:
+      function:   # can't have space between, tells spring which to use
+        definition: articleMessageProcessor
+      stream:
+        default:
+          contentType: application/json
+        bindings:
+          articleMessageProcessor-in-0:
+            destination: adminArticle
+            group: adminArticleGroup
+  
+    # tells spring mybatis mapper's xml(sql) located
+    mybatis:
+      mapper-locations:
+        - classpath:mapper/*.xml
+        - classpath:dao/*.xml
+  
+    ---
+  
+    spring.config.activate.on-profile: docker
+  
+    server.port: 80
+  
+    spring:
+      datasource:
+        url: jdbc:postgresql://cms-db:5432/contentdb
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.bindings.articleMessageProcessor-in-0.consumer:
+      partitioned: true
+---
+# Source: dev-env/charts/notification/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notification
+  labels:
+    app: notification
+data:
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+  notification.yml: |-
+    server:
+      port: 9999
+  
+    spring:
+      application:
+        name: notification
+      datasource:
+        url: jdbc:postgresql://localhost:5439/emaildb
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+      batch:
+        job:
+          enabled: false  # need to disable job runs at application start
+  
+    spring.cloud:
+      function:   # can't have space between, tells spring which to use
+        definition: orderMessageProcessor;orderItemMessageProcessor;orderReturnMessageProcessor;saleMessageProcessor;userMessageProcessor;adminMessageProcessor
+      stream:
+        default:
+          contentType: application/json
+        bindings:
+          orderMessageProcessor-in-0:   # message from services
+            destination: orderEmail
+            group: orderEmailGroup
+          orderItemMessageProcessor-in-0:
+            destination: orderItemEmail
+            group: orderItemEmailGroup
+          orderReturnMessageProcessor-in-0:
+            destination: orderReturnEmail
+            group: orderReturnEmailGroup
+          saleMessageProcessor-in-0:
+            destination: saleEmail
+            group: saleEmailGroup
+          userMessageProcessor-in-0:
+            destination: userEmail
+            group: userEmailGroup
+  
+          adminMessageProcessor-in-0:  # directly message from admin
+            destination: adminMessage
+            group: userEmailGroup
+  
+    spring.mail:
+      host: smtp.gmail.com
+      port: 587
+      username: YOU_GMAIL_LOGIN
+      password: YOU_APP_PASSWORD
+      properties:
+        mail:
+          transport:
+            protocol: smtp
+          smtp:
+            auth: true
+            starttls.enable: true
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    server.port: 80
+  
+    spring:
+      datasource.url: jdbc:postgresql://email-db:5432/emaildb
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.bindings.userMessageProcessor-in-0.consumer:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.authLog-out-0:
+      partition-key-expression: headers['event-type']
+---
+# Source: dev-env/charts/oms/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oms
+  labels:
+    app: oms
+data:
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+  oms.yml: |
+    server:
+      port: 8082
+  
+    spring:
+      application:
+        name: oms
+      datasource:
+        url: jdbc:postgresql://localhost:5434/orderdb
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+      redis:
+        host: localhost
+        port: 6379
+  
+    spring.cloud:
+      function: # can't have space between, tells spring which to use, using a pipe character allow multi-line.
+        definition: cartMessageProcessor;returnMessageProcessor;orderMessageProcessor;orderCompleteMessageProcessor;adminOrderMessageProcessor;adminReturnMessageProcessor;adminOrderItemAnnouncementProcessor;updateFromPmsMessageProcessor;updateFromSmsMessageProcessor;
+      stream:
+        default:
+          contentType: application/json
+        bindings:
+          cartMessageProcessor-in-0:        # incoming message from app/customer
+            destination: cart
+            group: cartGroup
+          returnMessageProcessor-in-0:
+            destination: return
+            group: returnGroup
+          orderMessageProcessor-in-0:
+            destination: order
+            group: orderGroup
+          orderCompleteMessageProcessor-in-0:
+            destination: orderComplete
+            group: orderGroup
+  
+          adminOrderMessageProcessor-in-0: # admin CRUD order or approve/reject return
+            destination: adminOrder
+            group: adminOrderGroup
+          adminReturnMessageProcessor-in-0:
+            destination: adminReturn
+            group: adminReturnGroup
+          adminOrderItemAnnouncementProcessor-in-0: # admin message to user with certain product purchased.
+            destination: adminOrderItem
+            group: adminOrderItemGroup
+  
+          updateFromPmsMessageProcessor-in-0:     #  update from SMS and PMS
+            destination: productStockOMSUpdate
+            group: productStockOMSUpdateGroup
+          updateFromSmsMessageProcessor-in-0:
+            destination: saleStockOMSUpdate
+            group: saleStockOMSUpdateGroup
+  
+          coupon-out-0:           # sending to other queue to update their stock after sales or return
+            destination: orderCouponUpdate
+            producer:
+              required-groups: orderCouponUpdateGroup
+          salesStock-out-0:
+            destination: orderSaleStockUpdate
+            producer:
+              required-groups: orderSaleStockUpdateGroup
+          product-out-0:
+            destination: orderProductStockUpdate
+            producer:
+              required-groups: orderProductStockUpdateGroup
+  
+          orderCancelTTL-out-0:               # queue with TTL, act as scheduled task or delayed task
+            destination: orderCancelQueue
+            producer:
+              required-groups: orderGroup
+          returnRequestTTL-out-0:
+            destination: returnRequestQueue
+            producer:
+              required-groups: returnGroup
+  
+          orderMessage-out-0:            # send out system and update message to use regarding order
+            destination: orderEmail
+            producer:
+              required-groups: orderEmailGroup
+          orderItemMessage-out-0:
+            destination: orderItemEmail
+            producer:
+              required-groups: orderItemEmailGroup
+          orderReturnMessage-out-0:
+            destination: orderReturnEmail
+            producer:
+              required-groups: orderReturnEmailGroup
+  
+    # tells spring mybatis mapper's xml(sql) located
+    mybatis:
+      mapper-locations:
+        - classpath:mapper/*.xml
+        - classpath:dao/*.xml
+  
+    # if you running it local/ide
+    paypal:
+      mode: YOUR_PAYPAL_MODE
+      client:
+        id: YOUR_PAYPAL_CLIENT_ID
+        secret: YOUR_PAYPAL_CLIENT_SECRET
+  
+    redis:
+      key:
+        orderId: oms
+      database: ECom
+      expire:
+        common: 7200    # 120 minutes, measured in seconds
+  
+    custom:
+      rabbitMQ:
+        orderCancelTTL-time: 120000     # in milliseconds, 120 seconds
+        returnRequestTTL-time: 120000   # 3 days  259200000
+  
+    usps:
+      userid: YOUR_USPS_USERID
+      password: YOUR_USPS_PASSWORD
+  
+    ---
+  
+    spring.config.activate.on-profile: docker
+  
+    server.port: 80
+  
+    spring:
+      datasource:
+        url: jdbc:postgresql://oms-db:5432/orderdb
+      redis:
+        host: redis
+  
+    paypal:
+      mode: ${PAYPAL_MODE}
+      client:
+        id: ${PAYPAL_CLIENT_ID}
+        secret: ${PAYPAL_CLIENT_SECRET}
+  
+    usps:
+      userid: ${USPS_USERID}
+      password: ${USPS_PASSWORD}
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.bindings.cartMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.returnMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.orderMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.orderCompleteMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.adminOrderMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.adminReturnMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.updateFromPmsMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.updateFromSmsMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.coupon-out-0:
+      partition-key-expression: headers['event-type']
+  
+    spring.cloud.stream.bindings.salesStock-out-0:
+      partition-key-expression: headers['event-type']
+  
+    spring.cloud.stream.bindings.product-out-0:
+      partition-key-expression: headers['event-type']
+---
+# Source: dev-env/charts/pms/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pms
+  labels:
+    app: pms
+data:
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+  pms.yml: |
+    server:
+      port: 8083
+  
+    spring:
+      application:
+        name: pms
+      datasource:
+        url: jdbc:postgresql://localhost:5435/productdb
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+  
+    spring.cloud:
+      function:
+        # can't have space between, tells spring which to use
+        definition: reviewMessageProcessor;adminBrandMessageProcessor;adminProductMessageProcessor;adminReviewMessageProcessor;omsProductMessageProcessor;smsProductMessageProcessor
+      stream:
+        default:
+          contentType: application/json
+        bindings:
+          reviewMessageProcessor-in-0:      # incoming message from App/customer
+            destination: review
+            group: reviewGroup
+          adminBrandMessageProcessor-in-0:  # admin CRUD brand, product and review
+            destination: adminBrand
+            group: adminBrandGroup
+          adminProductMessageProcessor-in-0:
+            destination: adminProduct
+            group: adminProductGroup
+          adminReviewMessageProcessor-in-0:
+            destination: adminReview
+            group: adminReviewGroup
+  
+          omsProductMessageProcessor-in-0:      # update from OMS(purchase, return) and SMS for new sale
+            destination: orderProductStockUpdate
+            group: orderProductStockUpdateGroup
+          smsProductMessageProcessor-in-0:
+            destination: saleStockPMSUpdate
+            group: saleStockPMSUpdateGroup
+  
+          omsProductUpdate-out-0:               # sending update to SMS and OMS for product changes
+            destination:  productStockOMSUpdate
+            group: productStockOMSUpdateGroup
+          smsProductUpdate-out-0:
+            destination: productStockSMSUpdate
+            group: productStockSMSUpdateGroup
+  
+    # tells spring mybatis mapper's xml(sql) located
+    mybatis:
+      mapper-locations:
+        - classpath:mapper/*.xml
+        - classpath:dao/*.xml
+  
+    ---
+  
+    spring.config.activate.on-profile: docker
+  
+    server.port: 80
+  
+    spring:
+      datasource:
+        url: jdbc:postgresql://pms-db:5432/productdb
+  
+    ---
+  
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.bindings.reviewMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.adminBrandMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.adminProductMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.adminReviewMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.omsProductMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.smsProductMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.omsProductUpdate-out-0:
+      partition-key-expression: headers['event-type']
+  
+    spring.cloud.stream.bindings.smsProductUpdate-out-0:
+      partition-key-expression: headers['event-type']
+---
+# Source: dev-env/charts/search/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: search
+  labels:
+    app: search
+data:
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+  search.yml: |-
+    server:
+      port: 8081
+  
+    spring:
+      application:
+        name: search
+      datasource:
+        url: jdbc:postgresql://localhost/productdb # need to change localhost for docker-compose
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+      data:
+        elasticsearch:
+          repositories:
+            enabled: true
+        mongodb:
+          auto-index-creation: true
+          host: localhost
+          port: 27017
+          database: springecommerece
+      elasticsearch:
+        rest:
+          uris: http://localhost:9200
+  
+    # tells spring mybatis mapper's xml(sql) located
+    mybatis:
+      mapper-locations:
+        - classpath:mapper/*.xml
+        - classpath:dao/*.xml
+  
+    ---
+  
+    spring.config.activate.on-profile: docker
+  
+    spring:
+      datasource.url: jdbc:postgresql://pms-db:5432/productdb
+      elasticsearch:
+        rest:
+          uris: http://elasticsearch:9200
+      data:
+        mongodb:
+          host: mongodb
+---
+# Source: dev-env/charts/sms/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sms
+  labels:
+    app: sms
+data:
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+  sms.yml: |
+    server:
+      port: 8084
+  
+    spring:
+      application:
+        name: sms
+      datasource:
+        url: jdbc:postgresql://localhost:5436/salesdb
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+  
+    spring.cloud:
+      function: # can't have space between, tells spring which to use
+        definition: adminCouponMessageProcessor;adminSalesStockMessageProcessor;couponMessageProcessor;salesStockMessageProcessor;productStockMessageProcessor
+      stream:
+        default:
+          contentType: application/json
+        bindings:
+          adminCouponMessageProcessor-in-0:         # admin CRUD coupon or sale
+            destination: adminCoupon
+            group: adminCouponGroup
+          adminSalesStockMessageProcessor-in-0:
+            destination: adminSales
+            group: adminSalesGroup
+  
+          couponMessageProcessor-in-0:   # update from OMS(purchase, return) and PMS for new product
+            destination: orderCouponUpdate
+            group: orderCouponUpdateGroup
+          salesStockMessageProcessor-in-0:
+            destination: orderSaleStockUpdate
+            group: orderSaleStockUpdateGroup
+          productStockMessageProcessor-in-0:
+            destination: productStockSMSUpdate
+            group: productStockSMSUpdateGroup
+  
+          saleUpdateToOMS-out-0:            # sending update to PMS and OMS for new sale
+            destination: saleStockOMSUpdate
+            group: saleStockOMSUpdateGroup
+          saleUpdateToPms-out-0:
+            destination: saleStockPMSUpdate
+            group: saleStockPMSUpdateGroup
+  
+    # tells spring mybatis mapper's xml(sql) located
+    mybatis:
+      mapper-locations:
+        - classpath:mapper/*.xml
+        - classpath:dao/*.xml
+  
+    ---
+  
+    spring.config.activate.on-profile: docker
+  
+    server.port: 80
+  
+    spring:
+      datasource:
+        url: jdbc:postgresql://sms-db:5432/salesdb
+  
+    ---
+  
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.bindings.adminCouponMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.adminSalesStockMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.couponMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.salesStockMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.productStockMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.saleUpdateToOMS-out-0:
+      partition-key-expression: headers['event-type']
+  
+    spring.cloud.stream.bindings.saleUpdateToPms-out-0:
+      partition-key-expression: headers['event-type']
+---
+# Source: dev-env/charts/ums/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ums
+  labels:
+    app: ums
+data:
+  application.yml: |
+    # message queue related and distributed tracing/Zipkin/Sleuth needed to collect logs
+    spring:
+      rabbitmq:
+        host: localhost
+        port: 5672
+        virtual-host: /
+        publisher-confirms: true
+  
+    spring.cloud.stream.defaultBinder: rabbit
+    spring.zipkin.sender.type: rabbit
+    spring.sleuth.sampler.probability: 1.0
+  
+    # WARNING: Exposing all management endpoints over http should only be used during development, must be locked down in production!
+    management.endpoint.health.show-details: "ALWAYS"
+    management.endpoints.web.exposure.include: "*"
+  
+    #    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
+    #    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
+    #    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
+    #    WARN: A level higher than INFO that indicates potentially harmful situations.
+    #    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+  
+    logging:
+      level:
+        #root: ERROR
+        root: INFO
+        org.springframework.security: DEBUG
+        org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+        com.itsthatjun.ecommerce: DEBUG
+  
+    server.shutdown: graceful
+    spring.lifecycle.timeout-per-shutdown-phase: 10s
+  
+    ---
+    spring.config.activate.on-profile: docker
+  
+    spring.rabbitmq.host: rabbitmq
+  
+    # Disabled for kubernetes, use eureka profile to deploy on docker
+    # eureka.client.enabled: false
+  
+    ---
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.defaultBinder: kafka
+    spring.zipkin.sender.type: kafka
+  
+    spring.cloud.stream.kafka.binder:
+      brokers: kafka
+      defaultBrokerPort: 9092
+  
+    management.health.rabbit.enabled: false
+    spring.kafka.bootstrap-servers: kafka:9092
+    spring.cloud.stream.kafka.binder.replication-factor: 1
+  
+    ---
+    spring.config.activate.on-profile: eureka
+  
+    app.eureka-server: eureka
+  
+    eureka:
+      client:
+        enabled: true
+        serviceUrl:
+          defaultZone: http://${app.eureka-server}:8761/eureka/
+        initialInstanceInfoReplicationIntervalSeconds: 5
+        registryFetchIntervalSeconds: 5
+      instance:
+        leaseRenewalIntervalInSeconds: 5
+        leaseExpirationDurationInSeconds: 5
+  ums.yml: |+
+    server:
+      port: 8085
+  
+    jwt:
+      HEADER_STRING: Authorization
+      tokenPrefix: Bearer
+      secretKey: JunChen522
+      expirationTimeMinute: 150
+      issuer: auth-server
+  
+    spring:
+      application:
+        name: ums
+      datasource:
+        url: jdbc:postgresql://localhost:5437/userdb
+        driverClassName: org.postgresql.Driver
+        #initialization-mode: always
+      data:
+        mongodb:
+          host: localhost
+          port: 27017
+          database: springecommerece
+      redis:
+        host: localhost
+        port: 6379
+  
+    spring.cloud:
+      function:   # can't have space between, tells spring which to use
+        definition: adminUserMessageProcessor;adminEmailProcessor;userMessageProcessor;authMessageProcessor
+      stream:
+        default:
+          contentType: application/json
+        bindings:
+          adminUserMessageProcessor-in-0:      # admin
+            destination: adminUser
+            group: adminUserGroup
+          adminEmailProcessor-in-0:
+            destination: adminUserEmail
+            group: adminUserEmailGroup
+  
+          userMessageProcessor-in-0:        # user and auth update
+            destination: user
+            group: userGroup
+          authMessageProcessor-in-0:
+            destination: authLogUpdate
+            group: authLogUpdateGroup
+  
+          authUpdate-out-0:        # sending update to auth to update member info
+            destination: umsUserUpdate
+            producer:
+              required-groups: auditGroup
+  
+          umsEmail-out-0: # sending event to notification service
+            destination: userEmail
+            producer:
+              required-groups: userEmailGroup
+  
+  
+    # tells spring mybatis mapper's xml(sql) located
+    mybatis:
+      mapper-locations:
+        - classpath:mapper/*.xml
+        - classpath:dao/*.xml
+  
+    redis:
+      key:
+        prefix:
+          authCode: "authCode:"
+        expire:
+          authCode: 120
+  
+    ---
+  
+    spring.config.activate.on-profile: docker
+  
+    server.port: 80
+  
+    spring:
+      datasource:
+        url: jdbc:postgresql://ums-db:5432/userdb
+      data:
+        mongodb:
+          host: mongodb
+      redis:
+        host: redis
+  
+    ---
+  
+    spring.config.activate.on-profile: kafka
+  
+    spring.cloud.stream.bindings.adminUserMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.userMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.authMessageProcessor-in-0:
+      partitioned: true
+  
+    spring.cloud.stream.bindings.authUpdate-out-0:
+      partition-key-expression: headers['event-type']
+---
+# Source: dev-env/charts/app/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  labels:
+    app: app
+spec:
+  type: ClusterIP
+  selector:
+    app: app
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+# Source: dev-env/charts/auth-db/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-db
+  labels:
+    app: auth-db
+spec:
+  type: ClusterIP
+  selector:
+    app: auth-db
+  ports:
+    - port: 5432
+---
+# Source: dev-env/charts/auth-server/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-server
+  labels:
+    app: auth-server
+spec:
+  type: ClusterIP
+  selector:
+    app: auth-server
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+# Source: dev-env/charts/cms-db/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: cms-db
+  labels:
+    app: cms-db
+spec:
+  type: ClusterIP
+  selector:
+    app: cms-db
+  ports:
+    - port: 5432
+---
+# Source: dev-env/charts/cms/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: cms
+  labels:
+    app: cms
+spec:
+  type: ClusterIP
+  selector:
+    app: cms
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+# Source: dev-env/charts/elasticsearch/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  labels:
+    app: elasticsearch
+spec:
+  type: ClusterIP
+  selector:
+    app: elasticsearch
+  ports:
+    - name: http
+      port: 9200
+      protocol: TCP
+      targetPort: 9200
+    - name: transport
+      port: 9300
+      protocol: TCP
+      targetPort: 9300
+---
+# Source: dev-env/charts/email-db/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-db
+  labels:
+    app: email-db
+spec:
+  type: ClusterIP
+  selector:
+    app: email-db
+  ports:
+    - port: 5432
+---
+# Source: dev-env/charts/kibana/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  type: ClusterIP
+  selector:
+    app: kibana
+  ports:
+    - name: http
+      port: 5601
+      protocol: TCP
+      targetPort: 5601
+---
+# Source: dev-env/charts/logstash/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash
+  labels:
+    app: logstash
+spec:
+  type: ClusterIP
+  selector:
+    app: logstash
+  ports:
+    - name: beats
+      port: 5044
+      protocol: TCP
+    - name: monitoring
+      port: 9600
+      protocol: TCP
+---
+# Source: dev-env/charts/mongodb/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+---
+# Source: dev-env/charts/notification/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification
+  labels:
+    app: notification
+spec:
+  type: ClusterIP
+  selector:
+    app: notification
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+# Source: dev-env/charts/oms-db/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: oms-db
+  labels:
+    app: oms-db
+spec:
+  type: ClusterIP
+  selector:
+    app: oms-db
+  ports:
+    - port: 5432
+---
+# Source: dev-env/charts/oms/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: oms
+  labels:
+    app: oms
+spec:
+  type: ClusterIP
+  selector:
+    app: oms
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+# Source: dev-env/charts/pms-db/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pms-db
+  labels:
+    app: pms-db
+spec:
+  type: ClusterIP
+  selector:
+    app: pms-db
+  ports:
+    - port: 5432
+---
+# Source: dev-env/charts/pms/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: pms
+  labels:
+    app: pms
+spec:
+  type: ClusterIP
+  selector:
+    app: pms
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+# Source: dev-env/charts/rabbitmq/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  type: LoadBalancer
+  selector:
+    app: rabbitmq
+  ports:
+    - name: rabbitmq
+      port: 5672
+      protocol: TCP
+      targetPort: 5672
+    - name: rabbitmq-management
+      port: 15672
+      protocol: TCP
+      targetPort: 15672
+---
+# Source: dev-env/charts/redis/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    app: redis
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP
+---
+# Source: dev-env/charts/search/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: search
+  labels:
+    app: search
+spec:
+  type: ClusterIP
+  selector:
+    app: search
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+---
+# Source: dev-env/charts/sms-db/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sms-db
+  labels:
+    app: sms-db
+spec:
+  type: ClusterIP
+  selector:
+    app: sms-db
+  ports:
+    - port: 5432
+---
+# Source: dev-env/charts/sms/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sms
+  labels:
+    app: sms
+spec:
+  type: ClusterIP
+  selector:
+    app: sms
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+# Source: dev-env/charts/ums-db/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ums-db
+  labels:
+    app: ums-db
+spec:
+  type: ClusterIP
+  selector:
+    app: ums-db
+  ports:
+    - port: 5432
+---
+# Source: dev-env/charts/ums/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ums
+  labels:
+    app: ums
+spec:
+  type: ClusterIP
+  selector:
+    app: ums
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+# Source: dev-env/charts/zipkin/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: zipkin
+  labels:
+    app: zipkin
+spec:
+  type: ClusterIP
+  selector:
+    app: zipkin
+  ports:
+    - name: http
+      port: 9411
+      protocol: TCP
+      targetPort: 9411
+---
+# Source: dev-env/charts/app/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - name: app
+          image: e-com/app:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/app.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          - secretRef:
+              name: mongodb-credentials
+          volumeMounts:
+            - name: app
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: app
+          configMap:
+            name: app
+---
+# Source: dev-env/charts/auth-db/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-db
+  labels:
+    app: auth-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-db
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: auth-db
+    spec:
+      containers:
+        - name: auth-db
+          image: postgres:16-bullseye
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: POSTGRES_DB
+            value: authdb
+          envFrom:
+          - secretRef:
+              name: postgres-server-credentials
+          volumeMounts:
+            - name: auth-data
+              mountPath: /docker-entrypoint-initdb.d
+          ports:
+            - containerPort: 5432
+      volumes:
+        - name: auth-data
+          configMap:
+            name: postgres-data
+---
+# Source: dev-env/charts/auth-server/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-server
+  labels:
+    app: auth-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-server
+  template:
+    metadata:
+      labels:
+        app: auth-server
+    spec:
+      containers:
+        - name: auth-server
+          image: e-com/auth-server:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/auth-server.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          volumeMounts:
+            - name: auth-server
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: auth-server
+          configMap:
+            name: auth-server
+---
+# Source: dev-env/charts/cms-db/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms-db
+  labels:
+    app: cms-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cms-db
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: cms-db
+    spec:
+      containers:
+        - name: cms-db
+          image: postgres:16-bullseye
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: POSTGRES_DB
+            value: contentdb
+          envFrom:
+          - secretRef:
+              name: postgres-server-credentials
+          volumeMounts:
+            - name: cms-data
+              mountPath: /docker-entrypoint-initdb.d
+          ports:
+            - containerPort: 5432
+      volumes:
+        - name: cms-data
+          configMap:
+            name: postgres-data
+---
+# Source: dev-env/charts/cms/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cms
+  labels:
+    app: cms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cms
+  template:
+    metadata:
+      labels:
+        app: cms
+    spec:
+      containers:
+        - name: cms
+          image: e-com/cms:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/cms.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          volumeMounts:
+            - name: cms
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: cms
+          configMap:
+            name: cms
+---
+# Source: dev-env/charts/elasticsearch/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  labels:
+    app: elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+        - name: elasticsearch
+          image: elasticsearch:7.12.0
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: ES_JAVA_OPTS
+            value: -Xms512m -Xmx1024m
+          - name: cluster.name
+            value: elasticsearch
+          - name: discovery.type
+            value: single-node
+          ports:
+            - containerPort: 9200
+            - containerPort: 9300
+---
+# Source: dev-env/charts/email-db/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-db
+  labels:
+    app: email-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email-db
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: email-db
+    spec:
+      containers:
+        - name: email-db
+          image: postgres:16-bullseye
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: POSTGRES_DB
+            value: emaildb
+          envFrom:
+          - secretRef:
+              name: postgres-server-credentials
+          volumeMounts:
+            - name: email-data
+              mountPath: /docker-entrypoint-initdb.d
+          ports:
+            - containerPort: 5432
+      volumes:
+        - name: email-data
+          configMap:
+            name: postgres-data
+---
+# Source: dev-env/charts/kibana/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  labels:
+    app: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: kibana:7.12.0
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: ELASTICSEARCH_HOSTS
+            value: http://elasticsearch:9200
+          ports:
+            - containerPort: 5601
+---
+# Source: dev-env/charts/logstash/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+  labels:
+    app: logstash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: logstash
+    spec:
+      containers:
+        - name: logstash
+          image: logstash:7.12.0
+          imagePullPolicy: IfNotPresent
+          env:
+          ports:
+            - containerPort: 5044
+            - containerPort: 9600
+---
+# Source: dev-env/charts/mongodb/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1  # Adjust as needed
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:5.0.0
+          ports:
+            - containerPort: 27017
+---
+# Source: dev-env/charts/notification/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification
+  labels:
+    app: notification
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification
+  template:
+    metadata:
+      labels:
+        app: notification
+    spec:
+      containers:
+        - name: notification
+          image: e-com/notification:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/notification.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          - secretRef:
+              name: email-credentials
+          volumeMounts:
+            - name: notification
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: notification
+          configMap:
+            name: notification
+---
+# Source: dev-env/charts/oms-db/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oms-db
+  labels:
+    app: oms-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oms-db
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: oms-db
+    spec:
+      containers:
+        - name: oms-db
+          image: postgres:16-bullseye
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: POSTGRES_DB
+            value: orderdb
+          envFrom:
+          - secretRef:
+              name: postgres-server-credentials
+          volumeMounts:
+            - name: oms-data
+              mountPath: /docker-entrypoint-initdb.d
+          ports:
+            - containerPort: 5432
+      volumes:
+        - name: oms-data
+          configMap:
+            name: postgres-data
+---
+# Source: dev-env/charts/oms/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oms
+  labels:
+    app: oms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oms
+  template:
+    metadata:
+      labels:
+        app: oms
+    spec:
+      containers:
+        - name: oms
+          image: e-com/oms:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/oms.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: paypal-credentials
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          - secretRef:
+              name: usps-credentials
+          volumeMounts:
+            - name: oms
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: oms
+          configMap:
+            name: oms
+---
+# Source: dev-env/charts/pms-db/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pms-db
+  labels:
+    app: pms-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pms-db
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: pms-db
+    spec:
+      containers:
+        - name: pms-db
+          image: postgres:16-bullseye
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: POSTGRES_DB
+            value: productdb
+          envFrom:
+          - secretRef:
+              name: postgres-server-credentials
+          volumeMounts:
+            - name: pms-data
+              mountPath: /docker-entrypoint-initdb.d
+          ports:
+            - containerPort: 5432
+      volumes:
+        - name: pms-data
+          configMap:
+            name: postgres-data
+---
+# Source: dev-env/charts/pms/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pms
+  labels:
+    app: pms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pms
+  template:
+    metadata:
+      labels:
+        app: pms
+    spec:
+      containers:
+        - name: pms
+          image: e-com/pms:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/pms.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          volumeMounts:
+            - name: pms
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: pms
+          configMap:
+            name: pms
+---
+# Source: dev-env/charts/rabbitmq/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3.8.11-management
+          imagePullPolicy: IfNotPresent
+          env:
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
+---
+# Source: dev-env/charts/redis/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7.0.14
+          ports:
+            - containerPort: 6379
+---
+# Source: dev-env/charts/search/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search
+  labels:
+    app: search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: search
+  template:
+    metadata:
+      labels:
+        app: search
+    spec:
+      containers:
+        - name: search
+          image: e-com/search:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/search.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          volumeMounts:
+            - name: search
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: search
+          configMap:
+            name: search
+---
+# Source: dev-env/charts/sms-db/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sms-db
+  labels:
+    app: sms-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sms-db
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: sms-db
+    spec:
+      containers:
+        - name: sms-db
+          image: postgres:16-bullseye
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: POSTGRES_DB
+            value: salesdb
+          envFrom:
+          - secretRef:
+              name: postgres-server-credentials
+          volumeMounts:
+            - name: sms-data
+              mountPath: /docker-entrypoint-initdb.d
+          ports:
+            - containerPort: 5432
+      volumes:
+        - name: sms-data
+          configMap:
+            name: postgres-data
+---
+# Source: dev-env/charts/sms/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sms
+  labels:
+    app: sms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sms
+  template:
+    metadata:
+      labels:
+        app: sms
+    spec:
+      containers:
+        - name: sms
+          image: e-com/sms:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/sms.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          volumeMounts:
+            - name: sms
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: sms
+          configMap:
+            name: sms
+---
+# Source: dev-env/charts/ums-db/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ums-db
+  labels:
+    app: ums-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ums-db
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: ums-db
+    spec:
+      containers:
+        - name: ums-db
+          image: postgres:16-bullseye
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: POSTGRES_DB
+            value: userdb
+          envFrom:
+          - secretRef:
+              name: postgres-server-credentials
+          volumeMounts:
+            - name: ums-data
+              mountPath: /docker-entrypoint-initdb.d
+          ports:
+            - containerPort: 5432
+      volumes:
+        - name: ums-data
+          configMap:
+            name: postgres-data
+---
+# Source: dev-env/charts/ums/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ums
+  labels:
+    app: ums
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ums
+  template:
+    metadata:
+      labels:
+        app: ums
+    spec:
+      containers:
+        - name: ums
+          image: e-com/ums:latest
+          imagePullPolicy: Never
+          env:
+          - name: SPRING_CONFIG_LOCATION
+            value: file:/config-repo/application.yml,file:/config-repo/ums.yml
+          - name: SPRING_PROFILES_ACTIVE
+            value: docker
+          envFrom:
+          - secretRef:
+              name: postgres-credentials
+          - secretRef:
+              name: rabbitmq-credentials
+          volumeMounts:
+            - name: ums
+              mountPath: /config-repo
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+      volumes:
+        - name: ums
+          configMap:
+            name: ums
+---
+# Source: dev-env/charts/zipkin/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zipkin
+  labels:
+    app: zipkin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zipkin
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: zipkin
+    spec:
+      containers:
+        - name: zipkin
+          image: openzipkin/zipkin:2.23.2
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: RABBIT_ADDRESSES
+            value: rabbitmq
+          - name: STORAGE_TYPE
+            value: mem
+          ports:
+            - containerPort: 9411
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: auth-server
+spec:
+  host: auth-server
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: app
+spec:
+  host: app
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: cms
+spec:
+  host: cms
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: pms
+spec:
+  host: pms
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: oms
+spec:
+  host: oms
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: sms
+spec:
+  host: sms
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: ums
+spec:
+  host: ums
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: search
+spec:
+  host: search
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: notification
+spec:
+  host: notification
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+# Source: dev-env/templates/istio_base.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: e-com-gw
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - springecom.me
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+    #tls:
+      #credentialName: e-com-certificate
+      #mode: SIMPLE
+---
+# Source: dev-env/templates/istio_base.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: e-com-vs
+spec:
+  gateways:
+    - e-com-gw
+  hosts:
+    - springecom.me
+  http:
+    - match:
+        - uri:
+            exact: /
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /article
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /brand
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /product
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /review
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /cart
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /order
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /return
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /coupon
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /sale
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /user
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /esProduct/search
+      route:
+      - destination:
+          host: search
+          port:
+            number: 8081
+    - match:
+        - uri:
+            prefix: /esProduct/importAll
+      route:
+      - destination:
+          host: search
+          port:
+            number: 8081
+    - match:
+        - uri:
+            prefix: /swagger
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /swagger-ui.html
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /webjars
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /v2/api-docs
+      route:
+      - destination:
+          host: app
+          port:
+            number: 80
+    - match:
+        - uri:
+            prefix: /login
+      route:
+      - destination:
+          host: auth-server
+          port:
+            number: 80

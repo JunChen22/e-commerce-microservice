@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -38,6 +37,7 @@ public class UserController {
         return memberService.getInfo();
     }
 
+    // TODO: change it to flux
     @GetMapping("/getAllUserInfo") // TODO: change it to mTLS. Currently is dangerously wide open.
     public List<UserInfo> getAllUserInfo() {
         return memberService.getAllUserInfo();

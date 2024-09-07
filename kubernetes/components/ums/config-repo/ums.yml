@@ -1,1 +1,102 @@
-../../../../config-repo/ums.yml
+server:
+  port: 8085
+
+jwt:
+  HEADER_STRING: Authorization
+  tokenPrefix: Bearer
+  secretKey: JunChen522
+  expirationTimeMinute: 150
+  issuer: auth-server
+
+spring:
+  application:
+    name: ums
+  datasource:
+    url: jdbc:postgresql://localhost:5437/userdb
+    driverClassName: org.postgresql.Driver
+    #initialization-mode: always
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: springecommerece
+  redis:
+    host: localhost
+    port: 6379
+
+spring.cloud:
+  function:   # can't have space between, tells spring which to use
+    definition: adminUserMessageProcessor;adminEmailProcessor;userMessageProcessor;authMessageProcessor
+  stream:
+    default:
+      contentType: application/json
+    bindings:
+      adminUserMessageProcessor-in-0:      # admin
+        destination: adminUser
+        group: adminUserGroup
+      adminEmailProcessor-in-0:
+        destination: adminUserEmail
+        group: adminUserEmailGroup
+
+      userMessageProcessor-in-0:        # user and auth update
+        destination: user
+        group: userGroup
+      authMessageProcessor-in-0:
+        destination: authLogUpdate
+        group: authLogUpdateGroup
+
+      authUpdate-out-0:        # sending update to auth to update member info
+        destination: umsUserUpdate
+        producer:
+          required-groups: auditGroup
+
+      umsEmail-out-0: # sending event to notification service
+        destination: userEmail
+        producer:
+          required-groups: userEmailGroup
+
+
+# tells spring mybatis mapper's xml(sql) located
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath:dao/*.xml
+
+redis:
+  key:
+    prefix:
+      authCode: "authCode:"
+    expire:
+      authCode: 120
+
+---
+
+spring.config.activate.on-profile: docker
+
+server.port: 80
+
+spring:
+  datasource:
+    url: jdbc:postgresql://ums-db:5432/userdb
+  data:
+    mongodb:
+      host: mongodb
+  redis:
+    host: redis
+
+---
+
+spring.config.activate.on-profile: kafka
+
+spring.cloud.stream.bindings.adminUserMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.userMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.authMessageProcessor-in-0:
+  partitioned: true
+
+spring.cloud.stream.bindings.authUpdate-out-0:
+  partition-key-expression: headers['event-type']
+

@@ -29,8 +29,8 @@ public class ContentAggregate {
 
     @GetMapping("/all")
     @ApiOperation(value = "Get all articles")
-    public Mono<List<ArticleInfo>> getAllArticle() {
-        return articleService.getAllArticle().collectList();
+    public Flux<ArticleInfo> getAllArticle() {
+        return articleService.getAllArticle();
     }
 
     @GetMapping("/{articleId}")

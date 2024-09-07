@@ -30,34 +30,25 @@ public class BrandAggregate {
     }
 
     @GetMapping("/listAll")
-    @Cacheable(value = "allBrandCache", key = "'getAllBrand'")
     @ApiOperation(value = "Get all brands")
-    public List<Brand> getAllBrand() {
+    public Flux<Brand> getAllBrand() {
         Flux<Brand> brandFlux = brandService.getAllBrand();
-        List<Brand> brandList = brandFlux.collectList().block();
-
-        return brandList;
+        return brandFlux;
     }
 
     @GetMapping("/list")
-    @Cacheable(value = "allBrandCachePage", key = "'getAllBrand'")
     @ApiOperation(value = "Get brands with page and size")
-    public List<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+    public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize) {
         Flux<Brand> brandFlux = brandService.getAllBrand(pageNum, pageSize);
-        List<Brand> brandList = brandFlux.collectList().block();
-
-        return brandList;
+        return brandFlux;
     }
 
     @GetMapping("/product/{brandId}")
-    @Cacheable(value = "brandProductCache", key = "'getBrandProduct'")
     @ApiOperation(value = "Get all product of this brand")
-    public List<Product> getBrandProduct(@PathVariable int brandId) {
+    public Flux<Product> getBrandProduct(@PathVariable int brandId) {
         Flux<Product> productFlux = brandService.getBrandProduct(brandId);
-        List<Product> productList = productFlux.collectList().block();
-
-        return productList;
+        return productFlux;
     }
 
     @GetMapping("/{brandId}")

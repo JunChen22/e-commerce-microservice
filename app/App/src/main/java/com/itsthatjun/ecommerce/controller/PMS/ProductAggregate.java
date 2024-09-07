@@ -36,16 +36,29 @@ public class ProductAggregate {
     }
 
     @GetMapping("/listAll")
-    @Cacheable(value = "productsCache", key = "'listAllProduct'")
     @ApiOperation(value = "Get all product")
-    public List<ProductDTO> listAllProduct() {
-        Flux<ProductDTO> productFlux = productService.listAllProduct();
-        // Collect the elements of the Flux into a List
-        List<ProductDTO> productList = productFlux.collectList().block();
-
-        // Return the List<Product>
-        return productList;
+    public Flux<ProductDTO> listAllProduct() {
+        return productService.listAllProduct();
     }
+
+    /* TODO: Implement caching
+    @GetMapping("/listAll")
+    @ApiOperation(value = "Get all products")
+    public Flux<ProductDTO> listAllProduct() {
+        // Check if cached data is available
+        if (productService.checkForCache()) {
+            return productService.getCachedAllProduct();
+        } else {
+            // Otherwise, fetch from the source and cache the result
+            return productService.listAllProduct()
+                    .doOnNext(product -> productService.cacheProduct(product))
+                    .onErrorResume(error -> {
+                        // Handle any errors and potentially return fallback data
+                        return Flux.empty();
+                    });
+        }
+    }
+     */
 
     @GetMapping("/list")
     @ApiOperation(value = "Get product with page and size")

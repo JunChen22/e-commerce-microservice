@@ -15,12 +15,6 @@ spec:
   selector:
     app: {{ include "common.fullname" . }}
   ports:
-  {{- range .Values.service.ports }}
-    - name: {{ .name }}
-      protocol: {{ .protocol }}
-      port: {{ .port }}
-      targetPort: {{ .targetPort }}
+{{ toYaml .Values.service.ports | indent 4 }}
   {{- end }}
-
-{{- end -}}
 {{- end -}}
