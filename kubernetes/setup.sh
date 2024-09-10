@@ -48,14 +48,14 @@ helm template ./environments/istio-system/ > ./environments/istio-system/rendere
 
 
 # installing cert-manager
-#helm repo add jetstack https://charts.jetstack.io
-#helm repo update
-#helm install cert-manager jetstack/cert-manager \
-#  --create-namespace \
-#  --namespace cert-manager \
-#  --version v1.3.1 \
-#  --set installCRDs=true \
-#  --wait
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install cert-manager jetstack/cert-manager \
+  --create-namespace \
+  --namespace cert-manager \
+  --version v1.3.1 \
+  --set installCRDs=true \
+  --wait
 
 
 # enable/start ingress controller, gateway, not needed after service mesh, Istio

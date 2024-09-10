@@ -2956,9 +2956,12 @@ spec:
   - hosts:
     - springecom.me
     port:
-      name: http
-      number: 80
-      protocol: HTTP
+      name: https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: service-certificate
+      mode: SIMPLE
 ---
 # Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: security.istio.io/v1beta1

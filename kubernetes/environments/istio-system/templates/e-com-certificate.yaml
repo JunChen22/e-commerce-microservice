@@ -1,0 +1,27 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: service-certificate
+spec:
+  commonName: springecom.me
+  subject:
+    countries:
+      - my-country
+    localities:
+      - my-locality
+    organizationalUnits:
+      - my-ou
+    organizations:
+      - my-org
+    postalCodes:
+      - my-pc
+    provinces:
+      - my-province
+    serialNumber: my-sn
+    streetAddresses:
+      - my-address
+  dnsNames:
+    - springecom.me
+  issuerRef:
+    name: service-ca-issuer
+  secretName: service-certificate

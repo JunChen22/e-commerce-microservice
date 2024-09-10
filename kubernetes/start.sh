@@ -16,7 +16,7 @@ minikube kubectl -- create configmap postgres-data --from-file=../document/data.
 echo "Installing Helm chart for the e-com development environment..."
 helm install e-com-dev-env ./environments/dev-env --namespace e-com
 
-# helm install istio-custom ./environments/istio-system --namespace istio-system
+helm install istio-custom ./environments/istio-system --namespace istio-system
 
 
 # Step 5: Set the current Kubernetes context to the e-com namespace

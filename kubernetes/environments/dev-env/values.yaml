@@ -126,12 +126,12 @@ gateway:
     selector: ingressgateway
     host: springecom.me
     port:
-      name: http
-      number: 80
-      protocol: HTTP
-#    tls:
-#      credentialName: service-certificate
-#      mode: SIMPLE
+      name: https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: service-certificate
+      mode: SIMPLE
     virtualService:
       name: e-com-vs
       http:

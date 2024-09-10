@@ -1,0 +1,58 @@
+---
+# Source: istio-system/templates/e-com-certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: service-certificate
+spec:
+  commonName: springecom.me
+  subject:
+    countries:
+      - my-country
+    localities:
+      - my-locality
+    organizationalUnits:
+      - my-ou
+    organizations:
+      - my-org
+    postalCodes:
+      - my-pc
+    provinces:
+      - my-province
+    serialNumber: my-sn
+    streetAddresses:
+      - my-address
+  dnsNames:
+    - springecom.me
+  issuerRef:
+    name: service-ca-issuer
+  secretName: service-certificate
+---
+# Source: istio-system/templates/selfsigned-issuer.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: root-ca-cert
+spec:
+  isCA: true
+  commonName: root-ca
+  secretName: root-ca-secret
+  issuerRef:
+    name: selfsigned-root-ca-issuer
+---
+# Source: istio-system/templates/selfsigned-issuer.yaml
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned-root-ca-issuer
+spec:
+  selfSigned: {}
+---
+# Source: istio-system/templates/service-certificate-issuer.yaml
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: service-ca-issuer
+spec:
+  ca:
+    secretName: root-ca-secret
