@@ -3,7 +3,7 @@
 # TODO: might add download minikube too and make kubectl alias as part of setup
 
 # start a different profile
-minikube start -p spring
+minikube start -p spring --cpus=4 --memory=8192
 
 # switching profile
 minikube profile spring
@@ -29,7 +29,7 @@ docker pull openzipkin/zipkin:2.23.2
 
 cd ./kubernetes
 
-# installing Istio
+# installing Istio, might switch to Minikube Istio addons instead.
 # curl -L https://istio.io/downloadIstio | sh -
 cd istio-* # I'm using istio-1.23.0
 export PATH=$PWD/bin:$PATH  # temporarily add the path to the istioctl executable to your system’s PATH variable to run the tool from any terminal session.
@@ -43,11 +43,23 @@ cd ../
 
 # rendered_out_template.txt is the output of the rendered template, easier to debug
 helm template ./environments/dev-env/ > ./environments/dev-env/rendered_out_template.txt
-helm template ./environments/prod-env/ > ./environments/prod-env/rendered_out_template.txt
+# helm template ./environments/prod-env/ > ./environments/prod-env/rendered_out_template.txt
+helm template ./environments/istio-system/ > ./environments/istio-system/rendered_out_template.txt
+
+
+# installing cert-manager
+#helm repo add jetstack https://charts.jetstack.io
+#helm repo update
+#helm install cert-manager jetstack/cert-manager \
+#  --create-namespace \
+#  --namespace cert-manager \
+#  --version v1.3.1 \
+#  --set installCRDs=true \
+#  --wait
+
 
 # enable/start ingress controller, gateway, not needed after service mesh, Istio
 # minikube addons enable ingress
-
 # minikube addons enable metrics-server
 
 # just to show current addon list

@@ -129,9 +129,9 @@ gateway:
       name: http
       number: 80
       protocol: HTTP
-    tls:
-      credentialName: e-com-certificate
-      mode: SIMPLE
+#    tls:
+#      credentialName: service-certificate
+#      mode: SIMPLE
     virtualService:
       name: e-com-vs
       http:
@@ -199,10 +199,10 @@ gateway:
           destination:
             host: app
             port: 80
-        - prefix: /swagger-ui.html
-          destination:
-            host: app
-            port: 80
+#        - prefix: /swagger-ui.html
+#          destination:
+#            host: app
+#            port: 80
         - prefix: /webjars
           destination:
             host: app
@@ -236,13 +236,39 @@ gateway:
 #            host: app
 #            port: 80
 
+
+peerAuthentication:
+  name: default
+  namespace: e-com
+  mtls:
+    mode: STRICT
+
 destinationRules:
-  - name: auth-server
-  - name: app
-  - name: cms
-  - name: pms
-  - name: oms
-  - name: sms
-  - name: ums
-  - name: search
-  - name: notification
+  mode: ISTIO_MUTUAL
+  rules:
+    - name: auth-server
+    - name: app
+    - name: cms
+    - name: pms
+    - name: oms
+    - name: sms
+    - name: ums
+    - name: search
+    - name: notification
+
+
+#authorizationPolicy:
+#  name: product-composite-require-jwt
+#  namespace: e-com
+#  action: ALLOW
+#  selector:
+#    appName: product-composite
+
+#requestAuthentication:
+#  name: product-composite-request-authentication
+#  namespace: e-com
+#  jwtRules:
+#    issuer: http://auth-server
+#    jwksUri: http://auth-server.hands-on.svc.cluster.local/oauth2/jwks
+#  selector:
+#    appName: product-composite

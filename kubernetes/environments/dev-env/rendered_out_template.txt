@@ -44,8 +44,8 @@ metadata:
     app: paypal-credentials
 type: Opaque
 data:
-  PAYPAL_CLIENT_ID: QWJFZkF4ZzVpVXVBaXBUMDNPeDR5RkF5RllfWnR1UFJwTGpXSXpGVFFxd1dTU1d4UjdkSXRWWG1hdy1taFRiZWNGNFFGbTh2eUZqZ3dxMHI=
-  PAYPAL_CLIENT_SECRET: RUd4ajNIQTNvVURJVkJBWElKODVYWTdZNUR2VWh5MFduZjU2aHVWcWlxemdvTm5LSGVTd2xPSDhiYWtRZlhqYjA5cURKWGFTS29IZWVaeWw=
+  PAYPAL_CLIENT_ID: Q0xJRU5UX0lE
+  PAYPAL_CLIENT_SECRET: Q0xJRU5UX1NFQ1JFVA==
   PAYPAL_MODE: c2FuZGJveA==
 ---
 # Source: dev-env/templates/secrets.yaml
@@ -2845,7 +2845,7 @@ spec:
           ports:
             - containerPort: 9411
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2856,7 +2856,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2867,7 +2867,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2878,7 +2878,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2889,7 +2889,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2900,7 +2900,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2911,7 +2911,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2922,7 +2922,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2933,7 +2933,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_dest_rules_mutual_tls.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -2944,7 +2944,7 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
 ---
-# Source: dev-env/templates/istio_base.yaml
+# Source: dev-env/templates/istio_gateway.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
@@ -2959,11 +2959,17 @@ spec:
       name: http
       number: 80
       protocol: HTTP
-    #tls:
-      #credentialName: e-com-certificate
-      #mode: SIMPLE
 ---
-# Source: dev-env/templates/istio_base.yaml
+# Source: dev-env/templates/istio_mTLS.yaml
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+spec:
+  mtls:
+    mode: STRICT
+---
+# Source: dev-env/templates/istio_gateway.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -3081,14 +3087,6 @@ spec:
     - match:
         - uri:
             prefix: /swagger
-      route:
-      - destination:
-          host: app
-          port:
-            number: 80
-    - match:
-        - uri:
-            prefix: /swagger-ui.html
       route:
       - destination:
           host: app

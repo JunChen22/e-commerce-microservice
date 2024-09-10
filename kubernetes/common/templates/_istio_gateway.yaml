@@ -1,5 +1,4 @@
-{{- define "common.istio_base" -}}
-
+{{- define "common.istio_gateway" -}}
 {{- range .Values.gateway }}
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
@@ -15,9 +14,6 @@ spec:
       name: {{ .port.name }}
       number: {{ .port.number }}
       protocol: {{ .port.protocol }}
-    #tls:
-      #credentialName: {{ .tls.credentialName }}
-      #mode: {{ .tls.mode }}
 ---
 {{- end }}
 

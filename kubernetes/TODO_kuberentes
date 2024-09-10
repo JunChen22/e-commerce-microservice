@@ -36,3 +36,9 @@ ports:
   - name: http-mgm
     containerPort: 4004
     protocol: TCP
+
+
+
+# see if i can replace the istioctl with kubectl addons
+istioctl proxy-status
+istioctl pc tls <pod-name> -n <namespace>

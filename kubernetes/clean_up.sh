@@ -16,6 +16,8 @@ sudo sed -i "\~^$INGRESS_IP[[:space:]]*springecom\.me\$~d" /etc/hosts
 eval $(minikube docker-env --unset)
 
 minikube kubectl delete namespace e-com
+minikube kubectl delete namespace istio-system
+minikube kubectl delete namespace cert-manager
 
 # delete profile
 minikube delete -p spring
