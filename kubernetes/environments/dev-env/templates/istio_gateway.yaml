@@ -1,1 +1,1 @@
-{{- template "common.istio_gateway" . -}}
+{{- template "common.istio-gateway" . -}}

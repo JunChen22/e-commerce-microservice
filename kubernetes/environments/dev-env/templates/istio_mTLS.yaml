@@ -1,1 +1,1 @@
-{{- template "common.istio_mTLS" . -}}
+{{- template "common.istio-mTLS" . -}}

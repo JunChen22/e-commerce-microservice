@@ -21,7 +21,8 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "springecom.me/article/all",
+									"raw": "https://springecom.me/article/all",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -43,7 +44,8 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "springecom.me/article/1",
+									"raw": "https://springecom.me/article/1",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -65,7 +67,8 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "springecom.me/article/1?delay=5&faultPercent=0",
+									"raw": "https://springecom.me/article/1?delay=5&faultPercent=0",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -97,7 +100,8 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "springecom.me/article/1?delay=0&faultPercent=50",
+									"raw": "https://springecom.me/article/1?delay=0&faultPercent=50",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -134,7 +138,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/cart/list",
+											"raw": "https://springecom.me/cart/list",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -162,7 +167,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me/cart/add",
+											"raw": "https://springecom.me/cart/add",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -190,7 +196,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me/cart/update/quantity",
+											"raw": "https://springecom.me/cart/update/quantity",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -210,7 +217,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/cart/delete/1",
+											"raw": "https://springecom.me/cart/delete/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -230,7 +238,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/cart/clear",
+											"raw": "https://springecom.me/cart/clear",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -263,7 +272,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me/order/generateOrder",
+											"raw": "https://springecom.me/order/generateOrder",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -282,7 +292,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/order/list",
+											"raw": "https://springecom.me/order/list",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -301,7 +312,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/order/payment/getPaymentLink/2023102530101000003",
+											"raw": "https://springecom.me/order/payment/getPaymentLink/2023102530101000003",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -322,7 +334,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/order/detail/20231013s",
+											"raw": "https://springecom.me/order/detail/20231013s",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -342,7 +355,8 @@
 										"method": "POST",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/order/cancelOrder/MD1014",
+											"raw": "https://springecom.me/order/cancelOrder/MD1014",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -376,7 +390,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me/order/return/apply",
+											"raw": "https://springecom.me/order/return/apply",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -405,7 +420,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me/order/return/apply",
+											"raw": "https://springecom.me/order/return/apply",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -425,7 +441,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/order/return/status/2023102520101000001",
+											"raw": "https://springecom.me/order/return/status/2023102520101000001",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -446,7 +463,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/order/return/cancel",
+											"raw": "https://springecom.me/order/return/cancel",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -479,7 +497,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/review/getAllProductReview/1",
+											"raw": "https://springecom.me/review/getAllProductReview/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -502,7 +521,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/review/detail/1",
+											"raw": "https://springecom.me/review/detail/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -531,7 +551,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me/review/create",
+											"raw": "https://springecom.me/review/create",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -559,7 +580,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me/review/update",
+											"raw": "https://springecom.me/review/update",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -578,7 +600,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/review/delete/11",
+											"raw": "https://springecom.me/review/delete/11",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -606,7 +629,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/product/listAll",
+											"raw": "https://springecom.me/product/listAll",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -628,7 +652,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/product/list",
+											"raw": "https://springecom.me/product/list",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -650,7 +675,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/product/3",
+											"raw": "https://springecom.me/product/3",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -674,7 +700,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/brand/listAll",
+											"raw": "https://springecom.me/brand/listAll",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -693,7 +720,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/brand/list",
+											"raw": "https://springecom.me/brand/list",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -712,7 +740,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/brand/product/2",
+											"raw": "https://springecom.me/brand/product/2",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -732,7 +761,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/brand/2",
+											"raw": "https://springecom.me/brand/2",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -764,7 +794,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/sale/AllFlashSaleItem",
+											"raw": "https://springecom.me/sale/AllFlashSaleItem",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -786,7 +817,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/sale/AllPromotionSale",
+											"raw": "https://springecom.me/sale/AllPromotionSale",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -808,7 +840,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/sale/AllPromotionSaleItem",
+											"raw": "https://springecom.me/sale/AllPromotionSaleItem",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -832,7 +865,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me/coupon/check?couponCode=10OFF",
+											"raw": "https://springecom.me/coupon/check?couponCode=10OFF",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -876,7 +910,8 @@
 									}
 								},
 								"url": {
-									"raw": "springecom.me/user/getInfo",
+									"raw": "https://springecom.me/user/getInfo",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -904,7 +939,8 @@
 									}
 								},
 								"url": {
-									"raw": "springecom.me/user/register",
+									"raw": "https://springecom.me/user/register",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -932,7 +968,8 @@
 									}
 								},
 								"url": {
-									"raw": "springecom.me/user/updatePassword",
+									"raw": "https://springecom.me/user/updatePassword",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -960,7 +997,8 @@
 									}
 								},
 								"url": {
-									"raw": "springecom.me/user/updateInfo",
+									"raw": "https://springecom.me/user/updateInfo",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -988,7 +1026,8 @@
 									}
 								},
 								"url": {
-									"raw": "springecom.me/user/updateAddress",
+									"raw": "https://springecom.me/user/updateAddress",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -1016,7 +1055,8 @@
 									}
 								},
 								"url": {
-									"raw": "springecom.me/user/deleteAccount",
+									"raw": "https://springecom.me/user/deleteAccount",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -1040,7 +1080,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "springecom.me/actuator",
+							"raw": "https://springecom.me/actuator",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -1067,7 +1108,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me/login",
+							"raw": "https://springecom.me/login",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -1132,7 +1174,8 @@
 									}
 								},
 								"url": {
-									"raw": "springecom.me:8082/article/create",
+									"raw": "https://springecom.me:8082/article/create",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -1152,7 +1195,8 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "springecom.me:8082/article/all",
+									"raw": "https://springecom.me:8082/article/all",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -1172,7 +1216,8 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "springecom.me:8082/article/1",
+									"raw": "https://springecom.me:8082/article/1",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -1201,7 +1246,8 @@
 									}
 								},
 								"url": {
-									"raw": "springecom.me:8082/article/update",
+									"raw": "https://springecom.me:8082/article/update",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -1221,7 +1267,8 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "springecom.me:8082/article/delete/4",
+									"raw": "https://springecom.me:8082/article/delete/4",
+									"protocol": "https",
 									"host": [
 										"springecom",
 										"me"
@@ -1250,7 +1297,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/all/WAITING_FOR_PAYMENT",
+											"raw": "https://springecom.me:8082/order/all/WAITING_FOR_PAYMENT",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1271,7 +1319,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/all/FULFILLING",
+											"raw": "https://springecom.me:8082/order/all/FULFILLING",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1292,7 +1341,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/all/SEND",
+											"raw": "https://springecom.me:8082/order/all/SEND",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1313,7 +1363,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/all/COMPLETE",
+											"raw": "https://springecom.me:8082/order/all/COMPLETE",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1334,7 +1385,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/all/CLOSED",
+											"raw": "https://springecom.me:8082/order/all/CLOSED",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1355,7 +1407,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/all/INVALID",
+											"raw": "https://springecom.me:8082/order/all/INVALID",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1376,7 +1429,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/user/1",
+											"raw": "https://springecom.me:8082/order/user/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1397,7 +1451,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/1001",
+											"raw": "https://springecom.me:8082/order/1001",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1417,7 +1472,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/payment/getPaymentLink/2023102540101000004",
+											"raw": "https://springecom.me:8082/order/payment/getPaymentLink/2023102540101000004",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1448,7 +1504,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/order/create",
+											"raw": "https://springecom.me:8082/order/create",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1477,7 +1534,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/order/create",
+											"raw": "https://springecom.me:8082/order/create",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1506,7 +1564,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/order/update",
+											"raw": "https://springecom.me:8082/order/update",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1535,7 +1594,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/order/cancel",
+											"raw": "https://springecom.me:8082/order/cancel",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1560,7 +1620,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/return/all/WAITING_TO_PROCESS",
+											"raw": "https://springecom.me:8082/order/return/all/WAITING_TO_PROCESS",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1582,7 +1643,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/return/all/RETURNING",
+											"raw": "https://springecom.me:8082/order/return/all/RETURNING",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1604,7 +1666,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/return/all/COMPLETED",
+											"raw": "https://springecom.me:8082/order/return/all/COMPLETED",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1626,7 +1689,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/return/REJECTED",
+											"raw": "https://springecom.me:8082/order/return/REJECTED",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1647,7 +1711,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/return/1003",
+											"raw": "https://springecom.me:8082/order/return/1003",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1668,7 +1733,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/order/return/user/1",
+											"raw": "https://springecom.me:8082/order/return/user/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1699,7 +1765,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/order/return/update",
+											"raw": "https://springecom.me:8082/order/return/update",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1729,7 +1796,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/order/return/update",
+											"raw": "https://springecom.me:8082/order/return/update",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1759,7 +1827,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/order/return/update",
+											"raw": "https://springecom.me:8082/order/return/update",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1810,7 +1879,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/brand/listAll",
+											"raw": "https://springecom.me:8082/brand/listAll",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1830,7 +1900,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/brand/list",
+											"raw": "https://springecom.me:8082/brand/list",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1850,7 +1921,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/brand/product/2",
+											"raw": "https://springecom.me:8082/brand/product/2",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1871,7 +1943,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/brand/2",
+											"raw": "https://springecom.me:8082/brand/2",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1900,7 +1973,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/brand/create",
+											"raw": "https://springecom.me:8082/brand/create",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1929,7 +2003,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/brand/update/",
+											"raw": "https://springecom.me:8082/brand/update/",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1950,7 +2025,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/brand/delete/12",
+											"raw": "https://springecom.me:8082/brand/delete/12",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1976,7 +2052,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/product/listAll",
+											"raw": "https://springecom.me:8082/product/listAll",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -1996,7 +2073,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/product/list",
+											"raw": "https://springecom.me:8082/product/list",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2016,7 +2094,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/product/2",
+											"raw": "https://springecom.me:8082/product/2",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2045,7 +2124,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/product/updateProductInfo",
+											"raw": "https://springecom.me:8082/product/updateProductInfo",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2074,7 +2154,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/product/updateProductStatus",
+											"raw": "https://springecom.me:8082/product/updateProductStatus",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2103,7 +2184,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/product/updateProductSkuStatus",
+											"raw": "https://springecom.me:8082/product/updateProductSkuStatus",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2132,7 +2214,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/product/updateProductStock",
+											"raw": "https://springecom.me:8082/product/updateProductStock",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2161,7 +2244,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/product/updateProductPrice",
+											"raw": "https://springecom.me:8082/product/updateProductPrice",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2181,7 +2265,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/product/delete/1",
+											"raw": "https://springecom.me:8082/product/delete/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2212,6 +2297,7 @@
 										},
 										"url": {
 											"raw": "localhost:8082/product/create",
+											"protocol": "https",
 											"host": [
 												"localhost"
 											],
@@ -2240,6 +2326,7 @@
 										},
 										"url": {
 											"raw": "localhost:8082/product/create",
+											"protocol": "https",
 											"host": [
 												"localhost"
 											],
@@ -2268,6 +2355,7 @@
 										},
 										"url": {
 											"raw": "localhost:8082/product/addProductSku",
+											"protocol": "https",
 											"host": [
 												"localhost"
 											],
@@ -2296,6 +2384,7 @@
 										},
 										"url": {
 											"raw": "localhost:8082/product/addProductSku",
+											"protocol": "https",
 											"host": [
 												"localhost"
 											],
@@ -2319,7 +2408,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/review/getAllProductReview/1",
+											"raw": "https://springecom.me:8082/review/getAllProductReview/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2340,7 +2430,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/review/getAllReviewByUser/1",
+											"raw": "https://springecom.me:8082/review/getAllReviewByUser/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2370,7 +2461,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/review/create",
+											"raw": "https://springecom.me:8082/review/create",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2399,7 +2491,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/review/update",
+											"raw": "https://springecom.me:8082/review/update",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2419,7 +2512,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/review/delete/11",
+											"raw": "https://springecom.me:8082/review/delete/11",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2450,7 +2544,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/coupon/listAll",
+											"raw": "https://springecom.me:8082/coupon/listAll",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2470,7 +2565,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/coupon/1",
+											"raw": "https://springecom.me:8082/coupon/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2490,7 +2586,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/coupon/product/1",
+											"raw": "https://springecom.me:8082/coupon/product/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2515,7 +2612,8 @@
 											"urlencoded": []
 										},
 										"url": {
-											"raw": "springecom.me:8082/coupon/create",
+											"raw": "https://springecom.me:8082/coupon/create",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2544,7 +2642,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/coupon/update",
+											"raw": "https://springecom.me:8082/coupon/update",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2564,7 +2663,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/coupon/delete/7",
+											"raw": "https://springecom.me:8082/coupon/delete/7",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2590,7 +2690,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/coupon/getAllUsedCoupon",
+											"raw": "https://springecom.me:8082/coupon/getAllUsedCoupon",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2610,7 +2711,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/coupon/getUserCoupon/1",
+											"raw": "https://springecom.me:8082/coupon/getUserCoupon/1",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2636,7 +2738,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/sale/AllPromotionSale",
+											"raw": "https://springecom.me:8082/sale/AllPromotionSale",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2656,7 +2759,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/sale/AllPromotionSaleItem",
+											"raw": "https://springecom.me:8082/sale/AllPromotionSaleItem",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2676,7 +2780,8 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/sale/AllFlashSaleItem",
+											"raw": "https://springecom.me:8082/sale/AllFlashSaleItem",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2705,7 +2810,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/sale/createList",
+											"raw": "https://springecom.me:8082/sale/createList",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2734,7 +2840,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/sale/createCategorySale",
+											"raw": "https://springecom.me:8082/sale/createCategorySale",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2763,7 +2870,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/sale/createBrandSale",
+											"raw": "https://springecom.me:8082/sale/createBrandSale",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2792,7 +2900,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/sale/updateInfo",
+											"raw": "https://springecom.me:8082/sale/updateInfo",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2821,7 +2930,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/sale/updatePrice",
+											"raw": "https://springecom.me:8082/sale/updatePrice",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2850,7 +2960,8 @@
 											}
 										},
 										"url": {
-											"raw": "springecom.me:8082/sale/updateStatus",
+											"raw": "https://springecom.me:8082/sale/updateStatus",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2870,7 +2981,8 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "springecom.me:8082/sale/delete/5",
+											"raw": "https://springecom.me:8082/sale/delete/5",
+											"protocol": "https",
 											"host": [
 												"springecom",
 												"me"
@@ -2920,7 +3032,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me:8082/admin/login",
+							"raw": "https://springecom.me:8082/admin/login",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -2949,7 +3062,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me:8082/admin/login",
+							"raw": "https://springecom.me:8082/admin/login",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -2978,7 +3092,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me:8082/admin/login",
+							"raw": "https://springecom.me:8082/admin/login",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3020,7 +3135,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me:8082/admin/logs/1",
+							"raw": "https://springecom.me:8082/admin/logs/1",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3063,7 +3179,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me:8082/admin/roles/1",
+							"raw": "https://springecom.me:8082/admin/roles/1",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3106,7 +3223,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me:8082/admin/permission/1",
+							"raw": "https://springecom.me:8082/admin/permission/1",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3136,7 +3254,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me:8082/admin/register",
+							"raw": "https://springecom.me:8082/admin/register",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3159,7 +3278,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "springecom.me:8082/actuator/health",
+							"raw": "https://springecom.me:8082/actuator/health",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3214,7 +3334,8 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "springecom.me/esProduct/importAll",
+							"raw": "https://springecom.me/esProduct/importAll",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3233,12 +3354,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "springecom.me/search?keyword=phone&pageNum=1&sort=3",
+							"raw": "https://springecom.me/esProduct/search?keyword=phone&pageNum=1&sort=3",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
 							],
 							"path": [
+								"esProduct",
 								"search"
 							],
 							"query": [
@@ -3265,7 +3388,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "springecom.me:8081/esProduct/getAll",
+							"raw": "https://springecom.me:8081/esProduct/getAll",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3285,7 +3409,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "springecom.me:8081/esProduct/create/1",
+							"raw": "https://springecom.me:8081/esProduct/create/1",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3306,7 +3431,8 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "springecom.me:8081/esProduct/delete/2",
+							"raw": "https://springecom.me:8081/esProduct/delete/2",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"
@@ -3336,7 +3462,8 @@
 							}
 						},
 						"url": {
-							"raw": "springecom.me:8081/esProduct/delete/batch",
+							"raw": "https://springecom.me:8081/esProduct/delete/batch",
+							"protocol": "https",
 							"host": [
 								"springecom",
 								"me"

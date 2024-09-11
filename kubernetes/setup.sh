@@ -43,7 +43,7 @@ cd ../
 
 # rendered_out_template.txt is the output of the rendered template, easier to debug
 helm template ./environments/dev-env/ > ./environments/dev-env/rendered_out_template.txt
-# helm template ./environments/prod-env/ > ./environments/prod-env/rendered_out_template.txt
+helm template ./environments/prod-env/ > ./environments/prod-env/rendered_out_template.txt
 helm template ./environments/istio-system/ > ./environments/istio-system/rendered_out_template.txt
 
 

@@ -37,14 +37,11 @@ later
 
 - add admin to Kubernetes.
 - renew token too
-- add mTls between services.
 - oauth2
 
 - add Jenkin, maybe
 - change it to spring boot 3.x. currently at 2.5.2
 - Servlet-based Security Replace with Reactive Components
-
-
 
 Switching to more reactive programming
 - R2DBC
@@ -52,3 +49,6 @@ Switching to more reactive programming
 - mongo-reactive
 - redis-reactive
 
+switch from symmetrical to asymmetrical encryption
+- Istio authorization policy and request authentication
+- change auth server to use asymmetrical encryption, jwks

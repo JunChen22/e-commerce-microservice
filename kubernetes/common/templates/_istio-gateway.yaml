@@ -1,4 +1,4 @@
-{{- define "common.istio_gateway" -}}
+{{- define "common.istio-gateway" -}}
 {{- range .Values.gateway }}
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway

@@ -120,6 +120,7 @@ notification:
     - email-credentials
 
 
+# Istio Gateway
 gateway:
   - name: e-com-gw
     type: ingress
@@ -237,6 +238,7 @@ gateway:
 #            port: 80
 
 
+# mTLS
 peerAuthentication:
   name: default
   namespace: e-com
@@ -257,18 +259,4 @@ destinationRules:
     - name: notification
 
 
-#authorizationPolicy:
-#  name: product-composite-require-jwt
-#  namespace: e-com
-#  action: ALLOW
-#  selector:
-#    appName: product-composite
-
-#requestAuthentication:
-#  name: product-composite-request-authentication
-#  namespace: e-com
-#  jwtRules:
-#    issuer: http://auth-server
-#    jwksUri: http://auth-server.hands-on.svc.cluster.local/oauth2/jwks
-#  selector:
-#    appName: product-composite
+# JWT Authorization Policy

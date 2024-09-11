@@ -1,4 +1,4 @@
-{{- define "common.istio_mTLS" -}}
+{{- define "common.istio-mTLS" -}}
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
