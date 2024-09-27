@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -93,7 +94,6 @@ public class CartItemServiceImpl implements CartItemService {
             newItem.setProductId(sku.getProductId());
             newItem.setPrice(sku.getPrice());
             newItem.setProductPic(sku.getPicture());
-            newItem.setCreatedAt(new Date());
             cartItemMapper.insert(newItem);
         }
 

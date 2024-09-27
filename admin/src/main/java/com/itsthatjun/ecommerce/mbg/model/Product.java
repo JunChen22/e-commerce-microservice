@@ -31,7 +31,7 @@ public class Product implements Serializable {
 
     private String coverPicture;
 
-    private BigDecimal pictureAlbum;
+    private Integer pictureAlbum;
 
     private String description;
 
@@ -55,7 +55,7 @@ public class Product implements Serializable {
 
     private String detailDesc;
 
-    private BigDecimal descriptionAlbum;
+    private Integer descriptionAlbumId;
 
     private Integer deleteStatus;
 
@@ -171,11 +171,11 @@ public class Product implements Serializable {
         this.coverPicture = coverPicture;
     }
 
-    public BigDecimal getPictureAlbum() {
+    public Integer getPictureAlbum() {
         return pictureAlbum;
     }
 
-    public void setPictureAlbum(BigDecimal pictureAlbum) {
+    public void setPictureAlbum(Integer pictureAlbum) {
         this.pictureAlbum = pictureAlbum;
     }
 
@@ -267,12 +267,12 @@ public class Product implements Serializable {
         this.detailDesc = detailDesc;
     }
 
-    public BigDecimal getDescriptionAlbum() {
-        return descriptionAlbum;
+    public Integer getDescriptionAlbumId() {
+        return descriptionAlbumId;
     }
 
-    public void setDescriptionAlbum(BigDecimal descriptionAlbum) {
-        this.descriptionAlbum = descriptionAlbum;
+    public void setDescriptionAlbumId(Integer descriptionAlbumId) {
+        this.descriptionAlbumId = descriptionAlbumId;
     }
 
     public Integer getDeleteStatus() {

@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 public class ProductAttribute implements Serializable {
     private Integer id;
@@ -10,7 +9,7 @@ public class ProductAttribute implements Serializable {
 
     private Integer productId;
 
-    private BigDecimal attributeTypeId;
+    private Integer attributeTypeId;
 
     private String attributeValue;
 
@@ -42,11 +41,11 @@ public class ProductAttribute implements Serializable {
         this.productId = productId;
     }
 
-    public BigDecimal getAttributeTypeId() {
+    public Integer getAttributeTypeId() {
         return attributeTypeId;
     }
 
-    public void setAttributeTypeId(BigDecimal attributeTypeId) {
+    public void setAttributeTypeId(Integer attributeTypeId) {
         this.attributeTypeId = attributeTypeId;
     }
 

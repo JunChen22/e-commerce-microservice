@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.dto.enumgroup;
+package com.itsthatjun.ecommerce.enums;
 
 public enum Status {
     ACTIVE,

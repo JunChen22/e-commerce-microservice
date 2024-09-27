@@ -5,7 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="alphabet" jdbcType="VARCHAR" property="alphabet" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="logo" jdbcType="VARCHAR" property="logo" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -102,7 +102,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Brand" useGeneratedKeys="true">
     insert into brand (name, alphabet, status, 
       logo)
-    values (#{name,jdbcType=VARCHAR}, #{alphabet,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+    values (#{name,jdbcType=VARCHAR}, #{alphabet,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{logo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Brand" useGeneratedKeys="true">
@@ -129,7 +129,7 @@
         #{alphabet,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="logo != null">
         #{logo,jdbcType=VARCHAR},
@@ -155,7 +155,7 @@
         alphabet = #{record.alphabet,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=INTEGER},
       </if>
       <if test="record.logo != null">
         logo = #{record.logo,jdbcType=VARCHAR},
@@ -170,7 +170,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       alphabet = #{record.alphabet,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
       logo = #{record.logo,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -186,7 +186,7 @@
         alphabet = #{alphabet,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="logo != null">
         logo = #{logo,jdbcType=VARCHAR},
@@ -198,7 +198,7 @@
     update brand
     set name = #{name,jdbcType=VARCHAR},
       alphabet = #{alphabet,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       logo = #{logo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

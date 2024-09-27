@@ -765,52 +765,52 @@ public class OrderItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdEqualTo(Long value) {
+        public Criteria andProductSkuIdEqualTo(Integer value) {
             addCriterion("product_sku_id =", value, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdNotEqualTo(Long value) {
+        public Criteria andProductSkuIdNotEqualTo(Integer value) {
             addCriterion("product_sku_id <>", value, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdGreaterThan(Long value) {
+        public Criteria andProductSkuIdGreaterThan(Integer value) {
             addCriterion("product_sku_id >", value, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andProductSkuIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("product_sku_id >=", value, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdLessThan(Long value) {
+        public Criteria andProductSkuIdLessThan(Integer value) {
             addCriterion("product_sku_id <", value, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdLessThanOrEqualTo(Long value) {
+        public Criteria andProductSkuIdLessThanOrEqualTo(Integer value) {
             addCriterion("product_sku_id <=", value, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdIn(List<Long> values) {
+        public Criteria andProductSkuIdIn(List<Integer> values) {
             addCriterion("product_sku_id in", values, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdNotIn(List<Long> values) {
+        public Criteria andProductSkuIdNotIn(List<Integer> values) {
             addCriterion("product_sku_id not in", values, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdBetween(Long value1, Long value2) {
+        public Criteria andProductSkuIdBetween(Integer value1, Integer value2) {
             addCriterion("product_sku_id between", value1, value2, "productSkuId");
             return (Criteria) this;
         }
 
-        public Criteria andProductSkuIdNotBetween(Long value1, Long value2) {
+        public Criteria andProductSkuIdNotBetween(Integer value1, Integer value2) {
             addCriterion("product_sku_id not between", value1, value2, "productSkuId");
             return (Criteria) this;
         }
@@ -895,52 +895,52 @@ public class OrderItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdEqualTo(Long value) {
+        public Criteria andProductCategoryIdEqualTo(Integer value) {
             addCriterion("product_category_id =", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdNotEqualTo(Long value) {
+        public Criteria andProductCategoryIdNotEqualTo(Integer value) {
             addCriterion("product_category_id <>", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdGreaterThan(Long value) {
+        public Criteria andProductCategoryIdGreaterThan(Integer value) {
             addCriterion("product_category_id >", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andProductCategoryIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("product_category_id >=", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdLessThan(Long value) {
+        public Criteria andProductCategoryIdLessThan(Integer value) {
             addCriterion("product_category_id <", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdLessThanOrEqualTo(Long value) {
+        public Criteria andProductCategoryIdLessThanOrEqualTo(Integer value) {
             addCriterion("product_category_id <=", value, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdIn(List<Long> values) {
+        public Criteria andProductCategoryIdIn(List<Integer> values) {
             addCriterion("product_category_id in", values, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdNotIn(List<Long> values) {
+        public Criteria andProductCategoryIdNotIn(List<Integer> values) {
             addCriterion("product_category_id not in", values, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdBetween(Long value1, Long value2) {
+        public Criteria andProductCategoryIdBetween(Integer value1, Integer value2) {
             addCriterion("product_category_id between", value1, value2, "productCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andProductCategoryIdNotBetween(Long value1, Long value2) {
+        public Criteria andProductCategoryIdNotBetween(Integer value1, Integer value2) {
             addCriterion("product_category_id not between", value1, value2, "productCategoryId");
             return (Criteria) this;
         }

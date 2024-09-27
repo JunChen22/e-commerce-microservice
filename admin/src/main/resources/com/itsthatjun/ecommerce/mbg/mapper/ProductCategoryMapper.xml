@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ProductCategory">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="parent_id" jdbcType="NUMERIC" property="parentId" />
-    <result column="level" jdbcType="NUMERIC" property="level" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="level" jdbcType="INTEGER" property="level" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -101,7 +101,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductCategory" useGeneratedKeys="true">
     insert into product_category (name, parent_id, level
       )
-    values (#{name,jdbcType=VARCHAR}, #{parentId,jdbcType=NUMERIC}, #{level,jdbcType=NUMERIC}
+    values (#{name,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductCategory" useGeneratedKeys="true">
@@ -122,10 +122,10 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="parentId != null">
-        #{parentId,jdbcType=NUMERIC},
+        #{parentId,jdbcType=INTEGER},
       </if>
       <if test="level != null">
-        #{level,jdbcType=NUMERIC},
+        #{level,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -145,10 +145,10 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.parentId != null">
-        parent_id = #{record.parentId,jdbcType=NUMERIC},
+        parent_id = #{record.parentId,jdbcType=INTEGER},
       </if>
       <if test="record.level != null">
-        level = #{record.level,jdbcType=NUMERIC},
+        level = #{record.level,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -159,8 +159,8 @@
     update product_category
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      parent_id = #{record.parentId,jdbcType=NUMERIC},
-      level = #{record.level,jdbcType=NUMERIC}
+      parent_id = #{record.parentId,jdbcType=INTEGER},
+      level = #{record.level,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -172,10 +172,10 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=NUMERIC},
+        parent_id = #{parentId,jdbcType=INTEGER},
       </if>
       <if test="level != null">
-        level = #{level,jdbcType=NUMERIC},
+        level = #{level,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -183,8 +183,8 @@
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductCategory">
     update product_category
     set name = #{name,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=NUMERIC},
-      level = #{level,jdbcType=NUMERIC}
+      parent_id = #{parentId,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

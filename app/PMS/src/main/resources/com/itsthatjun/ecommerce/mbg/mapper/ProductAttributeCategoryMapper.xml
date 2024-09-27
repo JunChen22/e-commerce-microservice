@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ProductAttributeCategory">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="attribute_amount" jdbcType="NUMERIC" property="attributeAmount" />
+    <result column="attribute_amount" jdbcType="INTEGER" property="attributeAmount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -99,7 +99,7 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttributeCategory" useGeneratedKeys="true">
     insert into product_attribute_category (name, attribute_amount)
-    values (#{name,jdbcType=VARCHAR}, #{attributeAmount,jdbcType=NUMERIC})
+    values (#{name,jdbcType=VARCHAR}, #{attributeAmount,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttributeCategory" useGeneratedKeys="true">
     insert into product_attribute_category
@@ -116,7 +116,7 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="attributeAmount != null">
-        #{attributeAmount,jdbcType=NUMERIC},
+        #{attributeAmount,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -136,7 +136,7 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.attributeAmount != null">
-        attribute_amount = #{record.attributeAmount,jdbcType=NUMERIC},
+        attribute_amount = #{record.attributeAmount,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -147,7 +147,7 @@
     update product_attribute_category
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      attribute_amount = #{record.attributeAmount,jdbcType=NUMERIC}
+      attribute_amount = #{record.attributeAmount,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -159,7 +159,7 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="attributeAmount != null">
-        attribute_amount = #{attributeAmount,jdbcType=NUMERIC},
+        attribute_amount = #{attributeAmount,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -167,7 +167,7 @@
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttributeCategory">
     update product_attribute_category
     set name = #{name,jdbcType=VARCHAR},
-      attribute_amount = #{attributeAmount,jdbcType=NUMERIC}
+      attribute_amount = #{attributeAmount,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

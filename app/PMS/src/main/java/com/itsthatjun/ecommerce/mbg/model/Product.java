@@ -54,7 +54,7 @@ public class Product {
 
     private String detailDesc;
 
-    private BigDecimal descriptionAlbum;
+    private Integer descriptionAlbumId;
 
     private Integer deleteStatus;
 
@@ -264,12 +264,12 @@ public class Product {
         this.detailDesc = detailDesc;
     }
 
-    public BigDecimal getDescriptionAlbum() {
-        return descriptionAlbum;
+    public Integer getDescriptionAlbumId() {
+        return descriptionAlbumId;
     }
 
-    public void setDescriptionAlbum(BigDecimal descriptionAlbum) {
-        this.descriptionAlbum = descriptionAlbum;
+    public void setDescriptionAlbumId(Integer descriptionAlbumId) {
+        this.descriptionAlbumId = descriptionAlbumId;
     }
 
     public Integer getDeleteStatus() {

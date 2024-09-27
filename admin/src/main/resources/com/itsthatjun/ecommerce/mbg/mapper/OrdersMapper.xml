@@ -3,8 +3,8 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.OrdersMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Orders">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="member_id" jdbcType="BIGINT" property="memberId" />
-    <result column="coupon_id" jdbcType="BIGINT" property="couponId" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="coupon_id" jdbcType="INTEGER" property="couponId" />
     <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
     <result column="member_email" jdbcType="VARCHAR" property="memberEmail" />
     <result column="total_amount" jdbcType="NUMERIC" property="totalAmount" />
@@ -142,7 +142,7 @@
       delivery_time, receive_time, comment, 
       admin_note, created_at, updated_at
       )
-    values (#{memberId,jdbcType=BIGINT}, #{couponId,jdbcType=BIGINT}, #{orderSn,jdbcType=VARCHAR}, 
+    values (#{memberId,jdbcType=INTEGER}, #{couponId,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, 
       #{memberEmail,jdbcType=VARCHAR}, #{totalAmount,jdbcType=NUMERIC}, #{promotionAmount,jdbcType=NUMERIC}, 
       #{couponAmount,jdbcType=NUMERIC}, #{discountAmount,jdbcType=NUMERIC}, #{shippingCost,jdbcType=NUMERIC}, 
       #{payAmount,jdbcType=NUMERIC}, #{payType,jdbcType=INTEGER}, #{sourceType,jdbcType=INTEGER}, 
@@ -250,10 +250,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="memberId != null">
-        #{memberId,jdbcType=BIGINT},
+        #{memberId,jdbcType=INTEGER},
       </if>
       <if test="couponId != null">
-        #{couponId,jdbcType=BIGINT},
+        #{couponId,jdbcType=INTEGER},
       </if>
       <if test="orderSn != null">
         #{orderSn,jdbcType=VARCHAR},
@@ -354,10 +354,10 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=BIGINT},
+        member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
       <if test="record.couponId != null">
-        coupon_id = #{record.couponId,jdbcType=BIGINT},
+        coupon_id = #{record.couponId,jdbcType=INTEGER},
       </if>
       <if test="record.orderSn != null">
         order_sn = #{record.orderSn,jdbcType=VARCHAR},
@@ -451,8 +451,8 @@
   <update id="updateByExample" parameterType="map">
     update orders
     set id = #{record.id,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=BIGINT},
-      coupon_id = #{record.couponId,jdbcType=BIGINT},
+      member_id = #{record.memberId,jdbcType=INTEGER},
+      coupon_id = #{record.couponId,jdbcType=INTEGER},
       order_sn = #{record.orderSn,jdbcType=VARCHAR},
       member_email = #{record.memberEmail,jdbcType=VARCHAR},
       total_amount = #{record.totalAmount,jdbcType=NUMERIC},
@@ -489,10 +489,10 @@
     update orders
     <set>
       <if test="memberId != null">
-        member_id = #{memberId,jdbcType=BIGINT},
+        member_id = #{memberId,jdbcType=INTEGER},
       </if>
       <if test="couponId != null">
-        coupon_id = #{couponId,jdbcType=BIGINT},
+        coupon_id = #{couponId,jdbcType=INTEGER},
       </if>
       <if test="orderSn != null">
         order_sn = #{orderSn,jdbcType=VARCHAR},
@@ -583,8 +583,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Orders">
     update orders
-    set member_id = #{memberId,jdbcType=BIGINT},
-      coupon_id = #{couponId,jdbcType=BIGINT},
+    set member_id = #{memberId,jdbcType=INTEGER},
+      coupon_id = #{couponId,jdbcType=INTEGER},
       order_sn = #{orderSn,jdbcType=VARCHAR},
       member_email = #{memberEmail,jdbcType=VARCHAR},
       total_amount = #{totalAmount,jdbcType=NUMERIC},

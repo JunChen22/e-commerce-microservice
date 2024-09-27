@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ReviewPicturesMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ReviewPictures">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="review_album_id" jdbcType="NUMERIC" property="reviewAlbumId" />
+    <result column="review_album_id" jdbcType="INTEGER" property="reviewAlbumId" />
     <result column="filename" jdbcType="VARCHAR" property="filename" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
@@ -101,7 +101,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewPictures" useGeneratedKeys="true">
     insert into review_pictures (review_album_id, filename, created_at
       )
-    values (#{reviewAlbumId,jdbcType=NUMERIC}, #{filename,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
+    values (#{reviewAlbumId,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewPictures" useGeneratedKeys="true">
@@ -119,7 +119,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="reviewAlbumId != null">
-        #{reviewAlbumId,jdbcType=NUMERIC},
+        #{reviewAlbumId,jdbcType=INTEGER},
       </if>
       <if test="filename != null">
         #{filename,jdbcType=VARCHAR},
@@ -142,7 +142,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.reviewAlbumId != null">
-        review_album_id = #{record.reviewAlbumId,jdbcType=NUMERIC},
+        review_album_id = #{record.reviewAlbumId,jdbcType=INTEGER},
       </if>
       <if test="record.filename != null">
         filename = #{record.filename,jdbcType=VARCHAR},
@@ -158,7 +158,7 @@
   <update id="updateByExample" parameterType="map">
     update review_pictures
     set id = #{record.id,jdbcType=INTEGER},
-      review_album_id = #{record.reviewAlbumId,jdbcType=NUMERIC},
+      review_album_id = #{record.reviewAlbumId,jdbcType=INTEGER},
       filename = #{record.filename,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -169,7 +169,7 @@
     update review_pictures
     <set>
       <if test="reviewAlbumId != null">
-        review_album_id = #{reviewAlbumId,jdbcType=NUMERIC},
+        review_album_id = #{reviewAlbumId,jdbcType=INTEGER},
       </if>
       <if test="filename != null">
         filename = #{filename,jdbcType=VARCHAR},
@@ -182,7 +182,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewPictures">
     update review_pictures
-    set review_album_id = #{reviewAlbumId,jdbcType=NUMERIC},
+    set review_album_id = #{reviewAlbumId,jdbcType=INTEGER},
       filename = #{filename,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

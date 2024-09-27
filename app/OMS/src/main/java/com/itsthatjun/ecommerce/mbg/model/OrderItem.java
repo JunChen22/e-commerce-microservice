@@ -27,7 +27,7 @@ public class OrderItem {
 
     private String productSkuCode;
 
-    private Long productCategoryId;
+    private Integer productCategoryId;
 
     private String promotionName;
 
@@ -133,11 +133,11 @@ public class OrderItem {
         this.productSkuCode = productSkuCode;
     }
 
-    public Long getProductCategoryId() {
+    public Integer getProductCategoryId() {
         return productCategoryId;
     }
 
-    public void setProductCategoryId(Long productCategoryId) {
+    public void setProductCategoryId(Integer productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
 

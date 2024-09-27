@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ProductAttribute">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="sku_code" jdbcType="VARCHAR" property="skuCode" />
-    <result column="product_id" jdbcType="NUMERIC" property="productId" />
-    <result column="attribute_type_id" jdbcType="NUMERIC" property="attributeTypeId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="attribute_type_id" jdbcType="INTEGER" property="attributeTypeId" />
     <result column="attribute_value" jdbcType="VARCHAR" property="attributeValue" />
     <result column="attribute_unit" jdbcType="VARCHAR" property="attributeUnit" />
   </resultMap>
@@ -103,7 +103,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttribute" useGeneratedKeys="true">
     insert into product_attribute (sku_code, product_id, attribute_type_id, 
       attribute_value, attribute_unit)
-    values (#{skuCode,jdbcType=VARCHAR}, #{productId,jdbcType=NUMERIC}, #{attributeTypeId,jdbcType=NUMERIC}, 
+    values (#{skuCode,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{attributeTypeId,jdbcType=INTEGER}, 
       #{attributeValue,jdbcType=VARCHAR}, #{attributeUnit,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttribute" useGeneratedKeys="true">
@@ -130,10 +130,10 @@
         #{skuCode,jdbcType=VARCHAR},
       </if>
       <if test="productId != null">
-        #{productId,jdbcType=NUMERIC},
+        #{productId,jdbcType=INTEGER},
       </if>
       <if test="attributeTypeId != null">
-        #{attributeTypeId,jdbcType=NUMERIC},
+        #{attributeTypeId,jdbcType=INTEGER},
       </if>
       <if test="attributeValue != null">
         #{attributeValue,jdbcType=VARCHAR},
@@ -159,10 +159,10 @@
         sku_code = #{record.skuCode,jdbcType=VARCHAR},
       </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=NUMERIC},
+        product_id = #{record.productId,jdbcType=INTEGER},
       </if>
       <if test="record.attributeTypeId != null">
-        attribute_type_id = #{record.attributeTypeId,jdbcType=NUMERIC},
+        attribute_type_id = #{record.attributeTypeId,jdbcType=INTEGER},
       </if>
       <if test="record.attributeValue != null">
         attribute_value = #{record.attributeValue,jdbcType=VARCHAR},
@@ -179,8 +179,8 @@
     update product_attribute
     set id = #{record.id,jdbcType=INTEGER},
       sku_code = #{record.skuCode,jdbcType=VARCHAR},
-      product_id = #{record.productId,jdbcType=NUMERIC},
-      attribute_type_id = #{record.attributeTypeId,jdbcType=NUMERIC},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      attribute_type_id = #{record.attributeTypeId,jdbcType=INTEGER},
       attribute_value = #{record.attributeValue,jdbcType=VARCHAR},
       attribute_unit = #{record.attributeUnit,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -194,10 +194,10 @@
         sku_code = #{skuCode,jdbcType=VARCHAR},
       </if>
       <if test="productId != null">
-        product_id = #{productId,jdbcType=NUMERIC},
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="attributeTypeId != null">
-        attribute_type_id = #{attributeTypeId,jdbcType=NUMERIC},
+        attribute_type_id = #{attributeTypeId,jdbcType=INTEGER},
       </if>
       <if test="attributeValue != null">
         attribute_value = #{attributeValue,jdbcType=VARCHAR},
@@ -211,8 +211,8 @@
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttribute">
     update product_attribute
     set sku_code = #{skuCode,jdbcType=VARCHAR},
-      product_id = #{productId,jdbcType=NUMERIC},
-      attribute_type_id = #{attributeTypeId,jdbcType=NUMERIC},
+      product_id = #{productId,jdbcType=INTEGER},
+      attribute_type_id = #{attributeTypeId,jdbcType=INTEGER},
       attribute_value = #{attributeValue,jdbcType=VARCHAR},
       attribute_unit = #{attributeUnit,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

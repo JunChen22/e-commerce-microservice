@@ -28,7 +28,7 @@ public interface DTOMapper {
     @Mapping(target = "onSaleStatus", ignore = true)
     @Mapping(target = "lowStock", ignore = true)
     @Mapping(target = "unitSold", ignore = true)
-    @Mapping(target = "descriptionAlbum", ignore = true)
+    @Mapping(target = "descriptionAlbumId", ignore = true)
     @Mapping(target = "deleteStatus", ignore = true)
     @Mapping(target = "publishStatus", ignore = true)
     @Mapping(target = "note", ignore = true)

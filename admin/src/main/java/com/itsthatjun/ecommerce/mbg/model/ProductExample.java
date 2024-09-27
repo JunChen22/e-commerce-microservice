@@ -956,52 +956,52 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumEqualTo(BigDecimal value) {
+        public Criteria andPictureAlbumEqualTo(Integer value) {
             addCriterion("picture_album =", value, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumNotEqualTo(BigDecimal value) {
+        public Criteria andPictureAlbumNotEqualTo(Integer value) {
             addCriterion("picture_album <>", value, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumGreaterThan(BigDecimal value) {
+        public Criteria andPictureAlbumGreaterThan(Integer value) {
             addCriterion("picture_album >", value, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andPictureAlbumGreaterThanOrEqualTo(Integer value) {
             addCriterion("picture_album >=", value, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumLessThan(BigDecimal value) {
+        public Criteria andPictureAlbumLessThan(Integer value) {
             addCriterion("picture_album <", value, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andPictureAlbumLessThanOrEqualTo(Integer value) {
             addCriterion("picture_album <=", value, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumIn(List<BigDecimal> values) {
+        public Criteria andPictureAlbumIn(List<Integer> values) {
             addCriterion("picture_album in", values, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumNotIn(List<BigDecimal> values) {
+        public Criteria andPictureAlbumNotIn(List<Integer> values) {
             addCriterion("picture_album not in", values, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andPictureAlbumBetween(Integer value1, Integer value2) {
             addCriterion("picture_album between", value1, value2, "pictureAlbum");
             return (Criteria) this;
         }
 
-        public Criteria andPictureAlbumNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andPictureAlbumNotBetween(Integer value1, Integer value2) {
             addCriterion("picture_album not between", value1, value2, "pictureAlbum");
             return (Criteria) this;
         }
@@ -1706,63 +1706,63 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumIsNull() {
-            addCriterion("description_album is null");
+        public Criteria andDescriptionAlbumIdIsNull() {
+            addCriterion("description_album_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumIsNotNull() {
-            addCriterion("description_album is not null");
+        public Criteria andDescriptionAlbumIdIsNotNull() {
+            addCriterion("description_album_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumEqualTo(BigDecimal value) {
-            addCriterion("description_album =", value, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdEqualTo(Integer value) {
+            addCriterion("description_album_id =", value, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumNotEqualTo(BigDecimal value) {
-            addCriterion("description_album <>", value, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdNotEqualTo(Integer value) {
+            addCriterion("description_album_id <>", value, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumGreaterThan(BigDecimal value) {
-            addCriterion("description_album >", value, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdGreaterThan(Integer value) {
+            addCriterion("description_album_id >", value, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("description_album >=", value, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("description_album_id >=", value, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumLessThan(BigDecimal value) {
-            addCriterion("description_album <", value, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdLessThan(Integer value) {
+            addCriterion("description_album_id <", value, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("description_album <=", value, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdLessThanOrEqualTo(Integer value) {
+            addCriterion("description_album_id <=", value, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumIn(List<BigDecimal> values) {
-            addCriterion("description_album in", values, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdIn(List<Integer> values) {
+            addCriterion("description_album_id in", values, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumNotIn(List<BigDecimal> values) {
-            addCriterion("description_album not in", values, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdNotIn(List<Integer> values) {
+            addCriterion("description_album_id not in", values, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("description_album between", value1, value2, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdBetween(Integer value1, Integer value2) {
+            addCriterion("description_album_id between", value1, value2, "descriptionAlbumId");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionAlbumNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("description_album not between", value1, value2, "descriptionAlbum");
+        public Criteria andDescriptionAlbumIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("description_album_id not between", value1, value2, "descriptionAlbumId");
             return (Criteria) this;
         }
 

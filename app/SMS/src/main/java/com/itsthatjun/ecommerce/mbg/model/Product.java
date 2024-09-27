@@ -16,7 +16,7 @@ public class Product {
 
     private String categoryName;
 
-    private BigDecimal attributeCategoryId;
+    private Integer attributeCategoryId;
 
     private String sn;
 
@@ -30,7 +30,7 @@ public class Product {
 
     private String coverPicture;
 
-    private BigDecimal pictureAlbum;
+    private Integer pictureAlbum;
 
     private String description;
 
@@ -54,7 +54,7 @@ public class Product {
 
     private String detailDesc;
 
-    private BigDecimal descriptionAlbum;
+    private Integer descriptionAlbumId;
 
     private Integer deleteStatus;
 
@@ -112,11 +112,11 @@ public class Product {
         this.categoryName = categoryName;
     }
 
-    public BigDecimal getAttributeCategoryId() {
+    public Integer getAttributeCategoryId() {
         return attributeCategoryId;
     }
 
-    public void setAttributeCategoryId(BigDecimal attributeCategoryId) {
+    public void setAttributeCategoryId(Integer attributeCategoryId) {
         this.attributeCategoryId = attributeCategoryId;
     }
 
@@ -168,11 +168,11 @@ public class Product {
         this.coverPicture = coverPicture;
     }
 
-    public BigDecimal getPictureAlbum() {
+    public Integer getPictureAlbum() {
         return pictureAlbum;
     }
 
-    public void setPictureAlbum(BigDecimal pictureAlbum) {
+    public void setPictureAlbum(Integer pictureAlbum) {
         this.pictureAlbum = pictureAlbum;
     }
 
@@ -264,12 +264,12 @@ public class Product {
         this.detailDesc = detailDesc;
     }
 
-    public BigDecimal getDescriptionAlbum() {
-        return descriptionAlbum;
+    public Integer getDescriptionAlbumId() {
+        return descriptionAlbumId;
     }
 
-    public void setDescriptionAlbum(BigDecimal descriptionAlbum) {
-        this.descriptionAlbum = descriptionAlbum;
+    public void setDescriptionAlbumId(Integer descriptionAlbumId) {
+        this.descriptionAlbumId = descriptionAlbumId;
     }
 
     public Integer getDeleteStatus() {

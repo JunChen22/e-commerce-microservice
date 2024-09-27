@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Data
@@ -15,7 +16,7 @@ public class OrderParam {
     private Map<String, Integer> orderProductSku;
 
     @ApiModelProperty("order amount calculated from cart")
-    private double amount;
+    private BigDecimal amount;
 
     @ApiModelProperty("Member deliver address")
     private AddressDTO address;
@@ -24,7 +25,7 @@ public class OrderParam {
     private String coupon;
 
     @ApiModelProperty("coupon discount amount calculated from cart")
-    private double discountAmount;
+    private BigDecimal discountAmount;
 
     @ApiModelProperty("paypal, g pay, or finance. currently just paypal")
     private int payType;

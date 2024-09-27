@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.AddressMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Address">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="member_id" jdbcType="NUMERIC" property="memberId" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
     <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
@@ -108,7 +108,7 @@
     insert into address (member_id, receiver_name, phone_number, 
       detail_address, city, state, 
       zip_code, note)
-    values (#{memberId,jdbcType=NUMERIC}, #{receiverName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
+    values (#{memberId,jdbcType=INTEGER}, #{receiverName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
       #{detailAddress,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
       #{zipCode,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR})
   </insert>
@@ -142,7 +142,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="memberId != null">
-        #{memberId,jdbcType=NUMERIC},
+        #{memberId,jdbcType=INTEGER},
       </if>
       <if test="receiverName != null">
         #{receiverName,jdbcType=VARCHAR},
@@ -180,7 +180,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=NUMERIC},
+        member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
       <if test="record.receiverName != null">
         receiver_name = #{record.receiverName,jdbcType=VARCHAR},
@@ -211,7 +211,7 @@
   <update id="updateByExample" parameterType="map">
     update address
     set id = #{record.id,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=NUMERIC},
+      member_id = #{record.memberId,jdbcType=INTEGER},
       receiver_name = #{record.receiverName,jdbcType=VARCHAR},
       phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
       detail_address = #{record.detailAddress,jdbcType=VARCHAR},
@@ -227,7 +227,7 @@
     update address
     <set>
       <if test="memberId != null">
-        member_id = #{memberId,jdbcType=NUMERIC},
+        member_id = #{memberId,jdbcType=INTEGER},
       </if>
       <if test="receiverName != null">
         receiver_name = #{receiverName,jdbcType=VARCHAR},
@@ -255,7 +255,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Address">
     update address
-    set member_id = #{memberId,jdbcType=NUMERIC},
+    set member_id = #{memberId,jdbcType=INTEGER},
       receiver_name = #{receiverName,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       detail_address = #{detailAddress,jdbcType=VARCHAR},

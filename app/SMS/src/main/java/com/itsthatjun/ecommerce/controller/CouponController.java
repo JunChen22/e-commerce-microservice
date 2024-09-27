@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/coupon")
 @Api(tags = "", description = "")
@@ -27,7 +29,7 @@ public class CouponController {
 
     @GetMapping("/check")
     @ApiOperation("Check coupon and return discount amount")
-    public Mono<Double> checkCoupon(@RequestParam String couponCode, @RequestHeader("X-UserId") int userId) {
+    public Mono<BigDecimal> checkCoupon(@RequestParam String couponCode, @RequestHeader("X-UserId") int userId) {
         // TODO: currently return total amount, need to change to return individual discount.
         //  might return something like <String, Double> skuDiscount
         return couponService.checkDiscount(couponCode, userId);

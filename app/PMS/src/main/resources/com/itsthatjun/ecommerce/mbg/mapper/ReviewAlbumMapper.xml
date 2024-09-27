@@ -3,8 +3,8 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ReviewAlbumMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ReviewAlbum">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="review_id" jdbcType="NUMERIC" property="reviewId" />
-    <result column="pic_count" jdbcType="NUMERIC" property="picCount" />
+    <result column="review_id" jdbcType="INTEGER" property="reviewId" />
+    <result column="pic_count" jdbcType="INTEGER" property="picCount" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -101,7 +101,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewAlbum" useGeneratedKeys="true">
     insert into review_album (review_id, pic_count, created_at
       )
-    values (#{reviewId,jdbcType=NUMERIC}, #{picCount,jdbcType=NUMERIC}, #{createdAt,jdbcType=TIMESTAMP}
+    values (#{reviewId,jdbcType=INTEGER}, #{picCount,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewAlbum" useGeneratedKeys="true">
@@ -119,10 +119,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="reviewId != null">
-        #{reviewId,jdbcType=NUMERIC},
+        #{reviewId,jdbcType=INTEGER},
       </if>
       <if test="picCount != null">
-        #{picCount,jdbcType=NUMERIC},
+        #{picCount,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -142,10 +142,10 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.reviewId != null">
-        review_id = #{record.reviewId,jdbcType=NUMERIC},
+        review_id = #{record.reviewId,jdbcType=INTEGER},
       </if>
       <if test="record.picCount != null">
-        pic_count = #{record.picCount,jdbcType=NUMERIC},
+        pic_count = #{record.picCount,jdbcType=INTEGER},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -158,8 +158,8 @@
   <update id="updateByExample" parameterType="map">
     update review_album
     set id = #{record.id,jdbcType=INTEGER},
-      review_id = #{record.reviewId,jdbcType=NUMERIC},
-      pic_count = #{record.picCount,jdbcType=NUMERIC},
+      review_id = #{record.reviewId,jdbcType=INTEGER},
+      pic_count = #{record.picCount,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -169,10 +169,10 @@
     update review_album
     <set>
       <if test="reviewId != null">
-        review_id = #{reviewId,jdbcType=NUMERIC},
+        review_id = #{reviewId,jdbcType=INTEGER},
       </if>
       <if test="picCount != null">
-        pic_count = #{picCount,jdbcType=NUMERIC},
+        pic_count = #{picCount,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -182,8 +182,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewAlbum">
     update review_album
-    set review_id = #{reviewId,jdbcType=NUMERIC},
-      pic_count = #{picCount,jdbcType=NUMERIC},
+    set review_id = #{reviewId,jdbcType=INTEGER},
+      pic_count = #{picCount,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

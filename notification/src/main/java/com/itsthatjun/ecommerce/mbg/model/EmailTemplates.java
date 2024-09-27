@@ -9,7 +9,7 @@ public class EmailTemplates {
 
     private String templateText;
 
-    private Date created;
+    private Date createdAt;
 
     private Date updatedAt;
 
@@ -37,12 +37,12 @@ public class EmailTemplates {
         this.templateText = templateText;
     }
 
-    public Date getCreated() {
-        return created;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Date getUpdatedAt() {

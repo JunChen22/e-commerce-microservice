@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,52 +174,52 @@ public class ProductAttributeTypeExample {
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdEqualTo(BigDecimal value) {
+        public Criteria andAttributeCategoryIdEqualTo(Integer value) {
             addCriterion("attribute_category_id =", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdNotEqualTo(BigDecimal value) {
+        public Criteria andAttributeCategoryIdNotEqualTo(Integer value) {
             addCriterion("attribute_category_id <>", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdGreaterThan(BigDecimal value) {
+        public Criteria andAttributeCategoryIdGreaterThan(Integer value) {
             addCriterion("attribute_category_id >", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andAttributeCategoryIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("attribute_category_id >=", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdLessThan(BigDecimal value) {
+        public Criteria andAttributeCategoryIdLessThan(Integer value) {
             addCriterion("attribute_category_id <", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andAttributeCategoryIdLessThanOrEqualTo(Integer value) {
             addCriterion("attribute_category_id <=", value, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdIn(List<BigDecimal> values) {
+        public Criteria andAttributeCategoryIdIn(List<Integer> values) {
             addCriterion("attribute_category_id in", values, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdNotIn(List<BigDecimal> values) {
+        public Criteria andAttributeCategoryIdNotIn(List<Integer> values) {
             addCriterion("attribute_category_id not in", values, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andAttributeCategoryIdBetween(Integer value1, Integer value2) {
             addCriterion("attribute_category_id between", value1, value2, "attributeCategoryId");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeCategoryIdNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andAttributeCategoryIdNotBetween(Integer value1, Integer value2) {
             addCriterion("attribute_category_id not between", value1, value2, "attributeCategoryId");
             return (Criteria) this;
         }

@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ProductUpdateLogMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ProductUpdateLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="product_id" jdbcType="NUMERIC" property="productId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
     <result column="price_old" jdbcType="NUMERIC" property="priceOld" />
     <result column="price_new" jdbcType="NUMERIC" property="priceNew" />
     <result column="sale_price_old" jdbcType="NUMERIC" property="salePriceOld" />
@@ -112,7 +112,7 @@
       sale_price_old, sale_price_new, old_stock, 
       added_stock, total_stock, update_action, 
       operator, created_at)
-    values (#{productId,jdbcType=NUMERIC}, #{priceOld,jdbcType=NUMERIC}, #{priceNew,jdbcType=NUMERIC}, 
+    values (#{productId,jdbcType=INTEGER}, #{priceOld,jdbcType=NUMERIC}, #{priceNew,jdbcType=NUMERIC}, 
       #{salePriceOld,jdbcType=NUMERIC}, #{salePriceNew,jdbcType=NUMERIC}, #{oldStock,jdbcType=INTEGER}, 
       #{addedStock,jdbcType=INTEGER}, #{totalStock,jdbcType=INTEGER}, #{updateAction,jdbcType=VARCHAR}, 
       #{operator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
@@ -156,7 +156,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="productId != null">
-        #{productId,jdbcType=NUMERIC},
+        #{productId,jdbcType=INTEGER},
       </if>
       <if test="priceOld != null">
         #{priceOld,jdbcType=NUMERIC},
@@ -203,7 +203,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=NUMERIC},
+        product_id = #{record.productId,jdbcType=INTEGER},
       </if>
       <if test="record.priceOld != null">
         price_old = #{record.priceOld,jdbcType=NUMERIC},
@@ -243,7 +243,7 @@
   <update id="updateByExample" parameterType="map">
     update product_update_log
     set id = #{record.id,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=NUMERIC},
+      product_id = #{record.productId,jdbcType=INTEGER},
       price_old = #{record.priceOld,jdbcType=NUMERIC},
       price_new = #{record.priceNew,jdbcType=NUMERIC},
       sale_price_old = #{record.salePriceOld,jdbcType=NUMERIC},
@@ -262,7 +262,7 @@
     update product_update_log
     <set>
       <if test="productId != null">
-        product_id = #{productId,jdbcType=NUMERIC},
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="priceOld != null">
         price_old = #{priceOld,jdbcType=NUMERIC},
@@ -299,7 +299,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductUpdateLog">
     update product_update_log
-    set product_id = #{productId,jdbcType=NUMERIC},
+    set product_id = #{productId,jdbcType=INTEGER},
       price_old = #{priceOld,jdbcType=NUMERIC},
       price_new = #{priceNew,jdbcType=NUMERIC},
       sale_price_old = #{salePriceOld,jdbcType=NUMERIC},

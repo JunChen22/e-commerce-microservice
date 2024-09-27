@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.dto.model;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -11,17 +12,17 @@ public class OrderDTO {
 
     private String memberEmail;
 
-    private double totalAmount;
+    private BigDecimal totalAmount;
 
-    private double promotionAmount;
+    private BigDecimal promotionAmount;
 
-    private double couponAmount;
+    private BigDecimal couponAmount;
 
-    private double discountAmount;
+    private BigDecimal discountAmount;
 
-    private double shippingCost;
+    private BigDecimal shippingCost;
 
-    private double payAmount;
+    private BigDecimal payAmount;
 
     private String receiverPhone;
 

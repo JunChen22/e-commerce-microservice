@@ -23,11 +23,11 @@ public class OrderItem {
 
     private Integer productQuantity;
 
-    private Long productSkuId;
+    private Integer productSkuId;
 
     private String productSkuCode;
 
-    private Long productCategoryId;
+    private Integer productCategoryId;
 
     private String promotionName;
 
@@ -117,11 +117,11 @@ public class OrderItem {
         this.productQuantity = productQuantity;
     }
 
-    public Long getProductSkuId() {
+    public Integer getProductSkuId() {
         return productSkuId;
     }
 
-    public void setProductSkuId(Long productSkuId) {
+    public void setProductSkuId(Integer productSkuId) {
         this.productSkuId = productSkuId;
     }
 
@@ -133,11 +133,11 @@ public class OrderItem {
         this.productSkuCode = productSkuCode;
     }
 
-    public Long getProductCategoryId() {
+    public Integer getProductCategoryId() {
         return productCategoryId;
     }
 
-    public void setProductCategoryId(Long productCategoryId) {
+    public void setProductCategoryId(Integer productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
 

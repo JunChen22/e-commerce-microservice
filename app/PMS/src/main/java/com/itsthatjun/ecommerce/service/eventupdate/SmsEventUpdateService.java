@@ -45,10 +45,10 @@ public class SmsEventUpdateService {
                 int productId = sku.getProductId();
                 Product affectedProduct = productMapper.selectByPrimaryKey(productId);
 
-                double currentSalePrice = affectedProduct.getSalePrice().doubleValue();
-                double skuSalePrice = sku.getPromotionPrice().doubleValue();
+                BigDecimal currentSalePrice = affectedProduct.getSalePrice();
+                BigDecimal skuSalePrice = sku.getPromotionPrice();
 
-                affectedProduct.setSalePrice(BigDecimal.valueOf(Math.min(currentSalePrice, skuSalePrice)));
+                affectedProduct.setSalePrice(currentSalePrice.min(skuSalePrice));
                 affectedProduct.setOnSaleStatus(1);
                 productMapper.updateByPrimaryKeySelective(affectedProduct);
             }

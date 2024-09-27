@@ -2,6 +2,8 @@ package com.itsthatjun.ecommerce.dto.oms.model;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class OrderItemDTO {
 
@@ -13,15 +15,15 @@ public class OrderItemDTO {
 
     private String productSn;
 
-    private double productPrice;
+    private BigDecimal productPrice;
 
     private Integer productQuantity;
 
     private String productSkuCode;
 
-    private double promotionAmount;
+    private BigDecimal promotionAmount;
 
-    private double couponAmount;
+    private BigDecimal couponAmount;
 
-    private double realAmount;
+    private BigDecimal realAmount;
 }

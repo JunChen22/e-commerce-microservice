@@ -1,11 +1,9 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
-
 public class ProductAttributeType {
     private Integer id;
 
-    private BigDecimal attributeCategoryId;
+    private Integer attributeCategoryId;
 
     private String name;
 
@@ -17,11 +15,11 @@ public class ProductAttributeType {
         this.id = id;
     }
 
-    public BigDecimal getAttributeCategoryId() {
+    public Integer getAttributeCategoryId() {
         return attributeCategoryId;
     }
 
-    public void setAttributeCategoryId(BigDecimal attributeCategoryId) {
+    public void setAttributeCategoryId(Integer attributeCategoryId) {
         this.attributeCategoryId = attributeCategoryId;
     }
 

@@ -27,6 +27,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static com.itsthatjun.ecommerce.dto.event.outgoing.OmsReturnEvent.Type.NEW_RETURN;
@@ -156,7 +157,8 @@ public class AdminReturnServiceImpl implements AdminReturnService {
         String orderSn = orderReturnRequest.getOrderSn();
 
         // check price from their order
-        double returnItemRefundAmount = 0;
+        BigDecimal returnItemRefundAmount = BigDecimal.ZERO;
+
         for (ReturnItem item: returnItemList) {
             String itemSku = item.getProductSku();
             OrderItemExample orderItemExample = new OrderItemExample();
@@ -166,20 +168,19 @@ public class AdminReturnServiceImpl implements AdminReturnService {
             if (orderItemList.isEmpty()) throw new RuntimeException("Return item not in order: " + orderSn);
             OrderItem orderItem = orderItemList.get(0);
 
-            if (orderItem.getRealAmount().doubleValue() != item.getPurchasedPrice().doubleValue()) {
+            if (orderItem.getRealAmount().compareTo(item.getPurchasedPrice()) != 0) {
                 throw new RuntimeException("Error pricing with return item");
             }
 
             int quantity = item.getQuantity();
 
-            returnItemRefundAmount += item.getPurchasedPrice().doubleValue() * quantity;    // TODO: watch out for big decimal difference
+            returnItemRefundAmount = item.getPurchasedPrice().multiply(BigDecimal.valueOf(quantity)).add(returnItemRefundAmount);
         }
 
-        /*  TODO: need to change double back to big decimal, this pricing is causing error
-        if (returnItemRefundAmount != orderReturnRequest.getAskingAmount().doubleValue()) {
+        // TODO: need to change double back to big decimal, this pricing is causing error
+        if (returnItemRefundAmount.compareTo(orderReturnRequest.getAskingAmount()) != 0) {
             throw new RuntimeException("Return order Request asking refund pricing error");
         }
-         */
 
         orderReturnRequest.setStatus(1);
         orderReturnRequest.setHandleOperator(operator);
@@ -288,7 +289,7 @@ public class AdminReturnServiceImpl implements AdminReturnService {
         sendSalesStockUpdateMessage("salesStock-out-0", new SmsSalesStockOutEvent(SmsSalesStockOutEvent.Type.UPDATE_RETURN, orderSn, skuQuantity));
 
         String paymentId = foundOrder.getPaymentId();
-        double refundAmount = returnRequest.getAskingAmount().doubleValue();
+        BigDecimal refundAmount = returnRequest.getAskingAmount();
 
         try {
             Refund refund = paypalService.createRefund(paymentId, refundAmount);
@@ -316,7 +317,6 @@ public class AdminReturnServiceImpl implements AdminReturnService {
         log.setReturnRequestId(returnRequestId);
         log.setUpdateAction(updateAction);
         log.setOperator(operator);
-        log.setCreatedAt(new Date());
         logMapper.insert(log);
     }
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.MemberIconMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.MemberIcon">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="member_id" jdbcType="NUMERIC" property="memberId" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
     <result column="filename" jdbcType="VARCHAR" property="filename" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -99,7 +99,7 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIcon" useGeneratedKeys="true">
     insert into member_icon (member_id, filename)
-    values (#{memberId,jdbcType=NUMERIC}, #{filename,jdbcType=VARCHAR})
+    values (#{memberId,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIcon" useGeneratedKeys="true">
     insert into member_icon
@@ -113,7 +113,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="memberId != null">
-        #{memberId,jdbcType=NUMERIC},
+        #{memberId,jdbcType=INTEGER},
       </if>
       <if test="filename != null">
         #{filename,jdbcType=VARCHAR},
@@ -133,7 +133,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=NUMERIC},
+        member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
       <if test="record.filename != null">
         filename = #{record.filename,jdbcType=VARCHAR},
@@ -146,7 +146,7 @@
   <update id="updateByExample" parameterType="map">
     update member_icon
     set id = #{record.id,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=NUMERIC},
+      member_id = #{record.memberId,jdbcType=INTEGER},
       filename = #{record.filename,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -156,7 +156,7 @@
     update member_icon
     <set>
       <if test="memberId != null">
-        member_id = #{memberId,jdbcType=NUMERIC},
+        member_id = #{memberId,jdbcType=INTEGER},
       </if>
       <if test="filename != null">
         filename = #{filename,jdbcType=VARCHAR},
@@ -166,7 +166,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberIcon">
     update member_icon
-    set member_id = #{memberId,jdbcType=NUMERIC},
+    set member_id = #{memberId,jdbcType=INTEGER},
       filename = #{filename,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

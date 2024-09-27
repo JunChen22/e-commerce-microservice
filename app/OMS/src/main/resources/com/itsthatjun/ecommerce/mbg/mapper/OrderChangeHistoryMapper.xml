@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.OrderChangeHistoryMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.OrderChangeHistory">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="order_id" jdbcType="NUMERIC" property="orderId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
     <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
     <result column="note" jdbcType="VARCHAR" property="note" />
@@ -105,7 +105,7 @@
     insert into order_change_history (order_id, update_action, order_status, 
       note, operator, created_at
       )
-    values (#{orderId,jdbcType=NUMERIC}, #{updateAction,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, 
+    values (#{orderId,jdbcType=INTEGER}, #{updateAction,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, 
       #{note,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -133,7 +133,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="orderId != null">
-        #{orderId,jdbcType=NUMERIC},
+        #{orderId,jdbcType=INTEGER},
       </if>
       <if test="updateAction != null">
         #{updateAction,jdbcType=VARCHAR},
@@ -165,7 +165,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=NUMERIC},
+        order_id = #{record.orderId,jdbcType=INTEGER},
       </if>
       <if test="record.updateAction != null">
         update_action = #{record.updateAction,jdbcType=VARCHAR},
@@ -190,7 +190,7 @@
   <update id="updateByExample" parameterType="map">
     update order_change_history
     set id = #{record.id,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=NUMERIC},
+      order_id = #{record.orderId,jdbcType=INTEGER},
       update_action = #{record.updateAction,jdbcType=VARCHAR},
       order_status = #{record.orderStatus,jdbcType=INTEGER},
       note = #{record.note,jdbcType=VARCHAR},
@@ -204,7 +204,7 @@
     update order_change_history
     <set>
       <if test="orderId != null">
-        order_id = #{orderId,jdbcType=NUMERIC},
+        order_id = #{orderId,jdbcType=INTEGER},
       </if>
       <if test="updateAction != null">
         update_action = #{updateAction,jdbcType=VARCHAR},
@@ -226,7 +226,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.OrderChangeHistory">
     update order_change_history
-    set order_id = #{orderId,jdbcType=NUMERIC},
+    set order_id = #{orderId,jdbcType=INTEGER},
       update_action = #{updateAction,jdbcType=VARCHAR},
       order_status = #{orderStatus,jdbcType=INTEGER},
       note = #{note,jdbcType=VARCHAR},

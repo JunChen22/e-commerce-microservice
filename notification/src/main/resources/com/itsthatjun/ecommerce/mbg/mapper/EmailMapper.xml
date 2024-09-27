@@ -10,7 +10,7 @@
     <result column="subject" jdbcType="VARCHAR" property="subject" />
     <result column="body" jdbcType="VARCHAR" property="body" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
-    <result column="created" jdbcType="TIMESTAMP" property="created" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +72,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, service_type, action_type, sender_email, recipient_email, subject, body, operator, 
-    created
+    created_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample" resultMap="BaseResultMap">
     select
@@ -107,10 +107,10 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Email" useGeneratedKeys="true">
     insert into email (service_type, action_type, sender_email, 
       recipient_email, subject, body, 
-      operator, created)
+      operator, created_at)
     values (#{serviceType,jdbcType=VARCHAR}, #{actionType,jdbcType=VARCHAR}, #{senderEmail,jdbcType=VARCHAR}, 
       #{recipientEmail,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, 
-      #{operator,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP})
+      #{operator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Email" useGeneratedKeys="true">
     insert into email
@@ -136,8 +136,8 @@
       <if test="operator != null">
         operator,
       </if>
-      <if test="created != null">
-        created,
+      <if test="createdAt != null">
+        created_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -162,8 +162,8 @@
       <if test="operator != null">
         #{operator,jdbcType=VARCHAR},
       </if>
-      <if test="created != null">
-        #{created,jdbcType=TIMESTAMP},
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -200,8 +200,8 @@
       <if test="record.operator != null">
         operator = #{record.operator,jdbcType=VARCHAR},
       </if>
-      <if test="record.created != null">
-        created = #{record.created,jdbcType=TIMESTAMP},
+      <if test="record.createdAt != null">
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -218,7 +218,7 @@
       subject = #{record.subject,jdbcType=VARCHAR},
       body = #{record.body,jdbcType=VARCHAR},
       operator = #{record.operator,jdbcType=VARCHAR},
-      created = #{record.created,jdbcType=TIMESTAMP}
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -247,8 +247,8 @@
       <if test="operator != null">
         operator = #{operator,jdbcType=VARCHAR},
       </if>
-      <if test="created != null">
-        created = #{created,jdbcType=TIMESTAMP},
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -262,7 +262,7 @@
       subject = #{subject,jdbcType=VARCHAR},
       body = #{body,jdbcType=VARCHAR},
       operator = #{operator,jdbcType=VARCHAR},
-      created = #{created,jdbcType=TIMESTAMP}
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

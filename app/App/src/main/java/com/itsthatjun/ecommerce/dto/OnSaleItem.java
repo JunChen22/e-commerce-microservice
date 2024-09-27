@@ -4,14 +4,21 @@ import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
 public class OnSaleItem {
-    Product product;
-    Brand brand;
-    Double discountAmount;
-    int numberAvailable;
-    Date timeStart;
-    Date timeEnd;
+
+    private Product product;
+
+    private Brand brand;
+
+    private BigDecimal discountAmount;
+
+    private int numberAvailable;
+
+    private Date timeStart;
+
+    private Date timeEnd;
 }

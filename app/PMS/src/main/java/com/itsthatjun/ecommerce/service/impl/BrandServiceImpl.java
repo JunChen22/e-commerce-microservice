@@ -110,7 +110,6 @@ public class BrandServiceImpl implements BrandService {
         updateLog.setBrandId(brandId);
         updateLog.setUpdateAction(updateAction);
         updateLog.setOperator(operator);
-        updateLog.setCreatedAt(new Date());
         brandUpdateLogMapper.insert(updateLog);
     }
 }

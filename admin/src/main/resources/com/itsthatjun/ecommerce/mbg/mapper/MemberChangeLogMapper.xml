@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.MemberChangeLogMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.MemberChangeLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="member_id" jdbcType="NUMERIC" property="memberId" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
     <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
@@ -102,7 +102,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberChangeLog" useGeneratedKeys="true">
     insert into member_change_log (member_id, update_action, operator, 
       created_at)
-    values (#{memberId,jdbcType=NUMERIC}, #{updateAction,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+    values (#{memberId,jdbcType=INTEGER}, #{updateAction,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberChangeLog" useGeneratedKeys="true">
@@ -123,7 +123,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="memberId != null">
-        #{memberId,jdbcType=NUMERIC},
+        #{memberId,jdbcType=INTEGER},
       </if>
       <if test="updateAction != null">
         #{updateAction,jdbcType=VARCHAR},
@@ -149,7 +149,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=NUMERIC},
+        member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
       <if test="record.updateAction != null">
         update_action = #{record.updateAction,jdbcType=VARCHAR},
@@ -168,7 +168,7 @@
   <update id="updateByExample" parameterType="map">
     update member_change_log
     set id = #{record.id,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=NUMERIC},
+      member_id = #{record.memberId,jdbcType=INTEGER},
       update_action = #{record.updateAction,jdbcType=VARCHAR},
       operator = #{record.operator,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
@@ -180,7 +180,7 @@
     update member_change_log
     <set>
       <if test="memberId != null">
-        member_id = #{memberId,jdbcType=NUMERIC},
+        member_id = #{memberId,jdbcType=INTEGER},
       </if>
       <if test="updateAction != null">
         update_action = #{updateAction,jdbcType=VARCHAR},
@@ -196,7 +196,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.MemberChangeLog">
     update member_change_log
-    set member_id = #{memberId,jdbcType=NUMERIC},
+    set member_id = #{memberId,jdbcType=INTEGER},
       update_action = #{updateAction,jdbcType=VARCHAR},
       operator = #{operator,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP}

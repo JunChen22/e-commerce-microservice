@@ -337,29 +337,35 @@ public class AdminProductServiceImpl implements AdminProductService {
         skuExample.createCriteria().andProductIdEqualTo(productId).andStatusEqualTo(1);
         List<ProductSku> skuList = skuMapper.selectByExample(skuExample);
 
-        double newHighestPrice = product.getOriginalPrice().doubleValue();
-        double newLowPrice = product.getSalePrice().doubleValue();
+        BigDecimal newHighestPrice = product.getOriginalPrice();
+        BigDecimal newLowPrice = product.getSalePrice();
 
         // find low and high price of sku
         for (ProductSku productSku : skuList) {
-            double skuSalePrice = productSku.getPromotionPrice().doubleValue();
-            double skuPrice = productSku.getPrice().doubleValue();
-            newHighestPrice = Math.max(newHighestPrice, skuPrice);
-            newLowPrice = Math.min(newLowPrice, skuSalePrice);
+            BigDecimal skuSalePrice = productSku.getPromotionPrice();
+            BigDecimal skuPrice = productSku.getPrice();
+
+            if (skuPrice.compareTo(newHighestPrice) > 0) {
+                newHighestPrice = skuPrice;  // Update the highest price
+            }
+
+            if (skuSalePrice.compareTo(newLowPrice) < 0) {
+                newLowPrice = skuSalePrice;  // Update the lowest sale price
+            }
         }
 
         // update price to highest, sku is just a variant of product.
-        double skuPrice = product.getOriginalPrice().doubleValue();
-        if (newHighestPrice > product.getOriginalPrice().doubleValue()) {
+        BigDecimal skuPrice = product.getOriginalPrice();
+        if (newHighestPrice.compareTo(product.getOriginalPrice()) > 0) {
             for (ProductSku productSku : skuList) {
-                productSku.setPrice(BigDecimal.valueOf(skuPrice));
+                productSku.setPrice(skuPrice);
                 skuMapper.updateByPrimaryKey(productSku);
             }
         }
 
         // update product price
-        product.setSalePrice(BigDecimal.valueOf(newLowPrice));
-        product.setOriginalPrice(BigDecimal.valueOf(newHighestPrice));
+        product.setSalePrice(newLowPrice);
+        product.setOriginalPrice(newHighestPrice);
         productMapper.updateByPrimaryKeySelective(product);
 
         return product;
@@ -454,7 +460,6 @@ public class AdminProductServiceImpl implements AdminProductService {
         // update information
         updateLog.setUpdateAction(updateAction);
         updateLog.setOperator(operator);
-        updateLog.setCreatedAt(new Date());
         logMapper.insert(updateLog);
     }
 

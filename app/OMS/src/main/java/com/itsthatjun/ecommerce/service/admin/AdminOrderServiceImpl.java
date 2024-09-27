@@ -30,6 +30,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ import static com.itsthatjun.ecommerce.dto.event.outgoing.OmsOrderAnnouncementEv
 @Service
 public class AdminOrderServiceImpl implements AdminOrderService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AdminOrderServiceImpl.class);
 
     private final PaypalService paypalService;
 
@@ -167,10 +168,9 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     private Orders internalCreateOrder(String orderSn, Orders newOrder, List<OrderItem> orderItemList, Address address, String reason, String operator) {
         newOrder.setOrderSn(orderSn);
-        newOrder.setCreatedAt(new Date());
         newOrder.setAdminNote(reason);
 
-        double orderTotal = 0;
+        BigDecimal orderTotal = BigDecimal.ZERO;
 
         // set address
         newOrder.setReceiverName(address.getReceiverName());
@@ -201,7 +201,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
             item.setPromotionAmount(sku.getPromotionPrice());
             item.setProductSkuCode(productSku);
 
-            orderTotal += sku.getPromotionPrice().doubleValue() * quantity;
+            orderTotal = sku.getPromotionPrice().multiply(BigDecimal.valueOf(quantity)).add(orderTotal);
         }
 
         if (!hasStock(orderItemList)) throw new OrderException("Not enough stock, Unable to order");
@@ -364,7 +364,6 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         changeLog.setOrderStatus(status);
         changeLog.setOperator(operator);
         changeLog.setNote(note);
-        changeLog.setCreatedAt(new Date());
         changeHistoryMapper.insert(changeLog);
     }
 

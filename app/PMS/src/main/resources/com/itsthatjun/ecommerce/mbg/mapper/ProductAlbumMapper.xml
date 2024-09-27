@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ProductAlbum">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="product_id" jdbcType="NUMERIC" property="productId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
     <result column="cover_pic" jdbcType="VARCHAR" property="coverPic" />
-    <result column="pic_count" jdbcType="NUMERIC" property="picCount" />
+    <result column="pic_count" jdbcType="INTEGER" property="picCount" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
@@ -105,8 +105,8 @@
     insert into product_album (name, product_id, cover_pic, 
       pic_count, description, created_at
       )
-    values (#{name,jdbcType=VARCHAR}, #{productId,jdbcType=NUMERIC}, #{coverPic,jdbcType=VARCHAR}, 
-      #{picCount,jdbcType=NUMERIC}, #{description,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
+    values (#{name,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{coverPic,jdbcType=VARCHAR}, 
+      #{picCount,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAlbum" useGeneratedKeys="true">
@@ -136,13 +136,13 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="productId != null">
-        #{productId,jdbcType=NUMERIC},
+        #{productId,jdbcType=INTEGER},
       </if>
       <if test="coverPic != null">
         #{coverPic,jdbcType=VARCHAR},
       </if>
       <if test="picCount != null">
-        #{picCount,jdbcType=NUMERIC},
+        #{picCount,jdbcType=INTEGER},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
@@ -168,13 +168,13 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=NUMERIC},
+        product_id = #{record.productId,jdbcType=INTEGER},
       </if>
       <if test="record.coverPic != null">
         cover_pic = #{record.coverPic,jdbcType=VARCHAR},
       </if>
       <if test="record.picCount != null">
-        pic_count = #{record.picCount,jdbcType=NUMERIC},
+        pic_count = #{record.picCount,jdbcType=INTEGER},
       </if>
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
@@ -191,9 +191,9 @@
     update product_album
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      product_id = #{record.productId,jdbcType=NUMERIC},
+      product_id = #{record.productId,jdbcType=INTEGER},
       cover_pic = #{record.coverPic,jdbcType=VARCHAR},
-      pic_count = #{record.picCount,jdbcType=NUMERIC},
+      pic_count = #{record.picCount,jdbcType=INTEGER},
       description = #{record.description,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -207,13 +207,13 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="productId != null">
-        product_id = #{productId,jdbcType=NUMERIC},
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="coverPic != null">
         cover_pic = #{coverPic,jdbcType=VARCHAR},
       </if>
       <if test="picCount != null">
-        pic_count = #{picCount,jdbcType=NUMERIC},
+        pic_count = #{picCount,jdbcType=INTEGER},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
@@ -227,9 +227,9 @@
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAlbum">
     update product_album
     set name = #{name,jdbcType=VARCHAR},
-      product_id = #{productId,jdbcType=NUMERIC},
+      product_id = #{productId,jdbcType=INTEGER},
       cover_pic = #{coverPic,jdbcType=VARCHAR},
-      pic_count = #{picCount,jdbcType=NUMERIC},
+      pic_count = #{picCount,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

@@ -3,18 +3,18 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.OrderItemMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.OrderItem">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
-    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
     <result column="product_pic" jdbcType="VARCHAR" property="productPic" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="product_brand" jdbcType="VARCHAR" property="productBrand" />
     <result column="product_sn" jdbcType="VARCHAR" property="productSn" />
     <result column="product_price" jdbcType="NUMERIC" property="productPrice" />
     <result column="product_quantity" jdbcType="INTEGER" property="productQuantity" />
-    <result column="product_sku_id" jdbcType="BIGINT" property="productSkuId" />
+    <result column="product_sku_id" jdbcType="INTEGER" property="productSkuId" />
     <result column="product_sku_code" jdbcType="VARCHAR" property="productSkuCode" />
-    <result column="product_category_id" jdbcType="BIGINT" property="productCategoryId" />
+    <result column="product_category_id" jdbcType="INTEGER" property="productCategoryId" />
     <result column="promotion_name" jdbcType="VARCHAR" property="promotionName" />
     <result column="promotion_amount" jdbcType="NUMERIC" property="promotionAmount" />
     <result column="coupon_amount" jdbcType="NUMERIC" property="couponAmount" />
@@ -120,10 +120,10 @@
       product_sku_id, product_sku_code, product_category_id, 
       promotion_name, promotion_amount, coupon_amount, 
       real_amount)
-    values (#{orderId,jdbcType=BIGINT}, #{orderSn,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, 
+    values (#{orderId,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, 
       #{productPic,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{productBrand,jdbcType=VARCHAR}, 
       #{productSn,jdbcType=VARCHAR}, #{productPrice,jdbcType=NUMERIC}, #{productQuantity,jdbcType=INTEGER}, 
-      #{productSkuId,jdbcType=BIGINT}, #{productSkuCode,jdbcType=VARCHAR}, #{productCategoryId,jdbcType=BIGINT}, 
+      #{productSkuId,jdbcType=INTEGER}, #{productSkuCode,jdbcType=VARCHAR}, #{productCategoryId,jdbcType=INTEGER}, 
       #{promotionName,jdbcType=VARCHAR}, #{promotionAmount,jdbcType=NUMERIC}, #{couponAmount,jdbcType=NUMERIC}, 
       #{realAmount,jdbcType=NUMERIC})
   </insert>
@@ -181,13 +181,13 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="orderId != null">
-        #{orderId,jdbcType=BIGINT},
+        #{orderId,jdbcType=INTEGER},
       </if>
       <if test="orderSn != null">
         #{orderSn,jdbcType=VARCHAR},
       </if>
       <if test="productId != null">
-        #{productId,jdbcType=BIGINT},
+        #{productId,jdbcType=INTEGER},
       </if>
       <if test="productPic != null">
         #{productPic,jdbcType=VARCHAR},
@@ -208,13 +208,13 @@
         #{productQuantity,jdbcType=INTEGER},
       </if>
       <if test="productSkuId != null">
-        #{productSkuId,jdbcType=BIGINT},
+        #{productSkuId,jdbcType=INTEGER},
       </if>
       <if test="productSkuCode != null">
         #{productSkuCode,jdbcType=VARCHAR},
       </if>
       <if test="productCategoryId != null">
-        #{productCategoryId,jdbcType=BIGINT},
+        #{productCategoryId,jdbcType=INTEGER},
       </if>
       <if test="promotionName != null">
         #{promotionName,jdbcType=VARCHAR},
@@ -243,13 +243,13 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=BIGINT},
+        order_id = #{record.orderId,jdbcType=INTEGER},
       </if>
       <if test="record.orderSn != null">
         order_sn = #{record.orderSn,jdbcType=VARCHAR},
       </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=BIGINT},
+        product_id = #{record.productId,jdbcType=INTEGER},
       </if>
       <if test="record.productPic != null">
         product_pic = #{record.productPic,jdbcType=VARCHAR},
@@ -270,13 +270,13 @@
         product_quantity = #{record.productQuantity,jdbcType=INTEGER},
       </if>
       <if test="record.productSkuId != null">
-        product_sku_id = #{record.productSkuId,jdbcType=BIGINT},
+        product_sku_id = #{record.productSkuId,jdbcType=INTEGER},
       </if>
       <if test="record.productSkuCode != null">
         product_sku_code = #{record.productSkuCode,jdbcType=VARCHAR},
       </if>
       <if test="record.productCategoryId != null">
-        product_category_id = #{record.productCategoryId,jdbcType=BIGINT},
+        product_category_id = #{record.productCategoryId,jdbcType=INTEGER},
       </if>
       <if test="record.promotionName != null">
         promotion_name = #{record.promotionName,jdbcType=VARCHAR},
@@ -298,18 +298,18 @@
   <update id="updateByExample" parameterType="map">
     update order_item
     set id = #{record.id,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=BIGINT},
+      order_id = #{record.orderId,jdbcType=INTEGER},
       order_sn = #{record.orderSn,jdbcType=VARCHAR},
-      product_id = #{record.productId,jdbcType=BIGINT},
+      product_id = #{record.productId,jdbcType=INTEGER},
       product_pic = #{record.productPic,jdbcType=VARCHAR},
       product_name = #{record.productName,jdbcType=VARCHAR},
       product_brand = #{record.productBrand,jdbcType=VARCHAR},
       product_sn = #{record.productSn,jdbcType=VARCHAR},
       product_price = #{record.productPrice,jdbcType=NUMERIC},
       product_quantity = #{record.productQuantity,jdbcType=INTEGER},
-      product_sku_id = #{record.productSkuId,jdbcType=BIGINT},
+      product_sku_id = #{record.productSkuId,jdbcType=INTEGER},
       product_sku_code = #{record.productSkuCode,jdbcType=VARCHAR},
-      product_category_id = #{record.productCategoryId,jdbcType=BIGINT},
+      product_category_id = #{record.productCategoryId,jdbcType=INTEGER},
       promotion_name = #{record.promotionName,jdbcType=VARCHAR},
       promotion_amount = #{record.promotionAmount,jdbcType=NUMERIC},
       coupon_amount = #{record.couponAmount,jdbcType=NUMERIC},
@@ -322,13 +322,13 @@
     update order_item
     <set>
       <if test="orderId != null">
-        order_id = #{orderId,jdbcType=BIGINT},
+        order_id = #{orderId,jdbcType=INTEGER},
       </if>
       <if test="orderSn != null">
         order_sn = #{orderSn,jdbcType=VARCHAR},
       </if>
       <if test="productId != null">
-        product_id = #{productId,jdbcType=BIGINT},
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="productPic != null">
         product_pic = #{productPic,jdbcType=VARCHAR},
@@ -349,13 +349,13 @@
         product_quantity = #{productQuantity,jdbcType=INTEGER},
       </if>
       <if test="productSkuId != null">
-        product_sku_id = #{productSkuId,jdbcType=BIGINT},
+        product_sku_id = #{productSkuId,jdbcType=INTEGER},
       </if>
       <if test="productSkuCode != null">
         product_sku_code = #{productSkuCode,jdbcType=VARCHAR},
       </if>
       <if test="productCategoryId != null">
-        product_category_id = #{productCategoryId,jdbcType=BIGINT},
+        product_category_id = #{productCategoryId,jdbcType=INTEGER},
       </if>
       <if test="promotionName != null">
         promotion_name = #{promotionName,jdbcType=VARCHAR},
@@ -374,18 +374,18 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.OrderItem">
     update order_item
-    set order_id = #{orderId,jdbcType=BIGINT},
+    set order_id = #{orderId,jdbcType=INTEGER},
       order_sn = #{orderSn,jdbcType=VARCHAR},
-      product_id = #{productId,jdbcType=BIGINT},
+      product_id = #{productId,jdbcType=INTEGER},
       product_pic = #{productPic,jdbcType=VARCHAR},
       product_name = #{productName,jdbcType=VARCHAR},
       product_brand = #{productBrand,jdbcType=VARCHAR},
       product_sn = #{productSn,jdbcType=VARCHAR},
       product_price = #{productPrice,jdbcType=NUMERIC},
       product_quantity = #{productQuantity,jdbcType=INTEGER},
-      product_sku_id = #{productSkuId,jdbcType=BIGINT},
+      product_sku_id = #{productSkuId,jdbcType=INTEGER},
       product_sku_code = #{productSkuCode,jdbcType=VARCHAR},
-      product_category_id = #{productCategoryId,jdbcType=BIGINT},
+      product_category_id = #{productCategoryId,jdbcType=INTEGER},
       promotion_name = #{promotionName,jdbcType=VARCHAR},
       promotion_amount = #{promotionAmount,jdbcType=NUMERIC},
       coupon_amount = #{couponAmount,jdbcType=NUMERIC},

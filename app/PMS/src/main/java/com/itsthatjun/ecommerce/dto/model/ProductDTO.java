@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.dto.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -22,9 +23,9 @@ public class ProductDTO implements Serializable {
 
     private String description;
 
-    private double originalPrice;
+    private BigDecimal originalPrice;
 
-    private double salePrice;
+    private BigDecimal salePrice;
 
     private int stock;
 

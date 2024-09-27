@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.BrandUpdateLogMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.BrandUpdateLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="brand_id" jdbcType="NUMERIC" property="brandId" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
     <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
     <result column="operator" jdbcType="VARCHAR" property="operator" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
@@ -102,7 +102,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.BrandUpdateLog" useGeneratedKeys="true">
     insert into brand_update_log (brand_id, update_action, operator, 
       created_at)
-    values (#{brandId,jdbcType=NUMERIC}, #{updateAction,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+    values (#{brandId,jdbcType=INTEGER}, #{updateAction,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.BrandUpdateLog" useGeneratedKeys="true">
@@ -123,7 +123,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="brandId != null">
-        #{brandId,jdbcType=NUMERIC},
+        #{brandId,jdbcType=INTEGER},
       </if>
       <if test="updateAction != null">
         #{updateAction,jdbcType=VARCHAR},
@@ -149,7 +149,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.brandId != null">
-        brand_id = #{record.brandId,jdbcType=NUMERIC},
+        brand_id = #{record.brandId,jdbcType=INTEGER},
       </if>
       <if test="record.updateAction != null">
         update_action = #{record.updateAction,jdbcType=VARCHAR},
@@ -168,7 +168,7 @@
   <update id="updateByExample" parameterType="map">
     update brand_update_log
     set id = #{record.id,jdbcType=INTEGER},
-      brand_id = #{record.brandId,jdbcType=NUMERIC},
+      brand_id = #{record.brandId,jdbcType=INTEGER},
       update_action = #{record.updateAction,jdbcType=VARCHAR},
       operator = #{record.operator,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
@@ -180,7 +180,7 @@
     update brand_update_log
     <set>
       <if test="brandId != null">
-        brand_id = #{brandId,jdbcType=NUMERIC},
+        brand_id = #{brandId,jdbcType=INTEGER},
       </if>
       <if test="updateAction != null">
         update_action = #{updateAction,jdbcType=VARCHAR},
@@ -196,7 +196,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.BrandUpdateLog">
     update brand_update_log
-    set brand_id = #{brandId,jdbcType=NUMERIC},
+    set brand_id = #{brandId,jdbcType=INTEGER},
       update_action = #{updateAction,jdbcType=VARCHAR},
       operator = #{operator,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP}

@@ -1,15 +1,13 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
-
 public class ProductCategory {
     private Integer id;
 
     private String name;
 
-    private BigDecimal parentId;
+    private Integer parentId;
 
-    private BigDecimal level;
+    private Integer level;
 
     public Integer getId() {
         return id;
@@ -27,19 +25,19 @@ public class ProductCategory {
         this.name = name;
     }
 
-    public BigDecimal getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigDecimal parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 
-    public BigDecimal getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(BigDecimal level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 }

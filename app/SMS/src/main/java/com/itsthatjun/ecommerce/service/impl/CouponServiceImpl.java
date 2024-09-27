@@ -58,14 +58,14 @@ public class CouponServiceImpl implements CouponService {
         this.jdbcScheduler = jdbcScheduler;
     }
     @Override
-    public Mono<Double> checkDiscount(String couponCode, int userId) {
+    public Mono<BigDecimal> checkDiscount(String couponCode, int userId) {
         return Mono.fromCallable(() -> {
             Coupon foundCoupon = checkCoupon(couponCode);
-            if (foundCoupon == null) return 0.0;
+            if (foundCoupon == null) return BigDecimal.ZERO;
 
             // TODO: change it to fit more reactive way
             List<CartItem> cartItemList = getCartFromOms(userId);
-            if (cartItemList.isEmpty()) return 0.0;
+            if (cartItemList.isEmpty()) return BigDecimal.ZERO;
 
             Map<String, Integer> skuQuantity = new HashMap<>();
             for (CartItem cartItem : cartItemList) {
@@ -113,24 +113,26 @@ public class CouponServiceImpl implements CouponService {
         return result.get(0);
     }
 
-    private double getDiscountAmount(Map<String, Integer> skuQuantity, Coupon coupon) {
-        double totalDiscount = 0;
+    private BigDecimal getDiscountAmount(Map<String, Integer> skuQuantity, Coupon coupon) {
+        BigDecimal totalDiscount = BigDecimal.ZERO;
 
         // check expiration
         Date startDate = coupon.getStartTime();
         Date endDate = coupon.getEndTime();
         Date currentDate = new Date();
 
+        // check coupon valid date and expiration
         if (!(currentDate.after(startDate) && currentDate.before(endDate))) {
-            return 0;
+            return totalDiscount;
         }
 
-        if (coupon.getStatus() == 0) return 0;  // not active coupon
+        // not active coupon
+        if (coupon.getStatus() == 0) return BigDecimal.ZERO;
 
         // check usage limit
         if (coupon.getCount() <= coupon.getUsedCount() && coupon.getUsedCount() >= coupon.getPublishCount()) {
             LOG.info("Coupon expired.");
-            return 0;
+            return totalDiscount;
         }
 
         // discount on 0-> all, 1 -> specific brand,  2-> specific category , 3-> specific item
@@ -146,7 +148,6 @@ public class CouponServiceImpl implements CouponService {
         List<CouponProductRelation> itemAffectedByCouponList = productRelationMapper.selectByExample(productRelationExample);
 
         for (String skuCode : skuQuantity.keySet()) {
-            String itemSKuCode = skuCode;
             int quantityNeeded = skuQuantity.get(skuCode);
 
             ProductSkuExample skuExample = new ProductSkuExample();
@@ -156,11 +157,14 @@ public class CouponServiceImpl implements CouponService {
             int itemId = productSkuStock.getProductId();
 
             for (CouponProductRelation discountItem: itemAffectedByCouponList) {
-                if (discountItem.getProductSkuCode().equals(itemSKuCode)  && discountItem.getProductId() == itemId) {
-                    if (coupon.getDiscountType() == 0) {// discount by amount
-                        totalDiscount = totalDiscount + (coupon.getAmount().doubleValue() * quantityNeeded);
-                    } else {   // discount  by percent
-                        totalDiscount = totalDiscount + ((coupon.getAmount().doubleValue() * productSkuStock.getPromotionPrice().doubleValue()) / 100) * quantityNeeded;
+                if (discountItem.getProductSkuCode().equals(skuCode)  && discountItem.getProductId() == itemId) {
+                    if (coupon.getDiscountType() == 0) {  // Discount by amount
+                        totalDiscount = totalDiscount.add(coupon.getAmount().multiply(BigDecimal.valueOf(quantityNeeded)));
+                    } else {   // Discount by percent
+                        // Calculate the discount amount based on the percentage
+                        BigDecimal discountAmount = coupon.getAmount().divide(BigDecimal.valueOf(100)); // Convert percentage to decimal
+                        BigDecimal discountForThisItem = discountAmount.multiply(productSkuStock.getPromotionPrice());
+                        totalDiscount = totalDiscount.add(discountForThisItem.multiply(BigDecimal.valueOf(quantityNeeded)));
                     }
                 }
             }
@@ -168,22 +172,23 @@ public class CouponServiceImpl implements CouponService {
         return totalDiscount;
     }
 
-    private double wholeOrderDiscount(Map<String, Integer> skuQuantity, Coupon coupon) {
-        double totalDiscount = 0;
-        double totalPrice = 0;
+    private BigDecimal wholeOrderDiscount(Map<String, Integer> skuQuantity, Coupon coupon) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
         for (String skuCode : skuQuantity.keySet()) {
             int quantityNeeded = skuQuantity.get(skuCode);
 
             ProductSkuExample skuExample = new ProductSkuExample();
             skuExample.createCriteria().andSkuCodeEqualTo(skuCode);
             ProductSku productSkuStock = productSkuMapper.selectByExample(skuExample).get(0);
-            totalPrice += productSkuStock.getPromotionPrice().doubleValue() * quantityNeeded;
+            totalPrice = productSkuStock.getPromotionPrice().multiply(BigDecimal.valueOf(quantityNeeded)).add(totalPrice);
         }
 
+        BigDecimal totalDiscount;
+
         if (coupon.getDiscountType() == 0) {// discount by amount
-            totalDiscount = coupon.getAmount().doubleValue();
+            totalDiscount = coupon.getAmount();
         } else {   // discount  by percent
-            totalDiscount =  ((coupon.getAmount().doubleValue() * totalPrice) / 100);
+            totalDiscount =  totalPrice.multiply(coupon.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP);
         }
         return totalDiscount;
     }
@@ -352,7 +357,6 @@ public class CouponServiceImpl implements CouponService {
         couponChangeLog.setCouponId(coupon.getId());
         couponChangeLog.setUpdateAction(updateAction);
         couponChangeLog.setOperator(operator);
-        couponChangeLog.setCreatedAt(new Date());
         logMapper.insert(couponChangeLog);
     }
 }

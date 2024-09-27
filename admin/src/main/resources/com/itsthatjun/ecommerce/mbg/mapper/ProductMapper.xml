@@ -3,19 +3,19 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ProductMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Product">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="brand_id" jdbcType="NUMERIC" property="brandId" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
     <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="category_id" jdbcType="NUMERIC" property="categoryId" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
-    <result column="attribute_category_id" jdbcType="NUMERIC" property="attributeCategoryId" />
+    <result column="attribute_category_id" jdbcType="INTEGER" property="attributeCategoryId" />
     <result column="sn" jdbcType="VARCHAR" property="sn" />
     <result column="new_status" jdbcType="INTEGER" property="newStatus" />
     <result column="recommend_status" jdbcType="INTEGER" property="recommendStatus" />
     <result column="verify_status" jdbcType="INTEGER" property="verifyStatus" />
     <result column="sub_title" jdbcType="VARCHAR" property="subTitle" />
     <result column="cover_picture" jdbcType="VARCHAR" property="coverPicture" />
-    <result column="picture_album" jdbcType="NUMERIC" property="pictureAlbum" />
+    <result column="picture_album" jdbcType="INTEGER" property="pictureAlbum" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="original_price" jdbcType="NUMERIC" property="originalPrice" />
     <result column="on_sale_status" jdbcType="INTEGER" property="onSaleStatus" />
@@ -27,7 +27,7 @@
     <result column="keywords" jdbcType="VARCHAR" property="keywords" />
     <result column="detail_title" jdbcType="VARCHAR" property="detailTitle" />
     <result column="detail_desc" jdbcType="VARCHAR" property="detailDesc" />
-    <result column="description_album" jdbcType="NUMERIC" property="descriptionAlbum" />
+    <result column="description_album_id" jdbcType="INTEGER" property="descriptionAlbumId" />
     <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
     <result column="publish_status" jdbcType="INTEGER" property="publishStatus" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
@@ -95,8 +95,8 @@
     id, brand_id, brand_name, name, category_id, category_name, attribute_category_id, 
     sn, new_status, recommend_status, verify_status, sub_title, cover_picture, picture_album, 
     description, original_price, on_sale_status, sale_price, stock, low_stock, unit_sold, 
-    weight, keywords, detail_title, detail_desc, description_album, delete_status, publish_status, 
-    created_at, note
+    weight, keywords, detail_title, detail_desc, description_album_id, delete_status, 
+    publish_status, created_at, note
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductExample" resultMap="BaseResultMap">
     select
@@ -137,17 +137,17 @@
       on_sale_status, sale_price, stock, 
       low_stock, unit_sold, weight, 
       keywords, detail_title, detail_desc, 
-      description_album, delete_status, publish_status, 
+      description_album_id, delete_status, publish_status, 
       created_at, note)
-    values (#{brandId,jdbcType=NUMERIC}, #{brandName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{categoryId,jdbcType=NUMERIC}, #{categoryName,jdbcType=VARCHAR}, #{attributeCategoryId,jdbcType=NUMERIC}, 
+    values (#{brandId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{categoryId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{attributeCategoryId,jdbcType=INTEGER}, 
       #{sn,jdbcType=VARCHAR}, #{newStatus,jdbcType=INTEGER}, #{recommendStatus,jdbcType=INTEGER}, 
       #{verifyStatus,jdbcType=INTEGER}, #{subTitle,jdbcType=VARCHAR}, #{coverPicture,jdbcType=VARCHAR}, 
-      #{pictureAlbum,jdbcType=NUMERIC}, #{description,jdbcType=VARCHAR}, #{originalPrice,jdbcType=NUMERIC}, 
+      #{pictureAlbum,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{originalPrice,jdbcType=NUMERIC}, 
       #{onSaleStatus,jdbcType=INTEGER}, #{salePrice,jdbcType=NUMERIC}, #{stock,jdbcType=INTEGER}, 
       #{lowStock,jdbcType=INTEGER}, #{unitSold,jdbcType=INTEGER}, #{weight,jdbcType=NUMERIC}, 
       #{keywords,jdbcType=VARCHAR}, #{detailTitle,jdbcType=VARCHAR}, #{detailDesc,jdbcType=VARCHAR}, 
-      #{descriptionAlbum,jdbcType=NUMERIC}, #{deleteStatus,jdbcType=INTEGER}, #{publishStatus,jdbcType=INTEGER}, 
+      #{descriptionAlbumId,jdbcType=INTEGER}, #{deleteStatus,jdbcType=INTEGER}, #{publishStatus,jdbcType=INTEGER}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Product" useGeneratedKeys="true">
@@ -225,8 +225,8 @@
       <if test="detailDesc != null">
         detail_desc,
       </if>
-      <if test="descriptionAlbum != null">
-        description_album,
+      <if test="descriptionAlbumId != null">
+        description_album_id,
       </if>
       <if test="deleteStatus != null">
         delete_status,
@@ -243,7 +243,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="brandId != null">
-        #{brandId,jdbcType=NUMERIC},
+        #{brandId,jdbcType=INTEGER},
       </if>
       <if test="brandName != null">
         #{brandName,jdbcType=VARCHAR},
@@ -252,13 +252,13 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="categoryId != null">
-        #{categoryId,jdbcType=NUMERIC},
+        #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="categoryName != null">
         #{categoryName,jdbcType=VARCHAR},
       </if>
       <if test="attributeCategoryId != null">
-        #{attributeCategoryId,jdbcType=NUMERIC},
+        #{attributeCategoryId,jdbcType=INTEGER},
       </if>
       <if test="sn != null">
         #{sn,jdbcType=VARCHAR},
@@ -279,7 +279,7 @@
         #{coverPicture,jdbcType=VARCHAR},
       </if>
       <if test="pictureAlbum != null">
-        #{pictureAlbum,jdbcType=NUMERIC},
+        #{pictureAlbum,jdbcType=INTEGER},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
@@ -314,8 +314,8 @@
       <if test="detailDesc != null">
         #{detailDesc,jdbcType=VARCHAR},
       </if>
-      <if test="descriptionAlbum != null">
-        #{descriptionAlbum,jdbcType=NUMERIC},
+      <if test="descriptionAlbumId != null">
+        #{descriptionAlbumId,jdbcType=INTEGER},
       </if>
       <if test="deleteStatus != null">
         #{deleteStatus,jdbcType=INTEGER},
@@ -344,7 +344,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.brandId != null">
-        brand_id = #{record.brandId,jdbcType=NUMERIC},
+        brand_id = #{record.brandId,jdbcType=INTEGER},
       </if>
       <if test="record.brandName != null">
         brand_name = #{record.brandName,jdbcType=VARCHAR},
@@ -353,13 +353,13 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.categoryId != null">
-        category_id = #{record.categoryId,jdbcType=NUMERIC},
+        category_id = #{record.categoryId,jdbcType=INTEGER},
       </if>
       <if test="record.categoryName != null">
         category_name = #{record.categoryName,jdbcType=VARCHAR},
       </if>
       <if test="record.attributeCategoryId != null">
-        attribute_category_id = #{record.attributeCategoryId,jdbcType=NUMERIC},
+        attribute_category_id = #{record.attributeCategoryId,jdbcType=INTEGER},
       </if>
       <if test="record.sn != null">
         sn = #{record.sn,jdbcType=VARCHAR},
@@ -380,7 +380,7 @@
         cover_picture = #{record.coverPicture,jdbcType=VARCHAR},
       </if>
       <if test="record.pictureAlbum != null">
-        picture_album = #{record.pictureAlbum,jdbcType=NUMERIC},
+        picture_album = #{record.pictureAlbum,jdbcType=INTEGER},
       </if>
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
@@ -415,8 +415,8 @@
       <if test="record.detailDesc != null">
         detail_desc = #{record.detailDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.descriptionAlbum != null">
-        description_album = #{record.descriptionAlbum,jdbcType=NUMERIC},
+      <if test="record.descriptionAlbumId != null">
+        description_album_id = #{record.descriptionAlbumId,jdbcType=INTEGER},
       </if>
       <if test="record.deleteStatus != null">
         delete_status = #{record.deleteStatus,jdbcType=INTEGER},
@@ -438,19 +438,19 @@
   <update id="updateByExample" parameterType="map">
     update product
     set id = #{record.id,jdbcType=INTEGER},
-      brand_id = #{record.brandId,jdbcType=NUMERIC},
+      brand_id = #{record.brandId,jdbcType=INTEGER},
       brand_name = #{record.brandName,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      category_id = #{record.categoryId,jdbcType=NUMERIC},
+      category_id = #{record.categoryId,jdbcType=INTEGER},
       category_name = #{record.categoryName,jdbcType=VARCHAR},
-      attribute_category_id = #{record.attributeCategoryId,jdbcType=NUMERIC},
+      attribute_category_id = #{record.attributeCategoryId,jdbcType=INTEGER},
       sn = #{record.sn,jdbcType=VARCHAR},
       new_status = #{record.newStatus,jdbcType=INTEGER},
       recommend_status = #{record.recommendStatus,jdbcType=INTEGER},
       verify_status = #{record.verifyStatus,jdbcType=INTEGER},
       sub_title = #{record.subTitle,jdbcType=VARCHAR},
       cover_picture = #{record.coverPicture,jdbcType=VARCHAR},
-      picture_album = #{record.pictureAlbum,jdbcType=NUMERIC},
+      picture_album = #{record.pictureAlbum,jdbcType=INTEGER},
       description = #{record.description,jdbcType=VARCHAR},
       original_price = #{record.originalPrice,jdbcType=NUMERIC},
       on_sale_status = #{record.onSaleStatus,jdbcType=INTEGER},
@@ -462,7 +462,7 @@
       keywords = #{record.keywords,jdbcType=VARCHAR},
       detail_title = #{record.detailTitle,jdbcType=VARCHAR},
       detail_desc = #{record.detailDesc,jdbcType=VARCHAR},
-      description_album = #{record.descriptionAlbum,jdbcType=NUMERIC},
+      description_album_id = #{record.descriptionAlbumId,jdbcType=INTEGER},
       delete_status = #{record.deleteStatus,jdbcType=INTEGER},
       publish_status = #{record.publishStatus,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -475,7 +475,7 @@
     update product
     <set>
       <if test="brandId != null">
-        brand_id = #{brandId,jdbcType=NUMERIC},
+        brand_id = #{brandId,jdbcType=INTEGER},
       </if>
       <if test="brandName != null">
         brand_name = #{brandName,jdbcType=VARCHAR},
@@ -484,13 +484,13 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="categoryId != null">
-        category_id = #{categoryId,jdbcType=NUMERIC},
+        category_id = #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="categoryName != null">
         category_name = #{categoryName,jdbcType=VARCHAR},
       </if>
       <if test="attributeCategoryId != null">
-        attribute_category_id = #{attributeCategoryId,jdbcType=NUMERIC},
+        attribute_category_id = #{attributeCategoryId,jdbcType=INTEGER},
       </if>
       <if test="sn != null">
         sn = #{sn,jdbcType=VARCHAR},
@@ -511,7 +511,7 @@
         cover_picture = #{coverPicture,jdbcType=VARCHAR},
       </if>
       <if test="pictureAlbum != null">
-        picture_album = #{pictureAlbum,jdbcType=NUMERIC},
+        picture_album = #{pictureAlbum,jdbcType=INTEGER},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
@@ -546,8 +546,8 @@
       <if test="detailDesc != null">
         detail_desc = #{detailDesc,jdbcType=VARCHAR},
       </if>
-      <if test="descriptionAlbum != null">
-        description_album = #{descriptionAlbum,jdbcType=NUMERIC},
+      <if test="descriptionAlbumId != null">
+        description_album_id = #{descriptionAlbumId,jdbcType=INTEGER},
       </if>
       <if test="deleteStatus != null">
         delete_status = #{deleteStatus,jdbcType=INTEGER},
@@ -566,19 +566,19 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Product">
     update product
-    set brand_id = #{brandId,jdbcType=NUMERIC},
+    set brand_id = #{brandId,jdbcType=INTEGER},
       brand_name = #{brandName,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      category_id = #{categoryId,jdbcType=NUMERIC},
+      category_id = #{categoryId,jdbcType=INTEGER},
       category_name = #{categoryName,jdbcType=VARCHAR},
-      attribute_category_id = #{attributeCategoryId,jdbcType=NUMERIC},
+      attribute_category_id = #{attributeCategoryId,jdbcType=INTEGER},
       sn = #{sn,jdbcType=VARCHAR},
       new_status = #{newStatus,jdbcType=INTEGER},
       recommend_status = #{recommendStatus,jdbcType=INTEGER},
       verify_status = #{verifyStatus,jdbcType=INTEGER},
       sub_title = #{subTitle,jdbcType=VARCHAR},
       cover_picture = #{coverPicture,jdbcType=VARCHAR},
-      picture_album = #{pictureAlbum,jdbcType=NUMERIC},
+      picture_album = #{pictureAlbum,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
       original_price = #{originalPrice,jdbcType=NUMERIC},
       on_sale_status = #{onSaleStatus,jdbcType=INTEGER},
@@ -590,7 +590,7 @@
       keywords = #{keywords,jdbcType=VARCHAR},
       detail_title = #{detailTitle,jdbcType=VARCHAR},
       detail_desc = #{detailDesc,jdbcType=VARCHAR},
-      description_album = #{descriptionAlbum,jdbcType=NUMERIC},
+      description_album_id = #{descriptionAlbumId,jdbcType=INTEGER},
       delete_status = #{deleteStatus,jdbcType=INTEGER},
       publish_status = #{publishStatus,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},

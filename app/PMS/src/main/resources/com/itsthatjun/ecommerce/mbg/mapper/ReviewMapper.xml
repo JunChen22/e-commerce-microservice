@@ -3,8 +3,8 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ReviewMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Review">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="product_id" jdbcType="NUMERIC" property="productId" />
-    <result column="member_id" jdbcType="NUMERIC" property="memberId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
     <result column="member_name" jdbcType="VARCHAR" property="memberName" />
     <result column="member_icon" jdbcType="VARCHAR" property="memberIcon" />
     <result column="star" jdbcType="INTEGER" property="star" />
@@ -112,7 +112,7 @@
       member_icon, star, tittle, 
       likes, verified, content, 
       created_at, updated_at)
-    values (#{productId,jdbcType=NUMERIC}, #{memberId,jdbcType=NUMERIC}, #{memberName,jdbcType=VARCHAR}, 
+    values (#{productId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{memberName,jdbcType=VARCHAR}, 
       #{memberIcon,jdbcType=VARCHAR}, #{star,jdbcType=INTEGER}, #{tittle,jdbcType=VARCHAR}, 
       #{likes,jdbcType=INTEGER}, #{verified,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
@@ -156,10 +156,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="productId != null">
-        #{productId,jdbcType=NUMERIC},
+        #{productId,jdbcType=INTEGER},
       </if>
       <if test="memberId != null">
-        #{memberId,jdbcType=NUMERIC},
+        #{memberId,jdbcType=INTEGER},
       </if>
       <if test="memberName != null">
         #{memberName,jdbcType=VARCHAR},
@@ -203,10 +203,10 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=NUMERIC},
+        product_id = #{record.productId,jdbcType=INTEGER},
       </if>
       <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=NUMERIC},
+        member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
       <if test="record.memberName != null">
         member_name = #{record.memberName,jdbcType=VARCHAR},
@@ -243,8 +243,8 @@
   <update id="updateByExample" parameterType="map">
     update review
     set id = #{record.id,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=NUMERIC},
-      member_id = #{record.memberId,jdbcType=NUMERIC},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      member_id = #{record.memberId,jdbcType=INTEGER},
       member_name = #{record.memberName,jdbcType=VARCHAR},
       member_icon = #{record.memberIcon,jdbcType=VARCHAR},
       star = #{record.star,jdbcType=INTEGER},
@@ -262,10 +262,10 @@
     update review
     <set>
       <if test="productId != null">
-        product_id = #{productId,jdbcType=NUMERIC},
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="memberId != null">
-        member_id = #{memberId,jdbcType=NUMERIC},
+        member_id = #{memberId,jdbcType=INTEGER},
       </if>
       <if test="memberName != null">
         member_name = #{memberName,jdbcType=VARCHAR},
@@ -299,8 +299,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Review">
     update review
-    set product_id = #{productId,jdbcType=NUMERIC},
-      member_id = #{memberId,jdbcType=NUMERIC},
+    set product_id = #{productId,jdbcType=INTEGER},
+      member_id = #{memberId,jdbcType=INTEGER},
       member_name = #{memberName,jdbcType=VARCHAR},
       member_icon = #{memberIcon,jdbcType=VARCHAR},
       star = #{star,jdbcType=INTEGER},

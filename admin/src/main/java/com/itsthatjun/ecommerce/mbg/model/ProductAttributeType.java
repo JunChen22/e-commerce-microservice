@@ -1,12 +1,11 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 public class ProductAttributeType implements Serializable {
     private Integer id;
 
-    private BigDecimal attributeCategoryId;
+    private Integer attributeCategoryId;
 
     private String name;
 
@@ -20,11 +19,11 @@ public class ProductAttributeType implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getAttributeCategoryId() {
+    public Integer getAttributeCategoryId() {
         return attributeCategoryId;
     }
 
-    public void setAttributeCategoryId(BigDecimal attributeCategoryId) {
+    public void setAttributeCategoryId(Integer attributeCategoryId) {
         this.attributeCategoryId = attributeCategoryId;
     }
 

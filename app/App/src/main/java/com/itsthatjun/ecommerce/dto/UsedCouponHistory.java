@@ -10,6 +10,6 @@ import java.util.List;
 public class UsedCouponHistory {
 
     private Coupon coupon;
-    private List<CouponHistory> couponHistoryList;
 
+    private List<CouponHistory> couponHistoryList;
 }

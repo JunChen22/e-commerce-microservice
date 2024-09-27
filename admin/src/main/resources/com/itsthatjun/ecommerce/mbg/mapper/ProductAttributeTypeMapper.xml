@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ProductAttributeTypeMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ProductAttributeType">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="attribute_category_id" jdbcType="NUMERIC" property="attributeCategoryId" />
+    <result column="attribute_category_id" jdbcType="INTEGER" property="attributeCategoryId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -99,7 +99,7 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttributeType" useGeneratedKeys="true">
     insert into product_attribute_type (attribute_category_id, name)
-    values (#{attributeCategoryId,jdbcType=NUMERIC}, #{name,jdbcType=VARCHAR})
+    values (#{attributeCategoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttributeType" useGeneratedKeys="true">
     insert into product_attribute_type
@@ -113,7 +113,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="attributeCategoryId != null">
-        #{attributeCategoryId,jdbcType=NUMERIC},
+        #{attributeCategoryId,jdbcType=INTEGER},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -133,7 +133,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.attributeCategoryId != null">
-        attribute_category_id = #{record.attributeCategoryId,jdbcType=NUMERIC},
+        attribute_category_id = #{record.attributeCategoryId,jdbcType=INTEGER},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -146,7 +146,7 @@
   <update id="updateByExample" parameterType="map">
     update product_attribute_type
     set id = #{record.id,jdbcType=INTEGER},
-      attribute_category_id = #{record.attributeCategoryId,jdbcType=NUMERIC},
+      attribute_category_id = #{record.attributeCategoryId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -156,7 +156,7 @@
     update product_attribute_type
     <set>
       <if test="attributeCategoryId != null">
-        attribute_category_id = #{attributeCategoryId,jdbcType=NUMERIC},
+        attribute_category_id = #{attributeCategoryId,jdbcType=INTEGER},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -166,7 +166,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductAttributeType">
     update product_attribute_type
-    set attribute_category_id = #{attributeCategoryId,jdbcType=NUMERIC},
+    set attribute_category_id = #{attributeCategoryId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

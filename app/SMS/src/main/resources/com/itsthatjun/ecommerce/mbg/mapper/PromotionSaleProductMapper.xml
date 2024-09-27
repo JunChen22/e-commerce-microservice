@@ -3,8 +3,8 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.PromotionSaleProductMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.PromotionSaleProduct">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="promotion_sale_id" jdbcType="BIGINT" property="promotionSaleId" />
-    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="promotion_sale_id" jdbcType="INTEGER" property="promotionSaleId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
     <result column="product_sku_code" jdbcType="VARCHAR" property="productSkuCode" />
     <result column="promotion_price" jdbcType="NUMERIC" property="promotionPrice" />
     <result column="promotion_limit_item" jdbcType="INTEGER" property="promotionLimitItem" />
@@ -106,7 +106,7 @@
     insert into promotion_sale_product (promotion_sale_id, product_id, product_sku_code, 
       promotion_price, promotion_limit_item, promotion_limit_per_user
       )
-    values (#{promotionSaleId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{productSkuCode,jdbcType=VARCHAR}, 
+    values (#{promotionSaleId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{productSkuCode,jdbcType=VARCHAR}, 
       #{promotionPrice,jdbcType=NUMERIC}, #{promotionLimitItem,jdbcType=INTEGER}, #{promotionLimitPerUser,jdbcType=INTEGER}
       )
   </insert>
@@ -134,10 +134,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="promotionSaleId != null">
-        #{promotionSaleId,jdbcType=BIGINT},
+        #{promotionSaleId,jdbcType=INTEGER},
       </if>
       <if test="productId != null">
-        #{productId,jdbcType=BIGINT},
+        #{productId,jdbcType=INTEGER},
       </if>
       <if test="productSkuCode != null">
         #{productSkuCode,jdbcType=VARCHAR},
@@ -166,10 +166,10 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.promotionSaleId != null">
-        promotion_sale_id = #{record.promotionSaleId,jdbcType=BIGINT},
+        promotion_sale_id = #{record.promotionSaleId,jdbcType=INTEGER},
       </if>
       <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=BIGINT},
+        product_id = #{record.productId,jdbcType=INTEGER},
       </if>
       <if test="record.productSkuCode != null">
         product_sku_code = #{record.productSkuCode,jdbcType=VARCHAR},
@@ -191,8 +191,8 @@
   <update id="updateByExample" parameterType="map">
     update promotion_sale_product
     set id = #{record.id,jdbcType=INTEGER},
-      promotion_sale_id = #{record.promotionSaleId,jdbcType=BIGINT},
-      product_id = #{record.productId,jdbcType=BIGINT},
+      promotion_sale_id = #{record.promotionSaleId,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=INTEGER},
       product_sku_code = #{record.productSkuCode,jdbcType=VARCHAR},
       promotion_price = #{record.promotionPrice,jdbcType=NUMERIC},
       promotion_limit_item = #{record.promotionLimitItem,jdbcType=INTEGER},
@@ -205,10 +205,10 @@
     update promotion_sale_product
     <set>
       <if test="promotionSaleId != null">
-        promotion_sale_id = #{promotionSaleId,jdbcType=BIGINT},
+        promotion_sale_id = #{promotionSaleId,jdbcType=INTEGER},
       </if>
       <if test="productId != null">
-        product_id = #{productId,jdbcType=BIGINT},
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="productSkuCode != null">
         product_sku_code = #{productSkuCode,jdbcType=VARCHAR},
@@ -227,8 +227,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleProduct">
     update promotion_sale_product
-    set promotion_sale_id = #{promotionSaleId,jdbcType=BIGINT},
-      product_id = #{productId,jdbcType=BIGINT},
+    set promotion_sale_id = #{promotionSaleId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
       product_sku_code = #{productSkuCode,jdbcType=VARCHAR},
       promotion_price = #{promotionPrice,jdbcType=NUMERIC},
       promotion_limit_item = #{promotionLimitItem,jdbcType=INTEGER},

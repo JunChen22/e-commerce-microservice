@@ -93,7 +93,6 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
                                               Map<String, Integer> skuQuantity, int userId) {
         String orderSn = returnRequest.getOrderSn();
         returnRequest.setOrderSn(orderSn);
-        returnRequest.setCreatedAt(new Date());
         returnRequest.setMemberId(userId);
         returnRequest.setStatus(0);
 
@@ -101,7 +100,7 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
         int returnRequestId = returnRequest.getId();
 
-        double returnAmount = 0;
+        BigDecimal returnAmount = BigDecimal.ZERO;
 
         // check for item validation from order and price
         for (String sku: skuQuantity.keySet()) {
@@ -113,23 +112,22 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
 
             OrderItem item  = orderItem.get(0);
             int quantityToReturn = skuQuantity.get(sku);
-            double purchasePrice = item.getRealAmount().doubleValue();
+            BigDecimal purchasePrice = item.getRealAmount();
 
             ReturnItem returnItem = new ReturnItem();
             returnItem.setReturnRequestId(returnRequestId);
             returnItem.setOrderSn(orderSn);
-            returnItem.setPurchasedPrice(BigDecimal.valueOf(purchasePrice));
+            returnItem.setPurchasedPrice(purchasePrice);
             returnItem.setQuantity(quantityToReturn);
             returnItemMapper.insert(returnItem);
 
-            returnAmount += purchasePrice * quantityToReturn;
+            returnAmount = purchasePrice.multiply(BigDecimal.valueOf(quantityToReturn)).add(returnAmount);
         }
 
-        returnRequest.setAskingAmount(BigDecimal.valueOf(returnAmount));
+        returnRequest.setAskingAmount(returnAmount);
 
         // attach picture to request if any
         for (ReturnReasonPictures picture: picturesList) {
-            picture.setCreatedAt(new Date());
             picture.setReturnRequestId(returnRequestId);
             picturesMapper.insert(picture);
         }
@@ -212,7 +210,6 @@ public class ReturnOrderServiceImpl implements ReturnOrderService {
         log.setReturnRequestId(returnRequestId);
         log.setUpdateAction(updateAction);
         log.setOperator(operator);
-        log.setCreatedAt(new Date());
         logMapper.insert(log);
     }
 }

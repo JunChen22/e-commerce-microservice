@@ -22,7 +22,7 @@ public class PaypalService {
 
     @ApiOperation(value = "")
     public Payment createPayment(
-            Double total,
+            BigDecimal total,
             String currency,
             PaypalPaymentMethod method,
             PaypalPaymentIntent intent,
@@ -32,7 +32,7 @@ public class PaypalService {
             String orderSn) throws PayPalRESTException {
         Amount amount = new Amount();
         amount.setCurrency(currency);
-        total = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        total = total.setScale(2, RoundingMode.HALF_UP);
         amount.setTotal(String.format("%.2f", total));
 
         Transaction transaction = new Transaction();
@@ -72,7 +72,7 @@ public class PaypalService {
         return payment.execute(apiContext, paymentExecute);
     }
 
-    public Refund createRefund(String saleId, double amount) throws PayPalRESTException {
+    public Refund createRefund(String saleId, BigDecimal amount) throws PayPalRESTException {
         Sale sale = new Sale();
         sale.setId(saleId);
 

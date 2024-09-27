@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -245,52 +244,52 @@ public class ProductCategoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andParentIdEqualTo(BigDecimal value) {
+        public Criteria andParentIdEqualTo(Integer value) {
             addCriterion("parent_id =", value, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdNotEqualTo(BigDecimal value) {
+        public Criteria andParentIdNotEqualTo(Integer value) {
             addCriterion("parent_id <>", value, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdGreaterThan(BigDecimal value) {
+        public Criteria andParentIdGreaterThan(Integer value) {
             addCriterion("parent_id >", value, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andParentIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("parent_id >=", value, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdLessThan(BigDecimal value) {
+        public Criteria andParentIdLessThan(Integer value) {
             addCriterion("parent_id <", value, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andParentIdLessThanOrEqualTo(Integer value) {
             addCriterion("parent_id <=", value, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdIn(List<BigDecimal> values) {
+        public Criteria andParentIdIn(List<Integer> values) {
             addCriterion("parent_id in", values, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdNotIn(List<BigDecimal> values) {
+        public Criteria andParentIdNotIn(List<Integer> values) {
             addCriterion("parent_id not in", values, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andParentIdBetween(Integer value1, Integer value2) {
             addCriterion("parent_id between", value1, value2, "parentId");
             return (Criteria) this;
         }
 
-        public Criteria andParentIdNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andParentIdNotBetween(Integer value1, Integer value2) {
             addCriterion("parent_id not between", value1, value2, "parentId");
             return (Criteria) this;
         }
@@ -305,52 +304,52 @@ public class ProductCategoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andLevelEqualTo(BigDecimal value) {
+        public Criteria andLevelEqualTo(Integer value) {
             addCriterion("level =", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelNotEqualTo(BigDecimal value) {
+        public Criteria andLevelNotEqualTo(Integer value) {
             addCriterion("level <>", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelGreaterThan(BigDecimal value) {
+        public Criteria andLevelGreaterThan(Integer value) {
             addCriterion("level >", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andLevelGreaterThanOrEqualTo(Integer value) {
             addCriterion("level >=", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelLessThan(BigDecimal value) {
+        public Criteria andLevelLessThan(Integer value) {
             addCriterion("level <", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andLevelLessThanOrEqualTo(Integer value) {
             addCriterion("level <=", value, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelIn(List<BigDecimal> values) {
+        public Criteria andLevelIn(List<Integer> values) {
             addCriterion("level in", values, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelNotIn(List<BigDecimal> values) {
+        public Criteria andLevelNotIn(List<Integer> values) {
             addCriterion("level not in", values, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andLevelBetween(Integer value1, Integer value2) {
             addCriterion("level between", value1, value2, "level");
             return (Criteria) this;
         }
 
-        public Criteria andLevelNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andLevelNotBetween(Integer value1, Integer value2) {
             addCriterion("level not between", value1, value2, "level");
             return (Criteria) this;
         }

@@ -2,6 +2,8 @@ package com.itsthatjun.ecommerce.dto.pms.model;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductSkuDTO {
 
@@ -9,9 +11,9 @@ public class ProductSkuDTO {
 
     private String picture;
 
-    private double price;
+    private BigDecimal price;
 
-    private double promotionPrice;
+    private BigDecimal promotionPrice;
 
     private Integer stock;
 }

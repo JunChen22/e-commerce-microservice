@@ -20,7 +20,7 @@ public class Admin implements Serializable {
 
     private Date lastLogin;
 
-    private String status;
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -88,11 +88,11 @@ public class Admin implements Serializable {
         this.lastLogin = lastLogin;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

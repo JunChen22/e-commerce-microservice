@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -14,25 +15,39 @@ public class EsProduct {
 
     @Id
     private Long id;
+
     @Field(type = FieldType.Keyword)
     private String productSn;
+
     private Long brandId;
+
     @Field(type = FieldType.Keyword)
     private String brandName;
+
     @Field(type = FieldType.Keyword)
     private String productCategoryName;
+
     @Field(type = FieldType.Keyword)
     private String name;
+
     @Field(type = FieldType.Keyword)
     private String subTitle;
+
     @Field(type = FieldType.Keyword)
     private String keywords;
-    private double price;
+
+    private BigDecimal price;
+
     private Integer sale;
+
     private Integer newStatus;
+
     private Integer recommendStatus;
+
     private Integer stock;
+
     private Integer promotionType;
+
     @Field(type = FieldType.Nested)
     private List<EsProductAttribute> attrValueList;
 }

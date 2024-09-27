@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ShoppingCartMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ShoppingCart">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
@@ -101,7 +101,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ShoppingCart" useGeneratedKeys="true">
     insert into shopping_cart (member_id, created_at, updated_at
       )
-    values (#{memberId,jdbcType=BIGINT}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
+    values (#{memberId,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ShoppingCart" useGeneratedKeys="true">
@@ -119,7 +119,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="memberId != null">
-        #{memberId,jdbcType=BIGINT},
+        #{memberId,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -142,7 +142,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=BIGINT},
+        member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -158,7 +158,7 @@
   <update id="updateByExample" parameterType="map">
     update shopping_cart
     set id = #{record.id,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=BIGINT},
+      member_id = #{record.memberId,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -169,7 +169,7 @@
     update shopping_cart
     <set>
       <if test="memberId != null">
-        member_id = #{memberId,jdbcType=BIGINT},
+        member_id = #{memberId,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -182,7 +182,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ShoppingCart">
     update shopping_cart
-    set member_id = #{memberId,jdbcType=BIGINT},
+    set member_id = #{memberId,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

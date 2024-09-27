@@ -19,7 +19,7 @@ public class Email {
 
     private String operator;
 
-    private Date created;
+    private Date createdAt;
 
     public Integer getId() {
         return id;
@@ -85,11 +85,11 @@ public class Email {
         this.operator = operator;
     }
 
-    public Date getCreated() {
-        return created;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

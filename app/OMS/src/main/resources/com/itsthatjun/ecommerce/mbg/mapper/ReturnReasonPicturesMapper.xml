@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ReturnReasonPicturesMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ReturnReasonPictures">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="return_request_id" jdbcType="BIGINT" property="returnRequestId" />
+    <result column="return_request_id" jdbcType="INTEGER" property="returnRequestId" />
     <result column="filename" jdbcType="VARCHAR" property="filename" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
   </resultMap>
@@ -101,7 +101,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnReasonPictures" useGeneratedKeys="true">
     insert into return_reason_pictures (return_request_id, filename, created_at
       )
-    values (#{returnRequestId,jdbcType=BIGINT}, #{filename,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
+    values (#{returnRequestId,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnReasonPictures" useGeneratedKeys="true">
@@ -119,7 +119,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="returnRequestId != null">
-        #{returnRequestId,jdbcType=BIGINT},
+        #{returnRequestId,jdbcType=INTEGER},
       </if>
       <if test="filename != null">
         #{filename,jdbcType=VARCHAR},
@@ -142,7 +142,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.returnRequestId != null">
-        return_request_id = #{record.returnRequestId,jdbcType=BIGINT},
+        return_request_id = #{record.returnRequestId,jdbcType=INTEGER},
       </if>
       <if test="record.filename != null">
         filename = #{record.filename,jdbcType=VARCHAR},
@@ -158,7 +158,7 @@
   <update id="updateByExample" parameterType="map">
     update return_reason_pictures
     set id = #{record.id,jdbcType=INTEGER},
-      return_request_id = #{record.returnRequestId,jdbcType=BIGINT},
+      return_request_id = #{record.returnRequestId,jdbcType=INTEGER},
       filename = #{record.filename,jdbcType=VARCHAR},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -169,7 +169,7 @@
     update return_reason_pictures
     <set>
       <if test="returnRequestId != null">
-        return_request_id = #{returnRequestId,jdbcType=BIGINT},
+        return_request_id = #{returnRequestId,jdbcType=INTEGER},
       </if>
       <if test="filename != null">
         filename = #{filename,jdbcType=VARCHAR},
@@ -182,7 +182,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnReasonPictures">
     update return_reason_pictures
-    set return_request_id = #{returnRequestId,jdbcType=BIGINT},
+    set return_request_id = #{returnRequestId,jdbcType=INTEGER},
       filename = #{filename,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

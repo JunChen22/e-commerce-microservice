@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -245,52 +244,52 @@ public class ProductAttributeCategoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountEqualTo(BigDecimal value) {
+        public Criteria andAttributeAmountEqualTo(Integer value) {
             addCriterion("attribute_amount =", value, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountNotEqualTo(BigDecimal value) {
+        public Criteria andAttributeAmountNotEqualTo(Integer value) {
             addCriterion("attribute_amount <>", value, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountGreaterThan(BigDecimal value) {
+        public Criteria andAttributeAmountGreaterThan(Integer value) {
             addCriterion("attribute_amount >", value, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andAttributeAmountGreaterThanOrEqualTo(Integer value) {
             addCriterion("attribute_amount >=", value, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountLessThan(BigDecimal value) {
+        public Criteria andAttributeAmountLessThan(Integer value) {
             addCriterion("attribute_amount <", value, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andAttributeAmountLessThanOrEqualTo(Integer value) {
             addCriterion("attribute_amount <=", value, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountIn(List<BigDecimal> values) {
+        public Criteria andAttributeAmountIn(List<Integer> values) {
             addCriterion("attribute_amount in", values, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountNotIn(List<BigDecimal> values) {
+        public Criteria andAttributeAmountNotIn(List<Integer> values) {
             addCriterion("attribute_amount not in", values, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andAttributeAmountBetween(Integer value1, Integer value2) {
             addCriterion("attribute_amount between", value1, value2, "attributeAmount");
             return (Criteria) this;
         }
 
-        public Criteria andAttributeAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+        public Criteria andAttributeAmountNotBetween(Integer value1, Integer value2) {
             addCriterion("attribute_amount not between", value1, value2, "attributeAmount");
             return (Criteria) this;
         }

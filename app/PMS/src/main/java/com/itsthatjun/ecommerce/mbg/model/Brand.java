@@ -7,7 +7,7 @@ public class Brand {
 
     private String alphabet;
 
-    private String status;
+    private Integer status;
 
     private String logo;
 
@@ -35,11 +35,11 @@ public class Brand {
         this.alphabet = alphabet;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

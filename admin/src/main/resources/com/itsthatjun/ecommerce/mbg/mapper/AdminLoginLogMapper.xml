@@ -3,7 +3,7 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.AdminLoginLogMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="admin_id" jdbcType="NUMERIC" property="adminId" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
     <result column="login_date" jdbcType="DATE" property="loginDate" />
     <result column="login_time" jdbcType="VARCHAR" property="loginTime" />
     <result column="ip_address" jdbcType="VARCHAR" property="ipAddress" />
@@ -103,7 +103,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog" useGeneratedKeys="true">
     insert into admin_login_log (admin_id, login_date, login_time, 
       ip_address, user_agent)
-    values (#{adminId,jdbcType=NUMERIC}, #{loginDate,jdbcType=DATE}, #{loginTime,jdbcType=VARCHAR}, 
+    values (#{adminId,jdbcType=INTEGER}, #{loginDate,jdbcType=DATE}, #{loginTime,jdbcType=VARCHAR}, 
       #{ipAddress,jdbcType=VARCHAR}, #{userAgent,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog" useGeneratedKeys="true">
@@ -127,7 +127,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="adminId != null">
-        #{adminId,jdbcType=NUMERIC},
+        #{adminId,jdbcType=INTEGER},
       </if>
       <if test="loginDate != null">
         #{loginDate,jdbcType=DATE},
@@ -156,7 +156,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.adminId != null">
-        admin_id = #{record.adminId,jdbcType=NUMERIC},
+        admin_id = #{record.adminId,jdbcType=INTEGER},
       </if>
       <if test="record.loginDate != null">
         login_date = #{record.loginDate,jdbcType=DATE},
@@ -178,7 +178,7 @@
   <update id="updateByExample" parameterType="map">
     update admin_login_log
     set id = #{record.id,jdbcType=INTEGER},
-      admin_id = #{record.adminId,jdbcType=NUMERIC},
+      admin_id = #{record.adminId,jdbcType=INTEGER},
       login_date = #{record.loginDate,jdbcType=DATE},
       login_time = #{record.loginTime,jdbcType=VARCHAR},
       ip_address = #{record.ipAddress,jdbcType=VARCHAR},
@@ -191,7 +191,7 @@
     update admin_login_log
     <set>
       <if test="adminId != null">
-        admin_id = #{adminId,jdbcType=NUMERIC},
+        admin_id = #{adminId,jdbcType=INTEGER},
       </if>
       <if test="loginDate != null">
         login_date = #{loginDate,jdbcType=DATE},
@@ -210,7 +210,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog">
     update admin_login_log
-    set admin_id = #{adminId,jdbcType=NUMERIC},
+    set admin_id = #{adminId,jdbcType=INTEGER},
       login_date = #{loginDate,jdbcType=DATE},
       login_time = #{loginTime,jdbcType=VARCHAR},
       ip_address = #{ipAddress,jdbcType=VARCHAR},

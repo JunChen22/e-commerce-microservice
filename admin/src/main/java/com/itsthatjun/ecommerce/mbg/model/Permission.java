@@ -1,13 +1,12 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class Permission implements Serializable {
     private Integer id;
 
-    private BigDecimal parentId;
+    private Integer parentId;
 
     private String name;
 
@@ -15,7 +14,7 @@ public class Permission implements Serializable {
 
     private Date createdAt;
 
-    private String status;
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -27,11 +26,11 @@ public class Permission implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(BigDecimal parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 
@@ -59,11 +58,11 @@ public class Permission implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

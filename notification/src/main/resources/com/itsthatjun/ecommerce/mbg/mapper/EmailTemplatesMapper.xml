@@ -5,7 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
     <result column="template_text" jdbcType="VARCHAR" property="templateText" />
-    <result column="created" jdbcType="TIMESTAMP" property="created" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, service_name, template_text, created, updated_at
+    id, service_name, template_text, created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailTemplatesExample" resultMap="BaseResultMap">
     select
@@ -100,9 +100,9 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailTemplates" useGeneratedKeys="true">
-    insert into email_templates (service_name, template_text, created, 
+    insert into email_templates (service_name, template_text, created_at, 
       updated_at)
-    values (#{serviceName,jdbcType=VARCHAR}, #{templateText,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, 
+    values (#{serviceName,jdbcType=VARCHAR}, #{templateText,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
       #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailTemplates" useGeneratedKeys="true">
@@ -114,8 +114,8 @@
       <if test="templateText != null">
         template_text,
       </if>
-      <if test="created != null">
-        created,
+      <if test="createdAt != null">
+        created_at,
       </if>
       <if test="updatedAt != null">
         updated_at,
@@ -128,8 +128,8 @@
       <if test="templateText != null">
         #{templateText,jdbcType=VARCHAR},
       </if>
-      <if test="created != null">
-        #{created,jdbcType=TIMESTAMP},
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=TIMESTAMP},
@@ -154,8 +154,8 @@
       <if test="record.templateText != null">
         template_text = #{record.templateText,jdbcType=VARCHAR},
       </if>
-      <if test="record.created != null">
-        created = #{record.created,jdbcType=TIMESTAMP},
+      <if test="record.createdAt != null">
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updatedAt != null">
         updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
@@ -170,7 +170,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       service_name = #{record.serviceName,jdbcType=VARCHAR},
       template_text = #{record.templateText,jdbcType=VARCHAR},
-      created = #{record.created,jdbcType=TIMESTAMP},
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -185,8 +185,8 @@
       <if test="templateText != null">
         template_text = #{templateText,jdbcType=VARCHAR},
       </if>
-      <if test="created != null">
-        created = #{created,jdbcType=TIMESTAMP},
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=TIMESTAMP},
@@ -198,7 +198,7 @@
     update email_templates
     set service_name = #{serviceName,jdbcType=VARCHAR},
       template_text = #{templateText,jdbcType=VARCHAR},
-      created = #{created,jdbcType=TIMESTAMP},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

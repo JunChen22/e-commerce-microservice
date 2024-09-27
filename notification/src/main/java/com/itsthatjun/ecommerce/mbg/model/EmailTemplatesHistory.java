@@ -9,7 +9,7 @@ public class EmailTemplatesHistory {
 
     private String updateAction;
 
-    private Date created;
+    private Date createdAt;
 
     private String operator;
 
@@ -37,12 +37,12 @@ public class EmailTemplatesHistory {
         this.updateAction = updateAction;
     }
 
-    public Date getCreated() {
-        return created;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getOperator() {

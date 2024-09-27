@@ -3,9 +3,9 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.CouponHistoryMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.CouponHistory">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="coupon_id" jdbcType="BIGINT" property="couponId" />
-    <result column="member_id" jdbcType="BIGINT" property="memberId" />
-    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="coupon_id" jdbcType="INTEGER" property="couponId" />
+    <result column="member_id" jdbcType="INTEGER" property="memberId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="used_time" jdbcType="TIMESTAMP" property="usedTime" />
     <result column="code" jdbcType="VARCHAR" property="code" />
   </resultMap>
@@ -103,7 +103,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponHistory" useGeneratedKeys="true">
     insert into coupon_history (coupon_id, member_id, order_id, 
       used_time, code)
-    values (#{couponId,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, 
+    values (#{couponId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, 
       #{usedTime,jdbcType=TIMESTAMP}, #{code,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponHistory" useGeneratedKeys="true">
@@ -127,13 +127,13 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="couponId != null">
-        #{couponId,jdbcType=BIGINT},
+        #{couponId,jdbcType=INTEGER},
       </if>
       <if test="memberId != null">
-        #{memberId,jdbcType=BIGINT},
+        #{memberId,jdbcType=INTEGER},
       </if>
       <if test="orderId != null">
-        #{orderId,jdbcType=BIGINT},
+        #{orderId,jdbcType=INTEGER},
       </if>
       <if test="usedTime != null">
         #{usedTime,jdbcType=TIMESTAMP},
@@ -156,13 +156,13 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.couponId != null">
-        coupon_id = #{record.couponId,jdbcType=BIGINT},
+        coupon_id = #{record.couponId,jdbcType=INTEGER},
       </if>
       <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=BIGINT},
+        member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
       <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=BIGINT},
+        order_id = #{record.orderId,jdbcType=INTEGER},
       </if>
       <if test="record.usedTime != null">
         used_time = #{record.usedTime,jdbcType=TIMESTAMP},
@@ -178,9 +178,9 @@
   <update id="updateByExample" parameterType="map">
     update coupon_history
     set id = #{record.id,jdbcType=INTEGER},
-      coupon_id = #{record.couponId,jdbcType=BIGINT},
-      member_id = #{record.memberId,jdbcType=BIGINT},
-      order_id = #{record.orderId,jdbcType=BIGINT},
+      coupon_id = #{record.couponId,jdbcType=INTEGER},
+      member_id = #{record.memberId,jdbcType=INTEGER},
+      order_id = #{record.orderId,jdbcType=INTEGER},
       used_time = #{record.usedTime,jdbcType=TIMESTAMP},
       code = #{record.code,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -191,13 +191,13 @@
     update coupon_history
     <set>
       <if test="couponId != null">
-        coupon_id = #{couponId,jdbcType=BIGINT},
+        coupon_id = #{couponId,jdbcType=INTEGER},
       </if>
       <if test="memberId != null">
-        member_id = #{memberId,jdbcType=BIGINT},
+        member_id = #{memberId,jdbcType=INTEGER},
       </if>
       <if test="orderId != null">
-        order_id = #{orderId,jdbcType=BIGINT},
+        order_id = #{orderId,jdbcType=INTEGER},
       </if>
       <if test="usedTime != null">
         used_time = #{usedTime,jdbcType=TIMESTAMP},
@@ -210,9 +210,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponHistory">
     update coupon_history
-    set coupon_id = #{couponId,jdbcType=BIGINT},
-      member_id = #{memberId,jdbcType=BIGINT},
-      order_id = #{orderId,jdbcType=BIGINT},
+    set coupon_id = #{couponId,jdbcType=INTEGER},
+      member_id = #{memberId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
       used_time = #{usedTime,jdbcType=TIMESTAMP},
       code = #{code,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

@@ -124,8 +124,6 @@ public class MemberServiceImpl implements MemberService {
 
         String passWord = newMember.getPassword();
         newMember.setPassword(passwordEncoder().encode(passWord));
-
-        newMember.setCreatedAt(new Date());
         newMember.setStatus(1);
         memberMapper.insert(newMember);
 
@@ -280,7 +278,6 @@ public class MemberServiceImpl implements MemberService {
 
             String passWord = newMember.getPassword();
             newMember.setPassword(passwordEncoder().encode(passWord));
-            newMember.setCreatedAt(new Date());
             newMember.setStatus(1);
 
             memberMapper.insert(newMember);
@@ -333,7 +330,6 @@ public class MemberServiceImpl implements MemberService {
         changeLog.setMemberId(userId);
         changeLog.setUpdateAction(updateAction);
         changeLog.setOperator(operator);
-        changeLog.setCreatedAt(new Date());
         logMapper.insert(changeLog);
     }
 

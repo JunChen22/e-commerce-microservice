@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
+
 @RestController
 @Api(tags = "Coupon controller", description = "Coupon controller")
 @RequestMapping("/coupon")
@@ -28,7 +30,7 @@ public class CouponAggregate {
 
     @GetMapping("/check")
     @ApiOperation("Check coupon and return discount amount")
-    public Mono<Double> checkCoupon(@RequestParam String couponCode) {
+    public Mono<BigDecimal> checkCoupon(@RequestParam String couponCode) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserContext userContext = (UserContext) authentication.getPrincipal();
         int userId = userContext.getUserId();

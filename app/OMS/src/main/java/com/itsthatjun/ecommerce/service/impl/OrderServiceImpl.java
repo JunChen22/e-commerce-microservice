@@ -38,6 +38,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
@@ -75,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final DTOMapper dtoMapper;
 
-    private final double SHIPPING_COST = 15;  // default shipping cost for order less than 50
+    private final BigDecimal SHIPPING_COST = BigDecimal.valueOf(15);  // default shipping cost for order less than 50
 
     private final String SMS_SERVICE_URL = "http://sms/coupon";
 
@@ -168,8 +169,8 @@ public class OrderServiceImpl implements OrderService {
 
         Map<String, Integer> skuQuantity = orderParam.getOrderProductSku(); // sku and quantity for order
 
-        double orderTotal = 0;
-        double couponDiscount = orderParam.getDiscountAmount();
+        BigDecimal orderTotal = BigDecimal.ZERO;
+        BigDecimal couponDiscount = orderParam.getDiscountAmount();
 
         // verify the price again
         for (String skuCode: skuQuantity.keySet()) {
@@ -192,7 +193,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setProductQuantity(quantity);
             orderItem.setRealAmount(sku.getPromotionPrice());
 
-            orderTotal += sku.getPromotionPrice().doubleValue() * quantity;
+            orderTotal = sku.getPromotionPrice().multiply(BigDecimal.valueOf(quantity)).add(orderTotal);
             orderItemList.add(orderItem);
         }
 
@@ -200,37 +201,37 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderException("Not enough stock, Unable to order");
         }
 
-        orderTotal = Math.round(orderTotal * 100.0) / 100.0;  // TODO: change back double to big decimal for more accuracy
-        // and use.setScale(2, RoundingMode.CEILING);
+        orderTotal = orderTotal.setScale(2, RoundingMode.HALF_UP);
 
         // verify price difference
-        if (orderTotal != orderParam.getAmount()) {
+        if (orderTotal.compareTo(orderParam.getAmount()) != 0) {
             throw new OrderException("Pricing error");
         }
 
         lockStock(orderItemList);
 
         // synchronous call to coupon service, assume the accepted discount amount is incorrect.
-        double checkedDiscount = checkCouponDiscountFromSms(couponCode, userId);
-        couponDiscount = couponDiscount == checkedDiscount ? couponDiscount : 0;
+        BigDecimal checkedDiscount = checkCouponDiscountFromSms(couponCode, userId);
+        couponDiscount = couponDiscount.compareTo(checkedDiscount) == 0 ? couponDiscount : BigDecimal.ZERO;
 
-        // check shipping cost, $50 or more get free shipping or $15
         // TODO: calculate shipping cost from UPS API, currently just fixed rate
-        if (orderTotal < 50) orderTotal += SHIPPING_COST;
+        // Check shipping cost, $50 or more gets free shipping; otherwise, add $15
+        if (orderTotal.compareTo(BigDecimal.valueOf(50)) < 0) {
+            orderTotal = orderTotal.add(SHIPPING_COST);
+        }
 
-        orderTotal = orderTotal - couponDiscount;
+        orderTotal = orderTotal.subtract(couponDiscount);
 
         //newOrder.setPayType(payType);  // TODO: change data type to string in database
 
         newOrder.setOrderSn(orderSn);
         newOrder.setStatus(0);   // waiting for payment
-        newOrder.setTotalAmount(BigDecimal.valueOf(orderTotal));
+        newOrder.setTotalAmount(orderTotal);
         newOrder.setMemberId(userId);
 
         newOrder.setReceiverName(address.getReceiverName());
         newOrder.setReceiverDetailAddress(address.getDetailAddress());
 
-        newOrder.setCreatedAt(new Date());
         ordersMapper.insert(newOrder);
 
         int newOrderId = newOrder.getId();
@@ -279,31 +280,28 @@ public class OrderServiceImpl implements OrderService {
          return newOrder;
     }
 
-    private double checkCouponDiscountFromSms(String couponCode, int userId) {
+    private BigDecimal checkCouponDiscountFromSms(String couponCode, int userId) {
         String url = SMS_SERVICE_URL + "/check?couponCode=" + couponCode;
         LOG.debug("Will call the list API on URL: {}", url);
 
         // Define the timeout in milliseconds
         int timeoutMilliseconds = 200; // 0.2 second
 
-        double discountAmount = 0;
+        BigDecimal discountAmount = BigDecimal.ZERO;
 
-        try {
-            // Make a synchronous HTTP GET request with a timeout to the coupon service
-            Mono<Double> discountMono = webClient.get()
-                    .uri(url)
-                    .header("X-UserId", String.valueOf(userId))
-                    .retrieve()
-                    .onStatus(httpStatus -> httpStatus.is5xxServerError(),
-                            clientResponse -> Mono.error(new RuntimeException("Server error")))
-                    .bodyToMono(Double.class)
-                    .timeout(Duration.ofMillis(timeoutMilliseconds));
+        // TODO: change it to use big decimal and non-blocking
+        // Make a synchronous HTTP GET request with a timeout to the coupon service
+//        Mono<Double> discountMono = webClient.get()
+//                .uri(url)
+//                .header("X-UserId", String.valueOf(userId))
+//                .retrieve()
+//                .onStatus(httpStatus -> httpStatus.is5xxServerError(),
+//                        clientResponse -> Mono.error(new RuntimeException("Server error")))
+//                .bodyToMono(Double.class)
+//                .timeout(Duration.ofMillis(timeoutMilliseconds));
+//
+//        discountAmount = discountMono.blockOptional().orElse(0.0);
 
-            discountAmount = discountMono.blockOptional().orElse(0.0);
-        } catch (Exception e) {
-            // Handle errors, including timeouts, here
-            discountAmount = 0;
-        }
         return discountAmount;
     }
 
@@ -583,7 +581,6 @@ public class OrderServiceImpl implements OrderService {
         changeLog.setOrderStatus(status);
         changeLog.setOperator(operator);
         changeLog.setNote(note);
-        changeLog.setCreatedAt(new Date());
         changeHistoryMapper.insert(changeLog);
     }
 

@@ -140,13 +140,11 @@ public class SalesServiceimpl implements SalesService {
         if (itemAlreadyOnSale) return null;
 
         PromotionSale newPromotionSale = request.getPromotionSale();
-        newPromotionSale.setCreatedAt(new Date());
         promotionSaleMapper.insert(newPromotionSale);
 
         int newSaleId = newPromotionSale.getId();
         int discountType = newPromotionSale.getDiscountType();
-        double discountAmount = newPromotionSale.getAmount().doubleValue();
-
+        BigDecimal discountAmount = newPromotionSale.getAmount();
         List<ProductSku> affectedSku = new ArrayList<>();
 
         // find and update sku and product price and status.
@@ -156,20 +154,19 @@ public class SalesServiceimpl implements SalesService {
             skuExample.createCriteria().andSkuCodeEqualTo(skuCode);
 
             List<ProductSku> productSkuList = productSkuMapper.selectByExample(skuExample);
-            if (productSkuList.isEmpty()) throw new RuntimeException("Can not find sku code : " + skuCode);
-
-            ProductSku productSku = productSkuList.get(0);
-            double currentSkuSale = productSku.getPrice().doubleValue();
-            if (discountType == 0) {// discount by amount
-                currentSkuSale = currentSkuSale  - discountAmount;
-            } else {   // discount  by percent
-                currentSkuSale = currentSkuSale - (discountAmount *  currentSkuSale / 100);
+            if (productSkuList.isEmpty()) {
+                throw new RuntimeException("Can not find sku code : " + skuCode);
             }
 
-            productSku.setPromotionPrice(BigDecimal.valueOf(currentSkuSale));
+            ProductSku productSku = productSkuList.get(0);
+            BigDecimal currentSkuSale = productSku.getPrice();
+
+            currentSkuSale = calculateSkuSale(currentSkuSale, discountType, discountAmount);
+
+            productSku.setPromotionPrice(currentSkuSale);
 
             saleProduct.setPromotionSaleId(newSaleId);
-            saleProduct.setPromotionPrice(BigDecimal.valueOf(currentSkuSale));
+            saleProduct.setPromotionPrice(currentSkuSale);
 
             productSkuMapper.updateByPrimaryKeySelective(productSku);
             promotionSaleProductMapper.insert(saleProduct);
@@ -177,9 +174,12 @@ public class SalesServiceimpl implements SalesService {
             // update product sale status
             int productId = saleProduct.getProductId();
             Product affectedProduct = productMapper.selectByPrimaryKey(productId);
-            double currentProductPrice = affectedProduct.getSalePrice().doubleValue();
+
+            BigDecimal currentProductPrice = affectedProduct.getSalePrice();
             affectedProduct.setOnSaleStatus(1);
-            affectedProduct.setSalePrice(BigDecimal.valueOf(Math.min(currentProductPrice, currentSkuSale)));
+
+            // Update product sale price if the new SKU price is lower
+            affectedProduct.setSalePrice(currentProductPrice.min(currentSkuSale));
             productMapper.updateByPrimaryKeySelective(affectedProduct);
 
             affectedSku.add(productSku);
@@ -190,6 +190,16 @@ public class SalesServiceimpl implements SalesService {
         sendOmsSaleUpdateMessage("saleUpdateToOMS-out-0", new OmsSaleOutEvent(OmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
         sendPmsSaleUpdateMessage("saleUpdateToPms-out-0", new PmsSaleOutEvent(PmsSaleOutEvent.Type.UPDATE_SALE_PRICE, affectedSku));
         return newPromotionSale;
+    }
+
+    private BigDecimal calculateSkuSale(BigDecimal currentSkuSale, int discountType, BigDecimal discountAmount) {
+        if (discountType == 0) {    // Discount by amount
+            return currentSkuSale.subtract(discountAmount);
+        } else {   // Discount by percentage
+            BigDecimal percentage = discountAmount.divide(BigDecimal.valueOf(100));  // Convert percentage to decimal
+            BigDecimal discount = currentSkuSale.multiply(percentage);  // Multiply current price by percentage
+            return currentSkuSale.subtract(discount);  // Subtract discount from the current price
+        }
     }
 
     @Override
@@ -335,13 +345,13 @@ public class SalesServiceimpl implements SalesService {
 
         int saleId = updatedSale.getId();
         int discountType = updatedSale.getDiscountType();
-        double discountAmount = updatedSale.getAmount().doubleValue();
+        BigDecimal discountAmount = updatedSale.getAmount();
 
         List<ProductSku> affectedSku = new ArrayList<>();
 
         PromotionSaleProductExample promotionSaleProductExample = new PromotionSaleProductExample();
         promotionSaleProductExample.createCriteria().andPromotionSaleIdEqualTo(saleId);
-        List<PromotionSaleProduct> onsaleProdctList =  promotionSaleProductMapper.selectByExample(promotionSaleProductExample);
+        List<PromotionSaleProduct> onsaleProdctList = promotionSaleProductMapper.selectByExample(promotionSaleProductExample);
 
         // find and update sku and product price and status.
         for (PromotionSaleProduct saleProduct : onsaleProdctList) {
@@ -353,22 +363,19 @@ public class SalesServiceimpl implements SalesService {
             if (productSkuList.isEmpty()) throw new RuntimeException("Can not find sku code : " + skuCode);
 
             ProductSku productSku = productSkuList.get(0);
-            double currentSkuSale = productSku.getPrice().doubleValue();
-            if (discountType == 0) {// discount by amount
-                currentSkuSale = currentSkuSale  - discountAmount;
-            } else {   // discount  by percent
-                currentSkuSale = currentSkuSale - (discountAmount *  currentSkuSale / 100);
-            }
+            BigDecimal currentSkuSale = productSku.getPrice();
 
-            productSku.setPromotionPrice(BigDecimal.valueOf(currentSkuSale));
-            saleProduct.setPromotionPrice(BigDecimal.valueOf(currentSkuSale));
+            currentSkuSale = calculateSkuSale(currentSkuSale, discountType, discountAmount);
+
+            productSku.setPromotionPrice(currentSkuSale);
+            saleProduct.setPromotionPrice(currentSkuSale);
 
             productSkuMapper.updateByPrimaryKeySelective(productSku);
             promotionSaleProductMapper.updateByPrimaryKeySelective(saleProduct);
 
             int productId = saleProduct.getProductId();
             Product affectedProduct = productMapper.selectByPrimaryKey(productId);
-            affectedProduct.setSalePrice(BigDecimal.valueOf(currentSkuSale));
+            affectedProduct.setSalePrice(currentSkuSale);
             productMapper.updateByPrimaryKeySelective(affectedProduct);
 
             affectedSku.add(productSku);
@@ -409,20 +416,20 @@ public class SalesServiceimpl implements SalesService {
                     if (productSkuList.isEmpty()) throw new RuntimeException("Can not find sku code : " + skuCode);
 
                     ProductSku productSku = productSkuList.get(0);
-                    double originalPrice = productSku.getPrice().doubleValue();
+                    BigDecimal originalPrice = productSku.getPrice();
 
-                    productSku.setPromotionPrice(BigDecimal.valueOf(originalPrice));
-                    saleProduct.setPromotionPrice(BigDecimal.valueOf(originalPrice));
+                    productSku.setPromotionPrice(originalPrice);
+                    saleProduct.setPromotionPrice(originalPrice);
 
                     productSkuMapper.updateByPrimaryKeySelective(productSku);
                     promotionSaleProductMapper.updateByPrimaryKeySelective(saleProduct);
 
                     int productId = saleProduct.getProductId();
                     Product affectedProduct = productMapper.selectByPrimaryKey(productId);
-                    double currentProductPrice = affectedProduct.getOriginalPrice().doubleValue();
+                    BigDecimal currentProductPrice = affectedProduct.getOriginalPrice();
 
                     affectedProduct.setOnSaleStatus(0);
-                    affectedProduct.setSalePrice(BigDecimal.valueOf(currentProductPrice));
+                    affectedProduct.setSalePrice(currentProductPrice);
 
                     productMapper.updateByPrimaryKey(affectedProduct);
 
@@ -460,9 +467,9 @@ public class SalesServiceimpl implements SalesService {
                 if (productSkuList.isEmpty()) throw new RuntimeException("Can not find sku code : " + skuCode);
 
                 ProductSku productSku = productSkuList.get(0);
-                double originalPrice = productSku.getPrice().doubleValue();
+                BigDecimal originalPrice = productSku.getPrice();
 
-                productSku.setPromotionPrice(BigDecimal.valueOf(originalPrice));
+                productSku.setPromotionPrice(originalPrice);
 
                 int productId = saleProduct.getProductId();
 
@@ -471,9 +478,9 @@ public class SalesServiceimpl implements SalesService {
 
                 Product affectedProduct = productMapper.selectByPrimaryKey(productId);
                 affectedProduct.setOnSaleStatus(0);
-                double currentProductPrice = affectedProduct.getOriginalPrice().doubleValue();
+                BigDecimal currentProductPrice = affectedProduct.getOriginalPrice();
 
-                affectedProduct.setSalePrice(BigDecimal.valueOf(currentProductPrice));
+                affectedProduct.setSalePrice(currentProductPrice);
 
                 productMapper.updateByPrimaryKey(affectedProduct);
 
@@ -493,7 +500,6 @@ public class SalesServiceimpl implements SalesService {
         updateLog.setDiscountType(sale.getDiscountType());
         updateLog.setAmount(sale.getAmount());
         updateLog.setOperator(operator);
-        updateLog.setCreatedAt(new Date());
         promotionSaleLogMapper.insert(updateLog);
     }
 

@@ -219,7 +219,6 @@ public class AdminArticleServiceImpl implements AdminArticleService {
         changeLog.setArticleId(articleId);
         changeLog.setUpdateAction(updateAction);
         changeLog.setOperator(operator);
-        changeLog.setCreatedAt(new Date());
         logMapper.insert(changeLog);
     }
 }

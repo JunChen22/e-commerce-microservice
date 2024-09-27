@@ -112,7 +112,6 @@ public class ReviewServiceImpl implements ReviewService {
     public Mono<Review> createReview(Review newReview, List<ReviewPictures> picturesList, int userId) {
         return Mono.fromCallable(() -> {
             // Offload the blocking operation to the specified scheduler
-            newReview.setCreatedAt(new Date());
             newReview.setMemberId(userId);
             reviewMapper.insert(newReview);
             int reviewId = newReview.getId();
@@ -174,7 +173,6 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewAlbum newAlbum = new ReviewAlbum();
         newAlbum.setReviewId(reviewId);
         newAlbum.setPicCount(picturesList.size());
-        newAlbum.setCreatedAt(new Date());
         albumMapper.insert(newAlbum);
 
         int albumId = newAlbum.getId();
@@ -183,7 +181,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         for (ReviewPictures picture: picturesList) {
             picture.setReviewAlbumId(albumId);
-            picture.setCreatedAt(new Date());
 
             picturesMapper.insert(picture);
         }
@@ -196,7 +193,6 @@ public class ReviewServiceImpl implements ReviewService {
         updateLog.setReviewId(reviewId);
         updateLog.setUpdateAction(updateAction);
         updateLog.setOperator("user id: " + userId);
-        updateLog.setCreatedAt(new Date());
         updateLogMapper.insert(updateLog);
     }
 
@@ -246,7 +242,6 @@ public class ReviewServiceImpl implements ReviewService {
     public Mono<Review> adminCreateReview(Review newReview, List<ReviewPictures> picturesList, String operator) {
         return Mono.fromCallable(() -> {
             // Offload the blocking operation to the specified scheduler
-            newReview.setCreatedAt(new Date());
             reviewMapper.insert(newReview);
 
             int reviewId = newReview.getId();
@@ -304,7 +299,6 @@ public class ReviewServiceImpl implements ReviewService {
         updateLog.setReviewId(reviewId);
         updateLog.setUpdateAction(updateAction);
         updateLog.setOperator(operator);
-        updateLog.setCreatedAt(new Date());
         updateLogMapper.insert(updateLog);
     }
 }
