@@ -25,7 +25,7 @@ public class ScheduledTasks {
         this.uspsApiService = uspsApiService;
     }
 
-    @Scheduled(initialDelay = 2 * 60 * 1000, fixedRate = 15 * 60 * 1000) // Run every 15 minutes TODO: change it to Spring Batch
+    @Scheduled(initialDelay = 2 * 60 * 1000, fixedRate = 15 * 60 * 1000) // Run every 15 minutes TODO: change it to Spring Batch or Quartz
     public void checkDeliveryStatus() throws Exception {
         System.out.println("Checking orders with UPS API...");
 

@@ -3,12 +3,12 @@ package com.itsthatjun.ecommerce.mbg.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class AdminRoleRelation implements Serializable {
+public class AdminPermissionRelation implements Serializable {
     private Integer id;
 
     private Integer adminId;
 
-    private Integer roleId;
+    private Integer permissionId;
 
     private Integer assignedBy;
 
@@ -34,12 +34,12 @@ public class AdminRoleRelation implements Serializable {
         this.adminId = adminId;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public Integer getPermissionId() {
+        return permissionId;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setPermissionId(Integer permissionId) {
+        this.permissionId = permissionId;
     }
 
     public Integer getAssignedBy() {

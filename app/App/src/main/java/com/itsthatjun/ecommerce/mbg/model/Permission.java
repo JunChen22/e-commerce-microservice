@@ -1,18 +1,13 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Permission implements Serializable {
     private Integer id;
 
-    private Integer parentId;
-
     private String name;
 
-    private String value;
-
-    private Date createdAt;
+    private String permissionKey;
 
     private Integer status;
 
@@ -26,14 +21,6 @@ public class Permission implements Serializable {
         this.id = id;
     }
 
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-
     public String getName() {
         return name;
     }
@@ -42,20 +29,12 @@ public class Permission implements Serializable {
         this.name = name;
     }
 
-    public String getValue() {
-        return value;
+    public String getPermissionKey() {
+        return permissionKey;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setPermissionKey(String permissionKey) {
+        this.permissionKey = permissionKey;
     }
 
     public Integer getStatus() {

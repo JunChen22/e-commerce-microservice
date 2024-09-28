@@ -1,15 +1,12 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
 import com.itsthatjun.ecommerce.dto.ProductReview;
-import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.PMS.impl.ReviewServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -43,28 +40,18 @@ public class ReviewAggregate {
     @PostMapping("/create")
     @ApiOperation(value = "create review for a product")
     public Mono<ProductReview> createProductReview(@RequestBody ProductReview newReview) {
-        int userId = getUserId();
-        return reviewService.createProductReview(newReview, userId);
+        return reviewService.createProductReview(newReview);
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "update a review")
     public Mono<ProductReview> updateProductReviews(@RequestBody ProductReview newReview) {
-        int userId = getUserId();
-        return reviewService.updateProductReviews(newReview, userId);
+        return reviewService.updateProductReviews(newReview);
     }
 
     @DeleteMapping("/delete/{reviewId}")
     @ApiOperation(value = "Get product with page and size")
     public Mono<Void> deleteProductReviews(@PathVariable int reviewId) {
-        int userId = getUserId();
-        return reviewService.deleteProductReviews(reviewId, userId);
-    }
-
-    private int getUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-        return userId;
+        return reviewService.deleteProductReviews(reviewId);
     }
 }

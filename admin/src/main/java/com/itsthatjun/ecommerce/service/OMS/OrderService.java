@@ -19,20 +19,20 @@ public interface OrderService {
     Mono<AdminOrderDetail> getOrder(String serialNumber);
 
     @ApiOperation(value = "create order")
-    Mono<AdminOrderDetail> createOrder(AdminOrderDetail orderDetail, String reason, String operatorName);
+    Mono<AdminOrderDetail> createOrder(AdminOrderDetail orderDetail, String reason);
 
     @ApiOperation(value = "get payment link to make payment in different time")
     Mono<String> getPaymentLink(String orderSn);
 
     @ApiOperation(value = "update a order")
-    Mono<AdminOrderDetail> updateOrder(AdminOrderDetail orderDetail, String reason, String operatorName);
+    Mono<AdminOrderDetail> updateOrder(AdminOrderDetail orderDetail, String reason);
 
     @ApiOperation(value = "delete a order by serial number")
-    Mono<Void> cancelOrder(String serialNumber, String reason, String operatorName);
+    Mono<Void> cancelOrder(String serialNumber, String reason);
 
     @ApiOperation(value = "Send message to users that are affected by purchased product sku")
-    Mono<Void> sendOrderItemNotification(String productSku, String message, String operatorName);
+    Mono<Void> sendOrderItemNotification(String productSku, String message);
 
     @ApiOperation(value = "Send message to users that are affected by purchased product")
-    Mono<Void> sendOrderProductNotification(String productSku, String message, String operatorName);
+    Mono<Void> sendOrderProductNotification(String productSku, String message);
 }

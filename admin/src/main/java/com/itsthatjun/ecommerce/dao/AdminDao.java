@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dao;
 
-import com.itsthatjun.ecommerce.dao.domainmodel.AdminDetail;
+import com.itsthatjun.ecommerce.mbg.model.Admin;
 import com.itsthatjun.ecommerce.mbg.model.AdminLoginLog;
 import com.itsthatjun.ecommerce.mbg.model.Permission;
 import com.itsthatjun.ecommerce.mbg.model.Roles;
@@ -12,15 +12,11 @@ import java.util.List;
 public interface AdminDao {
 
     @ApiModelProperty(value = "")
-    AdminDetail getAdminDetail(@Param("id") int id);
-
-    @ApiModelProperty(value = "")
     List<Permission> getPermissionList(@Param("id") int id);
 
     @ApiModelProperty(value = "")
     List<Roles> getRolesList(@Param("id") int id);
 
     @ApiModelProperty(value = "")
-    List<AdminLoginLog> getLoginLog(@Param("id") int id);
-
+    List<AdminLoginLog> getLoginList(@Param("id") int id);
 }

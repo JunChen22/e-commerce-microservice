@@ -5,6 +5,7 @@ import com.itsthatjun.ecommerce.dto.sms.event.SmsAdminSaleEvent;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.PromotionSale;
 import com.itsthatjun.ecommerce.service.SMS.PromotionService;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class PromotionServiceImpl implements PromotionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PromotionServiceImpl.class);
 
+    private final AdminServiceImpl adminService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -35,8 +38,9 @@ public class PromotionServiceImpl implements PromotionService {
     private final String SMS_SERVICE_URL = "http://sms/sale";
 
     @Autowired
-    public PromotionServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
+    public PromotionServiceImpl(AdminServiceImpl adminService, WebClient.Builder webClient, StreamBridge streamBridge,
                                 @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.adminService = adminService;
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -68,56 +72,65 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public Mono<OnSaleRequest> createListSale(OnSaleRequest request, String operator) {
+    public Mono<OnSaleRequest> createListSale(OnSaleRequest request) {
         return Mono.fromCallable(() -> {
-                sendMessage("sales-out-0", new SmsAdminSaleEvent(CREATE_SALE_LIST, request, operator));
-                return request;
+            String operator = adminService.getAdminName();
+            sendMessage("sales-out-0", new SmsAdminSaleEvent(CREATE_SALE_LIST, request, operator));
+            return request;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<OnSaleRequest> createBrandSale(OnSaleRequest request, String operator) {
+    public Mono<OnSaleRequest> createBrandSale(OnSaleRequest request) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
+            request.setOperator(operator);
             sendMessage("sales-out-0", new SmsAdminSaleEvent(CREATE_SALE_BRAND, request, operator));
             return request;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<OnSaleRequest> createCategorySale(OnSaleRequest request, String operator) {
+    public Mono<OnSaleRequest> createCategorySale(OnSaleRequest request) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
+            request.setOperator(operator);
             sendMessage("sales-out-0", new SmsAdminSaleEvent(CREATE_SALE_CATEGORY, request, operator));
             return request;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<OnSaleRequest> updateSaleInfo(OnSaleRequest request, String operator) {
+    public Mono<OnSaleRequest> updateSaleInfo(OnSaleRequest request) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("sales-out-0", new SmsAdminSaleEvent(UPDATE_SALE_INFO, request, operator));
             return request;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<OnSaleRequest> updateSalePrice(OnSaleRequest request, String operator) {
+    public Mono<OnSaleRequest> updateSalePrice(OnSaleRequest request) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("sales-out-0", new SmsAdminSaleEvent(UPDATE_SALE_PRICE, request, operator));
             return request;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<OnSaleRequest> updateSaleStatus(OnSaleRequest request, String operator) {
+    public Mono<OnSaleRequest> updateSaleStatus(OnSaleRequest request) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("sales-out-0", new SmsAdminSaleEvent(UPDATE_SALE_STATUS, request, operator));
             return request;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> delete(int promotionSaleId, String operator) {
+    public Mono<Void> delete(int promotionSaleId) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             OnSaleRequest saleRequest = new OnSaleRequest();
             PromotionSale promotionSale = new PromotionSale();
             promotionSale.setId(promotionSaleId);

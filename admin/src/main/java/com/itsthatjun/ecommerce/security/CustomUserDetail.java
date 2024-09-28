@@ -35,14 +35,14 @@ public class CustomUserDetail implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
         // Add authorities for permissions
         authorities.addAll(permissionList.stream()
-                .filter(permission -> permission.getValue() != null && permission.getStatus() == 1)
-                .map(permission -> new SimpleGrantedAuthority(permission.getValue()))
+                .filter(permission -> permission.getPermissionKey() != null && permission.getStatus() == 1)
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermissionKey()))
                 .collect(Collectors.toList()));
 
         // Add authorities for roles
         authorities.addAll(rolesList.stream()
                 .filter(role -> role.getStatus() == 1)
-                .map(role -> new SimpleGrantedAuthority( role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList()));
 
         return authorities;

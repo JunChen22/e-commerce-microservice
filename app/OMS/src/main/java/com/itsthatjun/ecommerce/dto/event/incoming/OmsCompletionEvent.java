@@ -14,7 +14,6 @@ public class OmsCompletionEvent {
         PAYMENT_FAILURE
     }
 
-    // TODO: might make a smaller DTO
     private final Type eventType;
     private final String orderSn;
     private final String paymentId;

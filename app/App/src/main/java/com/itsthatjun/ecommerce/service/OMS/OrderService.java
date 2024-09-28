@@ -10,20 +10,20 @@ import reactor.core.publisher.Mono;
 public interface OrderService {
 
     @ApiOperation("Get Order Detail by serial number")
-    Mono<OrderDetail> detail(String orderSn, int userId);
+    Mono<OrderDetail> detail(String orderSn);
 
     @ApiOperation("Get member order based on status code and page size")
-    Flux<OrderDTO> list(int status, Integer pageNum, Integer pageSize, int userId);
+    Flux<OrderDTO> list(int status, Integer pageNum, Integer pageSize);
 
     @ApiOperation(value = "get payment link to make payment in different time")
-    Mono<String> getPaymentLink(String orderSn, int userId);
+    Mono<String> getPaymentLink(String orderSn);
 
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
-    Mono<OrderParam> generateOrder(OrderParam orderParam, String requestUrl, int userId);
+    Mono<OrderParam> generateOrder(OrderParam orderParam, String requestUrl);
 
     @ApiOperation("after success paypal payment, actual processing the order , unlock stocks and update info's like coupon and stocks")
     Mono<String> successPay(String paymentId, String payerId);
 
     @ApiOperation("Cancel order if before sending the order out.")
-    Mono<Void> cancelUserOrder(String orderSn, int userId);
+    Mono<Void> cancelUserOrder(String orderSn);
 }

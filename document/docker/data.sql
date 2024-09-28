@@ -4,77 +4,77 @@
 DROP TABLE IF EXISTS brand;
 CREATE TABLE brand (
     id SERIAL PRIMARY KEY,
-    name     TEXT,
+    name TEXT,
     alphabet TEXT,
-    status   TEXT DEFAULT 'active',
-    logo     TEXT
+    status INTEGER DEFAULT 0, -- 0->inactive; 1->active
+    logo TEXT
 );
 
 INSERT INTO brand(name, alphabet, logo, status)
 VALUES
 -- phone/computer/electronic brand
-('Apple', 'A', 'apple.jpg', 'active'),
-('Samsung', 'S', 'samsung.jpg', 'active'),
-('Google', 'G', 'google.jpg', 'active'),
-('OnePlus', 'O', 'OnePlus.jpg', 'active'),
-('Lenovo', 'L', 'lenovo.jpg', 'active'),
-('ASUS', 'A', 'asus.jpg', 'active'),
-('Acer', 'A', 'acer.jpg', 'active'),
-('Alienware', 'A', 'alienware.jpg', 'active'),
-('Razer', 'R', 'razer.jpg', 'active'),
-('Microsoft', 'M', 'microsoft.jpg', 'active'),
-('Dell', 'D', 'dell.jpg', 'active'),
-('HP', 'H', 'hp.jpg', 'active'),
-('MSI', 'M', 'msi.jpg', 'active'),
+('Apple', 'A', 'apple.jpg', 1),
+('Samsung', 'S', 'samsung.jpg', 1),
+('Google', 'G', 'google.jpg', 1),
+('OnePlus', 'O', 'OnePlus.jpg', 1),
+('Lenovo', 'L', 'lenovo.jpg', 1),
+('ASUS', 'A', 'asus.jpg', 1),
+('Acer', 'A', 'acer.jpg', 1),
+('Alienware', 'A', 'alienware.jpg', 1),
+('Razer', 'R', 'razer.jpg', 1),
+('Microsoft', 'M', 'microsoft.jpg', 1),
+('Dell', 'D', 'dell.jpg', 1),
+('HP', 'H', 'hp.jpg', 1),
+('MSI', 'M', 'msi.jpg', 1),
 
 -- electrics
-('Anker', 'A', 'anker.jpg', 'active'),
-('Fitbit', 'F', 'fitbit.jpg', 'active'),
-('SanDisk', 'S', 'sandisk.jpg', 'active'),
-('Tile', 'T', 'tile.jpg', 'active'),
+('Anker', 'A', 'anker.jpg', 1),
+('Fitbit', 'F', 'fitbit.jpg', 1),
+('SanDisk', 'S', 'sandisk.jpg', 1),
+('Tile', 'T', 'tile.jpg', 1),
 
 -- video and audio
-('GoPro', 'G', 'gopro.jpg', 'active'),
-('Logitech', 'L', 'logitech.jpg', 'active'),
-('JBL', 'J', 'jbl.jpg', 'active'),
-('UE', 'U', 'ue.jpg', 'active'),
+('GoPro', 'G', 'gopro.jpg', 1),
+('Logitech', 'L', 'logitech.jpg', 1),
+('JBL', 'J', 'jbl.jpg', 1),
+('UE', 'U', 'ue.jpg', 1),
 
 -- clothing brand
-('Gucci', 'G', 'gucci.jpg', 'active'),
-('Nike', 'N', 'nike.jpg', 'active'),
-('Adidas', 'A', 'adidas.jpg', 'active'),
-('Gucci', 'G', 'gucci.jpg', 'active'),
-('Zara', 'Z', 'zara.jpg', 'active'),
-('HM', 'H', 'hm.jpg', 'active'),
-('Levis', 'L', 'levis.jpg', 'active'),
-('Calvin Klein', 'C', 'calvinklein.jpg', 'active'),
-('Versace', 'V', 'versace.jpg', 'active'),
+('Gucci', 'G', 'gucci.jpg', 1),
+('Nike', 'N', 'nike.jpg', 1),
+('Adidas', 'A', 'adidas.jpg', 1),
+('Gucci', 'G', 'gucci.jpg', 1),
+('Zara', 'Z', 'zara.jpg', 1),
+('HM', 'H', 'hm.jpg', 1),
+('Levis', 'L', 'levis.jpg', 1),
+('Calvin Klein', 'C', 'calvinklein.jpg', 1),
+('Versace', 'V', 'versace.jpg', 1),
 
 -- health and beauty brand
-('Nivea', 'N', 'nivea.jpg', 'active'),
-('Dove', 'D', 'dove.jpg', 'active'),
-('Cetaphil', 'C', 'cetaphil.jpg', 'active'),
-('Neutrogena', 'N', 'neutrogena.jpg', 'active'),
-('Aveeno', 'A', 'aveeno.jpg', 'active'),
-('Olay', 'O', 'olay.jpg', 'active'),
+('Nivea', 'N', 'nivea.jpg', 1),
+('Dove', 'D', 'dove.jpg', 1),
+('Cetaphil', 'C', 'cetaphil.jpg', 1),
+('Neutrogena', 'N', 'neutrogena.jpg', 1),
+('Aveeno', 'A', 'aveeno.jpg', 1),
+('Olay', 'O', 'olay.jpg', 1),
 
 -- books
-('Penguin Books', 'P', 'penguinbooks.jpg', 'active'),
-('HarperCollins', 'H', 'harpercollins.jpg', 'active'),
-('Random House', 'R', 'randomhouse.jpg', 'active'),
-('Book', 'B', 'book.jpg', 'active'),
+('Penguin Books', 'P', 'penguinbooks.jpg', 1),
+('HarperCollins', 'H', 'harpercollins.jpg', 1),
+('Random House', 'R', 'randomhouse.jpg', 1),
+('Book', 'B', 'book.jpg', 1),
 
 -- etc
-('Coca-Cola', 'C', 'cocacola.jpg', 'active'),
+('Coca-Cola', 'C', 'cocacola.jpg', 1),
 -- kitchen
-('Zojirushi', 'Z', 'zojirushi.jpg', 'active'),
-('Yeti', 'Y', 'yeti.jpg', 'active');
+('Zojirushi', 'Z', 'zojirushi.jpg', 1),
+('Yeti', 'Y', 'yeti.jpg', 1);
 
 
 DROP TABLE IF EXISTS brand_update_log;
 CREATE TABLE brand_update_log (
     id SERIAL PRIMARY KEY,
-    brand_id   NUMERIC,
+    brand_id INTEGER NOT NULL,
     update_action TEXT NOT NULL,
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -97,9 +97,9 @@ VALUES
 DROP TABLE IF EXISTS product_category;
 CREATE TABLE product_category (
     id SERIAL PRIMARY KEY,
-    name      TEXT,
-    parent_id NUMERIC,-- sub category
-    level     NUMERIC
+    name TEXT,
+    parent_id INTEGER NOT NULL,-- sub category
+    level INTEGER
 );
 
 -- main category
@@ -156,7 +156,7 @@ DROP TABLE IF EXISTS product_attribute_category;
 CREATE TABLE product_attribute_category (
     id SERIAL PRIMARY KEY,
     name TEXT,                     -- name of category. For example phone, shoes,
-    attribute_amount  NUMERIC      -- number of attribute for this, phone have 6 attribute, storage capacity, screen size, battery capapcity, etc
+    attribute_amount INTEGER      -- number of attribute for this, phone have 6 attribute, storage capacity, screen size, battery capapcity, etc
 );
 
 
@@ -204,8 +204,8 @@ VALUES
 DROP TABLE IF EXISTS product_attribute_type;
 CREATE TABLE product_attribute_type (
     id SERIAL PRIMARY KEY,
-    attribute_category_id NUMERIC,
-    name           TEXT
+    attribute_category_id INTEGER NOT NULL,
+    name TEXT
 );
 
 INSERT INTO product_attribute_type (attribute_category_id, name)
@@ -366,31 +366,31 @@ VALUES
 DROP TABLE IF EXISTS product;
 CREATE TABLE product (
     id SERIAL PRIMARY KEY,
-    brand_id          NUMERIC,
-    brand_name        TEXT,
-    name              TEXT,
-    category_id       NUMERIC,
+    brand_id INTEGER NOT NULL,
+    brand_name TEXT,
+    name TEXT,
+    category_id INTEGER NOT NULL,
     category_name TEXT,
-    attribute_category_id NUMERIC,	--
-    sn  VARCHAR(64),
+    attribute_category_id INTEGER NOT NULL,	--
+    sn VARCHAR(64),
     new_status INTEGER, -- 0->not new product; 1->new product
     recommend_status INTEGER, -- 0->not recommend; 1->recommend
     verify_status INTEGER, -- 0->not verified; 1->verified
     sub_title TEXT,
-    cover_picture           TEXT,           --  preview picture, for like list all, search all picture when getting specific
-    picture_album  NUMERIC,           -- collection of pictures
-    description       TEXT,
-    original_price  DECIMAL(10, 2),
+    cover_picture TEXT,           --  preview picture, for like list all, search all picture when getting specific
+    picture_album INTEGER,           -- collection of pictures
+    description TEXT,
+    original_price DECIMAL(10, 2),
     on_sale_status INTEGER,  --  0-> not on sale; 1-> is on sale; 2-> flash sale/special sales/clarance/used item
-    sale_price        DECIMAL(10, 2),     -- TODO: currently using it as lowest price of all sku variants. and using original price as highest, it changes with more sku variants added.
-    stock             INTEGER,
+    sale_price DECIMAL(10, 2),     -- TODO: currently using it as lowest price of all sku variants. and using original price as highest, it changes with more sku variants added.
+    stock INTEGER,
     low_stock INTEGER, -- -- low stock alarm, default is about 10% alarm
     unit_sold INTEGER,
     weight DECIMAL(10,2), -- product weight in grams
     keywords TEXT,
     detail_title TEXT,                -- at the bottom of product with detail title, description and picture
     detail_desc TEXT,
-    description_album NUMERIC,
+    description_album_id INTEGER,
     delete_status INTEGER DEFAULT 0, -- 0-> product not deleted; 1->product deleted, record purpose
     publish_status INTEGER DEFAULT 1, -- 0-> product is not published; 1->product is published, to temporary stop sale.
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -398,7 +398,7 @@ CREATE TABLE product (
 );
 
 -- Insert data into the product table
-INSERT INTO product (brand_id, brand_name, name, category_id, category_name, attribute_category_id, sn, sub_title, cover_picture, picture_album, description, original_price, on_sale_status, sale_price, stock, low_stock, unit_sold, weight, keywords, detail_title, detail_desc, description_album)
+INSERT INTO product (brand_id, brand_name, name, category_id, category_name, attribute_category_id, sn, sub_title, cover_picture, picture_album, description, original_price, on_sale_status, sale_price, stock, low_stock, unit_sold, weight, keywords, detail_title, detail_desc, description_album_id)
 VALUES
 -- Apple
 (1, 'Apple', 'iPhone 12', 15, 'Smartphones', 9, 'SN-123', 'Powerful and sleek', 'iphone12.jpg', 1, 'The iPhone 12 is the latest flagship smartphone from Apple.', 899.99, 0, 899.99, 100, 10, 50, 150, 'Apple, iPhone, smartphone', 'Product Details', 'Explore the amazing features of the iPhone 12.', 2),
@@ -450,11 +450,11 @@ VALUES
 DROP TABLE IF EXISTS product_sku;
 CREATE TABLE product_sku (    -- all product have one default sku variant
     id SERIAL PRIMARY KEY,
-    product_id INTEGER,
+    product_id INTEGER NOT NULL,
     sku_code TEXT,
     picture TEXT,
-    price NUMERIC,
-    promotion_price NUMERIC,
+    price DECIMAL(10, 2),
+    promotion_price DECIMAL(10, 2),
     stock INTEGER,
     low_stock INTEGER,     -- low stock alarm, default is about 10% alarm
     lock_stock INTEGER DEFAULT 0, -- lock stock is updated from lock stock + order quantity, can't order when current stock is less than lock stock. update lock stock to 0 after ordered.
@@ -513,8 +513,8 @@ DROP TABLE IF EXISTS product_attribute;
 CREATE TABLE product_attribute (
     id SERIAL PRIMARY KEY,
     sku_code TEXT,
-    product_id NUMERIC,
-    attribute_type_id NUMERIC,
+    product_id INTEGER NOT NULL,
+    attribute_type_id INTEGER NOT NULL,
     attribute_value TEXT,
     attribute_unit TEXT
 );
@@ -833,9 +833,9 @@ DROP TABLE IF EXISTS product_album;
 CREATE TABLE product_album (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    product_id  NUMERIC,
+    product_id INTEGER NOT NULL,
     cover_pic TEXT,
-    pic_count NUMERIC,
+    pic_count INTEGER,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -907,8 +907,7 @@ VALUES
 DROP TABLE IF EXISTS product_pictures;
 CREATE TABLE product_pictures (
     id SERIAL PRIMARY KEY,
-    product_album_id NUMERIC,
-    product_id  NUMERIC,
+    product_album_id INTEGER NOT NULL,
     filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -1011,11 +1010,11 @@ VALUES
 DROP TABLE IF EXISTS product_update_log;
 CREATE TABLE product_update_log (
     id SERIAL PRIMARY KEY,
-    product_id  NUMERIC,
-    price_old   NUMERIC,
-    price_new   NUMERIC,
-    sale_price_old    NUMERIC,
-    sale_price_new    NUMERIC,
+    product_id INTEGER NOT NULL,
+    price_old DECIMAL(10, 2) NOT NULL,
+    price_new DECIMAL(10, 2) NOT NULL,
+    sale_price_old DECIMAL(10, 2) NOT NULL,
+    sale_price_new DECIMAL(10, 2) NOT NULL,
     old_stock INTEGER,
     added_stock INTEGER,
     total_stock INTEGER,
@@ -1037,20 +1036,19 @@ VALUES
 DROP TABLE IF EXISTS review;
 CREATE TABLE review (
     id SERIAL PRIMARY KEY,
-    product_id  NUMERIC,
-    member_id NUMERIC,
+    product_id INTEGER NOT NULL,
+    member_id INTEGER NOT NULL,
     member_name TEXT,
     member_icon TEXT,
-    star        INTEGER,
-    tittle      TEXT,
-    likes       INTEGER DEFAULT 1,
-    verified  INTEGER, -- TODO: might change it to boolean instead for all the verify status
-    content     TEXT,
+    star INTEGER,
+    tittle TEXT,
+    likes INTEGER DEFAULT 1,
+    verified INTEGER,
+    content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TODO: should I just store picture in one review and separation by semi-colon or continue to use album
 INSERT INTO review (product_id, member_id, member_name, member_icon, star, created_at, tittle, likes, content)
 VALUES
 (1, 1, 'user1', 'icon.jpg', 3.5, '2020-03-18 22:18:40', 'size smaller than expected', 1,'size was smaller than expected'),
@@ -1068,8 +1066,8 @@ VALUES
 DROP TABLE IF EXISTS review_album;
 CREATE TABLE review_album (
     id SERIAL PRIMARY KEY,
-    review_id  NUMERIC,
-    pic_count NUMERIC,
+    review_id INTEGER NOT NULL,
+    pic_count INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -1090,7 +1088,7 @@ VALUES
 DROP TABLE IF EXISTS review_pictures;
 CREATE TABLE review_pictures (
     id SERIAL PRIMARY KEY,
-    review_album_id  NUMERIC,
+    review_album_id INTEGER NOT NULL,
     filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -1117,7 +1115,7 @@ VALUES
 DROP TABLE IF EXISTS review_update_log;
 CREATE TABLE review_update_log (
     id SERIAL PRIMARY KEY,
-    review_id  NUMERIC,
+    review_id INTEGER NOT NULL,
     update_action TEXT NOT NULL,
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -1144,45 +1142,45 @@ VALUES
 DROP TABLE IF EXISTS member;
 CREATE TABLE member (
     id SERIAL PRIMARY KEY,
-    username     TEXT,
-    password     TEXT,
-    name        TEXT,
+    username TEXT UNIQUE ,
+    password TEXT,
+    name TEXT,
     phone_number TEXT,
-    email       TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
     email_subscription INTEGER DEFAULT 1,
-    status       INTEGER DEFAULT 1,
+    status INTEGER DEFAULT 1,
     verified_status INTEGER DEFAULT 0,
-    delete_status       INTEGER DEFAULT 0,
-    created_at  TIMESTAMP,
-    last_login   TIMESTAMP,
+    delete_status INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP,
     source_type  TEXT          -- web user -> 0, mobile user -> 1
 );
 
 DROP TABLE IF EXISTS member_icon;
 CREATE TABLE member_icon (
     id SERIAL PRIMARY KEY,
-    member_id NUMERIC,
+    member_id INTEGER NOT NULL,
     filename TEXT
 );
 
 DROP TABLE IF EXISTS address;
 CREATE TABLE address (
     id SERIAL PRIMARY KEY,
-    member_id    NUMERIC,
+    member_id INTEGER NOT NULL,
     receiver_name TEXT,
     phone_number TEXT,
-    detail_address  TEXT,
-    city         TEXT,
-    state        TEXT,
-    zip_code     TEXT,
-    note         TEXT
+    detail_address TEXT,
+    city TEXT,
+    state TEXT,
+    zip_code TEXT,
+    note TEXT
 );
 
 DROP TABLE IF EXISTS member_login_log;
 CREATE TABLE member_login_log (
     id SERIAL PRIMARY KEY,
-    member_id  NUMERIC,
-    login_time TIMESTAMP,
+    member_id INTEGER NOT NULL,
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ip_address TEXT,
     login_type TEXT -- 0/1/2 pc TEXT, ios TEXT, android
 );
@@ -1190,7 +1188,7 @@ CREATE TABLE member_login_log (
 DROP TABLE IF EXISTS member_change_log;
 CREATE TABLE member_change_log (
     id SERIAL PRIMARY KEY,
-    member_id  NUMERIC NOT NULL,
+    member_id INTEGER NOT NULL,
     update_action VARCHAR(255) NOT NULL,
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -1248,134 +1246,134 @@ VALUES
 DROP TABLE IF EXISTS admin;
 CREATE TABLE admin (
     id SERIAL PRIMARY KEY,
-    username    TEXT,
-    password    TEXT,
-    icon        TEXT,
-    email       TEXT,
-    name        TEXT,
-    created_at TIMESTAMP,
-    last_login  TIMESTAMP,
-    status      TEXT
-);
-
-DROP TABLE IF EXISTS admin_login_log;
-CREATE TABLE admin_login_log (
-    id SERIAL PRIMARY KEY,
-    admin_id    NUMERIC,
-    login_date  DATE,
-    login_time  VARCHAR(50),
-    ip_address  VARCHAR(20),
-    user_agent  INT
+    username TEXT UNIQUE,
+    password TEXT,
+    icon TEXT,
+    email TEXT UNIQUE NOT NULL,
+    name TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP,
+    status INTEGER DEFAULT 0
 );
 
 DROP TABLE IF EXISTS roles;
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
-    name        TEXT,
+    name TEXT,
     description TEXT,
-    created_at TIMESTAMP,
-    status      TEXT
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status INTEGER DEFAULT 0
 );
 
 DROP TABLE IF EXISTS permission;
 CREATE TABLE permission (
     id SERIAL PRIMARY KEY,
-    parent_id NUMERIC,-- sub permission
-    name    TEXT,
-    value   TEXT,   -- TODO: need to rename this value to something else
-    created_at TIMESTAMP,
-    status  TEXT
+    parent_id INTEGER NOT NULL,-- sub permission
+    name TEXT,
+    permission_key TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status INTEGER DEFAULT 0
 );
 
 DROP TABLE IF EXISTS role_permission_relation;
 CREATE TABLE role_permission_relation (
     id SERIAL PRIMARY KEY,
-    role_id NUMERIC,
-    permission_id  NUMERIC
+    role_id INTEGER NOT NULL,
+    permission_id INTEGER
 );
 
 DROP TABLE IF EXISTS admin_role_relation;
 CREATE TABLE admin_role_relation (
     id SERIAL PRIMARY KEY,
-    admin_id NUMERIC,
-    role_id  NUMERIC
+    admin_id INTEGER NOT NULL,
+    role_id INTEGER
 );
+
+DROP TABLE IF EXISTS admin_login_log;
+CREATE TABLE admin_login_log (
+    id SERIAL PRIMARY KEY,
+    admin_id INTEGER NOT NULL,
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(20),
+    user_agent INTEGER
+);
+
 
 --------------Admin
 -- username : adminacct  password: adminpass      first admin have all permission, second is for order and only have order permission
 -- and third admin is for user and have all user permission.
 -- username : devacct   password: devpass
 INSERT INTO admin(username, password, email, name, created_at, status) VALUES
-('adminacct', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'admin@gmail.com', 'jun', '2020-03-18 22:18:40', 'active'),
-('adminacctorder', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'order@gmail.com', 'jun', '2020-03-18 22:18:40', 'active'),
-('adminacctuser', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'user@gmail.com', 'jun', '2020-03-18 22:18:40', 'active'),
-('devacct', '$2a$10$zykJppm18avEb79CGEtFjOIwKlgUJ4BeMFiF8HGjccVMgJ8XTjZpy', 'dev@gmail.com', 'dev', '2020-03-20 12:06:40', 'active');
+('adminacct', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'admin@gmail.com', 'jun', '2020-03-18 22:18:40', 1),
+('adminacctorder', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'order@gmail.com', 'jun', '2020-03-18 22:18:40', 1),
+('adminacctuser', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'user@gmail.com', 'jun', '2020-03-18 22:18:40', 1),
+('devacct', '$2a$10$zykJppm18avEb79CGEtFjOIwKlgUJ4BeMFiF8HGjccVMgJ8XTjZpy', 'dev@gmail.com', 'dev', '2020-03-20 12:06:40', 1);
 
 
 INSERT INTO roles (name, description, created_at, status)
 VALUES
-('ROLE_admin-product', 'manage product issues', '2020-03-23 09:42:22', 'active'),
-('ROLE_admin-order', 'manage order issues', '2020-03-23 09:42:22', 'active'),
-('ROLE_admin-user', 'manage user related issue', '2020-03-21 12:35:20', 'active'),
-('ROLE_admin-sale', 'manage sale issues', '2020-03-23 09:42:22', 'active'),
-('ROLE_admin-content', 'manage content issues', '2020-03-23 09:42:22', 'active'),
-('ROLE_admin-root', 'root', '2020-03-18 22:18:40', 'active'),
-('ROLE_member', 'root', '2020-03-18 22:18:40', 'active');
+('ROLE_admin-product', 'manage product issues', '2020-03-23 09:42:22', 1),
+('ROLE_admin-order', 'manage order issues', '2020-03-23 09:42:22', 1),
+('ROLE_admin-user', 'manage user related issue', '2020-03-21 12:35:20', 1),
+('ROLE_admin-sale', 'manage sale issues', '2020-03-23 09:42:22', 1),
+('ROLE_admin-content', 'manage content issues', '2020-03-23 09:42:22', 1),
+('ROLE_admin-root', 'root', '2020-03-18 22:18:40', 1),
+('ROLE_member', 'root', '2020-03-18 22:18:40', 1);
 
 
-INSERT INTO permission (parent_id, name, value, created_at, status)
+INSERT INTO permission (parent_id, name, permission_key, created_at, status)
 VALUES
 -- base permission
-('0', 'product', null, '2019-08-18 16:00:38', 'active'),
-('0', 'order', null, '2019-08-18 16:00:38', 'active'),
-('0', 'user', null, '2019-08-18 16:00:38', 'active'),
-('0', 'sales', null, '2019-08-18 16:00:38', 'active'),
-('0', 'content', null, '2019-08-18 16:00:38', 'active'),
+('0', 'product', null, '2019-08-18 16:00:38', 1),
+('0', 'order', null, '2019-08-18 16:00:38', 1),
+('0', 'user', null, '2019-08-18 16:00:38', 1),
+('0', 'sales', null, '2019-08-18 16:00:38', 1),
+('0', 'content', null, '2019-08-18 16:00:38', 1),
 
 -- CRUD product
-('1', 'create product', 'product:create', '2019-08-18 16:00:38', 'active'),
-('1', 'read product', 'product:read', '2019-08-18 16:00:38', 'active'),
-('1', 'update product', 'product:update', '2019-08-18 16:00:38', 'active'),
-('1', 'delete product', 'product:delete', '2019-08-18 16:00:38', 'active'),
+('1', 'create product', 'product_create', '2019-08-18 16:00:38', 1),
+('1', 'read product', 'product_read', '2019-08-18 16:00:38', 1),
+('1', 'update product', 'product_update', '2019-08-18 16:00:38', 1),
+('1', 'delete product', 'product_delete', '2019-08-18 16:00:38', 1),
 
-('1', 'create brand', 'brand:create', '2019-08-18 16:00:38', 'active'),
-('1', 'read brand', 'brand:read', '2019-08-18 16:00:38', 'active'),
-('1', 'update brand', 'brand:update', '2019-08-18 16:00:38', 'active'),
-('1', 'delete brand', 'brand:delete', '2019-08-18 16:00:38', 'active'),
+('1', 'create brand', 'brand_create', '2019-08-18 16:00:38', 1),
+('1', 'read brand', 'brand_read', '2019-08-18 16:00:38', 1),
+('1', 'update brand', 'brand_update', '2019-08-18 16:00:38', 1),
+('1', 'delete brand', 'brand_delete', '2019-08-18 16:00:38', 1),
 
-('1', 'create product_category', 'product_category:create', '2019-08-18 16:00:38', 'active'),
-('1', 'read product_category', 'product_category:read', '2019-08-18 16:00:38', 'active'),
-('1', 'update product_category', 'product_category:update', '2019-08-18 16:00:38', 'active'),
-('1', 'delete product_category', 'product_category:delete', '2019-08-18 16:00:38', 'active'),
+('1', 'create product_category', 'product_category_create', '2019-08-18 16:00:38', 1),
+('1', 'read product_category', 'product_category_read', '2019-08-18 16:00:38', 1),
+('1', 'update product_category', 'product_category_update', '2019-08-18 16:00:38', 1),
+('1', 'delete product_category', 'product_category_delete', '2019-08-18 16:00:38', 1),
 
-('1', 'create product_attribute', 'product_attribute:create', '2019-08-18 16:00:38', 'active'),
-('1', 'read product_attribute', 'product_attribute:read', '2019-08-18 16:00:38', 'active'),
-('1', 'update product_attribute', 'product_attribute:update', '2019-08-18 16:00:38', 'active'),
-('1', 'delete product_attribute', 'product_attribute:delete', '2019-08-18 16:00:38', 'active'),
+('1', 'create product_attribute', 'product_attribute_create', '2019-08-18 16:00:38', 1),
+('1', 'read product_attribute', 'product_attribute_read', '2019-08-18 16:00:38', 1),
+('1', 'update product_attribute', 'product_attribute_update', '2019-08-18 16:00:38', 1),
+('1', 'delete product_attribute', 'product_attribute_delete', '2019-08-18 16:00:38', 1),
 
 -- CRUD Order
-('2', 'create order', 'order:create', '2019-08-18 16:00:38', 'active'),
-('2', 'read order', 'order:read', '2019-08-18 16:00:38', 'active'),
-('2', 'update order', 'order:update', '2019-08-18 16:00:38', 'active'),
-('2', 'delete order', 'order:delete', '2019-08-18 16:00:38', 'active'),
+('2', 'create order', 'order_create', '2019-08-18 16:00:38', 1),
+('2', 'read order', 'order_read', '2019-08-18 16:00:38', 1),
+('2', 'update order', 'order_update', '2019-08-18 16:00:38', 1),
+('2', 'delete order', 'order_delete', '2019-08-18 16:00:38', 1),
 
 -- CRUD user
-('3', 'create user', 'user:create', '2019-08-18 16:00:38', 'active'),
-('3', 'read user', 'user:read', '2019-08-18 16:00:38', 'active'),
-('3', 'update user', 'user:update', '2019-08-18 16:00:38', 'active'),
-('3', 'delete user', 'user:delete', '2019-08-18 16:00:38', 'active'),
+('3', 'create user', 'user_create', '2019-08-18 16:00:38', 1),
+('3', 'read user', 'user_read', '2019-08-18 16:00:38', 1),
+('3', 'update user', 'user_update', '2019-08-18 16:00:38', 1),
+('3', 'delete user', 'user_delete', '2019-08-18 16:00:38', 1),
 
 -- CRUD Sales
-('4', 'create sales', 'sales:create', '2019-08-18 16:00:38', 'active'),
-('4', 'read sales', 'sales:read', '2019-08-18 16:00:38', 'active'),
-('4', 'update sales', 'sales:update', '2019-08-18 16:00:38', 'active'),
-('4', 'delete sales', 'sales:delete', '2019-08-18 16:00:38', 'active'),
+('4', 'create sales', 'sales_create', '2019-08-18 16:00:38', 1),
+('4', 'read sales', 'sales_read', '2019-08-18 16:00:38', 1),
+('4', 'update sales', 'sales_update', '2019-08-18 16:00:38', 1),
+('4', 'delete sales', 'sales_delete', '2019-08-18 16:00:38', 1),
 
 -- CRUD Content
-('5', 'create content', 'content:create', '2019-08-18 16:00:38', 'active'),
-('5', 'read content', 'content:read', '2019-08-18 16:00:38', 'active'),
-('5', 'update content', 'content:update', '2019-08-18 16:00:38', 'active'),
-('5', 'delete content', 'content:delete', '2019-08-18 16:00:38', 'active');
+('5', 'create content', 'content_create', '2019-08-18 16:00:38', 1),
+('5', 'read content', 'content_read', '2019-08-18 16:00:38', 1),
+('5', 'update content', 'content_update', '2019-08-18 16:00:38', 1),
+('5', 'delete content', 'content_delete', '2019-08-18 16:00:38', 1);
 
 -- role to permission
 -- assign role_admin-order to have order level 0. (permission 1-5 all level 0)
@@ -1410,38 +1408,38 @@ VALUES
 
 
 -- user_agent 1 -> pc, 2 -> mobile users
-insert into admin_login_log (admin_id, login_date, login_time, ip_address, user_agent)
+insert into admin_login_log (admin_id, login_time, ip_address, user_agent)
 VALUES
-(2, '2022-06-22', '9:37', '134.163.118.46', 2),
-(1, '2023-02-10', '16:29', '63.34.62.42', 2),
-(1, '2023-03-24', '19:37', '135.233.10.69', 1),
-(1, '2022-09-12', '1:38', '20.247.202.109', 2),
-(2, '2023-02-15', '20:00', '36.98.223.124', 2),
-(3, '2022-06-23', '6:28', '173.205.10.223', 1),
-(3, '2023-04-22', '11:15', '196.204.187.66', 1),
-(3, '2022-05-04', '12:59', '71.116.127.75', 1),
-(3, '2023-04-29', '10:24', '150.162.71.34', 1),
-(2, '2022-07-17', '23:12', '120.114.34.124', 1),
-(2, '2022-06-09', '2:29', '217.211.41.124', 1),
-(2, '2022-09-06', '17:55', '123.88.59.30', 2),
-(1, '2022-11-16', '15:38', '38.151.187.192', 1),
-(2, '2023-03-14', '19:25', '240.177.24.96', 1),
-(1, '2022-10-22', '9:27', '21.229.17.241', 2),
-(2, '2022-10-01', '14:26', '10.201.14.67', 2),
-(2, '2022-06-23', '0:04', '60.94.22.72', 1),
-(1, '2022-12-21', '7:41', '31.173.45.239', 1),
-(1, '2022-08-25', '1:44', '93.236.87.97', 2),
-(1, '2023-03-21', '19:46', '188.250.113.175', 2),
-(2, '2023-02-26', '13:03', '218.254.5.254', 1),
-(2, '2022-11-23', '18:33', '104.148.201.62', 2),
-(1, '2022-12-02', '9:31', '78.116.167.232', 1),
-(3, '2022-11-22', '6:26', '235.188.63.46', 1),
-(1, '2022-06-27', '18:32', '94.211.177.207', 2),
-(2, '2022-07-24', '23:45', '165.173.17.183', 2),
-(2, '2023-02-03', '9:38', '124.116.179.206', 1),
-(1, '2022-12-23', '23:22', '128.42.207.29', 1),
-(3, '2022-10-22', '20:38', '68.210.228.208', 2),
-(2, '2022-05-29', '21:51', '165.130.166.222', 1);
+(2, '2022-06-22 9:37:00', '134.163.118.46', 2),
+(1, '2023-02-10 16:29:00', '63.34.62.42', 2),
+(1, '2023-03-24 19:37:00', '135.233.10.69', 1),
+(1, '2022-09-12 1:38:00', '20.247.202.109', 2),
+(2, '2023-02-15 20:00:00', '36.98.223.124', 2),
+(3, '2022-06-23 6:28:00', '173.205.10.223', 1),
+(3, '2023-04-22 11:15:00', '196.204.187.66', 1),
+(3, '2022-05-04 12:59:00', '71.116.127.75', 1),
+(3, '2023-04-29 10:24:00', '150.162.71.34', 1),
+(2, '2022-07-17 23:12:00', '120.114.34.124', 1),
+(2, '2022-06-09 2:29:00', '217.211.41.124', 1),
+(2, '2022-09-06 17:55:00', '123.88.59.30', 2),
+(1, '2022-11-16 15:38:00', '38.151.187.192', 1),
+(2, '2023-03-14 19:25:00', '240.177.24.96', 1),
+(1, '2022-10-22 9:27:00', '21.229.17.241', 2),
+(2, '2022-10-01 14:26:00', '10.201.14.67', 2),
+(2, '2022-06-23 0:04:00', '60.94.22.72', 1),
+(1, '2022-12-21 7:41:00', '31.173.45.239', 1),
+(1, '2022-08-25 1:44:00', '93.236.87.97', 2),
+(1, '2023-03-21 19:46:00', '188.250.113.175', 2),
+(2, '2023-02-26 13:03:00', '218.254.5.254', 1),
+(2, '2022-11-23 18:33:00', '104.148.201.62', 2),
+(1, '2022-12-02 9:31:00', '78.116.167.232', 1),
+(3, '2022-11-22 6:26:00', '235.188.63.46', 1),
+(1, '2022-06-27 18:32:00', '94.211.177.207', 2),
+(2, '2022-07-24 23:45:00', '165.173.17.183', 2),
+(2, '2023-02-03 9:38:00', '124.116.179.206', 1),
+(1, '2022-12-23 23:22:00', '128.42.207.29', 1),
+(3, '2022-10-22 20:38:00', '68.210.228.208', 2),
+(2, '2022-05-29 21:51:00', '165.130.166.222', 1);
 
 
 --------------------------------------------
@@ -1451,9 +1449,9 @@ VALUES
 DROP TABLE IF EXISTS shopping_cart;
 CREATE TABLE shopping_cart (
     id SERIAL PRIMARY KEY,
-    member_id BIGINT,
+    member_id INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO shopping_cart (member_id, created_at, updated_at) VALUES
@@ -1465,15 +1463,15 @@ INSERT INTO shopping_cart (member_id, created_at, updated_at) VALUES
 DROP TABLE IF EXISTS cart_item;
 CREATE TABLE cart_item (
     id SERIAL PRIMARY KEY,
-    cart_id BIGINT,
-    product_id BIGINT,
+    cart_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
     product_name VARCHAR(500),
     product_sku VARCHAR(500),
     product_pic VARCHAR(1000),
     quantity INTEGER,
-    price numeric(10,2),
+    price DECIMAL(10, 2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO cart_item (cart_id, product_id, product_name, product_sku, product_pic, quantity, price)
@@ -1491,16 +1489,16 @@ VALUES
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (   -- have to called orders instead of order, or else conflict with ORDER BY
     id SERIAL PRIMARY KEY,
-    member_id BIGINT NOT NULL,
-    coupon_id BIGINT,
+    member_id INTEGER NOT NULL,
+    coupon_id INTEGER DEFAULT NULL,
     order_sn VARCHAR(64),
     member_email VARCHAR(64),
-    total_amount NUMERIC(10,2),
-    promotion_amount NUMERIC(10,2),
-    coupon_amount NUMERIC(10,2),
-    discount_amount NUMERIC(10,2),
-    shipping_cost NUMERIC(10,2),
-    pay_amount NUMERIC(10,2),
+    total_amount DECIMAL(10, 2),
+    promotion_amount DECIMAL(10, 2),
+    coupon_amount DECIMAL(10, 2),
+    discount_amount DECIMAL(10, 2),
+    shipping_cost DECIMAL(10, 2),
+    pay_amount DECIMAL(10, 2),
     pay_type INTEGER,              -- credit card -> 0, paypal -> 1, google pay -> 2
     source_type INTEGER,           -- pc -> 0, mobile -> 1
     status INTEGER DEFAULT 0,                -- waiting for payment 0, fulfilling(paid) 1,  send 2, complete(received) 3, closed(out of return period) 4,invalid/cancel 5
@@ -1520,7 +1518,7 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
     comment VARCHAR(200) DEFAULT NULL,        -- comment left customer like "leave the package under the rug"
     admin_note VARCHAR(500) DEFAULT NULL,       -- note left by previous admin stating what's happening
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO orders (member_id, coupon_id, order_sn, total_amount,  promotion_amount, coupon_amount, discount_amount, shipping_cost, pay_amount,
@@ -1553,22 +1551,22 @@ VALUES
 DROP TABLE IF EXISTS order_item;
 CREATE TABLE order_item (
 	id SERIAL PRIMARY KEY,
-	order_id BIGINT DEFAULT NULL,
-	order_sn VARCHAR(64) DEFAULT NULL,
-	product_id BIGINT DEFAULT NULL,
+	order_id INTEGER NOT NULL,
+	order_sn VARCHAR(64) NOT NULL,
+	product_id INTEGER NOT NULL,
 	product_pic VARCHAR(500) DEFAULT NULL,
 	product_name VARCHAR(200) DEFAULT NULL,
 	product_brand VARCHAR(200) DEFAULT NULL,
 	product_sn VARCHAR(64) DEFAULT NULL,
-	product_price NUMERIC(10,2) DEFAULT NULL,
+	product_price DECIMAL(10, 2) DEFAULT NULL,
 	product_quantity INTEGER DEFAULT NULL,
-	product_sku_id BIGINT DEFAULT NULL,
+	product_sku_id INTEGER DEFAULT NULL,
 	product_sku_code VARCHAR(50) DEFAULT NULL,
-	product_category_id BIGINT DEFAULT NULL,
+	product_category_id INTEGER DEFAULT NULL,
 	promotion_name VARCHAR(200) DEFAULT NULL,
-	promotion_amount NUMERIC(10,2) DEFAULT NULL,
-	coupon_amount NUMERIC(10,2) DEFAULT NULL,               -- the coupon that applied to the product will have it if not just 0
-	real_amount NUMERIC(10,2) DEFAULT NULL      -- final paying price after sale and coupon.
+	promotion_amount DECIMAL(10, 2) DEFAULT NULL,
+	coupon_amount DECIMAL(10, 2) DEFAULT NULL,               -- the coupon that applied to the product will have it if not just 0
+	real_amount DECIMAL(10, 2) DEFAULT NULL      -- final paying price after sale and coupon.
 );
 
 INSERT INTO
@@ -1592,7 +1590,7 @@ VALUES
 DROP TABLE IF EXISTS order_change_history;
 CREATE TABLE order_change_history (
     id SERIAL PRIMARY KEY,
-    order_id numeric,
+    order_id INTEGER NOT NULL,
     update_action TEXT NOT NULL,
     order_status INTEGER NULL DEFAULT NULL,              -- waiting for payment 0, fulfilling 1,  send 2, complete(received) 3, closed(out of return period) 4,invalid 5
     note VARCHAR(500) NULL DEFAULT NULL,
@@ -1639,14 +1637,14 @@ VALUES
 DROP TABLE IF EXISTS return_request;
 CREATE TABLE return_request  (
     id SERIAL PRIMARY KEY,
-    order_id BIGINT,
-    company_address_id BIGINT,                   -- return to you(owner), return center or warehouse
+    order_id INTEGER NOT NULL,
+    company_address_id INTEGER NOT NULL,                   -- return to you(owner), return center or warehouse
     order_sn VARCHAR(64),
-    member_id BIGINT,
-    return_quantity BIGINT,                       -- number of items to be returned
+    member_id INTEGER NOT NULL,
+    return_quantity INTEGER,                       -- number of items to be returned
     return_name VARCHAR(100),
     return_phone VARCHAR(100),
-    status INT,                -- return status,  waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
+    status INTEGER,                -- return status,  waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
     handle_time TIMESTAMP,                        -- how long to return this item, e.g 2 weeks to return this or return is voided.
     asking_amount DECIMAL(10, 2),
     refunded_amount DECIMAL(10, 2),
@@ -1686,14 +1684,14 @@ VALUES
 DROP TABLE IF EXISTS return_item;
 CREATE TABLE return_item (
     id SERIAL PRIMARY KEY,
-    return_request_id BIGINT NOT NULL,
-    brand_id BIGINT,
-    order_id BIGINT,
+    return_request_id INTEGER NOT NULL,
+    brand_id INTEGER NOT NULL,
+    order_id INTEGER NOT NULL,
     order_sn VARCHAR(64),
-    product_id BIGINT,
+    product_id INTEGER NOT NULL,
     product_sku VARCHAR(100),
     purchased_price DECIMAL(10, 2),
-    quantity BIGINT
+    quantity INTEGER
 );
 
 INSERT INTO return_item (return_request_id, brand_id, order_id, order_sn, product_id, product_sku, quantity)
@@ -1711,7 +1709,7 @@ VALUES
 DROP TABLE IF EXISTS return_reason_pictures;
 CREATE TABLE return_reason_pictures (
     id SERIAL PRIMARY KEY,
-    return_request_id BIGINT NOT NULL,
+    return_request_id INTEGER NOT NULL,
     filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -1729,7 +1727,7 @@ VALUES
 DROP TABLE IF EXISTS return_log;
 CREATE TABLE return_log (
     id SERIAL PRIMARY KEY,
-    return_request_id BIGINT,
+    return_request_id INTEGER NOT NULL,
     update_action VARCHAR(100),
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -1756,7 +1754,7 @@ CREATE TABLE article (
     body TEXT NOT NULL,
     publish_status INTEGER NOT NULL DEFAULT 0,  -- article online status
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO article (title, body, publish_status)
@@ -1769,11 +1767,11 @@ VALUES
 DROP TABLE IF EXISTS article_QA;
 CREATE TABLE article_QA (
     id SERIAL PRIMARY KEY,
-    article_id INT NOT NULL,
+    article_id INTEGER NOT NULL,
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -1789,10 +1787,10 @@ VALUES
 DROP TABLE IF EXISTS article_image;
 CREATE TABLE article_image (
     id SERIAL PRIMARY KEY,
-    article_id INT NOT NULL,
+    article_id INTEGER NOT NULL,
     filename VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO article_image (article_id, filename)
@@ -1807,10 +1805,10 @@ VALUES
 DROP TABLE IF EXISTS article_video;
 CREATE TABLE article_video (
     id SERIAL PRIMARY KEY,
-    article_id INT NOT NULL,
+    article_id INTEGER NOT NULL,
     url VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO article_video (article_id, url)
@@ -1822,7 +1820,7 @@ VALUES
 DROP TABLE IF EXISTS article_change_log;
 CREATE TABLE article_change_log (
     id SERIAL PRIMARY KEY,
-    article_id INT NOT NULL,
+    article_id INTEGER NOT NULL,
     update_action VARCHAR(255) NOT NULL,
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -1851,7 +1849,7 @@ CREATE TABLE coupon (
     coupon_type INTEGER NULL DEFAULT NULL,           -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
     name VARCHAR(100),
     discount_type INTEGER NULL DEFAULT NULL,   -- 0 -> by amount, 1->  by percent off
-    amount numeric(10,2) NULL DEFAULT NULL,   -- amount discounted
+    amount DECIMAL(10, 2) NULL DEFAULT NULL,   -- amount discounted
     start_time TIMESTAMP NULL DEFAULT NULL,
     end_time TIMESTAMP NULL DEFAULT NULL,
     note VARCHAR(200) NULL DEFAULT NULL,
@@ -1877,8 +1875,8 @@ VALUES
 DROP TABLE IF EXISTS coupon_product_relation;
 CREATE TABLE coupon_product_relation(
     id SERIAL PRIMARY KEY,
-    coupon_id INTEGER,
-    product_id INTEGER,
+    coupon_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
     product_name VARCHAR(100),
     product_sn VARCHAR(100),
     product_sku_code VARCHAR(100)
@@ -1911,9 +1909,9 @@ VALUES
 DROP TABLE IF EXISTS coupon_history;
 CREATE TABLE coupon_history (
     id SERIAL PRIMARY KEY,
-    coupon_id BIGINT NOT NULL,
-    member_id BIGINT NOT NULL,
-    order_id BIGINT NOT NULL,
+    coupon_id INTEGER NOT NULL,
+    member_id INTEGER NOT NULL,
+    order_id INTEGER NOT NULL,
     used_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     code VARCHAR(64) NULL DEFAULT NULL
 );
@@ -1932,7 +1930,7 @@ VALUES
 DROP TABLE IF EXISTS coupon_change_log;
 CREATE TABLE coupon_change_log (
     id SERIAL PRIMARY KEY,
-    coupon_id INT NOT NULL,
+    coupon_id INTEGER NOT NULL,
     update_action VARCHAR(255) NOT NULL,
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -1954,12 +1952,12 @@ CREATE TABLE promotion_sale (
     name VARCHAR(100),
     promotion_type INTEGER,      -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
     discount_type INTEGER,       -- 0 -> by amount, 1->  by percent off
-    amount numeric,
+    amount DECIMAL(10, 2),
     status INTEGER,               -- 0-> not active, 1-> active is it active
     start_time TIMESTAMP,
-    end_time   TIMESTAMP,
+    end_time TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- TODO: does sale stacks?.  and need a way to check discounts time expiration. maybe redis or spring scheduler/task
@@ -1976,10 +1974,10 @@ VALUES
 DROP TABLE IF EXISTS promotion_sale_product;
 CREATE TABLE promotion_sale_product (
     id SERIAL PRIMARY KEY,
-    promotion_sale_id BIGINT NOT NULL,
-    product_id BIGINT NOT NULL,
+    promotion_sale_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
     product_sku_code TEXT,
-    promotion_price numeric NOT NULL,       -- what the price - promotion sale amount = promotion_price
+    promotion_price DECIMAL(10, 2) NOT NULL,       -- what the price - promotion sale amount = promotion_price
     promotion_limit_item INTEGER NOT NULL,      -- how many allowed to sell at discount, need to check sku stock
     promotion_limit_per_user INTEGER NOT NULL       -- number of limit per member/account
 );
@@ -2050,11 +2048,11 @@ UPDATE product_sku SET promotion_price = 449.99 WHERE product_id = 2 AND sku_cod
 DROP TABLE IF EXISTS promotion_sale_log;
 CREATE TABLE promotion_sale_log (
     id SERIAL PRIMARY KEY,
-    promotion_sale_id numeric,
+    promotion_sale_id INTEGER NOT NULL,
     sale_action TEXT,
     promotion_type INTEGER,    -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
     discount_type INTEGER,       -- 0 -> by amount, 1->  by percent off
-    amount numeric,
+    amount DECIMAL(10, 2),
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -2075,13 +2073,13 @@ DROP TABLE IF EXISTS email;
 CREATE TABLE email (
     id SERIAL PRIMARY KEY,
     service_type VARCHAR(255),
-    action_type    VARCHAR(255),
+    action_type VARCHAR(255),
     sender_email VARCHAR(255) NOT NULL,
     recipient_email VARCHAR(255) NOT NULL,
     subject VARCHAR(255),
     body TEXT,
     operator VARCHAR(100) NOT NULL,
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Admin Actions
@@ -2109,8 +2107,8 @@ CREATE TABLE email_templates (
     id SERIAL PRIMARY KEY,
     service_name VARCHAR(50),
     template_text TEXT,
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO email_templates (service_name, template_text)
@@ -2127,9 +2125,9 @@ VALUES
 DROP TABLE IF EXISTS email_templates_history;
 CREATE TABLE email_templates_history (
     id SERIAL PRIMARY KEY,
-    template_id NUMERIC,
+    template_id INTEGER NOT NULL,
     update_action TEXT NOT NULL,
-    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     operator VARCHAR(100) NOT NULL
 );
 
@@ -2138,103 +2136,3 @@ VALUES
 (1, 'create', 'Jun'),
 (2, 'create', 'Jun'),
 (3, 'create', 'Jun');
-
-
---- Spring Batch schema, needed to store jobs. Took it from their Jar file. SQL file. ---
---- from spring-batch-core-4.3.3.jar file in /home/.m2/repository/... ---
---- https://github.com/spring-projects/spring-batch/blob/main/spring-batch-core/src/main/resources/org/springframework/batch/core/schema-postgresql.sql ---
-DROP TABLE  IF EXISTS BATCH_JOB_INSTANCE;
-CREATE TABLE BATCH_JOB_INSTANCE  (
-    JOB_INSTANCE_ID BIGINT  NOT NULL PRIMARY KEY ,
-    VERSION BIGINT ,
-    JOB_NAME VARCHAR(100) NOT NULL,
-    JOB_KEY VARCHAR(32) NOT NULL,
-    constraint JOB_INST_UN unique (JOB_NAME, JOB_KEY)
-);
-
-DROP TABLE  IF EXISTS BATCH_JOB_EXECUTION;
-CREATE TABLE BATCH_JOB_EXECUTION  (
-    JOB_EXECUTION_ID BIGINT  NOT NULL PRIMARY KEY ,
-    VERSION BIGINT  ,
-    JOB_INSTANCE_ID BIGINT NOT NULL,
-    CREATE_TIME TIMESTAMP NOT NULL,
-    START_TIME TIMESTAMP DEFAULT NULL ,
-    END_TIME TIMESTAMP DEFAULT NULL ,
-    STATUS VARCHAR(10) ,
-    EXIT_CODE VARCHAR(2500) ,
-    EXIT_MESSAGE VARCHAR(2500) ,
-    LAST_UPDATED TIMESTAMP,
-    JOB_CONFIGURATION_LOCATION VARCHAR(2500) NULL,
-    constraint JOB_INST_EXEC_FK foreign key (JOB_INSTANCE_ID)
-    references BATCH_JOB_INSTANCE(JOB_INSTANCE_ID)
-);
-
-DROP TABLE  IF EXISTS BATCH_JOB_EXECUTION_PARAMS;
-CREATE TABLE BATCH_JOB_EXECUTION_PARAMS  (
-    JOB_EXECUTION_ID BIGINT NOT NULL ,
-    TYPE_CD VARCHAR(6) NOT NULL ,
-    KEY_NAME VARCHAR(100) NOT NULL ,
-    STRING_VAL VARCHAR(250) ,
-    DATE_VAL TIMESTAMP DEFAULT NULL ,
-    LONG_VAL BIGINT ,
-    DOUBLE_VAL DOUBLE PRECISION ,
-    IDENTIFYING CHAR(1) NOT NULL ,
-    constraint JOB_EXEC_PARAMS_FK foreign key (JOB_EXECUTION_ID)
-    references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
-);
-
-DROP TABLE  IF EXISTS BATCH_STEP_EXECUTION;
-CREATE TABLE BATCH_STEP_EXECUTION  (
-    STEP_EXECUTION_ID BIGINT  NOT NULL PRIMARY KEY ,
-    VERSION BIGINT NOT NULL,
-    STEP_NAME VARCHAR(100) NOT NULL,
-    JOB_EXECUTION_ID BIGINT NOT NULL,
-    START_TIME TIMESTAMP NOT NULL ,
-    END_TIME TIMESTAMP DEFAULT NULL ,
-    STATUS VARCHAR(10) ,
-    COMMIT_COUNT BIGINT ,
-    READ_COUNT BIGINT ,
-    FILTER_COUNT BIGINT ,
-    WRITE_COUNT BIGINT ,
-    READ_SKIP_COUNT BIGINT ,
-    WRITE_SKIP_COUNT BIGINT ,
-    PROCESS_SKIP_COUNT BIGINT ,
-    ROLLBACK_COUNT BIGINT ,
-    EXIT_CODE VARCHAR(2500) ,
-    EXIT_MESSAGE VARCHAR(2500) ,
-    LAST_UPDATED TIMESTAMP,
-    constraint JOB_EXEC_STEP_FK foreign key (JOB_EXECUTION_ID)
-    references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
-);
-
-DROP TABLE  IF EXISTS BATCH_STEP_EXECUTION_CONTEXT;
-CREATE TABLE BATCH_STEP_EXECUTION_CONTEXT  (
-    STEP_EXECUTION_ID BIGINT NOT NULL PRIMARY KEY,
-    SHORT_CONTEXT VARCHAR(2500) NOT NULL,
-    SERIALIZED_CONTEXT TEXT ,
-    constraint STEP_EXEC_CTX_FK foreign key (STEP_EXECUTION_ID)
-    references BATCH_STEP_EXECUTION(STEP_EXECUTION_ID)
-);
-
-DROP TABLE  IF EXISTS BATCH_JOB_EXECUTION_CONTEXT;
-CREATE TABLE BATCH_JOB_EXECUTION_CONTEXT  (
-    JOB_EXECUTION_ID BIGINT NOT NULL PRIMARY KEY,
-    SHORT_CONTEXT VARCHAR(2500) NOT NULL,
-    SERIALIZED_CONTEXT TEXT ,
-    constraint JOB_EXEC_CTX_FK foreign key (JOB_EXECUTION_ID)
-    references BATCH_JOB_EXECUTION(JOB_EXECUTION_ID)
-);
-
-DROP SEQUENCE  IF EXISTS BATCH_STEP_EXECUTION_SEQ ;
-CREATE SEQUENCE BATCH_STEP_EXECUTION_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
-
-DROP SEQUENCE  IF EXISTS BATCH_JOB_EXECUTION_SEQ ;
-CREATE SEQUENCE BATCH_JOB_EXECUTION_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
-
-DROP SEQUENCE  IF EXISTS BATCH_JOB_SEQ ;
-CREATE SEQUENCE BATCH_JOB_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
-
-
-
-
-

@@ -3,21 +3,20 @@ package com.itsthatjun.ecommerce.controller.UMS;
 import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
-import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/user")
+@PreAuthorize("hasRole('ROLE_admin-user')")
 @Api(tags = "User related", description = "retrieve user information")
 public class UserController {
 
@@ -49,51 +48,42 @@ public class UserController {
     }
 
     @PostMapping("/createMember")
+    @PreAuthorize("hasPermission('user_create')")
     @ApiOperation(value = "")
     public Mono<Member> createMember(@RequestBody Member member) {
-        String operatorName = getAdminName();
-        return userService.createMember(member, operatorName);
+        return userService.createMember(member);
     }
 
     @PostMapping("/updateMemberInfo")
+    @PreAuthorize("hasPermission('user_update')")
     @ApiOperation(value = "")
     public Mono<Member> updateMemberInfo(@RequestBody Member member) {
-        String operatorName = getAdminName();
-        return userService.updateMemberInfo(member, operatorName);
+        return userService.updateMemberInfo(member);
     }
 
     @PostMapping("/updateMemberStatus")
+    @PreAuthorize("hasPermission('user_update')")
     @ApiOperation(value = "")
     public Mono<Member> updateMemberStatus(@RequestBody Member member) {
-        String operatorName = getAdminName();
-        return userService.updateMemberStatus(member, operatorName);
+        return userService.updateMemberStatus(member);
     }
 
     @DeleteMapping("/delete/{memberId}")
+    @PreAuthorize("hasPermission('user_delete')")
     @ApiOperation(value = "")
     public Mono<Void> delete(@PathVariable int memberId) {
-        String operatorName = getAdminName();
-        return userService.delete(memberId, operatorName);
+        return userService.delete(memberId);
     }
 
     @PostMapping("/message/{memberId}")
     @ApiOperation(value = "")
     public Mono<Void> sendUserEmail(@PathVariable int memberId, @RequestBody String message) {
-        String operatorName = getAdminName();
-        return userService.sendUserEmail(memberId, message, operatorName);
+        return userService.sendUserEmail(memberId, message);
     }
 
     @PostMapping("/message/all")
     @ApiOperation(value = "")
     public Mono<Void> sendAllUserEmail(@RequestBody String message) {
-        String operatorName = getAdminName();
-        return userService.sendAllUserEmail(message, operatorName);
-    }
-
-    private String getAdminName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-        String adminName = userDetail.getAdmin().getName();
-        return adminName;
+        return userService.sendAllUserEmail(message);
     }
 }

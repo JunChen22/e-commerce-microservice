@@ -14,11 +14,11 @@ public interface ReviewService {
     Flux<ProductReview> getProductReviews(int productId);
 
     @ApiOperation(value = "create review for a product")
-    Mono<ProductReview> createProductReview(ProductReview newReview, int userId);
+    Mono<ProductReview> createProductReview(ProductReview newReview);
 
     @ApiOperation(value = "update a review")
-    Mono<ProductReview> updateProductReviews(ProductReview newReview, int userId);
+    Mono<ProductReview> updateProductReviews(ProductReview newReview);
 
     @ApiOperation(value = "Get product with page and size")
-    Mono<Void> deleteProductReviews(int reviewId, int userId);
+    Mono<Void> deleteProductReviews(int reviewId);
 }

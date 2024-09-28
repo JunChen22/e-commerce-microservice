@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.pms.AdminProductDetail;
 import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminProductEvent;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.PMS.ProductService;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class ProductServiceImpl implements ProductService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
 
+    private final AdminServiceImpl adminService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -34,8 +37,9 @@ public class ProductServiceImpl implements ProductService {
     private final String PMS_SERVICE_URL = "http://pms/product/admin";
 
     @Autowired
-    public ProductServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
+    public ProductServiceImpl(AdminServiceImpl adminService, WebClient.Builder webClient, StreamBridge streamBridge,
                               @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.adminService = adminService;
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -66,72 +70,81 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<AdminProductDetail> createProduct(AdminProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> createProduct(AdminProductDetail productDetail) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<AdminProductDetail> addProductSku(AdminProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> addProductSku(AdminProductDetail productDetail) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("product-out-0", new PmsAdminProductEvent(NEW_PRODUCT_SKU, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<AdminProductDetail> updateProductInfo(AdminProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductInfo(AdminProductDetail productDetail) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_INFO, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<AdminProductDetail> updateProductStatus(AdminProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductStatus(AdminProductDetail productDetail) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_STATUS, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<AdminProductDetail> updateProductSkuStatus(AdminProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductSkuStatus(AdminProductDetail productDetail) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_SKU_STATUS, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<AdminProductDetail> updateProductStock(AdminProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductStock(AdminProductDetail productDetail) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_STOCK, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<AdminProductDetail> updateProductPrice(AdminProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> updateProductPrice(AdminProductDetail productDetail) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("product-out-0", new PmsAdminProductEvent(UPDATE_PRODUCT_PRICE, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<AdminProductDetail> removeProductSku(AdminProductDetail productDetail, String operator) {
+    public Mono<AdminProductDetail> removeProductSku(AdminProductDetail productDetail) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("product-out-0", new PmsAdminProductEvent(REMOVE_PRODUCT_SKU, productDetail, operator));
             return productDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> deleteProduct(int productId, String operator) {
+    public Mono<Void> deleteProduct(int productId) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             AdminProductDetail productDetail = new AdminProductDetail();
             Product product = new Product();
             product.setId(productId);

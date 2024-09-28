@@ -8,6 +8,9 @@ import reactor.core.publisher.Mono;
 public interface UserService {
 
     @ApiOperation(value = "")
+    int getUserId();
+
+    @ApiOperation(value = "")
     Mono<MemberDetail> getInfo();
 
     @ApiOperation(value = "Register")

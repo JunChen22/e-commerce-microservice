@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.controller.CMS;
 
 import com.itsthatjun.ecommerce.dto.cms.AdminArticleInfo;
-import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.CMS.impl.ArticleServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,14 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/article")
+@PreAuthorize("hasRole('ROLE_admin-content')")
 @Api(tags = "content related", description = "CRUD articles like buyer's guide, product comparison, and MISC articles")
 public class ArticleController {
 
@@ -42,33 +40,23 @@ public class ArticleController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_admin-content')")
+    @PreAuthorize("hasPermission('content_create')")
     @ApiOperation(value = "create an article(buyer's guide, comparison, and etc)")
     public Mono<AdminArticleInfo> createArticle(@RequestBody AdminArticleInfo articleInfo) {
-        String operatorName = getAdminName();
-        return articleService.createArticle(articleInfo, operatorName);
+        return articleService.createArticle(articleInfo);
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasRole('ROLE_admin-content')")
+    @PreAuthorize("hasPermission('content_update')")
     @ApiOperation(value = "update an article and it's content")
     public Mono<AdminArticleInfo> updateArticle(@RequestBody AdminArticleInfo articleInfo) {
-        String operatorName = getAdminName();
-        return articleService.updateArticle(articleInfo, operatorName);
+        return articleService.updateArticle(articleInfo);
     }
 
     @DeleteMapping("/delete/{articleId}")
-    @PreAuthorize("hasRole('ROLE_admin-content')")
+    @PreAuthorize("hasPermission('content_delete')")
     @ApiOperation(value = "delete article and it's related content(QA, videos, and images)")
     public Mono<Void> deleteArticle(@PathVariable int articleId) {
-        String operatorName = getAdminName();
-        return articleService.deleteArticle(articleId, operatorName);
-    }
-
-    private String getAdminName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-        String adminName = userDetail.getAdmin().getName();
-        return adminName;
+        return articleService.deleteArticle(articleId);
     }
 }

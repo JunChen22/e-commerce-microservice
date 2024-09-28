@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Roles implements Serializable {
     private Integer id;
@@ -9,8 +8,6 @@ public class Roles implements Serializable {
     private String name;
 
     private String description;
-
-    private Date createdAt;
 
     private Integer status;
 
@@ -38,14 +35,6 @@ public class Roles implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     public Integer getStatus() {

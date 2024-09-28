@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.sms.CouponSale;
 import com.itsthatjun.ecommerce.dto.sms.event.SmsAdminCouponEvent;
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
 import com.itsthatjun.ecommerce.service.SMS.CouponService;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class CouponServiceImpl implements CouponService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CouponServiceImpl.class);
 
+    private final AdminServiceImpl adminService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -34,8 +37,9 @@ public class CouponServiceImpl implements CouponService {
     private final String SMS_SERVICE_URL = "http://sms/coupon";
 
     @Autowired
-    public CouponServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
+    public CouponServiceImpl(AdminServiceImpl adminService, WebClient.Builder webClient, StreamBridge streamBridge,
                              @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.adminService = adminService;
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -67,24 +71,27 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Mono<CouponSale> create(CouponSale couponSale, String operator) {
+    public Mono<CouponSale> create(CouponSale couponSale) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("coupon-out-0", new SmsAdminCouponEvent(CREATE_COUPON, couponSale, operator));
             return couponSale;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<CouponSale> update(CouponSale updatedCouponSale, String operator) {
+    public Mono<CouponSale> update(CouponSale updatedCouponSale) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("coupon-out-0", new SmsAdminCouponEvent(UPDATE_COUPON, updatedCouponSale, operator));
             return updatedCouponSale;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> delete(int couponId, String operator) {
+    public Mono<Void> delete(int couponId) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             CouponSale couponSale = new CouponSale();
             couponSale.setCouponId(couponId);
             sendMessage("coupon-out-0", new SmsAdminCouponEvent(DELETE_COUPON, couponSale, operator));

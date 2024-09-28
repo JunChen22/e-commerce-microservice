@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminBrandEvent;
 import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.PMS.BrandService;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class BrandServiceImpl implements BrandService {
 
     private static final Logger LOG = LoggerFactory.getLogger(BrandServiceImpl.class);
 
+    private final AdminServiceImpl adminService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -34,8 +37,9 @@ public class BrandServiceImpl implements BrandService {
     private final String PMS_SERVICE_URL = "http://pms/brand";
 
     @Autowired
-    public BrandServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
+    public BrandServiceImpl(AdminServiceImpl adminService, WebClient.Builder webClient, StreamBridge streamBridge,
                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.adminService = adminService;
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -74,27 +78,30 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Mono<Brand> createBrand(Brand brand, String operatorName) {
+    public Mono<Brand> createBrand(Brand brand) {
         return Mono.fromCallable(() -> {
-            sendMessage("brand-out-0", new PmsAdminBrandEvent(CREATE, brand, operatorName));
+            String operator = adminService.getAdminName();
+            sendMessage("brand-out-0", new PmsAdminBrandEvent(CREATE, brand, operator));
             return brand;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Brand> updateBrand(Brand brand, String operatorName) {
+    public Mono<Brand> updateBrand(Brand brand) {
         return Mono.fromCallable(() -> {
-            sendMessage("brand-out-0", new PmsAdminBrandEvent(UPDATE, brand, operatorName));
+            String operator = adminService.getAdminName();
+            sendMessage("brand-out-0", new PmsAdminBrandEvent(UPDATE, brand, operator));
             return brand;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> deleteBrand(int brandId, String operatorName) {
+    public Mono<Void> deleteBrand(int brandId) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             Brand brand = new Brand();
             brand.setId(brandId);
-            sendMessage("brand-out-0", new PmsAdminBrandEvent(DELETE, brand, operatorName));
+            sendMessage("brand-out-0", new PmsAdminBrandEvent(DELETE, brand, operator));
         }).subscribeOn(publishEventScheduler).then();
     }
 

@@ -20,5 +20,5 @@ public interface OrderReturnService {
     Mono<ReturnDetail> getReturnRequest(String serialNumber);
 
     @ApiOperation(value = "update the status of the return apply")
-    Mono<Void> updateReturnOrderStatus(ReturnRequestDecision returnRequestDecision, String operator);
+    Mono<Void> updateReturnOrderStatus(ReturnRequestDecision returnRequestDecision);
 }

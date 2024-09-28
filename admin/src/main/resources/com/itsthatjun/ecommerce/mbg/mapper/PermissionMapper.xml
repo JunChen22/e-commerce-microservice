@@ -3,10 +3,8 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.PermissionMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Permission">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="value" jdbcType="VARCHAR" property="value" />
-    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="permission_key" jdbcType="VARCHAR" property="permissionKey" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -68,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, parent_id, name, value, created_at, status
+    id, name, permission_key, status
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.PermissionExample" resultMap="BaseResultMap">
     select
@@ -101,42 +99,30 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Permission" useGeneratedKeys="true">
-    insert into permission (parent_id, name, value, 
-      created_at, status)
-    values (#{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
+    insert into permission (name, permission_key, status
+      )
+    values (#{name,jdbcType=VARCHAR}, #{permissionKey,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Permission" useGeneratedKeys="true">
     insert into permission
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="parentId != null">
-        parent_id,
-      </if>
       <if test="name != null">
         name,
       </if>
-      <if test="value != null">
-        value,
-      </if>
-      <if test="createdAt != null">
-        created_at,
+      <if test="permissionKey != null">
+        permission_key,
       </if>
       <if test="status != null">
         status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="parentId != null">
-        #{parentId,jdbcType=INTEGER},
-      </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="value != null">
-        #{value,jdbcType=VARCHAR},
-      </if>
-      <if test="createdAt != null">
-        #{createdAt,jdbcType=TIMESTAMP},
+      <if test="permissionKey != null">
+        #{permissionKey,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -155,17 +141,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.parentId != null">
-        parent_id = #{record.parentId,jdbcType=INTEGER},
-      </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.value != null">
-        value = #{record.value,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="record.permissionKey != null">
+        permission_key = #{record.permissionKey,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
@@ -178,10 +158,8 @@
   <update id="updateByExample" parameterType="map">
     update permission
     set id = #{record.id,jdbcType=INTEGER},
-      parent_id = #{record.parentId,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      value = #{record.value,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      permission_key = #{record.permissionKey,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -190,17 +168,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.Permission">
     update permission
     <set>
-      <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=INTEGER},
-      </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="value != null">
-        value = #{value,jdbcType=VARCHAR},
-      </if>
-      <if test="createdAt != null">
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      <if test="permissionKey != null">
+        permission_key = #{permissionKey,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
@@ -210,10 +182,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Permission">
     update permission
-    set parent_id = #{parentId,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      value = #{value,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
+    set name = #{name,jdbcType=VARCHAR},
+      permission_key = #{permissionKey,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>

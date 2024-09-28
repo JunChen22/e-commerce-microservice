@@ -2,122 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.dao.AdminDao">
 
-    <resultMap id="AdminDetailResultMap" type="com.itsthatjun.ecommerce.dao.domainmodel.AdminDetail" autoMapping="true">
-        <id property="admin.id" column="admin_id"/>
-        <result column="admin_name" property="admin.name" />
-        <result column="username" property="admin.username"/>
-        <result column="email" property="admin.email" />
-        <result column="status" property="admin.status"/>
-
-        <collection property="roles" ofType="com.itsthatjun.ecommerce.mbg.model.Roles">
-            <result column="role_name" property="name"/>
-            <result column="role_description" property="description"/>
-            <result column="role_status" property="status"/>
-        </collection>
-
-        <collection property="permissions" ofType="com.itsthatjun.ecommerce.mbg.model.Permission">
-            <result column="permission_name" property="name"/>
-            <result column="permission_value" property="value"/>
-            <result column="persmission_status" property="status"/>
-        </collection>
-    </resultMap>
-
     <resultMap id="PermissionResultMap" type="com.itsthatjun.ecommerce.mbg.model.Permission">
         <result column="name" property="name"/>
         <result column="value" property="value"/>
-        <result column="status" property="status"/>
     </resultMap>
 
-    <resultMap id="RoleResultMap" type="com.itsthatjun.ecommerce.mbg.model.Roles" autoMapping="true">
-        <id property="id" column="id"/>
+    <resultMap id="RoleResultMap" type="com.itsthatjun.ecommerce.mbg.model.Roles">
         <result column="name" property="name"/>
         <result column="description" property="description"/>
-        <result column="status" property="status"/>
     </resultMap>
 
-    <resultMap id="LoginLogResultMap" type="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog" autoMapping="true">
-        <id property="id" column="id" />
-        <result column="admin_id" property="adminId"/>
-        <result column="login_date" property="loginDate"/>
-        <result column="login_time" property="loginTime"/>
-        <result column="ip_address" property="ipAddress"/>
-        <result column="user_agent" property="userAgent"/>
+    <resultMap id="AdminLoginLogResultMap" type="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog">
+        <result property="loginTime" column="login_time"/>
+        <result property="ipAddress" column="ip_address"/>
     </resultMap>
-
-    <select id="getAdminDetail" resultMap="AdminDetailResultMap">
-        SELECT
-            admin.id admin_id,
-            admin.username,
-            admin.name admin_name,
-            admin.email,
-            admin.status status,
-            roles.name role_name,
-            roles.description role_description,
-            roles.status role_status,
-            rolePermission.name  permission_name,
-            rolePermission.value permission_value,
-            rolePermission.status permission_status
-        FROM admin
-        LEFT JOIN admin_role_relation arr ON admin.id = arr.admin_id
-        LEFT JOIN roles ON arr.role_id = roles.id
-        LEFT JOIN role_permission_relation rpr ON roles.id = rpr.role_id
-        LEFT JOIN permission ON rpr.permission_id = permission.id
-        INNER JOIN (
-            SELECT
-                p1.name,
-                p2.name description,
-                p2.value,
-                p2.status
-            FROM permission p1
-            INNER JOIN permission p2 ON p1.id = p2.parent_id
-        ) rolePermission ON permission.name = rolePermission.name
-        WHERE admin.id = #{id};
-    </select>
 
     <select id="getPermissionList" resultMap="PermissionResultMap">
         SELECT
-            permission.name,
-            rolePermission.value,
-            rolePermission.status
-        FROM admin
-        LEFT JOIN admin_role_relation arr ON admin.id = arr.admin_id
-        LEFT JOIN roles ON arr.role_id = roles.id
-        LEFT JOIN role_permission_relation rpr ON roles.id = rpr.role_id
-        LEFT JOIN permission ON rpr.permission_id = permission.id
-        INNER JOIN (
-            SELECT
-                p1.name,
-                p2.name description,
-                p2.value,
-                p2.status
-            FROM permission p1
-            INNER JOIN permission p2 ON p1.id = p2.parent_id
-        ) rolePermission ON permission.name = rolePermission.name
-        WHERE admin.id = #{id}
+            p.name,
+            p.permission_key
+        FROM admin_permission_relation apr
+        JOIN permission p ON apr.permission_id = p.id
+        WHERE apr.admin_id = #{id} AND apr.status = 1;
     </select>
     
     <select id="getRolesList" resultMap="RoleResultMap">
         SELECT
-            admin.id,
-            admin.username,
             roles.name,
-            roles.description,
-            roles.status
+            roles.description
         FROM admin
         LEFT JOIN admin_role_relation arr ON admin.id = arr.admin_id
         LEFT JOIN roles ON arr.role_id = roles.id
-        WHERE admin.id = #{id};
+        WHERE admin.id = #{id} AND arr.status = 1;
     </select>
-    
-    <select id="getLoginLog" resultMap="LoginLogResultMap">
+
+
+    <select id="selectLoginLogsByAdminId" resultMap="AdminLoginLogResultMap">
         SELECT
-            id,
-            admin_id,
-            login_date,
             login_time,
-            ip_address,
-            user_agent
+            ip_address
         FROM admin_login_log
-        WHERE admin_id = #{id};
+        WHERE admin_id = #{id}
     </select>
 </mapper>

@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.event.ums.UmsUserEvent;
 import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
 import com.itsthatjun.ecommerce.dto.ums.model.AddressDTO;
 import com.itsthatjun.ecommerce.security.SecurityUtil;
+import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.UMS.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -42,6 +45,16 @@ public class UserServiceImpl implements UserService {
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
         this.securityUtil = securityUtil;
+    }
+
+    @Override
+    public int getUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            UserContext userContext = (UserContext) authentication.getPrincipal();
+            return userContext.getUserId();
+        }
+        return -1; // TODO: throw exception
     }
 
     @Override

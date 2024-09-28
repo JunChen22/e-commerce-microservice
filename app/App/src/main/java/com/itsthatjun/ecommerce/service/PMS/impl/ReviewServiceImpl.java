@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.ProductReview;
 import com.itsthatjun.ecommerce.dto.event.pms.PmsReviewEvent;
 import com.itsthatjun.ecommerce.mbg.model.Review;
 import com.itsthatjun.ecommerce.service.PMS.ReviewService;
+import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
+    private final UserServiceImpl userService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -34,8 +37,9 @@ public class ReviewServiceImpl implements ReviewService {
     private final String PMS_SERVICE_URL = "http://pms/review";
 
     @Autowired
-    public ReviewServiceImpl(WebClient webClient, StreamBridge streamBridge,
+    public ReviewServiceImpl(UserServiceImpl userService, WebClient webClient, StreamBridge streamBridge,
                              @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.userService = userService;
         this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -60,23 +64,26 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Mono<ProductReview> createProductReview(ProductReview newReview, int userId) {
+    public Mono<ProductReview> createProductReview(ProductReview newReview) {
         return Mono.fromCallable(() -> {
+            int userId = userService.getUserId();
             sendMessage("review-out-0", new PmsReviewEvent(CREATE_REVIEW, userId, newReview.getReview(), newReview.getPicturesList()));
             return newReview;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ProductReview> updateProductReviews(ProductReview newReview, int userId) {
+    public Mono<ProductReview> updateProductReviews(ProductReview newReview) {
         return Mono.fromCallable(() -> {
+            int userId = userService.getUserId();
             sendMessage("review-out-0", new PmsReviewEvent(UPDATE_REVIEW, userId, newReview.getReview(), newReview.getPicturesList()));
             return newReview;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> deleteProductReviews(int reviewId, int userId) {
+    public Mono<Void> deleteProductReviews(int reviewId) {
+        int userId = userService.getUserId();
         Review review = new Review();
         review.setId(reviewId);
         return Mono.fromRunnable(() -> {

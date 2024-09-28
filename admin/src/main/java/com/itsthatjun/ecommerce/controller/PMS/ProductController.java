@@ -2,7 +2,6 @@ package com.itsthatjun.ecommerce.controller.PMS;
 
 import com.itsthatjun.ecommerce.dto.pms.AdminProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.PMS.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,14 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/product")
+@PreAuthorize("hasRole('ROLE_admin-product')")
 @Api(tags = "Product related", description = "product related")
 public class ProductController {
 
@@ -50,81 +48,65 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_create')")
     @ApiOperation(value = "create a product with at least one sku variant")
     public Mono<AdminProductDetail> createProduct(@RequestBody AdminProductDetail productDetail) {
-        String operatorName = getAdminName();
-        return productService.createProduct(productDetail, operatorName);
+        return productService.createProduct(productDetail);
     }
 
     @PostMapping("/addProductSku")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_create')")
     @ApiOperation(value = "Add a sku to existing product.")
     public Mono<AdminProductDetail> addProductSku(@RequestBody AdminProductDetail productDetail) {
-        String operatorName = getAdminName();
-        return productService.addProductSku(productDetail, operatorName);
+        return productService.addProductSku(productDetail);
     }
 
     @PostMapping("/updateProductInfo")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_update')")
     @ApiOperation(value = "Update product info like category, name, description, subtitle and etc non-price affecting.")
     public Mono<AdminProductDetail> updateProductInfo(@RequestBody AdminProductDetail productDetail) {
-        String operatorName = getAdminName();
-        return productService.updateProductInfo(productDetail, operatorName);
+        return productService.updateProductInfo(productDetail);
     }
 
     @PostMapping("/updateProductStatus")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_update')")
     @ApiOperation(value = "Update product publish status.")
     public Mono<AdminProductDetail> updateProductStatus(@RequestBody AdminProductDetail productDetail) {
-        String operatorName = getAdminName();
-        return productService.updateProductStatus(productDetail, operatorName);
+        return productService.updateProductStatus(productDetail);
     }
 
     @PostMapping("/updateProductSkuStatus")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_update')")
     @ApiOperation(value = "Update product publish status.")
     public Mono<AdminProductDetail> updateProductSkuStatus(@RequestBody AdminProductDetail productDetail) {
-        String operatorName = getAdminName();
-        return productService.updateProductSkuStatus(productDetail, operatorName);
+        return productService.updateProductSkuStatus(productDetail);
     }
 
     @PostMapping("/updateProductStock")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_update')")
     @ApiOperation(value = "Adding stock to sku with newly added stock.")
     public Mono<AdminProductDetail> updateProductStock(@RequestBody AdminProductDetail productDetail) {
-        String operatorName = getAdminName();
-        return productService.updateProductStock(productDetail, operatorName);
+        return productService.updateProductStock(productDetail);
     }
 
     @PostMapping("/updateProductPrice")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_update')")
     @ApiOperation(value = "Update product and its sku prices of existing product.")
     public Mono<AdminProductDetail> updateProductPrice(@RequestBody AdminProductDetail productDetail) {
-        String operatorName = getAdminName();
-        return productService.updateProductPrice(productDetail, operatorName);
+        return productService.updateProductPrice(productDetail);
     }
 
     @PostMapping("/removeProductSku")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_delete')")
     @ApiOperation(value = "Remove/actual delete a sku from product. Product can have no sku, just holding information.")
     public Mono<AdminProductDetail> removeProductSku(@RequestBody AdminProductDetail productDetail) {
-        String operatorName = getAdminName();
-        return productService.removeProductSku(productDetail, operatorName);
+        return productService.removeProductSku(productDetail);
     }
 
     @DeleteMapping("/delete/{productId}")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('product_delete')")
     @ApiOperation(value = "Delete just means status changed for archive, not actual delete from database")
     public Mono<Void> deleteProduct(@PathVariable int productId) {
-        String operatorName = getAdminName();
-        return productService.deleteProduct(productId, operatorName);
-    }
-
-    private String getAdminName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-        String adminName = userDetail.getAdmin().getName();
-        return adminName;
+        return productService.deleteProduct(productId);
     }
 }

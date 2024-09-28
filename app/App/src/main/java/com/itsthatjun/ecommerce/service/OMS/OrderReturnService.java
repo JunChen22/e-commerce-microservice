@@ -8,14 +8,14 @@ import reactor.core.publisher.Mono;
 public interface OrderReturnService {
 
     @ApiOperation(value = "check status of the return request")
-    Mono<ReturnDetail> checkStatus(String orderSn, int userId);
+    Mono<ReturnDetail> checkStatus(String orderSn);
 
     @ApiOperation(value = "Apply for return item, waiting for admin approve")
-    Mono<ReturnParam> applyForReturn(ReturnParam returnParam, int userId);
+    Mono<ReturnParam> applyForReturn(ReturnParam returnParam);
 
     @ApiOperation(value = "change detail about return or return reason")
-    Mono<ReturnParam> updateReturn(ReturnParam returnParam, int userId);
+    Mono<ReturnParam> updateReturn(ReturnParam returnParam);
 
     @ApiOperation(value = "change detail about return or return reason")
-    Mono<Void> cancelReturn(String orderSn, int userId);
+    Mono<Void> cancelReturn(String orderSn);
 }

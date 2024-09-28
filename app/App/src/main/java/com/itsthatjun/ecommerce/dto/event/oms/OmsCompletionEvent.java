@@ -14,7 +14,6 @@ public class OmsCompletionEvent {
         PAYMENT_FAILURE // not used right now since it's TTL to cancel.
     }
 
-    // TODO:might make a smaller DTO
     private final Type eventType;
     private final String orderSn;
     private final String paymentId;

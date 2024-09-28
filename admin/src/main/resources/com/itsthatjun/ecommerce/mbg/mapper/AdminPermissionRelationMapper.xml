@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.AdminRoleRelationMapper">
-  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.AdminRoleRelation">
+<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.AdminPermissionRelationMapper">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.AdminPermissionRelation">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="admin_id" jdbcType="INTEGER" property="adminId" />
-    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="permission_id" jdbcType="INTEGER" property="permissionId" />
     <result column="assigned_by" jdbcType="INTEGER" property="assignedBy" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -68,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, admin_id, role_id, assigned_by, created_at, status
+    id, admin_id, permission_id, assigned_by, created_at, status
   </sql>
-  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminRoleRelationExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminPermissionRelationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from admin_role_relation
+    from admin_permission_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,33 +87,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from admin_role_relation
+    from admin_permission_relation
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from admin_role_relation
+    delete from admin_permission_relation
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminRoleRelationExample">
-    delete from admin_role_relation
+  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminPermissionRelationExample">
+    delete from admin_permission_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminRoleRelation" useGeneratedKeys="true">
-    insert into admin_role_relation (admin_id, role_id, assigned_by, 
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminPermissionRelation" useGeneratedKeys="true">
+    insert into admin_permission_relation (admin_id, permission_id, assigned_by, 
       created_at, status)
-    values (#{adminId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{assignedBy,jdbcType=INTEGER}, 
+    values (#{adminId,jdbcType=INTEGER}, #{permissionId,jdbcType=INTEGER}, #{assignedBy,jdbcType=INTEGER}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminRoleRelation" useGeneratedKeys="true">
-    insert into admin_role_relation
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminPermissionRelation" useGeneratedKeys="true">
+    insert into admin_permission_relation
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="adminId != null">
         admin_id,
       </if>
-      <if test="roleId != null">
-        role_id,
+      <if test="permissionId != null">
+        permission_id,
       </if>
       <if test="assignedBy != null">
         assigned_by,
@@ -129,8 +129,8 @@
       <if test="adminId != null">
         #{adminId,jdbcType=INTEGER},
       </if>
-      <if test="roleId != null">
-        #{roleId,jdbcType=INTEGER},
+      <if test="permissionId != null">
+        #{permissionId,jdbcType=INTEGER},
       </if>
       <if test="assignedBy != null">
         #{assignedBy,jdbcType=INTEGER},
@@ -143,14 +143,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminRoleRelationExample" resultType="java.lang.Long">
-    select count(*) from admin_role_relation
+  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminPermissionRelationExample" resultType="java.lang.Long">
+    select count(*) from admin_permission_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update admin_role_relation
+    update admin_permission_relation
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -158,8 +158,8 @@
       <if test="record.adminId != null">
         admin_id = #{record.adminId,jdbcType=INTEGER},
       </if>
-      <if test="record.roleId != null">
-        role_id = #{record.roleId,jdbcType=INTEGER},
+      <if test="record.permissionId != null">
+        permission_id = #{record.permissionId,jdbcType=INTEGER},
       </if>
       <if test="record.assignedBy != null">
         assigned_by = #{record.assignedBy,jdbcType=INTEGER},
@@ -176,10 +176,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update admin_role_relation
+    update admin_permission_relation
     set id = #{record.id,jdbcType=INTEGER},
       admin_id = #{record.adminId,jdbcType=INTEGER},
-      role_id = #{record.roleId,jdbcType=INTEGER},
+      permission_id = #{record.permissionId,jdbcType=INTEGER},
       assigned_by = #{record.assignedBy,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=INTEGER}
@@ -187,14 +187,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminRoleRelation">
-    update admin_role_relation
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminPermissionRelation">
+    update admin_permission_relation
     <set>
       <if test="adminId != null">
         admin_id = #{adminId,jdbcType=INTEGER},
       </if>
-      <if test="roleId != null">
-        role_id = #{roleId,jdbcType=INTEGER},
+      <if test="permissionId != null">
+        permission_id = #{permissionId,jdbcType=INTEGER},
       </if>
       <if test="assignedBy != null">
         assigned_by = #{assignedBy,jdbcType=INTEGER},
@@ -208,10 +208,10 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminRoleRelation">
-    update admin_role_relation
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminPermissionRelation">
+    update admin_permission_relation
     set admin_id = #{adminId,jdbcType=INTEGER},
-      role_id = #{roleId,jdbcType=INTEGER},
+      permission_id = #{permissionId,jdbcType=INTEGER},
       assigned_by = #{assignedBy,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER}

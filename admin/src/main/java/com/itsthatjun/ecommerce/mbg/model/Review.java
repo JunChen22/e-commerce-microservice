@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Review implements Serializable {
@@ -18,7 +19,7 @@ public class Review implements Serializable {
 
     private String tittle;
 
-    private Integer likes;
+    private BigDecimal likes;
 
     private Integer verified;
 
@@ -86,11 +87,11 @@ public class Review implements Serializable {
         this.tittle = tittle;
     }
 
-    public Integer getLikes() {
+    public BigDecimal getLikes() {
         return likes;
     }
 
-    public void setLikes(Integer likes) {
+    public void setLikes(BigDecimal likes) {
         this.likes = likes;
     }
 

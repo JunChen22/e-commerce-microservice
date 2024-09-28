@@ -7,7 +7,7 @@
     <result column="company_address_id" jdbcType="INTEGER" property="companyAddressId" />
     <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
     <result column="member_id" jdbcType="INTEGER" property="memberId" />
-    <result column="return_quantity" jdbcType="BIGINT" property="returnQuantity" />
+    <result column="return_quantity" jdbcType="INTEGER" property="returnQuantity" />
     <result column="return_name" jdbcType="VARCHAR" property="returnName" />
     <result column="return_phone" jdbcType="VARCHAR" property="returnPhone" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -127,7 +127,7 @@
       receive_operator, receive_time, receive_note, 
       created_at, updated_at)
     values (#{orderId,jdbcType=INTEGER}, #{companyAddressId,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, 
-      #{memberId,jdbcType=INTEGER}, #{returnQuantity,jdbcType=BIGINT}, #{returnName,jdbcType=VARCHAR}, 
+      #{memberId,jdbcType=INTEGER}, #{returnQuantity,jdbcType=INTEGER}, #{returnName,jdbcType=VARCHAR}, 
       #{returnPhone,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{handleTime,jdbcType=TIMESTAMP}, 
       #{askingAmount,jdbcType=NUMERIC}, #{refundedAmount,jdbcType=NUMERIC}, #{reason,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{handleNote,jdbcType=VARCHAR}, #{handleOperator,jdbcType=VARCHAR}, 
@@ -212,7 +212,7 @@
         #{memberId,jdbcType=INTEGER},
       </if>
       <if test="returnQuantity != null">
-        #{returnQuantity,jdbcType=BIGINT},
+        #{returnQuantity,jdbcType=INTEGER},
       </if>
       <if test="returnName != null">
         #{returnName,jdbcType=VARCHAR},
@@ -286,7 +286,7 @@
         member_id = #{record.memberId,jdbcType=INTEGER},
       </if>
       <if test="record.returnQuantity != null">
-        return_quantity = #{record.returnQuantity,jdbcType=BIGINT},
+        return_quantity = #{record.returnQuantity,jdbcType=INTEGER},
       </if>
       <if test="record.returnName != null">
         return_name = #{record.returnName,jdbcType=VARCHAR},
@@ -345,7 +345,7 @@
       company_address_id = #{record.companyAddressId,jdbcType=INTEGER},
       order_sn = #{record.orderSn,jdbcType=VARCHAR},
       member_id = #{record.memberId,jdbcType=INTEGER},
-      return_quantity = #{record.returnQuantity,jdbcType=BIGINT},
+      return_quantity = #{record.returnQuantity,jdbcType=INTEGER},
       return_name = #{record.returnName,jdbcType=VARCHAR},
       return_phone = #{record.returnPhone,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
@@ -381,7 +381,7 @@
         member_id = #{memberId,jdbcType=INTEGER},
       </if>
       <if test="returnQuantity != null">
-        return_quantity = #{returnQuantity,jdbcType=BIGINT},
+        return_quantity = #{returnQuantity,jdbcType=INTEGER},
       </if>
       <if test="returnName != null">
         return_name = #{returnName,jdbcType=VARCHAR},
@@ -437,7 +437,7 @@
       company_address_id = #{companyAddressId,jdbcType=INTEGER},
       order_sn = #{orderSn,jdbcType=VARCHAR},
       member_id = #{memberId,jdbcType=INTEGER},
-      return_quantity = #{returnQuantity,jdbcType=BIGINT},
+      return_quantity = #{returnQuantity,jdbcType=INTEGER},
       return_name = #{returnName,jdbcType=VARCHAR},
       return_phone = #{returnPhone,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},

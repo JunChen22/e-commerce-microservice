@@ -6,6 +6,7 @@ import com.itsthatjun.ecommerce.dto.event.oms.OmsOrderEvent;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.model.OrderDTO;
 import com.itsthatjun.ecommerce.service.OMS.OrderService;
+import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+    private final UserServiceImpl userService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -40,15 +43,17 @@ public class OrderServiceImpl implements OrderService {
     private final String OMS_SERVICE_URL = "http://oms/order";
 
     @Autowired
-    public OrderServiceImpl(WebClient webClient, StreamBridge streamBridge,
+    public OrderServiceImpl(UserServiceImpl userService, WebClient webClient, StreamBridge streamBridge,
                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.userService = userService;
         this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }
 
     @Override
-    public Mono<OrderDetail> detail(String orderSn, int userId) {
+    public Mono<OrderDetail> detail(String orderSn) {
+        int userId = userService.getUserId();
         String url = OMS_SERVICE_URL + "/detail/" + orderSn;
         LOG.debug("Will call the detail API on URL: {}", url);
 
@@ -57,7 +62,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Flux<OrderDTO> list(int status, Integer pageNum, Integer pageSize, int userId) {
+    public Flux<OrderDTO> list(int status, Integer pageNum, Integer pageSize) {
+        int userId = userService.getUserId();
         String url = OMS_SERVICE_URL + "/list";
         LOG.debug("Will call the list API on URL: {}", url);
 
@@ -66,8 +72,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<OrderParam> generateOrder(OrderParam orderParam, String requestUrl, int userId) {
+    public Mono<OrderParam> generateOrder(OrderParam orderParam, String requestUrl) {
         return Mono.fromCallable(() -> {
+            int userId = userService.getUserId();
             String successUrl = requestUrl + "/" + PAYPAL_SUCCESS_URL;
             String cancelUrl = requestUrl + "/";
             sendOrderMessage("order-out-0", new OmsOrderEvent(GENERATE_ORDER, userId, null, orderParam, successUrl, cancelUrl));
@@ -76,7 +83,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<String> getPaymentLink(String orderSn, int userId) {
+    public Mono<String> getPaymentLink(String orderSn) {
+        int userId = userService.getUserId();
         String url = OMS_SERVICE_URL + "/payment/getPaymentLink/" + orderSn;
         LOG.debug("Will call the payment API on URL: {}", url);
 
@@ -93,8 +101,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Void> cancelUserOrder(String orderSn, int userId) {
+    public Mono<Void> cancelUserOrder(String orderSn) {
         return Mono.fromRunnable(() -> {
+            int userId = userService.getUserId();
             sendOrderMessage("order-out-0", new OmsOrderEvent(CANCEL_ORDER, userId, orderSn, null, null, null));
         }).subscribeOn(publishEventScheduler).then();
     }

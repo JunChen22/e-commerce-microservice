@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.service.OMS.impl;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsCartEvent;
 import com.itsthatjun.ecommerce.mbg.model.CartItem;
 import com.itsthatjun.ecommerce.service.OMS.CartService;
+import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class CartServiceImpl implements CartService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CartServiceImpl.class);
 
+    private final UserServiceImpl userService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -34,41 +37,45 @@ public class CartServiceImpl implements CartService {
     private final String OMS_SERVICE_URL = "http://oms/cart";
 
     @Autowired
-    public CartServiceImpl(WebClient webClient, StreamBridge streamBridge,
+    public CartServiceImpl(UserServiceImpl userService, WebClient webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.userService = userService;
         this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }
 
     @Override
-    public Flux<CartItem> list(int userId) {
+    public Flux<CartItem> list() {
+        int userId = userService.getUserId();
         String url = OMS_SERVICE_URL + "/list";
         LOG.debug("Will call the list API on URL: {}", url);
-
         return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToFlux(CartItem.class)
                 .log(LOG.getName(), FINE).onErrorResume(WebClientResponseException.class, ex -> Flux.empty());
     }
 
     @Override
-    public Mono<CartItem> add(CartItem cartItem, int userId) {
+    public Mono<CartItem> add(CartItem cartItem) {
         return Mono.fromCallable(() -> {
+            int userId = userService.getUserId();
             sendMessage("cart-out-0", new OmsCartEvent(ADD_ONE, userId, cartItem));
             return cartItem;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<CartItem> updateQuantity(CartItem cartItem, int userId) {
+    public Mono<CartItem> updateQuantity(CartItem cartItem) {
         return Mono.fromCallable(() -> {
+            int userId = userService.getUserId();
             sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.UPDATE, userId, cartItem));
             return cartItem;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> delete(int cartItemId, int userId) {
+    public Mono<Void> delete(int cartItemId) {
         return Mono.fromRunnable(() -> {
+            int userId = userService.getUserId();
             CartItem cartItem = new CartItem();
             cartItem.setCartId(cartItemId);
             sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.DELETE, userId, cartItem));
@@ -76,8 +83,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Mono<Void> clear(int userId) {
+    public Mono<Void> clear() {
         return Mono.fromRunnable(() -> {
+            int userId = userService.getUserId();
             sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.CLEAR, userId, null));
         }).subscribeOn(publishEventScheduler).then();
     }

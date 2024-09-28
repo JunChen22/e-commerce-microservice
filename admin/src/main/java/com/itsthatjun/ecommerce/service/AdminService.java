@@ -13,4 +13,6 @@ public interface AdminService {
     @ApiOperation(value = "main admin list an admins roles")
     Mono<AdminDetail> getAdminDetail(int id);
 
+    @ApiOperation(value = "get current admin name from security context")
+    String getAdminName();
 }

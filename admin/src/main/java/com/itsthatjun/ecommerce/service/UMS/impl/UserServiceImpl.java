@@ -6,6 +6,7 @@ import com.itsthatjun.ecommerce.dto.ums.event.UmsAdminUserEvent;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
 import com.itsthatjun.ecommerce.service.UMS.UserService;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    private final AdminServiceImpl adminService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -38,8 +41,9 @@ public class UserServiceImpl implements UserService {
     private final String UMS_SERVICE_URL = "http://ums/user";
 
     @Autowired
-    public UserServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
+    public UserServiceImpl(AdminServiceImpl adminService, WebClient.Builder webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.adminService = adminService;
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -70,32 +74,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<Member> createMember(Member member, String operator) {
+    public Mono<Member> createMember(Member member) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("user-out-0", new UmsAdminUserEvent(NEW_ACCOUNT, member, operator));
             return member;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Member> updateMemberInfo(Member member, String operator) {
+    public Mono<Member> updateMemberInfo(Member member) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_INFO, member, operator));
             return member;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Member> updateMemberStatus(Member member, String operator) {
+    public Mono<Member> updateMemberStatus(Member member) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("user-out-0", new UmsAdminUserEvent(UPDATE_ACCOUNT_STATUS, member, operator));
             return member;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> delete(int memberId, String operator) {
+    public Mono<Void> delete(int memberId) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             Member member = new Member();
             member.setId(memberId);
             sendMessage("user-out-0", new UmsAdminUserEvent(DELETE_ACCOUNT, member, operator));
@@ -111,15 +119,17 @@ public class UserServiceImpl implements UserService {
         streamBridge.send(bindingName, message);
     }
 
-    public Mono<Void> sendUserEmail(int memberId, String message, String operator) {
+    public Mono<Void> sendUserEmail(int memberId, String message) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             UmsAdminEmailEvent event =  new UmsAdminEmailEvent(ONE_USER, memberId, message, operator);
             sendEmailMessage("userEmail-out-0", event);
         }).subscribeOn(publishEventScheduler).then();
     }
 
-    public Mono<Void> sendAllUserEmail(String message, String operator) {
+    public Mono<Void> sendAllUserEmail(String message) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             UmsAdminEmailEvent event =  new UmsAdminEmailEvent(ALL_USER, null, message, operator);
             sendEmailMessage("userEmail-out-0", event);
         }).subscribeOn(publishEventScheduler).then();

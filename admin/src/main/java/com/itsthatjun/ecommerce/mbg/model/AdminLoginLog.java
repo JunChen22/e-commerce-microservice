@@ -8,9 +8,7 @@ public class AdminLoginLog implements Serializable {
 
     private Integer adminId;
 
-    private Date loginDate;
-
-    private String loginTime;
+    private Date loginTime;
 
     private String ipAddress;
 
@@ -34,19 +32,11 @@ public class AdminLoginLog implements Serializable {
         this.adminId = adminId;
     }
 
-    public Date getLoginDate() {
-        return loginDate;
-    }
-
-    public void setLoginDate(Date loginDate) {
-        this.loginDate = loginDate;
-    }
-
-    public String getLoginTime() {
+    public Date getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(String loginTime) {
+    public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
     }
 

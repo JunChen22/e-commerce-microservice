@@ -4,21 +4,20 @@ import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
 import com.itsthatjun.ecommerce.dto.oms.admin.AdminOrderDetail;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
-import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/order")
+@PreAuthorize("hasRole('ROLE_admin-order')")
 @Api(tags = "Order related", description = "retrieve information about an order(s) and change order")
 public class OrderController {
 
@@ -50,12 +49,12 @@ public class OrderController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasPermission('order_create')")
     @ApiOperation(value = "create order")
     public Mono<AdminOrderDetail> createOrder(@RequestBody OrderParam orderParam) {
-        String operatorName = getAdminName();
         AdminOrderDetail orderDetail = orderParam.getOrderDetail();
         String reason = orderParam.getReason();
-        return orderService.createOrder(orderDetail, reason, operatorName);
+        return orderService.createOrder(orderDetail, reason);
     }
 
     @GetMapping("/payment/getPaymentLink/{orderSn}")
@@ -65,41 +64,34 @@ public class OrderController {
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasPermission('order_update')")
     @ApiOperation(value = "update a order")
     public Mono<AdminOrderDetail> updateOrder(@RequestBody OrderParam orderParam) {
-        String operatorName = getAdminName();
         AdminOrderDetail orderDetail = orderParam.getOrderDetail();
         String reason = orderParam.getReason();
-        return orderService.updateOrder(orderDetail, reason, operatorName);
+        return orderService.updateOrder(orderDetail, reason);
     }
 
     @DeleteMapping("/cancel")
+    @PreAuthorize("hasPermission('order_delete')")
     @ApiOperation(value = "cancel a order by serial number")
     public Mono<Void> cancelOrder(@RequestBody OrderParam orderParam) {
         String orderSn = orderParam.getOrderDetail().getOrder().getOrderSn();
-        String operatorName = getAdminName();
         String reason = orderParam.getReason();
-        return orderService.cancelOrder(orderSn, reason, operatorName);
+        return orderService.cancelOrder(orderSn, reason);
     }
 
     @PostMapping("/notification/")
-    @ApiOperation(value = "")
+    @PreAuthorize("hasPermission('order_update')")
+    @ApiOperation(value = "Send message to users that are affected by purchased product sku")
     public Mono<Void> sendOrderItemNotification(@RequestParam String productSku, @RequestBody String message) {
-        String operatorName = getAdminName();
-        return orderService.sendOrderItemNotification(productSku, message, operatorName);
+        return orderService.sendOrderItemNotification(productSku, message);
     }
 
     @PostMapping("/notification/{productName}")
-    @ApiOperation(value = "")
+    @PreAuthorize("hasPermission('order_update')")
+    @ApiOperation(value = "Send message to users that are affected by purchased product")
     public Mono<Void> sendOrderProductNotification(@PathVariable String productName, @RequestBody String message) {
-        String operatorName = getAdminName();
-        return orderService.sendOrderProductNotification(productName, message, operatorName);
-    }
-
-    private String getAdminName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-        String adminName = userDetail.getAdmin().getName();
-        return adminName;
+        return orderService.sendOrderProductNotification(productName, message);
     }
 }

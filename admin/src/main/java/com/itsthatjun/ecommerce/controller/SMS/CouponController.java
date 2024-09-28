@@ -2,21 +2,20 @@ package com.itsthatjun.ecommerce.controller.SMS;
 
 import com.itsthatjun.ecommerce.dto.sms.CouponSale;
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
-import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.SMS.impl.CouponServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/coupon")
+@PreAuthorize("hasRole('ROLE_admin-sale')")
 @Api(tags = "Coupon related", description = "CRUD coupon by admin with right roles/permission")
 public class CouponController {
 
@@ -50,28 +49,18 @@ public class CouponController {
     @PostMapping("/create")
     @ApiOperation(value = "create a coupon")
     public Mono<CouponSale> create(@RequestBody CouponSale couponSale) {
-        String operatorName = getAdminName();
-        return couponService.create(couponSale, operatorName);
+        return couponService.create(couponSale);
     }
 
     @PostMapping("/update")
     @ApiOperation(value = "update a coupon")
     public Mono<CouponSale> update(@RequestBody CouponSale updatedCouponSale) {
-        String operatorName = getAdminName();
-        return couponService.update(updatedCouponSale, operatorName);
+        return couponService.update(updatedCouponSale);
     }
 
     @DeleteMapping("/delete/{couponId}")
     @ApiOperation(value = "delete a coupon")
     public Mono<Void> delete(@PathVariable int couponId) {
-        String operatorName = getAdminName();
-        return couponService.delete(couponId, operatorName);
-    }
-
-    private String getAdminName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-        String adminName = userDetail.getAdmin().getName();
-        return adminName;
+        return couponService.delete(couponId);
     }
 }

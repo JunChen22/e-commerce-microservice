@@ -8,18 +8,18 @@ import reactor.core.publisher.Mono;
 public interface CartService {
 
     @ApiOperation("list current user's shopping cart")
-    Flux<CartItem> list(int userId);
+    Flux<CartItem> list();
 
     @ApiOperation("add item to shopping cart")
-    Mono<CartItem> add(CartItem cartItem, int userId);
+    Mono<CartItem> add(CartItem cartItem);
 
     @ApiOperation("update shopping cart item quantity")
-    Mono<CartItem> updateQuantity(CartItem cartItem, int userId);
+    Mono<CartItem> updateQuantity(CartItem cartItem);
 
     @ApiOperation("remove item from shopping cart")
-    Mono<Void> delete(int cartItemId, int userId);
+    Mono<Void> delete(int cartItemId);
 
     @ApiOperation("clear user shopping cart")
-    Mono<Void> clear(int userId);
+    Mono<Void> clear();
 
 }

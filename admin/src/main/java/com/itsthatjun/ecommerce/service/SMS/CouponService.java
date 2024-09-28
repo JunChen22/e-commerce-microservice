@@ -18,11 +18,11 @@ public interface CouponService {
     Flux<Coupon> getCouponForProduct(int productId);
 
     @ApiOperation(value = "create a coupon")
-    Mono<CouponSale> create(CouponSale couponSale, String operator);
+    Mono<CouponSale> create(CouponSale couponSale);
 
     @ApiOperation(value = "update a coupon")
-    Mono<CouponSale> update(CouponSale updatedCouponSale, String operator);
+    Mono<CouponSale> update(CouponSale updatedCouponSale);
 
     @ApiOperation(value = "delete a coupon")
-    Mono<Void> delete(int couponId, String operator);
+    Mono<Void> delete(int couponId);
 }

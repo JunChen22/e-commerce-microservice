@@ -6,6 +6,7 @@ import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderAnnouncementEvent;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderEvent;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.service.OMS.OrderService;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+    private final AdminServiceImpl adminService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -38,8 +41,9 @@ public class OrderServiceImpl implements OrderService {
     private final String OMS_SERVICE_URL = "http://oms/order";
 
     @Autowired
-    public OrderServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
+    public OrderServiceImpl(AdminServiceImpl adminService, WebClient.Builder webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.adminService = adminService;
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -70,9 +74,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<AdminOrderDetail> createOrder(AdminOrderDetail orderDetail, String reason, String operatorName) {
+    public Mono<AdminOrderDetail> createOrder(AdminOrderDetail orderDetail, String reason) {
         return Mono.fromCallable(() -> {
-            sendMessage("order-out-0", new OmsAdminOrderEvent(GENERATE_ORDER, orderDetail, reason, operatorName));
+            String operator = adminService.getAdminName();
+            sendMessage("order-out-0", new OmsAdminOrderEvent(GENERATE_ORDER, orderDetail, reason, operator));
             return orderDetail;
         }).subscribeOn(publishEventScheduler);
     }
@@ -87,21 +92,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<AdminOrderDetail> updateOrder(AdminOrderDetail orderDetail, String reason, String operatorName) {
+    public Mono<AdminOrderDetail> updateOrder(AdminOrderDetail orderDetail, String reason) {
         return Mono.fromCallable(() -> {
-            sendMessage("order-out-0", new OmsAdminOrderEvent(UPDATE_ORDER, orderDetail, reason, operatorName));
+            String operator = adminService.getAdminName();
+            sendMessage("order-out-0", new OmsAdminOrderEvent(UPDATE_ORDER, orderDetail, reason, operator));
             return orderDetail;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> cancelOrder(String serialNumber, String reason, String operatorName) {
+    public Mono<Void> cancelOrder(String serialNumber, String reason) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             AdminOrderDetail orderDetail = new AdminOrderDetail();
             Orders orderTobeCancelled = new Orders();
             orderTobeCancelled.setOrderSn(serialNumber);
             orderDetail.setOrder(orderTobeCancelled);
-            sendMessage("order-out-0", new OmsAdminOrderEvent(CANCEL_ORDER, orderDetail, reason, operatorName));
+            sendMessage("order-out-0", new OmsAdminOrderEvent(CANCEL_ORDER, orderDetail, reason, operator));
         }).subscribeOn(publishEventScheduler).then();
     }
 
@@ -115,17 +122,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Mono<Void> sendOrderItemNotification(String productSku, String message, String operatorName) {
+    public Mono<Void> sendOrderItemNotification(String productSku, String message) {
         return Mono.fromRunnable(() -> {
-            OmsAdminOrderAnnouncementEvent event = new OmsAdminOrderAnnouncementEvent(ORDER_ITEM_SKU, productSku, message, operatorName);
+            String operator = adminService.getAdminName();
+            OmsAdminOrderAnnouncementEvent event = new OmsAdminOrderAnnouncementEvent(ORDER_ITEM_SKU, productSku, message, operator);
             sendOrderItemMessage("orderMessage-out", event);
         }).subscribeOn(publishEventScheduler).then();
     }
 
     @Override
-    public Mono<Void> sendOrderProductNotification(String productName, String message, String operatorName) {
+    public Mono<Void> sendOrderProductNotification(String productName, String message) {
         return Mono.fromRunnable(() -> {
-            OmsAdminOrderAnnouncementEvent event = new OmsAdminOrderAnnouncementEvent(ORDER_ITEM_PRODUCT, productName, message, operatorName);
+            String operator = adminService.getAdminName();
+            OmsAdminOrderAnnouncementEvent event = new OmsAdminOrderAnnouncementEvent(ORDER_ITEM_PRODUCT, productName, message, operator);
             sendOrderItemMessage("orderMessage-out", event);
         }).subscribeOn(publishEventScheduler).then();
     }

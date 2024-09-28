@@ -1,6 +1,7 @@
 package com.itsthatjun.ecommerce.mbg.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdminRoleRelationExample {
@@ -281,6 +282,186 @@ public class AdminRoleRelationExample {
 
         public Criteria andRoleIdNotBetween(Integer value1, Integer value2) {
             addCriterion("role_id not between", value1, value2, "roleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByIsNull() {
+            addCriterion("assigned_by is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByIsNotNull() {
+            addCriterion("assigned_by is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByEqualTo(Integer value) {
+            addCriterion("assigned_by =", value, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByNotEqualTo(Integer value) {
+            addCriterion("assigned_by <>", value, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByGreaterThan(Integer value) {
+            addCriterion("assigned_by >", value, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByGreaterThanOrEqualTo(Integer value) {
+            addCriterion("assigned_by >=", value, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByLessThan(Integer value) {
+            addCriterion("assigned_by <", value, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByLessThanOrEqualTo(Integer value) {
+            addCriterion("assigned_by <=", value, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByIn(List<Integer> values) {
+            addCriterion("assigned_by in", values, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByNotIn(List<Integer> values) {
+            addCriterion("assigned_by not in", values, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByBetween(Integer value1, Integer value2) {
+            addCriterion("assigned_by between", value1, value2, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssignedByNotBetween(Integer value1, Integer value2) {
+            addCriterion("assigned_by not between", value1, value2, "assignedBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIsNull() {
+            addCriterion("created_at is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIsNotNull() {
+            addCriterion("created_at is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtEqualTo(Date value) {
+            addCriterion("created_at =", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotEqualTo(Date value) {
+            addCriterion("created_at <>", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtGreaterThan(Date value) {
+            addCriterion("created_at >", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("created_at >=", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtLessThan(Date value) {
+            addCriterion("created_at <", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtLessThanOrEqualTo(Date value) {
+            addCriterion("created_at <=", value, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtIn(List<Date> values) {
+            addCriterion("created_at in", values, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotIn(List<Date> values) {
+            addCriterion("created_at not in", values, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtBetween(Date value1, Date value2) {
+            addCriterion("created_at between", value1, value2, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedAtNotBetween(Date value1, Date value2) {
+            addCriterion("created_at not between", value1, value2, "createdAt");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Integer value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Integer value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Integer value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Integer value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Integer> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Integer> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Integer value1, Integer value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }

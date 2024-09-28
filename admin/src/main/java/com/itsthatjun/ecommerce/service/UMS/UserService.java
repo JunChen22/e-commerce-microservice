@@ -19,14 +19,14 @@ public interface UserService {
     Flux<MemberLoginLog> listAllLoginFrequency(int userId);
 
     @ApiOperation("")
-    Mono<Member> createMember(Member member, String operator);
+    Mono<Member> createMember(Member member);
 
     @ApiOperation("")
-    Mono<Member> updateMemberInfo(Member member, String operator);
+    Mono<Member> updateMemberInfo(Member member);
 
     @ApiOperation("")
-    Mono<Member> updateMemberStatus(Member member, String operator);
+    Mono<Member> updateMemberStatus(Member member);
 
     @ApiOperation("")
-    Mono<Void> delete(int memberId, String operator);
+    Mono<Void> delete(int memberId);
 }

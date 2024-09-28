@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.service.CMS.impl;
 import com.itsthatjun.ecommerce.dto.cms.AdminArticleInfo;
 import com.itsthatjun.ecommerce.dto.cms.event.CmsAdminArticleEvent;
 import com.itsthatjun.ecommerce.service.CMS.ArticleService;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
+    private final AdminServiceImpl adminService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -33,8 +36,9 @@ public class ArticleServiceImpl implements ArticleService {
     private final String CMS_SERVICE_URL = "http://cms/article";
 
     @Autowired
-    public ArticleServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
-                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+    public ArticleServiceImpl(AdminServiceImpl adminService, WebClient.Builder webClient, StreamBridge streamBridge,
+                              @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.adminService = adminService;
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -59,27 +63,29 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Mono<AdminArticleInfo> createArticle(AdminArticleInfo articleInfo, String operator) {
+    public Mono<AdminArticleInfo> createArticle(AdminArticleInfo articleInfo) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("article-out-0", new CmsAdminArticleEvent(CREATE, articleInfo, operator));
             return articleInfo;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<AdminArticleInfo> updateArticle(AdminArticleInfo articleInfo, String operator) {
+    public Mono<AdminArticleInfo> updateArticle(AdminArticleInfo articleInfo) {
         return Mono.fromCallable(() -> {
+            String operator = adminService.getAdminName();
             sendMessage("article-out-0", new CmsAdminArticleEvent(UPDATE, articleInfo, operator));
             return articleInfo;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> deleteArticle(int articleId, String operator) {
+    public Mono<Void> deleteArticle(int articleId) {
         return Mono.fromRunnable(() -> {
+            String operator = adminService.getAdminName();
             AdminArticleInfo articleInfo = new AdminArticleInfo();
             articleInfo.setId(articleId);
-
             sendMessage("article-out-0", new CmsAdminArticleEvent(DELETE, articleInfo, operator));
         }).subscribeOn(publishEventScheduler).then();
     }

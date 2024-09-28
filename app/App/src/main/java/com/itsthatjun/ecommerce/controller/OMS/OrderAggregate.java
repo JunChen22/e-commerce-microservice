@@ -4,7 +4,6 @@ import com.itsthatjun.ecommerce.config.URLUtils;
 import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.model.OrderDTO;
-import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,8 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Flux;
@@ -36,8 +33,7 @@ public class OrderAggregate {
     @GetMapping("/detail/{orderSn}")
     @ApiOperation("Get Order Detail by serial number")
     public Mono<OrderDetail> detail(@PathVariable String orderSn) {
-        int userId = getUserId();
-        return orderService.detail(orderSn, userId);
+        return orderService.detail(orderSn);
     }
 
     @GetMapping("/list")
@@ -47,16 +43,14 @@ public class OrderAggregate {
     public Flux<OrderDTO> list(@RequestParam(required = false, defaultValue = "-1")  int status,
                                @RequestParam(required = false, defaultValue = "1") Integer pageNum,
                                @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
-        int userId = getUserId();
-        return orderService.list(status, pageNum, pageSize, userId);
+        return orderService.list(status, pageNum, pageSize);
     }
 
     @PostMapping("/generateOrder")
     @ApiOperation(value = "Generate order based on shopping cart, actual transaction")
     public Mono<OrderParam> generateOrder(@RequestBody OrderParam orderParam, ServerRequest request) {
-        int userId = getUserId();
         String requestUrl = URLUtils.getBaseUrl(request);
-        return orderService.generateOrder(orderParam, requestUrl, userId);
+        return orderService.generateOrder(orderParam, requestUrl);
     }
 
     @GetMapping("/payment/success")
@@ -68,21 +62,12 @@ public class OrderAggregate {
     @GetMapping("/payment/getPaymentLink/{orderSn}")
     @ApiOperation("Pay order payment at a different time than generating order.")
     public Mono<String> getPaymentLink(@PathVariable String orderSn) {
-        int userId = getUserId();
-        return orderService.getPaymentLink(orderSn, userId);
+        return orderService.getPaymentLink(orderSn);
     }
 
     @PostMapping("/cancelOrder/{orderSn}")
     @ApiOperation("Cancel order if before sending the order out.")
     public Mono<Void> cancelUserOrder(@PathVariable String orderSn) {
-        int userId = getUserId();
-        return orderService.cancelUserOrder(orderSn, userId);
-    }
-
-    private int getUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserContext userContext = (UserContext) authentication.getPrincipal();
-        int userId = userContext.getUserId();
-        return userId;
+        return orderService.cancelUserOrder(orderSn);
     }
 }

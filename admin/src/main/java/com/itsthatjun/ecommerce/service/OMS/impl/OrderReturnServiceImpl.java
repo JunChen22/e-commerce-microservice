@@ -6,6 +6,7 @@ import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
 import com.itsthatjun.ecommerce.dto.oms.event.OmsAdminOrderReturnEvent;
 import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.OMS.OrderReturnService;
+import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class OrderReturnServiceImpl implements OrderReturnService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderReturnServiceImpl.class);
 
+    private final AdminServiceImpl adminService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -36,8 +39,9 @@ public class OrderReturnServiceImpl implements OrderReturnService {
     private final String OMS_SERVICE_URL = "http://oms/order/return";
 
     @Autowired
-    public OrderReturnServiceImpl(WebClient.Builder webClient, StreamBridge streamBridge,
+    public OrderReturnServiceImpl(AdminServiceImpl adminService, WebClient.Builder webClient, StreamBridge streamBridge,
                                   @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
+        this.adminService = adminService;
         this.webClient = webClient.build();
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
@@ -68,7 +72,8 @@ public class OrderReturnServiceImpl implements OrderReturnService {
     }
 
     @Override
-    public Mono<Void> updateReturnOrderStatus(ReturnRequestDecision returnRequestDecision, String operator) {
+    public Mono<Void> updateReturnOrderStatus(ReturnRequestDecision returnRequestDecision) {
+        String operator = adminService.getAdminName();
         OmsAdminOrderReturnEvent event;
 
         switch (returnRequestDecision.getStatus()) {

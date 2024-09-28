@@ -2,7 +2,6 @@ package com.itsthatjun.ecommerce.controller.PMS;
 
 import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.PMS.impl.BrandServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,14 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/brand")
+@PreAuthorize("hasRole('ROLE_admin-product')")
 @Api(tags = "brand related", description = "brand management")
 public class BrandController {
 
@@ -56,33 +54,23 @@ public class BrandController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('brand_create')")
     @ApiOperation(value = "Create a brand")
     public Mono<Brand> createBrand(@RequestBody Brand brand) {
-        String operatorName = getAdminName();
-        return brandService.createBrand(brand, operatorName);
+        return brandService.createBrand(brand);
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @PreAuthorize("hasPermission('brand_update')")
     @ApiOperation(value = "Update a brand")
     public Mono<Brand> updateBrand(@RequestBody Brand brand) {
-        String operatorName = getAdminName();
-        return brandService.updateBrand(brand, operatorName);
+        return brandService.updateBrand(brand);
     }
 
-    @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ROLE_admin-product')")
+    @DeleteMapping("/delete/{brandId}")
+    @PreAuthorize("hasPermission('brand_delete')")
     @ApiOperation(value = "Delete a brand")
     public Mono<Void> deleteBrand(@PathVariable int brandId) {
-        String operatorName = getAdminName();
-        return brandService.deleteBrand(brandId, operatorName);
-    }
-
-    private String getAdminName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-        String adminName = userDetail.getAdmin().getName();
-        return adminName;
+        return brandService.deleteBrand(brandId);
     }
 }

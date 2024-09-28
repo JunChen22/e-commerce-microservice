@@ -91,3 +91,16 @@ cd ../
 
 docker-compose down
 echo "MyBatis generation completed for all modules"
+
+
+echo "Update sql script for all modules test container"
+
+MODULES=("admin" "app/App" "app/CMS" "app/OMS" "app/PMS" "app/SMS" "app/UMS" "auth-server" "notification" "search")
+SOURCE_PATH="./document/data.sql"
+
+# Loop through each module name and copy data.sql for test container
+for MODULE_NAME in "${MODULES[@]}"; do
+    DEST_PATH="$MODULE_NAME/src/test/resources/data_test_copy.sql"
+    cp "$SOURCE_PATH" "$DEST_PATH"
+    echo "Copied $SOURCE_PATH to $DEST_PATH"
+done

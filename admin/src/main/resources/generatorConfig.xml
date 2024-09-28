@@ -185,7 +185,12 @@
             <columnOverride column="role_id" javaType="java.lang.Integer" />
             <columnOverride column="permission_id" javaType="java.lang.Integer" />
         </table>
-
+        <table tableName= "admin_permission_relation">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="admin_id" javaType="java.lang.Integer" />
+            <columnOverride column="permission_id" javaType="java.lang.Integer" />
+        </table>
 
 
         <!--  OMS -->

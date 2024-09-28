@@ -5,6 +5,7 @@ import com.itsthatjun.ecommerce.dto.event.oms.OmsReturnEvent;
 import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
 import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.OMS.OrderReturnService;
+import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +25,8 @@ public class OrderReturnServiceImpl implements OrderReturnService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderReturnServiceImpl.class);
 
+    private final UserServiceImpl userService;
+
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
@@ -32,14 +35,16 @@ public class OrderReturnServiceImpl implements OrderReturnService {
 
     private final String OMS_SERVICE_URL = "http://oms/order/return";
 
-    public OrderReturnServiceImpl(WebClient webClient, StreamBridge streamBridge,
+    public OrderReturnServiceImpl(UserServiceImpl userService, WebClient webClient, StreamBridge streamBridge,
                            @Qualifier("publishEventScheduler")Scheduler publishEventScheduler) {
+        this.userService = userService;
         this.webClient = webClient;
         this.streamBridge = streamBridge;
         this.publishEventScheduler = publishEventScheduler;
     }
 
-    public Mono<ReturnDetail> checkStatus(String orderSn, int userId) {
+    public Mono<ReturnDetail> checkStatus(String orderSn) {
+        int userId = userService.getUserId();
         String url = OMS_SERVICE_URL + "/status/" + orderSn;
         LOG.debug("Will call the checkStatus API on URL: {}", url);
 
@@ -48,24 +53,27 @@ public class OrderReturnServiceImpl implements OrderReturnService {
     }
 
     @Override
-    public Mono<ReturnParam> applyForReturn(ReturnParam returnParam, int userId) {
+    public Mono<ReturnParam> applyForReturn(ReturnParam returnParam) {
         return Mono.fromCallable(() -> {
+            int userId = userService.getUserId();
             sendMessage("return-out-0", new OmsReturnEvent(APPLY, userId, returnParam));
             return returnParam;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<ReturnParam> updateReturn(ReturnParam returnParam, int userId) {
+    public Mono<ReturnParam> updateReturn(ReturnParam returnParam) {
         return Mono.fromCallable(() -> {
+            int userId = userService.getUserId();
             sendMessage("return-out-0", new OmsReturnEvent(UPDATE, userId, returnParam));
             return returnParam;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> cancelReturn(String orderSn, int userId) {
+    public Mono<Void> cancelReturn(String orderSn) {
         return Mono.fromRunnable(() -> {
+            int userId = userService.getUserId();
             ReturnRequest returnRequest = new ReturnRequest();
             returnRequest.setOrderSn(orderSn);
             ReturnParam requestParam = new ReturnParam();

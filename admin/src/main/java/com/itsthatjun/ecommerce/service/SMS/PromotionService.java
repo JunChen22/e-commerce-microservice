@@ -19,23 +19,23 @@ public interface PromotionService {
     Flux<Product> getAllFlashSaleItem();
 
     @ApiOperation("")
-    Mono<OnSaleRequest> createListSale(OnSaleRequest request, String operator);
+    Mono<OnSaleRequest> createListSale(OnSaleRequest request);
 
     @ApiOperation("")
-    Mono<OnSaleRequest> createBrandSale(OnSaleRequest request, String operator);
+    Mono<OnSaleRequest> createBrandSale(OnSaleRequest request);
 
     @ApiOperation("")
-    Mono<OnSaleRequest> createCategorySale(OnSaleRequest request, String operator);
+    Mono<OnSaleRequest> createCategorySale(OnSaleRequest request);
 
     @ApiOperation("")
-    Mono<OnSaleRequest> updateSaleInfo(OnSaleRequest request, String operator);
+    Mono<OnSaleRequest> updateSaleInfo(OnSaleRequest request);
 
     @ApiOperation("")
-    Mono<OnSaleRequest> updateSalePrice(OnSaleRequest request, String operator);
+    Mono<OnSaleRequest> updateSalePrice(OnSaleRequest request);
 
     @ApiOperation("")
-    Mono<OnSaleRequest> updateSaleStatus(OnSaleRequest request, String operator);
+    Mono<OnSaleRequest> updateSaleStatus(OnSaleRequest request);
 
     @ApiOperation("")
-    Mono<Void> delete(int promotionSaleId, String operator);
+    Mono<Void> delete(int promotionSaleId);
 }

@@ -2,7 +2,6 @@ package com.itsthatjun.ecommerce.mbg.model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class AdminLoginLogExample {
@@ -104,32 +103,6 @@ public class AdminLoginLogExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -252,66 +225,6 @@ public class AdminLoginLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andLoginDateIsNull() {
-            addCriterion("login_date is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateIsNotNull() {
-            addCriterion("login_date is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateEqualTo(Date value) {
-            addCriterionForJDBCDate("login_date =", value, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateNotEqualTo(Date value) {
-            addCriterionForJDBCDate("login_date <>", value, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateGreaterThan(Date value) {
-            addCriterionForJDBCDate("login_date >", value, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("login_date >=", value, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateLessThan(Date value) {
-            addCriterionForJDBCDate("login_date <", value, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("login_date <=", value, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateIn(List<Date> values) {
-            addCriterionForJDBCDate("login_date in", values, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateNotIn(List<Date> values) {
-            addCriterionForJDBCDate("login_date not in", values, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("login_date between", value1, value2, "loginDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginDateNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("login_date not between", value1, value2, "loginDate");
-            return (Criteria) this;
-        }
-
         public Criteria andLoginTimeIsNull() {
             addCriterion("login_time is null");
             return (Criteria) this;
@@ -322,62 +235,52 @@ public class AdminLoginLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeEqualTo(String value) {
+        public Criteria andLoginTimeEqualTo(Date value) {
             addCriterion("login_time =", value, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeNotEqualTo(String value) {
+        public Criteria andLoginTimeNotEqualTo(Date value) {
             addCriterion("login_time <>", value, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeGreaterThan(String value) {
+        public Criteria andLoginTimeGreaterThan(Date value) {
             addCriterion("login_time >", value, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeGreaterThanOrEqualTo(String value) {
+        public Criteria andLoginTimeGreaterThanOrEqualTo(Date value) {
             addCriterion("login_time >=", value, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeLessThan(String value) {
+        public Criteria andLoginTimeLessThan(Date value) {
             addCriterion("login_time <", value, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeLessThanOrEqualTo(String value) {
+        public Criteria andLoginTimeLessThanOrEqualTo(Date value) {
             addCriterion("login_time <=", value, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeLike(String value) {
-            addCriterion("login_time like", value, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeNotLike(String value) {
-            addCriterion("login_time not like", value, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeIn(List<String> values) {
+        public Criteria andLoginTimeIn(List<Date> values) {
             addCriterion("login_time in", values, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeNotIn(List<String> values) {
+        public Criteria andLoginTimeNotIn(List<Date> values) {
             addCriterion("login_time not in", values, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeBetween(String value1, String value2) {
+        public Criteria andLoginTimeBetween(Date value1, Date value2) {
             addCriterion("login_time between", value1, value2, "loginTime");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTimeNotBetween(String value1, String value2) {
+        public Criteria andLoginTimeNotBetween(Date value1, Date value2) {
             addCriterion("login_time not between", value1, value2, "loginTime");
             return (Criteria) this;
         }

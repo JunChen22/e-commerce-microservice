@@ -4,8 +4,7 @@
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="admin_id" jdbcType="INTEGER" property="adminId" />
-    <result column="login_date" jdbcType="DATE" property="loginDate" />
-    <result column="login_time" jdbcType="VARCHAR" property="loginTime" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
     <result column="ip_address" jdbcType="VARCHAR" property="ipAddress" />
     <result column="user_agent" jdbcType="INTEGER" property="userAgent" />
   </resultMap>
@@ -68,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, admin_id, login_date, login_time, ip_address, user_agent
+    id, admin_id, login_time, ip_address, user_agent
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminLoginLogExample" resultMap="BaseResultMap">
     select
@@ -101,19 +100,16 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog" useGeneratedKeys="true">
-    insert into admin_login_log (admin_id, login_date, login_time, 
-      ip_address, user_agent)
-    values (#{adminId,jdbcType=INTEGER}, #{loginDate,jdbcType=DATE}, #{loginTime,jdbcType=VARCHAR}, 
-      #{ipAddress,jdbcType=VARCHAR}, #{userAgent,jdbcType=INTEGER})
+    insert into admin_login_log (admin_id, login_time, ip_address, 
+      user_agent)
+    values (#{adminId,jdbcType=INTEGER}, #{loginTime,jdbcType=TIMESTAMP}, #{ipAddress,jdbcType=VARCHAR}, 
+      #{userAgent,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog" useGeneratedKeys="true">
     insert into admin_login_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="adminId != null">
         admin_id,
-      </if>
-      <if test="loginDate != null">
-        login_date,
       </if>
       <if test="loginTime != null">
         login_time,
@@ -129,11 +125,8 @@
       <if test="adminId != null">
         #{adminId,jdbcType=INTEGER},
       </if>
-      <if test="loginDate != null">
-        #{loginDate,jdbcType=DATE},
-      </if>
       <if test="loginTime != null">
-        #{loginTime,jdbcType=VARCHAR},
+        #{loginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="ipAddress != null">
         #{ipAddress,jdbcType=VARCHAR},
@@ -158,11 +151,8 @@
       <if test="record.adminId != null">
         admin_id = #{record.adminId,jdbcType=INTEGER},
       </if>
-      <if test="record.loginDate != null">
-        login_date = #{record.loginDate,jdbcType=DATE},
-      </if>
       <if test="record.loginTime != null">
-        login_time = #{record.loginTime,jdbcType=VARCHAR},
+        login_time = #{record.loginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.ipAddress != null">
         ip_address = #{record.ipAddress,jdbcType=VARCHAR},
@@ -179,8 +169,7 @@
     update admin_login_log
     set id = #{record.id,jdbcType=INTEGER},
       admin_id = #{record.adminId,jdbcType=INTEGER},
-      login_date = #{record.loginDate,jdbcType=DATE},
-      login_time = #{record.loginTime,jdbcType=VARCHAR},
+      login_time = #{record.loginTime,jdbcType=TIMESTAMP},
       ip_address = #{record.ipAddress,jdbcType=VARCHAR},
       user_agent = #{record.userAgent,jdbcType=INTEGER}
     <if test="_parameter != null">
@@ -193,11 +182,8 @@
       <if test="adminId != null">
         admin_id = #{adminId,jdbcType=INTEGER},
       </if>
-      <if test="loginDate != null">
-        login_date = #{loginDate,jdbcType=DATE},
-      </if>
       <if test="loginTime != null">
-        login_time = #{loginTime,jdbcType=VARCHAR},
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="ipAddress != null">
         ip_address = #{ipAddress,jdbcType=VARCHAR},
@@ -211,8 +197,7 @@
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.AdminLoginLog">
     update admin_login_log
     set admin_id = #{adminId,jdbcType=INTEGER},
-      login_date = #{loginDate,jdbcType=DATE},
-      login_time = #{loginTime,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
       ip_address = #{ipAddress,jdbcType=VARCHAR},
       user_agent = #{userAgent,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
