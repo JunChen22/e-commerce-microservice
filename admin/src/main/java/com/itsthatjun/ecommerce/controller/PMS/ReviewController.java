@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/review")
-@PreAuthorize("hasRole('ROLE_admin-product')")
+@PreAuthorize("hasRole('ROLE_admin_product')")
 @Api(tags = "Product related", description = "CRUD a specific product reviews")
 public class ReviewController {
 
@@ -40,18 +40,21 @@ public class ReviewController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasPermission('review:create')")
     @ApiOperation(value = "create review for a product")
     public Mono<ProductReview> createProductReview(@RequestBody ProductReview review) {
         return reviewService.createProductReview(review);
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasPermission('review:update')")
     @ApiOperation(value = "update a review")
     public Mono<ProductReview> updateProductReviews(@RequestBody ProductReview updatedReview) {
         return reviewService.updateProductReviews(updatedReview);
     }
 
     @DeleteMapping("/delete/{reviewId}")
+    @PreAuthorize("hasPermission('review:delete')")
     @ApiOperation(value = "Get product with page and size")
     public Mono<Void> deleteProductReviews(@PathVariable int reviewId) {
         return reviewService.deleteProductReviews(reviewId);

@@ -54,9 +54,18 @@ public class AdminController {
             );
     }
 
-    //@PreAuthorize("hasAuthority('user:read')")
-    @PreAuthorize("hasRole('ROLE_admin-root')")
+    /*
+    @PostMapping("/register")
+    @PreAuthorize("hasPermission('user:create')")
+    @ApiOperation("")
+    public Mono<ResponseEntity<LoginResponse>> register(@RequestBody LoginRequest loginRequest) {
+
+    }
+
+     */
+
     @GetMapping("/roles/{id}")
+    @PreAuthorize("hasRole('ROLE_admin_root') and hasPermission('admin:read')")
     @ApiOperation("")
     public Mono<AdminDetail> getRole(@PathVariable int id) {
         return adminService.getAdminDetail(id);

@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/order/return")
-@PreAuthorize("hasRole('ROLE_admin-order')")
+@PreAuthorize("hasRole('ROLE_admin_order')")
 @Api(tags = "return related", description = "apply return and related api")
 public class OrderReturnController {
 
@@ -52,7 +52,7 @@ public class OrderReturnController {
     // the status of the return request created by user
 
     @PostMapping("/update")
-    @PreAuthorize("hasPermission('order_update')")
+    @PreAuthorize("hasPermission('order:update')")
     @ApiOperation(value = "update the status of the return apply")
     public Mono<Void> updateReturnOrderStatus(@RequestBody ReturnRequestDecision returnRequestDecision) {
         return orderReturnService.updateReturnOrderStatus(returnRequestDecision);

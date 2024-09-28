@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/coupon")
-@PreAuthorize("hasRole('ROLE_admin-sale')")
+@PreAuthorize("hasRole('ROLE_admin_sale')")
 @Api(tags = "Coupon related", description = "CRUD coupon by admin with right roles/permission")
 public class CouponController {
 
@@ -47,18 +47,21 @@ public class CouponController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasPermission('coupon:create')")
     @ApiOperation(value = "create a coupon")
     public Mono<CouponSale> create(@RequestBody CouponSale couponSale) {
         return couponService.create(couponSale);
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasPermission('coupon:update')")
     @ApiOperation(value = "update a coupon")
     public Mono<CouponSale> update(@RequestBody CouponSale updatedCouponSale) {
         return couponService.update(updatedCouponSale);
     }
 
     @DeleteMapping("/delete/{couponId}")
+    @PreAuthorize("hasPermission('coupon:delete')")
     @ApiOperation(value = "delete a coupon")
     public Mono<Void> delete(@PathVariable int couponId) {
         return couponService.delete(couponId);

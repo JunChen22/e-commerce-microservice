@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/brand")
-@PreAuthorize("hasRole('ROLE_admin-product')")
+@PreAuthorize("hasRole('ROLE_admin_product')")
 @Api(tags = "brand related", description = "brand management")
 public class BrandController {
 
@@ -54,21 +54,21 @@ public class BrandController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasPermission('brand_create')")
+    @PreAuthorize("hasPermission('brand:create')")
     @ApiOperation(value = "Create a brand")
     public Mono<Brand> createBrand(@RequestBody Brand brand) {
         return brandService.createBrand(brand);
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasPermission('brand_update')")
+    @PreAuthorize("hasPermission('brand:update')")
     @ApiOperation(value = "Update a brand")
     public Mono<Brand> updateBrand(@RequestBody Brand brand) {
         return brandService.updateBrand(brand);
     }
 
     @DeleteMapping("/delete/{brandId}")
-    @PreAuthorize("hasPermission('brand_delete')")
+    @PreAuthorize("hasPermission('brand:delete')")
     @ApiOperation(value = "Delete a brand")
     public Mono<Void> deleteBrand(@PathVariable int brandId) {
         return brandService.deleteBrand(brandId);

@@ -1322,82 +1322,82 @@ VALUES
 
 INSERT INTO roles (name, description, status)
 VALUES
-('ROLE_admin-content', 'manage content issues', 1),
-('ROLE_admin-order', 'manage order issues', 1),
-('ROLE_admin-product', 'manage product issues', 1),
-('ROLE_admin-sale', 'manage sale issues', 1),
-('ROLE_admin-user', 'manage user related issue', 1),
-('ROLE_admin-root', 'root', 1);
+('ROLE_admin_content', 'manage content issues', 1),
+('ROLE_admin_order', 'manage order issues', 1),
+('ROLE_admin_product', 'manage product issues', 1),
+('ROLE_admin_sale', 'manage sale issues', 1),
+('ROLE_admin_user', 'manage user related issue', 1),
+('ROLE_admin_root', 'root', 1);
 
 
 INSERT INTO permission (name, permission_key, status)
 VALUES
 -- CRUD Content
-('create content', 'content_create', 1),
-('read content', 'content_read', 1),
-('update content', 'content_update', 1),
-('delete content', 'content_delete', 1),
+('create content', 'content:create', 1),
+('read content', 'content:read', 1),
+('update content', 'content:update', 1),
+('delete content', 'content:delete', 1),
 
 -- CRUD Order
-('create order', 'order_create', 1),
-('read order', 'order_read', 1),
-('update order', 'order_update', 1),
-('delete order', 'order_delete', 1),
+('create order', 'order:create', 1),
+('read order', 'order:read', 1),
+('update order', 'order:update', 1),
+('delete order', 'order:delete', 1),
 
-('create order return', 'order_return_create', 1),
-('read order return', 'order_return_read', 1),
-('update order return', 'order_return_update', 1),
-('delete order return', 'order_return_delete', 1),
+('create order return', 'order:return:create', 1),
+('read order return', 'order:return:read', 1),
+('update order return', 'order:return:update', 1),
+('delete order return', 'order:return:delete', 1),
 
 -- CRUD Product
-('create product', 'product_create', 1),
-('read product', 'product_read', 1),
-('update product', 'product_update', 1),
-('delete product', 'product_delete', 1),
+('create product', 'product:create', 1),
+('read product', 'product:read', 1),
+('update product', 'product:update', 1),
+('delete product', 'product:delete', 1),
 
-('create brand', 'brand_create', 1),
-('read brand', 'brand_read', 1),
-('update brand', 'brand_update', 1),
-('delete brand', 'brand_delete', 1),
+('create brand', 'brand:create', 1),
+('read brand', 'brand:read', 1),
+('update brand', 'brand:update', 1),
+('delete brand', 'brand:delete', 1),
 
-('create review', 'review_create', 1),
-('read review', 'review_read', 1),
-('update review', 'review_update', 1),
-('delete review', 'review_delete', 1),
+('create review', 'review:create', 1),
+('read review', 'review:read', 1),
+('update review', 'review:update', 1),
+('delete review', 'review:delete', 1),
 
 -- CRUD Sales
-('create sales', 'sales_create', 1),
-('read sales', 'sales_read', 1),
-('update sales', 'sales_update', 1),
-('delete sales', 'sales_delete', 1),
+('create sales', 'sales:create', 1),
+('read sales', 'sales:read', 1),
+('update sales', 'sales:update', 1),
+('delete sales', 'sales:delete', 1),
 
-('create coupon', 'coupon_create', 1),
-('read coupon', 'coupon_read', 1),
-('update coupon', 'coupon_update', 1),
-('delete coupon', 'coupon_delete', 1),
+('create coupon', 'coupon:create', 1),
+('read coupon', 'coupon:read', 1),
+('update coupon', 'coupon:update', 1),
+('delete coupon', 'coupon:delete', 1),
 
 -- CRUD User
-('create user', 'user_create', 1),
-('read user', 'user_read', 1),
-('update user', 'user_update', 1),
-('delete user', 'user_delete', 1),
+('create user', 'user:create', 1),
+('read user', 'user:read', 1),
+('update user', 'user:update', 1),
+('delete user', 'user:delete', 1),
 
-('create admin', 'admin_create', 1),
-('read admin', 'admin_read', 1),
-('update admin', 'admin_update', 1),
-('delete admin', 'admin_delete', 1);
+('create admin', 'admin:create', 1),
+('read admin', 'admin:read', 1),
+('update admin', 'admin:update', 1),
+('delete admin', 'admin:delete', 1);
 
 
 -- role to permission
 -- roles have different permission
 INSERT INTO role_permission_relation(role_id, permission_id)
 VALUES
-('1', '1'), -- ROLE_admin-content
+('1', '1'), -- ROLE_admin_content
 ('1', '2'),
 ('1', '3'),
 ('1', '4'),
 
-('2', '5'), -- ROLE_admin-order
+('2', '5'), -- ROLE_admin_order
 ('2', '6'),
 ('2', '7'),
 ('2', '8'),
@@ -1407,7 +1407,7 @@ VALUES
 ('2', '11'),
 ('2', '12'),
 
-('3', '13'), -- ROLE_admin-product
+('3', '13'), -- ROLE_admin_product
 ('3', '14'),
 ('3', '15'),
 ('3', '16'),
@@ -1422,7 +1422,7 @@ VALUES
 ('3', '23'),
 ('3', '24'),
 
-('4', '25'), -- ROLE_admin-sales
+('4', '25'), -- ROLE_admin_sales
 ('4', '26'),
 ('4', '27'),
 ('4', '28'),
@@ -1432,7 +1432,7 @@ VALUES
 ('4', '31'),
 ('4', '32'),
 
-('5', '33'), -- ROLE_admin-user
+('5', '33'), -- ROLE_admin_user
 ('5', '34'),
 ('5', '35'),
 ('5', '36'),
@@ -1485,6 +1485,7 @@ VALUES
 (3, 5, 1, 1); -- user admin responsible for user management
 
 
+-- TODO: RoleHierarchy roleHierarchy bean, simply root admin
 INSERT INTO admin_permission_relation(admin_id, permission_id, assigned_by, status)
 VALUES
 (1, 1, 1, 1), -- root admin with all the permissions

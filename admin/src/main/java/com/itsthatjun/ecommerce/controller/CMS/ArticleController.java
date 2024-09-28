@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/article")
-@PreAuthorize("hasRole('ROLE_admin-content')")
+@PreAuthorize("hasRole('ROLE_admin_content')")
 @Api(tags = "content related", description = "CRUD articles like buyer's guide, product comparison, and MISC articles")
 public class ArticleController {
 
@@ -40,21 +40,21 @@ public class ArticleController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasPermission('content_create')")
+    @PreAuthorize("hasPermission('content:create')")
     @ApiOperation(value = "create an article(buyer's guide, comparison, and etc)")
     public Mono<AdminArticleInfo> createArticle(@RequestBody AdminArticleInfo articleInfo) {
         return articleService.createArticle(articleInfo);
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasPermission('content_update')")
+    @PreAuthorize("hasPermission('content:update')")
     @ApiOperation(value = "update an article and it's content")
     public Mono<AdminArticleInfo> updateArticle(@RequestBody AdminArticleInfo articleInfo) {
         return articleService.updateArticle(articleInfo);
     }
 
     @DeleteMapping("/delete/{articleId}")
-    @PreAuthorize("hasPermission('content_delete')")
+    @PreAuthorize("hasPermission('content:delete')")
     @ApiOperation(value = "delete article and it's related content(QA, videos, and images)")
     public Mono<Void> deleteArticle(@PathVariable int articleId) {
         return articleService.deleteArticle(articleId);

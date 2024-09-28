@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/sale")
-@PreAuthorize("hasRole('ROLE_admin-sale')")
+@PreAuthorize("hasRole('ROLE_admin_sale')")
 @Api(tags = "Sales related", description = "Item on sale for a set of time")
 public class PromotionController {
 
@@ -48,42 +48,49 @@ public class PromotionController {
     }
 
     @PostMapping("/createList")
-    @ApiOperation("")
-    public Mono<OnSaleRequest> createList(@RequestBody OnSaleRequest request) {
+    @PreAuthorize("hasPermission('sales:create')")
+    @ApiOperation("create sale on a list of items")
+    public Mono<OnSaleRequest> createSale(@RequestBody OnSaleRequest request) {
         return promotionService.createListSale(request);
     }
 
     @PostMapping("/createBrandSale")
+    @PreAuthorize("hasPermission('sales:create')")
     @ApiOperation("")
     public Mono<OnSaleRequest> createBrandSale(@RequestBody OnSaleRequest request) {
         return promotionService.createBrandSale(request);
     }
 
     @PostMapping("/createCategorySale")
+    @PreAuthorize("hasPermission('sales:create')")
     @ApiOperation("")
     public Mono<OnSaleRequest> createCategorySale(@RequestBody OnSaleRequest request) {
         return promotionService.createCategorySale(request);
     }
 
     @PostMapping("/updateInfo")
+    @PreAuthorize("hasPermission('sales:update')")
     @ApiOperation("Update info like name, sale type and time, non-price affecting")
     public Mono<OnSaleRequest> updateSaleInfo(@RequestBody OnSaleRequest request) {
         return promotionService.updateSaleInfo(request);
     }
 
     @PostMapping("/updatePrice")
+    @PreAuthorize("hasPermission('sales:update')")
     @ApiOperation("Update sale discount percent or fixed amount. price affecting")
     public Mono<OnSaleRequest> updateSalePrice(@RequestBody OnSaleRequest request) {
         return promotionService.updateSalePrice(request);
     }
 
     @PostMapping("/updateStatus")
+    @PreAuthorize("hasPermission('sales:update')")
     @ApiOperation("Update sale to be online or off line, price affecting")
     public Mono<OnSaleRequest> updateSaleStatus(@RequestBody OnSaleRequest request) {
         return promotionService.updateSaleStatus(request);
     }
 
     @DeleteMapping("/delete/{promotionSaleId}")
+    @PreAuthorize("hasPermission('sales:detele')")
     @ApiOperation("")
     public Mono<Void> delete(@PathVariable int promotionSaleId) {
         return promotionService.delete(promotionSaleId);

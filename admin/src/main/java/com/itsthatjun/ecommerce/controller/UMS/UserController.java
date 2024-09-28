@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/user")
-@PreAuthorize("hasRole('ROLE_admin-user')")
+@PreAuthorize("hasRole('ROLE_admin_user')")
 @Api(tags = "User related", description = "retrieve user information")
 public class UserController {
 
@@ -48,28 +48,28 @@ public class UserController {
     }
 
     @PostMapping("/createMember")
-    @PreAuthorize("hasPermission('user_create')")
+    @PreAuthorize("hasPermission('user:create')")
     @ApiOperation(value = "")
     public Mono<Member> createMember(@RequestBody Member member) {
         return userService.createMember(member);
     }
 
     @PostMapping("/updateMemberInfo")
-    @PreAuthorize("hasPermission('user_update')")
+    @PreAuthorize("hasPermission('user:update')")
     @ApiOperation(value = "")
     public Mono<Member> updateMemberInfo(@RequestBody Member member) {
         return userService.updateMemberInfo(member);
     }
 
     @PostMapping("/updateMemberStatus")
-    @PreAuthorize("hasPermission('user_update')")
+    @PreAuthorize("hasPermission('user:update')")
     @ApiOperation(value = "")
     public Mono<Member> updateMemberStatus(@RequestBody Member member) {
         return userService.updateMemberStatus(member);
     }
 
     @DeleteMapping("/delete/{memberId}")
-    @PreAuthorize("hasPermission('user_delete')")
+    @PreAuthorize("hasPermission('user:delete')")
     @ApiOperation(value = "")
     public Mono<Void> delete(@PathVariable int memberId) {
         return userService.delete(memberId);

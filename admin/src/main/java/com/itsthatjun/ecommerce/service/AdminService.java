@@ -15,4 +15,7 @@ public interface AdminService {
 
     @ApiOperation(value = "get current admin name from security context")
     String getAdminName();
+
+    //TODO: root admin can delete admin
+    //     edit admin role and permission
 }

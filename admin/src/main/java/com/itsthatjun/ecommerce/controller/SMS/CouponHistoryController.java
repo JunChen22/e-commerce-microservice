@@ -17,7 +17,7 @@ import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/coupon")
-@PreAuthorize("hasRole('ROLE_admin-sale')")
+@PreAuthorize("hasRole('ROLE_admin_sale')")
 @Api(tags = "Coupon related", description = "CRUD coupon by admin with right roles/permission")
 public class CouponHistoryController {
 

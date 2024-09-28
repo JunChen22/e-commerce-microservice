@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/order")
-@PreAuthorize("hasRole('ROLE_admin-order')")
+@PreAuthorize("hasRole('ROLE_admin_order')")
 @Api(tags = "Order related", description = "retrieve information about an order(s) and change order")
 public class OrderController {
 
@@ -49,7 +49,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasPermission('order_create')")
+    @PreAuthorize("hasPermission('order:create')")
     @ApiOperation(value = "create order")
     public Mono<AdminOrderDetail> createOrder(@RequestBody OrderParam orderParam) {
         AdminOrderDetail orderDetail = orderParam.getOrderDetail();
@@ -64,7 +64,7 @@ public class OrderController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasPermission('order_update')")
+    @PreAuthorize("hasPermission('order:update')")
     @ApiOperation(value = "update a order")
     public Mono<AdminOrderDetail> updateOrder(@RequestBody OrderParam orderParam) {
         AdminOrderDetail orderDetail = orderParam.getOrderDetail();
@@ -73,7 +73,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/cancel")
-    @PreAuthorize("hasPermission('order_delete')")
+    @PreAuthorize("hasPermission('order:delete')")
     @ApiOperation(value = "cancel a order by serial number")
     public Mono<Void> cancelOrder(@RequestBody OrderParam orderParam) {
         String orderSn = orderParam.getOrderDetail().getOrder().getOrderSn();
@@ -82,14 +82,14 @@ public class OrderController {
     }
 
     @PostMapping("/notification/")
-    @PreAuthorize("hasPermission('order_update')")
+    @PreAuthorize("hasPermission('order:update')")
     @ApiOperation(value = "Send message to users that are affected by purchased product sku")
     public Mono<Void> sendOrderItemNotification(@RequestParam String productSku, @RequestBody String message) {
         return orderService.sendOrderItemNotification(productSku, message);
     }
 
     @PostMapping("/notification/{productName}")
-    @PreAuthorize("hasPermission('order_update')")
+    @PreAuthorize("hasPermission('order:update')")
     @ApiOperation(value = "Send message to users that are affected by purchased product")
     public Mono<Void> sendOrderProductNotification(@PathVariable String productName, @RequestBody String message) {
         return orderService.sendOrderProductNotification(productName, message);

@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/product")
-@PreAuthorize("hasRole('ROLE_admin-product')")
+@PreAuthorize("hasRole('ROLE_admin_product')")
 @Api(tags = "Product related", description = "product related")
 public class ProductController {
 
@@ -48,63 +48,63 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasPermission('product_create')")
+    @PreAuthorize("hasPermission('product:create')")
     @ApiOperation(value = "create a product with at least one sku variant")
     public Mono<AdminProductDetail> createProduct(@RequestBody AdminProductDetail productDetail) {
         return productService.createProduct(productDetail);
     }
 
     @PostMapping("/addProductSku")
-    @PreAuthorize("hasPermission('product_create')")
+    @PreAuthorize("hasPermission('product:create')")
     @ApiOperation(value = "Add a sku to existing product.")
     public Mono<AdminProductDetail> addProductSku(@RequestBody AdminProductDetail productDetail) {
         return productService.addProductSku(productDetail);
     }
 
     @PostMapping("/updateProductInfo")
-    @PreAuthorize("hasPermission('product_update')")
+    @PreAuthorize("hasPermission('product:update')")
     @ApiOperation(value = "Update product info like category, name, description, subtitle and etc non-price affecting.")
     public Mono<AdminProductDetail> updateProductInfo(@RequestBody AdminProductDetail productDetail) {
         return productService.updateProductInfo(productDetail);
     }
 
     @PostMapping("/updateProductStatus")
-    @PreAuthorize("hasPermission('product_update')")
+    @PreAuthorize("hasPermission('product:update')")
     @ApiOperation(value = "Update product publish status.")
     public Mono<AdminProductDetail> updateProductStatus(@RequestBody AdminProductDetail productDetail) {
         return productService.updateProductStatus(productDetail);
     }
 
     @PostMapping("/updateProductSkuStatus")
-    @PreAuthorize("hasPermission('product_update')")
+    @PreAuthorize("hasPermission('product:update')")
     @ApiOperation(value = "Update product publish status.")
     public Mono<AdminProductDetail> updateProductSkuStatus(@RequestBody AdminProductDetail productDetail) {
         return productService.updateProductSkuStatus(productDetail);
     }
 
     @PostMapping("/updateProductStock")
-    @PreAuthorize("hasPermission('product_update')")
+    @PreAuthorize("hasPermission('product:update')")
     @ApiOperation(value = "Adding stock to sku with newly added stock.")
     public Mono<AdminProductDetail> updateProductStock(@RequestBody AdminProductDetail productDetail) {
         return productService.updateProductStock(productDetail);
     }
 
     @PostMapping("/updateProductPrice")
-    @PreAuthorize("hasPermission('product_update')")
+    @PreAuthorize("hasPermission('product:update')")
     @ApiOperation(value = "Update product and its sku prices of existing product.")
     public Mono<AdminProductDetail> updateProductPrice(@RequestBody AdminProductDetail productDetail) {
         return productService.updateProductPrice(productDetail);
     }
 
     @PostMapping("/removeProductSku")
-    @PreAuthorize("hasPermission('product_delete')")
+    @PreAuthorize("hasPermission('product:delete')")
     @ApiOperation(value = "Remove/actual delete a sku from product. Product can have no sku, just holding information.")
     public Mono<AdminProductDetail> removeProductSku(@RequestBody AdminProductDetail productDetail) {
         return productService.removeProductSku(productDetail);
     }
 
     @DeleteMapping("/delete/{productId}")
-    @PreAuthorize("hasPermission('product_delete')")
+    @PreAuthorize("hasPermission('product:delete')")
     @ApiOperation(value = "Delete just means status changed for archive, not actual delete from database")
     public Mono<Void> deleteProduct(@PathVariable int productId) {
         return productService.deleteProduct(productId);
