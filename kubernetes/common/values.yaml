@@ -18,5 +18,29 @@ service:
     protocol: TCP
     targetPort: 80
 
+livenessProbe_enabled: false
+livenessProbe:
+  httpGet:
+    scheme: HTTP
+    path: /actuator/health/liveness
+    port: 4004
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 20
+  successThreshold: 1
+
+readinessProbe_enabled: false
+readinessProbe:
+  httpGet:
+    scheme: HTTP
+    path: /actuator/health/readiness
+    port: 4004
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+  successThreshold: 1
+
 namespace:
   name: e-com

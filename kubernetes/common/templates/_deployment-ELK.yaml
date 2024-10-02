@@ -32,8 +32,6 @@ spec:
             value: {{ $val }}
           {{- end }}
           ports:
-          {{- range .Values.containerPorts }}
-            - containerPort: {{ .containerPort }}
-          {{- end }}
-{{- end -}}
+{{ toYaml .Values.ports | indent 12 }}
+{{- end }}
 {{- end -}}

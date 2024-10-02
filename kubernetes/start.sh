@@ -12,6 +12,10 @@ minikube kubectl -- apply --filename environments/e-com-namespace.yaml --namespa
 echo "Creating PostgreSQL configmap with initialization data..."
 minikube kubectl -- create configmap postgres-data --from-file=../document/data.sql --namespace=e-com
 
+echo "Creating MongoDB configmap with initialization data..."
+minikube kubectl -- create configmap mongo-data --from-file=../document/init-mongo.js --namespace=e-com
+
+
 # Step 4: Install Helm chart for e-com development environment
 echo "Installing Helm chart for the e-com development environment..."
 helm install e-com-dev-env ./environments/dev-env --namespace e-com

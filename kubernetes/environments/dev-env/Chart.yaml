@@ -12,92 +12,93 @@ dependencies:
 
   - name: app
     version: 1.0.0
-    repository: file://../../components/app
+    repository: file://../../components/core-services/app
 
   - name: cms
     version: 1.0.0
-    repository: file://../../components/cms
+    repository: file://../../components/core-services/cms
 
   - name: cms-db
     version: 1.0.0
-    repository: file://../../components/cms-db
+    repository: file://../../components/databases/cms-db
 
   - name: pms
     version: 1.0.0
-    repository: file://../../components/pms
+    repository: file://../../components/core-services/pms
 
   - name: pms-db
     version: 1.0.0
-    repository: file://../../components/pms-db
+    repository: file://../../components/databases/pms-db
 
   - name: oms
     version: 1.0.0
-    repository: file://../../components/oms
+    repository: file://../../components/core-services/oms
 
   - name: oms-db
     version: 1.0.0
-    repository: file://../../components/oms-db
+    repository: file://../../components/databases/oms-db
 
   - name: sms
     version: 1.0.0
-    repository: file://../../components/sms
+    repository: file://../../components/core-services/sms
 
   - name: sms-db
     version: 1.0.0
-    repository: file://../../components/sms-db
+    repository: file://../../components/databases/sms-db
 
   - name: ums
     version: 1.0.0
-    repository: file://../../components/ums
+    repository: file://../../components/core-services/ums
 
   - name: ums-db
     version: 1.0.0
-    repository: file://../../components/ums-db
+    repository: file://../../components/databases/ums-db
 
   - name: auth-server
     version: 1.0.0
-    repository: file://../../components/auth-server
+    repository: file://../../components/core-services/auth-server
 
   - name: auth-db
     version: 1.0.0
-    repository: file://../../components/auth-db
+    repository: file://../../components/databases/auth-db
 
   - name: rabbitmq
     version: 1.0.0
-    repository: file://../../components/rabbitmq
+    repository: file://../../components/infrastructure/rabbitmq
 
   - name: redis
     version: 1.0.0
-    repository: file://../../components/redis
+    repository: file://../../components/infrastructure/redis
 
-  - name: mongodb
+  - name: search-db
     version: 1.0.0
-    repository: file://../../components/mongodb
+    repository: file://../../components/databases/search-db
 
   - name: zipkin
     version: 1.0.0
-    repository: file://../../components/zipkin
+    repository: file://../../components/infrastructure/zipkin
 
   - name: elasticsearch
     version: 1.0.0
-    repository: file://../../components/elasticsearch
+    repository: file://../../components/ELK/elasticsearch
 
   - name: kibana
     version: 1.0.0
-    repository: file://../../components/kibana
+    repository: file://../../components/ELK/kibana
 
   - name: logstash
     version: 1.0.0
-    repository: file://../../components/logstash
+    repository: file://../../components/ELK/logstash
 
   - name: search
     version: 1.0.0
-    repository: file://../../components/search
+    repository: file://../../components/core-services/search
 
   - name: notification
     version: 1.0.0
-    repository: file://../../components/notification
+    repository: file://../../components/core-services/notification
 
   - name: email-db
     version: 1.0.0
-    repository: file://../../components/email-db
+    repository: file://../../components/databases/email-db
+

@@ -21,7 +21,7 @@ metadata:
 type: Opaque
 data:
   password: cGFzc3dvcmQ=
-  username: dXNlcm5hbWU=
+  username: bW9uZ28=
 ---
 # Source: dev-env/templates/secrets.yaml
 apiVersion: v1
@@ -33,7 +33,7 @@ metadata:
 type: Opaque
 data:
   password: cGFzc3dvcmQ=
-  username: dXNlcm5hbWU=
+  username: bW9uZ28=
 ---
 # Source: dev-env/templates/secrets.yaml
 apiVersion: v1
@@ -1231,10 +1231,6 @@ data:
     spring:
       application:
         name: search
-      datasource:
-        url: jdbc:postgresql://localhost/productdb # need to change localhost for docker-compose
-        driverClassName: org.postgresql.Driver
-        #initialization-mode: always
       data:
         elasticsearch:
           repositories:
@@ -1243,7 +1239,10 @@ data:
           auto-index-creation: true
           host: localhost
           port: 27017
-          database: springecommerece
+          username: mongo
+          password: password
+          database: searchdatabase
+          authentication-database: admin
       elasticsearch:
         rest:
           uris: http://localhost:9200
@@ -1259,13 +1258,12 @@ data:
     spring.config.activate.on-profile: docker
   
     spring:
-      datasource.url: jdbc:postgresql://pms-db:5432/productdb
       elasticsearch:
         rest:
           uris: http://elasticsearch:9200
       data:
         mongodb:
-          host: mongodb
+          host: search-db
 ---
 # Source: dev-env/charts/sms/templates/configmap.yaml
 apiVersion: v1
@@ -1762,19 +1760,6 @@ spec:
       port: 9600
       protocol: TCP
 ---
-# Source: dev-env/charts/mongodb/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb
-spec:
-  selector:
-    app: mongodb
-  ports:
-    - protocol: TCP
-      port: 27017
-      targetPort: 27017
----
 # Source: dev-env/charts/notification/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -1880,15 +1865,34 @@ apiVersion: v1
 kind: Service
 metadata:
   name: redis
+  labels:
+    app: redis
 spec:
+  type: ClusterIP
   selector:
     app: redis
   ports:
     - name: redis
-      protocol: TCP
       port: 6379
+      protocol: TCP
       targetPort: 6379
+---
+# Source: dev-env/charts/search-db/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: search-db
+  labels:
+    app: search-db
+spec:
   type: ClusterIP
+  selector:
+    app: search-db
+  ports:
+    - name: mongodb
+      port: 27017
+      protocol: TCP
+      targetPort: 27017
 ---
 # Source: dev-env/charts/search/templates/service.yaml
 apiVersion: v1
@@ -2016,8 +2020,26 @@ spec:
               name: postgres-credentials
           - secretRef:
               name: rabbitmq-credentials
-          - secretRef:
-              name: mongodb-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: app
               mountPath: /config-repo
@@ -2097,9 +2119,29 @@ spec:
             value: docker
           envFrom:
           - secretRef:
-              name: postgres-credentials
+              name: mongodb-credentials
           - secretRef:
               name: rabbitmq-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: auth-server
               mountPath: /config-repo
@@ -2182,6 +2224,26 @@ spec:
               name: postgres-credentials
           - secretRef:
               name: rabbitmq-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: cms
               mountPath: /config-repo
@@ -2324,27 +2386,6 @@ spec:
             - containerPort: 5044
             - containerPort: 9600
 ---
-# Source: dev-env/charts/mongodb/templates/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mongodb
-spec:
-  replicas: 1  # Adjust as needed
-  selector:
-    matchLabels:
-      app: mongodb
-  template:
-    metadata:
-      labels:
-        app: mongodb
-    spec:
-      containers:
-        - name: mongodb
-          image: mongo:5.0.0
-          ports:
-            - containerPort: 27017
----
 # Source: dev-env/charts/notification/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -2378,6 +2419,26 @@ spec:
               name: rabbitmq-credentials
           - secretRef:
               name: email-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: notification
               mountPath: /config-repo
@@ -2464,6 +2525,26 @@ spec:
               name: rabbitmq-credentials
           - secretRef:
               name: usps-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: oms
               mountPath: /config-repo
@@ -2546,6 +2627,26 @@ spec:
               name: postgres-credentials
           - secretRef:
               name: rabbitmq-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: pms
               mountPath: /config-repo
@@ -2583,14 +2684,17 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
           ports:
-            - containerPort: 5672
-            - containerPort: 15672
+            - containerPort: 80
+              name: http
+              protocol: TCP
 ---
 # Source: dev-env/charts/redis/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
+  labels:
+    app: redis
 spec:
   replicas: 1
   selector:
@@ -2598,14 +2702,54 @@ spec:
       app: redis
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
       labels:
         app: redis
     spec:
       containers:
         - name: redis
           image: redis:7.0.14
+          imagePullPolicy: IfNotPresent
+          env:
           ports:
             - containerPort: 6379
+---
+# Source: dev-env/charts/search-db/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-db
+  labels:
+    app: search-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: search-db
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: search-db
+    spec:
+      containers:
+        - name: search-db
+          image: mongo:5.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: MONGO_INITDB_DATABASE
+            value: searchdatabase
+          volumeMounts:
+            - name: search-data
+              mountPath: /docker-entrypoint-initdb.d
+          ports:
+            - containerPort: 27017
+      volumes:
+        - name: search-data
+          configMap:
+            name: mongo-data
 ---
 # Source: dev-env/charts/search/templates/deployment.yaml
 apiVersion: apps/v1
@@ -2638,6 +2782,26 @@ spec:
               name: postgres-credentials
           - secretRef:
               name: rabbitmq-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: search
               mountPath: /config-repo
@@ -2720,6 +2884,26 @@ spec:
               name: postgres-credentials
           - secretRef:
               name: rabbitmq-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: sms
               mountPath: /config-repo
@@ -2802,6 +2986,26 @@ spec:
               name: postgres-credentials
           - secretRef:
               name: rabbitmq-credentials
+          livenessProbe:
+            failureThreshold: 20
+            httpGet:
+              path: /actuator/health/liveness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 4004
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           volumeMounts:
             - name: ums
               mountPath: /config-repo

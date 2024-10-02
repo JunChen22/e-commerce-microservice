@@ -8,8 +8,8 @@ secrets:
     RABBITMQ_DEFAULT_USER: guest
     RABBITMQ_DEFAULT_PASS: guest
 
-  mongodb-server-credentials:   # not used yet
-    username: username
+  mongodb-server-credentials:
+    username: mongo
     password: password
 
   postgres-credentials:
@@ -34,13 +34,9 @@ secrets:
     password: guest
 
   mongodb-credentials:
-    username: username
+    username: mongo
     password: password
 
-
-postgres:
-  envFromSecretRefs:
-    - postgres-server-credentials
 
 cms-db:
   envFromSecretRefs:
@@ -70,11 +66,14 @@ email-db:
   envFromSecretRefs:
     - postgres-server-credentials
 
+mongodb:
+  envFromSecretRefs:
+    - mongodb-server-credentials
+
 app:
   envFromSecretRefs:
     - postgres-credentials
     - rabbitmq-credentials
-    - mongodb-credentials
 
 oms:
   envFromSecretRefs:
@@ -110,7 +109,7 @@ search:
 
 auth-server:
   envFromSecretRefs:
-    - postgres-credentials
+    - mongodb-credentials
     - rabbitmq-credentials
 
 notification:

@@ -1,0 +1,26 @@
+fullnameOverride: search
+
+image:
+  name: search
+
+env:
+  SPRING_PROFILES_ACTIVE: "docker"
+  SPRING_CONFIG_LOCATION: file:/config-repo/application.yml,file:/config-repo/search.yml
+
+service:
+  type: ClusterIP
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+
+configmap:
+  volumeMounts:
+    mountPath: /config-repo
+
+livenessProbe_enabled: true
+
+readinessProbe_enabled: true
+
+containerPorts:
+  - containerPort: 8081

@@ -1,0 +1,21 @@
+fullnameOverride: zipkin
+
+image:
+  name: openzipkin/zipkin
+  tag: 2.23.2
+  pullPolicy: IfNotPresent
+
+ports:
+  - containerPort: 9411
+
+env:
+  STORAGE_TYPE: mem
+  RABBIT_ADDRESSES: rabbitmq
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 9411
+      targetPort: 9411

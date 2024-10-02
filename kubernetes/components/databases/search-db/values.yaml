@@ -1,0 +1,26 @@
+fullnameOverride: search-db
+
+image:
+  name: mongo
+  tag: 5.0.0
+  pullPolicy: IfNotPresent
+
+ports:
+  - containerPort: 27017
+
+service:
+  type: ClusterIP
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+env:
+  MONGO_INITDB_DATABASE: searchdatabase
+
+volume:
+  name: search-data
+  dataInitializerMountPath: /docker-entrypoint-initdb.d
+  dataInitializerConfigmap: mongo-data
+

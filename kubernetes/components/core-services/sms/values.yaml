@@ -1,0 +1,19 @@
+fullnameOverride: sms
+
+image:
+  name: sms
+
+env:
+  SPRING_PROFILES_ACTIVE: "docker"
+  SPRING_CONFIG_LOCATION: file:/config-repo/application.yml,file:/config-repo/sms.yml
+
+service:
+  type: ClusterIP
+
+livenessProbe_enabled: true
+
+readinessProbe_enabled: true
+
+configmap:
+  volumeMounts:
+    mountPath: /config-repo

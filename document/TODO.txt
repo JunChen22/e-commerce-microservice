@@ -52,3 +52,6 @@ Switching to more reactive programming
 switch from symmetrical to asymmetrical encryption
 - Istio authorization policy and request authentication
 - change auth server to use asymmetrical encryption, jwks
+
+Store behavior data for each service
+- store in postgres or add mongodb for it
