@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.elasticsearch.document;
+package com.itsthatjun.ecommerce.document.elasticsearch;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -14,7 +14,7 @@ import java.util.List;
 public class EsProduct {
 
     @Id
-    private Long id;
+    private String id; // ES alphanumeric id
 
     @Field(type = FieldType.Keyword)
     private String productSn;
@@ -48,6 +48,6 @@ public class EsProduct {
 
     private Integer promotionType;
 
-    @Field(type = FieldType.Nested)
-    private List<EsProductAttribute> attrValueList;
+    //@Field(type = FieldType.Nested) TODO: will be sku with attributes
+    //private List<EsProductAttribute> attrValueList;
 }

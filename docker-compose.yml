@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  postgres:
+  postgres:     # Used to create model for MybatisGenerator for app. and used by admin.
     image: postgres:16-bullseye
     container_name: e-com_postgres
     restart: always
@@ -145,13 +145,19 @@ services:
       interval: 10s
       retries: 5
 
-  mongodb:
+  search-db:
     image: mongo:5.0.0
     container_name: e-com_mongodb
     restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: searchdatabase
     ports:
       - "27017:27017"
-    command: mongod
+    volumes:
+      - search-data:/data/db
+      - ./document/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js  # Mount your init script
     healthcheck:
       test: "mongo --eval 'db.stats().ok'"
       interval: 5s
@@ -185,36 +191,42 @@ services:
       retries: 10
 
   elasticsearch:
-    image: elasticsearch:7.12.0
+    image: elasticsearch:7.17.3
     container_name: e-com_elastic-search
     environment:
       - "cluster.name=elasticsearch"
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
-    #volumes:
-    #  - /home/jun/Desktop/data/ELK/es:/usr/share/elasticsearch/data # data
+      - "xpack.security.enabled=false"  # Disable security
     ports:
       - "9200:9200"
       - "9300:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
 
   logstash:
-    image: logstash:7.12.0
+    image: logstash:7.17.3
     container_name: e-com_logstash
     ports:
       - "5044:5044"
       - "9600:9600"
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
 
   kibana:
-    image: kibana:7.12.0
+    image: kibana:7.17.3
     container_name: e-com_kibana
     environment:
       - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
     ports:
       - "5601:5601"
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
 
   search:
     build: search
@@ -228,11 +240,12 @@ services:
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
-      - mongodb
-      - kibana
-      - logstash
-      - elasticsearch
-      - pms-db
+      rabbitmq:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      search-db:
+        condition: service_healthy
 
   app:
     build: app/App
@@ -265,8 +278,6 @@ services:
     depends_on:
       cms-db:
         condition: service_healthy
-      mongodb:
-        condition: service_healthy
       rabbitmq:
         condition: service_healthy
       redis:
@@ -293,6 +304,8 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
   pms:
     build: app/PMS
@@ -307,8 +320,6 @@ services:
       - $PWD/config-repo:/config-repo
     depends_on:
       pms-db:
-        condition: service_healthy
-      mongodb:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
@@ -329,8 +340,6 @@ services:
     depends_on:
       sms-db:
         condition: service_healthy
-      mongodb:
-        condition: service_healthy
       rabbitmq:
         condition: service_healthy
 
@@ -347,8 +356,6 @@ services:
       - $PWD/config-repo:/config-repo
     depends_on:
       ums-db:
-        condition: service_healthy
-      mongodb:
         condition: service_healthy
       rabbitmq:
         condition: service_started
@@ -370,14 +377,13 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
-      mongodb:
+      redis:
         condition: service_healthy
 
   gateway:
     build: gateway
     image: e-com/gateway
     container_name: e-com_gateway
-    mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/gateway.yml
@@ -393,7 +399,6 @@ services:
     build: eureka-server
     image: e-com/eureka-server
     container_name: e-com_eureka-server
-    mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/eureka-server.yml
@@ -411,11 +416,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
-    healthcheck:
-      test: ["CMD", "curl", "-fs", "http://auth-server/actuator/health"]
-      interval: 5s
-      timeout: 2s
-      retries: 60
     depends_on:
       auth-db:
         condition: service_healthy
@@ -438,11 +438,12 @@ services:
     depends_on:
       email-db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   zipkin:
     image: openzipkin/zipkin:2.23.2
     container_name: e-com_zipkin
-    mem_limit: 1024m
     environment:
       - STORAGE_TYPE=mem
       - RABBIT_ADDRESSES=rabbitmq
@@ -462,3 +463,4 @@ volumes:
   auth-data:
   email-data:
   rabbit-data:
+  search-data:

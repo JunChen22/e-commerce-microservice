@@ -42,13 +42,13 @@ public class AppApplication {
         return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
     }
 
-    @Bean   // turn all the webclient to load balanced when sending, if there's more than one.
+    @Bean   // turn all the webclient to load balanced when sending, if there's more than one. it doesn't work with Kubernetes
     @Profile("eureka")
     public WebClient loadBalancedWebClient(WebClient.Builder builder) {
         return builder.filter(lbFunction).build();
     }
 
-    @Bean   // it doesn't work with Kubernetes
+    @Bean
     public WebClient webClient(WebClient.Builder builder) {
         return builder.build();
     }

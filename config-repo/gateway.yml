@@ -63,7 +63,7 @@ spring.cloud.gateway.routes:
   - id: search-import data
     uri: http://search:8081
     predicates:
-      - Path=/esProduct/importAll
+      - Path=/admin/esProduct/importAll
 
   - id: swagger
     uri: http://app

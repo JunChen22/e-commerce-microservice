@@ -6,7 +6,8 @@ E-commerce for medium to large business. The microservice version is multi-vendo
 
 ``` lua
 E-commerece 
-├── Authuthorization server  -- could replace it with OAuth2 but not implement here
+├── authuthorization server  -- could replace it with OAuth2 or but not implement here
+├──   -- could replace it with OAuth2 but not implement here
 ├── config-repo  -- centralized config
 ├── config-server  -- configuration server/ serverices retrieves their application.yml
 ├── gateway  -- gateway for connection / not needed in kubernetes
@@ -103,33 +104,32 @@ or generate the file manually.
 ps : Remove docker volume so the new data.sql can function properly and update.
 ```
 ### Tech stack
-| Tech                                                                                   | role                                  | version | How is it being used here                               |
-|----------------------------------------------------------------------------------------|---------------------------------------|---------|---------------------------------------------------------|
-| [Spring Boot](https://spring.io/projects/spring-boot)                                  | MVC framework                         | 2.5.2   |                                                         |
-| [Spring WebFlux](https://docs.spring.io/spring-framework/reference/)                   | Reactive                              | 2.5.2   | Non-blocking APIs and event driven asynchronous service |
-| [SpringSecurity](https://spring.io/projects/spring-security)                           | Security                              | 2.5.2   |                                                         |
-| [Eureka](https://cloud.spring.io/spring-cloud-netflix/reference/html/)                 | Spring Cloud - Service Discovery      | 2.5.2   | Service discovery                                       |
-| [Gateway](https://cloud.spring.io/spring-cloud-netflix/reference/html/)                | Spring Cloud - Gateway                | 2.5.2   | Gateway                                                 |
-| [Auth](https://cloud.spring.io/spring-cloud-netflix/reference/html/)                   | Spring Cloud - Auth server            | 2.5.2   | security                                                |
-| [PostgreSQL](https://www.postgresql.org/)                                              | SQL database                          | 9.6.10  | store all product and user related data                 |
-| [MyBatis](http://www.mybatis.org/mybatis-3/zh/index.html)                              | ORM framework                         | 2.3.0   | ORM(object relation mapping), middle ware               |
-| [MyBatisGenerator](http://www.mybatis.org/generator/index.html)                        | Sourcecode generator                  | 1.4.0   | Generate basic functionality(CRUD) to database          |
-| [RabbitMQ](https://www.rabbitmq.com/)                                                  | Message queue                         |         |                                                         |
-| [Redis](https://redis.io/)                                                             | Cache mechanism                       |         | used like a scheduler here, emails verification         |
-| [MongoDB](https://www.mongodb.com)                                                     | NoSql database(search & read history) | 5.0.0   | store user search & view history                        |
-| [Elasticsearch](https://github.com/elastic/elasticsearch)                              | Search engine                         | 7,12.0  | imported data from PostgreSQL for fast search           |
-| [LogStash](https://github.com/elastic/logstash)                                        | Logging Service                       | 7,12.0  |                                                         |
-| [Kibana](https://github.com/elastic/kibana)                                            | Elasticsearch LogStash visualization  | 7,12.0  |                                                         |
-| [Nginx](https://www.nginx.com/)                                                        | Webserver / Load balancing            |         |                                                         |
-| [Docker](https://www.docker.com)                                                       | Containerization                      |         | Easier deployment                                       |
-| [JWT](https://github.com/jwtk/jjwt)                                                    | Encryption tool                       |         |                                                         |
-| [Lombok](https://github.com/rzwitserloot/lombok)                                       | minimize boilerplate                  |         |                                                         |
-| [PageHelper](http://git.oschina.net/free/Mybatis_PageHelper)                           | MyBatis pagination helper             |         |                                                         |
-| [Swagger-UI](https://github.com/swagger-api/swagger-ui)                                | Documentation tool                    |         |                                                         |
-| [Hibernate-Validator](http://hibernate.org/validator)                                  | Validation                            |         |                                                         |
-| [PayPal](https://developer.paypal.com/home)                                            | Payment Gateway                       | 1.14.0  | Third party payment processor                           |
-| [Ubuntu](https://ubuntu.com/)                                                          | OS                                    |         |                                                         |
-| AWS S3                                                                                 | File storage                          |         | store images, videos                                    |
+| Tech                                                                    | role                                  | version | How is it being used here                                              |
+|-------------------------------------------------------------------------|---------------------------------------|---------|------------------------------------------------------------------------|
+| [Spring Boot](https://spring.io/projects/spring-boot)                   | MVC framework                         | 2.7.18  |                                                                        |
+| [Spring WebFlux](https://docs.spring.io/spring-framework/reference/)    | Reactive programming                  | 2.7.18  | Non-blocking APIs and event driven asynchronous service                |
+| [Spring Security](https://spring.io/projects/spring-security)           | Security                              | 2.7.18  |                                                                        |
+| [Eureka](https://cloud.spring.io/spring-cloud-netflix/reference/html/)  | Spring Cloud - Service Discovery      | 2.7.18  | Service discovery                                                      |
+| [Gateway](https://cloud.spring.io/spring-cloud-netflix/reference/html/) | Spring Cloud - Gateway                | 2.7.18  | Gateway                                                                |
+| [PostgreSQL](https://www.postgresql.org/)                               | SQL database                          | 9.6.10  | store all product and user related data                                |
+| [MyBatis](http://www.mybatis.org/mybatis-3/zh/index.html)               | ORM framework                         | 2.3.0   | ORM(object relation mapping), middle ware                              |
+| [MyBatisGenerator](http://www.mybatis.org/generator/index.html)         | Sourcecode generator                  | 1.4.0   | Generate basic functionality(CRUD) to database                         |
+| [RabbitMQ](https://www.rabbitmq.com/)                                   | Message queue                         |         |                                                                        |
+| [Redis](https://redis.io/)                                              | Cache mechanism                       |         | used like a scheduler here, emails verification                        |
+| [MongoDB](https://www.mongodb.com)                                      | NoSql database(search & read history) | 5.0.0   | store user search & view history, activity tracking and behaviral data |
+| [Elasticsearch](https://github.com/elastic/elasticsearch)               | Search engine                         | 7,12.0  | imported data from PostgreSQL for fast search                          |
+| [LogStash](https://github.com/elastic/logstash)                         | Logging Service                       | 7,12.0  |                                                                        |
+| [Kibana](https://github.com/elastic/kibana)                             | Elasticsearch LogStash visualization  | 7,12.0  |                                                                        |
+| [Nginx](https://www.nginx.com/)                                         | Webserver / Load balancing            |         |                                                                        |
+| [Docker](https://www.docker.com)                                        | Containerization                      |         | Easier deployment                                                      |
+| [JWT](https://github.com/jwtk/jjwt)                                     | Encryption tool                       |         |                                                                        |
+| [Lombok](https://github.com/rzwitserloot/lombok)                        | minimize boilerplate                  |         |                                                                        |
+| [PageHelper](http://git.oschina.net/free/Mybatis_PageHelper)            | MyBatis pagination helper             |         |                                                                        |
+| [Swagger-UI](https://github.com/swagger-api/swagger-ui)                 | Documentation tool                    |         |                                                                        |
+| [Hibernate-Validator](http://hibernate.org/validator)                   | Validation                            |         |                                                                        |
+| [PayPal](https://developer.paypal.com/home)                             | Payment Gateway                       | 1.14.0  | Third party payment processor                                          |
+| [Ubuntu](https://ubuntu.com/)                                           | OS                                    |         |                                                                        |
+| AWS S3                                                                  | File storage                          |         | store images, videos                                                   |
 
 
 Eureka to see which services are available.http://localhost:8080/eureka/web

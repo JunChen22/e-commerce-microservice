@@ -13,9 +13,9 @@ import static java.time.ZonedDateTime.now;
 public class PmsReviewEvent {
 
     public enum Type {
-        CREATE_REVIEW,  // update stock after order generated, locked stock increase
-        UPDATE_REVIEW,  // update after payment,  unlock locked stock and update stock.
-        DELETE_REVIEW    // unlock returned or unpaid orders stock
+        CREATE_REVIEW,
+        UPDATE_REVIEW,
+        DELETE_REVIEW
     }
 
     private final Type eventType;

@@ -16,7 +16,7 @@ public abstract class TestContainerConfig {
     private static final String INIT_SCRIPT_PATH = "data_test_copy.sql";
     private static final DockerImageName postgresImageName = DockerImageName.parse("postgres:16-bullseye");
     private static final DockerImageName mongoImageName = DockerImageName.parse("mongo:5.0.0");
-    private static final DockerImageName elasticSearchImageName = DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch:7.12.0");
+    private static final DockerImageName elasticSearchImageName = DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch:7.17.24");
 
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(postgresImageName).withInitScript(INIT_SCRIPT_PATH);
 

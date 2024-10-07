@@ -1,28 +1,15 @@
 package com.itsthatjun.ecommerce.service;
 
-import com.itsthatjun.ecommerce.elasticsearch.document.EsProduct;
-import com.github.pagehelper.Page;
-
-import java.util.List;
+import com.itsthatjun.ecommerce.document.elasticsearch.EsProduct;
+import reactor.core.publisher.Flux;
 
 public interface EsProductService {
 
-    int importAll();
+    Flux<EsProduct> search(String keyword, int pageNum, int pageSize);
 
-    EsProduct create(Long id);
-
-    void delete(Long id);
-
-    void delete(List<Long> id);
-
-    List<EsProduct> search(String keyword, int pageNum, int pageSize);
-
-    //List<EsProduct> search(String name, String keyword, int category, int pageNum, int pageSize, int sort);
+    //Flux<EsProduct> search(String name, String keyword, int category, int pageNum, int pageSize, int sort);
 
     // TODO: recommendation
-    Page<EsProduct> recommend(Long id, Integer pageNum, Integer pageSize);
 
     // EsProductRelatedInfo searchRelatedInfo(String keyword);
-
-    List<EsProduct> listImportedProduct();
 }

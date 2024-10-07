@@ -44,7 +44,9 @@ later
 - Servlet-based Security Replace with Reactive Components
 
 Switching to more reactive programming
-- R2DBC
+- R2DBC, remove mybatis and mybatis generator. kept generated models.
+  currently, is mimicking non-blocking behavior with a thread pool to postgres.
+  switch to completely non-blocking with R2DBC.
 - switch from sleuth to micrometer
 - mongo-reactive
 - redis-reactive
