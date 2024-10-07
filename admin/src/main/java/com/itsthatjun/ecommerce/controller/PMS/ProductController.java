@@ -3,10 +3,8 @@ package com.itsthatjun.ecommerce.controller.PMS;
 import com.itsthatjun.ecommerce.dto.pms.AdminProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.PMS.impl.ProductServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +14,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/product")
 @PreAuthorize("hasRole('ROLE_admin_product')")
-@Api(tags = "Product related", description = "product related")
+@Tag(name = "Product related", description = "product related")
 public class ProductController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ProductController.class);
 
     private final ProductServiceImpl productService;
 

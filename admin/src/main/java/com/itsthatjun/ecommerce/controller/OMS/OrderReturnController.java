@@ -5,10 +5,8 @@ import com.itsthatjun.ecommerce.dto.oms.ReturnRequestDecision;
 import com.itsthatjun.ecommerce.dto.oms.ReturnStatusCode;
 import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderReturnServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +16,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/order/return")
 @PreAuthorize("hasRole('ROLE_admin_order')")
-@Api(tags = "return related", description = "apply return and related api")
+@Tag(name = "return related", description = "apply return and related api")
 public class OrderReturnController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(OrderReturnController.class);
 
     private final OrderReturnServiceImpl orderReturnService;
 

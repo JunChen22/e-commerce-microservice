@@ -2,16 +2,16 @@ package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.document.elasticsearch.EsProduct;
 import com.itsthatjun.ecommerce.service.EsProductService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/esProduct")
-@Api(tags = "EsProductController", description = "Elastic search management")
+@Tag(name = "EsProductController", description = "Elastic search management")
 public class ESController {
 
     private final EsProductService productService;

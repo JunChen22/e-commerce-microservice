@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ArticleDao {
 
-    @ApiModelProperty(value = "get all articles and its media content")
-    List<ArticleInfo> getAllArticles();
+    @ApiModelProperty(value = "list all articles and its media content")
+    List<ArticleInfo> listAllArticles();
 
     @ApiModelProperty(value = "get one article and its media content")
     ArticleInfo getArticle(@Param("id") int id);

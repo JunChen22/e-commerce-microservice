@@ -3,10 +3,8 @@ package com.itsthatjun.ecommerce.controller.SMS;
 import com.itsthatjun.ecommerce.dto.sms.CouponSale;
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
 import com.itsthatjun.ecommerce.service.SMS.impl.CouponServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +14,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/coupon")
 @PreAuthorize("hasRole('ROLE_admin_sale')")
-@Api(tags = "Coupon related", description = "CRUD coupon by admin with right roles/permission")
+@Tag(name = "Coupon related", description = "CRUD coupon by admin with right roles/permission")
 public class CouponController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CouponController.class);
 
     private final CouponServiceImpl couponService;
 

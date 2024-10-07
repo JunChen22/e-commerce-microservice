@@ -13,11 +13,11 @@ public interface MemberDao {
     MemberDetail getUserDetail(@Param("userId") int userId);
 
     @ApiModelProperty(value = "Get all user with name and email for Notification service")
-    List<UserInfo> getAllUserInfo();
+    List<UserInfo> listAllUserInfo();
 
     @ApiModelProperty(value = "Get user with name and email for Notification service")
     UserInfo getUserInfo(@Param("userId") int userId);
 
     @ApiModelProperty(value = "Get all user with name and email that signed up sale promo for Notification service")
-    List<UserInfo> getAllUserInfoSalePromo();
+    List<UserInfo> listAllUserInfoSalePromo();
 }

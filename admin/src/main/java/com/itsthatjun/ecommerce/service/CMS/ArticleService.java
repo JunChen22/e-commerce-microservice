@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
 public interface ArticleService {
 
-    @ApiOperation(value = "Get all the articles")
-    Flux<AdminArticleInfo> getAllArticle();
+    @ApiOperation(value = "List all the articles")
+    Flux<AdminArticleInfo> listAllArticle();
 
     @ApiOperation(value = "Get a specific article by article id")
     Mono<AdminArticleInfo> getArticle(@PathVariable int articleId);

@@ -2,24 +2,17 @@ package com.itsthatjun.ecommerce.controller.UMS;
 
 import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
 import com.itsthatjun.ecommerce.dto.ums.model.AddressDTO;
-import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@Api(tags = "User controller", description = "user controller")
+@Tag(name = "User controller", description = "user controller")
 @RequestMapping("/user")
 public class UserAggregate {
-
-    private static final Logger LOG = LoggerFactory.getLogger(UserAggregate.class);
 
     private final UserServiceImpl userService;
 

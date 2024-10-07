@@ -2,10 +2,8 @@ package com.itsthatjun.ecommerce.controller.SMS;
 
 import com.itsthatjun.ecommerce.security.UserContext;
 import com.itsthatjun.ecommerce.service.SMS.impl.CouponServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,11 +13,9 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 
 @RestController
-@Api(tags = "Coupon controller", description = "Coupon controller")
+@Tag(name = "Coupon controller", description = "Coupon controller")
 @RequestMapping("/coupon")
 public class CouponAggregate {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CouponAggregate.class);
 
     private final CouponServiceImpl couponService;
 

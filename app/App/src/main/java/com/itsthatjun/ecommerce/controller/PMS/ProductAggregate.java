@@ -3,24 +3,17 @@ package com.itsthatjun.ecommerce.controller.PMS;
 import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
 import com.itsthatjun.ecommerce.dto.pms.model.ProductDTO;
 import com.itsthatjun.ecommerce.service.PMS.impl.ProductServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @RestController
-@Api(tags = "Product controller", description = "product controller")
+@Tag(name = "Product controller", description = "product controller")
 @RequestMapping("/product")
 public class ProductAggregate {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ProductAggregate.class);
 
     private final ProductServiceImpl productService;
 

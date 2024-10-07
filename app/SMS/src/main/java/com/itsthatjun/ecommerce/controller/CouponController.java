@@ -2,10 +2,8 @@ package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.mbg.model.Coupon;
 import com.itsthatjun.ecommerce.service.impl.CouponServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -15,10 +13,8 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/coupon")
-@Api(tags = "", description = "")
+@Tag(name = "", description = "")
 public class CouponController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CouponController.class);
 
     private CouponServiceImpl couponService;
 
@@ -38,7 +34,7 @@ public class CouponController {
     @GetMapping("/admin/listAll")
     @ApiOperation("list all coupons")
     public Flux<Coupon> listAllCoupon() {
-        return couponService.getAllCoupon();
+        return couponService.listAllCoupon();
     }
 
     @GetMapping("/admin/{couponId}")

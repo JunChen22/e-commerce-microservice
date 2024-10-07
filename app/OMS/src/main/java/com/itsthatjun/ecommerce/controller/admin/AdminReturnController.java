@@ -1,12 +1,9 @@
 package com.itsthatjun.ecommerce.controller.admin;
 
-import com.itsthatjun.ecommerce.controller.ReturnController;
 import com.itsthatjun.ecommerce.dto.ReturnDetail;
 import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.admin.AdminReturnServiceImpl;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -15,8 +12,6 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/order/return/admin")
 public class AdminReturnController {
-
-    private final static Logger LOG = LoggerFactory.getLogger(ReturnController.class);
 
     private final AdminReturnServiceImpl returnOrderService;
 

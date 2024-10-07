@@ -89,7 +89,7 @@ public class AdminProductServiceImpl implements AdminProductService {
     @Override
     public Flux<Product> listAllProduct() {
         return Mono.fromCallable(() -> {
-            List<Product> productList = productDao.getAllProduct();
+            List<Product> productList = productDao.listAllProduct();
             return productList;
         }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }

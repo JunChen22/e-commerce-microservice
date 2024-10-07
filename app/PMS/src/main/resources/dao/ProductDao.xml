@@ -37,7 +37,7 @@
         <result property="filename" column="pp_filename"/>
     </resultMap>
 
-    <select id="getAllProduct" resultMap="productDTOMap">
+    <select id="listAllProduct" resultMap="productDTOMap">
         SELECT
             p.brand_name p_brandName,
             p.name p_name,

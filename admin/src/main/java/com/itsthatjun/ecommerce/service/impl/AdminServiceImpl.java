@@ -7,6 +7,8 @@ import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.mbg.mapper.AdminMapper;
 import com.itsthatjun.ecommerce.service.AdminService;
 import org.apache.ibatis.javassist.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,8 @@ import java.util.List;
 
 @Service
 public class AdminServiceImpl implements ReactiveUserDetailsService, AdminService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AdminServiceImpl.class);
 
     private final AdminMapper adminMapper;
 

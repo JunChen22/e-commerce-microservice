@@ -176,7 +176,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Mono<Map<Object, Object>> hGetAll(String key) {
+    public Mono<Map<Object, Object>> hListAll(String key) {
         return redisTemplate.opsForHash()
                 .entries(key)
                 .collectMap(Map.Entry::getKey, Map.Entry::getValue);

@@ -12,12 +12,12 @@ import java.util.Map;
 public interface AdminProductDao {
 
     @ApiModelProperty("get all product")
-    List<Product> getAllProduct();
+    List<Product> listAllProduct();
 
     @ApiModelProperty("")
     Product getProduct(@Param("productId") int productId);
 
-    List<ProductSku> getAllSku(@Param("productId") int productId);
+    List<ProductSku> listAllSku(@Param("productId") int productId);
 
     @ApiModelProperty("get a pictures for product detail")
     List<ProductPictures> getProductPictures(@Param("productId") int productId);
@@ -27,5 +27,4 @@ public interface AdminProductDao {
 
     @ApiModelProperty("get attribute name based on category name. e.g Smartphone attribute will be camera resolution")
     List<Map<String, Object>> getAttributeType(@Param("categoryName") String categoryName);
-
 }

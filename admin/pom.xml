@@ -51,6 +51,18 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
 
+
+        <!-- documentation -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+        </dependency>
+
+
         <!-- mybatis and paging addon from GitHub -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>

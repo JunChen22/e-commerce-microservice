@@ -2,10 +2,8 @@ package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.ProductReview;
 import com.itsthatjun.ecommerce.service.impl.ReviewServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +14,8 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/review")
-@Api(tags = "Product related", description = "CRUD a specific product reviews")
+@Tag(name = "Product related", description = "CRUD a specific product reviews")
 public class ReviewController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ReviewController.class);
 
     private final ReviewServiceImpl reviewService;
 
@@ -34,15 +30,15 @@ public class ReviewController {
         return reviewService.getDetailReview(reviewId);
     }
 
-    @GetMapping("/getAllProductReview/{productId}")
-    @ApiOperation(value = "get all reviews for a product")
-    public Flux<ProductReview> getProductReviews(@PathVariable int productId) {
+    @GetMapping("/listAllProductReview/{productId}")
+    @ApiOperation(value = "list all reviews for a product")
+    public Flux<ProductReview> listProductReviews(@PathVariable int productId) {
         return reviewService.listProductAllReview(productId);
     }
 
-    @GetMapping("/admin/getAllReviewByUser/{useId}")
-    @ApiOperation(value = "get all reviews for a product")
-    public Flux<ProductReview> getProductReviewsByUser(@PathVariable int useId) {
+    @GetMapping("/admin/listAllReviewByUser/{useId}")
+    @ApiOperation(value = "list all reviews for a product")
+    public Flux<ProductReview> listProductReviewsByUser(@PathVariable int useId) {
         return reviewService.listAllReviewByUser(useId);
     }
 }

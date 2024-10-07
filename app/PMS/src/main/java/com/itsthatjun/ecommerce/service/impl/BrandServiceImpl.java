@@ -16,7 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,15 +41,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Flux<Brand> listAllBrand() {
-        return Mono.fromCallable(() -> {
-            List<Brand> brandList = brandMapper.selectByExample(new BrandExample());
-            return brandList;
-        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Flux<Brand> listBrand(int pageNum, int pageSize) {
+    public Flux<Brand> listAllBrand(int pageNum, int pageSize) {
         return Mono.fromCallable(() -> {
             PageHelper.startPage(pageNum, pageSize);
             List<Brand> brandList = brandMapper.selectByExample(new BrandExample());

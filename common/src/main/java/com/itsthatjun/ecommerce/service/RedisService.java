@@ -105,8 +105,8 @@ public interface RedisService {
     @ApiOperation(value = "Set a hash key-value pair")
     Mono<Void> hSet(String key, String hashKey, Object value);
 
-    @ApiOperation(value = "Get all key-value pairs in a hash")
-    Mono<Map<Object, Object>> hGetAll(String key);
+    @ApiOperation(value = "List all key-value pairs in a hash")
+    Mono<Map<Object, Object>> hListAll(String key);
 
     @ApiOperation(value = "Set multiple key-value pairs in a hash with an optional expiration time")
     Mono<Boolean> hSetAll(String key, Map<String, Object> map, long time);

@@ -29,7 +29,7 @@ public class ScheduledTasks {
     public void checkDeliveryStatus() throws Exception {
         System.out.println("Checking orders with UPS API...");
 
-        List<Orders> ordersToCheck = orderService.getAllSendingOrder();
+        List<Orders> ordersToCheck = orderService.listAllSendingOrder();
 
         // Process orders in batches
         for (int i = 0; i < ordersToCheck.size(); i += BATCH_SIZE) {

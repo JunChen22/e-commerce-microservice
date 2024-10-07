@@ -3,20 +3,16 @@ package com.itsthatjun.ecommerce.controller.OMS;
 import com.itsthatjun.ecommerce.dto.ReturnParam;
 import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderReturnServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@Api(tags = "Return controller", description = "return order")
+@Tag(name = "Return controller", description = "return order")
 @RequestMapping("/order/return")
 public class ReturnAggregate {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ReturnAggregate.class);
 
     private final OrderReturnServiceImpl returnService;
 

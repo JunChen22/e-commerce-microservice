@@ -83,7 +83,7 @@
         WHERE m.id = #{userId};
     </select>
 
-    <select id="getAllUserInfo" resultMap="userInfoDTOMap">
+    <select id="listAllUserInfo" resultMap="userInfoDTOMap">
         SELECT
             name,
             email
@@ -99,7 +99,7 @@
         WHERE status = 1 and id = #{userId};
     </select>
 
-    <select id="getAllUserInfoSalePromo" resultMap="userInfoDTOMap">
+    <select id="listAllUserInfoSalePromo" resultMap="userInfoDTOMap">
         SELECT
             name,
             email

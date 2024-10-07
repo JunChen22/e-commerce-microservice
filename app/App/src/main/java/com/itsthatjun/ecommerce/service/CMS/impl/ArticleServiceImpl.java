@@ -10,7 +10,6 @@ import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,7 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Flux<ArticleInfo> getAllArticle() {
+    public Flux<ArticleInfo> listAllArticle() {
         String url = CMS_SERVICE_URL + "/all";
         LOG.debug("Will call the getAllArticle API on URL: {}", url);
 

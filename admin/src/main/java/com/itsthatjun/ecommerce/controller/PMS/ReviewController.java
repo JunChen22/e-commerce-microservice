@@ -2,10 +2,8 @@ package com.itsthatjun.ecommerce.controller.PMS;
 
 import com.itsthatjun.ecommerce.dto.pms.ProductReview;
 import com.itsthatjun.ecommerce.service.PMS.impl.ReviewServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +13,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/review")
 @PreAuthorize("hasRole('ROLE_admin_product')")
-@Api(tags = "Product related", description = "CRUD a specific product reviews")
+@Tag(name = "Product related", description = "CRUD a specific product reviews")
 public class ReviewController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ReviewController.class);
 
     private final ReviewServiceImpl reviewService;
 
@@ -27,13 +23,13 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/getAllProductReview/{productId}")
+    @GetMapping("/listAllProductReview/{productId}")
     @ApiOperation(value = "get all reviews for a product")
     public Flux<ProductReview> getProductReviews(@PathVariable int productId) {
         return reviewService.getProductReviews(productId);
     }
 
-    @GetMapping("/getAllReviewByUser/{useId}")
+    @GetMapping("/listAllReviewByUser/{useId}")
     @ApiOperation(value = "get all reviews made a user")
     public Flux<ProductReview> getProductReviewsByUser(@PathVariable int useId) {
         return reviewService.getProductReviewsByUser(useId);

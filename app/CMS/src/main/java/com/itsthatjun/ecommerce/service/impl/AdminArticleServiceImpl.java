@@ -59,9 +59,9 @@ public class AdminArticleServiceImpl implements AdminArticleService {
     }
 
     @Override
-    public Flux<AdminArticleInfo> getAllArticles() {
+    public Flux<AdminArticleInfo> listAllArticles() {
         return Mono.fromCallable(() -> {
-            List<AdminArticleInfo> articleInfoList = articleDao.getAllArticles();
+            List<AdminArticleInfo> articleInfoList = articleDao.listAllArticles();
             return articleInfoList;
         }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }

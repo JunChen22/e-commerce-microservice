@@ -40,7 +40,7 @@ public interface OrderService {
     List<OrderDetail> getUserPurchasedItem(String productSku);
 
     @ApiOperation("get all order that are still in status 2, send/transitioning")
-    List<Orders> getAllSendingOrder();
+    List<Orders> listAllSendingOrder();
 
     @ApiOperation("Member received deliver, update order status by scheduled task")
     void confirmReceiveOrder(String orderSn);

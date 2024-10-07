@@ -34,7 +34,7 @@
         <result property="url" column="v_url"/>
     </resultMap>
 
-    <select id="getAllArticles" resultMap="articleMap">
+    <select id="listAllArticles" resultMap="articleMap">
         SELECT
             a.title a_title,
             a.body a_body,

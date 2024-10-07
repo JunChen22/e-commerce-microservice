@@ -11,8 +11,8 @@ import java.util.Map;
 
 public interface ProductDao {
 
-    @ApiModelProperty("get all product")
-    List<ProductDTO> getAllProduct();
+    @ApiModelProperty("list all product")
+    List<ProductDTO> listAllProduct();
 
     @ApiModelProperty("get a product detail, sku/variants, attribute , category and etc")
     ProductDetail getProductDetail(@Param("productId") int productId);
@@ -25,5 +25,4 @@ public interface ProductDao {
 
     @ApiModelProperty("get attribute name based on category name. e.g Smartphone attribute will be camera resolution")
     List<Map<String, Object>> getAttributeType(@Param("categoryName") String categoryName);
-
 }

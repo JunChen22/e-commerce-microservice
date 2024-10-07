@@ -8,11 +8,8 @@ import reactor.core.publisher.Mono;
 
 public interface BrandService {
 
-    @ApiOperation(value = "Get all brands")
-    Flux<Brand> getAllBrand();
-
-    @ApiOperation(value = "Get brands with page and size")
-    Flux<Brand> getAllBrand(int pageNum, int pageSize);
+    @ApiOperation(value = "List brands with page and size")
+    Flux<Brand> listAllBrand(int pageNum, int pageSize);
 
     @ApiOperation(value = "Get all product of this brand")
     Flux<Product> getBrandProduct(int brandId);

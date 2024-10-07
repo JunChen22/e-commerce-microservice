@@ -3,11 +3,9 @@ package com.itsthatjun.ecommerce.controller;
 import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.dto.model.OrderDTO;
 import com.itsthatjun.ecommerce.service.impl.OrderServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -17,10 +15,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/order")
-@Api(tags = "", description = "")
+@Tag(name = "", description = "")
 public class OrderController {
-
-    private final static Logger LOG = LoggerFactory.getLogger(OrderController.class);
 
     private final OrderServiceImpl orderService;
 

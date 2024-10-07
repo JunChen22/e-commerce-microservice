@@ -185,6 +185,18 @@
                 <version>${springfox.swagger.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
+                <version>${spring.doc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>${spring.doc.version}</version>
+            </dependency>
+
+
             <!-- unit testing -->
             <dependency>
                 <groupId>junit</groupId>

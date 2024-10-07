@@ -33,9 +33,9 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Flux<ArticleInfo> getAllArticles() {
+    public Flux<ArticleInfo> listAllArticles() {
         return Mono.fromCallable(() ->
-                articleDao.getAllArticles()
+                articleDao.listAllArticles()
         ).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }
 

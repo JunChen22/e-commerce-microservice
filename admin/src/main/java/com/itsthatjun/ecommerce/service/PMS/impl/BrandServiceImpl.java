@@ -46,15 +46,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Flux<Brand> getAllBrand() {
-        String url = PMS_SERVICE_URL + "/listAll";
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-    }
-
-    @Override
-    public Flux<Brand> getAllBrand(int pageNum, int pageSize) {
+    public Flux<Brand> listAllBrand(int pageNum, int pageSize) {
         String url = PMS_SERVICE_URL + "/list?page=" + pageNum + "&size=" + pageSize;
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)

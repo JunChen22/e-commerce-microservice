@@ -3,10 +3,8 @@ package com.itsthatjun.ecommerce.controller;
 import com.itsthatjun.ecommerce.dto.OnSale;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.impl.SalesServiceimpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +13,8 @@ import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/sale")
-@Api(tags = "Sales related", description = "Item on sale for a set of time")
+@Tag(name = "Sales related", description = "Item on sale for a set of time")
 public class PromotionController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PromotionController.class);
 
     private final SalesServiceimpl salesServiceimpl;
 

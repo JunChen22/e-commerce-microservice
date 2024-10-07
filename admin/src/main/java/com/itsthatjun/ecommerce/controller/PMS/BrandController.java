@@ -3,10 +3,8 @@ package com.itsthatjun.ecommerce.controller.PMS;
 import com.itsthatjun.ecommerce.mbg.model.Brand;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.PMS.impl.BrandServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +14,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/brand")
 @PreAuthorize("hasRole('ROLE_admin_product')")
-@Api(tags = "brand related", description = "brand management")
+@Tag(name = "brand related", description = "brand management")
 public class BrandController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(BrandController.class);
 
     private final BrandServiceImpl brandService;
 
@@ -29,16 +25,10 @@ public class BrandController {
     }
 
     @GetMapping("/listAll")
-    @ApiOperation(value = "Get all brands")
-    public Flux<Brand> getAllBrand() {
-        return brandService.getAllBrand();
-    }
-
-    @GetMapping("/list")
-    @ApiOperation(value = "Get brands with page and size")
-    public Flux<Brand> getAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+    @ApiOperation(value = "Get all brands with page and size")
+    public Flux<Brand> listAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                    @RequestParam(value = "size", defaultValue = "3") int pageSize) {
-        return brandService.getAllBrand(pageNum, pageSize);
+        return brandService.listAllBrand(pageNum, pageSize);
     }
 
     @GetMapping("/product/{brandId}")

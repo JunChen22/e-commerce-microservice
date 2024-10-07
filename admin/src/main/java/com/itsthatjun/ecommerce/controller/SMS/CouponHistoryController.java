@@ -3,10 +3,8 @@ package com.itsthatjun.ecommerce.controller.SMS;
 import com.itsthatjun.ecommerce.dto.sms.UsedCouponHistory;
 import com.itsthatjun.ecommerce.mbg.model.CouponHistory;
 import com.itsthatjun.ecommerce.service.SMS.impl.CouponHistoryServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +16,8 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequestMapping("/coupon")
 @PreAuthorize("hasRole('ROLE_admin_sale')")
-@Api(tags = "Coupon related", description = "CRUD coupon by admin with right roles/permission")
+@Tag(name = "Coupon related", description = "CRUD coupon by admin with right roles/permission")
 public class CouponHistoryController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CouponHistoryController.class);
 
     private final CouponHistoryServiceImpl historyService;
 
@@ -30,7 +26,7 @@ public class CouponHistoryController {
         this.historyService = historyService;
     }
 
-    @GetMapping("/getAllUsedCoupon")
+    @GetMapping("/listAllUsedCoupon")
     @ApiOperation(value = "return all the coupon used between two time")
     public Flux<UsedCouponHistory> couponUsed() {
         return historyService.couponUsed();

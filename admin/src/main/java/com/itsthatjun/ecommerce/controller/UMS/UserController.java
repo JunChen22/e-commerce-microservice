@@ -4,10 +4,8 @@ import com.itsthatjun.ecommerce.dto.ums.MemberDetail;
 import com.itsthatjun.ecommerce.mbg.model.Member;
 import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +15,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/user")
 @PreAuthorize("hasRole('ROLE_admin_user')")
-@Api(tags = "User related", description = "retrieve user information")
+@Tag(name = "User related", description = "retrieve user information")
 public class UserController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
     private final UserServiceImpl userService;
 
@@ -35,10 +31,10 @@ public class UserController {
         return userService.getUser(userId);
     }
 
-    @GetMapping("/getAllUser")
+    @GetMapping("/listAllUser")
     @ApiOperation(value = "")
-    public Flux<Member> getAllUser() {
-        return userService.getAllUser();
+    public Flux<Member> listAllUser() {
+        return userService.listAllUser();
     }
 
     @GetMapping("/getMemberLoginFrequency/{userId}")

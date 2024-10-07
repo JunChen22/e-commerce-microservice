@@ -5,11 +5,9 @@ import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import com.itsthatjun.ecommerce.dto.oms.OrderDetail;
 import com.itsthatjun.ecommerce.dto.oms.model.OrderDTO;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -17,11 +15,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@Api(tags = "Order controller", description = "Order controller")
+@Tag(name = "Order controller", description = "Order controller")
 @RequestMapping("/order")
 public class OrderAggregate {
-
-    private static final Logger LOG = LoggerFactory.getLogger(OrderAggregate.class);
 
     private final OrderServiceImpl orderService;
 

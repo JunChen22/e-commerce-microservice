@@ -13,7 +13,7 @@ public interface UserService {
     Mono<MemberDetail> getUser(int userId);
 
     @ApiOperation("")
-    Flux<Member> getAllUser();
+    Flux<Member> listAllUser();
 
     @ApiOperation("")
     Flux<MemberLoginLog> listAllLoginFrequency(int userId);

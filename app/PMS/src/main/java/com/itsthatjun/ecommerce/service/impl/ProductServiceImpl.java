@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Flux<ProductDTO> listAllProduct() {
         return Mono.fromCallable(() -> {
-            List<ProductDTO> productList = dao.getAllProduct();
+            List<ProductDTO> productList = dao.listAllProduct();
             return productList;
         }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
     }

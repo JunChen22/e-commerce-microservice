@@ -9,10 +9,7 @@ import reactor.core.publisher.Mono;
 public interface BrandService {
 
     @ApiOperation("")
-    Flux<Brand> listAllBrand();
-
-    @ApiOperation("")
-    Flux<Brand> listBrand(int pageNum, int pageSize);
+    Flux<Brand> listAllBrand(int pageNum, int pageSize);
 
     @ApiOperation("")
     Flux<Product> listAllBrandProduct(int brandId);

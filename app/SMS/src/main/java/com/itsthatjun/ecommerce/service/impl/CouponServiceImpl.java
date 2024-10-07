@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.service.impl;
 
-import com.itsthatjun.ecommerce.dto.CouponDiscount;
 import com.itsthatjun.ecommerce.exceptions.CouponException;
 import com.itsthatjun.ecommerce.exceptions.ProductException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
@@ -239,7 +238,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Flux<Coupon> getAllCoupon() {
+    public Flux<Coupon> listAllCoupon() {
         return Mono.fromCallable(() -> {
             LocalDate localDate = LocalDate.now();
             java.sql.Date date = java.sql.Date.valueOf(localDate);

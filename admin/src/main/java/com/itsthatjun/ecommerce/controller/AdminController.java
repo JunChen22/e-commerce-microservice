@@ -7,8 +7,8 @@ import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
 import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;
 import com.itsthatjun.ecommerce.security.LoginRequest;
 import com.itsthatjun.ecommerce.security.LoginResponse;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/admin")
-@Api(tags = {"Admin related"}, description = "admin related")
+@Tag(name = "Admin related", description = "admin related")
 public class AdminController {
 
     private final AdminServiceImpl adminService;

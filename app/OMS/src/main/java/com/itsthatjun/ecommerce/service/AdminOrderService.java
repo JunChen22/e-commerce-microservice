@@ -13,7 +13,7 @@ import java.util.List;
 public interface AdminOrderService {
 
     @ApiOperation("waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5")
-    Flux<Orders> getAllOrderByStatus(int statusCode);
+    Flux<Orders> listAllOrderByStatus(int statusCode);
 
     @ApiOperation("get user detail order")
     Mono<OrderDetail> getUserOrderDetail(String orderSn);

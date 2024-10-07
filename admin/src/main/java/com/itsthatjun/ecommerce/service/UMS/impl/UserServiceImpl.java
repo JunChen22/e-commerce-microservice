@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Flux<Member> getAllUser() {
+    public Flux<Member> listAllUser() {
         String url = UMS_SERVICE_URL + "/admin/getAllUser";
 
         return webClient.get().uri(url).retrieve().bodyToFlux(Member.class)

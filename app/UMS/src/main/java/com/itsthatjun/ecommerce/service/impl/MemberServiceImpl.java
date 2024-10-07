@@ -26,7 +26,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
-import java.util.Date;
 import java.util.List;
 
 import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsAuthUpdateEvent.Type.*;
@@ -230,7 +229,7 @@ public class MemberServiceImpl implements MemberService {
 
     // ================= Admin actions ===================
     @Override
-    public Flux<Member> getAllUser() {
+    public Flux<Member> listAllUser() {
         return Mono.fromCallable(() -> {
             List<Member> memberList = memberMapper.selectByExample(new MemberExample());
             return memberList;
@@ -344,11 +343,6 @@ public class MemberServiceImpl implements MemberService {
                 .setHeader("event-type", event.getEventType())
                 .build();
         streamBridge.send(bindingName, message);
-    }
-
-    public List<UserInfo> getAllUserInfo() {
-        List<UserInfo> userInfoList = memberDao.getAllUserInfo();
-        return userInfoList;
     }
 
     @Override

@@ -36,7 +36,7 @@ import static com.itsthatjun.ecommerce.dto.event.outgoing.OmsReturnEvent.Type.RE
 @Service
 public class AdminReturnServiceImpl implements AdminReturnService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReturnOrderServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AdminReturnServiceImpl.class);
 
     private final PaypalService paypalService;
 

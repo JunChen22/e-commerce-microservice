@@ -45,7 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Flux<AdminArticleInfo> getAllArticle() {
+    public Flux<AdminArticleInfo> listAllArticle() {
         String url = CMS_SERVICE_URL + "/admin/all";
         LOG.debug("Will call the getAllArticle API on URL: {}", url);
 

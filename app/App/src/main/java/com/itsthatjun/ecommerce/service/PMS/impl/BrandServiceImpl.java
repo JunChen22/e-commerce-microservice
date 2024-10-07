@@ -6,7 +6,6 @@ import com.itsthatjun.ecommerce.service.PMS.BrandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -29,16 +28,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Flux<Brand> getAllBrand() {
-        String url = PMS_SERVICE_URL + "/listAll/";
-        LOG.debug("Will call the getAllBrand API on URL: {}", url);
-
-        return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-    }
-
-    @Override
-    public Flux<Brand> getAllBrand(int pageNum, int pageSize) {
+    public Flux<Brand> listAllBrand(int pageNum, int pageSize) {
         String url = PMS_SERVICE_URL + "/list/" + "?pageNum=" + pageNum + "&pageSize=" + pageSize;
         LOG.debug("Will call the getAllBrand API on URL: {}", url);
 

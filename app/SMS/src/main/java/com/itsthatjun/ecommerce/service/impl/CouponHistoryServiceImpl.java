@@ -18,6 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,9 @@ public class CouponHistoryServiceImpl implements CouponHistoryService {
     }
 
     @Override
-    public Flux<UsedCouponHistory> getAllCouponUsed() {
+    public Flux<UsedCouponHistory> listAllCouponUsedBetween(LocalDateTime startTime, LocalDateTime endTime) {
         return Mono.fromCallable(() -> {
+            // TODO: add time range filter
             List<Coupon> couponList = couponMapper.selectByExample(new CouponExample());
             List<UsedCouponHistory> usedCouponHistoryList = new ArrayList<>();
             for (Coupon coupon : couponList) {

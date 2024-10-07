@@ -6,8 +6,8 @@ import com.itsthatjun.ecommerce.security.CustomReactiveAuthenticationManager;
 import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
 import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@Api(tags = "User related", description = "retrieve user information")
+@Tag(name = "User related", description = "retrieve user information")
 public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);

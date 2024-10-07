@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.dao.AdminProductDao">
 
-    <select id="getAllProduct" resultMap="com.itsthatjun.ecommerce.mbg.mapper.ProductMapper.BaseResultMap">
+    <select id="listAllProduct" resultMap="com.itsthatjun.ecommerce.mbg.mapper.ProductMapper.BaseResultMap">
         SELECT
             *
         FROM product p;
@@ -15,7 +15,7 @@
         WHERE id = #{productId}
     </select>
 
-    <select id="getAllSku" resultMap="com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper.BaseResultMap">
+    <select id="listAllSku" resultMap="com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper.BaseResultMap">
         SELECT
             *
         FROM product_sku

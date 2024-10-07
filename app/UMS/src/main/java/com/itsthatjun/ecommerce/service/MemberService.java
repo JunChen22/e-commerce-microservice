@@ -42,7 +42,7 @@ public interface MemberService {
     // ================= Admin operations ==================
 
     @ApiOperation("")
-    Flux<Member> getAllUser();
+    Flux<Member> listAllUser();
 
     @ApiOperation("")
     Mono<AdminMemberDetail> getMemberDetailByUserId(int userId);

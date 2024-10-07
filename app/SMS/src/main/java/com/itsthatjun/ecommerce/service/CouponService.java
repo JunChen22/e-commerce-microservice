@@ -20,8 +20,8 @@ public interface  CouponService {
     @ApiOperation("update used coupon count and history")
     Mono<Void> updateUsedCoupon(String code, int orderId, int memberId);
 
-    @ApiOperation(value = "Get all coupon")
-    Flux<Coupon> getAllCoupon();
+    @ApiOperation(value = "List all coupon")
+    Flux<Coupon> listAllCoupon();
 
     @ApiOperation(value = "Get detail of a coupon by id")
     Mono<Coupon> getACoupon(int id);

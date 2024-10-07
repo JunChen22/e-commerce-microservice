@@ -11,7 +11,6 @@ import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.AdminOrderService;
 import com.itsthatjun.ecommerce.service.PaypalService;
-import com.itsthatjun.ecommerce.service.impl.OrderServiceImpl;
 import com.itsthatjun.ecommerce.service.impl.RedisServiceImpl;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
@@ -93,7 +92,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     // TODO: change these based of status code and add 4 and 5 in
     // waiting for payment 0 , fulfilling 1,  send 2 , complete(received) 3, closed(out of return period) 4 ,invalid 5
     @Override
-    public Flux<Orders> getAllOrderByStatus(int statusCode) {
+    public Flux<Orders> listAllOrderByStatus(int statusCode) {
         return Mono.fromCallable(() -> {
             OrdersExample example = new OrdersExample();
             example.createCriteria().andStatusEqualTo(statusCode);

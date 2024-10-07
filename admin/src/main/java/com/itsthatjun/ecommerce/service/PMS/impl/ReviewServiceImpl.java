@@ -2,7 +2,6 @@ package com.itsthatjun.ecommerce.service.PMS.impl;
 
 import com.itsthatjun.ecommerce.dto.pms.ProductReview;
 import com.itsthatjun.ecommerce.dto.pms.event.PmsAdminReviewEvent;
-import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.mbg.model.Review;
 import com.itsthatjun.ecommerce.service.PMS.ReviewService;
 import com.itsthatjun.ecommerce.service.impl.AdminServiceImpl;

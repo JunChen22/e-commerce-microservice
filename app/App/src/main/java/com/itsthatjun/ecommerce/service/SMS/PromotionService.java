@@ -7,12 +7,12 @@ import reactor.core.publisher.Flux;
 
 public interface PromotionService {
 
-    @ApiOperation("All sales including promotional sale(regular discount) and flash sale(could clearance or limited time discount")
-    Flux<PromotionSale> getAllPromotionSale();
+    @ApiOperation("List all sales including promotional sale(regular discount) and flash sale(could clearance or limited time discount")
+    Flux<PromotionSale> listAllPromotionSale();
 
-    @ApiOperation("get all the item that is on regular sale discount")
-    Flux<Product> getAllPromotionSaleItem();
+    @ApiOperation("List all the item that is on regular sale discount")
+    Flux<Product> listAllPromotionSaleItem();
 
-    @ApiOperation("get all item that is on short term sale like clearance or special sale")
-    Flux<Product> getAllFlashSaleItem();
+    @ApiOperation("List all item that is on short term sale like clearance or special sale")
+    Flux<Product> listAllFlashSaleItem();
 }

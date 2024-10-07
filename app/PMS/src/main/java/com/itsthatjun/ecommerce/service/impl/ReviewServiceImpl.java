@@ -7,6 +7,8 @@ import com.itsthatjun.ecommerce.mbg.mapper.ReviewPicturesMapper;
 import com.itsthatjun.ecommerce.mbg.mapper.ReviewUpdateLogMapper;
 import com.itsthatjun.ecommerce.mbg.model.*;
 import com.itsthatjun.ecommerce.service.ReviewService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import java.util.List;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     private final ReviewMapper reviewMapper;
 

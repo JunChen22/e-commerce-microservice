@@ -2,10 +2,8 @@ package com.itsthatjun.ecommerce.controller.CMS;
 
 import com.itsthatjun.ecommerce.dto.cms.AdminArticleInfo;
 import com.itsthatjun.ecommerce.service.CMS.impl.ArticleServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +13,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/article")
 @PreAuthorize("hasRole('ROLE_admin_content')")
-@Api(tags = "content related", description = "CRUD articles like buyer's guide, product comparison, and MISC articles")
+@Tag(name = "content related", description = "CRUD articles like buyer's guide, product comparison, and MISC articles")
 public class ArticleController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ArticleController.class);
 
     private final ArticleServiceImpl articleService;
 
@@ -27,10 +23,10 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    @GetMapping("/all")
-    @ApiOperation(value = "Get all the articles")
-    public Flux<AdminArticleInfo> getAllArticle() {
-        return articleService.getAllArticle();
+    @GetMapping("/listAll")
+    @ApiOperation(value = "List all the articles")
+    public Flux<AdminArticleInfo> listAllArticle() {
+        return articleService.listAllArticle();
     }
 
     @GetMapping("/{articleId}")

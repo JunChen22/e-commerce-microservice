@@ -5,10 +5,8 @@ import com.itsthatjun.ecommerce.dto.oms.OrderStatus;
 import com.itsthatjun.ecommerce.dto.oms.admin.AdminOrderDetail;
 import com.itsthatjun.ecommerce.mbg.model.Orders;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +16,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/order")
 @PreAuthorize("hasRole('ROLE_admin_order')")
-@Api(tags = "Order related", description = "retrieve information about an order(s) and change order")
+@Tag(name = "Order related", description = "retrieve information about an order(s) and change order")
 public class OrderController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(OrderController.class);
 
     private final OrderServiceImpl orderService;
 

@@ -55,7 +55,7 @@ class CMSApplicationTests extends TestContainerConfig {
     private WebTestClient client;
 
     @Test
-    void getAllArticles() {
+    void listAllArticles() {
         client.get()
                 .uri("/article/all")
                 .accept(APPLICATION_JSON)
@@ -78,7 +78,7 @@ class CMSApplicationTests extends TestContainerConfig {
 
     @Test
     void contextLoads() {
-        Flux<ArticleInfo> articleInfoFlux = articleService.getAllArticles();
+        Flux<ArticleInfo> articleInfoFlux = articleService.listAllArticles();
 
         // Subscribe to the Flux and define how to handle emitted elements
         articleInfoFlux.subscribe(
@@ -103,7 +103,7 @@ class CMSApplicationTests extends TestContainerConfig {
         sendCreateArticleEvent();
         sendCreateArticleEvent();
         TimeUnit.SECONDS.sleep(1);
-        assertEquals(6, adminArticleDao.getAllArticles().size());
+        assertEquals(6, adminArticleDao.listAllArticles().size());
     }
 
     private void sendCreateArticleEvent() {

@@ -40,7 +40,6 @@ import reactor.core.scheduler.Scheduler;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.*;
 
 import static com.itsthatjun.ecommerce.dto.event.incoming.OmsCompletionEvent.Type.PAYMENT_FAILURE;
@@ -656,7 +655,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Orders> getAllSendingOrder() {
+    public List<Orders> listAllSendingOrder() {
         OrdersExample ordersExample = new OrdersExample();
         ordersExample.createCriteria().andStatusEqualTo(2);
         List<Orders> ordersList = ordersMapper.selectByExample(ordersExample);

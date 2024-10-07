@@ -5,11 +5,12 @@ import com.itsthatjun.ecommerce.mbg.model.CouponHistory;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDateTime;
 
 public interface CouponHistoryService {
 
-    @ApiOperation(value = "Get statistic for coupon usage")
-    Flux<UsedCouponHistory> getAllCouponUsed();
+    @ApiOperation(value = "List all statistic for coupon usage")
+    Flux<UsedCouponHistory> listAllCouponUsedBetween(LocalDateTime startTime, LocalDateTime endTime);
 
     @ApiOperation(value = "Get coupon usage of a user")
     Flux<CouponHistory> getUserCouponUsage(int userId);

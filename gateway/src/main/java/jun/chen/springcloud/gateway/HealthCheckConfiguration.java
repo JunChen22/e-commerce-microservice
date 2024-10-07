@@ -50,6 +50,10 @@ public class HealthCheckConfiguration {
 
         registry.put("auth-server", () -> getHealth("http://auth-server"));
 
+        registry.put("notification", () -> getHealth("http://notification"));
+
+        registry.put("search", () -> getHealth("http://search"));
+
         return CompositeReactiveHealthContributor.fromMap(registry);
     }
 

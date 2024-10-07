@@ -3,10 +3,8 @@ package com.itsthatjun.ecommerce.controller;
 import com.itsthatjun.ecommerce.dto.AdminProductDetail;
 import com.itsthatjun.ecommerce.mbg.model.Product;
 import com.itsthatjun.ecommerce.service.admin.AdminProductServiceImpl;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -14,10 +12,8 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/product/admin")
-@Api(tags = "Product related", description = "Product management service controller")
+@Tag(name = "Product related", description = "Product management service controller")
 public class AdminProductController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ProductController.class);
 
     private final AdminProductServiceImpl productService;
 
