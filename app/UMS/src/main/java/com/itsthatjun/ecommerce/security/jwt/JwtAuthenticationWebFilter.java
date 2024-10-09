@@ -18,10 +18,12 @@ public class JwtAuthenticationWebFilter implements WebFilter {
 
     @Value("${jwt.HEADER_STRING}")
     private String header;
+
     @Value("${jwt.tokenPrefix}")
     private String tokenPrefix;
 
-    private final Logger log = LoggerFactory.getLogger(JwtAuthenticationWebFilter.class);
+    private static Logger log = LoggerFactory.getLogger(JwtAuthenticationWebFilter.class);
+
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired

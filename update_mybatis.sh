@@ -1,21 +1,10 @@
 #!/bin/bash
 
-# Shut down all Docker containers
-docker-compose down
-
-# Remove Docker volumes
-docker volume rm e-commerce-microservice_db-data
-docker volume rm e-commerce-microservice_sms-data
-docker volume rm e-commerce-microservice_oms-data
-docker volume rm e-commerce-microservice_ums-data
-docker volume rm e-commerce-microservice_cms-data
-docker volume rm e-commerce-microservice_pms-data
-docker volume rm e-commerce-microservice_auth-data
-docker volume rm e-commerce-microservice_email-data
-docker volume rm e-commerce-microservice_rabbit-data
+# Shut down all Docker containers and remove volumes
+docker-compose down -v
 
 # Start Docker containers for databases
-docker-compose up -d oms-db cms-db ums-db pms-db sms-db auth-db postgres email-db
+docker-compose up -d oms-db cms-db ums-db pms-db sms-db auth-db postgres
 
 # Wait for the containers to be healthy
 echo "Waiting for containers to be healthy..."
@@ -81,11 +70,6 @@ cd ../..
 
 echo "Generating MyBatis files for auth-server"
 cd ./auth-server
-mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
-cd ../
-
-echo "Generating MyBatis files for Notification"
-cd ./notification
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../
 

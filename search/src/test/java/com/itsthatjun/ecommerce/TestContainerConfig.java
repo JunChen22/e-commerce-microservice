@@ -5,7 +5,6 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.lifecycle.Startables;
 import org.testcontainers.utility.DockerImageName;
@@ -13,12 +12,8 @@ import org.testcontainers.utility.DockerImageName;
 @EnableElasticsearchRepositories(basePackages = "com.itsthatjun.ecommerce.elasticsearch.repository")
 public abstract class TestContainerConfig {
 
-    private static final String INIT_SCRIPT_PATH = "data_test_copy.sql";
-    private static final DockerImageName postgresImageName = DockerImageName.parse("postgres:16-bullseye");
     private static final DockerImageName mongoImageName = DockerImageName.parse("mongo:5.0.0");
     private static final DockerImageName elasticSearchImageName = DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch:7.17.24");
-
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(postgresImageName).withInitScript(INIT_SCRIPT_PATH);
 
     private static final MongoDBContainer mongo = new MongoDBContainer(mongoImageName);
 
@@ -26,17 +21,13 @@ public abstract class TestContainerConfig {
 
     @AfterAll
     static void afterAllBase() {
-        postgres.stop();
         mongo.stop();
         elasticsearch.stop();
     }
 
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
-        Startables.deepStart(postgres, mongo, elasticsearch).join();
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
+        Startables.deepStart(mongo, elasticsearch).join();
 
         String mongoHost = mongo.getHost();
         Integer mongoMappedPort = mongo.getMappedPort(27017);

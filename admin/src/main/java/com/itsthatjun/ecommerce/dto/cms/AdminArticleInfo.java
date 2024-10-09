@@ -23,5 +23,4 @@ public class AdminArticleInfo extends Article implements Serializable {
 
     @ApiModelProperty("")
     private List<ArticleVideo> videos;
-
 }

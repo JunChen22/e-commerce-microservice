@@ -95,6 +95,11 @@ spring.cloud.gateway.routes:
     predicates:
       - Path=/login
 
+  - id: notification-testing-open-api
+    uri: http://notification
+    predicates:
+      - Path=/**
+
 management.endpoint.gateway.enabled: true
 
 logging:

@@ -1,27 +1,15 @@
-server.error.include-message: always
-
-spring.cloud.stream.defaultBinder: rabbit
-eureka.client.enabled: false
-spring.sleuth.integration.enabled: false
-
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
-
-#    TRACE: The lowest level of logging that provides the most detailed information about what is happening in the application.
-#    DEBUG: A level higher than TRACE that provides information about application flow and internal state.
-#    INFO: A level higher than DEBUG that provides information about what the application is doing and its status.
-#    WARN: A level higher than INFO that indicates potentially harmful situations.
-#    ERROR: The highest level of logging that indicates errors that may cause the application to malfunction or fail.
+spring:
+  elasticsearch:
+    uris: http://localhost:9200
+  data:
+    elasticsearch:
+      client:
+        reactive: true
+      repositories:
+        enabled: true
 
 logging:
   level:
-    #root: ERROR
     root: INFO
-    org.springframework.security: DEBUG
-    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
-    com.itsthatjun.ecommerce: DEBUG
+    org.springframework.data.elasticsearch.client.WIRE: TRACE
     org.testcontainers: DEBUG

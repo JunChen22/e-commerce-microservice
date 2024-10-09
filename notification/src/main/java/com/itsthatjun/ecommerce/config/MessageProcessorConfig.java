@@ -4,8 +4,8 @@ import com.itsthatjun.ecommerce.dto.OrderDetail;
 import com.itsthatjun.ecommerce.dto.ReturnDetail;
 import com.itsthatjun.ecommerce.dto.UserInfo;
 import com.itsthatjun.ecommerce.dto.event.*;
-import com.itsthatjun.ecommerce.service.OmsService;
-import com.itsthatjun.ecommerce.service.UmsService;
+import com.itsthatjun.ecommerce.service.event.OmsServiceImpl;
+import com.itsthatjun.ecommerce.service.event.UmsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ public class MessageProcessorConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageProcessorConfig.class);
 
-    private final UmsService umsService;
+    private final UmsServiceImpl umsService;
 
-    private final OmsService omsService;
+    private final OmsServiceImpl omsService;
 
     @Autowired
-    public MessageProcessorConfig(UmsService umsService, OmsService omsService) {
+    public MessageProcessorConfig(UmsServiceImpl umsService, OmsServiceImpl omsService) {
         this.umsService = umsService;
         this.omsService = omsService;
     }

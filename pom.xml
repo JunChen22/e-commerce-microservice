@@ -60,7 +60,7 @@
         <junit.version>4.13.1</junit.version>
         <reactor.test.version>3.4.13</reactor.test.version>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-        <spring.doc.version>2.0.2</spring.doc.version>
+        <spring.doc.version>1.6.15</spring.doc.version>
     </properties>
 
     <dependencies>          <!-- all child module will be used -->
@@ -136,6 +136,18 @@
                 <version>${postgres.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.r2dbc</groupId>
+                <artifactId>r2dbc-postgresql</artifactId>
+                <version>0.8.13.RELEASE</version>
+            </dependency>
+
+
             <!-- paypal API -->
             <dependency>
                 <groupId>com.paypal.sdk</groupId>
@@ -187,15 +199,9 @@
 
             <dependency>
                 <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
+                <artifactId>springdoc-openapi-webflux-ui</artifactId>
                 <version>${spring.doc.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-                <version>${spring.doc.version}</version>
-            </dependency>
-
 
             <!-- unit testing -->
             <dependency>

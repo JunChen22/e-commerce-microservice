@@ -1,13 +1,11 @@
 package com.itsthatjun.ecommerce;
 
-import com.itsthatjun.ecommerce.config.MyBatisConfig;
 import com.itsthatjun.ecommerce.dto.event.*;
-import com.itsthatjun.ecommerce.service.EmailService;
+import com.itsthatjun.ecommerce.service.impl.EmailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.function.Consumer;
@@ -15,7 +13,6 @@ import java.util.function.Consumer;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@Import(MyBatisConfig.class)
 @ActiveProfiles("test")
 public class NotificationApplicationTests extends TestContainerConfig {
 
