@@ -14,8 +14,10 @@ public class JwtTokenUtil {
 
     @Value("${jwt.secretKey}")
     private String secret;
+
     @Value("${jwt.expirationTimeMinute}")
     private int expiration;
+
     @Value("${jwt.issuer}")
     private String issuer;
 
@@ -36,6 +38,7 @@ public class JwtTokenUtil {
                 .compact();
     }
 
+    // TODO: add refresh token
     private boolean isTokenExpired(String token) {
         Claims claims= getClaimsFromToken(token);
         Date date = claims.getExpiration();

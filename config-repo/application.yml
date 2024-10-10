@@ -22,7 +22,6 @@ management.endpoints.web.exposure.include: "*"
 
 logging:
   level:
-    #root: ERROR
     root: INFO
     org.springframework.security: DEBUG
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE

@@ -1,11 +1,12 @@
 package com.itsthatjun.ecommerce.security;
 
-import com.itsthatjun.ecommerce.mbg.model.Member;
+import com.itsthatjun.ecommerce.model.Member;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 public class CustomUserDetail implements UserDetails {
@@ -19,7 +20,12 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        // TODO: add authorities for member roles
+
+//        return member.getRoles().stream()
+//                .map(role -> new SimpleGrantedAuthority(role.getName()))
+//                .collect(Collectors.toList());
+        return Collections.emptyList();
     }
 
     @Override

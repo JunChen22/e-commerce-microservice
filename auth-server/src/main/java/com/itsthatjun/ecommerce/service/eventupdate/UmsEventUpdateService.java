@@ -1,41 +1,62 @@
 package com.itsthatjun.ecommerce.service.eventupdate;
 
-import com.itsthatjun.ecommerce.mbg.mapper.MemberMapper;
-import com.itsthatjun.ecommerce.mbg.model.Member;
-import io.swagger.annotations.ApiOperation;
+import com.itsthatjun.ecommerce.model.Member;
+import com.itsthatjun.ecommerce.repository.MemberRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class UmsEventUpdateService {
 
-    private final MemberMapper memberMapper;
+    private static final Logger LOG = LoggerFactory.getLogger(UmsEventUpdateService.class);
+
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public UmsEventUpdateService(MemberMapper memberMapper) {
-        this.memberMapper = memberMapper;
+    public UmsEventUpdateService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
-    @ApiOperation(value = "adds user to auth datase")
-    public void addMember(Member member) {
-        memberMapper.insert(member);
-    };
-
-    @ApiOperation(value = "update info like password and name, other info are irrelevant for auth")
-    public void updateInfo(Member member) {
-        memberMapper.updateByPrimaryKey(member);
+    /**
+     * Adds a new user to the authentication database.
+     *
+     * @param member the member to add
+     * @return a Mono containing the added member
+     */
+    public Mono<Member> addMember(Member member) {
+        return memberRepository.save(member);
     }
 
-    @ApiOperation(value = "Update account status, status 0 can not login only 1 can.")
-    public void updateStatus(Member member) {
-        memberMapper.updateByPrimaryKey(member);
+    /**
+     * Updates user information like password and name.
+     *
+     * @param member the member with updated information
+     * @return a Mono containing the updated member
+     */
+    public Mono<Member> updateInfo(Member member) {
+        return memberRepository.save(member);
     }
 
-    @ApiOperation(value = "delete member, remove from auth server, record kept in UMS")
-    public void deleteMember(int userId) {
-        Member existingMember = memberMapper.selectByPrimaryKey(userId);
-        existingMember.setStatus(0);
-        existingMember.setDeleteStatus(1);
-        memberMapper.updateByPrimaryKey(existingMember);
+    /**
+     * Updates the account status. Only status 1 allows login.
+     *
+     * @param member the member with updated status
+     * @return a Mono containing the updated member
+     */
+    public Mono<Member> updateStatus(Member member) {
+        return memberRepository.save(member);
+    }
+
+    /**
+     * Deletes a member from the authentication server.
+     *
+     * @param userId the ID of the member to delete
+     * @return a Mono indicating completion
+     */
+    public Mono<Void> deleteMember(int userId) {
+        return memberRepository.deleteById(userId);
     }
 }

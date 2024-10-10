@@ -4,10 +4,12 @@ server:
 spring:
   application:
     name: auth-server
-  datasource:
-    url: jdbc:postgresql://localhost:5438/authdb
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5438/authdb
+    username: postgres
+    password: password
+    pool:
+      enabled: true
 
 spring.cloud:
   function:   # can't have space between, tells spring which to use
@@ -38,7 +40,7 @@ spring.config.activate.on-profile: docker
 server.port: 80
 
 spring:
-  datasource.url: jdbc:postgresql://auth-db:5432/authdb
+  r2dbc.url: r2dbc:postgresql://auth-db:5432/authdb
   redis:
     host: redis
 

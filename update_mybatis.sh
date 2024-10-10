@@ -14,7 +14,6 @@ while true; do
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "ums-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "pms-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "sms-db" && \
-       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "email-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "auth-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "postgres"
     then

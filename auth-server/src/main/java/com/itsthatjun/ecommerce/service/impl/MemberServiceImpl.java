@@ -1,11 +1,9 @@
 package com.itsthatjun.ecommerce.service.impl;
 
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent;
-import com.itsthatjun.ecommerce.mbg.mapper.MemberLoginLogMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.MemberMapper;
-import com.itsthatjun.ecommerce.mbg.model.Member;
-import com.itsthatjun.ecommerce.mbg.model.MemberExample;
-import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
+import com.itsthatjun.ecommerce.model.MemberLoginLog;
+import com.itsthatjun.ecommerce.repository.MemberLoginLogRepository;
+import com.itsthatjun.ecommerce.repository.MemberRepository;
 import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.MemberService;
 import org.slf4j.Logger;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
-import java.util.List;
 
 import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent.Type.New_LOGIN;
 
@@ -30,42 +27,41 @@ public class MemberServiceImpl implements ReactiveUserDetailsService, MemberServ
 
     private static final Logger LOG = LoggerFactory.getLogger(MemberServiceImpl.class);
 
-    private final MemberMapper memberMapper;
+    private final MemberRepository memberRepository;
 
-    private final MemberLoginLogMapper loginLogMapper;
+    private final MemberLoginLogRepository loginLogRepository;
 
     private final StreamBridge streamBridge;
 
     @Autowired
-    public MemberServiceImpl(MemberMapper memberMapper, MemberLoginLogMapper loginLogMapper, StreamBridge streamBridge) {
-        this.memberMapper = memberMapper;
-        this.loginLogMapper = loginLogMapper;
+    public MemberServiceImpl(MemberRepository memberRepository, MemberLoginLogRepository loginLogRepository, StreamBridge streamBridge) {
+        this.memberRepository = memberRepository;
+        this.loginLogRepository = loginLogRepository;
         this.streamBridge = streamBridge;
     }
 
     @Override
-    public Mono<UserDetails> findByUsername(String username) throws UsernameNotFoundException{
-        MemberExample example = new MemberExample();
-        example.createCriteria().andUsernameEqualTo(username).andStatusEqualTo(1);
-        List<Member> memberList = memberMapper.selectByExample(example);
-
-        if (memberList.isEmpty()) {
-            return Mono.error(new UsernameNotFoundException("Username not found"));
-        }
-
-        Member member = memberList.get(0);
-
-        return Mono.just(new CustomUserDetail(member));
+    public Mono<UserDetails> findByUsername(String username) throws UsernameNotFoundException {
+        // TODO: Add a check for the user's status (e.g. active, inactive, etc.)
+        //      when no user is found, throw a UsernameNotFoundException
+        return memberRepository.findByUsername(username)
+                .map(CustomUserDetail::new);
     }
 
     @Override
-    public void memberLoginLog(int userId) {
+    public Mono<Void> memberLoginLog(int memberId) {
         MemberLoginLog newLogin = new MemberLoginLog();
-        newLogin.setId(userId);
+        newLogin.setMemberId(memberId);
         newLogin.setLoginTime(new Date());
-        // newLogin.setIpAddress();  TODO: set IP address
-        loginLogMapper.insert(newLogin);
-        sendUmsLogUpdateMessage("authLog-out-0", new UmsLogUpdateEvent(New_LOGIN, userId, newLogin));
+        // TODO: set IP address (this should be done when you get the actual IP address)
+        // newLogin.setIpAddress(ipAddress);
+
+        return loginLogRepository.save(newLogin) // Save the new login log
+                .flatMap(savedLog -> {
+                    // Send the log update message after saving the log
+                    sendUmsLogUpdateMessage("authLog-out-0", new UmsLogUpdateEvent(New_LOGIN, memberId, savedLog));
+                    return Mono.empty();
+                });
     }
 
     private void sendUmsLogUpdateMessage(String bindingName, UmsLogUpdateEvent event) {

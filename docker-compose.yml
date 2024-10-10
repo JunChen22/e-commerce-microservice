@@ -147,7 +147,7 @@ services:
 
   search-db:
     image: mongo:5.0.0
-    container_name: e-com_mongodb
+    container_name: e-com_search-db
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo

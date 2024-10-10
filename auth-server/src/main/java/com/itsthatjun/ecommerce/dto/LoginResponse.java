@@ -6,6 +6,7 @@ import lombok.Getter;
 public class LoginResponse {
 
     private boolean success;
+
     private String token;
 
     public LoginResponse(boolean success, String token) {

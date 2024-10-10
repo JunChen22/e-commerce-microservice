@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dto.event.outgoing;
 
-import com.itsthatjun.ecommerce.mbg.model.MemberLoginLog;
+import com.itsthatjun.ecommerce.model.MemberLoginLog;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;

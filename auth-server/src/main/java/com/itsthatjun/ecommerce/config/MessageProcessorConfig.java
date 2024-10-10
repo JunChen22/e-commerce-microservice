@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.config;
 
 import com.itsthatjun.ecommerce.dto.event.Incoming.UmsUserEvent;
-import com.itsthatjun.ecommerce.mbg.model.Member;
+import com.itsthatjun.ecommerce.model.Member;
 import com.itsthatjun.ecommerce.service.eventupdate.UmsEventUpdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +35,10 @@ public class MessageProcessorConfig {
             switch (event.getEventType()) {
 
                 case NEW_ACCOUNT:
-                    umsEventUpdateService.addMember(member);
+                    umsEventUpdateService.addMember(member).subscribe();
                     break;
 
-                case UPDATE_ACCOUNT_INFO:
+                case UPDATE_ACCOUNT_INFO:       // might combine these two since their action are similar
                     umsEventUpdateService.updateInfo(member);
                     break;
 

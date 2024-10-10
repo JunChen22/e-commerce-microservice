@@ -26,6 +26,7 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
 
+        <!-- r2dbc -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>

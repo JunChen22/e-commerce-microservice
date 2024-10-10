@@ -1,9 +1,14 @@
 package com.itsthatjun.ecommerce.service;
 
-import io.swagger.annotations.ApiOperation;
+import reactor.core.publisher.Mono;
 
 public interface MemberService {
 
-    @ApiOperation(value = "sends update log to UMS")
-    void memberLoginLog(int userId);
+    /**
+     * Sends update log to UMS.
+     *
+     * @param memberId the ID of the user to log
+     * @return a Mono indicating completion
+     */
+    Mono<Void> memberLoginLog(int memberId);
 }
