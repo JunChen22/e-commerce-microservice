@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ArticleVideoMapper">
-  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ArticleVideo">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.model.entity.ArticleVideo">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="url" jdbcType="VARCHAR" property="url" />
@@ -99,13 +99,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleVideo" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleVideo" useGeneratedKeys="true">
     insert into article_video (article_id, url, created_at, 
       updated_at)
     values (#{articleId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
       #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleVideo" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleVideo" useGeneratedKeys="true">
     insert into article_video
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="articleId != null">
@@ -176,7 +176,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleVideo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleVideo">
     update article_video
     <set>
       <if test="articleId != null">
@@ -194,7 +194,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleVideo">
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleVideo">
     update article_video
     set article_id = #{articleId,jdbcType=INTEGER},
       url = #{url,jdbcType=VARCHAR},

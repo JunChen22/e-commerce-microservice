@@ -1,24 +1,47 @@
 package com.itsthatjun.ecommerce.service;
 
-import com.itsthatjun.ecommerce.dto.admin.AdminArticleInfo;
-import io.swagger.annotations.ApiOperation;
+import com.itsthatjun.ecommerce.model.AdminArticleInfo;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface AdminArticleService {
 
-    @ApiOperation(value = "get all articles")
+    /**
+     * list all articles
+     * @return list of articles
+     */
     Flux<AdminArticleInfo> listAllArticles();
 
-    @ApiOperation(value = "get article based on id")
+    /**
+     * get article based on id, added delay and fault percentage for circuit breaker testing
+     * @param articleId article id
+     * @param delay delay in ms
+     * @param faultPercent fault percentage
+     * @return article info
+     */
     Mono<AdminArticleInfo> getArticle(int articleId, int delay, int faultPercent);
-
-    @ApiOperation(value = "create article")
-    Mono<AdminArticleInfo> createArticle(AdminArticleInfo article, String operator);
-
-    @ApiOperation(value = "update/add article and its media content")
-    Mono<AdminArticleInfo> updateArticle(AdminArticleInfo article, String operator);
-
-    @ApiOperation(value = "delete article and all of its media content")
-    Mono<Void> deleteArticle(int articleId, String operator);
+//
+//    /**
+//     * create article and its media content
+//     * @param article article info
+//     * @param operator operator
+//     * @return article info
+//     */
+//    Mono<AdminArticleInfo> createArticle(AdminArticleInfo article, String operator);
+//
+//    /**
+//     * update/add article and its media content
+//     * @param article article info
+//     * @param operator operator
+//     * @return article info
+//     */
+//    Mono<AdminArticleInfo> updateArticle(AdminArticleInfo article, String operator);
+//
+//    /**
+//     * delete article and all of its media content
+//     * @param articleId article id
+//     * @param operator operator
+//     * @return void
+//     */
+//    Mono<Void> deleteArticle(int articleId, String operator);
 }

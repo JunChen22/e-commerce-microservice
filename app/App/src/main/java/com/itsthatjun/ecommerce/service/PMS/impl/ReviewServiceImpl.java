@@ -2,7 +2,7 @@ package com.itsthatjun.ecommerce.service.PMS.impl;
 
 import com.itsthatjun.ecommerce.dto.ProductReview;
 import com.itsthatjun.ecommerce.dto.event.pms.PmsReviewEvent;
-import com.itsthatjun.ecommerce.mbg.model.Review;
+import com.itsthatjun.ecommerce.model.Review;
 import com.itsthatjun.ecommerce.service.PMS.ReviewService;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;

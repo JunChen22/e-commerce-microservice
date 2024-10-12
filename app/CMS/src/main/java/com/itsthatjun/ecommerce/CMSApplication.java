@@ -30,15 +30,15 @@ public class CMSApplication {
     }
 
     @Bean
-    public Scheduler jdbcScheduler() {
-        LOG.info("Creates a jdbcScheduler with thread pool size = {}", threadPoolSize);
-        return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "jdbc-pool");
+    public Scheduler publishEventScheduler() {
+        LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
+        return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
     }
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(CMSApplication.class, args);
 
-        String postgresSqlURL = context.getEnvironment().getProperty("spring.datasource.url");
+        String postgresSqlURL = context.getEnvironment().getProperty("spring.r2dbc.url");
         LOG.info("Connected to Postgres:" + postgresSqlURL);
     }
 }

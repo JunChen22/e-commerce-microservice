@@ -1,15 +1,23 @@
 package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.dto.ArticleInfo;
-import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ArticleService {
 
-    @ApiOperation(value = "list all articles")
+    /**
+     * list all articles
+     * @return list of articles
+     */
     Flux<ArticleInfo> listAllArticles();
 
-    @ApiOperation(value = "get article based on id")
-    Mono<ArticleInfo> getArticle(int articleId, int delay, int faultPercent);
+    /**
+     * get article based on slug, added delay and fault percentage for circuit breaker testing
+     * @param slug slug
+     * @param delay delay in milliseconds
+     * @param faultPercent fault percentage
+     * @return article info
+     */
+    Mono<ArticleInfo> getArticleBySlug(String slug, int delay, int faultPercent);
 }

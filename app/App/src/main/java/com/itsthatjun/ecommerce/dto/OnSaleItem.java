@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.mbg.model.Brand;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.model.Brand;
+import com.itsthatjun.ecommerce.model.Product;
 import lombok.Data;
 
 import java.math.BigDecimal;

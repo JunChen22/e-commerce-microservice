@@ -39,15 +39,15 @@ public class MessageProcessorConfig {
                     break;
 
                 case UPDATE_ACCOUNT_INFO:       // might combine these two since their action are similar
-                    umsEventUpdateService.updateInfo(member);
+                    umsEventUpdateService.updateInfo(member).subscribe();
                     break;
 
                 case UPDATE_ACCOUNT_STATUS:
-                    umsEventUpdateService.updateStatus(member);
+                    umsEventUpdateService.updateStatus(member).subscribe();
                     break;
 
                 case DELETE_ACCOUNT:
-                    umsEventUpdateService.deleteMember(userId);
+                    umsEventUpdateService.deleteMember(userId).subscribe();
                     break;
 
                 default:

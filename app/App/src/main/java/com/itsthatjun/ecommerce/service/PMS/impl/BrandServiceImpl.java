@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.PMS.impl;
 
-import com.itsthatjun.ecommerce.mbg.model.Brand;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.model.Brand;
+import com.itsthatjun.ecommerce.model.Product;
 import com.itsthatjun.ecommerce.service.PMS.BrandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

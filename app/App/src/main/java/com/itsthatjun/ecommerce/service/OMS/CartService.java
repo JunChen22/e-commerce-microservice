@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service.OMS;
 
-import com.itsthatjun.ecommerce.mbg.model.CartItem;
+import com.itsthatjun.ecommerce.model.CartItem;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

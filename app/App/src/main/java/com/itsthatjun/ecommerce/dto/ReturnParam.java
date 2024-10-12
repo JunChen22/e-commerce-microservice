@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.mbg.model.ReturnReasonPictures;
-import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
+import com.itsthatjun.ecommerce.model.ReturnReasonPictures;
+import com.itsthatjun.ecommerce.model.ReturnRequest;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

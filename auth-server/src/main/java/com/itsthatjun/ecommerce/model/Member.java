@@ -6,12 +6,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @Table("member")
 public class Member {
-
     @Id
     private Integer id;
 

@@ -9,7 +9,6 @@ import java.util.Date;
 @Data
 @Table("member_login_log")
 public class MemberLoginLog {
-
     @Id
     private Integer id;
 

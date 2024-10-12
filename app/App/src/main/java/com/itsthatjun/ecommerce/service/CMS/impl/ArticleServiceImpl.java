@@ -36,8 +36,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Flux<ArticleInfo> listAllArticle() {
-        String url = CMS_SERVICE_URL + "/all";
+    public Flux<ArticleInfo> listAllArticles() {
+        String url = CMS_SERVICE_URL + "/listAll";
         LOG.debug("Will call the getAllArticle API on URL: {}", url);
 
        return webClient.get().uri(url).retrieve().bodyToFlux(ArticleInfo.class)
@@ -49,9 +49,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Retry(name = "genericRetry")
     @RateLimiter(name = "genericRateLimiter")
     @CircuitBreaker(name = "genericCircuitBreaker", fallbackMethod = "getArticleFallbackValue")
-    public Mono<ArticleInfo> getArticle(int articleId, int delay, int faultPercent) {
-        URI url = UriComponentsBuilder.fromUriString(CMS_SERVICE_URL + "/{articleId}?delay={delay}&faultPercent={faultPercent}")
-                .build(articleId, delay, faultPercent);
+    public Mono<ArticleInfo> getArticle(String slug, int delay, int faultPercent) {
+        URI url = UriComponentsBuilder.fromUriString(CMS_SERVICE_URL + "/{slug}?delay={delay}&faultPercent={faultPercent}")
+                .build(slug, delay, faultPercent);
         LOG.debug("Will call the getArticle API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(ArticleInfo.class)

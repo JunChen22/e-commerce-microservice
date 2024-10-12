@@ -1,23 +1,34 @@
 package com.itsthatjun.ecommerce.dto.cms;
 
-import com.itsthatjun.ecommerce.dto.cms.outgoing.ArticleDTO;
-import com.itsthatjun.ecommerce.dto.cms.outgoing.ImageDTO;
-import com.itsthatjun.ecommerce.dto.cms.outgoing.QaDTO;
-import com.itsthatjun.ecommerce.dto.cms.outgoing.VideoDTO;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
+import com.itsthatjun.ecommerce.dto.cms.model.ArticleDTO;
+import com.itsthatjun.ecommerce.dto.cms.model.ImageDTO;
+import com.itsthatjun.ecommerce.dto.cms.model.QaDTO;
+import com.itsthatjun.ecommerce.dto.cms.model.VideoDTO;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
 import java.util.List;
 
-@Data
-public class ArticleInfo extends ArticleDTO {
+@Getter
+@Setter
+public class ArticleInfo extends ArticleDTO implements Serializable {
 
-    @ApiModelProperty("")
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * question and answer
+     */
     private List<QaDTO> QA;
 
-    @ApiModelProperty("")
+    /**
+     * images
+     */
     private List<ImageDTO> images;
 
-    @ApiModelProperty("")
+    /**
+     * videos
+     */
     private List<VideoDTO> videos;
 }

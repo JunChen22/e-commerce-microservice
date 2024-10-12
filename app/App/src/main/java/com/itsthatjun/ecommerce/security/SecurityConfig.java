@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .authorizeExchange(exchanges ->
                         exchanges
-                                .pathMatchers(HttpMethod.GET, "/article/all", "/article/{articleId}").permitAll()
+                                .pathMatchers(HttpMethod.GET, "/article/listAll", "/article/{articleId}").permitAll()
                                 .pathMatchers(HttpMethod.GET, "/brand/listAll", "/brand/list", "/brand/product/{brandId}", "/brand/{brandId}").permitAll()
                                 .pathMatchers(HttpMethod.GET, "/product/listAll", "/product/{id}", "/product/list").permitAll()
                                 .pathMatchers(HttpMethod.GET, "/review/detail/{reviewId}", "/review/getAllProductReview/**").permitAll()

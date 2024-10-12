@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.dto.event.pms;
 
-import com.itsthatjun.ecommerce.mbg.model.Review;
-import com.itsthatjun.ecommerce.mbg.model.ReviewPictures;
+import com.itsthatjun.ecommerce.model.Review;
+import com.itsthatjun.ecommerce.model.ReviewPictures;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;

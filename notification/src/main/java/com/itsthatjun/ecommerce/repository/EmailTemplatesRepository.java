@@ -7,5 +7,11 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface EmailTemplatesRepository extends ReactiveCrudRepository<EmailTemplates, Integer> {
+
+    /**
+     * find email template based on service name
+     * @param serviceName service name like OMS or PMS. order and product.
+     * @return pre-defined template with placeholder
+     */
     Mono<EmailTemplates> findByServiceName(String serviceName);
 }

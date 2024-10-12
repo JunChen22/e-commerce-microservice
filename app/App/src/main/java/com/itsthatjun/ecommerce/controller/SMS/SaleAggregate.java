@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller.SMS;
 
-import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.PromotionSale;
+import com.itsthatjun.ecommerce.model.Product;
+import com.itsthatjun.ecommerce.model.PromotionSale;
 import com.itsthatjun.ecommerce.service.SMS.impl.PromotionServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;

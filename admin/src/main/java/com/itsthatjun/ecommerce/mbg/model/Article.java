@@ -8,6 +8,8 @@ public class Article implements Serializable {
 
     private String title;
 
+    private String slug;
+
     private String body;
 
     private Integer publishStatus;
@@ -32,6 +34,14 @@ public class Article implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     public String getBody() {

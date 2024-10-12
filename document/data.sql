@@ -1893,17 +1893,18 @@ DROP TABLE IF EXISTS article;
 CREATE TABLE article (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL, -- URL-friendly slug
     body TEXT NOT NULL,
     publish_status INTEGER NOT NULL DEFAULT 0,  -- article online status
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO article (title, body, publish_status)
+INSERT INTO article (title, slug, body, publish_status)
 VALUES
-('Buyer''s guide', 'This article provides a comprehensive guide for buyers.', 1),
-('Product Comparison', 'This article compares different products and their features.', 1),
-('How to Choose the Right Product', 'This article provides tips on how to choose the right product for your needs.', 0);
+('Buyer''s guide', 'buyers-guide' ,'This article provides a comprehensive guide for buyers.', 1),
+('Product Comparison', 'product-comparison', 'This article compares different products and their features.', 1),
+('How to Choose the Right Product', 'how-to-choose-the-right-product', 'This article provides tips on how to choose the right product for your needs.', 1);
 
 
 DROP TABLE IF EXISTS article_QA;

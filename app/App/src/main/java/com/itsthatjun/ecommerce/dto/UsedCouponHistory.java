@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.mbg.model.Coupon;
-import com.itsthatjun.ecommerce.mbg.model.CouponHistory;
+import com.itsthatjun.ecommerce.model.Coupon;
+import com.itsthatjun.ecommerce.model.CouponHistory;
 import lombok.Data;
 
 import java.util.List;

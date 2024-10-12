@@ -235,6 +235,76 @@ public class ArticleExample {
             return (Criteria) this;
         }
 
+        public Criteria andSlugIsNull() {
+            addCriterion("slug is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugIsNotNull() {
+            addCriterion("slug is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugEqualTo(String value) {
+            addCriterion("slug =", value, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugNotEqualTo(String value) {
+            addCriterion("slug <>", value, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugGreaterThan(String value) {
+            addCriterion("slug >", value, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugGreaterThanOrEqualTo(String value) {
+            addCriterion("slug >=", value, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugLessThan(String value) {
+            addCriterion("slug <", value, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugLessThanOrEqualTo(String value) {
+            addCriterion("slug <=", value, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugLike(String value) {
+            addCriterion("slug like", value, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugNotLike(String value) {
+            addCriterion("slug not like", value, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugIn(List<String> values) {
+            addCriterion("slug in", values, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugNotIn(List<String> values) {
+            addCriterion("slug not in", values, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugBetween(String value1, String value2) {
+            addCriterion("slug between", value1, value2, "slug");
+            return (Criteria) this;
+        }
+
+        public Criteria andSlugNotBetween(String value1, String value2) {
+            addCriterion("slug not between", value1, value2, "slug");
+            return (Criteria) this;
+        }
+
         public Criteria andBodyIsNull() {
             addCriterion("body is null");
             return (Criteria) this;

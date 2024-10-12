@@ -23,15 +23,15 @@ public class ContentAggregate {
 
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all articles")
-    public Flux<ArticleInfo> listAllArticle() {
-        return articleService.listAllArticle();
+    public Flux<ArticleInfo> listAllArticles() {
+        return articleService.listAllArticles();
     }
 
-    @GetMapping("/{articleId}")
+    @GetMapping("/{slug}")
     @ApiOperation(value = "Get a article")
-    public Mono<ArticleInfo> getArticle(@PathVariable int articleId,
+    public Mono<ArticleInfo> getArticle(@PathVariable String slug,
                                         @RequestParam(value = "delay", required = false, defaultValue = "0") int delay,
                                         @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent) {
-        return articleService.getArticle(articleId, delay, faultPercent);
+        return articleService.getArticle(slug, delay, faultPercent);
     }
 }

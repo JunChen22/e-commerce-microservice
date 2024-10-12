@@ -24,7 +24,13 @@ spring:
 # outputs
 # CMS and SMS does not need message queue, they only have read operations.
 spring.cloud.stream:
+  function: # can't have space between, tells spring which to use, using a pipe character allow multi-line.
+    definition: cmsArticleMessageProcessor;
   bindings:             # only OMS,PMS,UMS have write operations. Read operations don't need to message queue, non-blocking synchronous.
+    cmsArticleMessageProcessor-in-0: # incoming message from cms to update redis cache
+      destination: article
+      group: articleGroup
+
     order-out-0:  # OMS
       destination: order
       producer:

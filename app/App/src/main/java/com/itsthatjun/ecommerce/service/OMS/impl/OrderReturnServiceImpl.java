@@ -3,7 +3,7 @@ package com.itsthatjun.ecommerce.service.OMS.impl;
 import com.itsthatjun.ecommerce.dto.ReturnParam;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsReturnEvent;
 import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
-import com.itsthatjun.ecommerce.mbg.model.ReturnRequest;
+import com.itsthatjun.ecommerce.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.OMS.OrderReturnService;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.mbg.model.CartItem;
+import com.itsthatjun.ecommerce.model.CartItem;
 import com.itsthatjun.ecommerce.service.OMS.impl.CartServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.SMS.impl;
 
-import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.PromotionSale;
+import com.itsthatjun.ecommerce.model.Product;
+import com.itsthatjun.ecommerce.model.PromotionSale;
 import com.itsthatjun.ecommerce.service.SMS.PromotionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

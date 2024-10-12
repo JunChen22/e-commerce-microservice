@@ -271,8 +271,6 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/cms.yml
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:

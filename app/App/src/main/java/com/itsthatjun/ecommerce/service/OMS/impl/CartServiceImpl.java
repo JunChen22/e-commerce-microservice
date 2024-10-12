@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.OMS.impl;
 
 import com.itsthatjun.ecommerce.dto.event.oms.OmsCartEvent;
-import com.itsthatjun.ecommerce.mbg.model.CartItem;
+import com.itsthatjun.ecommerce.model.CartItem;
 import com.itsthatjun.ecommerce.service.OMS.CartService;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;

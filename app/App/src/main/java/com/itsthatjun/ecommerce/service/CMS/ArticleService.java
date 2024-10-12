@@ -7,9 +7,19 @@ import reactor.core.publisher.Mono;
 
 public interface ArticleService {
 
+    /**
+     * List all articles
+     * @return
+     */
     @ApiOperation(value = "List all articles")
-    Flux<ArticleInfo> listAllArticle();
+    Flux<ArticleInfo> listAllArticles();
 
-    @ApiOperation(value = "Get a article")
-    Mono<ArticleInfo> getArticle(int articleId, int delay, int faultPercent);
+    /**
+     * Get article by slug
+     * @param slug
+     * @param delay
+     * @param faultPercent
+     * @return
+     */
+    Mono<ArticleInfo> getArticle(String slug, int delay, int faultPercent);
 }

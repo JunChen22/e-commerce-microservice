@@ -1,40 +1,31 @@
 package com.itsthatjun.ecommerce.dto;
 
-import com.itsthatjun.ecommerce.dto.admin.AdminArticleInfo;
-import com.itsthatjun.ecommerce.dto.model.ArticleDTO;
+import com.itsthatjun.ecommerce.dto.model.ImageDTO;
 import com.itsthatjun.ecommerce.dto.model.QaDTO;
-import com.itsthatjun.ecommerce.mbg.model.Article;
-import com.itsthatjun.ecommerce.mbg.model.ArticleImage;
-import com.itsthatjun.ecommerce.mbg.model.ArticleQa;
-import com.itsthatjun.ecommerce.mbg.model.ArticleVideo;
+import com.itsthatjun.ecommerce.dto.model.VideoDTO;
+import com.itsthatjun.ecommerce.model.entity.Article;
+import com.itsthatjun.ecommerce.model.entity.ArticleImage;
+import com.itsthatjun.ecommerce.model.entity.ArticleQa;
+import com.itsthatjun.ecommerce.model.entity.ArticleVideo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface DTOMapper {
 
-    DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
+    @Mapping(target = "QA", ignore = true)
+    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "videos", ignore = true)
+    ArticleInfo articleToArticleDTO(Article article);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    Article adminArticleInfoToArticle(AdminArticleInfo articleInfo);
 
-    AdminArticleInfo articleToAdminArticleInfo(Article article, List<ArticleQa> QA, List<ArticleImage> images, List<ArticleVideo> videos);
+    List<ImageDTO> imagesToImageDTOs(List<ArticleImage> articleImages);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    Article articleDTOToArticle(ArticleDTO articleDTO, Integer publishStatus);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "articleId", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    ArticleQa qaDTOToArticleQa(QaDTO qaDTO);
+    List<QaDTO> qasToQaDTOs(List<ArticleQa> articleQas);
 
-    List<ArticleQa> qaDTOToArticleQa(List<QaDTO> qaDTO);
+
+    List<VideoDTO> videosToVideoDTOs(List<ArticleVideo> articleVideos);
 }

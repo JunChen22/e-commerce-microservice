@@ -4,17 +4,15 @@
 docker-compose down -v
 
 # Start Docker containers for databases
-docker-compose up -d oms-db cms-db ums-db pms-db sms-db auth-db postgres
+docker-compose up -d oms-db ums-db pms-db sms-db postgres
 
 # Wait for the containers to be healthy
 echo "Waiting for containers to be healthy..."
 while true; do
     if docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "oms-db" && \
-       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "cms-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "ums-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "pms-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "sms-db" && \
-       docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "auth-db" && \
        docker ps --filter "health=healthy" --format "{{.Names}}" | grep -q "postgres"
     then
         echo "Containers are healthy."
@@ -42,11 +40,6 @@ cd ./app/App
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../..
 
-echo "Generating MyBatis files for ECom-app/CMS"
-cd ./app/CMS
-mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
-cd ../../
-
 echo "Generating MyBatis files for ECom-app/OMS"
 cd ./app/OMS
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
@@ -66,11 +59,6 @@ echo "Generating MyBatis files for ECom-app/UMS"
 cd ./app/UMS
 mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
 cd ../..
-
-echo "Generating MyBatis files for auth-server"
-cd ./auth-server
-mvn mybatis-generator:generate -Dmybatis.generator.overwrite=true
-cd ../
 
 docker-compose down
 echo "MyBatis generation completed for all modules"

@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.PMS;
 
-import com.itsthatjun.ecommerce.mbg.model.Brand;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.model.Brand;
+import com.itsthatjun.ecommerce.model.Product;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

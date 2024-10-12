@@ -38,27 +38,21 @@ public class UserController {
     @Autowired
     private MemberRepository memberRepository;
 
-    @PostMapping(value = "/login")
-    public String login() {
-        memberRepository.findAll().subscribe(System.out::println);
-        return "hello";
+    @Operation(summary = "Login",
+            description = "Login with username and password. return jwt token if successful")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+    public Mono<ResponseEntity<?>> login(@RequestBody LoginRequest loginRequest) {
+        return authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            ).flatMap(authentication -> {
+                CustomUserDetail user = (CustomUserDetail) authentication.getPrincipal();
+                String token = jwtTokenUtil.generateToken(user);
+                memberService.memberLoginLog(user.getUserId());
+                return Mono.just(ResponseEntity.ok(new LoginResponse(true, token)));
+            });
     }
-
-//    @Operation(summary = "Login",
-//            description = "Login with username and password. return jwt token if successful")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Login successful"),
-//            @ApiResponse(responseCode = "401", description = "Unauthorized")
-//    })
-//    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-//    public Mono<ResponseEntity<?>> login(@RequestBody LoginRequest loginRequest) {
-//        return authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-//            ).flatMap(authentication -> {
-//                CustomUserDetail user = (CustomUserDetail) authentication.getPrincipal();
-//                String token = jwtTokenUtil.generateToken(user);
-//                memberService.memberLoginLog(user.getUserId());
-//                return Mono.just(ResponseEntity.ok(new LoginResponse(true, token)));
-//            });
-//    }
 }

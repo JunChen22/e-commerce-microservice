@@ -8,5 +8,4 @@ public class QaDTO {
     private String question;
 
     private String answer;
-
 }
