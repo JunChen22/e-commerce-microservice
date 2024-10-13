@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service;
 
-import com.itsthatjun.ecommerce.mbg.model.Brand;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.model.entity.Brand;
+import com.itsthatjun.ecommerce.model.entity.Product;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

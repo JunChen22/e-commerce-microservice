@@ -13,5 +13,5 @@ public interface MemberLoginLogRepository extends ReactiveCrudRepository<MemberL
      * @param memberId the ID of the member
      * @return a Flux object that may contain the login logs
      */
-    Flux<MemberLoginLog> findByMemberId(Integer memberId);
+    Flux<MemberLoginLog> findAllByMemberId(Integer memberId);
 }

@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
-import com.itsthatjun.ecommerce.mbg.model.Brand;
-import com.itsthatjun.ecommerce.mbg.model.Product;
+import com.itsthatjun.ecommerce.model.entity.Brand;
+import com.itsthatjun.ecommerce.model.entity.Product;
 import com.itsthatjun.ecommerce.service.impl.BrandServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;

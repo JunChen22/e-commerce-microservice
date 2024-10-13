@@ -2,15 +2,11 @@
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <!-- driver or class path error , need to specify the path-->
-    <!-- don't need this line if generator plug in have dependecy driver -->
-    <!-- classPathEntry location="/home/jun/.m2/repository/org/postgresql/postgresql/42.2.8/postgresql-42.2.8.jar" / -->
     <context id="PostgresContext" targetRuntime="MyBatis3" defaultModelType="flat">
-        <!--newly generated mapper will update existing one-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
-        <!-- add serializable to all the generator model. for redis if needed.-->
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
-        <!-- congifuration for generated code comments, default is false ,generic comment -->
+        <!-- custom plugin -->
+        <plugin type="com.itsthatjun.ecommerce.generator.plugin.ModelAnnotationEnhancerPlugin" />
+
+        <!-- configuration for generated code comments, default is false ,generic comment -->
         <commentGenerator>
             <property name="suppressAllComments" value="true"/>
             <property name="suppressDate" value="true"/>
@@ -25,36 +21,32 @@
         </jdbcConnection>
 
         <!-- location of model and mapper will be generated -->
-        <javaModelGenerator targetPackage="com.itsthatjun.ecommerce.mbg.model"
-                            targetProject="src/main/java"/>
-
-        <!-- Generated XML mappers -->
-        <sqlMapGenerator targetPackage="com.itsthatjun.ecommerce.mbg.mapper"
-                         targetProject="src/main/resources"/>
-
-        <!-- Generated Java mapper interfaces -->
-        <javaClientGenerator targetPackage="com.itsthatjun.ecommerce.mbg.mapper"
-                         targetProject="src/main/java"
-                         type="XMLMAPPER"/>
+        <javaModelGenerator targetPackage="com.itsthatjun.ecommerce.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="modelType" value="flat"/> <!-- Ensures no getter/setter methods -->
+        </javaModelGenerator>
 
         <!-- generate the table needed -->
         <!-- change long to integer for PostgreSQL serial id, default mybatis generator is long data type  -->
-        <!-- without <columnOverride column="id" javaType="java.lang.Integer" /> -->
+
         <!--  PMS -->
         <table tableName= "brand">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
-
         <table tableName= "brand_update_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="brand_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
-
         <table tableName= "product_category">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="parent_id" javaType="java.lang.Integer" />
+            <columnOverride column="level" javaType="java.lang.Integer" />
         </table>
         <table tableName= "product_attribute_category">
             <generatedKey column="id" sqlStatement="JDBC" />
@@ -63,6 +55,7 @@
         <table tableName= "product_attribute_type">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="attribute_category_id" javaType="java.lang.Integer" />
         </table>
 
         <table tableName= "product">
@@ -71,15 +64,20 @@
             <columnOverride column="brand_id" javaType="java.lang.Integer" />
             <columnOverride column="category_id" javaType="java.lang.Integer" />
             <columnOverride column="attribute_category_id" javaType="java.lang.Integer" />
+            <columnOverride column="description_album_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
-        <table tableName= "product_attribute">
+        <table tableName= "product_sku">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
-        <table tableName= "product_update_log">
+        <table tableName= "product_attribute">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
@@ -89,44 +87,53 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName= "product_pictures">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_album_id" javaType="java.lang.Integer" />
-            <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
-        <table tableName= "product_sku">
+        <table tableName= "product_update_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
+
 
         <table tableName= "review">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName= "review_album">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="review_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName= "review_pictures">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="review_album_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName= "review_update_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="review_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <!--  UMS -->
@@ -134,6 +141,13 @@
         <table tableName= "member">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="last_login" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "member_icon">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="member_id" javaType="java.lang.Integer" />
         </table>
         <table tableName= "address">
             <generatedKey column="id" sqlStatement="JDBC" />
@@ -144,37 +158,29 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />
+            <columnOverride column="login_time" javaType="java.time.LocalDateTime" />
         </table>
         <table tableName= "member_change_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
-        <table tableName= "member_icon">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="member_id" javaType="java.lang.Integer" />
-        </table>
+
+
 
         <table tableName= "admin">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="last_login" javaType="java.time.LocalDateTime" />
         </table>
-        <table tableName= "admin_login_log">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="admin_id" javaType="java.lang.Integer" />
-        </table>
+
         <table tableName= "roles">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
         </table>
-        <table tableName= "admin_role_relation">
-            <generatedKey column="id" sqlStatement="JDBC" />
-            <columnOverride column="id" javaType="java.lang.Integer" />
-            <columnOverride column="admin_id" javaType="java.lang.Integer" />
-            <columnOverride column="role_id" javaType="java.lang.Integer" />
-        </table>
+
         <table tableName= "permission">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
@@ -185,11 +191,25 @@
             <columnOverride column="role_id" javaType="java.lang.Integer" />
             <columnOverride column="permission_id" javaType="java.lang.Integer" />
         </table>
+        <table tableName= "admin_role_relation">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="admin_id" javaType="java.lang.Integer" />
+            <columnOverride column="role_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
         <table tableName= "admin_permission_relation">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="admin_id" javaType="java.lang.Integer" />
             <columnOverride column="permission_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "admin_login_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="admin_id" javaType="java.lang.Integer" />
+            <columnOverride column="login_time" javaType="java.time.LocalDateTime" />
         </table>
 
 
@@ -198,6 +218,8 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="cart_item">
@@ -205,6 +227,8 @@
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="cart_id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="orders">
@@ -212,6 +236,8 @@
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />
             <columnOverride column="coupon_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="order_item">
@@ -220,12 +246,15 @@
             <columnOverride column="order_id" javaType="java.lang.Integer" />
             <columnOverride column="product_id" javaType="java.lang.Integer" />
             <columnOverride column="product_sku_id" javaType="java.lang.Integer" />
+            <columnOverride column="product_quantity" javaType="java.lang.Integer" />
+            <columnOverride column="product_category_id" javaType="java.lang.Integer" />
         </table>
 
         <table tableName="order_change_history">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="order_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="company_address">
@@ -242,6 +271,10 @@
             <columnOverride column="member_id" javaType="java.lang.Integer" />
             <columnOverride column="return_quantity" javaType="java.lang.Integer" />
             <columnOverride column="status" javaType="java.lang.Integer" />
+            <columnOverride column="handle_time" javaType="java.time.LocalDateTime" />
+            <columnOverride column="receive_time" javaType="java.time.LocalDateTime" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="return_item">
@@ -258,12 +291,14 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="return_request_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="return_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="return_request_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
 
@@ -273,6 +308,8 @@
         <table tableName="coupon">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="start_time" javaType="java.time.LocalDateTime" />
+            <columnOverride column="end_time" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="coupon_product_relation">
@@ -288,17 +325,23 @@
             <columnOverride column="coupon_id" javaType="java.lang.Integer" />
             <columnOverride column="member_id" javaType="java.lang.Integer" />
             <columnOverride column="order_id" javaType="java.lang.Integer" />
+            <columnOverride column="used_time" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="coupon_change_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="coupon_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="promotion_sale">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="start_time" javaType="java.time.LocalDateTime" />
+            <columnOverride column="end_time" javaType="java.time.LocalDateTime" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="promotion_sale_product">
@@ -312,6 +355,7 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="promotion_sale_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
 
 
@@ -319,30 +363,61 @@
         <table tableName="article">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="article_image">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="article_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="article_qa">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="article_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="article_video">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="article_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
 
         <table tableName="article_change_log">
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="article_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+
+
+        <!-- Notification -->
+        <table tableName="email">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+
+        <table tableName="email_templates">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
+        </table>
+
+        <table tableName="email_templates_history">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="template_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
         </table>
     </context>
 </generatorConfiguration>

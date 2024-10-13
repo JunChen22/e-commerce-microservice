@@ -459,3 +459,14 @@ A: this is caused by the load balanced webclient in app 's main application. It 
 
     I'm using two profile so I can keep the eureka profile for docker and kubernetes profile or the default for kubernetes.
 
+
+
+Q: Getting "Cannot instantiate object of type..." error when using a custom plugin in MyBatis Generator.
+
+A: Custom plugins must be:
+1. Developed in a separate module
+2. Packaged as a JAR file
+3. Added as a dependency to MyBatis Generator in pom.xml
+4. Referenced in generatorConfig.xml
+
+Note: Despite IDE auto-complete, the plugin won't work unless it's in a JAR and properly added as a dependency.

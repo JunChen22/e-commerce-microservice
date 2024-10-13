@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.dto.event.outgoing;
 
-import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.ProductSku;
+import com.itsthatjun.ecommerce.model.entity.Product;
+import com.itsthatjun.ecommerce.model.entity.ProductSku;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;

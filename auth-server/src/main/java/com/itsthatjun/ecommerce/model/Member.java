@@ -1,13 +1,15 @@
 package com.itsthatjun.ecommerce.model;
 
 import com.itsthatjun.ecommerce.enums.Status;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Table("member")
 public class Member {
     @Id

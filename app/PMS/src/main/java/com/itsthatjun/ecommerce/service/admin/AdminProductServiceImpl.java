@@ -2,13 +2,14 @@ package com.itsthatjun.ecommerce.service.admin;
 
 import com.github.pagehelper.PageHelper;
 import com.itsthatjun.ecommerce.dao.AdminProductDao;
-import com.itsthatjun.ecommerce.dto.AdminProductDetail;
+import com.itsthatjun.ecommerce.model.AdminProductDetail;
 import com.itsthatjun.ecommerce.dto.event.outgoing.OmsProductOutEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.SmsProductOutEvent;
 import com.itsthatjun.ecommerce.dto.model.Attribute;
 import com.itsthatjun.ecommerce.exceptions.ProductException;
 import com.itsthatjun.ecommerce.mbg.mapper.*;
 import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.model.entity.*;
 import com.itsthatjun.ecommerce.service.AdminProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

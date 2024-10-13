@@ -1,19 +1,6 @@
-modify  in database
-service:
-  type: ClusterIP
-  ports:
-    - port: 5432
-
-there's already default in common
-
-
 
 download minikube and set it to docker
-
 download helm?
-
-
-#
 
 livenessProbe_enabled: true
 
@@ -36,8 +23,6 @@ ports:
   - name: http-mgm
     containerPort: 4004
     protocol: TCP
-
-
 
 # see if i can replace the istioctl with kubectl addons
 istioctl proxy-status

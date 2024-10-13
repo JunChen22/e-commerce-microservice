@@ -199,10 +199,10 @@ gateway:
           destination:
             host: app
             port: 80
-#        - prefix: /swagger-ui.html
-#          destination:
-#            host: app
-#            port: 80
+        - prefix: /swagger-ui.html
+          destination:
+            host: app
+            port: 80
         - prefix: /webjars
           destination:
             host: app

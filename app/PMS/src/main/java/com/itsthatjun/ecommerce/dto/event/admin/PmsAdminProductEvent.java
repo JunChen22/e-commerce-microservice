@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dto.event.admin;
 
-import com.itsthatjun.ecommerce.dto.AdminProductDetail;
+import com.itsthatjun.ecommerce.model.AdminProductDetail;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;

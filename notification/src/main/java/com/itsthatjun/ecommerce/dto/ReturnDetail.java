@@ -5,11 +5,13 @@ import com.itsthatjun.ecommerce.dto.model.ReturnLogDTO;
 import com.itsthatjun.ecommerce.dto.model.ReturnPictureDTO;
 import com.itsthatjun.ecommerce.dto.model.ReturnRequestDTO;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class ReturnDetail extends ReturnRequestDTO {
 
     @ApiModelProperty("")

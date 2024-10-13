@@ -1,8 +1,8 @@
 package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.dto.ProductReview;
-import com.itsthatjun.ecommerce.mbg.model.Review;
-import com.itsthatjun.ecommerce.mbg.model.ReviewPictures;
+import com.itsthatjun.ecommerce.model.entity.Review;
+import com.itsthatjun.ecommerce.model.entity.ReviewPictures;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

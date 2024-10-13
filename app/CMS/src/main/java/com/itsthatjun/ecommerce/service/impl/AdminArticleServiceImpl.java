@@ -1,10 +1,5 @@
 package com.itsthatjun.ecommerce.service.impl;
 
-import com.itsthatjun.ecommerce.dto.ArticleInfo;
-import com.itsthatjun.ecommerce.dto.DTOMapper;
-import com.itsthatjun.ecommerce.dto.model.ImageDTO;
-import com.itsthatjun.ecommerce.dto.model.QaDTO;
-import com.itsthatjun.ecommerce.dto.model.VideoDTO;
 import com.itsthatjun.ecommerce.exceptions.ArticleNotFoundException;
 import com.itsthatjun.ecommerce.model.AdminArticleInfo;
 import com.itsthatjun.ecommerce.dto.event.outgoing.ArticleUpdateEvent;
@@ -14,14 +9,12 @@ import com.itsthatjun.ecommerce.service.AdminArticleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
 
 import java.time.Duration;
 import java.util.List;
@@ -42,10 +35,6 @@ public class AdminArticleServiceImpl implements AdminArticleService {
 
     private final ArticleLogRepository logRepository;
 
-    private final DTOMapper dtoMapper;
-
-    private final Scheduler jdbcScheduler;
-
     private final StreamBridge streamBridge;
 
     private final String BINDING_NAME = "app-article-out-0";
@@ -54,15 +43,12 @@ public class AdminArticleServiceImpl implements AdminArticleService {
 
     @Autowired
     public AdminArticleServiceImpl(ArticleRepository articleRepository, ArticleQARepository qaRepository, ArticleVideoRepository videoRepository,
-                                   ArticleImageRepository imageRepository, ArticleLogRepository logRepository, DTOMapper dtoMapper,
-                                   @Qualifier("publishEventScheduler") Scheduler jdbcScheduler, StreamBridge streamBridge) {
+                                   ArticleImageRepository imageRepository, ArticleLogRepository logRepository, StreamBridge streamBridge) {
         this.articleRepository = articleRepository;
         this.qaRepository = qaRepository;
         this.videoRepository = videoRepository;
         this.imageRepository = imageRepository;
         this.logRepository = logRepository;
-        this.dtoMapper = dtoMapper;
-        this.jdbcScheduler = jdbcScheduler;
         this.streamBridge = streamBridge;
     }
 

@@ -4,10 +4,12 @@ server:
 spring:
   application:
     name: pms
-  datasource:
-    url: jdbc:postgresql://localhost:5435/productdb
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5435/productdb
+    username: postgres
+    password: password
+    pool:
+      enabled: true
 
 spring.cloud:
   function:
@@ -44,12 +46,6 @@ spring.cloud:
         destination: productStockSMSUpdate
         group: productStockSMSUpdateGroup
 
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
 ---
 
 spring.config.activate.on-profile: docker
@@ -57,8 +53,7 @@ spring.config.activate.on-profile: docker
 server.port: 80
 
 spring:
-  datasource:
-    url: jdbc:postgresql://pms-db:5432/productdb
+  r2dbc.url: r2dbc:postgresql://pms-db:5432/productdb
 
 ---
 

@@ -1,10 +1,12 @@
 package com.itsthatjun.ecommerce.dto.cms.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 public class ArticleDTO {
 
     private String title;

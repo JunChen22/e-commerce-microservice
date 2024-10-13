@@ -1,16 +1,16 @@
 package com.itsthatjun.ecommerce.config;
 
-import com.itsthatjun.ecommerce.dto.AdminProductDetail;
+import com.itsthatjun.ecommerce.model.AdminProductDetail;
 import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminBrandEvent;
 import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminProductEvent;
 import com.itsthatjun.ecommerce.dto.event.admin.PmsAdminReviewEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.OmsUpdateIncomingEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.PmsReviewEvent;
 import com.itsthatjun.ecommerce.dto.event.incoming.SmsUpdateIncomingEvent;
-import com.itsthatjun.ecommerce.mbg.model.Brand;
-import com.itsthatjun.ecommerce.mbg.model.Product;
-import com.itsthatjun.ecommerce.mbg.model.ProductSku;
-import com.itsthatjun.ecommerce.mbg.model.Review;
+import com.itsthatjun.ecommerce.model.entity.Brand;
+import com.itsthatjun.ecommerce.model.entity.Product;
+import com.itsthatjun.ecommerce.model.entity.ProductSku;
+import com.itsthatjun.ecommerce.model.entity.Review;
 import com.itsthatjun.ecommerce.service.admin.AdminProductServiceImpl;
 import com.itsthatjun.ecommerce.service.eventupdate.OmsEventUpdateService;
 import com.itsthatjun.ecommerce.service.eventupdate.SmsEventUpdateService;

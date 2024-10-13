@@ -20,12 +20,9 @@ public interface DTOMapper {
     @Mapping(target = "videos", ignore = true)
     ArticleInfo articleToArticleDTO(Article article);
 
-
     List<ImageDTO> imagesToImageDTOs(List<ArticleImage> articleImages);
 
-
     List<QaDTO> qasToQaDTOs(List<ArticleQa> articleQas);
-
 
     List<VideoDTO> videosToVideoDTOs(List<ArticleVideo> articleVideos);
 }

@@ -235,8 +235,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/search.yml
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_DATA_MONGODB_USERNAME=${MONOGO_USR}
+      - SPRING_DATA_MONGODB_PASSWORD=${MONOGO_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
@@ -271,6 +271,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/cms.yml
+      - SPRING_R2DBC_USERNAME=${POSTGRES_USR}
+      - SPRING_R2DBC_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
@@ -312,8 +314,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/pms.yml
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_R2DBC_USERNAME=${POSTGRES_USR}
+      - SPRING_R2DBC_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
@@ -410,8 +412,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/auth-server.yml
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_R2DBC_USERNAME=${POSTGRES_USR}
+      - SPRING_R2DBC_PASSWORD=${POSTGRES_PWD}
     volumes:
       - $PWD/config-repo:/config-repo
     depends_on:
@@ -427,8 +429,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker,eureka
       - SPRING_CONFIG_LOCATION=file:/config-repo/application.yml,file:/config-repo/notification.yml
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USR}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_R2DBC_USERNAME=${POSTGRES_USR}
+      - SPRING_R2DBC_PASSWORD=${POSTGRES_PWD}
       - SPRING_MAIL_USERNAME=${MAIL_USERNAME}
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
     volumes:

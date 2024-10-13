@@ -1,12 +1,14 @@
 package com.itsthatjun.ecommerce.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Table("member_login_log")
 public class MemberLoginLog {
     @Id
