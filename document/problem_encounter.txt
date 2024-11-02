@@ -470,3 +470,17 @@ A: Custom plugins must be:
 4. Referenced in generatorConfig.xml
 
 Note: Despite IDE auto-complete, the plugin won't work unless it's in a JAR and properly added as a dependency.
+
+
+
+Q: "operator does not exist: publish_status_enum = character varying"
+
+A: when trying to find by a enum like article publish status, a custom writer converter is needed to convert java enum to postgres enum.
+but r2dbc can only convert native data types and not custom data types like java enum.
+
+using postgres type or enum, they're usually represent them in string but will only take postgres type or enum to search even though in the query
+will take in quote ' '  which is the same as string, they're not the same.  to get data from postgres that have enum, r2dbc would need a custom
+reader converter, a string to java enum. and to search by enum, i would need to cast java enum to postgres enum using sql query and not a custom
+writer converter since they only support the native data(primitive data?) and not custom data like java enum since postgres don't accept string
+as postgres enum
+

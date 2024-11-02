@@ -1,76 +1,191 @@
+-- Status Types
+DROP TYPE IF EXISTS account_status_enum CASCADE;
+CREATE TYPE account_status_enum AS ENUM (
+	'active',
+	'suspended',
+	'inactive'
+);
+
+DROP TYPE IF EXISTS order_status_enum CASCADE;
+CREATE TYPE order_status_enum AS ENUM (
+	'waiting_for_payment',
+	'fulfilling',
+	'sent',
+	'complete',
+	'closed',
+	'invalid'
+);
+
+DROP TYPE IF EXISTS publish_status_enum CASCADE;
+CREATE TYPE publish_status_enum AS ENUM (
+	'published',
+	'pending',
+	'draft',
+	'paused',
+	'deleted'
+);
+
+DROP TYPE IF EXISTS recommendation_status_enum CASCADE;
+CREATE TYPE recommendation_status_enum AS ENUM (
+	'frontpage',
+	'trending',
+	'popular',
+	'recommended',
+	'new_arrival',
+	'seasonal',
+	'flash_sale',
+	'normal',
+	'hidden'
+);
+
+DROP TYPE IF EXISTS return_status_enum CASCADE;
+CREATE TYPE return_status_enum AS ENUM (
+	'waiting_to_be_processed',
+	'returning',
+	'complete',
+	'rejected'
+);
+
+DROP TYPE IF EXISTS verification_status_enum CASCADE;
+CREATE TYPE verification_status_enum AS ENUM (
+	'verified',
+	'not_verified'
+);
+
+
+
+-- Type Enums
+
+DROP TYPE IF EXISTS discount_type_enum CASCADE;
+CREATE TYPE discount_type_enum AS ENUM (
+	'amount',
+	'percent'
+);
+
+DROP TYPE IF EXISTS email_template_type_enum CASCADE;
+CREATE TYPE email_template_type_enum AS ENUM (
+    'user_service',
+    'user_service_all',
+    'sale_service',
+    'order_service',
+    'order_service_update',
+    'order_service_return',
+    'order_service_return_update'
+);
+
+DROP TYPE IF EXISTS payment_type_enum CASCADE;
+CREATE TYPE payment_type_enum AS ENUM (
+	'credit_card',
+	'paypal',
+	'google_pay'
+);
+
+DROP TYPE IF EXISTS sales_type_enum CASCADE;
+CREATE TYPE sales_type_enum AS ENUM (
+    'not_on_sale',
+    'is_on_sale',
+    'flash_sale',
+    'special_sales',
+    'clearance',
+    'used_item'
+);
+
+DROP TYPE IF EXISTS source_type_enum CASCADE;
+CREATE TYPE source_type_enum AS ENUM (
+    'web',
+    'mobile'
+);
+
+DROP TYPE IF EXISTS target_type_enum CASCADE;
+CREATE TYPE target_type_enum AS ENUM (
+	'all',
+	'specific_brand',
+	'specific_category',
+	'specific_item'
+);
+
+-- etc
+DROP TYPE IF EXISTS product_condition_enum CASCADE;
+CREATE TYPE product_condition_enum AS ENUM (
+	'new',
+	'used',
+	'refurbished'
+);
+
+
 -------------------
 ----- PMS ---------
 -------------------
-DROP TABLE IF EXISTS brand;
+DROP TABLE IF EXISTS brand CASCADE;
 CREATE TABLE brand (
     id SERIAL PRIMARY KEY,
     name TEXT,
     alphabet TEXT,
-    status INTEGER DEFAULT 0, -- 0->inactive; 1->active
     logo TEXT,
+    publish_status publish_status_enum DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO brand(name, alphabet, logo, status)
+INSERT INTO brand(name, alphabet, logo, publish_status)
 VALUES
 -- phone/computer/electronic brand
-('Apple', 'A', 'apple.jpg', 1),
-('Samsung', 'S', 'samsung.jpg', 1),
-('Google', 'G', 'google.jpg', 1),
-('OnePlus', 'O', 'OnePlus.jpg', 1),
-('Lenovo', 'L', 'lenovo.jpg', 1),
-('ASUS', 'A', 'asus.jpg', 1),
-('Acer', 'A', 'acer.jpg', 1),
-('Alienware', 'A', 'alienware.jpg', 1),
-('Razer', 'R', 'razer.jpg', 1),
-('Microsoft', 'M', 'microsoft.jpg', 1),
-('Dell', 'D', 'dell.jpg', 1),
-('HP', 'H', 'hp.jpg', 1),
-('MSI', 'M', 'msi.jpg', 1),
+('Apple', 'A', 'apple.jpg', 'published'),
+('Samsung', 'S', 'samsung.jpg', 'published'),
+('Google', 'G', 'google.jpg', 'published'),
+('OnePlus', 'O', 'OnePlus.jpg', 'published'),
+('Lenovo', 'L', 'lenovo.jpg', 'published'),
+('ASUS', 'A', 'asus.jpg', 'published'),
+('Acer', 'A', 'acer.jpg', 'published'),
+('Alienware', 'A', 'alienware.jpg', 'published'),
+('Razer', 'R', 'razer.jpg', 'published'),
+('Microsoft', 'M', 'microsoft.jpg', 'published'),
+('Dell', 'D', 'dell.jpg', 'published'),
+('HP', 'H', 'hp.jpg', 'published'),
+('MSI', 'M', 'msi.jpg', 'published'),
 
 -- electrics
-('Anker', 'A', 'anker.jpg', 1),
-('Fitbit', 'F', 'fitbit.jpg', 1),
-('SanDisk', 'S', 'sandisk.jpg', 1),
-('Tile', 'T', 'tile.jpg', 1),
+('Anker', 'A', 'anker.jpg', 'published'),
+('Fitbit', 'F', 'fitbit.jpg', 'published'),
+('SanDisk', 'S', 'sandisk.jpg', 'published'),
+('Tile', 'T', 'tile.jpg', 'published'),
 
 -- video and audio
-('GoPro', 'G', 'gopro.jpg', 1),
-('Logitech', 'L', 'logitech.jpg', 1),
-('JBL', 'J', 'jbl.jpg', 1),
-('UE', 'U', 'ue.jpg', 1),
+('GoPro', 'G', 'gopro.jpg', 'published'),
+('Logitech', 'L', 'logitech.jpg', 'published'),
+('JBL', 'J', 'jbl.jpg', 'published'),
+('UE', 'U', 'ue.jpg', 'published'),
 
 -- clothing brand
-('Gucci', 'G', 'gucci.jpg', 1),
-('Nike', 'N', 'nike.jpg', 1),
-('Adidas', 'A', 'adidas.jpg', 1),
-('Gucci', 'G', 'gucci.jpg', 1),
-('Zara', 'Z', 'zara.jpg', 1),
-('HM', 'H', 'hm.jpg', 1),
-('Levis', 'L', 'levis.jpg', 1),
-('Calvin Klein', 'C', 'calvinklein.jpg', 1),
-('Versace', 'V', 'versace.jpg', 1),
+('Gucci', 'G', 'gucci.jpg', 'published'),
+('Nike', 'N', 'nike.jpg', 'published'),
+('Adidas', 'A', 'adidas.jpg', 'published'),
+('Gucci', 'G', 'gucci.jpg', 'published'),
+('Zara', 'Z', 'zara.jpg', 'published'),
+('HM', 'H', 'hm.jpg', 'published'),
+('Levis', 'L', 'levis.jpg', 'published'),
+('Calvin Klein', 'C', 'calvinklein.jpg', 'published'),
+('Versace', 'V', 'versace.jpg', 'published'),
 
 -- health and beauty brand
-('Nivea', 'N', 'nivea.jpg', 1),
-('Dove', 'D', 'dove.jpg', 1),
-('Cetaphil', 'C', 'cetaphil.jpg', 1),
-('Neutrogena', 'N', 'neutrogena.jpg', 1),
-('Aveeno', 'A', 'aveeno.jpg', 1),
-('Olay', 'O', 'olay.jpg', 1),
+('Nivea', 'N', 'nivea.jpg', 'published'),
+('Dove', 'D', 'dove.jpg', 'published'),
+('Cetaphil', 'C', 'cetaphil.jpg', 'published'),
+('Neutrogena', 'N', 'neutrogena.jpg', 'published'),
+('Aveeno', 'A', 'aveeno.jpg', 'published'),
+('Olay', 'O', 'olay.jpg', 'published'),
 
 -- books
-('Penguin Books', 'P', 'penguinbooks.jpg', 1),
-('HarperCollins', 'H', 'harpercollins.jpg', 1),
-('Random House', 'R', 'randomhouse.jpg', 1),
-('Book', 'B', 'book.jpg', 1),
+('Penguin Books', 'P', 'penguinbooks.jpg', 'published'),
+('HarperCollins', 'H', 'harpercollins.jpg', 'published'),
+('Random House', 'R', 'randomhouse.jpg', 'published'),
+('Book', 'B', 'book.jpg', 'published'),
 
 -- etc
-('Coca-Cola', 'C', 'cocacola.jpg', 1),
+('Coca-Cola', 'C', 'cocacola.jpg', 'published'),
 -- kitchen
-('Zojirushi', 'Z', 'zojirushi.jpg', 1),
-('Yeti', 'Y', 'yeti.jpg', 1);
+('Zojirushi', 'Z', 'zojirushi.jpg', 'published'),
+('Yeti', 'Y', 'yeti.jpg', 'published');
 
 
 DROP TABLE IF EXISTS brand_update_log;
@@ -96,7 +211,7 @@ VALUES
 (10, 'Create', 'Sarah White');
 
 
-DROP TABLE IF EXISTS product_category;
+DROP TABLE IF EXISTS product_category CASCADE;
 CREATE TABLE product_category (
     id SERIAL PRIMARY KEY,
     name TEXT,
@@ -365,26 +480,26 @@ VALUES
 (26, 'dimension L x W x H');
 
 
-DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS product CASCADE;
 CREATE TABLE product (
     id SERIAL PRIMARY KEY,
-    brand_id INTEGER NOT NULL,
+    brand_id INTEGER NOT NULL REFERENCES brand(id),
     brand_name TEXT,
-    name TEXT,
-    slug TEXT, -- for SEO friendly URL
-    category_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    slug TEXT UNIQUE, -- for SEO friendly URL
+    category_id INTEGER NOT NULL REFERENCES product_category(id),
     category_name TEXT,
-    attribute_category_id INTEGER NOT NULL,	--
-    sn VARCHAR(64),
-    new_status INTEGER, -- 0->not new product; 1->new product
-    recommend_status INTEGER, -- 0->not recommend; 1->recommend
-    verify_status INTEGER, -- 0->not verified; 1->verified
+    attribute_category_id INTEGER NOT NULL,
+    sn VARCHAR(64) UNIQUE, -- serial number
+    condition_status product_condition_enum DEFAULT 'new',
+    recommend_status recommendation_status_enum DEFAULT 'normal',
+    verify_status verification_status_enum default 'not_verified',
     sub_title TEXT,
     cover_picture TEXT,           --  preview picture, for like list all, search all picture when getting specific
     picture_album INTEGER,           -- collection of pictures
     description TEXT,
     original_price DECIMAL(10, 2),
-    on_sale_status INTEGER,  --  0-> not on sale; 1-> is on sale; 2-> flash sale/special sales/clarance/used item
+    on_sale_status INTEGER DEFAULT 0,  --  0 -> not on sale; 1 -> is on sale; 2 -> flash sale/special sales/clarance/used item
     sale_price DECIMAL(10, 2),     -- TODO: currently using it as lowest price of all sku variants. and using original price as highest, it changes with more sku variants added.
     stock INTEGER,
     low_stock INTEGER, -- -- low stock alarm, default is about 10% alarm
@@ -394,8 +509,8 @@ CREATE TABLE product (
     detail_title TEXT,                -- at the bottom of product with detail title, description and picture
     detail_desc TEXT,
     description_album_id INTEGER,
-    delete_status INTEGER DEFAULT 0, -- 0-> product not deleted; 1->product deleted, record purpose
-    publish_status INTEGER DEFAULT 1, -- 0-> product is not published; 1->product is published, to temporary stop sale.
+    delete_status BOOLEAN DEFAULT FALSE , -- soft delete, 0 -> product not deleted; 1 -> product deleted, record purpose
+    publish_status INTEGER DEFAULT 0, -- 0 -> product is not published; 1 -> product is published, to temporary stop sale.
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     note TEXT
@@ -411,27 +526,27 @@ VALUES
 (4, 'OnePlus', 'OnePlus 9 Pro', 'oneplus-9-pro', 15, 'Smartphones', 9, 'SN-789', 'Flagship performance', 'oneplus9Pro.jpg', 7, 'The OnePlus 9 Pro delivers exceptional performance and photography capabilities.', 1099.99, 0, 1099.99, 100, 10, 60, 180, 'OnePlus, smartphone', 'Product Details', 'Experience flagship performance with the OnePlus 9 Pro.', 8),
 (2, 'Samsung', 'Galaxy S21', 'galaxy-s21', 15, 'Smartphones', 9, 'SN-234', 'Powerful and feature-rich', 'galaxyS21.jpg', 9, 'The Galaxy S21 offers cutting-edge technology and a stunning display.', 1099.99, 0, 1099.99, 150, 15, 70, 170, 'Samsung, Galaxy, smartphone', 'Product Details', 'Experience the brilliance of the Galaxy S21.', 10),
 
-(1, 'Apple', 'AirPods Pro', 'airpods-pro', 21, 'Headphones', 15, 'SN-234', 'Immersive sound, active noise cancellation', 'airPodsPro.jpg', 11, 'The AirPods Pro deliver immersive sound and feature active noise cancellation for an enhanced audio experience.', 249.99, 0, 249.99, 200, 20, 150, 40, 'Apple, AirPods, headphones', 'Product Details', 'Enjoy immersive sound with the AirPods Pro.', 12),
-(1, 'Apple', 'AirPods 2', 'airpods-2', 21, 'Headphones', 15, 'SN-789', 'Immersive audio experience', 'airpods2.jpg', 13, 'The AirPods 2 deliver superior sound quality with active noise cancellation.', 249.99, 0, 249.99, 200, 20, 100, 50, 'Apple, AirPods, headphones', 'Product Details', 'Enjoy immersive audio with the AirPods Pro.', 14),
+(1, 'Apple', 'AirPods Pro', 'airpods-pro', 21, 'Headphones', 15, 'SN-235', 'Immersive sound, active noise cancellation', 'airPodsPro.jpg', 11, 'The AirPods Pro deliver immersive sound and feature active noise cancellation for an enhanced audio experience.', 249.99, 0, 249.99, 200, 20, 150, 40, 'Apple, AirPods, headphones', 'Product Details', 'Enjoy immersive sound with the AirPods Pro.', 12),
+(1, 'Apple', 'AirPods 2', 'airpods-2', 21, 'Headphones', 15, 'SN-782', 'Immersive audio experience', 'airpods2.jpg', 13, 'The AirPods 2 deliver superior sound quality with active noise cancellation.', 249.99, 0, 249.99, 200, 20, 100, 50, 'Apple, AirPods, headphones', 'Product Details', 'Enjoy immersive audio with the AirPods Pro.', 14),
 (4, 'OnePlus', 'OnePlus Buds Pro', 'oneplus-buds-pro', 21, 'Headphones', 15, 'SN-012', 'Immersive audio experience', 'oneplusBudsPro.jpg', 15, 'The OnePlus Buds Pro offer immersive sound and advanced noise cancellation.', 149.99, 0, 149.99, 150, 15, 90, 30, 'OnePlus, earbuds, headphones', 'Product Details', 'Enjoy immersive audio with the OnePlus Buds Pro.', 16),
 
 (1, 'Apple', 'iPad Pro', 'ipad-pro', 19, 'Tablets', 13, 'SN-901', 'The ultimate iPad experience', 'iPadPro.jpg', 17, 'The iPad Pro offers the ultimate tablet experience with its powerful performance and stunning display.', 799.99, 0, 799.99, 150, 15, 100, 470, 'Apple, iPad, tablet', 'Product Details', 'Experience the ultimate tablet experience with the iPad Pro.', 18),
 
-(4, 'OnePlus', 'OnePlus Watch', 'oneplus-watch', 20, 'Wearables', 14, 'SN-345', 'Stylish and smart', 'oneplusWatch.jpg', 19, 'The OnePlus Watch combines style and smart features for a seamless wearable experience.', 199.99, 0, 199.99, 80, 8, 50, 60, 'OnePlus, smartwatch', 'Product Details', 'Stay connected with the OnePlus Watch.', 20),
+(4, 'OnePlus', 'OnePlus Watch', 'oneplus-watch', 20, 'Wearables', 14, 'SN-342', 'Stylish and smart', 'oneplusWatch.jpg', 19, 'The OnePlus Watch combines style and smart features for a seamless wearable experience.', 199.99, 0, 199.99, 80, 8, 50, 60, 'OnePlus, smartwatch', 'Product Details', 'Stay connected with the OnePlus Watch.', 20),
 (2, 'Samsung', 'Galaxy Watch 3', 'galaxy-watch-3', 20, 'Wearables', 14, 'SN-567', 'Stylish and functional', 'galaxyWatch3.jpg', 21, 'The Galaxy Watch 3 combines style and functionality for a smart wearable experience.', 349.99, 0, 349.99, 100, 10, 50, 90, 'Samsung, Galaxy, smartwatch', 'Product Details', 'Stay connected with the Galaxy Watch 3.', 22),
 
 (2, 'Samsung', 'T5 Portable SSD', 't5-portable-ssd', 22, 'Storage', 16, 'SN-890', 'Fast and portable storage', 't5PortableSSD.jpg', 23, 'The T5 Portable SSD offers fast and secure storage for your data on the go.', 179.99, 0, 179.99, 250, 25, 120, 200, 'Samsung, SSD, storage', 'Product Details', 'Store and transfer your data with the T5 Portable SSD.', 24),
 
 (1, 'Apple', 'MacBook Pro', 'macbook-pro', 17, 'Laptop', 11, 'SN-678', 'Powerful performance, sleek design', 'macBookPro.jpg', 25, 'The MacBook Pro combines powerful performance with a sleek design, making it the perfect choice for professionals.', 1999.99, 0, 1999.99, 80, 8, 40, 170, 'Apple, MacBook, laptop', 'Product Details', 'Unleash your creativity with the MacBook Pro.', 26),
-(11, 'Dell', 'XPS 13', 'xps-13', 17, 'Laptop', 11, 'SN-456', 'Compact and powerful', 'xps13.jpg', 27, 'The XPS 13 is a compact and powerful laptop that delivers exceptional performance in a sleek design.', 1399.99, 0, 1399.99, 150, 15, 90, 110, 'Dell, XPS, laptop', 'Product Details', 'Experience power and portability with the XPS 13.', 28),
-(5, 'Lenovo', 'ThinkPad X1 Carbon', 'thinkpad-x1-carbon', 17, 'Laptop', 11, 'SN-123', 'Powerful and lightweight', 'thinkpadX1Carbon.jpg', 29, 'The ThinkPad X1 Carbon is a powerful and lightweight laptop designed for professionals.', 1499.99, 0, 1499.99, 200, 20, 100, 120, 'Lenovo, ThinkPad, laptop', 'Product Details', 'Experience the power of the ThinkPad X1 Carbon.', 30),
-(5, 'Lenovo', 'Yoga C940', 'yoga-c940', 17, 'Laptop', 11, 'SN-456', 'Versatile and stylish', 'yogaC940.jpg', 31, 'The Yoga C940 is a versatile and stylish 2-in-1 laptop with impressive performance.', 1299.99, 0, 1299.99, 150, 15, 80, 140, 'Lenovo, Yoga, laptop', 'Product Details', 'Unleash your creativity with the Yoga C940.', 32),
-(5, 'Lenovo', 'IdeaPad Gaming 3', 'ideapad-gaming-3', 17, 'Laptop', 11, 'SN-789', 'Powerful gaming performance', 'ideapadGaming3.jpg', 33, 'The IdeaPad Gaming 3 is a powerful gaming laptop that delivers exceptional performance.', 999.99, 0, 999.99, 100, 10, 50, 180, 'Lenovo, IdeaPad, gaming laptop', 'Product Details', 'Immerse yourself in the world of gaming with the IdeaPad Gaming 3.', 34),
-(8, 'Alienware', 'Alienware m15 R5', 'alienware-m15-r5', 17, 'Laptop', 11, 'SN-901', 'Unleash gaming supremacy', 'alienwarem15R5.jpg', 35, 'The Alienware m15 R5 is a gaming laptop that delivers unrivaled gaming performance.', 1999.99, 0, 1999.99, 80, 8, 50, 230, 'Alienware, gaming laptop', 'Product Details', 'Experience gaming supremacy with the Alienware m15 R5.', 36),
+(11, 'Dell', 'XPS 13', 'xps-13', 17, 'Laptop', 11, 'SN-452', 'Compact and powerful', 'xps13.jpg', 27, 'The XPS 13 is a compact and powerful laptop that delivers exceptional performance in a sleek design.', 1399.99, 0, 1399.99, 150, 15, 90, 110, 'Dell, XPS, laptop', 'Product Details', 'Experience power and portability with the XPS 13.', 28),
+(5, 'Lenovo', 'ThinkPad X1 Carbon', 'thinkpad-x1-carbon', 17, 'Laptop', 11, 'SN-125', 'Powerful and lightweight', 'thinkpadX1Carbon.jpg', 29, 'The ThinkPad X1 Carbon is a powerful and lightweight laptop designed for professionals.', 1499.99, 0, 1499.99, 200, 20, 100, 120, 'Lenovo, ThinkPad, laptop', 'Product Details', 'Experience the power of the ThinkPad X1 Carbon.', 30),
+(5, 'Lenovo', 'Yoga C940', 'yoga-c940', 17, 'Laptop', 11, 'SN-453', 'Versatile and stylish', 'yogaC940.jpg', 31, 'The Yoga C940 is a versatile and stylish 2-in-1 laptop with impressive performance.', 1299.99, 0, 1299.99, 150, 15, 80, 140, 'Lenovo, Yoga, laptop', 'Product Details', 'Unleash your creativity with the Yoga C940.', 32),
+(5, 'Lenovo', 'IdeaPad Gaming 3', 'ideapad-gaming-3', 17, 'Laptop', 11, 'SN-785', 'Powerful gaming performance', 'ideapadGaming3.jpg', 33, 'The IdeaPad Gaming 3 is a powerful gaming laptop that delivers exceptional performance.', 999.99, 0, 999.99, 100, 10, 50, 180, 'Lenovo, IdeaPad, gaming laptop', 'Product Details', 'Immerse yourself in the world of gaming with the IdeaPad Gaming 3.', 34),
+(8, 'Alienware', 'Alienware m15 R5', 'alienware-m15-r5', 17, 'Laptop', 11, 'SN-902', 'Unleash gaming supremacy', 'alienwarem15R5.jpg', 35, 'The Alienware m15 R5 is a gaming laptop that delivers unrivaled gaming performance.', 1999.99, 0, 1999.99, 80, 8, 50, 230, 'Alienware, gaming laptop', 'Product Details', 'Experience gaming supremacy with the Alienware m15 R5.', 36),
 
-(10, 'Microsoft', 'Xbox Series X', 'xbox-series-x', 18, 'Video Games and Consoles', 12, 'SN-123', 'Next-generation gaming', 'xboxSeriesX.jpg', 37, 'The Xbox Series X offers next-generation gaming with its powerful performance and immersive gaming experiences.', 499.99, 0, 499.99, 80, 8, 50, 4000, 'Microsoft, Xbox, gaming console', 'Product Details', 'Enter the next generation of gaming with the Xbox Series X.', 38),
+(10, 'Microsoft', 'Xbox Series X', 'xbox-series-x', 18, 'Video Games and Consoles', 12, 'SN-126', 'Next-generation gaming', 'xboxSeriesX.jpg', 37, 'The Xbox Series X offers next-generation gaming with its powerful performance and immersive gaming experiences.', 499.99, 0, 499.99, 80, 8, 50, 4000, 'Microsoft, Xbox, gaming console', 'Product Details', 'Enter the next generation of gaming with the Xbox Series X.', 38),
 
-(11, 'Dell', 'Dell UltraSharp U2720Q', 'dell-ultrasharp-u2720q', 23, 'Monitors', 17, 'SN-012', 'Exceptional color accuracy', 'dellUltraSharpU2720Q.jpg', 39, 'The Dell UltraSharp U2720Q is a professional-grade monitor that offers exceptional color accuracy for precise image reproduction.', 599.99, 0, 599.99, 120, 12, 70, 630, 'Dell, UltraSharp, monitor', 'Product Details', 'Experience exceptional color accuracy with the Dell UltraSharp U2720Q.', 40),
+(11, 'Dell', 'Dell UltraSharp U2720Q', 'dell-ultrasharp-u2720q', 23, 'Monitors', 17, 'SN-016', 'Exceptional color accuracy', 'dellUltraSharpU2720Q.jpg', 39, 'The Dell UltraSharp U2720Q is a professional-grade monitor that offers exceptional color accuracy for precise image reproduction.', 599.99, 0, 599.99, 120, 12, 70, 630, 'Dell, UltraSharp, monitor', 'Product Details', 'Experience exceptional color accuracy with the Dell UltraSharp U2720Q.', 40),
 
 -- sneakers/shoes
 (23, 'Nike', 'Nike Air Max 270', 'nike-air-max-270', 8, 'Men shoes', 2, 'SN-001', 'Iconic design and comfort', 'nikeAirMax270.jpg', 41, 'Experience iconic design and unmatched comfort with the Nike Air Max 270 sneakers.', 129.99, 0, 129.99, 100, 10, 50, 500, 'Nike, Air Max, sneakers', 'Product Details', 'Step up your style game with the Nike Air Max 270.', 42),
@@ -447,7 +562,7 @@ VALUES
 -- Books
 (40, 'Books', 'The Great Gatsby', 'the-great-gatsby', 13, 'Books', 7, 'SN-010', 'A classic tale of wealth and obsession', 'greatGatsby.jpg', 55, 'The Great Gatsby is a classic novel that explores themes of wealth, love, and the American Dream.', 14.99, 0, 14.99, 200, 20, 150, 300, 'The Great Gatsby, novel, literature', 'Product Details', 'Immerse yourself in the world of The Great Gatsby.', 56),
 (40, 'Books', 'To Kill a Mockingbird', 'to-kill-a-mockingbird', 13, 'Books', 7, 'SN-011', 'A powerful story of racial injustice and compassion', 'toKillAMockingbird.jpg', 57, 'To Kill a Mockingbird is a powerful novel that addresses themes of racial injustice and the power of compassion.', 12.99, 0, 12.99, 150, 15, 120, 250, 'To Kill a Mockingbird, novel, literature', 'Product Details', 'Experience the impact of To Kill a Mockingbird.', 58),
-(40, 'Books', 'Harry Potter and the Sorcerer''s Stone', 'harry-potter-and-the-sorcerers-stone', 13, 'Books', 7, 'SN-012', 'The beginning of a magical journey', 'harryPotterSorcerersStone.jpg', 59, 'Harry Potter and the Sorcerer''s Stone is the first book in the Harry Potter series, introducing readers to the magical world of Hogwarts.', 19.99, 0, 19.99, 100, 10, 200, 400, 'Harry Potter, Sorcerer''s Stone, fantasy, literature', 'Product Details', 'Embark on a magical journey with Harry Potter and the Sorcerer''s Stone.', 60);
+(40, 'Books', 'Harry Potter and the Sorcerer''s Stone', 'harry-potter-and-the-sorcerers-stone', 13, 'Books', 7, 'SN-017', 'The beginning of a magical journey', 'harryPotterSorcerersStone.jpg', 59, 'Harry Potter and the Sorcerer''s Stone is the first book in the Harry Potter series, introducing readers to the magical world of Hogwarts.', 19.99, 0, 19.99, 100, 10, 200, 400, 'Harry Potter, Sorcerer''s Stone, fantasy, literature', 'Product Details', 'Embark on a magical journey with Harry Potter and the Sorcerer''s Stone.', 60);
 
 
 -- A product SKU (Stock Keeping Unit) is a unique identifier assigned to a specific product variant to facilitate inventory management, tracking, and sales analysis.
@@ -455,7 +570,7 @@ DROP TABLE IF EXISTS product_sku;
 CREATE TABLE product_sku (    -- all product have one default sku variant
     id SERIAL PRIMARY KEY,
     product_id INTEGER NOT NULL,
-    sku_code TEXT,
+    sku_code TEXT,  -- used like a slug, unique for each product
     picture TEXT,
     price DECIMAL(10, 2),
     promotion_price DECIMAL(10, 2),
@@ -463,10 +578,11 @@ CREATE TABLE product_sku (    -- all product have one default sku variant
     low_stock INTEGER,     -- low stock alarm, default is about 10% alarm
     lock_stock INTEGER DEFAULT 0, -- lock stock is updated from lock stock + order quantity, can't order when current stock is less than lock stock. update lock stock to 0 after ordered.
     unit_sold INTEGER,
+    publish_status publish_status_enum DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status INTEGER DEFAULT 0      -- product sku online status, 0 - offline  1 - online ready for purchase
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 INSERT INTO product_sku (product_id, sku_code, picture, price, promotion_price, stock, low_stock, unit_sold)
 VALUES
@@ -1155,7 +1271,7 @@ CREATE TABLE member (
     phone_number TEXT,
     email TEXT UNIQUE NOT NULL,
     email_subscription INTEGER DEFAULT 1,
-    status INTEGER DEFAULT 1,
+    status account_status_enum DEFAULT 'active',
     verified_status INTEGER DEFAULT 0,
     delete_status INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -1238,7 +1354,7 @@ VALUES
 (2, 'John', '111-111-1111', '2 2nd street 3rd ave Apt 4F', 'Dallas', 'Texas', '75001', 'please call, door bell broken'),
 (3, 'Jane', '212-212-2222', '3 4st street 5nd ave', 'San Francisco', 'California', '94016', '');
 
---- login type,pc/andriod/IOS   = 0/1/2
+--- login type,pc/android/IOS   = 0/1/2
 INSERT INTO member_login_log (member_id, ip_address, login_type)
 VALUES
 (1, '127.0.0.1', '0'),
@@ -1260,7 +1376,7 @@ CREATE TABLE admin (
     name TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP,
-    status INTEGER DEFAULT 0
+    status account_status_enum DEFAULT 'inactive'
 );
 
 DROP TABLE IF EXISTS roles;
@@ -1268,7 +1384,7 @@ CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     name TEXT,
     description TEXT,
-    status INTEGER DEFAULT 0
+    status account_status_enum DEFAULT 'inactive'
 );
 
 DROP TABLE IF EXISTS permission;
@@ -1276,7 +1392,7 @@ CREATE TABLE permission (
     id SERIAL PRIMARY KEY,
     name TEXT,
     permission_key TEXT NOT NULL,
-    status INTEGER DEFAULT 0
+    status account_status_enum DEFAULT 'inactive'
 );
 
 DROP TABLE IF EXISTS role_permission_relation;
@@ -1293,7 +1409,7 @@ CREATE TABLE admin_role_relation (
     role_id INTEGER,
     assigned_by INTEGER, -- the admin who granted the role
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status INTEGER DEFAULT 0
+    status account_status_enum DEFAULT 'inactive'
 );
 
 DROP TABLE IF EXISTS admin_permission_relation;
@@ -1303,7 +1419,7 @@ CREATE TABLE admin_permission_relation ( -- TODO: might add a permission and/or 
     permission_id INTEGER NOT NULL,
     assigned_by INTEGER, -- the admin who granted the permission
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status INTEGER DEFAULT 0    -- root admin can revoke or enable the permission
+    status account_status_enum DEFAULT 'inactive'    -- root admin can revoke or enable the permission
 );
 
 DROP TABLE IF EXISTS admin_login_log;
@@ -1322,77 +1438,77 @@ CREATE TABLE admin_login_log (
 -- username : devacct   password: devpass
 INSERT INTO admin(username, password, email, name, status)
 VALUES
-('adminacct', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'admin@gmail.com', 'jun', 1),
-('adminacctorder', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'order@gmail.com', 'jun', 1),
-('adminacctuser', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'user@gmail.com', 'jun', 1),
-('devacct', '$2a$10$zykJppm18avEb79CGEtFjOIwKlgUJ4BeMFiF8HGjccVMgJ8XTjZpy', 'dev@gmail.com', 'dev', 1);
+('adminacct', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'admin@gmail.com', 'jun', 'active'),
+('adminacctorder', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'order@gmail.com', 'jun', 'active'),
+('adminacctuser', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'user@gmail.com', 'jun', 'active'),
+('devacct', '$2a$10$zykJppm18avEb79CGEtFjOIwKlgUJ4BeMFiF8HGjccVMgJ8XTjZpy', 'dev@gmail.com', 'dev', 'active');
 
 INSERT INTO roles (name, description, status)
 VALUES
-('ROLE_admin_content', 'manage content issues', 1),
-('ROLE_admin_order', 'manage order issues', 1),
-('ROLE_admin_product', 'manage product issues', 1),
-('ROLE_admin_sale', 'manage sale issues', 1),
-('ROLE_admin_user', 'manage user related issue', 1),
-('ROLE_admin_root', 'root', 1);
+('ROLE_admin_content', 'manage content issues', 'active'),
+('ROLE_admin_order', 'manage order issues', 'active'),
+('ROLE_admin_product', 'manage product issues', 'active'),
+('ROLE_admin_sale', 'manage sale issues', 'active'),
+('ROLE_admin_user', 'manage user related issue', 'active'),
+('ROLE_admin_root', 'root', 'active');
 
 
 INSERT INTO permission (name, permission_key, status)
 VALUES
 -- CRUD Content
-('create content', 'content:create', 1),
-('read content', 'content:read', 1),
-('update content', 'content:update', 1),
-('delete content', 'content:delete', 1),
+('create content', 'content:create', 'active'),
+('read content', 'content:read', 'active'),
+('update content', 'content:update', 'active'),
+('delete content', 'content:delete', 'active'),
 
 -- CRUD Order
-('create order', 'order:create', 1),
-('read order', 'order:read', 1),
-('update order', 'order:update', 1),
-('delete order', 'order:delete', 1),
+('create order', 'order:create', 'active'),
+('read order', 'order:read', 'active'),
+('update order', 'order:update', 'active'),
+('delete order', 'order:delete', 'active'),
 
-('create order return', 'order:return:create', 1),
-('read order return', 'order:return:read', 1),
-('update order return', 'order:return:update', 1),
-('delete order return', 'order:return:delete', 1),
+('create order return', 'order:return:create', 'active'),
+('read order return', 'order:return:read', 'active'),
+('update order return', 'order:return:update', 'active'),
+('delete order return', 'order:return:delete', 'active'),
 
 -- CRUD Product
-('create product', 'product:create', 1),
-('read product', 'product:read', 1),
-('update product', 'product:update', 1),
-('delete product', 'product:delete', 1),
+('create product', 'product:create', 'active'),
+('read product', 'product:read', 'active'),
+('update product', 'product:update', 'active'),
+('delete product', 'product:delete', 'active'),
 
-('create brand', 'brand:create', 1),
-('read brand', 'brand:read', 1),
-('update brand', 'brand:update', 1),
-('delete brand', 'brand:delete', 1),
+('create brand', 'brand:create', 'active'),
+('read brand', 'brand:read', 'active'),
+('update brand', 'brand:update', 'active'),
+('delete brand', 'brand:delete', 'active'),
 
-('create review', 'review:create', 1),
-('read review', 'review:read', 1),
-('update review', 'review:update', 1),
-('delete review', 'review:delete', 1),
+('create review', 'review:create', 'active'),
+('read review', 'review:read', 'active'),
+('update review', 'review:update', 'active'),
+('delete review', 'review:delete', 'active'),
 
 -- CRUD Sales
-('create sales', 'sales:create', 1),
-('read sales', 'sales:read', 1),
-('update sales', 'sales:update', 1),
-('delete sales', 'sales:delete', 1),
+('create sales', 'sales:create', 'active'),
+('read sales', 'sales:read', 'active'),
+('update sales', 'sales:update', 'active'),
+('delete sales', 'sales:delete', 'active'),
 
-('create coupon', 'coupon:create', 1),
-('read coupon', 'coupon:read', 1),
-('update coupon', 'coupon:update', 1),
-('delete coupon', 'coupon:delete', 1),
+('create coupon', 'coupon:create', 'active'),
+('read coupon', 'coupon:read', 'active'),
+('update coupon', 'coupon:update', 'active'),
+('delete coupon', 'coupon:delete', 'active'),
 
 -- CRUD User
-('create user', 'user:create', 1),
-('read user', 'user:read', 1),
-('update user', 'user:update', 1),
-('delete user', 'user:delete', 1),
+('create user', 'user:create', 'active'),
+('read user', 'user:read', 'active'),
+('update user', 'user:update', 'active'),
+('delete user', 'user:delete', 'active'),
 
-('create admin', 'admin:create', 1),
-('read admin', 'admin:read', 1),
-('update admin', 'admin:update', 1),
-('delete admin', 'admin:delete', 1);
+('create admin', 'admin:create', 'active'),
+('read admin', 'admin:read', 'active'),
+('update admin', 'admin:update', 'active'),
+('delete admin', 'admin:delete', 'active');
 
 
 -- role to permission
@@ -1480,81 +1596,81 @@ VALUES
 -- main admin have all permission/roles, have a root admin as role
 INSERT INTO admin_role_relation(admin_id, role_id, assigned_by, status)
 VALUES
-(1, 1, 1, 1), -- root admin with all the roles
-(1, 2, 1, 1),
-(1, 3, 1, 1),
-(1, 4, 1, 1),
-(1, 5, 1, 1),
-(1, 6, 1, 1),
+(1, 1, 1, 'active'), -- root admin with all the roles
+(1, 2, 1, 'active'),
+(1, 3, 1, 'active'),
+(1, 4, 1, 'active'),
+(1, 5, 1, 'active'),
+(1, 6, 1, 'active'),
 
-(2, 2, 1, 1), -- order admin responsible for order management
+(2, 2, 1, 'active'), -- order admin responsible for order management
 
-(3, 5, 1, 1); -- user admin responsible for user management
+(3, 5, 1, 'active'); -- user admin responsible for user management
 
 
 -- TODO: RoleHierarchy roleHierarchy bean, simply root admin
 INSERT INTO admin_permission_relation(admin_id, permission_id, assigned_by, status)
 VALUES
-(1, 1, 1, 1), -- root admin with all the permissions
-(1, 2, 1, 1),
-(1, 3, 1, 1),
-(1, 4, 1, 1),
-(1, 5, 1, 1),
-(1, 6, 1, 1),
-(1, 7, 1, 1),
-(1, 8, 1, 1),
-(1, 9, 1, 1),
-(1, 10, 1, 1),
-(1, 11, 1, 1),
-(1, 12, 1, 1),
-(1, 13, 1, 1),
-(1, 14, 1, 1),
-(1, 15, 1, 1),
-(1, 16, 1, 1),
-(1, 17, 1, 1),
-(1, 18, 1, 1),
-(1, 19, 1, 1),
-(1, 20, 1, 1),
-(1, 21, 1, 1),
-(1, 22, 1, 1),
-(1, 23, 1, 1),
-(1, 24, 1, 1),
-(1, 25, 1, 1),
-(1, 26, 1, 1),
-(1, 27, 1, 1),
-(1, 28, 1, 1),
-(1, 29, 1, 1),
-(1, 30, 1, 1),
-(1, 31, 1, 1),
-(1, 32, 1, 1),
-(1, 33, 1, 1),
-(1, 34, 1, 1),
-(1, 35, 1, 1),
-(1, 36, 1, 1),
-(1, 37, 1, 1),
-(1, 38, 1, 1),
-(1, 39, 1, 1),
-(1, 40, 1, 1),
+(1, 1, 1, 'active'), -- root admin with all the permissions
+(1, 2, 1, 'active'),
+(1, 3, 1, 'active'),
+(1, 4, 1, 'active'),
+(1, 5, 1, 'active'),
+(1, 6, 1, 'active'),
+(1, 7, 1, 'active'),
+(1, 8, 1, 'active'),
+(1, 9, 1, 'active'),
+(1, 10, 1, 'active'),
+(1, 11, 1, 'active'),
+(1, 12, 1, 'active'),
+(1, 13, 1, 'active'),
+(1, 14, 1, 'active'),
+(1, 15, 1, 'active'),
+(1, 16, 1, 'active'),
+(1, 17, 1, 'active'),
+(1, 18, 1, 'active'),
+(1, 19, 1, 'active'),
+(1, 20, 1, 'active'),
+(1, 21, 1, 'active'),
+(1, 22, 1, 'active'),
+(1, 23, 1, 'active'),
+(1, 24, 1, 'active'),
+(1, 25, 1, 'active'),
+(1, 26, 1, 'active'),
+(1, 27, 1, 'active'),
+(1, 28, 1, 'active'),
+(1, 29, 1, 'active'),
+(1, 30, 1, 'active'),
+(1, 31, 1, 'active'),
+(1, 32, 1, 'active'),
+(1, 33, 1, 'active'),
+(1, 34, 1, 'active'),
+(1, 35, 1, 'active'),
+(1, 36, 1, 'active'),
+(1, 37, 1, 'active'),
+(1, 38, 1, 'active'),
+(1, 39, 1, 'active'),
+(1, 40, 1, 'active'),
 
-(2, 5, 1, 1), -- order admin responsible for order management
-(2, 6, 1, 1),
-(2, 7, 1, 1),
-(2, 8, 1, 1),
+(2, 5, 1, 'active'), -- order admin responsible for order management
+(2, 6, 1, 'active'),
+(2, 7, 1, 'active'),
+(2, 8, 1, 'active'),
 
-(2, 9, 1, 1),
-(2, 10, 1, 1),
-(2, 11, 1, 1),
-(2, 12, 1, 1),
+(2, 9, 1, 'active'),
+(2, 10, 1, 'active'),
+(2, 11, 1, 'active'),
+(2, 12, 1, 'active'),
 
-(3, 33, 1, 1), -- user admin responsible for user management
-(3, 34, 1, 1),
-(3, 35, 1, 1),
-(3, 36, 1, 1),
+(3, 33, 1, 'active'), -- user admin responsible for user management
+(3, 34, 1, 'active'),
+(3, 35, 1, 'active'),
+(3, 36, 1, 'active'),
 
-(3, 37, 1, 1),
-(3, 38, 1, 1),
-(3, 39, 1, 1),
-(3, 40, 1, 1);
+(3, 37, 1, 'active'),
+(3, 38, 1, 'active'),
+(3, 39, 1, 'active'),
+(3, 40, 1, 'active');
 
 -- user_agent 1 -> pc, 2 -> mobile users
 insert into admin_login_log (admin_id, ip_address, user_agent)
@@ -1648,9 +1764,9 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
     discount_amount DECIMAL(10, 2),
     shipping_cost DECIMAL(10, 2),
     pay_amount DECIMAL(10, 2),
-    pay_type INTEGER,              -- credit card -> 0, paypal -> 1, google pay -> 2
-    source_type INTEGER,           -- pc -> 0, mobile -> 1
-    status INTEGER DEFAULT 0,                -- waiting for payment 0, fulfilling(paid) 1,  send 2, complete(received) 3, closed(out of return period) 4,invalid/cancel 5
+    payment_type payment_type_enum NOT NULL,              -- credit card, paypal, google pay
+    source_type source_type_enum,
+    order_status order_status_enum DEFAULT 'waiting_for_payment',    -- waiting for payment , fulfilling(paid) ,  send , complete(received) , closed(out of return period) ,invalid/cancel
     delivery_company VARCHAR(64),
     delivery_tracking_number VARCHAR(64),
     receiver_phone VARCHAR(32),
@@ -1670,28 +1786,29 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO orders (member_id, coupon_id, order_sn, total_amount,  promotion_amount, coupon_amount, discount_amount, shipping_cost, pay_amount,
-                    pay_type, source_type, status, delivery_company, delivery_tracking_number,
+INSERT INTO orders (member_id, coupon_id, order_sn, total_amount, promotion_amount, coupon_amount, discount_amount, shipping_cost, pay_amount,
+                    payment_type, source_type, order_status, delivery_company, delivery_tracking_number,
                     receiver_name, receiver_phone, member_email, receiver_detail_address, receiver_city, receiver_state, receiver_zip_code,
                     payment_time, delivery_time, comment)
 VALUES
-(1, 1, '1001', 2499.98, 149.99, 15, 164.99, 0, 2334.99, 1, 0, 1, 'UPS', '1234567890',
+(1, 1, '1001', 2499.98, 149.99, 15, 164.99, 0, 2334.99, 'credit_card', 'web', 'waiting_for_payment', 'UPS', '1234567890',
 'Jane Doe', '123-456-7890', 'john@example.com', '123 Main St', 'San Francisco', 'California', '12345',
 '2024-04-25 08:30:00', NULL, 'Please include stickers'),
+
 -- $20 off + 10% off coupon
-(2, 2, '1002', 2199.98, 20, 217.99, 237.99, 0, 1961.99, 1, 0, 2, 'UPS', '9876543210',
+(2, 2, '1002', 2199.98, 20, 217.99, 237.99, 0, 1961.99, 'paypal', 'mobile', 'fulfilling', 'UPS', '9876543210',
 'Jane Doe', '555-999-8888', 'janedoe@example.com', '456 Market St', 'San Francisco', 'CA', '94102',
 '2024-04-24 09:15:00', NULL, 'no comments'),
 
-(1, 1, '1003', 1399.99, 100, 15, 115, 0, 1284, 1, 0, 3, 'UPS', '123456789',
+(1, 1, '1003', 1399.99, 100, 15, 115, 0, 1284, 'credit_card', 'web', 'sent', 'UPS', '123456789',
 'Jane Doe', '555-123-4567', 'jane_doe@example.com', '123 Main St, Apt 4B', 'New York City', 'New York', '10001',
 '2024-01-09 10:45:00', NULL, 'I order it with other item, please ship it together'),
 
-(2, NULL, '1004', 129.99, 0, 0, 0, 0, 129.99, 1, 0, 4, 'UPS', '987654321',
+(2, NULL, '1004', 129.99, 0, 0, 0, 0, 129.99, 'credit_card', 'mobile', 'complete', 'UPS', '987654321',
 'John Smith', '555-987-6543', 'john_smith@example.com', '456 Oak St, Apt 12C', 'Los Angeles', 'California', '90001',
 '2024-01-12 11:15:00', NULL, NULL),
 
-(3, 3, '1005', 19999.90, 1000, 999999.99, 1000999.99, 0, 0, 1, 1, 5, 'USPS', '987654321',
+(3, 3, '1005', 19999.90, 1000, 999999.99, 1000999.99, 0, 0, 'google_pay', 'web', 'closed', 'USPS', '987654321',
 'John Smith', '555-987-6543', 'john_smith@example.com', '456 Oak St, Apt 12C', 'Los Angeles', 'California', '90001',
 '2024-01-12 11:15:00', NULL, NULL);
 
@@ -1793,7 +1910,7 @@ CREATE TABLE return_request  (
     return_quantity INTEGER,                       -- number of items to be returned
     return_name VARCHAR(100),
     return_phone VARCHAR(100),
-    status INTEGER,                -- return status,  waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
+    return_status return_status_enum DEFAULT 'waiting_to_be_processed',                -- return status,  waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
     handle_time TIMESTAMP,                        -- how long to return this item, e.g 2 weeks to return this or return is voided.
     asking_amount DECIMAL(10, 2),
     refunded_amount DECIMAL(10, 2),
@@ -1808,24 +1925,24 @@ CREATE TABLE return_request  (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO return_request (order_id, company_address_id, order_sn, member_id, return_quantity, return_name, return_phone, status,
+INSERT INTO return_request (order_id, company_address_id, order_sn, member_id, return_quantity, return_name, return_phone, return_status,
                                  handle_time, asking_amount, reason, description, handle_note, handle_operator, receive_operator,
                                  receive_time, receive_note)
 VALUES
-(1, 1, '1001', 1, 3, 'John Doe', '555-123-4567', 0,
+(1, 1, '1001', 1, 3, 'John Doe', '555-123-4567', 'waiting_to_be_processed',
  NULL, NULL, 'Item damaged upon arrival', 'Received two damaged items in the package.',
  NULL, NULL, NULL, NULL, NULL),
-(2, 2, '1002', 2, 1, 'Alice Smith', '555-987-6543', 1,
+(2, 2, '1002', 2, 1, 'Alice Smith', '555-987-6543', 'returning',
  NULL, NULL, 'Wrong item received', 'Received a different product than what was ordered.',
  NULL, NULL, NULL, NULL, NULL),
-(3, 3, '1003', 3, 6, 'Mary Johnson', '555-789-1234', 2,
+(3, 3, '1003', 3, 6, 'Mary Johnson', '555-789-1234', 'complete',
  '2024-09-09 14:30:00', 75.99, 'Changed my mind', 'Decided not to keep these items.',
  'Refund processed successfully.', 'AdminUser123', 'WarehouseStaff456',
  '2024-09-10 09:15:00', 'Items received in good condition.'),
-(4, 1, '1004', 4, 1, 'David Wilson', '555-555-5555', 3,
+(4, 1, '1004', 4, 1, 'David Wilson', '555-555-5555', 'rejected',
  NULL, NULL, 'Item does not match the description', 'The product received is not as described on the website.',
  'Rejected due to mismatch.', 'AdminUser789', NULL, NULL, NULL),
-(5, 2, '1005', 5, 2, 'Linda Davis', '555-123-7890', 0,
+(5, 2, '1005', 5, 2, 'Linda Davis', '555-123-7890', 'waiting_to_be_processed',
  NULL, NULL, 'Item arrived late', 'Items arrived after the expected delivery date.',
  NULL, NULL, NULL, NULL, NULL);
 
@@ -1901,17 +2018,20 @@ CREATE TABLE article (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL, -- URL-friendly slug
+    author_id INTEGER DEFAULT 0,     -- author of the article TODO: could be either admin or member or might just leave name there
+    author_name VARCHAR(20) NOT NULL,
     body TEXT NOT NULL,
-    publish_status INTEGER NOT NULL DEFAULT 0,  -- article online status
+    publish_status publish_status_enum DEFAULT 'pending',  -- article online status
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO article (title, slug, body, publish_status)
+INSERT INTO article (title, slug, author_name, body, publish_status)
 VALUES
-('Buyer''s guide', 'buyers-guide', 'This article provides a comprehensive guide for buyers.', 1),
-('Product Comparison', 'product-comparison', 'This article compares different products and their features.', 1),
-('How to Choose the Right Product', 'how-to-choose-the-right-product', 'This article provides tips on how to choose the right product for your needs.', 1);
+('Buyer''s guide', 'buyers-guide', 'Jun', 'This article provides a comprehensive guide for buyers.', 'published'),
+('Product Comparison', 'product-comparison', 'Jun', 'This article compares different products and their features.', 'published'),
+('How to Choose the Right Product', 'how-to-choose-the-right-product', 'Jun', 'This article provides tips on how to choose the right product for your needs.', 'published'),
+('Get Free Products', 'get-free-products', 'Jun', 'This article teach you how to exploit website for free products.', 'paused');
 
 
 DROP TABLE IF EXISTS article_QA;
@@ -1993,33 +2113,33 @@ VALUES
 --------------
 ---  SMS  ----
 --------------
+
 DROP TABLE IF EXISTS coupon;
 CREATE TABLE coupon (
     id SERIAL PRIMARY KEY,
-    coupon_type INTEGER NULL DEFAULT NULL,           -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
-    name VARCHAR(100),
-    discount_type INTEGER NULL DEFAULT NULL,   -- 0 -> by amount, 1->  by percent off
-    amount DECIMAL(10, 2) NULL DEFAULT NULL,   -- amount discounted
-    start_time TIMESTAMP NULL DEFAULT NULL,
-    end_time TIMESTAMP NULL DEFAULT NULL,
-    note VARCHAR(200) NULL DEFAULT NULL,
-    count INTEGER NULL DEFAULT NULL,          -- number of this coupon
-    publish_count INTEGER NULL DEFAULT NULL,  -- number of send/publish coupons to users
-    used_count INTEGER NULL DEFAULT NULL,      -- number of used coupons
-    code VARCHAR(64) NULL DEFAULT NULL,
-    status INTEGER NULL DEFAULT 1          -- is the coupon active or disable,  0 -> disable, 1 -> active
+    coupon_type target_type_enum DEFAULT 'specific_item',     -- type of coupon (all, specific brand, specific category, or specific item)
+    name VARCHAR(100) NOT NULL,                              -- name of the coupon
+    discount_type discount_type_enum DEFAULT 'amount',       -- discount type (amount or percent)
+    amount DECIMAL(10, 2) NOT NULL CHECK (amount >= 0),      -- amount of discount (must be positive)
+    minimum_purchase DECIMAL(10, 2) DEFAULT 0 CHECK (minimum_purchase >= 0), -- minimum purchase to apply the coupon (default is 0, no restriction)
+    start_time TIMESTAMP NOT NULL,                           -- coupon start time
+    end_time TIMESTAMP NOT NULL CHECK (end_time > start_time), -- ensure end_time is after start_time
+    note VARCHAR(200) NULL,                                  -- any additional notes
+    count INTEGER DEFAULT 0,                                 -- number of this coupon available
+    publish_count INTEGER DEFAULT 0,                         -- number of distributed coupons
+    used_count INTEGER DEFAULT 0,                            -- number of used coupons
+    code VARCHAR(64) NOT NULL UNIQUE,                        -- coupon code (must be unique)
+    publish_status publish_status_enum DEFAULT 'pending'             -- coupon status (active or inactive)
 );
-
--- TODO: make sure free coupon don't go negative
-INSERT INTO coupon(coupon_type, name, discount_type, amount, start_time, end_time, count, publish_count, used_count, code, status)
+-- TODO: make sure free coupon don't go negative, add a constraint in database level and application/service level
+INSERT INTO coupon (coupon_type, name, discount_type, amount, minimum_purchase, start_time, end_time, count, publish_count, used_count, code, publish_status)
 VALUES
-(0, '$15 off whole order', 0, 15.00, '2024-08-18 16:00:3', '2025-08-18 16:00:3', 20, 10, 0, '15OFF', 1),
-(0, '10% off whole order', 1, 10, '2024-08-18 16:00:3', '2025-08-18 16:00:3', 20, 10, 0, '10OFF', 1),
-(0, 'All free', 0, 999999.99, '2024-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1, 1, 'FREE', 1),
-(1, '$50 off Apple product', 0, 50.00, '2024-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1, 0, '50OFFAPPLE', 1),
-(2, '60% off shirts', 1, 60, '2024-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1, 0, '60OFFSHIRTS', 1),
-(3, '20% off Galaxy S21', 1, 20, '2024-08-18 16:00:3', '2025-08-18 16:00:3', 1, 1, 1, '20OFFS21', 1);
-
+('all', '$15 off whole order', 'amount', 15.00, 50.00, NOW(), NOW() + INTERVAL '1 year', 20, 10, 0, '15OFF', 'published'),
+('all', '10% off whole order', 'percent', 10.00, 100.00, NOW(), NOW() + INTERVAL '1 year', 20, 10, 0, '10OFF', 'published'),
+('all', 'All free', 'amount', 999999.99, 0.00, NOW(), NOW() + INTERVAL '1 year', 1, 1, 1, 'FREE', 'published'),
+('specific_brand', '$50 off Apple product', 'amount', 50.00, 500.00, NOW(), NOW() + INTERVAL '1 year', 1, 1, 0, '50OFFAPPLE', 'published'),
+('specific_category', '60% off shirts', 'percent', 60.00, 30.00, NOW(), NOW() + INTERVAL '1 year', 1, 1, 0, '60OFFSHIRTS', 'published'),
+('specific_item', '20% off Galaxy S21', 'percent', 20.00, 1000.00, NOW(), NOW() + INTERVAL '1 year', 1, 1, 1, '20OFFS21', 'published');
 
 -- the product that are affected by the coupon, coupon type 1-3 will use this. 0 type will not.
 DROP TABLE IF EXISTS coupon_product_relation;
@@ -2100,10 +2220,10 @@ DROP TABLE IF EXISTS promotion_sale;
 CREATE TABLE promotion_sale (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
-    promotion_type INTEGER,      -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
-    discount_type INTEGER,       -- 0 -> by amount, 1->  by percent off
+    promotion_type target_type_enum DEFAULT 'specific_item',      -- discount on 0-> all, 1 -> specific brand,  2-> specific category, 3-> specific item
+    discount_type discount_type_enum NOT NULL ,       -- 0 -> by amount, 1->  by percent off
     amount DECIMAL(10, 2),
-    status INTEGER,               -- 0-> not active, 1-> active is it active
+    publish_status publish_status_enum DEFAULT 'pending',               -- 0 -> not active, 1 -> active is it active
     start_time TIMESTAMP,
     end_time TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -2111,13 +2231,12 @@ CREATE TABLE promotion_sale (
 );
 
 -- TODO: does sale stacks?.  and need a way to check discounts time expiration. maybe redis or spring scheduler/task
-INSERT INTO promotion_sale(name, promotion_type, discount_type, amount, status, start_time, end_time)
+INSERT INTO promotion_sale(name, promotion_type, discount_type, amount, publish_status, start_time, end_time)
 VALUES
-('Every thing 10% off', 0, 1, 10, 0, '2024-02-25 08:45:00', '2024-08-25 08:45:00'),
-('OnePlus product $10 off', 1, 0, 10, 1, '2024-02-25 08:45:00', '2024-08-25 08:45:00'),
-('All laptop 100 off', 2, 0, 100, 1, '2024-02-25 08:45:00', '2024-08-25 08:45:00'),
-('iphone-SE 10% OFF', 3, 1, 10, 1, '2024-02-25 08:45:00', '2024-08-25 08:45:00');
-
+('Every thing 10% off', 'all', 'percent', 10, 'pending', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1 month'),
+('OnePlus product $10 off', 'specific_brand', 'amount', 10, 'published', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1 month'),
+('All laptop $100 off', 'specific_category', 'amount', 100, 'published', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1 month'),
+('iphone-SE 10% OFF', 'specific_item', 'percent', 10, 'published', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '1 month');
 
 -- products that affected by this promotion
 -- user other services to find, brand, category, specific product, or All

@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.service.impl;
 
+import com.itsthatjun.ecommerce.enums.status.PublishStatus;
 import com.itsthatjun.ecommerce.exceptions.ArticleNotFoundException;
 import com.itsthatjun.ecommerce.model.AdminArticleInfo;
 import com.itsthatjun.ecommerce.dto.event.outgoing.ArticleUpdateEvent;
@@ -56,7 +57,7 @@ public class AdminArticleServiceImpl implements AdminArticleService {
     public Flux<AdminArticleInfo> listAllArticles() {
         // optional:
         // Pageable pageable = PageRequest.of(0, 10); // Pageable with 10 items per page
-        return articleRepository.findAllByPublishStatus(1)
+        return articleRepository.findAllByPublishStatus(PublishStatus.PUBLISHED.getValue())
                 .flatMap(article -> {
                     int articleId = article.getId();
                     AdminArticleInfo articleInfo = new AdminArticleInfo(article);

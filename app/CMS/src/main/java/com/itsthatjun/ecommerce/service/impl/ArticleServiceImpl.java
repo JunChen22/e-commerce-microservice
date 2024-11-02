@@ -5,6 +5,7 @@ import com.itsthatjun.ecommerce.dto.DTOMapper;
 import com.itsthatjun.ecommerce.dto.model.ImageDTO;
 import com.itsthatjun.ecommerce.dto.model.QaDTO;
 import com.itsthatjun.ecommerce.dto.model.VideoDTO;
+import com.itsthatjun.ecommerce.enums.status.PublishStatus;
 import com.itsthatjun.ecommerce.exceptions.ArticleNotFoundException;
 import com.itsthatjun.ecommerce.repository.ArticleImageRepository;
 import com.itsthatjun.ecommerce.repository.ArticleQARepository;
@@ -51,9 +52,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Flux<ArticleInfo> listAllArticles() {
+
+        // TODO: Implement pagination for r2dbc
         // optional:
         // Pageable pageable = PageRequest.of(0, 10); // Pageable with 10 items per page
-        return articleRepository.findAllByPublishStatus(1)
+        return articleRepository.findAllByPublishStatus(PublishStatus.PUBLISHED.getValue())
                 .flatMap(article -> {
                     int articleId = article.getId();
                     ArticleInfo articleInfo = dtoMapper.articleToArticleDTO(article);
@@ -74,7 +77,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Mono<ArticleInfo> getArticleBySlug(String slug, int delay, int faultPercent) {
-        return articleRepository.findBySlugAndPublishStatus(slug, 1) // find
+        return articleRepository.findBySlugAndPublishStatus(slug, PublishStatus.PUBLISHED.getValue()) // find
                 .flatMap(article -> {
                     int articleId = article.getId();
                     ArticleInfo articleInfo = dtoMapper.articleToArticleDTO(article);

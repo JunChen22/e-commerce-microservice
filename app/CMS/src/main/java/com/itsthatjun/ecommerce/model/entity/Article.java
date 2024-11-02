@@ -1,11 +1,11 @@
 package com.itsthatjun.ecommerce.model.entity;
 
+import com.itsthatjun.ecommerce.enums.status.PublishStatus;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -18,17 +18,15 @@ public class Article {
 
     private String slug;
 
+    private Integer authorId;
+
+    private String authorName;
+
     private String body;
 
-    private Integer publishStatus;
+    private PublishStatus publishStatus;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-    // Generate slug based on title
-    public void generateSlug() {
-        this.slug = title.toLowerCase().replaceAll("[^a-z0-9-]", "-").replaceAll("--", "-");
-        this.slug = this.slug.replaceAll("-+", "-"); // Replace multiple hyphens with one
-    }
 }

@@ -1,11 +1,10 @@
 package com.itsthatjun.ecommerce.model.entity;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
