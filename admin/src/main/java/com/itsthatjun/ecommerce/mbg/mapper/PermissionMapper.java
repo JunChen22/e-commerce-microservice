@@ -12,19 +12,19 @@ public interface PermissionMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Permission record);
+    int insert(Permission row);
 
-    int insertSelective(Permission record);
+    int insertSelective(Permission row);
 
     List<Permission> selectByExample(PermissionExample example);
 
     Permission selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Permission record, @Param("example") PermissionExample example);
+    int updateByExampleSelective(@Param("row") Permission row, @Param("example") PermissionExample example);
 
-    int updateByExample(@Param("record") Permission record, @Param("example") PermissionExample example);
+    int updateByExample(@Param("row") Permission row, @Param("example") PermissionExample example);
 
-    int updateByPrimaryKeySelective(Permission record);
+    int updateByPrimaryKeySelective(Permission row);
 
-    int updateByPrimaryKey(Permission record);
+    int updateByPrimaryKey(Permission row);
 }

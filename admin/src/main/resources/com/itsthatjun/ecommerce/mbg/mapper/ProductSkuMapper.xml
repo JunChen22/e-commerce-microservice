@@ -12,7 +12,9 @@
     <result column="low_stock" jdbcType="INTEGER" property="lowStock" />
     <result column="lock_stock" jdbcType="INTEGER" property="lockStock" />
     <result column="unit_sold" jdbcType="INTEGER" property="unitSold" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="publish_status" jdbcType="VARCHAR" property="publishStatus" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, product_id, sku_code, picture, price, promotion_price, stock, low_stock, lock_stock, 
-    unit_sold, status
+    unit_sold, publish_status, created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductSkuExample" resultMap="BaseResultMap">
     select
@@ -110,11 +112,13 @@
     insert into product_sku (product_id, sku_code, picture, 
       price, promotion_price, stock, 
       low_stock, lock_stock, unit_sold, 
-      status)
+      publish_status, created_at, updated_at
+      )
     values (#{productId,jdbcType=INTEGER}, #{skuCode,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
       #{price,jdbcType=NUMERIC}, #{promotionPrice,jdbcType=NUMERIC}, #{stock,jdbcType=INTEGER}, 
       #{lowStock,jdbcType=INTEGER}, #{lockStock,jdbcType=INTEGER}, #{unitSold,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER})
+      #{publishStatus,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductSku" useGeneratedKeys="true">
     insert into product_sku
@@ -146,8 +150,14 @@
       <if test="unitSold != null">
         unit_sold,
       </if>
-      <if test="status != null">
-        status,
+      <if test="publishStatus != null">
+        publish_status,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -178,8 +188,14 @@
       <if test="unitSold != null">
         #{unitSold,jdbcType=INTEGER},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
+      <if test="publishStatus != null">
+        #{publishStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -192,58 +208,66 @@
   <update id="updateByExampleSelective" parameterType="map">
     update product_sku
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=INTEGER},
+      <if test="row.productId != null">
+        product_id = #{row.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.skuCode != null">
-        sku_code = #{record.skuCode,jdbcType=VARCHAR},
+      <if test="row.skuCode != null">
+        sku_code = #{row.skuCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.picture != null">
-        picture = #{record.picture,jdbcType=VARCHAR},
+      <if test="row.picture != null">
+        picture = #{row.picture,jdbcType=VARCHAR},
       </if>
-      <if test="record.price != null">
-        price = #{record.price,jdbcType=NUMERIC},
+      <if test="row.price != null">
+        price = #{row.price,jdbcType=NUMERIC},
       </if>
-      <if test="record.promotionPrice != null">
-        promotion_price = #{record.promotionPrice,jdbcType=NUMERIC},
+      <if test="row.promotionPrice != null">
+        promotion_price = #{row.promotionPrice,jdbcType=NUMERIC},
       </if>
-      <if test="record.stock != null">
-        stock = #{record.stock,jdbcType=INTEGER},
+      <if test="row.stock != null">
+        stock = #{row.stock,jdbcType=INTEGER},
       </if>
-      <if test="record.lowStock != null">
-        low_stock = #{record.lowStock,jdbcType=INTEGER},
+      <if test="row.lowStock != null">
+        low_stock = #{row.lowStock,jdbcType=INTEGER},
       </if>
-      <if test="record.lockStock != null">
-        lock_stock = #{record.lockStock,jdbcType=INTEGER},
+      <if test="row.lockStock != null">
+        lock_stock = #{row.lockStock,jdbcType=INTEGER},
       </if>
-      <if test="record.unitSold != null">
-        unit_sold = #{record.unitSold,jdbcType=INTEGER},
+      <if test="row.unitSold != null">
+        unit_sold = #{row.unitSold,jdbcType=INTEGER},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+      <if test="row.publishStatus != null">
+        publish_status = #{row.publishStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update product_sku
-    set id = #{record.id,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=INTEGER},
-      sku_code = #{record.skuCode,jdbcType=VARCHAR},
-      picture = #{record.picture,jdbcType=VARCHAR},
-      price = #{record.price,jdbcType=NUMERIC},
-      promotion_price = #{record.promotionPrice,jdbcType=NUMERIC},
-      stock = #{record.stock,jdbcType=INTEGER},
-      low_stock = #{record.lowStock,jdbcType=INTEGER},
-      lock_stock = #{record.lockStock,jdbcType=INTEGER},
-      unit_sold = #{record.unitSold,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=INTEGER}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      product_id = #{row.productId,jdbcType=INTEGER},
+      sku_code = #{row.skuCode,jdbcType=VARCHAR},
+      picture = #{row.picture,jdbcType=VARCHAR},
+      price = #{row.price,jdbcType=NUMERIC},
+      promotion_price = #{row.promotionPrice,jdbcType=NUMERIC},
+      stock = #{row.stock,jdbcType=INTEGER},
+      low_stock = #{row.lowStock,jdbcType=INTEGER},
+      lock_stock = #{row.lockStock,jdbcType=INTEGER},
+      unit_sold = #{row.unitSold,jdbcType=INTEGER},
+      publish_status = #{row.publishStatus,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -277,8 +301,14 @@
       <if test="unitSold != null">
         unit_sold = #{unitSold,jdbcType=INTEGER},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+      <if test="publishStatus != null">
+        publish_status = #{publishStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -294,7 +324,9 @@
       low_stock = #{lowStock,jdbcType=INTEGER},
       lock_stock = #{lockStock,jdbcType=INTEGER},
       unit_sold = #{unitSold,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER}
+      publish_status = #{publishStatus,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -786,63 +786,73 @@ public class OrdersExample {
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeIsNull() {
-            addCriterion("pay_type is null");
+        public Criteria andPaymentTypeIsNull() {
+            addCriterion("payment_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeIsNotNull() {
-            addCriterion("pay_type is not null");
+        public Criteria andPaymentTypeIsNotNull() {
+            addCriterion("payment_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeEqualTo(Integer value) {
-            addCriterion("pay_type =", value, "payType");
+        public Criteria andPaymentTypeEqualTo(String value) {
+            addCriterion("payment_type =", value, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeNotEqualTo(Integer value) {
-            addCriterion("pay_type <>", value, "payType");
+        public Criteria andPaymentTypeNotEqualTo(String value) {
+            addCriterion("payment_type <>", value, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeGreaterThan(Integer value) {
-            addCriterion("pay_type >", value, "payType");
+        public Criteria andPaymentTypeGreaterThan(String value) {
+            addCriterion("payment_type >", value, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("pay_type >=", value, "payType");
+        public Criteria andPaymentTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("payment_type >=", value, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeLessThan(Integer value) {
-            addCriterion("pay_type <", value, "payType");
+        public Criteria andPaymentTypeLessThan(String value) {
+            addCriterion("payment_type <", value, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("pay_type <=", value, "payType");
+        public Criteria andPaymentTypeLessThanOrEqualTo(String value) {
+            addCriterion("payment_type <=", value, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeIn(List<Integer> values) {
-            addCriterion("pay_type in", values, "payType");
+        public Criteria andPaymentTypeLike(String value) {
+            addCriterion("payment_type like", value, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeNotIn(List<Integer> values) {
-            addCriterion("pay_type not in", values, "payType");
+        public Criteria andPaymentTypeNotLike(String value) {
+            addCriterion("payment_type not like", value, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeBetween(Integer value1, Integer value2) {
-            addCriterion("pay_type between", value1, value2, "payType");
+        public Criteria andPaymentTypeIn(List<String> values) {
+            addCriterion("payment_type in", values, "paymentType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("pay_type not between", value1, value2, "payType");
+        public Criteria andPaymentTypeNotIn(List<String> values) {
+            addCriterion("payment_type not in", values, "paymentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentTypeBetween(String value1, String value2) {
+            addCriterion("payment_type between", value1, value2, "paymentType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentTypeNotBetween(String value1, String value2) {
+            addCriterion("payment_type not between", value1, value2, "paymentType");
             return (Criteria) this;
         }
 
@@ -856,113 +866,133 @@ public class OrdersExample {
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeEqualTo(Integer value) {
+        public Criteria andSourceTypeEqualTo(String value) {
             addCriterion("source_type =", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeNotEqualTo(Integer value) {
+        public Criteria andSourceTypeNotEqualTo(String value) {
             addCriterion("source_type <>", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeGreaterThan(Integer value) {
+        public Criteria andSourceTypeGreaterThan(String value) {
             addCriterion("source_type >", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeGreaterThanOrEqualTo(Integer value) {
+        public Criteria andSourceTypeGreaterThanOrEqualTo(String value) {
             addCriterion("source_type >=", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeLessThan(Integer value) {
+        public Criteria andSourceTypeLessThan(String value) {
             addCriterion("source_type <", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeLessThanOrEqualTo(Integer value) {
+        public Criteria andSourceTypeLessThanOrEqualTo(String value) {
             addCriterion("source_type <=", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeIn(List<Integer> values) {
+        public Criteria andSourceTypeLike(String value) {
+            addCriterion("source_type like", value, "sourceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceTypeNotLike(String value) {
+            addCriterion("source_type not like", value, "sourceType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceTypeIn(List<String> values) {
             addCriterion("source_type in", values, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeNotIn(List<Integer> values) {
+        public Criteria andSourceTypeNotIn(List<String> values) {
             addCriterion("source_type not in", values, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeBetween(Integer value1, Integer value2) {
+        public Criteria andSourceTypeBetween(String value1, String value2) {
             addCriterion("source_type between", value1, value2, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andSourceTypeNotBetween(Integer value1, Integer value2) {
+        public Criteria andSourceTypeNotBetween(String value1, String value2) {
             addCriterion("source_type not between", value1, value2, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNull() {
-            addCriterion("status is null");
+        public Criteria andOrderStatusIsNull() {
+            addCriterion("order_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
+        public Criteria andOrderStatusIsNotNull() {
+            addCriterion("order_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Integer value) {
-            addCriterion("status =", value, "status");
+        public Criteria andOrderStatusEqualTo(String value) {
+            addCriterion("order_status =", value, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Integer value) {
-            addCriterion("status <>", value, "status");
+        public Criteria andOrderStatusNotEqualTo(String value) {
+            addCriterion("order_status <>", value, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Integer value) {
-            addCriterion("status >", value, "status");
+        public Criteria andOrderStatusGreaterThan(String value) {
+            addCriterion("order_status >", value, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
-            addCriterion("status >=", value, "status");
+        public Criteria andOrderStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("order_status >=", value, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Integer value) {
-            addCriterion("status <", value, "status");
+        public Criteria andOrderStatusLessThan(String value) {
+            addCriterion("order_status <", value, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Integer value) {
-            addCriterion("status <=", value, "status");
+        public Criteria andOrderStatusLessThanOrEqualTo(String value) {
+            addCriterion("order_status <=", value, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Integer> values) {
-            addCriterion("status in", values, "status");
+        public Criteria andOrderStatusLike(String value) {
+            addCriterion("order_status like", value, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Integer> values) {
-            addCriterion("status not in", values, "status");
+        public Criteria andOrderStatusNotLike(String value) {
+            addCriterion("order_status not like", value, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(Integer value1, Integer value2) {
-            addCriterion("status between", value1, value2, "status");
+        public Criteria andOrderStatusIn(List<String> values) {
+            addCriterion("order_status in", values, "orderStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
-            addCriterion("status not between", value1, value2, "status");
+        public Criteria andOrderStatusNotIn(List<String> values) {
+            addCriterion("order_status not in", values, "orderStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderStatusBetween(String value1, String value2) {
+            addCriterion("order_status between", value1, value2, "orderStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderStatusNotBetween(String value1, String value2) {
+            addCriterion("order_status not between", value1, value2, "orderStatus");
             return (Criteria) this;
         }
 

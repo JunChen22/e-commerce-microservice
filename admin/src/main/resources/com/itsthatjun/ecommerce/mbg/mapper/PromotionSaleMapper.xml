@@ -4,10 +4,10 @@
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.PromotionSale">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="promotion_type" jdbcType="INTEGER" property="promotionType" />
-    <result column="discount_type" jdbcType="INTEGER" property="discountType" />
+    <result column="promotion_type" jdbcType="VARCHAR" property="promotionType" />
+    <result column="discount_type" jdbcType="VARCHAR" property="discountType" />
     <result column="amount" jdbcType="NUMERIC" property="amount" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="publish_status" jdbcType="VARCHAR" property="publishStatus" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
@@ -72,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, promotion_type, discount_type, amount, status, start_time, end_time, created_at, 
-    updated_at
+    id, name, promotion_type, discount_type, amount, publish_status, start_time, end_time, 
+    created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSaleExample" resultMap="BaseResultMap">
     select
@@ -107,11 +107,11 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSale" useGeneratedKeys="true">
     insert into promotion_sale (name, promotion_type, discount_type, 
-      amount, status, start_time, 
+      amount, publish_status, start_time, 
       end_time, created_at, updated_at
       )
-    values (#{name,jdbcType=VARCHAR}, #{promotionType,jdbcType=INTEGER}, #{discountType,jdbcType=INTEGER}, 
-      #{amount,jdbcType=NUMERIC}, #{status,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, 
+    values (#{name,jdbcType=VARCHAR}, #{promotionType,jdbcType=VARCHAR}, #{discountType,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=NUMERIC}, #{publishStatus,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
       #{endTime,jdbcType=TIMESTAMP}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -130,8 +130,8 @@
       <if test="amount != null">
         amount,
       </if>
-      <if test="status != null">
-        status,
+      <if test="publishStatus != null">
+        publish_status,
       </if>
       <if test="startTime != null">
         start_time,
@@ -151,16 +151,16 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="promotionType != null">
-        #{promotionType,jdbcType=INTEGER},
+        #{promotionType,jdbcType=VARCHAR},
       </if>
       <if test="discountType != null">
-        #{discountType,jdbcType=INTEGER},
+        #{discountType,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=NUMERIC},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
+      <if test="publishStatus != null">
+        #{publishStatus,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
@@ -185,54 +185,54 @@
   <update id="updateByExampleSelective" parameterType="map">
     update promotion_sale
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.promotionType != null">
-        promotion_type = #{record.promotionType,jdbcType=INTEGER},
+      <if test="row.promotionType != null">
+        promotion_type = #{row.promotionType,jdbcType=VARCHAR},
       </if>
-      <if test="record.discountType != null">
-        discount_type = #{record.discountType,jdbcType=INTEGER},
+      <if test="row.discountType != null">
+        discount_type = #{row.discountType,jdbcType=VARCHAR},
       </if>
-      <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=NUMERIC},
+      <if test="row.amount != null">
+        amount = #{row.amount,jdbcType=NUMERIC},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+      <if test="row.publishStatus != null">
+        publish_status = #{row.publishStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.startTime != null">
-        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      <if test="row.startTime != null">
+        start_time = #{row.startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.endTime != null">
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      <if test="row.endTime != null">
+        end_time = #{row.endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update promotion_sale
-    set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      promotion_type = #{record.promotionType,jdbcType=INTEGER},
-      discount_type = #{record.discountType,jdbcType=INTEGER},
-      amount = #{record.amount,jdbcType=NUMERIC},
-      status = #{record.status,jdbcType=INTEGER},
-      start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      name = #{row.name,jdbcType=VARCHAR},
+      promotion_type = #{row.promotionType,jdbcType=VARCHAR},
+      discount_type = #{row.discountType,jdbcType=VARCHAR},
+      amount = #{row.amount,jdbcType=NUMERIC},
+      publish_status = #{row.publishStatus,jdbcType=VARCHAR},
+      start_time = #{row.startTime,jdbcType=TIMESTAMP},
+      end_time = #{row.endTime,jdbcType=TIMESTAMP},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -243,16 +243,16 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="promotionType != null">
-        promotion_type = #{promotionType,jdbcType=INTEGER},
+        promotion_type = #{promotionType,jdbcType=VARCHAR},
       </if>
       <if test="discountType != null">
-        discount_type = #{discountType,jdbcType=INTEGER},
+        discount_type = #{discountType,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
         amount = #{amount,jdbcType=NUMERIC},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+      <if test="publishStatus != null">
+        publish_status = #{publishStatus,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
@@ -272,10 +272,10 @@
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.PromotionSale">
     update promotion_sale
     set name = #{name,jdbcType=VARCHAR},
-      promotion_type = #{promotionType,jdbcType=INTEGER},
-      discount_type = #{discountType,jdbcType=INTEGER},
+      promotion_type = #{promotionType,jdbcType=VARCHAR},
+      discount_type = #{discountType,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=NUMERIC},
-      status = #{status,jdbcType=INTEGER},
+      publish_status = #{publishStatus,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       created_at = #{createdAt,jdbcType=TIMESTAMP},

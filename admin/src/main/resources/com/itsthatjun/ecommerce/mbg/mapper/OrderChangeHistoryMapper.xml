@@ -161,42 +161,42 @@
   <update id="updateByExampleSelective" parameterType="map">
     update order_change_history
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=INTEGER},
+      <if test="row.orderId != null">
+        order_id = #{row.orderId,jdbcType=INTEGER},
       </if>
-      <if test="record.updateAction != null">
-        update_action = #{record.updateAction,jdbcType=VARCHAR},
+      <if test="row.updateAction != null">
+        update_action = #{row.updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="record.orderStatus != null">
-        order_status = #{record.orderStatus,jdbcType=INTEGER},
+      <if test="row.orderStatus != null">
+        order_status = #{row.orderStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.note != null">
-        note = #{record.note,jdbcType=VARCHAR},
+      <if test="row.note != null">
+        note = #{row.note,jdbcType=VARCHAR},
       </if>
-      <if test="record.operator != null">
-        operator = #{record.operator,jdbcType=VARCHAR},
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update order_change_history
-    set id = #{record.id,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
-      update_action = #{record.updateAction,jdbcType=VARCHAR},
-      order_status = #{record.orderStatus,jdbcType=INTEGER},
-      note = #{record.note,jdbcType=VARCHAR},
-      operator = #{record.operator,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      order_id = #{row.orderId,jdbcType=INTEGER},
+      update_action = #{row.updateAction,jdbcType=VARCHAR},
+      order_status = #{row.orderStatus,jdbcType=INTEGER},
+      note = #{row.note,jdbcType=VARCHAR},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

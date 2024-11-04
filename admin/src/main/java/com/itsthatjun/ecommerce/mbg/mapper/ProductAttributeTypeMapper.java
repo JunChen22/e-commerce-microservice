@@ -12,19 +12,19 @@ public interface ProductAttributeTypeMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ProductAttributeType record);
+    int insert(ProductAttributeType row);
 
-    int insertSelective(ProductAttributeType record);
+    int insertSelective(ProductAttributeType row);
 
     List<ProductAttributeType> selectByExample(ProductAttributeTypeExample example);
 
     ProductAttributeType selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ProductAttributeType record, @Param("example") ProductAttributeTypeExample example);
+    int updateByExampleSelective(@Param("row") ProductAttributeType row, @Param("example") ProductAttributeTypeExample example);
 
-    int updateByExample(@Param("record") ProductAttributeType record, @Param("example") ProductAttributeTypeExample example);
+    int updateByExample(@Param("row") ProductAttributeType row, @Param("example") ProductAttributeTypeExample example);
 
-    int updateByPrimaryKeySelective(ProductAttributeType record);
+    int updateByPrimaryKeySelective(ProductAttributeType row);
 
-    int updateByPrimaryKey(ProductAttributeType record);
+    int updateByPrimaryKey(ProductAttributeType row);
 }

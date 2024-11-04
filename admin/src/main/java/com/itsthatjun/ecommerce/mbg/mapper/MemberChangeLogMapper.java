@@ -12,19 +12,19 @@ public interface MemberChangeLogMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(MemberChangeLog record);
+    int insert(MemberChangeLog row);
 
-    int insertSelective(MemberChangeLog record);
+    int insertSelective(MemberChangeLog row);
 
     List<MemberChangeLog> selectByExample(MemberChangeLogExample example);
 
     MemberChangeLog selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") MemberChangeLog record, @Param("example") MemberChangeLogExample example);
+    int updateByExampleSelective(@Param("row") MemberChangeLog row, @Param("example") MemberChangeLogExample example);
 
-    int updateByExample(@Param("record") MemberChangeLog record, @Param("example") MemberChangeLogExample example);
+    int updateByExample(@Param("row") MemberChangeLog row, @Param("example") MemberChangeLogExample example);
 
-    int updateByPrimaryKeySelective(MemberChangeLog record);
+    int updateByPrimaryKeySelective(MemberChangeLog row);
 
-    int updateByPrimaryKey(MemberChangeLog record);
+    int updateByPrimaryKey(MemberChangeLog row);
 }

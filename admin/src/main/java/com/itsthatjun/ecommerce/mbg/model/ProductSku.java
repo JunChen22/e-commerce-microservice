@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.mbg.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class ProductSku implements Serializable {
     private Integer id;
@@ -24,7 +25,11 @@ public class ProductSku implements Serializable {
 
     private Integer unitSold;
 
-    private Integer status;
+    private String publishStatus;
+
+    private Date createdAt;
+
+    private Date updatedAt;
 
     private static final long serialVersionUID = 1L;
 
@@ -108,11 +113,27 @@ public class ProductSku implements Serializable {
         this.unitSold = unitSold;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getPublishStatus() {
+        return publishStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setPublishStatus(String publishStatus) {
+        this.publishStatus = publishStatus;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

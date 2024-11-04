@@ -3,10 +3,11 @@
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.CouponMapper">
   <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Coupon">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="coupon_type" jdbcType="INTEGER" property="couponType" />
+    <result column="coupon_type" jdbcType="VARCHAR" property="couponType" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="discount_type" jdbcType="INTEGER" property="discountType" />
+    <result column="discount_type" jdbcType="VARCHAR" property="discountType" />
     <result column="amount" jdbcType="NUMERIC" property="amount" />
+    <result column="minimum_purchase" jdbcType="NUMERIC" property="minimumPurchase" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="note" jdbcType="VARCHAR" property="note" />
@@ -14,7 +15,7 @@
     <result column="publish_count" jdbcType="INTEGER" property="publishCount" />
     <result column="used_count" jdbcType="INTEGER" property="usedCount" />
     <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="publish_status" jdbcType="VARCHAR" property="publishStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, coupon_type, name, discount_type, amount, start_time, end_time, note, count, 
-    publish_count, used_count, code, status
+    id, coupon_type, name, discount_type, amount, minimum_purchase, start_time, end_time, 
+    note, count, publish_count, used_count, code, publish_status
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.CouponExample" resultMap="BaseResultMap">
     select
@@ -110,15 +111,15 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Coupon" useGeneratedKeys="true">
     insert into coupon (coupon_type, name, discount_type, 
-      amount, start_time, end_time, 
-      note, count, publish_count, 
-      used_count, code, status
-      )
-    values (#{couponType,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{discountType,jdbcType=INTEGER}, 
-      #{amount,jdbcType=NUMERIC}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{note,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{publishCount,jdbcType=INTEGER}, 
-      #{usedCount,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
-      )
+      amount, minimum_purchase, start_time, 
+      end_time, note, count, 
+      publish_count, used_count, code, 
+      publish_status)
+    values (#{couponType,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{discountType,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=NUMERIC}, #{minimumPurchase,jdbcType=NUMERIC}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, 
+      #{publishCount,jdbcType=INTEGER}, #{usedCount,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, 
+      #{publishStatus,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Coupon" useGeneratedKeys="true">
     insert into coupon
@@ -134,6 +135,9 @@
       </if>
       <if test="amount != null">
         amount,
+      </if>
+      <if test="minimumPurchase != null">
+        minimum_purchase,
       </if>
       <if test="startTime != null">
         start_time,
@@ -156,22 +160,25 @@
       <if test="code != null">
         code,
       </if>
-      <if test="status != null">
-        status,
+      <if test="publishStatus != null">
+        publish_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="couponType != null">
-        #{couponType,jdbcType=INTEGER},
+        #{couponType,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="discountType != null">
-        #{discountType,jdbcType=INTEGER},
+        #{discountType,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
         #{amount,jdbcType=NUMERIC},
+      </if>
+      <if test="minimumPurchase != null">
+        #{minimumPurchase,jdbcType=NUMERIC},
       </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
@@ -194,8 +201,8 @@
       <if test="code != null">
         #{code,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
+      <if test="publishStatus != null">
+        #{publishStatus,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -208,66 +215,70 @@
   <update id="updateByExampleSelective" parameterType="map">
     update coupon
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.couponType != null">
-        coupon_type = #{record.couponType,jdbcType=INTEGER},
+      <if test="row.couponType != null">
+        coupon_type = #{row.couponType,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.discountType != null">
-        discount_type = #{record.discountType,jdbcType=INTEGER},
+      <if test="row.discountType != null">
+        discount_type = #{row.discountType,jdbcType=VARCHAR},
       </if>
-      <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=NUMERIC},
+      <if test="row.amount != null">
+        amount = #{row.amount,jdbcType=NUMERIC},
       </if>
-      <if test="record.startTime != null">
-        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      <if test="row.minimumPurchase != null">
+        minimum_purchase = #{row.minimumPurchase,jdbcType=NUMERIC},
       </if>
-      <if test="record.endTime != null">
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      <if test="row.startTime != null">
+        start_time = #{row.startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.note != null">
-        note = #{record.note,jdbcType=VARCHAR},
+      <if test="row.endTime != null">
+        end_time = #{row.endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.count != null">
-        count = #{record.count,jdbcType=INTEGER},
+      <if test="row.note != null">
+        note = #{row.note,jdbcType=VARCHAR},
       </if>
-      <if test="record.publishCount != null">
-        publish_count = #{record.publishCount,jdbcType=INTEGER},
+      <if test="row.count != null">
+        count = #{row.count,jdbcType=INTEGER},
       </if>
-      <if test="record.usedCount != null">
-        used_count = #{record.usedCount,jdbcType=INTEGER},
+      <if test="row.publishCount != null">
+        publish_count = #{row.publishCount,jdbcType=INTEGER},
       </if>
-      <if test="record.code != null">
-        code = #{record.code,jdbcType=VARCHAR},
+      <if test="row.usedCount != null">
+        used_count = #{row.usedCount,jdbcType=INTEGER},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+      <if test="row.code != null">
+        code = #{row.code,jdbcType=VARCHAR},
+      </if>
+      <if test="row.publishStatus != null">
+        publish_status = #{row.publishStatus,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update coupon
-    set id = #{record.id,jdbcType=INTEGER},
-      coupon_type = #{record.couponType,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      discount_type = #{record.discountType,jdbcType=INTEGER},
-      amount = #{record.amount,jdbcType=NUMERIC},
-      start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      note = #{record.note,jdbcType=VARCHAR},
-      count = #{record.count,jdbcType=INTEGER},
-      publish_count = #{record.publishCount,jdbcType=INTEGER},
-      used_count = #{record.usedCount,jdbcType=INTEGER},
-      code = #{record.code,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      coupon_type = #{row.couponType,jdbcType=VARCHAR},
+      name = #{row.name,jdbcType=VARCHAR},
+      discount_type = #{row.discountType,jdbcType=VARCHAR},
+      amount = #{row.amount,jdbcType=NUMERIC},
+      minimum_purchase = #{row.minimumPurchase,jdbcType=NUMERIC},
+      start_time = #{row.startTime,jdbcType=TIMESTAMP},
+      end_time = #{row.endTime,jdbcType=TIMESTAMP},
+      note = #{row.note,jdbcType=VARCHAR},
+      count = #{row.count,jdbcType=INTEGER},
+      publish_count = #{row.publishCount,jdbcType=INTEGER},
+      used_count = #{row.usedCount,jdbcType=INTEGER},
+      code = #{row.code,jdbcType=VARCHAR},
+      publish_status = #{row.publishStatus,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -275,16 +286,19 @@
     update coupon
     <set>
       <if test="couponType != null">
-        coupon_type = #{couponType,jdbcType=INTEGER},
+        coupon_type = #{couponType,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="discountType != null">
-        discount_type = #{discountType,jdbcType=INTEGER},
+        discount_type = #{discountType,jdbcType=VARCHAR},
       </if>
       <if test="amount != null">
         amount = #{amount,jdbcType=NUMERIC},
+      </if>
+      <if test="minimumPurchase != null">
+        minimum_purchase = #{minimumPurchase,jdbcType=NUMERIC},
       </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
@@ -307,18 +321,19 @@
       <if test="code != null">
         code = #{code,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+      <if test="publishStatus != null">
+        publish_status = #{publishStatus,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Coupon">
     update coupon
-    set coupon_type = #{couponType,jdbcType=INTEGER},
+    set coupon_type = #{couponType,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      discount_type = #{discountType,jdbcType=INTEGER},
+      discount_type = #{discountType,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=NUMERIC},
+      minimum_purchase = #{minimumPurchase,jdbcType=NUMERIC},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       note = #{note,jdbcType=VARCHAR},
@@ -326,7 +341,7 @@
       publish_count = #{publishCount,jdbcType=INTEGER},
       used_count = #{usedCount,jdbcType=INTEGER},
       code = #{code,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER}
+      publish_status = #{publishStatus,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

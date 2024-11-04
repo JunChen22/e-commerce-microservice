@@ -12,19 +12,19 @@ public interface ReviewUpdateLogMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ReviewUpdateLog record);
+    int insert(ReviewUpdateLog row);
 
-    int insertSelective(ReviewUpdateLog record);
+    int insertSelective(ReviewUpdateLog row);
 
     List<ReviewUpdateLog> selectByExample(ReviewUpdateLogExample example);
 
     ReviewUpdateLog selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ReviewUpdateLog record, @Param("example") ReviewUpdateLogExample example);
+    int updateByExampleSelective(@Param("row") ReviewUpdateLog row, @Param("example") ReviewUpdateLogExample example);
 
-    int updateByExample(@Param("record") ReviewUpdateLog record, @Param("example") ReviewUpdateLogExample example);
+    int updateByExample(@Param("row") ReviewUpdateLog row, @Param("example") ReviewUpdateLogExample example);
 
-    int updateByPrimaryKeySelective(ReviewUpdateLog record);
+    int updateByPrimaryKeySelective(ReviewUpdateLog row);
 
-    int updateByPrimaryKey(ReviewUpdateLog record);
+    int updateByPrimaryKey(ReviewUpdateLog row);
 }

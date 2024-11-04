@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.enums;
+package com.itsthatjun.ecommerce.enums.type;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

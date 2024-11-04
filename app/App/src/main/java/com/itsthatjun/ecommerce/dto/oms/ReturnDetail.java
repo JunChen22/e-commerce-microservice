@@ -4,20 +4,28 @@ import com.itsthatjun.ecommerce.dto.oms.model.ReturnItemDTO;
 import com.itsthatjun.ecommerce.dto.oms.model.ReturnLogDTO;
 import com.itsthatjun.ecommerce.dto.oms.model.ReturnPictureDTO;
 import com.itsthatjun.ecommerce.dto.oms.model.ReturnRequestDTO;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
-@Data
-public class ReturnDetail extends ReturnRequestDTO {
+@Getter
+@Setter
+public class ReturnDetail extends ReturnRequestDTO implements Serializable {
 
-    @ApiModelProperty("")
+    /**
+     * Return item list
+     */
     private List<ReturnItemDTO> returnItemList;
 
-    @ApiModelProperty("")
+    /**
+     * Return picture list
+     */
     private List<ReturnPictureDTO> picturesList;
 
-    @ApiModelProperty("")
+    /**
+     * Return log list
+     */
     private List<ReturnLogDTO> logList;
 }

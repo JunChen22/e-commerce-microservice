@@ -12,6 +12,8 @@ public class ReviewAlbum implements Serializable {
 
     private Date createdAt;
 
+    private Date updatedAt;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -44,5 +46,13 @@ public class ReviewAlbum implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

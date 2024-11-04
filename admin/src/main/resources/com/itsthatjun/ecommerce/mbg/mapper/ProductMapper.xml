@@ -6,13 +6,14 @@
     <result column="brand_id" jdbcType="INTEGER" property="brandId" />
     <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="slug" jdbcType="VARCHAR" property="slug" />
     <result column="category_id" jdbcType="INTEGER" property="categoryId" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="attribute_category_id" jdbcType="INTEGER" property="attributeCategoryId" />
     <result column="sn" jdbcType="VARCHAR" property="sn" />
-    <result column="new_status" jdbcType="INTEGER" property="newStatus" />
-    <result column="recommend_status" jdbcType="INTEGER" property="recommendStatus" />
-    <result column="verify_status" jdbcType="INTEGER" property="verifyStatus" />
+    <result column="condition_status" jdbcType="VARCHAR" property="conditionStatus" />
+    <result column="recommend_status" jdbcType="VARCHAR" property="recommendStatus" />
+    <result column="verify_status" jdbcType="VARCHAR" property="verifyStatus" />
     <result column="sub_title" jdbcType="VARCHAR" property="subTitle" />
     <result column="cover_picture" jdbcType="VARCHAR" property="coverPicture" />
     <result column="picture_album" jdbcType="INTEGER" property="pictureAlbum" />
@@ -28,9 +29,10 @@
     <result column="detail_title" jdbcType="VARCHAR" property="detailTitle" />
     <result column="detail_desc" jdbcType="VARCHAR" property="detailDesc" />
     <result column="description_album_id" jdbcType="INTEGER" property="descriptionAlbumId" />
-    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
+    <result column="delete_status" jdbcType="BIT" property="deleteStatus" />
     <result column="publish_status" jdbcType="INTEGER" property="publishStatus" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
     <result column="note" jdbcType="VARCHAR" property="note" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -92,11 +94,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, brand_id, brand_name, name, category_id, category_name, attribute_category_id, 
-    sn, new_status, recommend_status, verify_status, sub_title, cover_picture, picture_album, 
-    description, original_price, on_sale_status, sale_price, stock, low_stock, unit_sold, 
-    weight, keywords, detail_title, detail_desc, description_album_id, delete_status, 
-    publish_status, created_at, note
+    id, brand_id, brand_name, name, slug, category_id, category_name, attribute_category_id, 
+    sn, condition_status, recommend_status, verify_status, sub_title, cover_picture, 
+    picture_album, description, original_price, on_sale_status, sale_price, stock, low_stock, 
+    unit_sold, weight, keywords, detail_title, detail_desc, description_album_id, delete_status, 
+    publish_status, created_at, updated_at, note
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ProductExample" resultMap="BaseResultMap">
     select
@@ -130,25 +132,27 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Product" useGeneratedKeys="true">
     insert into product (brand_id, brand_name, name, 
-      category_id, category_name, attribute_category_id, 
-      sn, new_status, recommend_status, 
-      verify_status, sub_title, cover_picture, 
-      picture_album, description, original_price, 
-      on_sale_status, sale_price, stock, 
-      low_stock, unit_sold, weight, 
-      keywords, detail_title, detail_desc, 
-      description_album_id, delete_status, publish_status, 
-      created_at, note)
+      slug, category_id, category_name, 
+      attribute_category_id, sn, condition_status, 
+      recommend_status, verify_status, sub_title, 
+      cover_picture, picture_album, description, 
+      original_price, on_sale_status, sale_price, 
+      stock, low_stock, unit_sold, 
+      weight, keywords, detail_title, 
+      detail_desc, description_album_id, delete_status, 
+      publish_status, created_at, updated_at, 
+      note)
     values (#{brandId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{categoryId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{attributeCategoryId,jdbcType=INTEGER}, 
-      #{sn,jdbcType=VARCHAR}, #{newStatus,jdbcType=INTEGER}, #{recommendStatus,jdbcType=INTEGER}, 
-      #{verifyStatus,jdbcType=INTEGER}, #{subTitle,jdbcType=VARCHAR}, #{coverPicture,jdbcType=VARCHAR}, 
-      #{pictureAlbum,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{originalPrice,jdbcType=NUMERIC}, 
-      #{onSaleStatus,jdbcType=INTEGER}, #{salePrice,jdbcType=NUMERIC}, #{stock,jdbcType=INTEGER}, 
-      #{lowStock,jdbcType=INTEGER}, #{unitSold,jdbcType=INTEGER}, #{weight,jdbcType=NUMERIC}, 
-      #{keywords,jdbcType=VARCHAR}, #{detailTitle,jdbcType=VARCHAR}, #{detailDesc,jdbcType=VARCHAR}, 
-      #{descriptionAlbumId,jdbcType=INTEGER}, #{deleteStatus,jdbcType=INTEGER}, #{publishStatus,jdbcType=INTEGER}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR})
+      #{slug,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, 
+      #{attributeCategoryId,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR}, #{conditionStatus,jdbcType=VARCHAR}, 
+      #{recommendStatus,jdbcType=VARCHAR}, #{verifyStatus,jdbcType=VARCHAR}, #{subTitle,jdbcType=VARCHAR}, 
+      #{coverPicture,jdbcType=VARCHAR}, #{pictureAlbum,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
+      #{originalPrice,jdbcType=NUMERIC}, #{onSaleStatus,jdbcType=INTEGER}, #{salePrice,jdbcType=NUMERIC}, 
+      #{stock,jdbcType=INTEGER}, #{lowStock,jdbcType=INTEGER}, #{unitSold,jdbcType=INTEGER}, 
+      #{weight,jdbcType=NUMERIC}, #{keywords,jdbcType=VARCHAR}, #{detailTitle,jdbcType=VARCHAR}, 
+      #{detailDesc,jdbcType=VARCHAR}, #{descriptionAlbumId,jdbcType=INTEGER}, #{deleteStatus,jdbcType=BIT}, 
+      #{publishStatus,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
+      #{note,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Product" useGeneratedKeys="true">
     insert into product
@@ -162,6 +166,9 @@
       <if test="name != null">
         name,
       </if>
+      <if test="slug != null">
+        slug,
+      </if>
       <if test="categoryId != null">
         category_id,
       </if>
@@ -174,8 +181,8 @@
       <if test="sn != null">
         sn,
       </if>
-      <if test="newStatus != null">
-        new_status,
+      <if test="conditionStatus != null">
+        condition_status,
       </if>
       <if test="recommendStatus != null">
         recommend_status,
@@ -237,6 +244,9 @@
       <if test="createdAt != null">
         created_at,
       </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
       <if test="note != null">
         note,
       </if>
@@ -251,6 +261,9 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
+      <if test="slug != null">
+        #{slug,jdbcType=VARCHAR},
+      </if>
       <if test="categoryId != null">
         #{categoryId,jdbcType=INTEGER},
       </if>
@@ -263,14 +276,14 @@
       <if test="sn != null">
         #{sn,jdbcType=VARCHAR},
       </if>
-      <if test="newStatus != null">
-        #{newStatus,jdbcType=INTEGER},
+      <if test="conditionStatus != null">
+        #{conditionStatus,jdbcType=VARCHAR},
       </if>
       <if test="recommendStatus != null">
-        #{recommendStatus,jdbcType=INTEGER},
+        #{recommendStatus,jdbcType=VARCHAR},
       </if>
       <if test="verifyStatus != null">
-        #{verifyStatus,jdbcType=INTEGER},
+        #{verifyStatus,jdbcType=VARCHAR},
       </if>
       <if test="subTitle != null">
         #{subTitle,jdbcType=VARCHAR},
@@ -318,13 +331,16 @@
         #{descriptionAlbumId,jdbcType=INTEGER},
       </if>
       <if test="deleteStatus != null">
-        #{deleteStatus,jdbcType=INTEGER},
+        #{deleteStatus,jdbcType=BIT},
       </if>
       <if test="publishStatus != null">
         #{publishStatus,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
       <if test="note != null">
         #{note,jdbcType=VARCHAR},
@@ -340,134 +356,142 @@
   <update id="updateByExampleSelective" parameterType="map">
     update product
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.brandId != null">
-        brand_id = #{record.brandId,jdbcType=INTEGER},
+      <if test="row.brandId != null">
+        brand_id = #{row.brandId,jdbcType=INTEGER},
       </if>
-      <if test="record.brandName != null">
-        brand_name = #{record.brandName,jdbcType=VARCHAR},
+      <if test="row.brandName != null">
+        brand_name = #{row.brandName,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.categoryId != null">
-        category_id = #{record.categoryId,jdbcType=INTEGER},
+      <if test="row.slug != null">
+        slug = #{row.slug,jdbcType=VARCHAR},
       </if>
-      <if test="record.categoryName != null">
-        category_name = #{record.categoryName,jdbcType=VARCHAR},
+      <if test="row.categoryId != null">
+        category_id = #{row.categoryId,jdbcType=INTEGER},
       </if>
-      <if test="record.attributeCategoryId != null">
-        attribute_category_id = #{record.attributeCategoryId,jdbcType=INTEGER},
+      <if test="row.categoryName != null">
+        category_name = #{row.categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="record.sn != null">
-        sn = #{record.sn,jdbcType=VARCHAR},
+      <if test="row.attributeCategoryId != null">
+        attribute_category_id = #{row.attributeCategoryId,jdbcType=INTEGER},
       </if>
-      <if test="record.newStatus != null">
-        new_status = #{record.newStatus,jdbcType=INTEGER},
+      <if test="row.sn != null">
+        sn = #{row.sn,jdbcType=VARCHAR},
       </if>
-      <if test="record.recommendStatus != null">
-        recommend_status = #{record.recommendStatus,jdbcType=INTEGER},
+      <if test="row.conditionStatus != null">
+        condition_status = #{row.conditionStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.verifyStatus != null">
-        verify_status = #{record.verifyStatus,jdbcType=INTEGER},
+      <if test="row.recommendStatus != null">
+        recommend_status = #{row.recommendStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.subTitle != null">
-        sub_title = #{record.subTitle,jdbcType=VARCHAR},
+      <if test="row.verifyStatus != null">
+        verify_status = #{row.verifyStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.coverPicture != null">
-        cover_picture = #{record.coverPicture,jdbcType=VARCHAR},
+      <if test="row.subTitle != null">
+        sub_title = #{row.subTitle,jdbcType=VARCHAR},
       </if>
-      <if test="record.pictureAlbum != null">
-        picture_album = #{record.pictureAlbum,jdbcType=INTEGER},
+      <if test="row.coverPicture != null">
+        cover_picture = #{row.coverPicture,jdbcType=VARCHAR},
       </if>
-      <if test="record.description != null">
-        description = #{record.description,jdbcType=VARCHAR},
+      <if test="row.pictureAlbum != null">
+        picture_album = #{row.pictureAlbum,jdbcType=INTEGER},
       </if>
-      <if test="record.originalPrice != null">
-        original_price = #{record.originalPrice,jdbcType=NUMERIC},
+      <if test="row.description != null">
+        description = #{row.description,jdbcType=VARCHAR},
       </if>
-      <if test="record.onSaleStatus != null">
-        on_sale_status = #{record.onSaleStatus,jdbcType=INTEGER},
+      <if test="row.originalPrice != null">
+        original_price = #{row.originalPrice,jdbcType=NUMERIC},
       </if>
-      <if test="record.salePrice != null">
-        sale_price = #{record.salePrice,jdbcType=NUMERIC},
+      <if test="row.onSaleStatus != null">
+        on_sale_status = #{row.onSaleStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.stock != null">
-        stock = #{record.stock,jdbcType=INTEGER},
+      <if test="row.salePrice != null">
+        sale_price = #{row.salePrice,jdbcType=NUMERIC},
       </if>
-      <if test="record.lowStock != null">
-        low_stock = #{record.lowStock,jdbcType=INTEGER},
+      <if test="row.stock != null">
+        stock = #{row.stock,jdbcType=INTEGER},
       </if>
-      <if test="record.unitSold != null">
-        unit_sold = #{record.unitSold,jdbcType=INTEGER},
+      <if test="row.lowStock != null">
+        low_stock = #{row.lowStock,jdbcType=INTEGER},
       </if>
-      <if test="record.weight != null">
-        weight = #{record.weight,jdbcType=NUMERIC},
+      <if test="row.unitSold != null">
+        unit_sold = #{row.unitSold,jdbcType=INTEGER},
       </if>
-      <if test="record.keywords != null">
-        keywords = #{record.keywords,jdbcType=VARCHAR},
+      <if test="row.weight != null">
+        weight = #{row.weight,jdbcType=NUMERIC},
       </if>
-      <if test="record.detailTitle != null">
-        detail_title = #{record.detailTitle,jdbcType=VARCHAR},
+      <if test="row.keywords != null">
+        keywords = #{row.keywords,jdbcType=VARCHAR},
       </if>
-      <if test="record.detailDesc != null">
-        detail_desc = #{record.detailDesc,jdbcType=VARCHAR},
+      <if test="row.detailTitle != null">
+        detail_title = #{row.detailTitle,jdbcType=VARCHAR},
       </if>
-      <if test="record.descriptionAlbumId != null">
-        description_album_id = #{record.descriptionAlbumId,jdbcType=INTEGER},
+      <if test="row.detailDesc != null">
+        detail_desc = #{row.detailDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.deleteStatus != null">
-        delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      <if test="row.descriptionAlbumId != null">
+        description_album_id = #{row.descriptionAlbumId,jdbcType=INTEGER},
       </if>
-      <if test="record.publishStatus != null">
-        publish_status = #{record.publishStatus,jdbcType=INTEGER},
+      <if test="row.deleteStatus != null">
+        delete_status = #{row.deleteStatus,jdbcType=BIT},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.publishStatus != null">
+        publish_status = #{row.publishStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.note != null">
-        note = #{record.note,jdbcType=VARCHAR},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.note != null">
+        note = #{row.note,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update product
-    set id = #{record.id,jdbcType=INTEGER},
-      brand_id = #{record.brandId,jdbcType=INTEGER},
-      brand_name = #{record.brandName,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      category_id = #{record.categoryId,jdbcType=INTEGER},
-      category_name = #{record.categoryName,jdbcType=VARCHAR},
-      attribute_category_id = #{record.attributeCategoryId,jdbcType=INTEGER},
-      sn = #{record.sn,jdbcType=VARCHAR},
-      new_status = #{record.newStatus,jdbcType=INTEGER},
-      recommend_status = #{record.recommendStatus,jdbcType=INTEGER},
-      verify_status = #{record.verifyStatus,jdbcType=INTEGER},
-      sub_title = #{record.subTitle,jdbcType=VARCHAR},
-      cover_picture = #{record.coverPicture,jdbcType=VARCHAR},
-      picture_album = #{record.pictureAlbum,jdbcType=INTEGER},
-      description = #{record.description,jdbcType=VARCHAR},
-      original_price = #{record.originalPrice,jdbcType=NUMERIC},
-      on_sale_status = #{record.onSaleStatus,jdbcType=INTEGER},
-      sale_price = #{record.salePrice,jdbcType=NUMERIC},
-      stock = #{record.stock,jdbcType=INTEGER},
-      low_stock = #{record.lowStock,jdbcType=INTEGER},
-      unit_sold = #{record.unitSold,jdbcType=INTEGER},
-      weight = #{record.weight,jdbcType=NUMERIC},
-      keywords = #{record.keywords,jdbcType=VARCHAR},
-      detail_title = #{record.detailTitle,jdbcType=VARCHAR},
-      detail_desc = #{record.detailDesc,jdbcType=VARCHAR},
-      description_album_id = #{record.descriptionAlbumId,jdbcType=INTEGER},
-      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
-      publish_status = #{record.publishStatus,jdbcType=INTEGER},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      note = #{record.note,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      brand_id = #{row.brandId,jdbcType=INTEGER},
+      brand_name = #{row.brandName,jdbcType=VARCHAR},
+      name = #{row.name,jdbcType=VARCHAR},
+      slug = #{row.slug,jdbcType=VARCHAR},
+      category_id = #{row.categoryId,jdbcType=INTEGER},
+      category_name = #{row.categoryName,jdbcType=VARCHAR},
+      attribute_category_id = #{row.attributeCategoryId,jdbcType=INTEGER},
+      sn = #{row.sn,jdbcType=VARCHAR},
+      condition_status = #{row.conditionStatus,jdbcType=VARCHAR},
+      recommend_status = #{row.recommendStatus,jdbcType=VARCHAR},
+      verify_status = #{row.verifyStatus,jdbcType=VARCHAR},
+      sub_title = #{row.subTitle,jdbcType=VARCHAR},
+      cover_picture = #{row.coverPicture,jdbcType=VARCHAR},
+      picture_album = #{row.pictureAlbum,jdbcType=INTEGER},
+      description = #{row.description,jdbcType=VARCHAR},
+      original_price = #{row.originalPrice,jdbcType=NUMERIC},
+      on_sale_status = #{row.onSaleStatus,jdbcType=INTEGER},
+      sale_price = #{row.salePrice,jdbcType=NUMERIC},
+      stock = #{row.stock,jdbcType=INTEGER},
+      low_stock = #{row.lowStock,jdbcType=INTEGER},
+      unit_sold = #{row.unitSold,jdbcType=INTEGER},
+      weight = #{row.weight,jdbcType=NUMERIC},
+      keywords = #{row.keywords,jdbcType=VARCHAR},
+      detail_title = #{row.detailTitle,jdbcType=VARCHAR},
+      detail_desc = #{row.detailDesc,jdbcType=VARCHAR},
+      description_album_id = #{row.descriptionAlbumId,jdbcType=INTEGER},
+      delete_status = #{row.deleteStatus,jdbcType=BIT},
+      publish_status = #{row.publishStatus,jdbcType=INTEGER},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
+      note = #{row.note,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -483,6 +507,9 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="slug != null">
+        slug = #{slug,jdbcType=VARCHAR},
+      </if>
       <if test="categoryId != null">
         category_id = #{categoryId,jdbcType=INTEGER},
       </if>
@@ -495,14 +522,14 @@
       <if test="sn != null">
         sn = #{sn,jdbcType=VARCHAR},
       </if>
-      <if test="newStatus != null">
-        new_status = #{newStatus,jdbcType=INTEGER},
+      <if test="conditionStatus != null">
+        condition_status = #{conditionStatus,jdbcType=VARCHAR},
       </if>
       <if test="recommendStatus != null">
-        recommend_status = #{recommendStatus,jdbcType=INTEGER},
+        recommend_status = #{recommendStatus,jdbcType=VARCHAR},
       </if>
       <if test="verifyStatus != null">
-        verify_status = #{verifyStatus,jdbcType=INTEGER},
+        verify_status = #{verifyStatus,jdbcType=VARCHAR},
       </if>
       <if test="subTitle != null">
         sub_title = #{subTitle,jdbcType=VARCHAR},
@@ -550,13 +577,16 @@
         description_album_id = #{descriptionAlbumId,jdbcType=INTEGER},
       </if>
       <if test="deleteStatus != null">
-        delete_status = #{deleteStatus,jdbcType=INTEGER},
+        delete_status = #{deleteStatus,jdbcType=BIT},
       </if>
       <if test="publishStatus != null">
         publish_status = #{publishStatus,jdbcType=INTEGER},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
       <if test="note != null">
         note = #{note,jdbcType=VARCHAR},
@@ -569,13 +599,14 @@
     set brand_id = #{brandId,jdbcType=INTEGER},
       brand_name = #{brandName,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
+      slug = #{slug,jdbcType=VARCHAR},
       category_id = #{categoryId,jdbcType=INTEGER},
       category_name = #{categoryName,jdbcType=VARCHAR},
       attribute_category_id = #{attributeCategoryId,jdbcType=INTEGER},
       sn = #{sn,jdbcType=VARCHAR},
-      new_status = #{newStatus,jdbcType=INTEGER},
-      recommend_status = #{recommendStatus,jdbcType=INTEGER},
-      verify_status = #{verifyStatus,jdbcType=INTEGER},
+      condition_status = #{conditionStatus,jdbcType=VARCHAR},
+      recommend_status = #{recommendStatus,jdbcType=VARCHAR},
+      verify_status = #{verifyStatus,jdbcType=VARCHAR},
       sub_title = #{subTitle,jdbcType=VARCHAR},
       cover_picture = #{coverPicture,jdbcType=VARCHAR},
       picture_album = #{pictureAlbum,jdbcType=INTEGER},
@@ -591,9 +622,10 @@
       detail_title = #{detailTitle,jdbcType=VARCHAR},
       detail_desc = #{detailDesc,jdbcType=VARCHAR},
       description_album_id = #{descriptionAlbumId,jdbcType=INTEGER},
-      delete_status = #{deleteStatus,jdbcType=INTEGER},
+      delete_status = #{deleteStatus,jdbcType=BIT},
       publish_status = #{publishStatus,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       note = #{note,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

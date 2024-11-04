@@ -1,10 +1,12 @@
 package com.itsthatjun.ecommerce.dto.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 public class ReviewDTO {
 
     private String memberName;
@@ -24,5 +26,4 @@ public class ReviewDTO {
     private Date createdAt;
 
     private Date updatedAt;
-
 }

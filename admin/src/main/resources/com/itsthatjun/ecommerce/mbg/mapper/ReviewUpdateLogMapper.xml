@@ -145,34 +145,34 @@
   <update id="updateByExampleSelective" parameterType="map">
     update review_update_log
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.reviewId != null">
-        review_id = #{record.reviewId,jdbcType=INTEGER},
+      <if test="row.reviewId != null">
+        review_id = #{row.reviewId,jdbcType=INTEGER},
       </if>
-      <if test="record.updateAction != null">
-        update_action = #{record.updateAction,jdbcType=VARCHAR},
+      <if test="row.updateAction != null">
+        update_action = #{row.updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="record.operator != null">
-        operator = #{record.operator,jdbcType=VARCHAR},
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update review_update_log
-    set id = #{record.id,jdbcType=INTEGER},
-      review_id = #{record.reviewId,jdbcType=INTEGER},
-      update_action = #{record.updateAction,jdbcType=VARCHAR},
-      operator = #{record.operator,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      review_id = #{row.reviewId,jdbcType=INTEGER},
+      update_action = #{row.updateAction,jdbcType=VARCHAR},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

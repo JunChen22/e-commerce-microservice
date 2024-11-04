@@ -13,6 +13,8 @@ public class ArticleDTO {
 
     private String slug;
 
+    private String authorName;
+
     private String body;
 
     private LocalDateTime createdAt;

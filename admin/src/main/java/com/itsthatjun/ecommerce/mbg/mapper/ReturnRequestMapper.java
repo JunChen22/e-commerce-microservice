@@ -12,19 +12,19 @@ public interface ReturnRequestMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ReturnRequest record);
+    int insert(ReturnRequest row);
 
-    int insertSelective(ReturnRequest record);
+    int insertSelective(ReturnRequest row);
 
     List<ReturnRequest> selectByExample(ReturnRequestExample example);
 
     ReturnRequest selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ReturnRequest record, @Param("example") ReturnRequestExample example);
+    int updateByExampleSelective(@Param("row") ReturnRequest row, @Param("example") ReturnRequestExample example);
 
-    int updateByExample(@Param("record") ReturnRequest record, @Param("example") ReturnRequestExample example);
+    int updateByExample(@Param("row") ReturnRequest row, @Param("example") ReturnRequestExample example);
 
-    int updateByPrimaryKeySelective(ReturnRequest record);
+    int updateByPrimaryKeySelective(ReturnRequest row);
 
-    int updateByPrimaryKey(ReturnRequest record);
+    int updateByPrimaryKey(ReturnRequest row);
 }

@@ -199,62 +199,62 @@
   <update id="updateByExampleSelective" parameterType="map">
     update review
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=INTEGER},
+      <if test="row.productId != null">
+        product_id = #{row.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=INTEGER},
+      <if test="row.memberId != null">
+        member_id = #{row.memberId,jdbcType=INTEGER},
       </if>
-      <if test="record.memberName != null">
-        member_name = #{record.memberName,jdbcType=VARCHAR},
+      <if test="row.memberName != null">
+        member_name = #{row.memberName,jdbcType=VARCHAR},
       </if>
-      <if test="record.memberIcon != null">
-        member_icon = #{record.memberIcon,jdbcType=VARCHAR},
+      <if test="row.memberIcon != null">
+        member_icon = #{row.memberIcon,jdbcType=VARCHAR},
       </if>
-      <if test="record.star != null">
-        star = #{record.star,jdbcType=INTEGER},
+      <if test="row.star != null">
+        star = #{row.star,jdbcType=INTEGER},
       </if>
-      <if test="record.tittle != null">
-        tittle = #{record.tittle,jdbcType=VARCHAR},
+      <if test="row.tittle != null">
+        tittle = #{row.tittle,jdbcType=VARCHAR},
       </if>
-      <if test="record.likes != null">
-        likes = #{record.likes,jdbcType=NUMERIC},
+      <if test="row.likes != null">
+        likes = #{row.likes,jdbcType=NUMERIC},
       </if>
-      <if test="record.verified != null">
-        verified = #{record.verified,jdbcType=INTEGER},
+      <if test="row.verified != null">
+        verified = #{row.verified,jdbcType=INTEGER},
       </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=VARCHAR},
+      <if test="row.content != null">
+        content = #{row.content,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update review
-    set id = #{record.id,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=INTEGER},
-      member_name = #{record.memberName,jdbcType=VARCHAR},
-      member_icon = #{record.memberIcon,jdbcType=VARCHAR},
-      star = #{record.star,jdbcType=INTEGER},
-      tittle = #{record.tittle,jdbcType=VARCHAR},
-      likes = #{record.likes,jdbcType=NUMERIC},
-      verified = #{record.verified,jdbcType=INTEGER},
-      content = #{record.content,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      product_id = #{row.productId,jdbcType=INTEGER},
+      member_id = #{row.memberId,jdbcType=INTEGER},
+      member_name = #{row.memberName,jdbcType=VARCHAR},
+      member_icon = #{row.memberIcon,jdbcType=VARCHAR},
+      star = #{row.star,jdbcType=INTEGER},
+      tittle = #{row.tittle,jdbcType=VARCHAR},
+      likes = #{row.likes,jdbcType=NUMERIC},
+      verified = #{row.verified,jdbcType=INTEGER},
+      content = #{row.content,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

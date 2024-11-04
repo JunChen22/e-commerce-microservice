@@ -12,19 +12,19 @@ public interface ProductPicturesMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ProductPictures record);
+    int insert(ProductPictures row);
 
-    int insertSelective(ProductPictures record);
+    int insertSelective(ProductPictures row);
 
     List<ProductPictures> selectByExample(ProductPicturesExample example);
 
     ProductPictures selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ProductPictures record, @Param("example") ProductPicturesExample example);
+    int updateByExampleSelective(@Param("row") ProductPictures row, @Param("example") ProductPicturesExample example);
 
-    int updateByExample(@Param("record") ProductPictures record, @Param("example") ProductPicturesExample example);
+    int updateByExample(@Param("row") ProductPictures row, @Param("example") ProductPicturesExample example);
 
-    int updateByPrimaryKeySelective(ProductPictures record);
+    int updateByPrimaryKeySelective(ProductPictures row);
 
-    int updateByPrimaryKey(ProductPictures record);
+    int updateByPrimaryKey(ProductPictures row);
 }

@@ -12,19 +12,19 @@ public interface CompanyAddressMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(CompanyAddress record);
+    int insert(CompanyAddress row);
 
-    int insertSelective(CompanyAddress record);
+    int insertSelective(CompanyAddress row);
 
     List<CompanyAddress> selectByExample(CompanyAddressExample example);
 
     CompanyAddress selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") CompanyAddress record, @Param("example") CompanyAddressExample example);
+    int updateByExampleSelective(@Param("row") CompanyAddress row, @Param("example") CompanyAddressExample example);
 
-    int updateByExample(@Param("record") CompanyAddress record, @Param("example") CompanyAddressExample example);
+    int updateByExample(@Param("row") CompanyAddress row, @Param("example") CompanyAddressExample example);
 
-    int updateByPrimaryKeySelective(CompanyAddress record);
+    int updateByPrimaryKeySelective(CompanyAddress row);
 
-    int updateByPrimaryKey(CompanyAddress record);
+    int updateByPrimaryKey(CompanyAddress row);
 }

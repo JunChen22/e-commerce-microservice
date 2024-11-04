@@ -12,19 +12,19 @@ public interface ReturnReasonPicturesMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ReturnReasonPictures record);
+    int insert(ReturnReasonPictures row);
 
-    int insertSelective(ReturnReasonPictures record);
+    int insertSelective(ReturnReasonPictures row);
 
     List<ReturnReasonPictures> selectByExample(ReturnReasonPicturesExample example);
 
     ReturnReasonPictures selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ReturnReasonPictures record, @Param("example") ReturnReasonPicturesExample example);
+    int updateByExampleSelective(@Param("row") ReturnReasonPictures row, @Param("example") ReturnReasonPicturesExample example);
 
-    int updateByExample(@Param("record") ReturnReasonPictures record, @Param("example") ReturnReasonPicturesExample example);
+    int updateByExample(@Param("row") ReturnReasonPictures row, @Param("example") ReturnReasonPicturesExample example);
 
-    int updateByPrimaryKeySelective(ReturnReasonPictures record);
+    int updateByPrimaryKeySelective(ReturnReasonPictures row);
 
-    int updateByPrimaryKey(ReturnReasonPictures record);
+    int updateByPrimaryKey(ReturnReasonPictures row);
 }

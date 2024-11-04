@@ -18,5 +18,5 @@ public class ProductDetail extends ProductDTO implements Serializable {
 
     private List<ProductPictureDTO> picturesList;
 
-    private Map<String, String> attributes;
+    private Map<String, String> attributes; // skuCode, attributes
 }

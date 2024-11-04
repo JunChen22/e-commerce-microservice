@@ -12,19 +12,19 @@ public interface BrandUpdateLogMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(BrandUpdateLog record);
+    int insert(BrandUpdateLog row);
 
-    int insertSelective(BrandUpdateLog record);
+    int insertSelective(BrandUpdateLog row);
 
     List<BrandUpdateLog> selectByExample(BrandUpdateLogExample example);
 
     BrandUpdateLog selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") BrandUpdateLog record, @Param("example") BrandUpdateLogExample example);
+    int updateByExampleSelective(@Param("row") BrandUpdateLog row, @Param("example") BrandUpdateLogExample example);
 
-    int updateByExample(@Param("record") BrandUpdateLog record, @Param("example") BrandUpdateLogExample example);
+    int updateByExample(@Param("row") BrandUpdateLog row, @Param("example") BrandUpdateLogExample example);
 
-    int updateByPrimaryKeySelective(BrandUpdateLog record);
+    int updateByPrimaryKeySelective(BrandUpdateLog row);
 
-    int updateByPrimaryKey(BrandUpdateLog record);
+    int updateByPrimaryKey(BrandUpdateLog row);
 }

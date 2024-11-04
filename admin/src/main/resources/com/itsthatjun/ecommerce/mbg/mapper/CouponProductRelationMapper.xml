@@ -152,38 +152,38 @@
   <update id="updateByExampleSelective" parameterType="map">
     update coupon_product_relation
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.couponId != null">
-        coupon_id = #{record.couponId,jdbcType=INTEGER},
+      <if test="row.couponId != null">
+        coupon_id = #{row.couponId,jdbcType=INTEGER},
       </if>
-      <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=INTEGER},
+      <if test="row.productId != null">
+        product_id = #{row.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.productName != null">
-        product_name = #{record.productName,jdbcType=VARCHAR},
+      <if test="row.productName != null">
+        product_name = #{row.productName,jdbcType=VARCHAR},
       </if>
-      <if test="record.productSn != null">
-        product_sn = #{record.productSn,jdbcType=VARCHAR},
+      <if test="row.productSn != null">
+        product_sn = #{row.productSn,jdbcType=VARCHAR},
       </if>
-      <if test="record.productSkuCode != null">
-        product_sku_code = #{record.productSkuCode,jdbcType=VARCHAR},
+      <if test="row.productSkuCode != null">
+        product_sku_code = #{row.productSkuCode,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update coupon_product_relation
-    set id = #{record.id,jdbcType=INTEGER},
-      coupon_id = #{record.couponId,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=INTEGER},
-      product_name = #{record.productName,jdbcType=VARCHAR},
-      product_sn = #{record.productSn,jdbcType=VARCHAR},
-      product_sku_code = #{record.productSkuCode,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      coupon_id = #{row.couponId,jdbcType=INTEGER},
+      product_id = #{row.productId,jdbcType=INTEGER},
+      product_name = #{row.productName,jdbcType=VARCHAR},
+      product_sn = #{row.productSn,jdbcType=VARCHAR},
+      product_sku_code = #{row.productSkuCode,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

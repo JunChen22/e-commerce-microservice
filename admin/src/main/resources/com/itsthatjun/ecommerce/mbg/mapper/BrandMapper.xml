@@ -5,8 +5,10 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="alphabet" jdbcType="VARCHAR" property="alphabet" />
-    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="publish_status" jdbcType="VARCHAR" property="publishStatus" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, alphabet, status, logo
+    id, name, alphabet, logo, publish_status, created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.BrandExample" resultMap="BaseResultMap">
     select
@@ -100,10 +102,12 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Brand" useGeneratedKeys="true">
-    insert into brand (name, alphabet, status, 
-      logo)
-    values (#{name,jdbcType=VARCHAR}, #{alphabet,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{logo,jdbcType=VARCHAR})
+    insert into brand (name, alphabet, logo, 
+      publish_status, created_at, updated_at
+      )
+    values (#{name,jdbcType=VARCHAR}, #{alphabet,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, 
+      #{publishStatus,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Brand" useGeneratedKeys="true">
     insert into brand
@@ -114,11 +118,17 @@
       <if test="alphabet != null">
         alphabet,
       </if>
-      <if test="status != null">
-        status,
-      </if>
       <if test="logo != null">
         logo,
+      </if>
+      <if test="publishStatus != null">
+        publish_status,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -128,11 +138,17 @@
       <if test="alphabet != null">
         #{alphabet,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
       <if test="logo != null">
         #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="publishStatus != null">
+        #{publishStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -145,34 +161,42 @@
   <update id="updateByExampleSelective" parameterType="map">
     update brand
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.alphabet != null">
-        alphabet = #{record.alphabet,jdbcType=VARCHAR},
+      <if test="row.alphabet != null">
+        alphabet = #{row.alphabet,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+      <if test="row.logo != null">
+        logo = #{row.logo,jdbcType=VARCHAR},
       </if>
-      <if test="record.logo != null">
-        logo = #{record.logo,jdbcType=VARCHAR},
+      <if test="row.publishStatus != null">
+        publish_status = #{row.publishStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update brand
-    set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      alphabet = #{record.alphabet,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER},
-      logo = #{record.logo,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      name = #{row.name,jdbcType=VARCHAR},
+      alphabet = #{row.alphabet,jdbcType=VARCHAR},
+      logo = #{row.logo,jdbcType=VARCHAR},
+      publish_status = #{row.publishStatus,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -185,11 +209,17 @@
       <if test="alphabet != null">
         alphabet = #{alphabet,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
       <if test="logo != null">
         logo = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="publishStatus != null">
+        publish_status = #{publishStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -198,8 +228,10 @@
     update brand
     set name = #{name,jdbcType=VARCHAR},
       alphabet = #{alphabet,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      logo = #{logo,jdbcType=VARCHAR}
+      logo = #{logo,jdbcType=VARCHAR},
+      publish_status = #{publishStatus,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -12,19 +12,19 @@ public interface AdminLoginLogMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(AdminLoginLog record);
+    int insert(AdminLoginLog row);
 
-    int insertSelective(AdminLoginLog record);
+    int insertSelective(AdminLoginLog row);
 
     List<AdminLoginLog> selectByExample(AdminLoginLogExample example);
 
     AdminLoginLog selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") AdminLoginLog record, @Param("example") AdminLoginLogExample example);
+    int updateByExampleSelective(@Param("row") AdminLoginLog row, @Param("example") AdminLoginLogExample example);
 
-    int updateByExample(@Param("record") AdminLoginLog record, @Param("example") AdminLoginLogExample example);
+    int updateByExample(@Param("row") AdminLoginLog row, @Param("example") AdminLoginLogExample example);
 
-    int updateByPrimaryKeySelective(AdminLoginLog record);
+    int updateByPrimaryKeySelective(AdminLoginLog row);
 
-    int updateByPrimaryKey(AdminLoginLog record);
+    int updateByPrimaryKey(AdminLoginLog row);
 }

@@ -3,45 +3,101 @@ package com.itsthatjun.ecommerce.service;
 import com.itsthatjun.ecommerce.model.AdminProductDetail;
 import com.itsthatjun.ecommerce.model.entity.Product;
 import com.itsthatjun.ecommerce.model.entity.ProductSku;
-import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface AdminProductService {
 
-    @ApiOperation("")
-    Mono<AdminProductDetail> getProductDetail(int id);
-
-    @ApiOperation("")
+    /**
+     * List all products.
+     * @return list of products
+     */
     Flux<Product> listAllProduct();
 
-    @ApiOperation("")
+    /**
+     * List products with pagination.
+     * @param pageNum page number
+     * @param pageSize page size
+     * @return list of products
+     */
     Flux<Product> listProduct(int pageNum, int pageSize);
 
-    @ApiOperation("create a product with at least one sku variant")
+    /**
+     * Get product detail by id.
+     * @param id product id
+     * @return product detail
+     */
+    Mono<AdminProductDetail> getProductDetail(int id);
+
+    /**
+     * Create a product with at least one sku variant.
+     * @param productDetail product detail
+     * @param operator operator
+     * @return created product
+     */
     Mono<Product> createProduct(AdminProductDetail productDetail, String operator);
 
-    @ApiOperation("Add a sku to existing product.")
+    /**
+     * Add a sku to existing product.
+     * @param productDetail product detail
+     * @param operator operator
+     * @return updated product
+     */
     Mono<Product> addProductSku(AdminProductDetail productDetail, String operator);
 
-    @ApiOperation("Update product info like category, name, description, subtitle and etc non-price affecting.")
+    /**
+     * Update product info like category, name, description, subtitle and etc non-price affecting.
+     * @param updatedProduct updated product
+     * @param operator operator
+     * @return updated product
+     */
     Mono<Product> updateProductInfo(Product updatedProduct, String operator);
 
-    @ApiOperation("Update product publish status.")
+    /**
+     * Update product publish status.
+     * @param updatedProduct updated product
+     * @param operator operator
+     * @return updated product
+     */
     Mono<Product> updateProductStatus(Product updatedProduct, String operator);
 
-    @ApiOperation("Update product publish status.")
+    /**
+     * Update product sku publish status.
+     * @param updateSku updated sku
+     * @param operator operator
+     * @return updated product
+     */
     Mono<ProductSku> updateProductSkuStatus(ProductSku updateSku, String operator);
 
-    @ApiOperation("Adding stock to sku with newly added stock.")
+    /**
+     * Update product stock of existing product. Adding stock to sku with newly added stock.
+     * @param sku sku to update
+     * @param addedStock added stock
+     * @param operator operator
+     */
     Mono<ProductSku> updateProductStock(ProductSku sku, int addedStock, String operator);
 
-    @ApiOperation("Update product and its sku prices of existing product.")
+    /**
+     * Update product price of existing product.
+     * @param sku sku to update
+     * @param operator operator
+     * @return updated product
+     */
     Mono<Product> updateProductPrice(ProductSku sku, String operator);
 
-    @ApiOperation("Remove/actual delete a sku from product. Product can have no sku, just holding information.")
+    /**
+     * Remove sku from product. Product can have no sku, just holding information.
+     * @param removeSku sku to remove
+     * @param operator operator
+     * @return removed sku
+     */
     Mono<ProductSku> removeProductSku(ProductSku removeSku, String operator);
 
-    @ApiOperation("Soft delete. Delete just means status changed for archive, not actual delete from database")
+    /**
+     * Soft delete. Delete just means status changed for archive, not actual delete from database
+     * @param id product id
+     * @param operator operator
+     * @return void
+     */
     Mono<Void> removeProduct(int id, String operator); // TODO: might add a method to undelete the product and moved from archive back to offline.
 }

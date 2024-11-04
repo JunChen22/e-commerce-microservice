@@ -12,19 +12,19 @@ public interface MemberMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Member record);
+    int insert(Member row);
 
-    int insertSelective(Member record);
+    int insertSelective(Member row);
 
     List<Member> selectByExample(MemberExample example);
 
     Member selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Member record, @Param("example") MemberExample example);
+    int updateByExampleSelective(@Param("row") Member row, @Param("example") MemberExample example);
 
-    int updateByExample(@Param("record") Member record, @Param("example") MemberExample example);
+    int updateByExample(@Param("row") Member row, @Param("example") MemberExample example);
 
-    int updateByPrimaryKeySelective(Member record);
+    int updateByPrimaryKeySelective(Member row);
 
-    int updateByPrimaryKey(Member record);
+    int updateByPrimaryKey(Member row);
 }

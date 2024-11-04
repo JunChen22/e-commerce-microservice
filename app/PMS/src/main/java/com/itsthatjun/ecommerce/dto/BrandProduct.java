@@ -1,7 +1,14 @@
 package com.itsthatjun.ecommerce.dto;
 
-import lombok.Data;
+import com.itsthatjun.ecommerce.dto.model.ProductDTO;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class BrandProduct {
+import java.io.Serializable;
+import java.util.List;
+
+@Getter
+@Setter
+public class BrandProduct implements Serializable {
+    List<ProductDTO> products;
 }

@@ -1,12 +1,15 @@
 package com.itsthatjun.ecommerce.model.entity;
 
+import com.itsthatjun.ecommerce.enums.ProductCondition;
+import com.itsthatjun.ecommerce.enums.status.PublishStatus;
+import com.itsthatjun.ecommerce.enums.status.RecommendationStatus;
+import com.itsthatjun.ecommerce.enums.status.VerificationStatus;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,11 +34,11 @@ public class Product {
 
     private String sn;
 
-    private Integer newStatus;
+    private ProductCondition conditionStatus;
 
-    private Integer recommendStatus;
+    private RecommendationStatus recommendStatus;
 
-    private Integer verifyStatus;
+    private VerificationStatus verifyStatus;
 
     private String subTitle;
 
@@ -67,11 +70,13 @@ public class Product {
 
     private Integer descriptionAlbumId;
 
-    private Integer deleteStatus;
+    private Boolean deleteStatus;
 
-    private Integer publishStatus;
+    private PublishStatus publishStatus;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     private String note;
 }

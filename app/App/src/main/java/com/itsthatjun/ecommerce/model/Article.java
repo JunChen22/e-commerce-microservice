@@ -10,9 +10,13 @@ public class Article implements Serializable {
 
     private String slug;
 
+    private Integer authorId;
+
+    private String authorName;
+
     private String body;
 
-    private Integer publishStatus;
+    private String publishStatus;
 
     private Date createdAt;
 
@@ -44,6 +48,22 @@ public class Article implements Serializable {
         this.slug = slug;
     }
 
+    public Integer getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
     public String getBody() {
         return body;
     }
@@ -52,11 +72,11 @@ public class Article implements Serializable {
         this.body = body;
     }
 
-    public Integer getPublishStatus() {
+    public String getPublishStatus() {
         return publishStatus;
     }
 
-    public void setPublishStatus(Integer publishStatus) {
+    public void setPublishStatus(String publishStatus) {
         this.publishStatus = publishStatus;
     }
 

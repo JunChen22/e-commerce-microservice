@@ -12,19 +12,19 @@ public interface CartItemMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(CartItem record);
+    int insert(CartItem row);
 
-    int insertSelective(CartItem record);
+    int insertSelective(CartItem row);
 
     List<CartItem> selectByExample(CartItemExample example);
 
     CartItem selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") CartItem record, @Param("example") CartItemExample example);
+    int updateByExampleSelective(@Param("row") CartItem row, @Param("example") CartItemExample example);
 
-    int updateByExample(@Param("record") CartItem record, @Param("example") CartItemExample example);
+    int updateByExample(@Param("row") CartItem row, @Param("example") CartItemExample example);
 
-    int updateByPrimaryKeySelective(CartItem record);
+    int updateByPrimaryKeySelective(CartItem row);
 
-    int updateByPrimaryKey(CartItem record);
+    int updateByPrimaryKey(CartItem row);
 }

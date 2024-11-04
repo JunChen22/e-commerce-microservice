@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ArticleImageMapper">
-  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.model.entity.ArticleImage">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ArticleImage">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="filename" jdbcType="VARCHAR" property="filename" />
@@ -99,13 +99,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleImage" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleImage" useGeneratedKeys="true">
     insert into article_image (article_id, filename, created_at, 
       updated_at)
     values (#{articleId,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
       #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleImage" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleImage" useGeneratedKeys="true">
     insert into article_image
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="articleId != null">
@@ -145,38 +145,38 @@
   <update id="updateByExampleSelective" parameterType="map">
     update article_image
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.articleId != null">
-        article_id = #{record.articleId,jdbcType=INTEGER},
+      <if test="row.articleId != null">
+        article_id = #{row.articleId,jdbcType=INTEGER},
       </if>
-      <if test="record.filename != null">
-        filename = #{record.filename,jdbcType=VARCHAR},
+      <if test="row.filename != null">
+        filename = #{row.filename,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update article_image
-    set id = #{record.id,jdbcType=INTEGER},
-      article_id = #{record.articleId,jdbcType=INTEGER},
-      filename = #{record.filename,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      article_id = #{row.articleId,jdbcType=INTEGER},
+      filename = #{row.filename,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleImage">
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleImage">
     update article_image
     <set>
       <if test="articleId != null">
@@ -194,7 +194,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleImage">
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleImage">
     update article_image
     set article_id = #{articleId,jdbcType=INTEGER},
       filename = #{filename,jdbcType=VARCHAR},

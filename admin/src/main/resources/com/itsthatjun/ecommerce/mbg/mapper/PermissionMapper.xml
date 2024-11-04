@@ -5,7 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="permission_key" jdbcType="VARCHAR" property="permissionKey" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -101,7 +101,7 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Permission" useGeneratedKeys="true">
     insert into permission (name, permission_key, status
       )
-    values (#{name,jdbcType=VARCHAR}, #{permissionKey,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+    values (#{name,jdbcType=VARCHAR}, #{permissionKey,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Permission" useGeneratedKeys="true">
@@ -125,7 +125,7 @@
         #{permissionKey,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=INTEGER},
+        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -138,30 +138,30 @@
   <update id="updateByExampleSelective" parameterType="map">
     update permission
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.permissionKey != null">
-        permission_key = #{record.permissionKey,jdbcType=VARCHAR},
+      <if test="row.permissionKey != null">
+        permission_key = #{row.permissionKey,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+      <if test="row.status != null">
+        status = #{row.status,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update permission
-    set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      permission_key = #{record.permissionKey,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      name = #{row.name,jdbcType=VARCHAR},
+      permission_key = #{row.permissionKey,jdbcType=VARCHAR},
+      status = #{row.status,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -175,7 +175,7 @@
         permission_key = #{permissionKey,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+        status = #{status,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -184,7 +184,7 @@
     update permission
     set name = #{name,jdbcType=VARCHAR},
       permission_key = #{permissionKey,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER}
+      status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

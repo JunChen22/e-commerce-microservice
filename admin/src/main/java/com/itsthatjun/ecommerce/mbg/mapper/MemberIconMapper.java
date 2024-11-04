@@ -12,19 +12,19 @@ public interface MemberIconMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(MemberIcon record);
+    int insert(MemberIcon row);
 
-    int insertSelective(MemberIcon record);
+    int insertSelective(MemberIcon row);
 
     List<MemberIcon> selectByExample(MemberIconExample example);
 
     MemberIcon selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") MemberIcon record, @Param("example") MemberIconExample example);
+    int updateByExampleSelective(@Param("row") MemberIcon row, @Param("example") MemberIconExample example);
 
-    int updateByExample(@Param("record") MemberIcon record, @Param("example") MemberIconExample example);
+    int updateByExample(@Param("row") MemberIcon row, @Param("example") MemberIconExample example);
 
-    int updateByPrimaryKeySelective(MemberIcon record);
+    int updateByPrimaryKeySelective(MemberIcon row);
 
-    int updateByPrimaryKey(MemberIcon record);
+    int updateByPrimaryKey(MemberIcon row);
 }

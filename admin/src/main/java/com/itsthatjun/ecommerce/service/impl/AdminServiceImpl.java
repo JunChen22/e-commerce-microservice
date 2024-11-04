@@ -47,7 +47,7 @@ public class AdminServiceImpl implements ReactiveUserDetailsService, AdminServic
 
     @Override
     public Mono<String> register(Admin newAdmin) {
-        newAdmin.setStatus(1);
+        newAdmin.setStatus("active");
         AdminExample example = new AdminExample();
         example.createCriteria().andUsernameEqualTo(newAdmin.getUsername());
 

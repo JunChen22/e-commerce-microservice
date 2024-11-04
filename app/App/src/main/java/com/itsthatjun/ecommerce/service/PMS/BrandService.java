@@ -1,19 +1,37 @@
 package com.itsthatjun.ecommerce.service.PMS;
 
-import com.itsthatjun.ecommerce.model.Brand;
-import com.itsthatjun.ecommerce.model.Product;
-import io.swagger.annotations.ApiOperation;
+import com.itsthatjun.ecommerce.dto.pms.model.BrandDTO;
+import com.itsthatjun.ecommerce.dto.pms.model.ProductDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface BrandService {
 
-    @ApiOperation(value = "List brands with page and size")
-    Flux<Brand> listAllBrand(int pageNum, int pageSize);
+    /**
+     * list all brands
+     * @return list all brands
+     */
+    Flux<BrandDTO> listAllBrand();
 
-    @ApiOperation(value = "Get all product of this brand")
-    Flux<Product> getBrandProduct(int brandId);
+    /**
+     * list all brands with pagination
+     * @param pageNum page number
+     * @param pageSize page size
+     * @return list of brands
+     */
+    Flux<BrandDTO> listBrand(int pageNum, int pageSize);
 
-    @ApiOperation(value = "Get brand info")
-    Mono<Brand> getBrand(int brandId);
+    /**
+     * list all products of a brand
+     * @param brandId brand id
+     * @return list of products
+     */
+    Flux<ProductDTO> getBrandProduct(int brandId);
+
+    /**
+     * get brand by id
+     * @param brandId brand id
+     * @return brand
+     */
+    Mono<BrandDTO> getBrand(int brandId);
 }

@@ -12,19 +12,19 @@ public interface ProductSkuMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ProductSku record);
+    int insert(ProductSku row);
 
-    int insertSelective(ProductSku record);
+    int insertSelective(ProductSku row);
 
     List<ProductSku> selectByExample(ProductSkuExample example);
 
     ProductSku selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ProductSku record, @Param("example") ProductSkuExample example);
+    int updateByExampleSelective(@Param("row") ProductSku row, @Param("example") ProductSkuExample example);
 
-    int updateByExample(@Param("record") ProductSku record, @Param("example") ProductSkuExample example);
+    int updateByExample(@Param("row") ProductSku row, @Param("example") ProductSkuExample example);
 
-    int updateByPrimaryKeySelective(ProductSku record);
+    int updateByPrimaryKeySelective(ProductSku row);
 
-    int updateByPrimaryKey(ProductSku record);
+    int updateByPrimaryKey(ProductSku row);
 }

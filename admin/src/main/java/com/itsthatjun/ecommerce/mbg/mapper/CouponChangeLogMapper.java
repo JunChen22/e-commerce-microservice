@@ -12,19 +12,19 @@ public interface CouponChangeLogMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(CouponChangeLog record);
+    int insert(CouponChangeLog row);
 
-    int insertSelective(CouponChangeLog record);
+    int insertSelective(CouponChangeLog row);
 
     List<CouponChangeLog> selectByExample(CouponChangeLogExample example);
 
     CouponChangeLog selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") CouponChangeLog record, @Param("example") CouponChangeLogExample example);
+    int updateByExampleSelective(@Param("row") CouponChangeLog row, @Param("example") CouponChangeLogExample example);
 
-    int updateByExample(@Param("record") CouponChangeLog record, @Param("example") CouponChangeLogExample example);
+    int updateByExample(@Param("row") CouponChangeLog row, @Param("example") CouponChangeLogExample example);
 
-    int updateByPrimaryKeySelective(CouponChangeLog record);
+    int updateByPrimaryKeySelective(CouponChangeLog row);
 
-    int updateByPrimaryKey(CouponChangeLog record);
+    int updateByPrimaryKey(CouponChangeLog row);
 }

@@ -1,0 +1,1060 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.EmailMapper">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Email">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="service_type" jdbcType="VARCHAR" property="serviceType" />
+    <result column="action_type" jdbcType="VARCHAR" property="actionType" />
+    <result column="sender_email" jdbcType="VARCHAR" property="senderEmail" />
+    <result column="recipient_email" jdbcType="VARCHAR" property="recipientEmail" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="body" jdbcType="VARCHAR" property="body" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, service_type, action_type, sender_email, recipient_email, subject, body, operator, 
+    created_at
+  </sql>
+  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from email
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from email
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample">
+    delete from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Email" useGeneratedKeys="true">
+    insert into email (service_type, action_type, sender_email, 
+      recipient_email, subject, body, 
+      operator, created_at)
+    values (#{serviceType,jdbcType=VARCHAR}, #{actionType,jdbcType=VARCHAR}, #{senderEmail,jdbcType=VARCHAR}, 
+      #{recipientEmail,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Email" useGeneratedKeys="true">
+    insert into email
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceType != null">
+        service_type,
+      </if>
+      <if test="actionType != null">
+        action_type,
+      </if>
+      <if test="senderEmail != null">
+        sender_email,
+      </if>
+      <if test="recipientEmail != null">
+        recipient_email,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="body != null">
+        body,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="senderEmail != null">
+        #{senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientEmail != null">
+        #{recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null">
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample" resultType="java.lang.Long">
+    select count(*) from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update email
+    <set>
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
+      </if>
+      <if test="row.serviceType != null">
+        service_type = #{row.serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.actionType != null">
+        action_type = #{row.actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.senderEmail != null">
+        sender_email = #{row.senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="row.recipientEmail != null">
+        recipient_email = #{row.recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="row.subject != null">
+        subject = #{row.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="row.body != null">
+        body = #{row.body,jdbcType=VARCHAR},
+      </if>
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update email
+    set id = #{row.id,jdbcType=INTEGER},
+      service_type = #{row.serviceType,jdbcType=VARCHAR},
+      action_type = #{row.actionType,jdbcType=VARCHAR},
+      sender_email = #{row.senderEmail,jdbcType=VARCHAR},
+      recipient_email = #{row.recipientEmail,jdbcType=VARCHAR},
+      subject = #{row.subject,jdbcType=VARCHAR},
+      body = #{row.body,jdbcType=VARCHAR},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.Email">
+    update email
+    <set>
+      <if test="serviceType != null">
+        service_type = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        action_type = #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="senderEmail != null">
+        sender_email = #{senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientEmail != null">
+        recipient_email = #{recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null">
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Email">
+    update email
+    set service_type = #{serviceType,jdbcType=VARCHAR},
+      action_type = #{actionType,jdbcType=VARCHAR},
+      sender_email = #{senderEmail,jdbcType=VARCHAR},
+      recipient_email = #{recipientEmail,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      body = #{body,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Email">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="service_type" jdbcType="VARCHAR" property="serviceType" />
+    <result column="action_type" jdbcType="VARCHAR" property="actionType" />
+    <result column="sender_email" jdbcType="VARCHAR" property="senderEmail" />
+    <result column="recipient_email" jdbcType="VARCHAR" property="recipientEmail" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="body" jdbcType="VARCHAR" property="body" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, service_type, action_type, sender_email, recipient_email, subject, body, operator, 
+    created_at
+  </sql>
+  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from email
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from email
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample">
+    delete from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Email" useGeneratedKeys="true">
+    insert into email (service_type, action_type, sender_email, 
+      recipient_email, subject, body, 
+      operator, created_at)
+    values (#{serviceType,jdbcType=VARCHAR}, #{actionType,jdbcType=VARCHAR}, #{senderEmail,jdbcType=VARCHAR}, 
+      #{recipientEmail,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Email" useGeneratedKeys="true">
+    insert into email
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceType != null">
+        service_type,
+      </if>
+      <if test="actionType != null">
+        action_type,
+      </if>
+      <if test="senderEmail != null">
+        sender_email,
+      </if>
+      <if test="recipientEmail != null">
+        recipient_email,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="body != null">
+        body,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="senderEmail != null">
+        #{senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientEmail != null">
+        #{recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null">
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample" resultType="java.lang.Long">
+    select count(*) from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update email
+    <set>
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
+      </if>
+      <if test="row.serviceType != null">
+        service_type = #{row.serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.actionType != null">
+        action_type = #{row.actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.senderEmail != null">
+        sender_email = #{row.senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="row.recipientEmail != null">
+        recipient_email = #{row.recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="row.subject != null">
+        subject = #{row.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="row.body != null">
+        body = #{row.body,jdbcType=VARCHAR},
+      </if>
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update email
+    set id = #{row.id,jdbcType=INTEGER},
+      service_type = #{row.serviceType,jdbcType=VARCHAR},
+      action_type = #{row.actionType,jdbcType=VARCHAR},
+      sender_email = #{row.senderEmail,jdbcType=VARCHAR},
+      recipient_email = #{row.recipientEmail,jdbcType=VARCHAR},
+      subject = #{row.subject,jdbcType=VARCHAR},
+      body = #{row.body,jdbcType=VARCHAR},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.Email">
+    update email
+    <set>
+      <if test="serviceType != null">
+        service_type = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        action_type = #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="senderEmail != null">
+        sender_email = #{senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientEmail != null">
+        recipient_email = #{recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null">
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Email">
+    update email
+    set service_type = #{serviceType,jdbcType=VARCHAR},
+      action_type = #{actionType,jdbcType=VARCHAR},
+      sender_email = #{senderEmail,jdbcType=VARCHAR},
+      recipient_email = #{recipientEmail,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      body = #{body,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Email">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="service_type" jdbcType="VARCHAR" property="serviceType" />
+    <result column="action_type" jdbcType="VARCHAR" property="actionType" />
+    <result column="sender_email" jdbcType="VARCHAR" property="senderEmail" />
+    <result column="recipient_email" jdbcType="VARCHAR" property="recipientEmail" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="body" jdbcType="VARCHAR" property="body" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, service_type, action_type, sender_email, recipient_email, subject, body, operator, 
+    created_at
+  </sql>
+  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from email
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from email
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample">
+    delete from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Email" useGeneratedKeys="true">
+    insert into email (service_type, action_type, sender_email, 
+      recipient_email, subject, body, 
+      operator, created_at)
+    values (#{serviceType,jdbcType=VARCHAR}, #{actionType,jdbcType=VARCHAR}, #{senderEmail,jdbcType=VARCHAR}, 
+      #{recipientEmail,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Email" useGeneratedKeys="true">
+    insert into email
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceType != null">
+        service_type,
+      </if>
+      <if test="actionType != null">
+        action_type,
+      </if>
+      <if test="senderEmail != null">
+        sender_email,
+      </if>
+      <if test="recipientEmail != null">
+        recipient_email,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="body != null">
+        body,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="senderEmail != null">
+        #{senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientEmail != null">
+        #{recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null">
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.EmailExample" resultType="java.lang.Long">
+    select count(*) from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update email
+    <set>
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
+      </if>
+      <if test="row.serviceType != null">
+        service_type = #{row.serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.actionType != null">
+        action_type = #{row.actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.senderEmail != null">
+        sender_email = #{row.senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="row.recipientEmail != null">
+        recipient_email = #{row.recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="row.subject != null">
+        subject = #{row.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="row.body != null">
+        body = #{row.body,jdbcType=VARCHAR},
+      </if>
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update email
+    set id = #{row.id,jdbcType=INTEGER},
+      service_type = #{row.serviceType,jdbcType=VARCHAR},
+      action_type = #{row.actionType,jdbcType=VARCHAR},
+      sender_email = #{row.senderEmail,jdbcType=VARCHAR},
+      recipient_email = #{row.recipientEmail,jdbcType=VARCHAR},
+      subject = #{row.subject,jdbcType=VARCHAR},
+      body = #{row.body,jdbcType=VARCHAR},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.Email">
+    update email
+    <set>
+      <if test="serviceType != null">
+        service_type = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        action_type = #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="senderEmail != null">
+        sender_email = #{senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientEmail != null">
+        recipient_email = #{recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null">
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Email">
+    update email
+    set service_type = #{serviceType,jdbcType=VARCHAR},
+      action_type = #{actionType,jdbcType=VARCHAR},
+      sender_email = #{senderEmail,jdbcType=VARCHAR},
+      recipient_email = #{recipientEmail,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      body = #{body,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.model.entity.Email">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="service_type" jdbcType="VARCHAR" property="serviceType" />
+    <result column="action_type" jdbcType="VARCHAR" property="actionType" />
+    <result column="sender_email" jdbcType="VARCHAR" property="senderEmail" />
+    <result column="recipient_email" jdbcType="VARCHAR" property="recipientEmail" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="body" jdbcType="VARCHAR" property="body" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, service_type, action_type, sender_email, recipient_email, subject, body, operator, 
+    created_at
+  </sql>
+  <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.model.EmailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from email
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from email
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itsthatjun.ecommerce.model.EmailExample">
+    delete from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.entity.Email" useGeneratedKeys="true">
+    insert into email (service_type, action_type, sender_email, 
+      recipient_email, subject, body, 
+      operator, created_at)
+    values (#{serviceType,jdbcType=VARCHAR}, #{actionType,jdbcType=VARCHAR}, #{senderEmail,jdbcType=VARCHAR}, 
+      #{recipientEmail,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.entity.Email" useGeneratedKeys="true">
+    insert into email
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="serviceType != null">
+        service_type,
+      </if>
+      <if test="actionType != null">
+        action_type,
+      </if>
+      <if test="senderEmail != null">
+        sender_email,
+      </if>
+      <if test="recipientEmail != null">
+        recipient_email,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="body != null">
+        body,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="senderEmail != null">
+        #{senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientEmail != null">
+        #{recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null">
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itsthatjun.ecommerce.model.EmailExample" resultType="java.lang.Long">
+    select count(*) from email
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update email
+    <set>
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
+      </if>
+      <if test="row.serviceType != null">
+        service_type = #{row.serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.actionType != null">
+        action_type = #{row.actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.senderEmail != null">
+        sender_email = #{row.senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="row.recipientEmail != null">
+        recipient_email = #{row.recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="row.subject != null">
+        subject = #{row.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="row.body != null">
+        body = #{row.body,jdbcType=VARCHAR},
+      </if>
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update email
+    set id = #{row.id,jdbcType=INTEGER},
+      service_type = #{row.serviceType,jdbcType=VARCHAR},
+      action_type = #{row.actionType,jdbcType=VARCHAR},
+      sender_email = #{row.senderEmail,jdbcType=VARCHAR},
+      recipient_email = #{row.recipientEmail,jdbcType=VARCHAR},
+      subject = #{row.subject,jdbcType=VARCHAR},
+      body = #{row.body,jdbcType=VARCHAR},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.model.entity.Email">
+    update email
+    <set>
+      <if test="serviceType != null">
+        service_type = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionType != null">
+        action_type = #{actionType,jdbcType=VARCHAR},
+      </if>
+      <if test="senderEmail != null">
+        sender_email = #{senderEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientEmail != null">
+        recipient_email = #{recipientEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null">
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.model.entity.Email">
+    update email
+    set service_type = #{serviceType,jdbcType=VARCHAR},
+      action_type = #{actionType,jdbcType=VARCHAR},
+      sender_email = #{senderEmail,jdbcType=VARCHAR},
+      recipient_email = #{recipientEmail,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      body = #{body,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

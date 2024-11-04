@@ -1,14 +1,17 @@
 package com.itsthatjun.ecommerce.dto.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class BrandDTO {
+import java.io.Serializable;
+
+@Getter
+@Setter
+public class BrandDTO implements Serializable {
 
     private String name;
 
-    private String alphabet;
+    private String slug;
 
     private String logo;
-
 }

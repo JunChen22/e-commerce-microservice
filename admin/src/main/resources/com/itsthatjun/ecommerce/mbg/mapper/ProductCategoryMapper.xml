@@ -138,30 +138,30 @@
   <update id="updateByExampleSelective" parameterType="map">
     update product_category
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.parentId != null">
-        parent_id = #{record.parentId,jdbcType=INTEGER},
+      <if test="row.parentId != null">
+        parent_id = #{row.parentId,jdbcType=INTEGER},
       </if>
-      <if test="record.level != null">
-        level = #{record.level,jdbcType=INTEGER},
+      <if test="row.level != null">
+        level = #{row.level,jdbcType=INTEGER},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update product_category
-    set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      parent_id = #{record.parentId,jdbcType=INTEGER},
-      level = #{record.level,jdbcType=INTEGER}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      name = #{row.name,jdbcType=VARCHAR},
+      parent_id = #{row.parentId,jdbcType=INTEGER},
+      level = #{row.level,jdbcType=INTEGER}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

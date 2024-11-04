@@ -1,5 +1,7 @@
 package com.itsthatjun.ecommerce.model.entity;
 
+import com.itsthatjun.ecommerce.enums.status.PublishStatus;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -14,9 +16,13 @@ public class Brand {
 
     private String name;
 
-    private String alphabet;
-
-    private Integer status;
+    private String slug;
 
     private String logo;
+
+    private PublishStatus publishStatus;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

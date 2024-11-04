@@ -9,7 +9,7 @@ public class Permission implements Serializable {
 
     private String permissionKey;
 
-    private Integer status;
+    private String status;
 
     private static final long serialVersionUID = 1L;
 
@@ -37,11 +37,11 @@ public class Permission implements Serializable {
         this.permissionKey = permissionKey;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

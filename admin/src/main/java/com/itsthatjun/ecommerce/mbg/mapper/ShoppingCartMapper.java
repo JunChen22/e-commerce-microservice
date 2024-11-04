@@ -12,19 +12,19 @@ public interface ShoppingCartMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ShoppingCart record);
+    int insert(ShoppingCart row);
 
-    int insertSelective(ShoppingCart record);
+    int insertSelective(ShoppingCart row);
 
     List<ShoppingCart> selectByExample(ShoppingCartExample example);
 
     ShoppingCart selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ShoppingCart record, @Param("example") ShoppingCartExample example);
+    int updateByExampleSelective(@Param("row") ShoppingCart row, @Param("example") ShoppingCartExample example);
 
-    int updateByExample(@Param("record") ShoppingCart record, @Param("example") ShoppingCartExample example);
+    int updateByExample(@Param("row") ShoppingCart row, @Param("example") ShoppingCartExample example);
 
-    int updateByPrimaryKeySelective(ShoppingCart record);
+    int updateByPrimaryKeySelective(ShoppingCart row);
 
-    int updateByPrimaryKey(ShoppingCart record);
+    int updateByPrimaryKey(ShoppingCart row);
 }

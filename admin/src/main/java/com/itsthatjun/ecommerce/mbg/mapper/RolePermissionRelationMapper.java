@@ -12,19 +12,19 @@ public interface RolePermissionRelationMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(RolePermissionRelation record);
+    int insert(RolePermissionRelation row);
 
-    int insertSelective(RolePermissionRelation record);
+    int insertSelective(RolePermissionRelation row);
 
     List<RolePermissionRelation> selectByExample(RolePermissionRelationExample example);
 
     RolePermissionRelation selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") RolePermissionRelation record, @Param("example") RolePermissionRelationExample example);
+    int updateByExampleSelective(@Param("row") RolePermissionRelation row, @Param("example") RolePermissionRelationExample example);
 
-    int updateByExample(@Param("record") RolePermissionRelation record, @Param("example") RolePermissionRelationExample example);
+    int updateByExample(@Param("row") RolePermissionRelation row, @Param("example") RolePermissionRelationExample example);
 
-    int updateByPrimaryKeySelective(RolePermissionRelation record);
+    int updateByPrimaryKeySelective(RolePermissionRelation row);
 
-    int updateByPrimaryKey(RolePermissionRelation record);
+    int updateByPrimaryKey(RolePermissionRelation row);
 }

@@ -9,13 +9,13 @@ public class PromotionSale implements Serializable {
 
     private String name;
 
-    private Integer promotionType;
+    private String promotionType;
 
-    private Integer discountType;
+    private String discountType;
 
     private BigDecimal amount;
 
-    private Integer status;
+    private String publishStatus;
 
     private Date startTime;
 
@@ -43,19 +43,19 @@ public class PromotionSale implements Serializable {
         this.name = name;
     }
 
-    public Integer getPromotionType() {
+    public String getPromotionType() {
         return promotionType;
     }
 
-    public void setPromotionType(Integer promotionType) {
+    public void setPromotionType(String promotionType) {
         this.promotionType = promotionType;
     }
 
-    public Integer getDiscountType() {
+    public String getDiscountType() {
         return discountType;
     }
 
-    public void setDiscountType(Integer discountType) {
+    public void setDiscountType(String discountType) {
         this.discountType = discountType;
     }
 
@@ -67,12 +67,12 @@ public class PromotionSale implements Serializable {
         this.amount = amount;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getPublishStatus() {
+        return publishStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setPublishStatus(String publishStatus) {
+        this.publishStatus = publishStatus;
     }
 
     public Date getStartTime() {

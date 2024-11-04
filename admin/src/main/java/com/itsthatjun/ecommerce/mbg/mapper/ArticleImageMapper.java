@@ -12,19 +12,19 @@ public interface ArticleImageMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ArticleImage record);
+    int insert(ArticleImage row);
 
-    int insertSelective(ArticleImage record);
+    int insertSelective(ArticleImage row);
 
     List<ArticleImage> selectByExample(ArticleImageExample example);
 
     ArticleImage selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ArticleImage record, @Param("example") ArticleImageExample example);
+    int updateByExampleSelective(@Param("row") ArticleImage row, @Param("example") ArticleImageExample example);
 
-    int updateByExample(@Param("record") ArticleImage record, @Param("example") ArticleImageExample example);
+    int updateByExample(@Param("row") ArticleImage row, @Param("example") ArticleImageExample example);
 
-    int updateByPrimaryKeySelective(ArticleImage record);
+    int updateByPrimaryKeySelective(ArticleImage row);
 
-    int updateByPrimaryKey(ArticleImage record);
+    int updateByPrimaryKey(ArticleImage row);
 }

@@ -12,19 +12,19 @@ public interface ReturnLogMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ReturnLog record);
+    int insert(ReturnLog row);
 
-    int insertSelective(ReturnLog record);
+    int insertSelective(ReturnLog row);
 
     List<ReturnLog> selectByExample(ReturnLogExample example);
 
     ReturnLog selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ReturnLog record, @Param("example") ReturnLogExample example);
+    int updateByExampleSelective(@Param("row") ReturnLog row, @Param("example") ReturnLogExample example);
 
-    int updateByExample(@Param("record") ReturnLog record, @Param("example") ReturnLogExample example);
+    int updateByExample(@Param("row") ReturnLog row, @Param("example") ReturnLogExample example);
 
-    int updateByPrimaryKeySelective(ReturnLog record);
+    int updateByPrimaryKeySelective(ReturnLog row);
 
-    int updateByPrimaryKey(ReturnLog record);
+    int updateByPrimaryKey(ReturnLog row);
 }

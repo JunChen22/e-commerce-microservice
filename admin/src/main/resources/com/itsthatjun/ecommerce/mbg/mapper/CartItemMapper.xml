@@ -185,54 +185,54 @@
   <update id="updateByExampleSelective" parameterType="map">
     update cart_item
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.cartId != null">
-        cart_id = #{record.cartId,jdbcType=INTEGER},
+      <if test="row.cartId != null">
+        cart_id = #{row.cartId,jdbcType=INTEGER},
       </if>
-      <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=INTEGER},
+      <if test="row.productId != null">
+        product_id = #{row.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.productName != null">
-        product_name = #{record.productName,jdbcType=VARCHAR},
+      <if test="row.productName != null">
+        product_name = #{row.productName,jdbcType=VARCHAR},
       </if>
-      <if test="record.productSku != null">
-        product_sku = #{record.productSku,jdbcType=VARCHAR},
+      <if test="row.productSku != null">
+        product_sku = #{row.productSku,jdbcType=VARCHAR},
       </if>
-      <if test="record.productPic != null">
-        product_pic = #{record.productPic,jdbcType=VARCHAR},
+      <if test="row.productPic != null">
+        product_pic = #{row.productPic,jdbcType=VARCHAR},
       </if>
-      <if test="record.quantity != null">
-        quantity = #{record.quantity,jdbcType=INTEGER},
+      <if test="row.quantity != null">
+        quantity = #{row.quantity,jdbcType=INTEGER},
       </if>
-      <if test="record.price != null">
-        price = #{record.price,jdbcType=NUMERIC},
+      <if test="row.price != null">
+        price = #{row.price,jdbcType=NUMERIC},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update cart_item
-    set id = #{record.id,jdbcType=INTEGER},
-      cart_id = #{record.cartId,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=INTEGER},
-      product_name = #{record.productName,jdbcType=VARCHAR},
-      product_sku = #{record.productSku,jdbcType=VARCHAR},
-      product_pic = #{record.productPic,jdbcType=VARCHAR},
-      quantity = #{record.quantity,jdbcType=INTEGER},
-      price = #{record.price,jdbcType=NUMERIC},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      cart_id = #{row.cartId,jdbcType=INTEGER},
+      product_id = #{row.productId,jdbcType=INTEGER},
+      product_name = #{row.productName,jdbcType=VARCHAR},
+      product_sku = #{row.productSku,jdbcType=VARCHAR},
+      product_pic = #{row.productPic,jdbcType=VARCHAR},
+      quantity = #{row.quantity,jdbcType=INTEGER},
+      price = #{row.price,jdbcType=NUMERIC},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

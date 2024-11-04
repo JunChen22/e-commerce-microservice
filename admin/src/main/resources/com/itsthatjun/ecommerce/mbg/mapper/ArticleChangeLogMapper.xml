@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ArticleChangeLogMapper">
-  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.model.entity.ArticleChangeLog">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="update_action" jdbcType="VARCHAR" property="updateAction" />
@@ -99,13 +99,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleChangeLog" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog" useGeneratedKeys="true">
     insert into article_change_log (article_id, update_action, operator, 
       created_at)
     values (#{articleId,jdbcType=INTEGER}, #{updateAction,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
       #{createdAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleChangeLog" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog" useGeneratedKeys="true">
     insert into article_change_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="articleId != null">
@@ -145,38 +145,38 @@
   <update id="updateByExampleSelective" parameterType="map">
     update article_change_log
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.articleId != null">
-        article_id = #{record.articleId,jdbcType=INTEGER},
+      <if test="row.articleId != null">
+        article_id = #{row.articleId,jdbcType=INTEGER},
       </if>
-      <if test="record.updateAction != null">
-        update_action = #{record.updateAction,jdbcType=VARCHAR},
+      <if test="row.updateAction != null">
+        update_action = #{row.updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="record.operator != null">
-        operator = #{record.operator,jdbcType=VARCHAR},
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update article_change_log
-    set id = #{record.id,jdbcType=INTEGER},
-      article_id = #{record.articleId,jdbcType=INTEGER},
-      update_action = #{record.updateAction,jdbcType=VARCHAR},
-      operator = #{record.operator,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      article_id = #{row.articleId,jdbcType=INTEGER},
+      update_action = #{row.updateAction,jdbcType=VARCHAR},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleChangeLog">
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog">
     update article_change_log
     <set>
       <if test="articleId != null">
@@ -194,7 +194,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.model.entity.ArticleChangeLog">
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleChangeLog">
     update article_change_log
     set article_id = #{articleId,jdbcType=INTEGER},
       update_action = #{updateAction,jdbcType=VARCHAR},

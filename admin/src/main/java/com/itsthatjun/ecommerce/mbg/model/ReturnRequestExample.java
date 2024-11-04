@@ -616,63 +616,73 @@ public class ReturnRequestExample {
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNull() {
-            addCriterion("status is null");
+        public Criteria andReturnStatusIsNull() {
+            addCriterion("return_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
+        public Criteria andReturnStatusIsNotNull() {
+            addCriterion("return_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(Integer value) {
-            addCriterion("status =", value, "status");
+        public Criteria andReturnStatusEqualTo(String value) {
+            addCriterion("return_status =", value, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(Integer value) {
-            addCriterion("status <>", value, "status");
+        public Criteria andReturnStatusNotEqualTo(String value) {
+            addCriterion("return_status <>", value, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(Integer value) {
-            addCriterion("status >", value, "status");
+        public Criteria andReturnStatusGreaterThan(String value) {
+            addCriterion("return_status >", value, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
-            addCriterion("status >=", value, "status");
+        public Criteria andReturnStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("return_status >=", value, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(Integer value) {
-            addCriterion("status <", value, "status");
+        public Criteria andReturnStatusLessThan(String value) {
+            addCriterion("return_status <", value, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(Integer value) {
-            addCriterion("status <=", value, "status");
+        public Criteria andReturnStatusLessThanOrEqualTo(String value) {
+            addCriterion("return_status <=", value, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<Integer> values) {
-            addCriterion("status in", values, "status");
+        public Criteria andReturnStatusLike(String value) {
+            addCriterion("return_status like", value, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<Integer> values) {
-            addCriterion("status not in", values, "status");
+        public Criteria andReturnStatusNotLike(String value) {
+            addCriterion("return_status not like", value, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(Integer value1, Integer value2) {
-            addCriterion("status between", value1, value2, "status");
+        public Criteria andReturnStatusIn(List<String> values) {
+            addCriterion("return_status in", values, "returnStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
-            addCriterion("status not between", value1, value2, "status");
+        public Criteria andReturnStatusNotIn(List<String> values) {
+            addCriterion("return_status not in", values, "returnStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnStatusBetween(String value1, String value2) {
+            addCriterion("return_status between", value1, value2, "returnStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andReturnStatusNotBetween(String value1, String value2) {
+            addCriterion("return_status not between", value1, value2, "returnStatus");
             return (Criteria) this;
         }
 

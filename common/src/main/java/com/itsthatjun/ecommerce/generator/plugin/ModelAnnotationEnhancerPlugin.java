@@ -9,6 +9,8 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 import java.util.List;
 
+// This plugin is used to enhance the generated model classes with Lombok annotations and Spring Data annotations.
+// The plugin adds the following annotations to the model classes:
 public class ModelAnnotationEnhancerPlugin extends PluginAdapter {
 
     @Override

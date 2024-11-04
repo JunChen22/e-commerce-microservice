@@ -18,7 +18,7 @@ public class Member implements Serializable {
 
     private Integer emailSubscription;
 
-    private Integer status;
+    private String status;
 
     private Integer verifiedStatus;
 
@@ -88,11 +88,11 @@ public class Member implements Serializable {
         this.emailSubscription = emailSubscription;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

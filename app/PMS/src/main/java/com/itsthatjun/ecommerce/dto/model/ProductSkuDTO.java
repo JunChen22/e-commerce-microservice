@@ -1,11 +1,13 @@
 package com.itsthatjun.ecommerce.dto.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
 public class ProductSkuDTO {
 
     private String skuCode;

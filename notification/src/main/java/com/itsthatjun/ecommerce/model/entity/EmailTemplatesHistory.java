@@ -1,11 +1,10 @@
-package com.itsthatjun.ecommerce.model;
+package com.itsthatjun.ecommerce.model.entity;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-
-import java.util.Date;
 
 @Getter
 @Setter
@@ -18,7 +17,7 @@ public class EmailTemplatesHistory {
 
     private String updateAction;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     private String operator;
 }

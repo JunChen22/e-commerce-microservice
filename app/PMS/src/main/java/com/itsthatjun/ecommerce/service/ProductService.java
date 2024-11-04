@@ -2,19 +2,29 @@ package com.itsthatjun.ecommerce.service;
 
 import com.itsthatjun.ecommerce.dto.ProductDetail;
 import com.itsthatjun.ecommerce.dto.model.ProductDTO;
-import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ProductService {
 
-    @ApiOperation("")
-    Mono<ProductDetail> getProductDetail(int id);
-
-    @ApiOperation("")
+    /**
+     * list all products
+     * @return list of products
+     */
     Flux<ProductDTO> listAllProduct();
 
-    @ApiOperation("")
+    /**
+     * list products with pagination
+     * @param pageNum page number
+     * @param pageSize page size
+     * @return list of products
+     */
     Flux<ProductDTO> listProduct(int pageNum, int pageSize);
 
+    /**
+     * get product detail by id
+     * @param id product id
+     * @return product detail
+     */
+    Mono<ProductDetail> getProductDetail(int id);
 }

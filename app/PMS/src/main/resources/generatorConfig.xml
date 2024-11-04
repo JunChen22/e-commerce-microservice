@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="PostgresContext" targetRuntime="MyBatis3" defaultModelType="flat">
+        <!-- custom plugin -->
+        <plugin type="com.itsthatjun.ecommerce.generator.plugin.ModelAnnotationEnhancerPlugin" />
+
+        <!-- configuration for generated code comments, default is false ,generic comment -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+        <!--  database driver-->
+        <jdbcConnection driverClass="org.postgresql.Driver"
+                        connectionURL="jdbc:postgresql://localhost:5435/productdb"
+                        userId="postgres"
+                        password="password">
+        </jdbcConnection>
+
+        <!-- location of model and mapper will be generated -->
+        <javaModelGenerator targetPackage="com.itsthatjun.ecommerce.model.entity" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="modelType" value="flat"/> <!-- Ensures no getter/setter methods -->
+        </javaModelGenerator>
+
+        <!-- generate the table needed -->
+        <!-- change long to integer for PostgreSQL serial id, default mybatis generator is long data type  -->
+
+        <!--  PMS -->
+        <table tableName= "brand">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="publish_status" javaType="com.itsthatjun.ecommerce.enums.status.PublishStatus" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "brand_update_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="brand_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+
+
+        <table tableName= "product">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="brand_id" javaType="java.lang.Integer" />
+            <columnOverride column="category_id" javaType="java.lang.Integer" />
+            <columnOverride column="attribute_category_id" javaType="java.lang.Integer" />
+            <columnOverride column="description_album_id" javaType="java.lang.Integer" />
+            <columnOverride column="condition_status" javaType="com.itsthatjun.ecommerce.enums.ProductCondition" />
+            <columnOverride column="recommend_status" javaType="com.itsthatjun.ecommerce.enums.status.RecommendationStatus" />
+            <columnOverride column="verify_status" javaType="com.itsthatjun.ecommerce.enums.status.VerificationStatus" />
+            <columnOverride column="publish_status" javaType="com.itsthatjun.ecommerce.enums.status.PublishStatus" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "product_album">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "product_album_picture">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_album_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "product_attribute">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+        </table>
+        <table tableName= "product_attribute_category">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+        </table>
+        <table tableName= "product_attribute_type">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="attribute_category_id" javaType="java.lang.Integer" />
+        </table>
+        <table tableName= "product_category">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="parent_id" javaType="java.lang.Integer" />
+            <columnOverride column="level" javaType="java.lang.Integer" />
+        </table>
+        <table tableName= "product_sku">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="publish_status" javaType="com.itsthatjun.ecommerce.enums.status.PublishStatus" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "product_update_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+
+
+        <table tableName= "review">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="product_id" javaType="java.lang.Integer" />
+            <columnOverride column="member_id" javaType="java.lang.Integer" />
+            <columnOverride column="verify_status" javaType="com.itsthatjun.ecommerce.enums.status.VerificationStatus" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "review_album">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="review_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "review_album_picture">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="review_album_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+        <table tableName= "review_update_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="review_id" javaType="java.lang.Integer" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+    </context>
+</generatorConfiguration>

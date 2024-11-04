@@ -7,13 +7,15 @@ import java.util.Date;
 public class Coupon implements Serializable {
     private Integer id;
 
-    private Integer couponType;
+    private String couponType;
 
     private String name;
 
-    private Integer discountType;
+    private String discountType;
 
     private BigDecimal amount;
+
+    private BigDecimal minimumPurchase;
 
     private Date startTime;
 
@@ -29,7 +31,7 @@ public class Coupon implements Serializable {
 
     private String code;
 
-    private Integer status;
+    private String publishStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -41,11 +43,11 @@ public class Coupon implements Serializable {
         this.id = id;
     }
 
-    public Integer getCouponType() {
+    public String getCouponType() {
         return couponType;
     }
 
-    public void setCouponType(Integer couponType) {
+    public void setCouponType(String couponType) {
         this.couponType = couponType;
     }
 
@@ -57,11 +59,11 @@ public class Coupon implements Serializable {
         this.name = name;
     }
 
-    public Integer getDiscountType() {
+    public String getDiscountType() {
         return discountType;
     }
 
-    public void setDiscountType(Integer discountType) {
+    public void setDiscountType(String discountType) {
         this.discountType = discountType;
     }
 
@@ -71,6 +73,14 @@ public class Coupon implements Serializable {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getMinimumPurchase() {
+        return minimumPurchase;
+    }
+
+    public void setMinimumPurchase(BigDecimal minimumPurchase) {
+        this.minimumPurchase = minimumPurchase;
     }
 
     public Date getStartTime() {
@@ -129,11 +139,11 @@ public class Coupon implements Serializable {
         this.code = code;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getPublishStatus() {
+        return publishStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setPublishStatus(String publishStatus) {
+        this.publishStatus = publishStatus;
     }
 }

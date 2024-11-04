@@ -27,11 +27,11 @@ public class Orders implements Serializable {
 
     private BigDecimal payAmount;
 
-    private Integer payType;
+    private String paymentType;
 
-    private Integer sourceType;
+    private String sourceType;
 
-    private Integer status;
+    private String orderStatus;
 
     private String deliveryCompany;
 
@@ -157,28 +157,28 @@ public class Orders implements Serializable {
         this.payAmount = payAmount;
     }
 
-    public Integer getPayType() {
-        return payType;
+    public String getPaymentType() {
+        return paymentType;
     }
 
-    public void setPayType(Integer payType) {
-        this.payType = payType;
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
     }
 
-    public Integer getSourceType() {
+    public String getSourceType() {
         return sourceType;
     }
 
-    public void setSourceType(Integer sourceType) {
+    public void setSourceType(String sourceType) {
         this.sourceType = sourceType;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public String getDeliveryCompany() {

@@ -1,18 +1,17 @@
 package com.itsthatjun.ecommerce.service.eventupdate;
 
-import com.itsthatjun.ecommerce.mbg.mapper.ProductMapper;
-import com.itsthatjun.ecommerce.mbg.mapper.ProductSkuMapper;
 import com.itsthatjun.ecommerce.model.entity.Product;
 import com.itsthatjun.ecommerce.model.entity.ProductSku;
+import com.itsthatjun.ecommerce.repository.ProductRepository;
+import com.itsthatjun.ecommerce.repository.as.ProductSkuRepository;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,54 +21,63 @@ public class SmsEventUpdateService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmsEventUpdateService.class);
 
-    private final ProductMapper productMapper;
+    private final ProductRepository productRepository;
 
-    private final ProductSkuMapper skuMapper;
-
-    private final Scheduler jdbcScheduler;
+    private final ProductSkuRepository skuRepository;
 
     @Autowired
-    public SmsEventUpdateService(ProductMapper productMapper, ProductSkuMapper skuMapper,
-                                 @Qualifier("jdbcScheduler") Scheduler jdbcScheduler) {
-        this.productMapper = productMapper;
-        this.skuMapper = skuMapper;
-        this.jdbcScheduler = jdbcScheduler;
+    public SmsEventUpdateService(ProductRepository productRepository, ProductSkuRepository skuRepository) {
+        this.productRepository = productRepository;
+        this.skuRepository = skuRepository;
     }
 
+    /**
+     * Update sale price for product and sku. logic is done already in SMS
+     */
     @Transactional
-    @ApiOperation("Update sale price, logic is done already in SMS")
     public Mono<Void> updateSale(List<ProductSku> productSkuList) {
-        return Mono.fromRunnable(() -> {
-            for (ProductSku sku : productSkuList) {
-                skuMapper.updateByPrimaryKey(sku);
-                int productId = sku.getProductId();
-                Product affectedProduct = productMapper.selectByPrimaryKey(productId);
+        return Flux.fromIterable(productSkuList)
+                .flatMap(sku -> {
+                    // Update the SKU reactively
+                    return skuRepository.save(sku)
+                            .then(
+                                    // Fetch the associated product reactively by productId
+                                    productRepository.findById(sku.getProductId())
+                                            .flatMap(affectedProduct -> {
+                                                // Compare and set the minimum sale price between the SKU and the Product
+                                                BigDecimal currentSalePrice = affectedProduct.getSalePrice();
+                                                BigDecimal skuSalePrice = sku.getPromotionPrice();
+                                                affectedProduct.setSalePrice(currentSalePrice.min(skuSalePrice));
+                                                affectedProduct.setOnSaleStatus(1);
 
-                BigDecimal currentSalePrice = affectedProduct.getSalePrice();
-                BigDecimal skuSalePrice = sku.getPromotionPrice();
-
-                affectedProduct.setSalePrice(currentSalePrice.min(skuSalePrice));
-                affectedProduct.setOnSaleStatus(1);
-                productMapper.updateByPrimaryKeySelective(affectedProduct);
-            }
-        }).subscribeOn(jdbcScheduler).then();
+                                                // Save the updated product reactively
+                                                return productRepository.save(affectedProduct);
+                                            })
+                            );
+                }).then();
     }
 
+    /**
+     * Remove sale price and update product and sku
+     */
     @Transactional
-    @ApiOperation("Remove sale price and update product")
     public Mono<Void> removeSale(List<ProductSku> productSkuList) {
-        return Mono.fromRunnable(() -> {
-            for (ProductSku sku : productSkuList) {
-                skuMapper.updateByPrimaryKey(sku);
+        return Flux.fromIterable(productSkuList)
+                .flatMap(sku -> {
+                    // Save SKU reactively
+                    return skuRepository.save(sku)
+                            .then(
+                                    // Fetch the associated Product by productId reactively
+                                    productRepository.findById(sku.getProductId())
+                                            .flatMap(affectedProduct -> {
+                                                // Reset sale price and on-sale status
+                                                affectedProduct.setSalePrice(affectedProduct.getOriginalPrice());
+                                                affectedProduct.setOnSaleStatus(0);
 
-                int productId = sku.getProductId();
-                Product affectedProduct = productMapper.selectByPrimaryKey(productId);
-
-                affectedProduct.setSalePrice(affectedProduct.getOriginalPrice());
-                affectedProduct.setOnSaleStatus(0);
-
-                productMapper.updateByPrimaryKeySelective(affectedProduct);
-            }
-        }).subscribeOn(jdbcScheduler).then();
+                                                // Save updated product reactively
+                                                return productRepository.save(affectedProduct);
+                                            })
+                            );
+                }).then();
     }
 }

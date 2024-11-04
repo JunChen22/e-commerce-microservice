@@ -4,20 +4,28 @@ import com.itsthatjun.ecommerce.dto.ums.model.AddressDTO;
 import com.itsthatjun.ecommerce.dto.ums.model.MemberDTO;
 import com.itsthatjun.ecommerce.dto.ums.model.MemberIconDTO;
 import com.itsthatjun.ecommerce.dto.ums.model.MemberLoginLogDTO;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
-@Data
-public class MemberDetail extends MemberDTO {
+@Getter
+@Setter
+public class MemberDetail extends MemberDTO implements Serializable {
 
-    @ApiModelProperty("")
+    /**
+     * Member address
+     */
     private AddressDTO address;
 
-    @ApiModelProperty("")
+    /**
+     * Member icon
+     */
     private MemberIconDTO icon;
 
-    @ApiModelProperty("")
+    /**
+     * Login log list
+     */
     private List<MemberLoginLogDTO> loginLogList;
 }

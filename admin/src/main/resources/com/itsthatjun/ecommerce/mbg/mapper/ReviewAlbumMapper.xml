@@ -6,6 +6,7 @@
     <result column="review_id" jdbcType="INTEGER" property="reviewId" />
     <result column="pic_count" jdbcType="INTEGER" property="picCount" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, review_id, pic_count, created_at
+    id, review_id, pic_count, created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewAlbumExample" resultMap="BaseResultMap">
     select
@@ -99,10 +100,10 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewAlbum" useGeneratedKeys="true">
-    insert into review_album (review_id, pic_count, created_at
-      )
-    values (#{reviewId,jdbcType=INTEGER}, #{picCount,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}
-      )
+    insert into review_album (review_id, pic_count, created_at, 
+      updated_at)
+    values (#{reviewId,jdbcType=INTEGER}, #{picCount,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReviewAlbum" useGeneratedKeys="true">
     insert into review_album
@@ -116,6 +117,9 @@
       <if test="createdAt != null">
         created_at,
       </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="reviewId != null">
@@ -126,6 +130,9 @@
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -138,30 +145,34 @@
   <update id="updateByExampleSelective" parameterType="map">
     update review_album
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.reviewId != null">
-        review_id = #{record.reviewId,jdbcType=INTEGER},
+      <if test="row.reviewId != null">
+        review_id = #{row.reviewId,jdbcType=INTEGER},
       </if>
-      <if test="record.picCount != null">
-        pic_count = #{record.picCount,jdbcType=INTEGER},
+      <if test="row.picCount != null">
+        pic_count = #{row.picCount,jdbcType=INTEGER},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update review_album
-    set id = #{record.id,jdbcType=INTEGER},
-      review_id = #{record.reviewId,jdbcType=INTEGER},
-      pic_count = #{record.picCount,jdbcType=INTEGER},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      review_id = #{row.reviewId,jdbcType=INTEGER},
+      pic_count = #{row.picCount,jdbcType=INTEGER},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -177,6 +188,9 @@
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -184,7 +198,8 @@
     update review_album
     set review_id = #{reviewId,jdbcType=INTEGER},
       pic_count = #{picCount,jdbcType=INTEGER},
-      created_at = #{createdAt,jdbcType=TIMESTAMP}
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

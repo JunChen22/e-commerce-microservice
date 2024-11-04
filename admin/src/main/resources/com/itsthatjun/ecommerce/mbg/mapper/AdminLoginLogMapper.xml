@@ -145,34 +145,34 @@
   <update id="updateByExampleSelective" parameterType="map">
     update admin_login_log
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.adminId != null">
-        admin_id = #{record.adminId,jdbcType=INTEGER},
+      <if test="row.adminId != null">
+        admin_id = #{row.adminId,jdbcType=INTEGER},
       </if>
-      <if test="record.loginTime != null">
-        login_time = #{record.loginTime,jdbcType=TIMESTAMP},
+      <if test="row.loginTime != null">
+        login_time = #{row.loginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.ipAddress != null">
-        ip_address = #{record.ipAddress,jdbcType=VARCHAR},
+      <if test="row.ipAddress != null">
+        ip_address = #{row.ipAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.userAgent != null">
-        user_agent = #{record.userAgent,jdbcType=INTEGER},
+      <if test="row.userAgent != null">
+        user_agent = #{row.userAgent,jdbcType=INTEGER},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update admin_login_log
-    set id = #{record.id,jdbcType=INTEGER},
-      admin_id = #{record.adminId,jdbcType=INTEGER},
-      login_time = #{record.loginTime,jdbcType=TIMESTAMP},
-      ip_address = #{record.ipAddress,jdbcType=VARCHAR},
-      user_agent = #{record.userAgent,jdbcType=INTEGER}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      admin_id = #{row.adminId,jdbcType=INTEGER},
+      login_time = #{row.loginTime,jdbcType=TIMESTAMP},
+      ip_address = #{row.ipAddress,jdbcType=VARCHAR},
+      user_agent = #{row.userAgent,jdbcType=INTEGER}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

@@ -12,19 +12,19 @@ public interface OrderChangeHistoryMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(OrderChangeHistory record);
+    int insert(OrderChangeHistory row);
 
-    int insertSelective(OrderChangeHistory record);
+    int insertSelective(OrderChangeHistory row);
 
     List<OrderChangeHistory> selectByExample(OrderChangeHistoryExample example);
 
     OrderChangeHistory selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") OrderChangeHistory record, @Param("example") OrderChangeHistoryExample example);
+    int updateByExampleSelective(@Param("row") OrderChangeHistory row, @Param("example") OrderChangeHistoryExample example);
 
-    int updateByExample(@Param("record") OrderChangeHistory record, @Param("example") OrderChangeHistoryExample example);
+    int updateByExample(@Param("row") OrderChangeHistory row, @Param("example") OrderChangeHistoryExample example);
 
-    int updateByPrimaryKeySelective(OrderChangeHistory record);
+    int updateByPrimaryKeySelective(OrderChangeHistory row);
 
-    int updateByPrimaryKey(OrderChangeHistory record);
+    int updateByPrimaryKey(OrderChangeHistory row);
 }

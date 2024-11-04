@@ -13,6 +13,8 @@ public class Product implements Serializable {
 
     private String name;
 
+    private String slug;
+
     private Integer categoryId;
 
     private String categoryName;
@@ -21,11 +23,11 @@ public class Product implements Serializable {
 
     private String sn;
 
-    private Integer newStatus;
+    private String conditionStatus;
 
-    private Integer recommendStatus;
+    private String recommendStatus;
 
-    private Integer verifyStatus;
+    private String verifyStatus;
 
     private String subTitle;
 
@@ -57,11 +59,13 @@ public class Product implements Serializable {
 
     private Integer descriptionAlbumId;
 
-    private Integer deleteStatus;
+    private Boolean deleteStatus;
 
     private Integer publishStatus;
 
     private Date createdAt;
+
+    private Date updatedAt;
 
     private String note;
 
@@ -99,6 +103,14 @@ public class Product implements Serializable {
         this.name = name;
     }
 
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
     public Integer getCategoryId() {
         return categoryId;
     }
@@ -131,27 +143,27 @@ public class Product implements Serializable {
         this.sn = sn;
     }
 
-    public Integer getNewStatus() {
-        return newStatus;
+    public String getConditionStatus() {
+        return conditionStatus;
     }
 
-    public void setNewStatus(Integer newStatus) {
-        this.newStatus = newStatus;
+    public void setConditionStatus(String conditionStatus) {
+        this.conditionStatus = conditionStatus;
     }
 
-    public Integer getRecommendStatus() {
+    public String getRecommendStatus() {
         return recommendStatus;
     }
 
-    public void setRecommendStatus(Integer recommendStatus) {
+    public void setRecommendStatus(String recommendStatus) {
         this.recommendStatus = recommendStatus;
     }
 
-    public Integer getVerifyStatus() {
+    public String getVerifyStatus() {
         return verifyStatus;
     }
 
-    public void setVerifyStatus(Integer verifyStatus) {
+    public void setVerifyStatus(String verifyStatus) {
         this.verifyStatus = verifyStatus;
     }
 
@@ -275,11 +287,11 @@ public class Product implements Serializable {
         this.descriptionAlbumId = descriptionAlbumId;
     }
 
-    public Integer getDeleteStatus() {
+    public Boolean getDeleteStatus() {
         return deleteStatus;
     }
 
-    public void setDeleteStatus(Integer deleteStatus) {
+    public void setDeleteStatus(Boolean deleteStatus) {
         this.deleteStatus = deleteStatus;
     }
 
@@ -297,6 +309,14 @@ public class Product implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getNote() {

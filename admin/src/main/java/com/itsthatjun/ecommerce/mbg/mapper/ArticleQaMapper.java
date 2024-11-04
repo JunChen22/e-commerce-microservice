@@ -12,19 +12,19 @@ public interface ArticleQaMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ArticleQa record);
+    int insert(ArticleQa row);
 
-    int insertSelective(ArticleQa record);
+    int insertSelective(ArticleQa row);
 
     List<ArticleQa> selectByExample(ArticleQaExample example);
 
     ArticleQa selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ArticleQa record, @Param("example") ArticleQaExample example);
+    int updateByExampleSelective(@Param("row") ArticleQa row, @Param("example") ArticleQaExample example);
 
-    int updateByExample(@Param("record") ArticleQa record, @Param("example") ArticleQaExample example);
+    int updateByExample(@Param("row") ArticleQa row, @Param("example") ArticleQaExample example);
 
-    int updateByPrimaryKeySelective(ArticleQa record);
+    int updateByPrimaryKeySelective(ArticleQa row);
 
-    int updateByPrimaryKey(ArticleQa record);
+    int updateByPrimaryKey(ArticleQa row);
 }

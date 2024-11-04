@@ -12,19 +12,19 @@ public interface ProductAttributeCategoryMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ProductAttributeCategory record);
+    int insert(ProductAttributeCategory row);
 
-    int insertSelective(ProductAttributeCategory record);
+    int insertSelective(ProductAttributeCategory row);
 
     List<ProductAttributeCategory> selectByExample(ProductAttributeCategoryExample example);
 
     ProductAttributeCategory selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ProductAttributeCategory record, @Param("example") ProductAttributeCategoryExample example);
+    int updateByExampleSelective(@Param("row") ProductAttributeCategory row, @Param("example") ProductAttributeCategoryExample example);
 
-    int updateByExample(@Param("record") ProductAttributeCategory record, @Param("example") ProductAttributeCategoryExample example);
+    int updateByExample(@Param("row") ProductAttributeCategory row, @Param("example") ProductAttributeCategoryExample example);
 
-    int updateByPrimaryKeySelective(ProductAttributeCategory record);
+    int updateByPrimaryKeySelective(ProductAttributeCategory row);
 
-    int updateByPrimaryKey(ProductAttributeCategory record);
+    int updateByPrimaryKey(ProductAttributeCategory row);
 }

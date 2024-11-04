@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.model;
 
-import com.itsthatjun.ecommerce.enums.Status;
+import com.itsthatjun.ecommerce.enums.status.AccountStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -27,7 +27,7 @@ public class Member {
 
     private Integer emailSubscription;
 
-    private Status status;
+    private AccountStatus status;
 
     private Integer verifiedStatus;
 

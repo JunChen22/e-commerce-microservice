@@ -24,21 +24,15 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/detail/{reviewId}")
-    @ApiOperation(value = "get detail of a review")
-    public Mono<ProductReview> getDetailReview(@PathVariable int reviewId) {
-        return reviewService.getDetailReview(reviewId);
-    }
-
     @GetMapping("/listAllProductReview/{productId}")
     @ApiOperation(value = "list all reviews for a product")
     public Flux<ProductReview> listProductReviews(@PathVariable int productId) {
         return reviewService.listProductAllReview(productId);
     }
 
-    @GetMapping("/admin/listAllReviewByUser/{useId}")
-    @ApiOperation(value = "list all reviews for a product")
-    public Flux<ProductReview> listProductReviewsByUser(@PathVariable int useId) {
-        return reviewService.listAllReviewByUser(useId);
+    @GetMapping("/detail/{reviewId}")
+    @ApiOperation(value = "get detail of a review")
+    public Mono<ProductReview> getDetailReview(@PathVariable int reviewId) {
+        return reviewService.getDetailReview(reviewId);
     }
 }

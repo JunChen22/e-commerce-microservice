@@ -21,7 +21,7 @@ public class ReturnRequest implements Serializable {
 
     private String returnPhone;
 
-    private Integer status;
+    private String returnStatus;
 
     private Date handleTime;
 
@@ -113,12 +113,12 @@ public class ReturnRequest implements Serializable {
         this.returnPhone = returnPhone;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getReturnStatus() {
+        return returnStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setReturnStatus(String returnStatus) {
+        this.returnStatus = returnStatus;
     }
 
     public Date getHandleTime() {

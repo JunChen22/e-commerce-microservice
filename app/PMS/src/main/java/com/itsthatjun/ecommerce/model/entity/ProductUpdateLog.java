@@ -1,9 +1,17 @@
 package com.itsthatjun.ecommerce.model.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
+@Getter
+@Setter
+@Table("product_update_log")
 public class ProductUpdateLog {
+    @Id
     private Integer id;
 
     private Integer productId;
@@ -26,5 +34,5 @@ public class ProductUpdateLog {
 
     private String operator;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 }

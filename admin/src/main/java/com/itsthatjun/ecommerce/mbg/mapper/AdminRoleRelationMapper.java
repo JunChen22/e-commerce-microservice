@@ -12,19 +12,19 @@ public interface AdminRoleRelationMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(AdminRoleRelation record);
+    int insert(AdminRoleRelation row);
 
-    int insertSelective(AdminRoleRelation record);
+    int insertSelective(AdminRoleRelation row);
 
     List<AdminRoleRelation> selectByExample(AdminRoleRelationExample example);
 
     AdminRoleRelation selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") AdminRoleRelation record, @Param("example") AdminRoleRelationExample example);
+    int updateByExampleSelective(@Param("row") AdminRoleRelation row, @Param("example") AdminRoleRelationExample example);
 
-    int updateByExample(@Param("record") AdminRoleRelation record, @Param("example") AdminRoleRelationExample example);
+    int updateByExample(@Param("row") AdminRoleRelation row, @Param("example") AdminRoleRelationExample example);
 
-    int updateByPrimaryKeySelective(AdminRoleRelation record);
+    int updateByPrimaryKeySelective(AdminRoleRelation row);
 
-    int updateByPrimaryKey(AdminRoleRelation record);
+    int updateByPrimaryKey(AdminRoleRelation row);
 }

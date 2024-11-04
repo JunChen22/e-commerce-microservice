@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service;
 
-import com.itsthatjun.ecommerce.model.EmailTemplates;
+import com.itsthatjun.ecommerce.model.entity.EmailTemplates;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

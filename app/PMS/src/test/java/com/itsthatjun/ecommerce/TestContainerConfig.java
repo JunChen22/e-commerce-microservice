@@ -27,9 +27,12 @@ public abstract class TestContainerConfig {
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
         Startables.deepStart(postgres, rabbitMQ).join();
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
+
+        registry.add("spring.r2dbc.url", () ->
+                "r2dbc:postgresql://" + postgres.getHost() + ":" + postgres.getFirstMappedPort() + "/productdb"
+        );
+        registry.add("spring.r2dbc.username", postgres::getUsername);
+        registry.add("spring.r2dbc.password", postgres::getPassword);
 
         registry.add("spring.rabbitmq.host", rabbitMQ::getHost);
         registry.add("spring.rabbitmq.port", rabbitMQ::getAmqpPort);

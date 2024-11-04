@@ -169,46 +169,46 @@
   <update id="updateByExampleSelective" parameterType="map">
     update promotion_sale_log
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.promotionSaleId != null">
-        promotion_sale_id = #{record.promotionSaleId,jdbcType=INTEGER},
+      <if test="row.promotionSaleId != null">
+        promotion_sale_id = #{row.promotionSaleId,jdbcType=INTEGER},
       </if>
-      <if test="record.saleAction != null">
-        sale_action = #{record.saleAction,jdbcType=VARCHAR},
+      <if test="row.saleAction != null">
+        sale_action = #{row.saleAction,jdbcType=VARCHAR},
       </if>
-      <if test="record.promotionType != null">
-        promotion_type = #{record.promotionType,jdbcType=INTEGER},
+      <if test="row.promotionType != null">
+        promotion_type = #{row.promotionType,jdbcType=INTEGER},
       </if>
-      <if test="record.discountType != null">
-        discount_type = #{record.discountType,jdbcType=INTEGER},
+      <if test="row.discountType != null">
+        discount_type = #{row.discountType,jdbcType=INTEGER},
       </if>
-      <if test="record.amount != null">
-        amount = #{record.amount,jdbcType=NUMERIC},
+      <if test="row.amount != null">
+        amount = #{row.amount,jdbcType=NUMERIC},
       </if>
-      <if test="record.operator != null">
-        operator = #{record.operator,jdbcType=VARCHAR},
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update promotion_sale_log
-    set id = #{record.id,jdbcType=INTEGER},
-      promotion_sale_id = #{record.promotionSaleId,jdbcType=INTEGER},
-      sale_action = #{record.saleAction,jdbcType=VARCHAR},
-      promotion_type = #{record.promotionType,jdbcType=INTEGER},
-      discount_type = #{record.discountType,jdbcType=INTEGER},
-      amount = #{record.amount,jdbcType=NUMERIC},
-      operator = #{record.operator,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      promotion_sale_id = #{row.promotionSaleId,jdbcType=INTEGER},
+      sale_action = #{row.saleAction,jdbcType=VARCHAR},
+      promotion_type = #{row.promotionType,jdbcType=INTEGER},
+      discount_type = #{row.discountType,jdbcType=INTEGER},
+      amount = #{row.amount,jdbcType=NUMERIC},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

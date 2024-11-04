@@ -1,9 +1,18 @@
 package com.itsthatjun.ecommerce.model.entity;
 
+import com.itsthatjun.ecommerce.enums.status.VerificationStatus;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
+@Getter
+@Setter
+@Table("review")
 public class Review {
+    @Id
     private Integer id;
 
     private Integer productId;
@@ -20,11 +29,11 @@ public class Review {
 
     private BigDecimal likes;
 
-    private Integer verified;
+    private VerificationStatus verifyStatus;
 
     private String content;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 }

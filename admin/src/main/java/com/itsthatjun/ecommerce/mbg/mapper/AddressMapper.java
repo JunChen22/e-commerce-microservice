@@ -12,19 +12,19 @@ public interface AddressMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Address record);
+    int insert(Address row);
 
-    int insertSelective(Address record);
+    int insertSelective(Address row);
 
     List<Address> selectByExample(AddressExample example);
 
     Address selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Address record, @Param("example") AddressExample example);
+    int updateByExampleSelective(@Param("row") Address row, @Param("example") AddressExample example);
 
-    int updateByExample(@Param("record") Address record, @Param("example") AddressExample example);
+    int updateByExample(@Param("row") Address row, @Param("example") AddressExample example);
 
-    int updateByPrimaryKeySelective(Address record);
+    int updateByPrimaryKeySelective(Address row);
 
-    int updateByPrimaryKey(Address record);
+    int updateByPrimaryKey(Address row);
 }

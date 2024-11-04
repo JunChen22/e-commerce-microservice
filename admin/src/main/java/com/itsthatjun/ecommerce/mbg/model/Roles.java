@@ -9,7 +9,7 @@ public class Roles implements Serializable {
 
     private String description;
 
-    private Integer status;
+    private String status;
 
     private static final long serialVersionUID = 1L;
 
@@ -37,11 +37,11 @@ public class Roles implements Serializable {
         this.description = description;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

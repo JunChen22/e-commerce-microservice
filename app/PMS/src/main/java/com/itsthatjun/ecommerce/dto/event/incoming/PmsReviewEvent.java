@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.dto.event.incoming;
 
 import com.itsthatjun.ecommerce.model.entity.Review;
-import com.itsthatjun.ecommerce.model.entity.ReviewPictures;
+import com.itsthatjun.ecommerce.model.entity.ReviewAlbumPicture;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -21,10 +21,10 @@ public class PmsReviewEvent {
     private final Type eventType;
     private final int userId;
     private final Review review;
-    private final List<ReviewPictures> picturesList;
+    private final List<ReviewAlbumPicture> picturesList;
     private final ZonedDateTime eventCreatedAt;
 
-    public PmsReviewEvent(Type eventType, int userId, Review review, List<ReviewPictures> picturesList) {
+    public PmsReviewEvent(Type eventType, int userId, Review review, List<ReviewAlbumPicture> picturesList) {
         this.eventType = eventType;
         this.userId = userId;
         this.review = review;

@@ -12,19 +12,19 @@ public interface ArticleChangeLogMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ArticleChangeLog record);
+    int insert(ArticleChangeLog row);
 
-    int insertSelective(ArticleChangeLog record);
+    int insertSelective(ArticleChangeLog row);
 
     List<ArticleChangeLog> selectByExample(ArticleChangeLogExample example);
 
     ArticleChangeLog selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ArticleChangeLog record, @Param("example") ArticleChangeLogExample example);
+    int updateByExampleSelective(@Param("row") ArticleChangeLog row, @Param("example") ArticleChangeLogExample example);
 
-    int updateByExample(@Param("record") ArticleChangeLog record, @Param("example") ArticleChangeLogExample example);
+    int updateByExample(@Param("row") ArticleChangeLog row, @Param("example") ArticleChangeLogExample example);
 
-    int updateByPrimaryKeySelective(ArticleChangeLog record);
+    int updateByPrimaryKeySelective(ArticleChangeLog row);
 
-    int updateByPrimaryKey(ArticleChangeLog record);
+    int updateByPrimaryKey(ArticleChangeLog row);
 }

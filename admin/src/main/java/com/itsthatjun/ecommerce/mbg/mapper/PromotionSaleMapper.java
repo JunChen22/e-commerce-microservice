@@ -12,19 +12,19 @@ public interface PromotionSaleMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(PromotionSale record);
+    int insert(PromotionSale row);
 
-    int insertSelective(PromotionSale record);
+    int insertSelective(PromotionSale row);
 
     List<PromotionSale> selectByExample(PromotionSaleExample example);
 
     PromotionSale selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") PromotionSale record, @Param("example") PromotionSaleExample example);
+    int updateByExampleSelective(@Param("row") PromotionSale row, @Param("example") PromotionSaleExample example);
 
-    int updateByExample(@Param("record") PromotionSale record, @Param("example") PromotionSaleExample example);
+    int updateByExample(@Param("row") PromotionSale row, @Param("example") PromotionSaleExample example);
 
-    int updateByPrimaryKeySelective(PromotionSale record);
+    int updateByPrimaryKeySelective(PromotionSale row);
 
-    int updateByPrimaryKey(PromotionSale record);
+    int updateByPrimaryKey(PromotionSale row);
 }

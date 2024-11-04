@@ -9,7 +9,7 @@
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="email_subscription" jdbcType="INTEGER" property="emailSubscription" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="verified_status" jdbcType="INTEGER" property="verifiedStatus" />
     <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
@@ -116,7 +116,7 @@
       )
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{phoneNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{emailSubscription,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{verifiedStatus,jdbcType=INTEGER}, #{deleteStatus,jdbcType=INTEGER}, 
+      #{status,jdbcType=VARCHAR}, #{verifiedStatus,jdbcType=INTEGER}, #{deleteStatus,jdbcType=INTEGER}, 
       #{createdAt,jdbcType=TIMESTAMP}, #{lastLogin,jdbcType=TIMESTAMP}, #{sourceType,jdbcType=VARCHAR}
       )
   </insert>
@@ -180,7 +180,7 @@
         #{emailSubscription,jdbcType=INTEGER},
       </if>
       <if test="status != null">
-        #{status,jdbcType=INTEGER},
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="verifiedStatus != null">
         #{verifiedStatus,jdbcType=INTEGER},
@@ -208,66 +208,66 @@
   <update id="updateByExampleSelective" parameterType="map">
     update member
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.username != null">
-        username = #{record.username,jdbcType=VARCHAR},
+      <if test="row.username != null">
+        username = #{row.username,jdbcType=VARCHAR},
       </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=VARCHAR},
+      <if test="row.password != null">
+        password = #{row.password,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.phoneNumber != null">
-        phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
+      <if test="row.phoneNumber != null">
+        phone_number = #{row.phoneNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.email != null">
-        email = #{record.email,jdbcType=VARCHAR},
+      <if test="row.email != null">
+        email = #{row.email,jdbcType=VARCHAR},
       </if>
-      <if test="record.emailSubscription != null">
-        email_subscription = #{record.emailSubscription,jdbcType=INTEGER},
+      <if test="row.emailSubscription != null">
+        email_subscription = #{row.emailSubscription,jdbcType=INTEGER},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+      <if test="row.status != null">
+        status = #{row.status,jdbcType=VARCHAR},
       </if>
-      <if test="record.verifiedStatus != null">
-        verified_status = #{record.verifiedStatus,jdbcType=INTEGER},
+      <if test="row.verifiedStatus != null">
+        verified_status = #{row.verifiedStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.deleteStatus != null">
-        delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      <if test="row.deleteStatus != null">
+        delete_status = #{row.deleteStatus,jdbcType=INTEGER},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.lastLogin != null">
-        last_login = #{record.lastLogin,jdbcType=TIMESTAMP},
+      <if test="row.lastLogin != null">
+        last_login = #{row.lastLogin,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.sourceType != null">
-        source_type = #{record.sourceType,jdbcType=VARCHAR},
+      <if test="row.sourceType != null">
+        source_type = #{row.sourceType,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update member
-    set id = #{record.id,jdbcType=INTEGER},
-      username = #{record.username,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
-      email = #{record.email,jdbcType=VARCHAR},
-      email_subscription = #{record.emailSubscription,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=INTEGER},
-      verified_status = #{record.verifiedStatus,jdbcType=INTEGER},
-      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      last_login = #{record.lastLogin,jdbcType=TIMESTAMP},
-      source_type = #{record.sourceType,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      username = #{row.username,jdbcType=VARCHAR},
+      password = #{row.password,jdbcType=VARCHAR},
+      name = #{row.name,jdbcType=VARCHAR},
+      phone_number = #{row.phoneNumber,jdbcType=VARCHAR},
+      email = #{row.email,jdbcType=VARCHAR},
+      email_subscription = #{row.emailSubscription,jdbcType=INTEGER},
+      status = #{row.status,jdbcType=VARCHAR},
+      verified_status = #{row.verifiedStatus,jdbcType=INTEGER},
+      delete_status = #{row.deleteStatus,jdbcType=INTEGER},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      last_login = #{row.lastLogin,jdbcType=TIMESTAMP},
+      source_type = #{row.sourceType,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -293,7 +293,7 @@
         email_subscription = #{emailSubscription,jdbcType=INTEGER},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="verifiedStatus != null">
         verified_status = #{verifiedStatus,jdbcType=INTEGER},
@@ -321,7 +321,7 @@
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       email_subscription = #{emailSubscription,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
       verified_status = #{verifiedStatus,jdbcType=INTEGER},
       delete_status = #{deleteStatus,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},

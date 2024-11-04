@@ -129,26 +129,26 @@
   <update id="updateByExampleSelective" parameterType="map">
     update member_icon
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=INTEGER},
+      <if test="row.memberId != null">
+        member_id = #{row.memberId,jdbcType=INTEGER},
       </if>
-      <if test="record.filename != null">
-        filename = #{record.filename,jdbcType=VARCHAR},
+      <if test="row.filename != null">
+        filename = #{row.filename,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update member_icon
-    set id = #{record.id,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=INTEGER},
-      filename = #{record.filename,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      member_id = #{row.memberId,jdbcType=INTEGER},
+      filename = #{row.filename,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

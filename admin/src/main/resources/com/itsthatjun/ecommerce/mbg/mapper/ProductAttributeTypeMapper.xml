@@ -129,26 +129,26 @@
   <update id="updateByExampleSelective" parameterType="map">
     update product_attribute_type
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.attributeCategoryId != null">
-        attribute_category_id = #{record.attributeCategoryId,jdbcType=INTEGER},
+      <if test="row.attributeCategoryId != null">
+        attribute_category_id = #{row.attributeCategoryId,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="row.name != null">
+        name = #{row.name,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update product_attribute_type
-    set id = #{record.id,jdbcType=INTEGER},
-      attribute_category_id = #{record.attributeCategoryId,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      attribute_category_id = #{row.attributeCategoryId,jdbcType=INTEGER},
+      name = #{row.name,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

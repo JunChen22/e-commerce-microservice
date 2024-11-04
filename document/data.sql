@@ -120,73 +120,72 @@ DROP TABLE IF EXISTS brand CASCADE;
 CREATE TABLE brand (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    alphabet TEXT,
+    slug TEXT UNIQUE,  -- Add slug for SEO-friendly URLs
     logo TEXT,
     publish_status publish_status_enum DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO brand(name, alphabet, logo, publish_status)
+INSERT INTO brand(name, slug, logo, publish_status)
 VALUES
 -- phone/computer/electronic brand
-('Apple', 'A', 'apple.jpg', 'published'),
-('Samsung', 'S', 'samsung.jpg', 'published'),
-('Google', 'G', 'google.jpg', 'published'),
-('OnePlus', 'O', 'OnePlus.jpg', 'published'),
-('Lenovo', 'L', 'lenovo.jpg', 'published'),
-('ASUS', 'A', 'asus.jpg', 'published'),
-('Acer', 'A', 'acer.jpg', 'published'),
-('Alienware', 'A', 'alienware.jpg', 'published'),
-('Razer', 'R', 'razer.jpg', 'published'),
-('Microsoft', 'M', 'microsoft.jpg', 'published'),
-('Dell', 'D', 'dell.jpg', 'published'),
-('HP', 'H', 'hp.jpg', 'published'),
-('MSI', 'M', 'msi.jpg', 'published'),
+('Apple', 'apple', 'apple.jpg', 'published'),
+('Samsung', 'samsung', 'samsung.jpg', 'published'),
+('Google', 'google', 'google.jpg', 'published'),
+('OnePlus', 'oneplus', 'OnePlus.jpg', 'published'),
+('Lenovo', 'lenovo', 'lenovo.jpg', 'published'),
+('ASUS', 'asus', 'asus.jpg', 'published'),
+('Acer', 'acer', 'acer.jpg', 'published'),
+('Alienware', 'alienware', 'alienware.jpg', 'published'),
+('Razer', 'razer', 'razer.jpg', 'published'),
+('Microsoft', 'microsoft', 'microsoft.jpg', 'published'),
+('Dell', 'dell', 'dell.jpg', 'published'),
+('HP', 'hp', 'hp.jpg', 'published'),
+('MSI', 'msi', 'msi.jpg', 'published'),
 
 -- electrics
-('Anker', 'A', 'anker.jpg', 'published'),
-('Fitbit', 'F', 'fitbit.jpg', 'published'),
-('SanDisk', 'S', 'sandisk.jpg', 'published'),
-('Tile', 'T', 'tile.jpg', 'published'),
+('Anker', 'anker', 'anker.jpg', 'published'),
+('Fitbit', 'fitbit', 'fitbit.jpg', 'published'),
+('SanDisk', 'sandisk', 'sandisk.jpg', 'published'),
+('Tile', 'tile', 'tile.jpg', 'published'),
 
 -- video and audio
-('GoPro', 'G', 'gopro.jpg', 'published'),
-('Logitech', 'L', 'logitech.jpg', 'published'),
-('JBL', 'J', 'jbl.jpg', 'published'),
-('UE', 'U', 'ue.jpg', 'published'),
+('GoPro', 'gopro', 'gopro.jpg', 'published'),
+('Logitech', 'logitech', 'logitech.jpg', 'published'),
+('JBL', 'jbl', 'jbl.jpg', 'published'),
+('UE', 'ue', 'ue.jpg', 'published'),
 
 -- clothing brand
-('Gucci', 'G', 'gucci.jpg', 'published'),
-('Nike', 'N', 'nike.jpg', 'published'),
-('Adidas', 'A', 'adidas.jpg', 'published'),
-('Gucci', 'G', 'gucci.jpg', 'published'),
-('Zara', 'Z', 'zara.jpg', 'published'),
-('HM', 'H', 'hm.jpg', 'published'),
-('Levis', 'L', 'levis.jpg', 'published'),
-('Calvin Klein', 'C', 'calvinklein.jpg', 'published'),
-('Versace', 'V', 'versace.jpg', 'published'),
+('Gucci', 'gucci', 'gucci.jpg', 'published'),
+('Nike', 'nike', 'nike.jpg', 'published'),
+('Adidas', 'adidas', 'adidas.jpg', 'published'),
+('Zara', 'zara', 'zara.jpg', 'published'),
+('HM', 'hm', 'hm.jpg', 'published'),
+('Levis', 'levis', 'levis.jpg', 'published'),
+('Calvin Klein', 'calvin-klein', 'calvinklein.jpg', 'published'),
+('Versace', 'versace', 'versace.jpg', 'published'),
 
 -- health and beauty brand
-('Nivea', 'N', 'nivea.jpg', 'published'),
-('Dove', 'D', 'dove.jpg', 'published'),
-('Cetaphil', 'C', 'cetaphil.jpg', 'published'),
-('Neutrogena', 'N', 'neutrogena.jpg', 'published'),
-('Aveeno', 'A', 'aveeno.jpg', 'published'),
-('Olay', 'O', 'olay.jpg', 'published'),
+('Nivea', 'nivea', 'nivea.jpg', 'published'),
+('Dove', 'dove', 'dove.jpg', 'published'),
+('Cetaphil', 'cetaphil', 'cetaphil.jpg', 'published'),
+('Neutrogena', 'neutrogena', 'neutrogena.jpg', 'published'),
+('Aveeno', 'aveeno', 'aveeno.jpg', 'published'),
+('Olay', 'olay', 'olay.jpg', 'published'),
 
 -- books
-('Penguin Books', 'P', 'penguinbooks.jpg', 'published'),
-('HarperCollins', 'H', 'harpercollins.jpg', 'published'),
-('Random House', 'R', 'randomhouse.jpg', 'published'),
-('Book', 'B', 'book.jpg', 'published'),
+('Penguin Books', 'penguin-books', 'penguinbooks.jpg', 'published'),
+('HarperCollins', 'harpercollins', 'harpercollins.jpg', 'published'),
+('Random House', 'random-house', 'randomhouse.jpg', 'published'),
+('Book', 'book', 'book.jpg', 'published'),
 
 -- etc
-('Coca-Cola', 'C', 'cocacola.jpg', 'published'),
--- kitchen
-('Zojirushi', 'Z', 'zojirushi.jpg', 'published'),
-('Yeti', 'Y', 'yeti.jpg', 'published');
+('Coca-Cola', 'coca-cola', 'cocacola.jpg', 'published'),
 
+-- kitchen
+('Zojirushi', 'zojirushi', 'zojirushi.jpg', 'published'),
+('Yeti', 'yeti', 'yeti.jpg', 'published');
 
 DROP TABLE IF EXISTS brand_update_log;
 CREATE TABLE brand_update_log (
@@ -496,7 +495,7 @@ CREATE TABLE product (
     verify_status verification_status_enum default 'not_verified',
     sub_title TEXT,
     cover_picture TEXT,           --  preview picture, for like list all, search all picture when getting specific
-    picture_album INTEGER,           -- collection of pictures
+    picture_album INTEGER,           -- collection of picture
     description TEXT,
     original_price DECIMAL(10, 2),
     on_sale_status INTEGER DEFAULT 0,  --  0 -> not on sale; 1 -> is on sale; 2 -> flash sale/special sales/clarance/used item
@@ -510,59 +509,59 @@ CREATE TABLE product (
     detail_desc TEXT,
     description_album_id INTEGER,
     delete_status BOOLEAN DEFAULT FALSE , -- soft delete, 0 -> product not deleted; 1 -> product deleted, record purpose
-    publish_status INTEGER DEFAULT 0, -- 0 -> product is not published; 1 -> product is published, to temporary stop sale.
+    publish_status publish_status_enum DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     note TEXT
 );
 
 -- Insert data into the product table
-INSERT INTO product (brand_id, brand_name, name, slug, category_id, category_name, attribute_category_id, sn, sub_title, cover_picture, picture_album, description, original_price, on_sale_status, sale_price, stock, low_stock, unit_sold, weight, keywords, detail_title, detail_desc, description_album_id)
+INSERT INTO product (brand_id, brand_name, name, slug, category_id, category_name, attribute_category_id, sn, sub_title, cover_picture, picture_album, description, original_price, on_sale_status, sale_price, stock, low_stock, unit_sold, weight, keywords, detail_title, detail_desc, description_album_id, publish_status)
 VALUES
 -- electronics
-(1, 'Apple', 'iPhone 12', 'iphone-12', 15, 'Smartphones', 9, 'SN-123', 'Powerful and sleek', 'iphone12.jpg', 1, 'The iPhone 12 is the latest flagship smartphone from Apple.', 899.99, 0, 899.99, 100, 10, 50, 150, 'Apple, iPhone, smartphone', 'Product Details', 'Explore the amazing features of the iPhone 12.', 2),
-(1, 'Apple', 'iPhone SE', 'iphone-se', 15, 'Smartphones', 9, 'SN-456', 'Compact and affordable', 'iphoneSE.jpg', 3, 'The iPhone SE packs power and performance into a compact design.', 499.99, 0, 499.99, 50, 5, 30, 120, 'Apple, iPhone, smartphone', 'Product Details', 'Discover the capabilities of the iPhone SE.', 4),
-(3, 'Google', 'Pixel 5', 'pixel-5', 15, 'Smartphones', 9, 'SN-345', 'Capture the perfect shot', 'pixel5.jpg', 5, 'The Pixel 5 features an exceptional camera and advanced AI capabilities.', 799.99, 0, 799.99, 80, 8, 40, 140, 'Google, Pixel, smartphone', 'Product Details', 'Capture stunning photos with the Pixel 5.', 6),
-(4, 'OnePlus', 'OnePlus 9 Pro', 'oneplus-9-pro', 15, 'Smartphones', 9, 'SN-789', 'Flagship performance', 'oneplus9Pro.jpg', 7, 'The OnePlus 9 Pro delivers exceptional performance and photography capabilities.', 1099.99, 0, 1099.99, 100, 10, 60, 180, 'OnePlus, smartphone', 'Product Details', 'Experience flagship performance with the OnePlus 9 Pro.', 8),
-(2, 'Samsung', 'Galaxy S21', 'galaxy-s21', 15, 'Smartphones', 9, 'SN-234', 'Powerful and feature-rich', 'galaxyS21.jpg', 9, 'The Galaxy S21 offers cutting-edge technology and a stunning display.', 1099.99, 0, 1099.99, 150, 15, 70, 170, 'Samsung, Galaxy, smartphone', 'Product Details', 'Experience the brilliance of the Galaxy S21.', 10),
+(1, 'Apple', 'iPhone 12', 'iphone-12', 15, 'Smartphones', 9, 'SN-123', 'Powerful and sleek', 'iphone12.jpg', 1, 'The iPhone 12 is the latest flagship smartphone from Apple.', 899.99, 0, 899.99, 100, 10, 50, 150, 'Apple, iPhone, smartphone', 'Product Details', 'Explore the amazing features of the iPhone 12.', 2, 'published'),
+(1, 'Apple', 'iPhone SE', 'iphone-se', 15, 'Smartphones', 9, 'SN-456', 'Compact and affordable', 'iphoneSE.jpg', 3, 'The iPhone SE packs power and performance into a compact design.', 499.99, 0, 499.99, 50, 5, 30, 120, 'Apple, iPhone, smartphone', 'Product Details', 'Discover the capabilities of the iPhone SE.', 4, 'published'),
+(3, 'Google', 'Pixel 5', 'pixel-5', 15, 'Smartphones', 9, 'SN-345', 'Capture the perfect shot', 'pixel5.jpg', 5, 'The Pixel 5 features an exceptional camera and advanced AI capabilities.', 799.99, 0, 799.99, 80, 8, 40, 140, 'Google, Pixel, smartphone', 'Product Details', 'Capture stunning photos with the Pixel 5.', 6, 'published'),
+(4, 'OnePlus', 'OnePlus 9 Pro', 'oneplus-9-pro', 15, 'Smartphones', 9, 'SN-789', 'Flagship performance', 'oneplus9Pro.jpg', 7, 'The OnePlus 9 Pro delivers exceptional performance and photography capabilities.', 1099.99, 0, 1099.99, 100, 10, 60, 180, 'OnePlus, smartphone', 'Product Details', 'Experience flagship performance with the OnePlus 9 Pro.', 8, 'published'),
+(2, 'Samsung', 'Galaxy S21', 'galaxy-s21', 15, 'Smartphones', 9, 'SN-234', 'Powerful and feature-rich', 'galaxyS21.jpg', 9, 'The Galaxy S21 offers cutting-edge technology and a stunning display.', 1099.99, 0, 1099.99, 150, 15, 70, 170, 'Samsung, Galaxy, smartphone', 'Product Details', 'Experience the brilliance of the Galaxy S21.', 10, 'published'),
 
-(1, 'Apple', 'AirPods Pro', 'airpods-pro', 21, 'Headphones', 15, 'SN-235', 'Immersive sound, active noise cancellation', 'airPodsPro.jpg', 11, 'The AirPods Pro deliver immersive sound and feature active noise cancellation for an enhanced audio experience.', 249.99, 0, 249.99, 200, 20, 150, 40, 'Apple, AirPods, headphones', 'Product Details', 'Enjoy immersive sound with the AirPods Pro.', 12),
-(1, 'Apple', 'AirPods 2', 'airpods-2', 21, 'Headphones', 15, 'SN-782', 'Immersive audio experience', 'airpods2.jpg', 13, 'The AirPods 2 deliver superior sound quality with active noise cancellation.', 249.99, 0, 249.99, 200, 20, 100, 50, 'Apple, AirPods, headphones', 'Product Details', 'Enjoy immersive audio with the AirPods Pro.', 14),
-(4, 'OnePlus', 'OnePlus Buds Pro', 'oneplus-buds-pro', 21, 'Headphones', 15, 'SN-012', 'Immersive audio experience', 'oneplusBudsPro.jpg', 15, 'The OnePlus Buds Pro offer immersive sound and advanced noise cancellation.', 149.99, 0, 149.99, 150, 15, 90, 30, 'OnePlus, earbuds, headphones', 'Product Details', 'Enjoy immersive audio with the OnePlus Buds Pro.', 16),
+(1, 'Apple', 'AirPods Pro', 'airpods-pro', 21, 'Headphones', 15, 'SN-235', 'Immersive sound, active noise cancellation', 'airPodsPro.jpg', 11, 'The AirPods Pro deliver immersive sound and feature active noise cancellation for an enhanced audio experience.', 249.99, 0, 249.99, 200, 20, 150, 40, 'Apple, AirPods, headphones', 'Product Details', 'Enjoy immersive sound with the AirPods Pro.', 12, 'published'),
+(1, 'Apple', 'AirPods 2', 'airpods-2', 21, 'Headphones', 15, 'SN-782', 'Immersive audio experience', 'airpods2.jpg', 13, 'The AirPods 2 deliver superior sound quality with active noise cancellation.', 249.99, 0, 249.99, 200, 20, 100, 50, 'Apple, AirPods, headphones', 'Product Details', 'Enjoy immersive audio with the AirPods Pro.', 14, 'published'),
+(4, 'OnePlus', 'OnePlus Buds Pro', 'oneplus-buds-pro', 21, 'Headphones', 15, 'SN-012', 'Immersive audio experience', 'oneplusBudsPro.jpg', 15, 'The OnePlus Buds Pro offer immersive sound and advanced noise cancellation.', 149.99, 0, 149.99, 150, 15, 90, 30, 'OnePlus, earbuds, headphones', 'Product Details', 'Enjoy immersive audio with the OnePlus Buds Pro.', 16, 'published'),
 
-(1, 'Apple', 'iPad Pro', 'ipad-pro', 19, 'Tablets', 13, 'SN-901', 'The ultimate iPad experience', 'iPadPro.jpg', 17, 'The iPad Pro offers the ultimate tablet experience with its powerful performance and stunning display.', 799.99, 0, 799.99, 150, 15, 100, 470, 'Apple, iPad, tablet', 'Product Details', 'Experience the ultimate tablet experience with the iPad Pro.', 18),
+(1, 'Apple', 'iPad Pro', 'ipad-pro', 19, 'Tablets', 13, 'SN-901', 'The ultimate iPad experience', 'iPadPro.jpg', 17, 'The iPad Pro offers the ultimate tablet experience with its powerful performance and stunning display.', 799.99, 0, 799.99, 150, 15, 100, 470, 'Apple, iPad, tablet', 'Product Details', 'Experience the ultimate tablet experience with the iPad Pro.', 18, 'published'),
 
-(4, 'OnePlus', 'OnePlus Watch', 'oneplus-watch', 20, 'Wearables', 14, 'SN-342', 'Stylish and smart', 'oneplusWatch.jpg', 19, 'The OnePlus Watch combines style and smart features for a seamless wearable experience.', 199.99, 0, 199.99, 80, 8, 50, 60, 'OnePlus, smartwatch', 'Product Details', 'Stay connected with the OnePlus Watch.', 20),
-(2, 'Samsung', 'Galaxy Watch 3', 'galaxy-watch-3', 20, 'Wearables', 14, 'SN-567', 'Stylish and functional', 'galaxyWatch3.jpg', 21, 'The Galaxy Watch 3 combines style and functionality for a smart wearable experience.', 349.99, 0, 349.99, 100, 10, 50, 90, 'Samsung, Galaxy, smartwatch', 'Product Details', 'Stay connected with the Galaxy Watch 3.', 22),
+(4, 'OnePlus', 'OnePlus Watch', 'oneplus-watch', 20, 'Wearables', 14, 'SN-342', 'Stylish and smart', 'oneplusWatch.jpg', 19, 'The OnePlus Watch combines style and smart features for a seamless wearable experience.', 199.99, 0, 199.99, 80, 8, 50, 60, 'OnePlus, smartwatch', 'Product Details', 'Stay connected with the OnePlus Watch.', 20, 'published'),
+(2, 'Samsung', 'Galaxy Watch 3', 'galaxy-watch-3', 20, 'Wearables', 14, 'SN-567', 'Stylish and functional', 'galaxyWatch3.jpg', 21, 'The Galaxy Watch 3 combines style and functionality for a smart wearable experience.', 349.99, 0, 349.99, 100, 10, 50, 90, 'Samsung, Galaxy, smartwatch', 'Product Details', 'Stay connected with the Galaxy Watch 3.', 22, 'published'),
 
-(2, 'Samsung', 'T5 Portable SSD', 't5-portable-ssd', 22, 'Storage', 16, 'SN-890', 'Fast and portable storage', 't5PortableSSD.jpg', 23, 'The T5 Portable SSD offers fast and secure storage for your data on the go.', 179.99, 0, 179.99, 250, 25, 120, 200, 'Samsung, SSD, storage', 'Product Details', 'Store and transfer your data with the T5 Portable SSD.', 24),
+(2, 'Samsung', 'T5 Portable SSD', 't5-portable-ssd', 22, 'Storage', 16, 'SN-890', 'Fast and portable storage', 't5PortableSSD.jpg', 23, 'The T5 Portable SSD offers fast and secure storage for your data on the go.', 179.99, 0, 179.99, 250, 25, 120, 200, 'Samsung, SSD, storage', 'Product Details', 'Store and transfer your data with the T5 Portable SSD.', 24, 'published'),
 
-(1, 'Apple', 'MacBook Pro', 'macbook-pro', 17, 'Laptop', 11, 'SN-678', 'Powerful performance, sleek design', 'macBookPro.jpg', 25, 'The MacBook Pro combines powerful performance with a sleek design, making it the perfect choice for professionals.', 1999.99, 0, 1999.99, 80, 8, 40, 170, 'Apple, MacBook, laptop', 'Product Details', 'Unleash your creativity with the MacBook Pro.', 26),
-(11, 'Dell', 'XPS 13', 'xps-13', 17, 'Laptop', 11, 'SN-452', 'Compact and powerful', 'xps13.jpg', 27, 'The XPS 13 is a compact and powerful laptop that delivers exceptional performance in a sleek design.', 1399.99, 0, 1399.99, 150, 15, 90, 110, 'Dell, XPS, laptop', 'Product Details', 'Experience power and portability with the XPS 13.', 28),
-(5, 'Lenovo', 'ThinkPad X1 Carbon', 'thinkpad-x1-carbon', 17, 'Laptop', 11, 'SN-125', 'Powerful and lightweight', 'thinkpadX1Carbon.jpg', 29, 'The ThinkPad X1 Carbon is a powerful and lightweight laptop designed for professionals.', 1499.99, 0, 1499.99, 200, 20, 100, 120, 'Lenovo, ThinkPad, laptop', 'Product Details', 'Experience the power of the ThinkPad X1 Carbon.', 30),
-(5, 'Lenovo', 'Yoga C940', 'yoga-c940', 17, 'Laptop', 11, 'SN-453', 'Versatile and stylish', 'yogaC940.jpg', 31, 'The Yoga C940 is a versatile and stylish 2-in-1 laptop with impressive performance.', 1299.99, 0, 1299.99, 150, 15, 80, 140, 'Lenovo, Yoga, laptop', 'Product Details', 'Unleash your creativity with the Yoga C940.', 32),
-(5, 'Lenovo', 'IdeaPad Gaming 3', 'ideapad-gaming-3', 17, 'Laptop', 11, 'SN-785', 'Powerful gaming performance', 'ideapadGaming3.jpg', 33, 'The IdeaPad Gaming 3 is a powerful gaming laptop that delivers exceptional performance.', 999.99, 0, 999.99, 100, 10, 50, 180, 'Lenovo, IdeaPad, gaming laptop', 'Product Details', 'Immerse yourself in the world of gaming with the IdeaPad Gaming 3.', 34),
-(8, 'Alienware', 'Alienware m15 R5', 'alienware-m15-r5', 17, 'Laptop', 11, 'SN-902', 'Unleash gaming supremacy', 'alienwarem15R5.jpg', 35, 'The Alienware m15 R5 is a gaming laptop that delivers unrivaled gaming performance.', 1999.99, 0, 1999.99, 80, 8, 50, 230, 'Alienware, gaming laptop', 'Product Details', 'Experience gaming supremacy with the Alienware m15 R5.', 36),
+(1, 'Apple', 'MacBook Pro', 'macbook-pro', 17, 'Laptop', 11, 'SN-678', 'Powerful performance, sleek design', 'macBookPro.jpg', 25, 'The MacBook Pro combines powerful performance with a sleek design, making it the perfect choice for professionals.', 1999.99, 0, 1999.99, 80, 8, 40, 170, 'Apple, MacBook, laptop', 'Product Details', 'Unleash your creativity with the MacBook Pro.', 26, 'published'),
+(11, 'Dell', 'XPS 13', 'xps-13', 17, 'Laptop', 11, 'SN-452', 'Compact and powerful', 'xps13.jpg', 27, 'The XPS 13 is a compact and powerful laptop that delivers exceptional performance in a sleek design.', 1399.99, 0, 1399.99, 150, 15, 90, 110, 'Dell, XPS, laptop', 'Product Details', 'Experience power and portability with the XPS 13.', 28, 'published'),
+(5, 'Lenovo', 'ThinkPad X1 Carbon', 'thinkpad-x1-carbon', 17, 'Laptop', 11, 'SN-125', 'Powerful and lightweight', 'thinkpadX1Carbon.jpg', 29, 'The ThinkPad X1 Carbon is a powerful and lightweight laptop designed for professionals.', 1499.99, 0, 1499.99, 200, 20, 100, 120, 'Lenovo, ThinkPad, laptop', 'Product Details', 'Experience the power of the ThinkPad X1 Carbon.', 30, 'published'),
+(5, 'Lenovo', 'Yoga C940', 'yoga-c940', 17, 'Laptop', 11, 'SN-453', 'Versatile and stylish', 'yogaC940.jpg', 31, 'The Yoga C940 is a versatile and stylish 2-in-1 laptop with impressive performance.', 1299.99, 0, 1299.99, 150, 15, 80, 140, 'Lenovo, Yoga, laptop', 'Product Details', 'Unleash your creativity with the Yoga C940.', 32, 'published'),
+(5, 'Lenovo', 'IdeaPad Gaming 3', 'ideapad-gaming-3', 17, 'Laptop', 11, 'SN-785', 'Powerful gaming performance', 'ideapadGaming3.jpg', 33, 'The IdeaPad Gaming 3 is a powerful gaming laptop that delivers exceptional performance.', 999.99, 0, 999.99, 100, 10, 50, 180, 'Lenovo, IdeaPad, gaming laptop', 'Product Details', 'Immerse yourself in the world of gaming with the IdeaPad Gaming 3.', 34, 'published'),
+(8, 'Alienware', 'Alienware m15 R5', 'alienware-m15-r5', 17, 'Laptop', 11, 'SN-902', 'Unleash gaming supremacy', 'alienwarem15R5.jpg', 35, 'The Alienware m15 R5 is a gaming laptop that delivers unrivaled gaming performance.', 1999.99, 0, 1999.99, 80, 8, 50, 230, 'Alienware, gaming laptop', 'Product Details', 'Experience gaming supremacy with the Alienware m15 R5.', 36, 'published'),
 
-(10, 'Microsoft', 'Xbox Series X', 'xbox-series-x', 18, 'Video Games and Consoles', 12, 'SN-126', 'Next-generation gaming', 'xboxSeriesX.jpg', 37, 'The Xbox Series X offers next-generation gaming with its powerful performance and immersive gaming experiences.', 499.99, 0, 499.99, 80, 8, 50, 4000, 'Microsoft, Xbox, gaming console', 'Product Details', 'Enter the next generation of gaming with the Xbox Series X.', 38),
+(10, 'Microsoft', 'Xbox Series X', 'xbox-series-x', 18, 'Video Games and Consoles', 12, 'SN-126', 'Next-generation gaming', 'xboxSeriesX.jpg', 37, 'The Xbox Series X offers next-generation gaming with its powerful performance and immersive gaming experiences.', 499.99, 0, 499.99, 80, 8, 50, 4000, 'Microsoft, Xbox, gaming console', 'Product Details', 'Enter the next generation of gaming with the Xbox Series X.', 38, 'published'),
 
-(11, 'Dell', 'Dell UltraSharp U2720Q', 'dell-ultrasharp-u2720q', 23, 'Monitors', 17, 'SN-016', 'Exceptional color accuracy', 'dellUltraSharpU2720Q.jpg', 39, 'The Dell UltraSharp U2720Q is a professional-grade monitor that offers exceptional color accuracy for precise image reproduction.', 599.99, 0, 599.99, 120, 12, 70, 630, 'Dell, UltraSharp, monitor', 'Product Details', 'Experience exceptional color accuracy with the Dell UltraSharp U2720Q.', 40),
+(11, 'Dell', 'Dell UltraSharp U2720Q', 'dell-ultrasharp-u2720q', 23, 'Monitors', 17, 'SN-016', 'Exceptional color accuracy', 'dellUltraSharpU2720Q.jpg', 39, 'The Dell UltraSharp U2720Q is a professional-grade monitor that offers exceptional color accuracy for precise image reproduction.', 599.99, 0, 599.99, 120, 12, 70, 630, 'Dell, UltraSharp, monitor', 'Product Details', 'Experience exceptional color accuracy with the Dell UltraSharp U2720Q.', 40, 'published'),
 
 -- sneakers/shoes
-(23, 'Nike', 'Nike Air Max 270', 'nike-air-max-270', 8, 'Men shoes', 2, 'SN-001', 'Iconic design and comfort', 'nikeAirMax270.jpg', 41, 'Experience iconic design and unmatched comfort with the Nike Air Max 270 sneakers.', 129.99, 0, 129.99, 100, 10, 50, 500, 'Nike, Air Max, sneakers', 'Product Details', 'Step up your style game with the Nike Air Max 270.', 42),
-(23, 'Nike', 'Nike ZoomX Vaporfly NEXT', 'nike-zoomx-vaporfly-next', 8, 'Men shoes', 2, 'SN-003', 'Unmatched speed and performance', 'nikeZoomXVaporfly.jpg', 43, 'The Nike ZoomX Vaporfly NEXT% provides unmatched speed and performance for professional runners.', 249.99, 0, 249.99, 80, 8, 30, 350, 'Nike, ZoomX Vaporfly, sneakers', 'Product Details', 'Take your running to the next level with the Nike ZoomX Vaporfly NEXT.', 44),
-(24, 'Adidas', 'Adidas Ultra Boost', 'adidas-ultra-boost', 8, 'Men shoes', 2, 'SN-004', 'Ultimate comfort and style', 'adidasUltraBoost.jpg', 45, 'Experience ultimate comfort and style with the Adidas Ultra Boost sneakers.', 149.99, 0, 149.99, 150, 15, 60, 450, 'Adidas, Ultra Boost, sneakers', 'Product Details', 'Elevate your sneaker game with the Adidas Ultra Boost.', 46),
-(24, 'Adidas', 'Adidas Adilette Slides', 'adidas-adilette-slides', 9, 'Women shoes ', 3, 'SN-006', 'Casual and comfortable', 'adidasAdiletteSlides.jpg', 47, 'The Adidas Adilette Slides are casual and comfortable sandals perfect for lounging or post-workout relaxation.', 29.99, 0, 29.99, 200, 20, 120, 150, 'Adidas, Adilette, slides, sandals', 'Product Details', 'Slip into comfort with the Adidas Adilette Slides.', 48),
+(23, 'Nike', 'Nike Air Max 270', 'nike-air-max-270', 8, 'Men shoes', 2, 'SN-001', 'Iconic design and comfort', 'nikeAirMax270.jpg', 41, 'Experience iconic design and unmatched comfort with the Nike Air Max 270 sneakers.', 129.99, 0, 129.99, 100, 10, 50, 500, 'Nike, Air Max, sneakers', 'Product Details', 'Step up your style game with the Nike Air Max 270.', 42, 'published'),
+(23, 'Nike', 'Nike ZoomX Vaporfly NEXT', 'nike-zoomx-vaporfly-next', 8, 'Men shoes', 2, 'SN-003', 'Unmatched speed and performance', 'nikeZoomXVaporfly.jpg', 43, 'The Nike ZoomX Vaporfly NEXT% provides unmatched speed and performance for professional runners.', 249.99, 0, 249.99, 80, 8, 30, 350, 'Nike, ZoomX Vaporfly, sneakers', 'Product Details', 'Take your running to the next level with the Nike ZoomX Vaporfly NEXT.', 44, 'published'),
+(24, 'Adidas', 'Adidas Ultra Boost', 'adidas-ultra-boost', 8, 'Men shoes', 2, 'SN-004', 'Ultimate comfort and style', 'adidasUltraBoost.jpg', 45, 'Experience ultimate comfort and style with the Adidas Ultra Boost sneakers.', 149.99, 0, 149.99, 150, 15, 60, 450, 'Adidas, Ultra Boost, sneakers', 'Product Details', 'Elevate your sneaker game with the Adidas Ultra Boost.', 46, 'published'),
+(24, 'Adidas', 'Adidas Adilette Slides', 'adidas-adilette-slides', 9, 'Women shoes ', 3, 'SN-006', 'Casual and comfortable', 'adidasAdiletteSlides.jpg', 47, 'The Adidas Adilette Slides are casual and comfortable sandals perfect for lounging or post-workout relaxation.', 29.99, 0, 29.99, 200, 20, 120, 150, 'Adidas, Adilette, slides, sandals', 'Product Details', 'Slip into comfort with the Adidas Adilette Slides.', 48, 'published'),
 
 -- clothing
-(23, 'Nike', 'Nike Dri-FIT T-Shirt', 'nike-dri-fit-t-shirt', 7, 'Men clothing', 1, 'SN-002', 'Stay cool and comfortable', 'nikeDriFitShirt.jpg', 49, 'The Nike Dri-FIT T-Shirt keeps you cool and comfortable during your workouts or everyday activities.', 29.99, 0, 29.99, 200, 20, 100, 200, 'Nike, Dri-FIT, t-shirt', 'Product Details', 'Upgrade your wardrobe with the Nike Dri-FIT T-Shirt.', 50),
-(29, 'Calvin Klein', 'Calvin Klein Logo T-Shirt', 'calvin-klein-logo-t-shirt', 7, 'Men clothing', 1, 'SN-008', 'Classic and timeless', 'calvinKleinLogoShirt.jpg', 51, 'The Calvin Klein Logo T-Shirt features a classic and timeless design that adds style to any outfit.', 39.99, 0, 39.99, 100, 10, 70, 250, 'Calvin Klein, logo t-shirt, clothing', 'Product Details', 'Make a statement with the Calvin Klein Logo T-Shirt.', 52),
-(24, 'Adidas', 'Adidas Essential Track Pants', 'adidas-essential-track-pants', 7, 'Men clothing', 1, 'SN-005', 'Sporty and versatile', 'adidasTrackPants.jpg', 53, 'The Adidas Essential Track Pants offer a sporty and versatile option for your everyday activities.', 49.99, 0, 49.99, 100, 10, 80, 300, 'Adidas, track pants, clothing', 'Product Details', 'Stay comfortable and stylish with the Adidas Essential Track Pants.', 54),
+(23, 'Nike', 'Nike Dri-FIT T-Shirt', 'nike-dri-fit-t-shirt', 7, 'Men clothing', 1, 'SN-002', 'Stay cool and comfortable', 'nikeDriFitShirt.jpg', 49, 'The Nike Dri-FIT T-Shirt keeps you cool and comfortable during your workouts or everyday activities.', 29.99, 0, 29.99, 200, 20, 100, 200, 'Nike, Dri-FIT, t-shirt', 'Product Details', 'Upgrade your wardrobe with the Nike Dri-FIT T-Shirt.', 50, 'published'),
+(29, 'Calvin Klein', 'Calvin Klein Logo T-Shirt', 'calvin-klein-logo-t-shirt', 7, 'Men clothing', 1, 'SN-008', 'Classic and timeless', 'calvinKleinLogoShirt.jpg', 51, 'The Calvin Klein Logo T-Shirt features a classic and timeless design that adds style to any outfit.', 39.99, 0, 39.99, 100, 10, 70, 250, 'Calvin Klein, logo t-shirt, clothing', 'Product Details', 'Make a statement with the Calvin Klein Logo T-Shirt.', 52, 'published'),
+(24, 'Adidas', 'Adidas Essential Track Pants', 'adidas-essential-track-pants', 7, 'Men clothing', 1, 'SN-005', 'Sporty and versatile', 'adidasTrackPants.jpg', 53, 'The Adidas Essential Track Pants offer a sporty and versatile option for your everyday activities.', 49.99, 0, 49.99, 100, 10, 80, 300, 'Adidas, track pants, clothing', 'Product Details', 'Stay comfortable and stylish with the Adidas Essential Track Pants.', 54, 'published'),
 
 -- Books
-(40, 'Books', 'The Great Gatsby', 'the-great-gatsby', 13, 'Books', 7, 'SN-010', 'A classic tale of wealth and obsession', 'greatGatsby.jpg', 55, 'The Great Gatsby is a classic novel that explores themes of wealth, love, and the American Dream.', 14.99, 0, 14.99, 200, 20, 150, 300, 'The Great Gatsby, novel, literature', 'Product Details', 'Immerse yourself in the world of The Great Gatsby.', 56),
-(40, 'Books', 'To Kill a Mockingbird', 'to-kill-a-mockingbird', 13, 'Books', 7, 'SN-011', 'A powerful story of racial injustice and compassion', 'toKillAMockingbird.jpg', 57, 'To Kill a Mockingbird is a powerful novel that addresses themes of racial injustice and the power of compassion.', 12.99, 0, 12.99, 150, 15, 120, 250, 'To Kill a Mockingbird, novel, literature', 'Product Details', 'Experience the impact of To Kill a Mockingbird.', 58),
-(40, 'Books', 'Harry Potter and the Sorcerer''s Stone', 'harry-potter-and-the-sorcerers-stone', 13, 'Books', 7, 'SN-017', 'The beginning of a magical journey', 'harryPotterSorcerersStone.jpg', 59, 'Harry Potter and the Sorcerer''s Stone is the first book in the Harry Potter series, introducing readers to the magical world of Hogwarts.', 19.99, 0, 19.99, 100, 10, 200, 400, 'Harry Potter, Sorcerer''s Stone, fantasy, literature', 'Product Details', 'Embark on a magical journey with Harry Potter and the Sorcerer''s Stone.', 60);
+(40, 'Books', 'The Great Gatsby', 'the-great-gatsby', 13, 'Books', 7, 'SN-010', 'A classic tale of wealth and obsession', 'greatGatsby.jpg', 55, 'The Great Gatsby is a classic novel that explores themes of wealth, love, and the American Dream.', 14.99, 0, 14.99, 200, 20, 150, 300, 'The Great Gatsby, novel, literature', 'Product Details', 'Immerse yourself in the world of The Great Gatsby.', 56, 'published'),
+(40, 'Books', 'To Kill a Mockingbird', 'to-kill-a-mockingbird', 13, 'Books', 7, 'SN-011', 'A powerful story of racial injustice and compassion', 'toKillAMockingbird.jpg', 57, 'To Kill a Mockingbird is a powerful novel that addresses themes of racial injustice and the power of compassion.', 12.99, 0, 12.99, 150, 15, 120, 250, 'To Kill a Mockingbird, novel, literature', 'Product Details', 'Experience the impact of To Kill a Mockingbird.', 58, 'published'),
+(40, 'Books', 'Harry Potter and the Sorcerer''s Stone', 'harry-potter-and-the-sorcerers-stone', 13, 'Books', 7, 'SN-017', 'The beginning of a magical journey', 'harryPotterSorcerersStone.jpg', 59, 'Harry Potter and the Sorcerer''s Stone is the first book in the Harry Potter series, introducing readers to the magical world of Hogwarts.', 19.99, 0, 19.99, 100, 10, 200, 400, 'Harry Potter, Sorcerer''s Stone, fantasy, literature', 'Product Details', 'Embark on a magical journey with Harry Potter and the Sorcerer''s Stone.', 60, 'published');
 
 
 -- A product SKU (Stock Keeping Unit) is a unique identifier assigned to a specific product variant to facilitate inventory management, tracking, and sales analysis.
@@ -1026,15 +1025,15 @@ VALUES
 ('description pic', 30, 'https://i.imgur.com/AaevbdO.png', 'album description');
 
 
-DROP TABLE IF EXISTS product_pictures;
-CREATE TABLE product_pictures (
+DROP TABLE IF EXISTS product_album_picture;
+CREATE TABLE product_album_picture (
     id SERIAL PRIMARY KEY,
     product_album_id INTEGER NOT NULL,
     filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO product_pictures (product_album_id, filename)
+INSERT INTO product_album_picture (product_album_id, filename)
 VALUES
 (1, 'https://i.imgur.com/hFS4omM.png'),
 (1, 'https://i.imgur.com/1CwQZDS.jpeg'),
@@ -1165,7 +1164,7 @@ CREATE TABLE review (
     star INTEGER,
     tittle TEXT,
     likes DECIMAL(10, 1) DEFAULT 1,
-    verified INTEGER,
+    verify_status verification_status_enum DEFAULT 'not_verified',
     content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -1208,15 +1207,15 @@ VALUES
 (10, 2);
 
 
-DROP TABLE IF EXISTS review_pictures;
-CREATE TABLE review_pictures (
+DROP TABLE IF EXISTS review_album_picture;
+CREATE TABLE review_album_picture (
     id SERIAL PRIMARY KEY,
     review_album_id INTEGER NOT NULL,
     filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO review_pictures (review_album_id, filename)
+INSERT INTO review_album_picture (review_album_id, filename)
 VALUES
 (1, 'https://i.imgur.com/rzocQcD.jpeg'),
 (1, 'https://i.imgur.com/LUszOiA.jpeg'),
@@ -1972,15 +1971,15 @@ VALUES
 (5, 300, 1005, 'OR555555', 501, 'SKU008', 2);
 
 
-DROP TABLE IF EXISTS return_reason_pictures;
-CREATE TABLE return_reason_pictures (
+DROP TABLE IF EXISTS return_reason_picture;
+CREATE TABLE return_reason_picture (
     id SERIAL PRIMARY KEY,
     return_request_id INTEGER NOT NULL,
     filename VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO return_reason_pictures (return_request_id, filename)
+INSERT INTO return_reason_picture (return_request_id, filename)
 VALUES
 (1, 'https://i.imgur.com/zNGBoLk.jpeg'),
 (1, 'https://i.imgur.com/DebpKZa.png'),

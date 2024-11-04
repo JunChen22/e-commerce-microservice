@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service.impl;
 
-import com.itsthatjun.ecommerce.model.EmailTemplates;
+import com.itsthatjun.ecommerce.model.entity.EmailTemplates;
 import com.itsthatjun.ecommerce.repository.EmailTemplatesRepository;
 import com.itsthatjun.ecommerce.service.TemplateService;
 import org.slf4j.Logger;

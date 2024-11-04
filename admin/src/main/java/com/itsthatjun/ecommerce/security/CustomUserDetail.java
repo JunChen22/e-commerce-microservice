@@ -35,13 +35,13 @@ public class CustomUserDetail implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
         // Add authorities for permissions
         authorities.addAll(permissionList.stream()
-                .filter(permission -> permission.getPermissionKey() != null && permission.getStatus() == 1)
+                .filter(permission -> permission.getPermissionKey() != null && permission.getStatus().equals("active"))
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermissionKey()))
                 .collect(Collectors.toList()));
 
         // Add authorities for roles
         authorities.addAll(rolesList.stream()
-                .filter(role -> role.getStatus() == 1)
+                .filter(role -> role.getStatus().equals("active"))
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList()));
 

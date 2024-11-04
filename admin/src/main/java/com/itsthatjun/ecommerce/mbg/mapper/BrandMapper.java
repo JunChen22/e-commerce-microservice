@@ -12,19 +12,19 @@ public interface BrandMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Brand record);
+    int insert(Brand row);
 
-    int insertSelective(Brand record);
+    int insertSelective(Brand row);
 
     List<Brand> selectByExample(BrandExample example);
 
     Brand selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Brand record, @Param("example") BrandExample example);
+    int updateByExampleSelective(@Param("row") Brand row, @Param("example") BrandExample example);
 
-    int updateByExample(@Param("record") Brand record, @Param("example") BrandExample example);
+    int updateByExample(@Param("row") Brand row, @Param("example") BrandExample example);
 
-    int updateByPrimaryKeySelective(Brand record);
+    int updateByPrimaryKeySelective(Brand row);
 
-    int updateByPrimaryKey(Brand record);
+    int updateByPrimaryKey(Brand row);
 }

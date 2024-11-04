@@ -12,19 +12,19 @@ public interface OrderItemMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(OrderItem record);
+    int insert(OrderItem row);
 
-    int insertSelective(OrderItem record);
+    int insertSelective(OrderItem row);
 
     List<OrderItem> selectByExample(OrderItemExample example);
 
     OrderItem selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") OrderItem record, @Param("example") OrderItemExample example);
+    int updateByExampleSelective(@Param("row") OrderItem row, @Param("example") OrderItemExample example);
 
-    int updateByExample(@Param("record") OrderItem record, @Param("example") OrderItemExample example);
+    int updateByExample(@Param("row") OrderItem row, @Param("example") OrderItemExample example);
 
-    int updateByPrimaryKeySelective(OrderItem record);
+    int updateByPrimaryKeySelective(OrderItem row);
 
-    int updateByPrimaryKey(OrderItem record);
+    int updateByPrimaryKey(OrderItem row);
 }

@@ -145,34 +145,34 @@
   <update id="updateByExampleSelective" parameterType="map">
     update member_login_log
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=INTEGER},
+      <if test="row.memberId != null">
+        member_id = #{row.memberId,jdbcType=INTEGER},
       </if>
-      <if test="record.loginTime != null">
-        login_time = #{record.loginTime,jdbcType=TIMESTAMP},
+      <if test="row.loginTime != null">
+        login_time = #{row.loginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.ipAddress != null">
-        ip_address = #{record.ipAddress,jdbcType=VARCHAR},
+      <if test="row.ipAddress != null">
+        ip_address = #{row.ipAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.loginType != null">
-        login_type = #{record.loginType,jdbcType=VARCHAR},
+      <if test="row.loginType != null">
+        login_type = #{row.loginType,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update member_login_log
-    set id = #{record.id,jdbcType=INTEGER},
-      member_id = #{record.memberId,jdbcType=INTEGER},
-      login_time = #{record.loginTime,jdbcType=TIMESTAMP},
-      ip_address = #{record.ipAddress,jdbcType=VARCHAR},
-      login_type = #{record.loginType,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      member_id = #{row.memberId,jdbcType=INTEGER},
+      login_time = #{row.loginTime,jdbcType=TIMESTAMP},
+      ip_address = #{row.ipAddress,jdbcType=VARCHAR},
+      login_type = #{row.loginType,jdbcType=VARCHAR}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

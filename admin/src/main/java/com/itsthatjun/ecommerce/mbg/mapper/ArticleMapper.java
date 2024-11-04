@@ -12,19 +12,19 @@ public interface ArticleMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Article record);
+    int insert(Article row);
 
-    int insertSelective(Article record);
+    int insertSelective(Article row);
 
     List<Article> selectByExample(ArticleExample example);
 
     Article selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Article record, @Param("example") ArticleExample example);
+    int updateByExampleSelective(@Param("row") Article row, @Param("example") ArticleExample example);
 
-    int updateByExample(@Param("record") Article record, @Param("example") ArticleExample example);
+    int updateByExample(@Param("row") Article row, @Param("example") ArticleExample example);
 
-    int updateByPrimaryKeySelective(Article record);
+    int updateByPrimaryKeySelective(Article row);
 
-    int updateByPrimaryKey(Article record);
+    int updateByPrimaryKey(Article row);
 }

@@ -12,19 +12,19 @@ public interface AdminPermissionRelationMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(AdminPermissionRelation record);
+    int insert(AdminPermissionRelation row);
 
-    int insertSelective(AdminPermissionRelation record);
+    int insertSelective(AdminPermissionRelation row);
 
     List<AdminPermissionRelation> selectByExample(AdminPermissionRelationExample example);
 
     AdminPermissionRelation selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") AdminPermissionRelation record, @Param("example") AdminPermissionRelationExample example);
+    int updateByExampleSelective(@Param("row") AdminPermissionRelation row, @Param("example") AdminPermissionRelationExample example);
 
-    int updateByExample(@Param("record") AdminPermissionRelation record, @Param("example") AdminPermissionRelationExample example);
+    int updateByExample(@Param("row") AdminPermissionRelation row, @Param("example") AdminPermissionRelationExample example);
 
-    int updateByPrimaryKeySelective(AdminPermissionRelation record);
+    int updateByPrimaryKeySelective(AdminPermissionRelation row);
 
-    int updateByPrimaryKey(AdminPermissionRelation record);
+    int updateByPrimaryKey(AdminPermissionRelation row);
 }

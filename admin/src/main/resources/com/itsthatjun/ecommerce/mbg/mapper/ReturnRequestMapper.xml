@@ -10,7 +10,7 @@
     <result column="return_quantity" jdbcType="INTEGER" property="returnQuantity" />
     <result column="return_name" jdbcType="VARCHAR" property="returnName" />
     <result column="return_phone" jdbcType="VARCHAR" property="returnPhone" />
-    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="return_status" jdbcType="VARCHAR" property="returnStatus" />
     <result column="handle_time" jdbcType="TIMESTAMP" property="handleTime" />
     <result column="asking_amount" jdbcType="NUMERIC" property="askingAmount" />
     <result column="refunded_amount" jdbcType="NUMERIC" property="refundedAmount" />
@@ -84,9 +84,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, order_id, company_address_id, order_sn, member_id, return_quantity, return_name, 
-    return_phone, status, handle_time, asking_amount, refunded_amount, reason, description, 
-    handle_note, handle_operator, receive_operator, receive_time, receive_note, created_at, 
-    updated_at
+    return_phone, return_status, handle_time, asking_amount, refunded_amount, reason, 
+    description, handle_note, handle_operator, receive_operator, receive_time, receive_note, 
+    created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnRequestExample" resultMap="BaseResultMap">
     select
@@ -121,14 +121,14 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.ReturnRequest" useGeneratedKeys="true">
     insert into return_request (order_id, company_address_id, order_sn, 
       member_id, return_quantity, return_name, 
-      return_phone, status, handle_time, 
+      return_phone, return_status, handle_time, 
       asking_amount, refunded_amount, reason, 
       description, handle_note, handle_operator, 
       receive_operator, receive_time, receive_note, 
       created_at, updated_at)
     values (#{orderId,jdbcType=INTEGER}, #{companyAddressId,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, 
       #{memberId,jdbcType=INTEGER}, #{returnQuantity,jdbcType=INTEGER}, #{returnName,jdbcType=VARCHAR}, 
-      #{returnPhone,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{handleTime,jdbcType=TIMESTAMP}, 
+      #{returnPhone,jdbcType=VARCHAR}, #{returnStatus,jdbcType=VARCHAR}, #{handleTime,jdbcType=TIMESTAMP}, 
       #{askingAmount,jdbcType=NUMERIC}, #{refundedAmount,jdbcType=NUMERIC}, #{reason,jdbcType=VARCHAR}, 
       #{description,jdbcType=VARCHAR}, #{handleNote,jdbcType=VARCHAR}, #{handleOperator,jdbcType=VARCHAR}, 
       #{receiveOperator,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, #{receiveNote,jdbcType=VARCHAR}, 
@@ -158,8 +158,8 @@
       <if test="returnPhone != null">
         return_phone,
       </if>
-      <if test="status != null">
-        status,
+      <if test="returnStatus != null">
+        return_status,
       </if>
       <if test="handleTime != null">
         handle_time,
@@ -220,8 +220,8 @@
       <if test="returnPhone != null">
         #{returnPhone,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
+      <if test="returnStatus != null">
+        #{returnStatus,jdbcType=VARCHAR},
       </if>
       <if test="handleTime != null">
         #{handleTime,jdbcType=TIMESTAMP},
@@ -270,98 +270,98 @@
   <update id="updateByExampleSelective" parameterType="map">
     update return_request
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=INTEGER},
+      <if test="row.orderId != null">
+        order_id = #{row.orderId,jdbcType=INTEGER},
       </if>
-      <if test="record.companyAddressId != null">
-        company_address_id = #{record.companyAddressId,jdbcType=INTEGER},
+      <if test="row.companyAddressId != null">
+        company_address_id = #{row.companyAddressId,jdbcType=INTEGER},
       </if>
-      <if test="record.orderSn != null">
-        order_sn = #{record.orderSn,jdbcType=VARCHAR},
+      <if test="row.orderSn != null">
+        order_sn = #{row.orderSn,jdbcType=VARCHAR},
       </if>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=INTEGER},
+      <if test="row.memberId != null">
+        member_id = #{row.memberId,jdbcType=INTEGER},
       </if>
-      <if test="record.returnQuantity != null">
-        return_quantity = #{record.returnQuantity,jdbcType=INTEGER},
+      <if test="row.returnQuantity != null">
+        return_quantity = #{row.returnQuantity,jdbcType=INTEGER},
       </if>
-      <if test="record.returnName != null">
-        return_name = #{record.returnName,jdbcType=VARCHAR},
+      <if test="row.returnName != null">
+        return_name = #{row.returnName,jdbcType=VARCHAR},
       </if>
-      <if test="record.returnPhone != null">
-        return_phone = #{record.returnPhone,jdbcType=VARCHAR},
+      <if test="row.returnPhone != null">
+        return_phone = #{row.returnPhone,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
+      <if test="row.returnStatus != null">
+        return_status = #{row.returnStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.handleTime != null">
-        handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+      <if test="row.handleTime != null">
+        handle_time = #{row.handleTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.askingAmount != null">
-        asking_amount = #{record.askingAmount,jdbcType=NUMERIC},
+      <if test="row.askingAmount != null">
+        asking_amount = #{row.askingAmount,jdbcType=NUMERIC},
       </if>
-      <if test="record.refundedAmount != null">
-        refunded_amount = #{record.refundedAmount,jdbcType=NUMERIC},
+      <if test="row.refundedAmount != null">
+        refunded_amount = #{row.refundedAmount,jdbcType=NUMERIC},
       </if>
-      <if test="record.reason != null">
-        reason = #{record.reason,jdbcType=VARCHAR},
+      <if test="row.reason != null">
+        reason = #{row.reason,jdbcType=VARCHAR},
       </if>
-      <if test="record.description != null">
-        description = #{record.description,jdbcType=VARCHAR},
+      <if test="row.description != null">
+        description = #{row.description,jdbcType=VARCHAR},
       </if>
-      <if test="record.handleNote != null">
-        handle_note = #{record.handleNote,jdbcType=VARCHAR},
+      <if test="row.handleNote != null">
+        handle_note = #{row.handleNote,jdbcType=VARCHAR},
       </if>
-      <if test="record.handleOperator != null">
-        handle_operator = #{record.handleOperator,jdbcType=VARCHAR},
+      <if test="row.handleOperator != null">
+        handle_operator = #{row.handleOperator,jdbcType=VARCHAR},
       </if>
-      <if test="record.receiveOperator != null">
-        receive_operator = #{record.receiveOperator,jdbcType=VARCHAR},
+      <if test="row.receiveOperator != null">
+        receive_operator = #{row.receiveOperator,jdbcType=VARCHAR},
       </if>
-      <if test="record.receiveTime != null">
-        receive_time = #{record.receiveTime,jdbcType=TIMESTAMP},
+      <if test="row.receiveTime != null">
+        receive_time = #{row.receiveTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.receiveNote != null">
-        receive_note = #{record.receiveNote,jdbcType=VARCHAR},
+      <if test="row.receiveNote != null">
+        receive_note = #{row.receiveNote,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update return_request
-    set id = #{record.id,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
-      company_address_id = #{record.companyAddressId,jdbcType=INTEGER},
-      order_sn = #{record.orderSn,jdbcType=VARCHAR},
-      member_id = #{record.memberId,jdbcType=INTEGER},
-      return_quantity = #{record.returnQuantity,jdbcType=INTEGER},
-      return_name = #{record.returnName,jdbcType=VARCHAR},
-      return_phone = #{record.returnPhone,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER},
-      handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
-      asking_amount = #{record.askingAmount,jdbcType=NUMERIC},
-      refunded_amount = #{record.refundedAmount,jdbcType=NUMERIC},
-      reason = #{record.reason,jdbcType=VARCHAR},
-      description = #{record.description,jdbcType=VARCHAR},
-      handle_note = #{record.handleNote,jdbcType=VARCHAR},
-      handle_operator = #{record.handleOperator,jdbcType=VARCHAR},
-      receive_operator = #{record.receiveOperator,jdbcType=VARCHAR},
-      receive_time = #{record.receiveTime,jdbcType=TIMESTAMP},
-      receive_note = #{record.receiveNote,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      order_id = #{row.orderId,jdbcType=INTEGER},
+      company_address_id = #{row.companyAddressId,jdbcType=INTEGER},
+      order_sn = #{row.orderSn,jdbcType=VARCHAR},
+      member_id = #{row.memberId,jdbcType=INTEGER},
+      return_quantity = #{row.returnQuantity,jdbcType=INTEGER},
+      return_name = #{row.returnName,jdbcType=VARCHAR},
+      return_phone = #{row.returnPhone,jdbcType=VARCHAR},
+      return_status = #{row.returnStatus,jdbcType=VARCHAR},
+      handle_time = #{row.handleTime,jdbcType=TIMESTAMP},
+      asking_amount = #{row.askingAmount,jdbcType=NUMERIC},
+      refunded_amount = #{row.refundedAmount,jdbcType=NUMERIC},
+      reason = #{row.reason,jdbcType=VARCHAR},
+      description = #{row.description,jdbcType=VARCHAR},
+      handle_note = #{row.handleNote,jdbcType=VARCHAR},
+      handle_operator = #{row.handleOperator,jdbcType=VARCHAR},
+      receive_operator = #{row.receiveOperator,jdbcType=VARCHAR},
+      receive_time = #{row.receiveTime,jdbcType=TIMESTAMP},
+      receive_note = #{row.receiveNote,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -389,8 +389,8 @@
       <if test="returnPhone != null">
         return_phone = #{returnPhone,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
+      <if test="returnStatus != null">
+        return_status = #{returnStatus,jdbcType=VARCHAR},
       </if>
       <if test="handleTime != null">
         handle_time = #{handleTime,jdbcType=TIMESTAMP},
@@ -440,7 +440,7 @@
       return_quantity = #{returnQuantity,jdbcType=INTEGER},
       return_name = #{returnName,jdbcType=VARCHAR},
       return_phone = #{returnPhone,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
+      return_status = #{returnStatus,jdbcType=VARCHAR},
       handle_time = #{handleTime,jdbcType=TIMESTAMP},
       asking_amount = #{askingAmount,jdbcType=NUMERIC},
       refunded_amount = #{refundedAmount,jdbcType=NUMERIC},

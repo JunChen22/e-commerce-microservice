@@ -1,28 +1,37 @@
 package com.itsthatjun.ecommerce.service;
 
-import com.itsthatjun.ecommerce.model.entity.Brand;
-import com.itsthatjun.ecommerce.model.entity.Product;
-import io.swagger.annotations.ApiOperation;
+import com.itsthatjun.ecommerce.dto.model.BrandDTO;
+import com.itsthatjun.ecommerce.dto.model.ProductDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface BrandService {
 
-    @ApiOperation("")
-    Flux<Brand> listAllBrand(int pageNum, int pageSize);
+    /**
+     * list all brands
+     * @return list all brands
+     */
+    Flux<BrandDTO> listAllBrand();
 
-    @ApiOperation("")
-    Flux<Product> listAllBrandProduct(int brandId);
+    /**
+     * list all brands with pagination
+     * @param pageNum page number
+     * @param pageSize page size
+     * @return list of brands
+     */
+    Flux<BrandDTO> listBrand(int pageNum, int pageSize);
 
-    @ApiOperation("")
-    Mono<Brand> getBrand(int id);
+    /**
+     * list all products of a brand
+     * @param slug brand slug
+     * @return list of products
+     */
+    Flux<ProductDTO> listAllBrandProduct(String slug);
 
-    @ApiOperation("")
-    Mono<Brand> adminCreateBrand(Brand brand, String operator);
-
-    @ApiOperation("")
-    Mono<Brand> adminUpdateBrand(Brand brand, String operator);
-
-    @ApiOperation("")
-    Mono<Void> adminDeleteBrand(int brandId, String operator);
+    /**
+     * get brand by id
+     * @param slug brand slug
+     * @return brand
+     */
+    Mono<BrandDTO> getBrand(String slug);
 }

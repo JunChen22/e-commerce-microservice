@@ -12,19 +12,19 @@ public interface CouponMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Coupon record);
+    int insert(Coupon row);
 
-    int insertSelective(Coupon record);
+    int insertSelective(Coupon row);
 
     List<Coupon> selectByExample(CouponExample example);
 
     Coupon selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Coupon record, @Param("example") CouponExample example);
+    int updateByExampleSelective(@Param("row") Coupon row, @Param("example") CouponExample example);
 
-    int updateByExample(@Param("record") Coupon record, @Param("example") CouponExample example);
+    int updateByExample(@Param("row") Coupon row, @Param("example") CouponExample example);
 
-    int updateByPrimaryKeySelective(Coupon record);
+    int updateByPrimaryKeySelective(Coupon row);
 
-    int updateByPrimaryKey(Coupon record);
+    int updateByPrimaryKey(Coupon row);
 }

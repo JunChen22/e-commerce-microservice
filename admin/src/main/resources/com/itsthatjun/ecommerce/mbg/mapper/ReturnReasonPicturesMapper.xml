@@ -138,30 +138,30 @@
   <update id="updateByExampleSelective" parameterType="map">
     update return_reason_pictures
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.returnRequestId != null">
-        return_request_id = #{record.returnRequestId,jdbcType=INTEGER},
+      <if test="row.returnRequestId != null">
+        return_request_id = #{row.returnRequestId,jdbcType=INTEGER},
       </if>
-      <if test="record.filename != null">
-        filename = #{record.filename,jdbcType=VARCHAR},
+      <if test="row.filename != null">
+        filename = #{row.filename,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update return_reason_pictures
-    set id = #{record.id,jdbcType=INTEGER},
-      return_request_id = #{record.returnRequestId,jdbcType=INTEGER},
-      filename = #{record.filename,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      return_request_id = #{row.returnRequestId,jdbcType=INTEGER},
+      filename = #{row.filename,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

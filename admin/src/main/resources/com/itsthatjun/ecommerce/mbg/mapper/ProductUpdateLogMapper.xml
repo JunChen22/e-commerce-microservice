@@ -199,62 +199,62 @@
   <update id="updateByExampleSelective" parameterType="map">
     update product_update_log
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=INTEGER},
+      <if test="row.productId != null">
+        product_id = #{row.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.priceOld != null">
-        price_old = #{record.priceOld,jdbcType=NUMERIC},
+      <if test="row.priceOld != null">
+        price_old = #{row.priceOld,jdbcType=NUMERIC},
       </if>
-      <if test="record.priceNew != null">
-        price_new = #{record.priceNew,jdbcType=NUMERIC},
+      <if test="row.priceNew != null">
+        price_new = #{row.priceNew,jdbcType=NUMERIC},
       </if>
-      <if test="record.salePriceOld != null">
-        sale_price_old = #{record.salePriceOld,jdbcType=NUMERIC},
+      <if test="row.salePriceOld != null">
+        sale_price_old = #{row.salePriceOld,jdbcType=NUMERIC},
       </if>
-      <if test="record.salePriceNew != null">
-        sale_price_new = #{record.salePriceNew,jdbcType=NUMERIC},
+      <if test="row.salePriceNew != null">
+        sale_price_new = #{row.salePriceNew,jdbcType=NUMERIC},
       </if>
-      <if test="record.oldStock != null">
-        old_stock = #{record.oldStock,jdbcType=INTEGER},
+      <if test="row.oldStock != null">
+        old_stock = #{row.oldStock,jdbcType=INTEGER},
       </if>
-      <if test="record.addedStock != null">
-        added_stock = #{record.addedStock,jdbcType=INTEGER},
+      <if test="row.addedStock != null">
+        added_stock = #{row.addedStock,jdbcType=INTEGER},
       </if>
-      <if test="record.totalStock != null">
-        total_stock = #{record.totalStock,jdbcType=INTEGER},
+      <if test="row.totalStock != null">
+        total_stock = #{row.totalStock,jdbcType=INTEGER},
       </if>
-      <if test="record.updateAction != null">
-        update_action = #{record.updateAction,jdbcType=VARCHAR},
+      <if test="row.updateAction != null">
+        update_action = #{row.updateAction,jdbcType=VARCHAR},
       </if>
-      <if test="record.operator != null">
-        operator = #{record.operator,jdbcType=VARCHAR},
+      <if test="row.operator != null">
+        operator = #{row.operator,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update product_update_log
-    set id = #{record.id,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=INTEGER},
-      price_old = #{record.priceOld,jdbcType=NUMERIC},
-      price_new = #{record.priceNew,jdbcType=NUMERIC},
-      sale_price_old = #{record.salePriceOld,jdbcType=NUMERIC},
-      sale_price_new = #{record.salePriceNew,jdbcType=NUMERIC},
-      old_stock = #{record.oldStock,jdbcType=INTEGER},
-      added_stock = #{record.addedStock,jdbcType=INTEGER},
-      total_stock = #{record.totalStock,jdbcType=INTEGER},
-      update_action = #{record.updateAction,jdbcType=VARCHAR},
-      operator = #{record.operator,jdbcType=VARCHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      product_id = #{row.productId,jdbcType=INTEGER},
+      price_old = #{row.priceOld,jdbcType=NUMERIC},
+      price_new = #{row.priceNew,jdbcType=NUMERIC},
+      sale_price_old = #{row.salePriceOld,jdbcType=NUMERIC},
+      sale_price_new = #{row.salePriceNew,jdbcType=NUMERIC},
+      old_stock = #{row.oldStock,jdbcType=INTEGER},
+      added_stock = #{row.addedStock,jdbcType=INTEGER},
+      total_stock = #{row.totalStock,jdbcType=INTEGER},
+      update_action = #{row.updateAction,jdbcType=VARCHAR},
+      operator = #{row.operator,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

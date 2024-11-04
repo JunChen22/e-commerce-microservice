@@ -176,50 +176,50 @@
   <update id="updateByExampleSelective" parameterType="map">
     update return_item
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.returnRequestId != null">
-        return_request_id = #{record.returnRequestId,jdbcType=INTEGER},
+      <if test="row.returnRequestId != null">
+        return_request_id = #{row.returnRequestId,jdbcType=INTEGER},
       </if>
-      <if test="record.brandId != null">
-        brand_id = #{record.brandId,jdbcType=INTEGER},
+      <if test="row.brandId != null">
+        brand_id = #{row.brandId,jdbcType=INTEGER},
       </if>
-      <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=INTEGER},
+      <if test="row.orderId != null">
+        order_id = #{row.orderId,jdbcType=INTEGER},
       </if>
-      <if test="record.orderSn != null">
-        order_sn = #{record.orderSn,jdbcType=VARCHAR},
+      <if test="row.orderSn != null">
+        order_sn = #{row.orderSn,jdbcType=VARCHAR},
       </if>
-      <if test="record.productId != null">
-        product_id = #{record.productId,jdbcType=INTEGER},
+      <if test="row.productId != null">
+        product_id = #{row.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.productSku != null">
-        product_sku = #{record.productSku,jdbcType=VARCHAR},
+      <if test="row.productSku != null">
+        product_sku = #{row.productSku,jdbcType=VARCHAR},
       </if>
-      <if test="record.purchasedPrice != null">
-        purchased_price = #{record.purchasedPrice,jdbcType=NUMERIC},
+      <if test="row.purchasedPrice != null">
+        purchased_price = #{row.purchasedPrice,jdbcType=NUMERIC},
       </if>
-      <if test="record.quantity != null">
-        quantity = #{record.quantity,jdbcType=INTEGER},
+      <if test="row.quantity != null">
+        quantity = #{row.quantity,jdbcType=INTEGER},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update return_item
-    set id = #{record.id,jdbcType=INTEGER},
-      return_request_id = #{record.returnRequestId,jdbcType=INTEGER},
-      brand_id = #{record.brandId,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
-      order_sn = #{record.orderSn,jdbcType=VARCHAR},
-      product_id = #{record.productId,jdbcType=INTEGER},
-      product_sku = #{record.productSku,jdbcType=VARCHAR},
-      purchased_price = #{record.purchasedPrice,jdbcType=NUMERIC},
-      quantity = #{record.quantity,jdbcType=INTEGER}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      return_request_id = #{row.returnRequestId,jdbcType=INTEGER},
+      brand_id = #{row.brandId,jdbcType=INTEGER},
+      order_id = #{row.orderId,jdbcType=INTEGER},
+      order_sn = #{row.orderSn,jdbcType=VARCHAR},
+      product_id = #{row.productId,jdbcType=INTEGER},
+      product_sku = #{row.productSku,jdbcType=VARCHAR},
+      purchased_price = #{row.purchasedPrice,jdbcType=NUMERIC},
+      quantity = #{row.quantity,jdbcType=INTEGER}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>

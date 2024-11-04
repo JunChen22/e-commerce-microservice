@@ -1,10 +1,13 @@
 package com.itsthatjun.ecommerce.dto.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
 public class ProductAttributeDTO {
-    Map<String, String> attribute;      // attribute name to value+unit. 'storage capacity' : '128 GB'.  [attributeName : att_value + " " + att_unit]
+    // attribute name to value+unit. 'storage capacity' : '128 GB'.  [attributeName : att_value + " " + att_unit]
+    private Map<String, String> attribute;
 }

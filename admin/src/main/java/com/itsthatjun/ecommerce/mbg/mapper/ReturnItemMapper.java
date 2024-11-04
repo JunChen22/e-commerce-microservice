@@ -12,19 +12,19 @@ public interface ReturnItemMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ReturnItem record);
+    int insert(ReturnItem row);
 
-    int insertSelective(ReturnItem record);
+    int insertSelective(ReturnItem row);
 
     List<ReturnItem> selectByExample(ReturnItemExample example);
 
     ReturnItem selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ReturnItem record, @Param("example") ReturnItemExample example);
+    int updateByExampleSelective(@Param("row") ReturnItem row, @Param("example") ReturnItemExample example);
 
-    int updateByExample(@Param("record") ReturnItem record, @Param("example") ReturnItemExample example);
+    int updateByExample(@Param("row") ReturnItem row, @Param("example") ReturnItemExample example);
 
-    int updateByPrimaryKeySelective(ReturnItem record);
+    int updateByPrimaryKeySelective(ReturnItem row);
 
-    int updateByPrimaryKey(ReturnItem record);
+    int updateByPrimaryKey(ReturnItem row);
 }

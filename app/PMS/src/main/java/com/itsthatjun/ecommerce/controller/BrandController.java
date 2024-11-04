@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.controller;
 
-import com.itsthatjun.ecommerce.model.entity.Brand;
-import com.itsthatjun.ecommerce.model.entity.Product;
+import com.itsthatjun.ecommerce.dto.model.BrandDTO;
+import com.itsthatjun.ecommerce.dto.model.ProductDTO;
 import com.itsthatjun.ecommerce.service.impl.BrandServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,20 +24,26 @@ public class BrandController {
 
     @GetMapping("/listAll")
     @ApiOperation(value = "List all brands with page and size")
-    public Flux<Brand> listAllBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
-                                   @RequestParam(value = "size", defaultValue = "3") int pageSize) {
-        return brandService.listAllBrand(pageNum, pageSize);
+    public Flux<BrandDTO> listAllBrand() {
+        return brandService.listAllBrand();
     }
 
-    @GetMapping("/product/{brandId}")
+    @GetMapping("/listBrand")
+    @ApiOperation(value = "List all brands with page and size")
+    public Flux<BrandDTO> listBrand(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+                                    @RequestParam(value = "size", defaultValue = "3") int pageSize) {
+        return brandService.listBrand(pageNum, pageSize);
+    }
+
+    @GetMapping("/product/{slug}")
     @ApiOperation(value = "Get all product of this brand")
-    public Flux<Product> getBrandProduct(@PathVariable int brandId) {
-        return brandService.listAllBrandProduct(brandId);
+    public Flux<ProductDTO> getBrandProduct(@PathVariable String slug) {
+        return brandService.listAllBrandProduct(slug);
     }
 
-    @GetMapping("/{brandId}")
+    @GetMapping("/{slug}")
     @ApiOperation(value = "Get brand info")
-    public Mono<Brand> getBrand(@PathVariable int brandId) {
-        return brandService.getBrand(brandId);
+    public Mono<BrandDTO> getBrand(@PathVariable String slug) {
+        return brandService.getBrand(slug);
     }
 }

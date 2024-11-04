@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itsthatjun.ecommerce.mbg.mapper.ArticleMapper">
-  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.model.Article">
+  <resultMap id="BaseResultMap" type="com.itsthatjun.ecommerce.mbg.model.Article">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="slug" jdbcType="VARCHAR" property="slug" />
+    <result column="author_id" jdbcType="INTEGER" property="authorId" />
+    <result column="author_name" jdbcType="VARCHAR" property="authorName" />
     <result column="body" jdbcType="VARCHAR" property="body" />
-    <result column="publish_status" jdbcType="INTEGER" property="publishStatus" />
+    <result column="publish_status" jdbcType="VARCHAR" property="publishStatus" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
@@ -69,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, slug, body, publish_status, created_at, updated_at
+    id, title, slug, author_id, author_name, body, publish_status, created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.itsthatjun.ecommerce.mbg.model.ArticleExample" resultMap="BaseResultMap">
     select
@@ -101,15 +103,15 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.Article" useGeneratedKeys="true">
-    insert into article (title, slug, body, 
-      publish_status, created_at, updated_at
-      )
-    values (#{title,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, 
-      #{publishStatus,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Article" useGeneratedKeys="true">
+    insert into article (title, slug, author_id, 
+      author_name, body, publish_status, 
+      created_at, updated_at)
+    values (#{title,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR}, #{authorId,jdbcType=INTEGER}, 
+      #{authorName,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{publishStatus,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.model.Article" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.itsthatjun.ecommerce.mbg.model.Article" useGeneratedKeys="true">
     insert into article
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="title != null">
@@ -117,6 +119,12 @@
       </if>
       <if test="slug != null">
         slug,
+      </if>
+      <if test="authorId != null">
+        author_id,
+      </if>
+      <if test="authorName != null">
+        author_name,
       </if>
       <if test="body != null">
         body,
@@ -138,11 +146,17 @@
       <if test="slug != null">
         #{slug,jdbcType=VARCHAR},
       </if>
+      <if test="authorId != null">
+        #{authorId,jdbcType=INTEGER},
+      </if>
+      <if test="authorName != null">
+        #{authorName,jdbcType=VARCHAR},
+      </if>
       <if test="body != null">
         #{body,jdbcType=VARCHAR},
       </if>
       <if test="publishStatus != null">
-        #{publishStatus,jdbcType=INTEGER},
+        #{publishStatus,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         #{createdAt,jdbcType=TIMESTAMP},
@@ -161,46 +175,54 @@
   <update id="updateByExampleSelective" parameterType="map">
     update article
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=INTEGER},
       </if>
-      <if test="record.title != null">
-        title = #{record.title,jdbcType=VARCHAR},
+      <if test="row.title != null">
+        title = #{row.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.slug != null">
-        slug = #{record.slug,jdbcType=VARCHAR},
+      <if test="row.slug != null">
+        slug = #{row.slug,jdbcType=VARCHAR},
       </if>
-      <if test="record.body != null">
-        body = #{record.body,jdbcType=VARCHAR},
+      <if test="row.authorId != null">
+        author_id = #{row.authorId,jdbcType=INTEGER},
       </if>
-      <if test="record.publishStatus != null">
-        publish_status = #{record.publishStatus,jdbcType=INTEGER},
+      <if test="row.authorName != null">
+        author_name = #{row.authorName,jdbcType=VARCHAR},
       </if>
-      <if test="record.createdAt != null">
-        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      <if test="row.body != null">
+        body = #{row.body,jdbcType=VARCHAR},
       </if>
-      <if test="record.updatedAt != null">
-        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      <if test="row.publishStatus != null">
+        publish_status = #{row.publishStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createdAt != null">
+        created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updatedAt != null">
+        updated_at = #{row.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update article
-    set id = #{record.id,jdbcType=INTEGER},
-      title = #{record.title,jdbcType=VARCHAR},
-      slug = #{record.slug,jdbcType=VARCHAR},
-      body = #{record.body,jdbcType=VARCHAR},
-      publish_status = #{record.publishStatus,jdbcType=INTEGER},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
+    set id = #{row.id,jdbcType=INTEGER},
+      title = #{row.title,jdbcType=VARCHAR},
+      slug = #{row.slug,jdbcType=VARCHAR},
+      author_id = #{row.authorId,jdbcType=INTEGER},
+      author_name = #{row.authorName,jdbcType=VARCHAR},
+      body = #{row.body,jdbcType=VARCHAR},
+      publish_status = #{row.publishStatus,jdbcType=VARCHAR},
+      created_at = #{row.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{row.updatedAt,jdbcType=TIMESTAMP}
+    <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.model.Article">
+  <update id="updateByPrimaryKeySelective" parameterType="com.itsthatjun.ecommerce.mbg.model.Article">
     update article
     <set>
       <if test="title != null">
@@ -209,11 +231,17 @@
       <if test="slug != null">
         slug = #{slug,jdbcType=VARCHAR},
       </if>
+      <if test="authorId != null">
+        author_id = #{authorId,jdbcType=INTEGER},
+      </if>
+      <if test="authorName != null">
+        author_name = #{authorName,jdbcType=VARCHAR},
+      </if>
       <if test="body != null">
         body = #{body,jdbcType=VARCHAR},
       </if>
       <if test="publishStatus != null">
-        publish_status = #{publishStatus,jdbcType=INTEGER},
+        publish_status = #{publishStatus,jdbcType=VARCHAR},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -224,12 +252,14 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.model.Article">
+  <update id="updateByPrimaryKey" parameterType="com.itsthatjun.ecommerce.mbg.model.Article">
     update article
     set title = #{title,jdbcType=VARCHAR},
       slug = #{slug,jdbcType=VARCHAR},
+      author_id = #{authorId,jdbcType=INTEGER},
+      author_name = #{authorName,jdbcType=VARCHAR},
       body = #{body,jdbcType=VARCHAR},
-      publish_status = #{publishStatus,jdbcType=INTEGER},
+      publish_status = #{publishStatus,jdbcType=VARCHAR},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.PMS.impl;
 
-import com.itsthatjun.ecommerce.model.Brand;
-import com.itsthatjun.ecommerce.model.Product;
+import com.itsthatjun.ecommerce.dto.pms.model.BrandDTO;
+import com.itsthatjun.ecommerce.dto.pms.model.ProductDTO;
 import com.itsthatjun.ecommerce.service.PMS.BrandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,29 +28,38 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Flux<Brand> listAllBrand(int pageNum, int pageSize) {
-        String url = PMS_SERVICE_URL + "/list/" + "?pageNum=" + pageNum + "&pageSize=" + pageSize;
+    public Flux<BrandDTO> listAllBrand() {
+        String url = PMS_SERVICE_URL + "/listAll";
         LOG.debug("Will call the getAllBrand API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(Brand.class)
+        return webClient.get().uri(url).retrieve().bodyToFlux(BrandDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @Override
-    public Flux<Product> getBrandProduct(int brandId) {
+    public Flux<BrandDTO> listBrand(int pageNum, int pageSize) {
+        String url = PMS_SERVICE_URL + "/listBrand/" + "?pageNum=" + pageNum + "&pageSize=" + pageSize;
+        LOG.debug("Will call the getAllBrand API on URL: {}", url);
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(BrandDTO.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+    }
+
+    @Override
+    public Flux<ProductDTO> getBrandProduct(int brandId) {
         String url = PMS_SERVICE_URL + "/product/" + brandId;
         LOG.debug("Will call the getBrandProduct API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
+        return webClient.get().uri(url).retrieve().bodyToFlux(ProductDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @Override
-    public Mono<Brand> getBrand(int brandId) {
+    public Mono<BrandDTO> getBrand(int brandId) {
         String url = PMS_SERVICE_URL + "/" + brandId;
         LOG.debug("Will call the getBrand API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToMono(Brand.class)
+        return webClient.get().uri(url).retrieve().bodyToMono(BrandDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 }

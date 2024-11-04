@@ -12,19 +12,19 @@ public interface ReviewMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Review record);
+    int insert(Review row);
 
-    int insertSelective(Review record);
+    int insertSelective(Review row);
 
     List<Review> selectByExample(ReviewExample example);
 
     Review selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Review record, @Param("example") ReviewExample example);
+    int updateByExampleSelective(@Param("row") Review row, @Param("example") ReviewExample example);
 
-    int updateByExample(@Param("record") Review record, @Param("example") ReviewExample example);
+    int updateByExample(@Param("row") Review row, @Param("example") ReviewExample example);
 
-    int updateByPrimaryKeySelective(Review record);
+    int updateByPrimaryKeySelective(Review row);
 
-    int updateByPrimaryKey(Review record);
+    int updateByPrimaryKey(Review row);
 }

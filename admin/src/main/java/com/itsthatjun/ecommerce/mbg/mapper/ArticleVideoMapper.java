@@ -12,19 +12,19 @@ public interface ArticleVideoMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(ArticleVideo record);
+    int insert(ArticleVideo row);
 
-    int insertSelective(ArticleVideo record);
+    int insertSelective(ArticleVideo row);
 
     List<ArticleVideo> selectByExample(ArticleVideoExample example);
 
     ArticleVideo selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") ArticleVideo record, @Param("example") ArticleVideoExample example);
+    int updateByExampleSelective(@Param("row") ArticleVideo row, @Param("example") ArticleVideoExample example);
 
-    int updateByExample(@Param("record") ArticleVideo record, @Param("example") ArticleVideoExample example);
+    int updateByExample(@Param("row") ArticleVideo row, @Param("example") ArticleVideoExample example);
 
-    int updateByPrimaryKeySelective(ArticleVideo record);
+    int updateByPrimaryKeySelective(ArticleVideo row);
 
-    int updateByPrimaryKey(ArticleVideo record);
+    int updateByPrimaryKey(ArticleVideo row);
 }

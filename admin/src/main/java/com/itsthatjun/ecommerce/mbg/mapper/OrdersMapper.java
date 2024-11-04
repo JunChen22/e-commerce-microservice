@@ -12,19 +12,19 @@ public interface OrdersMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Orders record);
+    int insert(Orders row);
 
-    int insertSelective(Orders record);
+    int insertSelective(Orders row);
 
     List<Orders> selectByExample(OrdersExample example);
 
     Orders selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Orders record, @Param("example") OrdersExample example);
+    int updateByExampleSelective(@Param("row") Orders row, @Param("example") OrdersExample example);
 
-    int updateByExample(@Param("record") Orders record, @Param("example") OrdersExample example);
+    int updateByExample(@Param("row") Orders row, @Param("example") OrdersExample example);
 
-    int updateByPrimaryKeySelective(Orders record);
+    int updateByPrimaryKeySelective(Orders row);
 
-    int updateByPrimaryKey(Orders record);
+    int updateByPrimaryKey(Orders row);
 }
