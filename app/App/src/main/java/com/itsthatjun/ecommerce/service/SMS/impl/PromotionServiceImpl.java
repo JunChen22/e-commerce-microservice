@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.service.SMS.impl;
 
-import com.itsthatjun.ecommerce.model.Product;
-import com.itsthatjun.ecommerce.model.PromotionSale;
+import com.itsthatjun.ecommerce.dto.pms.model.ProductDTO;
 import com.itsthatjun.ecommerce.service.SMS.PromotionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,30 +25,30 @@ public class PromotionServiceImpl implements PromotionService {
         this.webClient = webClient;
     }
 
-    @Override
-    public Flux<PromotionSale> listAllPromotionSale() {
-        String url = SMS_SERVICE_URL + "/AllPromotionSale";
-        LOG.debug("Will call the getAllPromotionSale API on URL: {}", url);
+//    @Override
+//    public Flux<PromotionSale> listAllPromotionSale() {
+//        String url = SMS_SERVICE_URL + "/AllPromotionSale";
+//        LOG.debug("Will call the getAllPromotionSale API on URL: {}", url);
+//
+//        return webClient.get().uri(url).retrieve().bodyToFlux(PromotionSale.class)
+//                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+//    }
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(PromotionSale.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
-    }
-
     @Override
-    public Flux<Product> listAllPromotionSaleItem() {
+    public Flux<ProductDTO> listAllPromotionSaleItem() {
         String url = SMS_SERVICE_URL + "/AllPromotionSaleItem";
         LOG.debug("Will call the getAllPromotionSaleItem API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
+        return webClient.get().uri(url).retrieve().bodyToFlux(ProductDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 
     @Override
-    public Flux<Product> listAllFlashSaleItem() {
+    public Flux<ProductDTO> listAllFlashSaleItem() {
         String url = SMS_SERVICE_URL + "/AllFlashSaleItem";
         LOG.debug("Will call the getAllFlashSaleItem API on URL: {}", url);
 
-        return webClient.get().uri(url).retrieve().bodyToFlux(Product.class)
+        return webClient.get().uri(url).retrieve().bodyToFlux(ProductDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
     }
 }

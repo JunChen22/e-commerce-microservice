@@ -1,10 +1,11 @@
 package com.itsthatjun.ecommerce.dto.pms.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ReviewPictureDTO {
 
     private String filename;
-
 }

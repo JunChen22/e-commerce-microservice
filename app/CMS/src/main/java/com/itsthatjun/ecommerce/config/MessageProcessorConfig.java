@@ -25,25 +25,24 @@ public class MessageProcessorConfig {
 
     @Bean
     public Consumer<CmsAdminArticleEvent> articleMessageProcessor() {
-        // lambda expression of override method accept
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
             AdminArticleInfo articleInfo = event.getArticleInfo();
             String operator = event.getOperator();
 
             switch (event.getEventType()) {
-//                case CREATE:
-//                    articleService.createArticle(articleInfo, operator).subscribe();
-//                    break;
-//
-//                case UPDATE:
-//                    articleService.updateArticle(articleInfo, operator).subscribe();
-//                    break;
-//
-//                case DELETE:
-//                    int articleId = articleInfo.getId();
-//                    articleService.deleteArticle(articleId, operator).subscribe();
-//                    break;
+                case CREATE:
+                    articleService.createArticle(articleInfo, operator).subscribe();
+                    break;
+
+                case UPDATE:
+                    articleService.updateArticle(articleInfo, operator).subscribe();
+                    break;
+
+                case DELETE:
+                    int articleId = articleInfo.getId();
+                    articleService.deleteArticle(articleId, operator).subscribe();
+                    break;
 
                 default:
                     String errorMessage = "Incorrect event type:" + event.getEventType() + ", expected CREATE, " +

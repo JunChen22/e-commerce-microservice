@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service.PMS;
 
-import com.itsthatjun.ecommerce.dto.ProductReview;
+import com.itsthatjun.ecommerce.dto.pms.ProductReview;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

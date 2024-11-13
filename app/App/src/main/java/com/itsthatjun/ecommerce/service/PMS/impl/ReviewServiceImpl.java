@@ -1,8 +1,8 @@
 package com.itsthatjun.ecommerce.service.PMS.impl;
 
-import com.itsthatjun.ecommerce.dto.ProductReview;
+import com.itsthatjun.ecommerce.dto.pms.ProductReview;
 import com.itsthatjun.ecommerce.dto.event.pms.PmsReviewEvent;
-import com.itsthatjun.ecommerce.model.Review;
+import com.itsthatjun.ecommerce.dto.pms.model.ReviewDTO;
 import com.itsthatjun.ecommerce.service.PMS.ReviewService;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;
@@ -67,7 +67,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Mono<ProductReview> createProductReview(ProductReview newReview) {
         return Mono.fromCallable(() -> {
             int userId = userService.getUserId();
-            sendMessage("review-out-0", new PmsReviewEvent(CREATE_REVIEW, userId, newReview.getReview(), newReview.getPicturesList()));
+            sendMessage("review-out-0", new PmsReviewEvent(CREATE_REVIEW, userId, newReview));
             return newReview;
         }).subscribeOn(publishEventScheduler);
     }
@@ -76,7 +76,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Mono<ProductReview> updateProductReviews(ProductReview newReview) {
         return Mono.fromCallable(() -> {
             int userId = userService.getUserId();
-            sendMessage("review-out-0", new PmsReviewEvent(UPDATE_REVIEW, userId, newReview.getReview(), newReview.getPicturesList()));
+            sendMessage("review-out-0", new PmsReviewEvent(UPDATE_REVIEW, userId, newReview));
             return newReview;
         }).subscribeOn(publishEventScheduler);
     }
@@ -84,10 +84,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Mono<Void> deleteProductReviews(int reviewId) {
         int userId = userService.getUserId();
-        Review review = new Review();
-        review.setId(reviewId);
-        return Mono.fromRunnable(() -> {
-            sendMessage("review-out-0", new PmsReviewEvent(DELETE_REVIEW, userId, review, null));
+        return Mono.fromRunnable(() -> { // TODO:
+            sendMessage("review-out-0", new PmsReviewEvent(DELETE_REVIEW, userId, null));
         }).subscribeOn(publishEventScheduler).then();
     }
 

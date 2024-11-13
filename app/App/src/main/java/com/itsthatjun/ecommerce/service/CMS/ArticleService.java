@@ -1,7 +1,6 @@
 package com.itsthatjun.ecommerce.service.CMS;
 
 import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
-import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -11,8 +10,13 @@ public interface ArticleService {
      * List all articles
      * @return
      */
-    @ApiOperation(value = "List all articles")
     Flux<ArticleInfo> listAllArticles();
+
+    /**
+     * List all articles with pagination
+     * @return
+     */
+    Flux<ArticleInfo> listArticles(int page, int size);
 
     /**
      * Get article by slug

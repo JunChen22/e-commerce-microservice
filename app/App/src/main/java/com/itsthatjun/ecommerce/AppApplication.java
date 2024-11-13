@@ -27,7 +27,7 @@ public class AppApplication {
 
     @Autowired
     public AppApplication(
-            @Value("${app.threadPoolSize:2}") Integer threadPoolSize,
+            @Value("${app.threadPoolSize:4}") Integer threadPoolSize,
             @Value("${app.taskQueueSize:100}") Integer taskQueueSize,
             ReactorLoadBalancerExchangeFilterFunction lbFunction
     ) {

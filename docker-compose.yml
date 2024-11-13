@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  postgres:     # Used to create model for MybatisGenerator for app. and used by admin.
+  postgres:     # Used to create model for MybatisGenerator for admin.
     image: postgres:16-bullseye
     container_name: e-com_postgres
     restart: always

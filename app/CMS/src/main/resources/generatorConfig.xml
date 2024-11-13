@@ -34,6 +34,7 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="publish_status" javaType="com.itsthatjun.ecommerce.enums.status.PublishStatus" />
+            <columnOverride column="lifecycle_status" javaType="com.itsthatjun.ecommerce.enums.status.LifeCycleStatus" />
             <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
             <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>

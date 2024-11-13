@@ -1,8 +1,10 @@
 package com.itsthatjun.ecommerce.dto;
 
+import com.itsthatjun.ecommerce.dto.model.ArticleDTO;
 import com.itsthatjun.ecommerce.dto.model.ImageDTO;
 import com.itsthatjun.ecommerce.dto.model.QaDTO;
 import com.itsthatjun.ecommerce.dto.model.VideoDTO;
+import com.itsthatjun.ecommerce.model.AdminArticleInfo;
 import com.itsthatjun.ecommerce.model.entity.Article;
 import com.itsthatjun.ecommerce.model.entity.ArticleImage;
 import com.itsthatjun.ecommerce.model.entity.ArticleQa;
@@ -25,4 +27,18 @@ public interface DTOMapper {
     List<QaDTO> qasToQaDTOs(List<ArticleQa> articleQas);
 
     List<VideoDTO> videosToVideoDTOs(List<ArticleVideo> articleVideos);
+
+    /**
+     * AdminArticleInfo to Article
+     * @param adminArticleInfo
+     * @return
+     */
+    Article adminArticleInfoToArticle(AdminArticleInfo adminArticleInfo);
+
+    /**
+     * AdminArticleInfo to ArticleDTO
+     * @param adminArticleInfo
+     * @return
+     */
+    ArticleInfo adminArticleInfoToArticleDTO(AdminArticleInfo adminArticleInfo);
 }

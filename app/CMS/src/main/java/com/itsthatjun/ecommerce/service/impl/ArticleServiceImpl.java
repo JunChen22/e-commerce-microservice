@@ -52,11 +52,29 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Flux<ArticleInfo> listAllArticles() {
-
-        // TODO: Implement pagination for r2dbc
-        // optional:
-        // Pageable pageable = PageRequest.of(0, 10); // Pageable with 10 items per page
         return articleRepository.findAllByPublishStatus(PublishStatus.PUBLISHED.getValue())
+                .flatMap(article -> {
+                    int articleId = article.getId();
+                    ArticleInfo articleInfo = dtoMapper.articleToArticleDTO(article);
+                    Mono<List<ImageDTO>> imagesMono = fetchImagesForArticle(articleId);
+                    Mono<List<QaDTO>> qaMono = fetchQaForArticle(articleId);
+                    Mono<List<VideoDTO>> videosMono = fetchVideosForArticle(articleId);
+
+                    return Mono.zip(imagesMono, qaMono, videosMono)
+                            .map(tuple -> {
+                                articleInfo.setImages(tuple.getT1());
+                                articleInfo.setQA(tuple.getT2());
+                                articleInfo.setVideos(tuple.getT3());
+                                return articleInfo;  // Return the populated articleInfo
+                            });
+                })
+                .switchIfEmpty(Mono.error(new ArticleNotFoundException("No articles found."))); // Custom exception handling for empty result
+    }
+
+    @Override
+    public Flux<ArticleInfo> listArticles(int page, int size) {
+        int offset = page * size;
+        return articleRepository.findAllByPublishStatusWithPagination(PublishStatus.PUBLISHED.getValue(), offset, size)
                 .flatMap(article -> {
                     int articleId = article.getId();
                     ArticleInfo articleInfo = dtoMapper.articleToArticleDTO(article);
@@ -80,6 +98,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findBySlugAndPublishStatus(slug, PublishStatus.PUBLISHED.getValue()) // find
                 .flatMap(article -> {
                     int articleId = article.getId();
+                    System.out.println("Article ID: " + article.getBody());
                     ArticleInfo articleInfo = dtoMapper.articleToArticleDTO(article);
                     Mono<List<ImageDTO>> imagesMono = fetchImagesForArticle(articleId);
                     Mono<List<QaDTO>> qaMono = fetchQaForArticle(articleId);

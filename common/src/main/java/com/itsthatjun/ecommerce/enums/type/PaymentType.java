@@ -17,4 +17,20 @@ public enum PaymentType {
     public String getValue() {
         return value;
     }
+
+    /**
+     * Helper method to get the enum constant from a string value.
+     *
+     * @param status the string representation of the enum.
+     * @return the corresponding PaymentType enum.
+     * @throws IllegalArgumentException if the value does not correspond to any enum constant.
+     */
+    public static PaymentType fromString(String status) {
+        for (PaymentType paymentType : PaymentType.values()) {
+            if (paymentType.getValue().equalsIgnoreCase(status)) {
+                return paymentType;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant for value: " + status);
+    }
 }

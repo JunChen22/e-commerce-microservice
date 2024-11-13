@@ -1,9 +1,8 @@
 package com.itsthatjun.ecommerce.service.OMS.impl;
 
-import com.itsthatjun.ecommerce.dto.ReturnParam;
+import com.itsthatjun.ecommerce.dto.oms.ReturnParam;
 import com.itsthatjun.ecommerce.dto.event.oms.OmsReturnEvent;
 import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
-import com.itsthatjun.ecommerce.model.ReturnRequest;
 import com.itsthatjun.ecommerce.service.OMS.OrderReturnService;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;
@@ -74,11 +73,9 @@ public class OrderReturnServiceImpl implements OrderReturnService {
     public Mono<Void> cancelReturn(String orderSn) {
         return Mono.fromRunnable(() -> {
             int userId = userService.getUserId();
-            ReturnRequest returnRequest = new ReturnRequest();
+            ReturnParam returnRequest = new ReturnParam();
             returnRequest.setOrderSn(orderSn);
-            ReturnParam requestParam = new ReturnParam();
-            requestParam.setReturnRequest(returnRequest);
-            sendMessage("return-out-0", new OmsReturnEvent(CANCEL, userId, requestParam));
+            sendMessage("return-out-0", new OmsReturnEvent(CANCEL, userId, returnRequest));
         }).subscribeOn(publishEventScheduler).then();
     }
 

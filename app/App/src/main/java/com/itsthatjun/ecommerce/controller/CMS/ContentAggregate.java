@@ -27,6 +27,12 @@ public class ContentAggregate {
         return articleService.listAllArticles();
     }
 
+    @GetMapping("/list")
+    @ApiOperation(value = "Get all articles")
+    public Flux<ArticleInfo> listArticles(@RequestParam int page, @RequestParam int size) {
+        return articleService.listArticles(page, size);
+    }
+
     @GetMapping("/{slug}")
     @ApiOperation(value = "Get a article")
     public Mono<ArticleInfo> getArticle(@PathVariable String slug,

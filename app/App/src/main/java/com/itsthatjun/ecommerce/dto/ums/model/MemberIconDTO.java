@@ -1,8 +1,10 @@
 package com.itsthatjun.ecommerce.dto.ums.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class MemberIconDTO {
 
     private String filename;

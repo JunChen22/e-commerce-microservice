@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service.OMS;
 
-import com.itsthatjun.ecommerce.dto.ReturnParam;
+import com.itsthatjun.ecommerce.dto.oms.ReturnParam;
 import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Mono;

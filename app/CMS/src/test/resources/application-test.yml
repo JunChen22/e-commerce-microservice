@@ -12,11 +12,6 @@ logging:
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
     com.itsthatjun.ecommerce: DEBUG
 
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
 spring.cloud:
   function:   # can't have space between, tells spring which to use
     definition: articleMessageProcessor

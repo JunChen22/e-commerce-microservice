@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dto.event.oms;
 
-import com.itsthatjun.ecommerce.model.CartItem;
+import com.itsthatjun.ecommerce.dto.oms.model.CartItemDTO;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -19,10 +19,10 @@ public class OmsCartEvent {
 
     private final Type eventType;
     private final Integer userId;
-    private final CartItem cartItem;
+    private final CartItemDTO cartItem;
     private final ZonedDateTime eventCreatedAt;
 
-    public OmsCartEvent(Type eventType, Integer userId, CartItem cartItem) {
+    public OmsCartEvent(Type eventType, Integer userId, CartItemDTO cartItem) {
         this.eventType = eventType;
         this.userId = userId;
         this.cartItem = cartItem;

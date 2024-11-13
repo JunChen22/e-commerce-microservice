@@ -2,7 +2,6 @@ package com.itsthatjun.ecommerce.service.CMS.impl;
 
 import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
 import com.itsthatjun.ecommerce.service.CMS.ArticleService;
-import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -45,6 +44,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public Flux<ArticleInfo> listArticles(int page, int size) {
+        String url = CMS_SERVICE_URL + "/list" + "?page=" + page + "&size=" + size;
+        LOG.debug("Will call the getArticle API on URL: {}", url);
+
+        return webClient.get().uri(url).retrieve().bodyToFlux(ArticleInfo.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+    }
+
+    @Override
     @TimeLimiter(name = "genericTimeLimiter")
     @Retry(name = "genericRetry")
     @RateLimiter(name = "genericRateLimiter")
@@ -52,6 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
     public Mono<ArticleInfo> getArticle(String slug, int delay, int faultPercent) {
         URI url = UriComponentsBuilder.fromUriString(CMS_SERVICE_URL + "/{slug}?delay={delay}&faultPercent={faultPercent}")
                 .build(slug, delay, faultPercent);
+
         LOG.debug("Will call the getArticle API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(ArticleInfo.class)
@@ -59,9 +68,9 @@ public class ArticleServiceImpl implements ArticleService {
                 .onErrorResume(error -> Mono.empty());
     }
 
-    private Mono<ArticleInfo> getArticleFallbackValue(int articleId, int delay, int faultPercent, CallNotPermittedException ex) {
-        LOG.warn("Creating a fail-fast fallback article for articleId = {}, delay = {}, faultPercent = {} and exception = {} ",
-                articleId, delay, faultPercent, ex.toString());
+    private Mono<ArticleInfo> getArticleFallbackValue(String slug, int delay, int faultPercent, Throwable ex) {
+        LOG.warn("Creating a fail-fast fallback article for slug = {}, delay = {}, faultPercent = {}, exception = {}",
+                slug, delay, faultPercent, ex.toString());
         return Mono.error(new ServiceUnavailableException("The service is currently unavailable."));
     }
 }

@@ -13,6 +13,14 @@ public interface ArticleService {
     Flux<ArticleInfo> listAllArticles();
 
     /**
+     * list articles with pagination
+     * @param page page number
+     * @param size page size
+     * @return list of articles
+     */
+    Flux<ArticleInfo> listArticles(int page, int size);
+
+    /**
      * get article based on slug, added delay and fault percentage for circuit breaker testing
      * @param slug slug
      * @param delay delay in milliseconds

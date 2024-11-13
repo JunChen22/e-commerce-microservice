@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dto.event.oms;
 
-import com.itsthatjun.ecommerce.dto.ReturnParam;
+import com.itsthatjun.ecommerce.dto.oms.ReturnParam;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;

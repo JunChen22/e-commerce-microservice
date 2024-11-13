@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service.OMS.impl;
 
 import com.itsthatjun.ecommerce.dto.event.oms.OmsCartEvent;
-import com.itsthatjun.ecommerce.model.CartItem;
+import com.itsthatjun.ecommerce.dto.oms.model.CartItemDTO;
 import com.itsthatjun.ecommerce.service.OMS.CartService;
 import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
-import static com.itsthatjun.ecommerce.dto.event.oms.OmsCartEvent.Type.ADD_ONE;
+import static com.itsthatjun.ecommerce.dto.event.oms.OmsCartEvent.Type.*;
 import static java.util.logging.Level.FINE;
 
 @Service
@@ -46,16 +46,16 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Flux<CartItem> list() {
+    public Flux<CartItemDTO> getUserCart() {
         int userId = userService.getUserId();
         String url = OMS_SERVICE_URL + "/list";
         LOG.debug("Will call the list API on URL: {}", url);
-        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToFlux(CartItem.class)
+        return webClient.get().uri(url).header("X-UserId", String.valueOf(userId)).retrieve().bodyToFlux(CartItemDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(WebClientResponseException.class, ex -> Flux.empty());
     }
 
     @Override
-    public Mono<CartItem> add(CartItem cartItem) {
+    public Mono<CartItemDTO> addItem(CartItemDTO cartItem) {
         return Mono.fromCallable(() -> {
             int userId = userService.getUserId();
             sendMessage("cart-out-0", new OmsCartEvent(ADD_ONE, userId, cartItem));
@@ -64,29 +64,29 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Mono<CartItem> updateQuantity(CartItem cartItem) {
+    public Mono<CartItemDTO> updateQuantity(CartItemDTO cartItem) {
         return Mono.fromCallable(() -> {
             int userId = userService.getUserId();
-            sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.UPDATE, userId, cartItem));
+            sendMessage("cart-out-0", new OmsCartEvent(UPDATE, userId, cartItem));
             return cartItem;
         }).subscribeOn(publishEventScheduler);
     }
 
     @Override
-    public Mono<Void> delete(int cartItemId) {
+    public Mono<Void> deleteCartItem(String cartItemSku) {
         return Mono.fromRunnable(() -> {
             int userId = userService.getUserId();
-            CartItem cartItem = new CartItem();
-            cartItem.setCartId(cartItemId);
-            sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.DELETE, userId, cartItem));
+            CartItemDTO cartItem = new CartItemDTO();
+            cartItem.setProductSku(cartItemSku);
+            sendMessage("cart-out-0", new OmsCartEvent(DELETE, userId, cartItem));
         }).subscribeOn(publishEventScheduler).then();
     }
 
     @Override
-    public Mono<Void> clear() {
+    public Mono<Void> clearCart() {
         return Mono.fromRunnable(() -> {
             int userId = userService.getUserId();
-            sendMessage("cart-out-0", new OmsCartEvent(OmsCartEvent.Type.CLEAR, userId, null));
+            sendMessage("cart-out-0", new OmsCartEvent(CLEAR, userId, null));
         }).subscribeOn(publishEventScheduler).then();
     }
 

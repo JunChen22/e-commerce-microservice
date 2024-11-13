@@ -26,19 +26,28 @@ public class AdminArticleController {
     @Operation(summary = "get all articles",
             description = "get all articles")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "get all articles")
-    })
+            @ApiResponse(responseCode = "200", description = "get all articles"),
+            @ApiResponse(responseCode = "404", description = "No articles found")})
     @GetMapping(value = "/listAll", produces = "application/json")
     public Flux<AdminArticleInfo> listAllArticles() {
         return articleService.listAllArticles();
+    }
+
+    @Operation(summary = "get all articles with pagination",
+            description = "get all articles with pagination")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "get all articles"),
+            @ApiResponse(responseCode = "404", description = "No articles found")})
+    @GetMapping(value = "/list", produces = "application/json")
+    public Flux<AdminArticleInfo> listArticles(@RequestParam int page, @RequestParam int size) {
+        return articleService.listArticles(page, size);
     }
 
     @Operation(summary = "get article",
             description = "get article based on id, added delay and fault percentage for circuit breaker testing")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "get article"),
-            @ApiResponse(responseCode = "404", description = "article not found")
-    })
+            @ApiResponse(responseCode = "404", description = "article not found")})
     @GetMapping(value = "/{articleId}", produces = "application/json")
     public Mono<AdminArticleInfo> getArticle(@PathVariable int articleId,
                                         @RequestParam(value = "delay", required = false, defaultValue = "0") int delay,

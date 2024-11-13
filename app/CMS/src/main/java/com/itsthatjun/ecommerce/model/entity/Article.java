@@ -1,5 +1,6 @@
 package com.itsthatjun.ecommerce.model.entity;
 
+import com.itsthatjun.ecommerce.enums.status.LifeCycleStatus;
 import com.itsthatjun.ecommerce.enums.status.PublishStatus;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -25,6 +26,8 @@ public class Article {
     private String body;
 
     private PublishStatus publishStatus;
+
+    private LifeCycleStatus lifecycleStatus;
 
     private LocalDateTime createdAt;
 

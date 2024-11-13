@@ -1,25 +1,33 @@
 package com.itsthatjun.ecommerce.service.OMS;
 
-import com.itsthatjun.ecommerce.model.CartItem;
-import io.swagger.annotations.ApiOperation;
+import com.itsthatjun.ecommerce.dto.oms.model.CartItemDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface CartService {
 
-    @ApiOperation("list current user's shopping cart")
-    Flux<CartItem> list();
+    /**
+     * list current user's shopping cart
+     */
+    Flux<CartItemDTO> getUserCart();
 
-    @ApiOperation("add item to shopping cart")
-    Mono<CartItem> add(CartItem cartItem);
+    /**
+     * add item to shopping cart
+     */
+    Mono<CartItemDTO> addItem(CartItemDTO cartItem);
 
-    @ApiOperation("update shopping cart item quantity")
-    Mono<CartItem> updateQuantity(CartItem cartItem);
+    /**
+     * update shopping cart item quantity
+     */
+    Mono<CartItemDTO> updateQuantity(CartItemDTO cartItem);
 
-    @ApiOperation("remove item from shopping cart")
-    Mono<Void> delete(int cartItemId);
+    /**
+     * remove item from shopping cart
+     */
+    Mono<Void> deleteCartItem(String cartItemSku);
 
-    @ApiOperation("clear user shopping cart")
-    Mono<Void> clear();
-
+    /**
+     * clear user shopping cart
+     */
+    Mono<Void> clearCart();
 }

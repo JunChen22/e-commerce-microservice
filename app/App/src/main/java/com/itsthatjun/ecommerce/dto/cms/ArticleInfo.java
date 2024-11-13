@@ -1,6 +1,5 @@
 package com.itsthatjun.ecommerce.dto.cms;
 
-
 import com.itsthatjun.ecommerce.dto.cms.model.ArticleDTO;
 import com.itsthatjun.ecommerce.dto.cms.model.ImageDTO;
 import com.itsthatjun.ecommerce.dto.cms.model.QaDTO;

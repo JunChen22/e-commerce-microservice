@@ -20,4 +20,10 @@ public class CustomResponseEntityExceptionHandler {
     public ResponseEntity<String> handleArticleNotFoundException(ArticleNotFoundException ex) {
         return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ArticleSlugAlreadyExistException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> handleArticleSlugAlreadyExistException(ArticleSlugAlreadyExistException ex) {
+        return new ResponseEntity(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 }

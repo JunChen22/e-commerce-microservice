@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.controller.OMS;
 
-import com.itsthatjun.ecommerce.dto.ReturnParam;
+import com.itsthatjun.ecommerce.dto.oms.ReturnParam;
 import com.itsthatjun.ecommerce.dto.oms.ReturnDetail;
 import com.itsthatjun.ecommerce.service.OMS.impl.OrderReturnServiceImpl;
 import io.swagger.annotations.ApiOperation;

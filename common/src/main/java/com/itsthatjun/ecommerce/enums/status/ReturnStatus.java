@@ -18,4 +18,20 @@ public enum ReturnStatus {
     public String getValue() {
         return value;
     }
+
+    /**
+     * Helper method to get the enum constant from a string value.
+     *
+     * @param status the string representation of the enum.
+     * @return the corresponding ReturnStatus enum.
+     * @throws IllegalArgumentException if the value does not correspond to any enum constant.
+     */
+    public static ReturnStatus fromString(String status) {
+        for (ReturnStatus returnStatus : ReturnStatus.values()) {
+            if (returnStatus.getValue().equalsIgnoreCase(status)) {
+                return returnStatus;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant for value: " + status);
+    }
 }

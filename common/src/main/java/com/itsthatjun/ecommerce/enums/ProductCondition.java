@@ -17,4 +17,20 @@ public enum ProductCondition {
     public String getValue() {
         return value;
     }
+
+    /**
+     * Helper method to get the enum constant from a string value.
+     *
+     * @param status the string representation of the enum.
+     * @return the corresponding ProductCondition enum.
+     * @throws IllegalArgumentException if the value does not correspond to any enum constant.
+     */
+    public static ProductCondition fromString(String status) {
+        for (ProductCondition productCondition : ProductCondition.values()) {
+            if (productCondition.getValue().equalsIgnoreCase(status)) {
+                return productCondition;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant for value: " + status);
+    }
 }

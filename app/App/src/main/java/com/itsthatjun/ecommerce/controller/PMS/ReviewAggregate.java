@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.controller.PMS;
 
-import com.itsthatjun.ecommerce.dto.ProductReview;
+import com.itsthatjun.ecommerce.dto.pms.ProductReview;
 import com.itsthatjun.ecommerce.service.PMS.impl.ReviewServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
