@@ -6,7 +6,7 @@ public enum OrderStatus {
     WAITING_FOR_PAYMENT("waiting_for_payment"),
     FULFILLING("fulfilling"),
     SENT("sent"),
-    COMPLETE("complete"),  // received
+    COMPLETE("completed"),  // received
     CLOSED("closed"), // out of return period
     INVALID("invalid");
 

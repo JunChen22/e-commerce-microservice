@@ -18,14 +18,43 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/article/all",
+									"raw": "localhost:8080/article/listAll",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
 										"article",
-										"all"
+										"listAll"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Article - Get all with page",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/article/list?page=1&size=2",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"article",
+										"list"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										}
 									]
 								}
 							},
@@ -37,14 +66,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/article/1",
+									"raw": "localhost:8080/article/how-to-choose-the-right-product",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
 										"article",
-										"1"
+										"how-to-choose-the-right-product"
 									]
 								}
 							},
@@ -59,14 +88,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/article/1?delay=5&faultPercent=0",
+									"raw": "localhost:8080/article/how-to-choose-the-right-product?delay=5&faultPercent=0",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
 										"article",
-										"1"
+										"how-to-choose-the-right-product"
 									],
 									"query": [
 										{
@@ -91,14 +120,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:8080/article/1?delay=0&faultPercent=50",
+									"raw": "localhost:8080/article/how-to-choose-the-right-product?delay=0&faultPercent=50",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
 										"article",
-										"1"
+										"how-to-choose-the-right-product"
 									],
 									"query": [
 										{
@@ -858,6 +887,16 @@
 								"disableBodyPruning": true
 							},
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOjEsIm5hbWUiOiJKdW4iLCJpc3MiOiJhdXRoLXNlcnZlciIsImV4cCI6MTcyNTA0NzIxNSwiaWF0IjoxNzI1MDM4MjE1OTQ2LCJhdXRob3JpdGllcyI6bnVsbCwidXNlcm5hbWUiOiJ1c2VyMSJ9.V1f4XXUpfpx4b3QX95-nJTHMuAez95pZIiXAd4POcoXYW0eDbw-deibuK6Tnki8CW8XMOP1vYZD-_QBFVBT9Og",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"body": {
@@ -3180,12 +3219,14 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/esProduct/importAll",
+							"raw": "http://localhost:8080/admin/esProduct/importAll",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"admin",
 								"esProduct",
 								"importAll"
 							]

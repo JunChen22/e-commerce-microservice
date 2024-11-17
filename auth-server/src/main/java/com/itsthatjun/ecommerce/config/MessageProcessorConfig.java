@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.config;
 
 import com.itsthatjun.ecommerce.dto.event.Incoming.UmsUserEvent;
-import com.itsthatjun.ecommerce.model.Member;
+import com.itsthatjun.ecommerce.model.entity.Member;
 import com.itsthatjun.ecommerce.service.eventupdate.UmsEventUpdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @Configuration
@@ -29,7 +30,7 @@ public class MessageProcessorConfig {
         return event -> {
             LOG.info("Process message created at {}...", event.getEventCreatedAt());
 
-            int userId = event.getUserId();
+            UUID memberId = event.getMemberId();
             Member member = event.getMember();
 
             switch (event.getEventType()) {
@@ -47,7 +48,7 @@ public class MessageProcessorConfig {
                     break;
 
                 case DELETE_ACCOUNT:
-                    umsEventUpdateService.deleteMember(userId).subscribe();
+                    umsEventUpdateService.deleteMember(memberId).subscribe();
                     break;
 
                 default:

@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public class LoginResponse {
 
-    private boolean success;
+    private final boolean success;
 
-    private String token;
+    private final String token;
 
     public LoginResponse(boolean success, String token) {
         this.success = success;

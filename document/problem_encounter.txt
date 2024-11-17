@@ -484,3 +484,49 @@ reader converter, a string to java enum. and to search by enum, i would need to 
 writer converter since they only support the native data(primitive data?) and not custom data like java enum since postgres don't accept string
 as postgres enum
 
+e.g
+
+/**
+ * Find all kind of sale that are published. could be regular sale or special sale.
+ * Note: A custom write converter for R2DBC cannot convert a Java enum to a PostgreSQL enum directly, only primitive types.
+ * Like java enum to varchar or integer but not java enum to postgres enum. Instead, the query casts the Java enum to a PostgreSQL enum using SQL.
+ *
+ * @param publishStatus the publishing status to match
+ * @return the matching PromotionSale, if found
+ */
+@Query("SELECT * FROM promotion_sale WHERE publish_status = CAST(:publishStatus AS publish_status_enum)")
+Flux<PromotionSale> findAllByPublishStatus(@Param("publishStatus") String publishStatus);
+
+
+
+Q: caused by: io.r2dbc.postgresql.ExceptionFactory$PostgresqlBadGrammarException: column "publish_status" is of type publish_status_enum but expression is of type character varying
+
+A: this is caused by custom writer converter, it's trying to convert java enum to postgres enum.
+but r2dbc can only convert native data types and not custom data types like java enum.
+it turn java enum into string and trying to turn string to postgres enum but it's not working.
+postgres enum requires postgres enum, it looks like string but it's not. it's a custom data type.
+
+serval work around to use like Parameter and PostsgreEnum but it's not working for me.
+I'm using a query to cast java enum to postgres enum.
+
+@Query("INSERT INTO article (title, slug, author_name, body, publish_status) " +
+        "VALUES (:#{#article.title}, :#{#article.slug}, :#{#article.authorName}, :#{#article.body}, " +
+        "CAST(:#{#article.publishStatus.value} AS publish_status_enum)) RETURNING *")
+Mono<Article> saveArticle(@Param("article") Article article);
+
+using custom query to cast java enum for entities with postgres enum.
+the one without, will just use the provided save() method from repository.
+
+
+Q: [ERROR] Failed to execute goal org.mybatis.generator:mybatis-generator-maven-plugin:1.4.2:generate (default-cli)
+on project OMS: Execution default-cli of goal org.mybatis.generator:mybatis-generator-maven-plugin:1.4.2:generate
+failed: Cannot instantiate object of type com.itsthatjun.ecommerce.generator.plugin.ModelAnnotationEnhancerPlugin ->
+[Help 1]
+
+A: made changes in the common module but not yet rebuild it and causing error with change made in generatorConfig.xml.
+
+just need to rebuild common module then re-run the update_mybatis.sh script. or just
+
+$ mvn clean install -pl common
+$ cd ./app/CMS
+$ mybatis-generator:generate -Dmybatis.generator.overwrite=true

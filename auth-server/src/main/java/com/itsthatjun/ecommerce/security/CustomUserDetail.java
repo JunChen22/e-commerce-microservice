@@ -1,12 +1,13 @@
 package com.itsthatjun.ecommerce.security;
 
-import com.itsthatjun.ecommerce.model.Member;
+import com.itsthatjun.ecommerce.model.entity.Member;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 @Getter
 public class CustomUserDetail implements UserDetails {
@@ -42,7 +43,7 @@ public class CustomUserDetail implements UserDetails {
         return member.getName();
     }
 
-    public int getUserId() {
+    public UUID getMemberId() {
         return member.getId();
     }
 

@@ -23,7 +23,7 @@ public class JwtTokenUtil {
 
     public String generateToken(CustomUserDetail userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", userDetails.getUserId());
+        claims.put("sub", userDetails.getMemberId());
         claims.put("username", userDetails.getUsername());
         claims.put("authorities", userDetails.getAuthorities());  // TODO: add getAuthorities maybe, even for members
         claims.put("iat", new Date());

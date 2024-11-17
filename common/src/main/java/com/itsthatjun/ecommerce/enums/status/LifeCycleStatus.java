@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum LifeCycleStatus {
     NORMAL("normal"), // Fully active. User can log in and perform all actions.
-    SOFT_DELETE("soft_deleted"), // User account is disabled, but data remains in place.
+    SOFT_DELETE("soft_delete"), // User account is disabled, but data remains in place.
     ARCHIVED("archived"), // Similar to soft_deleted but meant for long-term retention. May only be accessible to admins for audits.
     BANNED("banned"); // User is locked out permanently due to policy violation.
 

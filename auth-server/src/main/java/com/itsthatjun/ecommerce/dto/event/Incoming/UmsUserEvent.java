@@ -1,9 +1,10 @@
 package com.itsthatjun.ecommerce.dto.event.Incoming;
 
-import com.itsthatjun.ecommerce.model.Member;
+import com.itsthatjun.ecommerce.model.entity.Member;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static java.time.ZonedDateTime.now;
 
@@ -18,13 +19,13 @@ public class UmsUserEvent {
     }
 
     private final Type eventType;
-    private final int userId;
+    private final UUID memberId;
     private final Member member;
     private final ZonedDateTime eventCreatedAt;
 
-    public UmsUserEvent(Type eventType, int userId, Member member) {
+    public UmsUserEvent(Type eventType, UUID memberId, Member member) {
         this.eventType = eventType;
-        this.userId = userId;
+        this.memberId = memberId;
         this.member = member;
         this.eventCreatedAt = now();
     }

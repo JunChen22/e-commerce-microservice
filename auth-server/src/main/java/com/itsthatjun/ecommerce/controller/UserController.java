@@ -51,8 +51,18 @@ public class UserController {
             ).flatMap(authentication -> {
                 CustomUserDetail user = (CustomUserDetail) authentication.getPrincipal();
                 String token = jwtTokenUtil.generateToken(user);
-                memberService.memberLoginLog(user.getUserId());
+                memberService.memberLoginLog(user.getMemberId());
                 return Mono.just(ResponseEntity.ok(new LoginResponse(true, token)));
             });
+    }
+
+    @Operation(summary = "Logoff", description = "Logoff the user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logoff successful"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @PostMapping(value = "/logout", consumes = "application/json", produces = "application/json")
+    public Mono<ResponseEntity<?>> logout() {
+        return Mono.just(ResponseEntity.ok(new LoginResponse(true, "Logoff successful")));
     }
 }

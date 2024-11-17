@@ -5,11 +5,9 @@ import lombok.Getter;
 @Getter
 public class LoginRequest {
 
-    //@NotEmpty(message = "username can not be empty")
-    String username;
+    private final String username;
 
-    //@NotEmpty(message = "password can not be empty")
-    String password;
+    private final String password;
 
     public LoginRequest(String username, String password) {
         this.username = username;

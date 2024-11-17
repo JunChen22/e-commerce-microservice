@@ -12,19 +12,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AdminArticleInfo extends Article implements Serializable {
+public class AdminArticleInfo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    public AdminArticleInfo(Article article) {
-        this.setId(article.getId());
-        this.setTitle(article.getTitle());
-        this.setSlug(article.getSlug());
-        this.setBody(article.getBody());
-        this.setPublishStatus(article.getPublishStatus());
-        this.setCreatedAt(article.getCreatedAt());
-        this.setUpdatedAt(article.getUpdatedAt());
-    }
+    private Article article;
 
     /**
      * question and answer

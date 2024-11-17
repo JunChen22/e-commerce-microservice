@@ -1,8 +1,10 @@
 package com.itsthatjun.ecommerce.service.impl;
 
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent;
-import com.itsthatjun.ecommerce.model.MemberLoginLog;
-import com.itsthatjun.ecommerce.repository.MemberLoginLogRepository;
+import com.itsthatjun.ecommerce.enums.type.PlatformType;
+import com.itsthatjun.ecommerce.enums.type.UserActivityType;
+import com.itsthatjun.ecommerce.model.entity.MemberActivityLog;
+import com.itsthatjun.ecommerce.repository.MemberActivityLogRepository;
 import com.itsthatjun.ecommerce.repository.MemberRepository;
 import com.itsthatjun.ecommerce.security.CustomUserDetail;
 import com.itsthatjun.ecommerce.service.MemberService;
@@ -18,9 +20,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.Date;
+import java.util.UUID;
 
-import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent.Type.New_LOGIN;
+import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent.Type.LOG_OFF;
+import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent.Type.LOG_IN;
 
 @Service
 public class MemberServiceImpl implements ReactiveUserDetailsService, MemberService {
@@ -29,12 +32,12 @@ public class MemberServiceImpl implements ReactiveUserDetailsService, MemberServ
 
     private final MemberRepository memberRepository;
 
-    private final MemberLoginLogRepository loginLogRepository;
+    private final MemberActivityLogRepository loginLogRepository;
 
     private final StreamBridge streamBridge;
 
     @Autowired
-    public MemberServiceImpl(MemberRepository memberRepository, MemberLoginLogRepository loginLogRepository, StreamBridge streamBridge) {
+    public MemberServiceImpl(MemberRepository memberRepository, MemberActivityLogRepository loginLogRepository, StreamBridge streamBridge) {
         this.memberRepository = memberRepository;
         this.loginLogRepository = loginLogRepository;
         this.streamBridge = streamBridge;
@@ -45,31 +48,48 @@ public class MemberServiceImpl implements ReactiveUserDetailsService, MemberServ
         // TODO: Add a check for the user's status (e.g. active, inactive, etc.)
         //      when no user is found, throw a UsernameNotFoundException
         return memberRepository.findByUsername(username)
-                .map(CustomUserDetail::new);
+                .switchIfEmpty(Mono.error(new UsernameNotFoundException("User not found: " + username)))
+                .map(CustomUserDetail::new);  // CustomUserDetail should implement UserDetails
     }
 
     @Override
-    public Mono<Void> memberLoginLog(int memberId) {
-        MemberLoginLog newLogin = new MemberLoginLog();
-        newLogin.setMemberId(memberId);
-        newLogin.setLoginTime(new Date());
-        // TODO: set IP address (this should be done when you get the actual IP address)
-        // newLogin.setIpAddress(ipAddress);
+    public Mono<Void> memberLoginLog(UUID memberId) {
+        MemberActivityLog activityLog = new MemberActivityLog();
+        activityLog.setMemberId(memberId);
+        activityLog.setActivity(UserActivityType.LOGIN);
+        activityLog.setIpAddress("127.0.0.1"); // TODO: set the actual IP address
+        activityLog.setPlatformType(PlatformType.WEB);  // TODO: set the actual platform type
 
-        return loginLogRepository.save(newLogin) // Save the new login log
-                .flatMap(savedLog -> {
+        return loginLogRepository.saveLog(activityLog) // Save the new login log
+                .flatMap(savedLog -> 
                     // Send the log update message after saving the log
-                    sendUmsLogUpdateMessage("authLog-out-0", new UmsLogUpdateEvent(New_LOGIN, memberId, savedLog));
-                    return Mono.empty();
-                });
+                    sendUmsLogUpdateMessage("authLog-out-0", new UmsLogUpdateEvent(LOG_IN, memberId, savedLog))
+                ).then();
     }
 
-    private void sendUmsLogUpdateMessage(String bindingName, UmsLogUpdateEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event-type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+    @Override
+    public Mono<Void> memberLogoutLog(UUID memberId) {
+        MemberActivityLog activityLog = new MemberActivityLog();
+        activityLog.setMemberId(memberId);
+        activityLog.setActivity(UserActivityType.LOGOFF);
+        activityLog.setIpAddress("127.0.0.1"); // TODO: set the actual IP address
+        activityLog.setPlatformType(PlatformType.WEB);  // TODO: set the actual platform type
+
+        return loginLogRepository.saveLog(activityLog) // Save the new login log
+                .flatMap(savedLog ->
+                        // Send the log update message after saving the log
+                        sendUmsLogUpdateMessage("authLog-out-0", new UmsLogUpdateEvent(LOG_OFF, memberId, savedLog))
+                ).then();
+    }
+
+    private Mono<Void> sendUmsLogUpdateMessage(String bindingName, UmsLogUpdateEvent event) {
+        return Mono.fromRunnable(() -> {
+            LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+            System.out.println("sending to binding: " + bindingName);
+            Message message = MessageBuilder.withPayload(event)
+                    .setHeader("event-type", event.getEventType())
+                    .build();
+            streamBridge.send(bindingName, message);
+        });
     }
 }

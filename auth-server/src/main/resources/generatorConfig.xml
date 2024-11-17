@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="PostgresContext" targetRuntime="MyBatis3" defaultModelType="flat">
+        <!-- custom plugin -->
+        <plugin type="com.itsthatjun.ecommerce.generator.plugin.ModelAnnotationEnhancerPlugin" />
+
+        <!-- configuration for generated code comments, default is false ,generic comment -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+        <!--  database driver-->
+        <jdbcConnection driverClass="org.postgresql.Driver"
+                        connectionURL="jdbc:postgresql://localhost:5438/authdb"
+                        userId="postgres"
+                        password="password">
+        </jdbcConnection>
+
+        <!-- location of model and mapper will be generated -->
+        <javaModelGenerator targetPackage="com.itsthatjun.ecommerce.model.entity" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="modelType" value="flat"/> <!-- Ensures no getter/setter methods -->
+        </javaModelGenerator>
+
+        <!-- generate the table needed -->
+        <!-- change long to integer for PostgreSQL serial id, default mybatis generator is long data type  -->
+        <!-- without <columnOverride column="id" javaType="java.lang.Integer" /> -->
+
+        <!--  UMS -->
+        <table tableName= "member">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.util.UUID" />
+            <columnOverride column="status" javaType="com.itsthatjun.ecommerce.enums.status.AccountStatus" />
+            <columnOverride column="verified_status" javaType="com.itsthatjun.ecommerce.enums.status.VerificationStatus" />
+            <columnOverride column="lifecycle_status" javaType="com.itsthatjun.ecommerce.enums.status.LifeCycleStatus" />
+            <columnOverride column="platform_type" javaType="com.itsthatjun.ecommerce.enums.type.PlatformType" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="last_login" javaType="java.time.LocalDateTime" />
+        </table>
+
+        <table tableName= "member_activity_log">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="member_id" javaType="java.util.UUID" />
+            <columnOverride column="activity" javaType="com.itsthatjun.ecommerce.enums.type.UserActivityType" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="platform_type" javaType="com.itsthatjun.ecommerce.enums.type.PlatformType" />
+        </table>
+    </context>
+</generatorConfiguration>

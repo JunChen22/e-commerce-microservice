@@ -1,9 +1,10 @@
 package com.itsthatjun.ecommerce.dto.event.outgoing;
 
-import com.itsthatjun.ecommerce.model.MemberLoginLog;
+import com.itsthatjun.ecommerce.model.entity.MemberActivityLog;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static java.time.ZonedDateTime.now;
 
@@ -11,18 +12,18 @@ import static java.time.ZonedDateTime.now;
 public class UmsLogUpdateEvent {
 
     public enum Type {
-        New_LOGIN,
+        LOG_IN,
         LOG_OFF
     }
 
     private final Type eventType;
-    private final int userId;
-    private final MemberLoginLog loginLog;
+    private final UUID memberId;
+    private final MemberActivityLog loginLog;
     private final ZonedDateTime eventCreatedAt;
 
-    public UmsLogUpdateEvent(Type eventType, int userId, MemberLoginLog loginLog) {
+    public UmsLogUpdateEvent(Type eventType, UUID memberId, MemberActivityLog loginLog) {
         this.eventType = eventType;
-        this.userId = userId;
+        this.memberId = memberId;
         this.loginLog = loginLog;
         this.eventCreatedAt = now();
     }

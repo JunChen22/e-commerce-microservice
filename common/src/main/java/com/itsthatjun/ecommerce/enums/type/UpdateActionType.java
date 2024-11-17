@@ -2,13 +2,17 @@ package com.itsthatjun.ecommerce.enums.type;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum SourceType {
-    WEB("web"),
-    MOBILE("mobile");
+public enum UpdateActionType {
+    CREATE("create"),
+    UPDATE("update"),
+    DELETE("delete"),
+    CANCEL("cancel"),
+    CLOSED("closed"),
+    OTHER("other");
 
     private final String value;
 
-    SourceType(String value) {
+    UpdateActionType(String value) {
         this.value = value;
     }
 
@@ -21,13 +25,13 @@ public enum SourceType {
      * Helper method to get the enum constant from a string value.
      *
      * @param status the string representation of the enum.
-     * @return the corresponding SourceType enum.
+     * @return the corresponding UpdateActionType enum.
      * @throws IllegalArgumentException if the value does not correspond to any enum constant.
      */
-    public static SourceType fromString(String status) {
-        for (SourceType sourceType : SourceType.values()) {
-            if (sourceType.getValue().equalsIgnoreCase(status)) {
-                return sourceType;
+    public static UpdateActionType fromString(String status) {
+        for (UpdateActionType updateActionType : UpdateActionType.values()) {
+            if (updateActionType.getValue().equalsIgnoreCase(status)) {
+                return updateActionType;
             }
         }
         throw new IllegalArgumentException("No enum constant for value: " + status);
