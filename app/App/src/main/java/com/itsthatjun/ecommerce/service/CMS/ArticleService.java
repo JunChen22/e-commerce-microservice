@@ -8,13 +8,13 @@ public interface ArticleService {
 
     /**
      * List all articles
-     * @return
+     * @return Flux<ArticleInfo>
      */
     Flux<ArticleInfo> listAllArticles();
 
     /**
      * List all articles with pagination
-     * @return
+     * @return Flux<ArticleInfo>
      */
     Flux<ArticleInfo> listArticles(int page, int size);
 
@@ -23,7 +23,7 @@ public interface ArticleService {
      * @param slug
      * @param delay
      * @param faultPercent
-     * @return
+     * @return Mono<ArticleInfo>
      */
     Mono<ArticleInfo> getArticle(String slug, int delay, int faultPercent);
 }

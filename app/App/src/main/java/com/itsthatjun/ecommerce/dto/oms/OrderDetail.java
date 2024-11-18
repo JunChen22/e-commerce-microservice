@@ -10,7 +10,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrderDetail extends OrderDTO implements Serializable {
+public class OrderDetail implements Serializable {
+
+    private OrderDTO order;
 
     /**
      * order item list

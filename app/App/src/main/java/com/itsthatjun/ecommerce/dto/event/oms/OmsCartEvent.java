@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.oms.model.CartItemDTO;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static java.time.ZonedDateTime.now;
 
@@ -18,13 +19,13 @@ public class OmsCartEvent {
     }
 
     private final Type eventType;
-    private final Integer userId;
+    private final UUID memberId;
     private final CartItemDTO cartItem;
     private final ZonedDateTime eventCreatedAt;
 
-    public OmsCartEvent(Type eventType, Integer userId, CartItemDTO cartItem) {
+    public OmsCartEvent(Type eventType, UUID memberId, CartItemDTO cartItem) {
         this.eventType = eventType;
-        this.userId = userId;
+        this.memberId = memberId;
         this.cartItem = cartItem;
         this.eventCreatedAt = now();
     }

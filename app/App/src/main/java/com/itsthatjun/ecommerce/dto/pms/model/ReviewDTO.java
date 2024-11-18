@@ -1,29 +1,37 @@
 package com.itsthatjun.ecommerce.dto.pms.model;
 
+import com.itsthatjun.ecommerce.enums.status.VerificationStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class ReviewDTO {
 
+    private String skuCode;
+
+    private UUID memberId;
+
     private String memberName;
 
     private String memberIcon;
 
-    private int star;
+    private Integer star;
 
     private String tittle;
 
-    private int likes;
+    private BigDecimal likes;
 
-    private Integer verified;
+    private VerificationStatus verifyStatus;
 
     private String content;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 }

@@ -3,7 +3,9 @@ package com.itsthatjun.ecommerce.controller.PMS;
 import com.itsthatjun.ecommerce.dto.pms.ProductDetail;
 import com.itsthatjun.ecommerce.dto.pms.model.ProductDTO;
 import com.itsthatjun.ecommerce.service.PMS.impl.ProductServiceImpl;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,19 +24,20 @@ public class ProductAggregate {
         this.productService = productService;
     }
 
-    @GetMapping("/{productId}")
-    @ApiOperation(value = "Get product by id")
-    public Mono<ProductDetail> listProduct(@PathVariable int productId) {
-        return productService.listProduct(productId);
-    }
-
+    @Operation(summary = "Get all product", description = "Get all product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get all product"),
+            @ApiResponse(responseCode = "404", description = "No product found")})
     @GetMapping("/listAll")
-    @ApiOperation(value = "Get all product")
     public Flux<ProductDTO> listAllProduct() {
         return productService.listAllProduct();
     }
 
     /* TODO: Implement caching
+    @Operation(summary = "Get all product", description = "Get all product")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get all product"),
+            @ApiResponse(responseCode = "404", description = "No product found")})
     @GetMapping("/listAll")
     @ApiOperation(value = "Get all products")
     public Flux<ProductDTO> listAllProduct() {
@@ -53,10 +56,22 @@ public class ProductAggregate {
     }
      */
 
+    @Operation(summary = "Get all product with page and size", description = "Get all product with page and size")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get all product with page and size"),
+            @ApiResponse(responseCode = "404", description = "No product found")})
     @GetMapping("/list")
-    @ApiOperation(value = "Get product with page and size")
     public Flux<ProductDTO> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                         @RequestParam(value = "size", defaultValue = "5") int pageSize) {
         return productService.listAllProduct(pageNum, pageSize);
+    }
+
+    @Operation(summary = "Get product by id", description = "Get product by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get product by id"),
+            @ApiResponse(responseCode = "404", description = "Product not found")})
+    @GetMapping("/{productId}")
+    public Mono<ProductDetail> listProduct(@PathVariable int productId) {
+        return productService.listProduct(productId);
     }
 }

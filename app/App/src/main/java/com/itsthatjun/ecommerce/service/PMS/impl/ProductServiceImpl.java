@@ -28,15 +28,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductDetail> listProduct(int id) {
-        String url = PMS_SERVICE_URL + "/" + id;
-        return webClient.get().uri(url).retrieve().bodyToMono(ProductDetail.class)
-                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
-    }
-
-    @Override
     public Flux<ProductDTO> listAllProduct() {
         String url = PMS_SERVICE_URL + "/listAll";
+        LOG.debug("Will call the listAllProduct API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ProductDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -45,8 +39,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Flux<ProductDTO> listAllProduct(int pageNum, int pageSize) {
         String url = PMS_SERVICE_URL + "/list?page=" + pageNum + "&size=" + pageSize;
+        LOG.debug("Will call the listAllProduct with pagination API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ProductDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
+    }
+
+    @Override
+    public Mono<ProductDetail> listProduct(int id) {
+        String url = PMS_SERVICE_URL + "/" + id;
+        LOG.debug("Will call the listProduct API on URL: {}", url);
+
+        return webClient.get().uri(url).retrieve().bodyToMono(ProductDetail.class)
+                .log(LOG.getName(), FINE).onErrorResume(error -> Mono.empty());
     }
 }

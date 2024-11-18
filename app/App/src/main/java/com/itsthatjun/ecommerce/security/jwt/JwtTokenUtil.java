@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtTokenUtil {
@@ -73,15 +74,15 @@ public class JwtTokenUtil {
         return name;
     }
 
-    public int getUserIdFromToken(String token) {
-        Integer userId;
+    public UUID getUserIdFromToken(String token) {
+        UUID userId = null;
         try {
             Claims claims = getClaimsFromToken(token);
-            userId = Integer.valueOf( claims.getSubject());
+            userId = UUID.fromString(claims.getSubject());  // Assuming subject is a UUID string
         } catch (Exception e) {
             userId = null;
         }
-        return (userId != null) ? userId : 0;
+        return userId;
     }
 
     private Claims getClaimsFromToken(String token) {

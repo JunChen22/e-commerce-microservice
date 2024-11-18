@@ -16,15 +16,15 @@ public class MessageProcessorConfig {
                 // TODO: Implement the logic to process the incoming event
                 //     update the article in redis cache
                 case CREATE:
-                    System.out.println("Create article: " + event.getArticleInfo().getTitle());
+                    System.out.println("Create article: " + event.getArticleInfo());
                     break;
 
                 case UPDATE:
-                    System.out.println("Update article: " + event.getArticleInfo().getTitle());
+                    System.out.println("Update article: " + event.getArticleInfo());
                     break;
 
                 case DELETE:
-                    System.out.println("Delete article: " + event.getArticleInfo().getTitle());
+                    System.out.println("Delete article: " + event.getArticleInfo());
                     break;
 
                 default:

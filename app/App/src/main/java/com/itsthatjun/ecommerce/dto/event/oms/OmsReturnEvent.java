@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.oms.ReturnParam;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static java.time.ZonedDateTime.now;
 
@@ -18,13 +19,13 @@ public class OmsReturnEvent {
     }
 
     private final Type eventType;
-    private final int userId;
+    private final UUID memberId;
     private final ReturnParam returnParam;
     private final ZonedDateTime eventCreatedAt;
 
-    public OmsReturnEvent(Type eventType, int userId, ReturnParam returnParam) {
+    public OmsReturnEvent(Type eventType, UUID memberId, ReturnParam returnParam) {
         this.eventType = eventType;
-        this.userId = userId;
+        this.memberId = memberId;
         this.returnParam = returnParam;
         this.eventCreatedAt = now();
     }

@@ -3,7 +3,6 @@ package com.itsthatjun.ecommerce.security;
 import com.itsthatjun.ecommerce.security.handler.CustomAccessDeniedHandler;
 import com.itsthatjun.ecommerce.security.handler.CustomAuthenticationEntryPoint;
 import com.itsthatjun.ecommerce.security.jwt.JwtAuthenticationWebFilter;
-import com.itsthatjun.ecommerce.security.jwt.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

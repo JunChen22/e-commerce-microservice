@@ -11,7 +11,9 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class ReturnParam extends ReturnRequestDTO implements Serializable {
+public class ReturnParam implements Serializable {
+
+    private ReturnRequestDTO returnRequest;
 
     /**
      * Return item list

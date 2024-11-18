@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.pms.ProductReview;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static java.time.ZonedDateTime.now;
 
@@ -17,13 +18,13 @@ public class PmsReviewEvent {
     }
 
     private final Type eventType;
-    private final int userId;
+    private final UUID memberId;
     private final ProductReview review;
     private final ZonedDateTime eventCreatedAt;
 
-    public PmsReviewEvent(Type eventType, int userId, ProductReview review) {
+    public PmsReviewEvent(Type eventType, UUID memberId, ProductReview review) {
         this.eventType = eventType;
-        this.userId = userId;
+        this.memberId = memberId;
         this.review = review;
         this.eventCreatedAt = now();
     }

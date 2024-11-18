@@ -12,7 +12,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class MemberDetail extends MemberDTO implements Serializable {
+public class MemberDetail implements Serializable {
+
+    private MemberDTO member;
 
     /**
      * Member address

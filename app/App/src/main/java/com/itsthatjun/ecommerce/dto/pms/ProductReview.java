@@ -13,7 +13,5 @@ public class ProductReview {
 
     private List<ReviewDTO> reviews;
 
-    private int albumId;
-
     private List<ReviewPictureDTO> picturesList;
 }

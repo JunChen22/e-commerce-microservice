@@ -12,7 +12,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ReturnDetail extends ReturnRequestDTO implements Serializable {
+public class ReturnDetail implements Serializable {
+
+    private ReturnRequestDTO returnRequest;
 
     /**
      * Return item list

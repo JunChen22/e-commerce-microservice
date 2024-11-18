@@ -5,25 +5,24 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Component
 public class SecurityUtil {
 
-    public Mono<UserContext> getUserContext() {
+    private Mono<UserContext> getUserContext() {
         return ReactiveSecurityContextHolder.getContext()
                 .map(SecurityContext::getAuthentication)
-                .map(authentication -> {
-                    if (authentication != null && authentication.getPrincipal() instanceof UserContext) {
-                        return (UserContext) authentication.getPrincipal();
-                    }
-                    throw new IllegalStateException("UserContext not found in SecurityContext");
-                });
+                .filter(authentication -> authentication != null && authentication.isAuthenticated())
+                .map(authentication -> (UserContext) authentication.getPrincipal())
+                .switchIfEmpty(Mono.error(new IllegalStateException("UserContext or MemberId not found")));
     }
 
     public Mono<String> getJwtToken() {
         return getUserContext().map(UserContext::getJwtToken);
     }
 
-    public Mono<Integer> getUserId() {
-        return getUserContext().map(UserContext::getUserId);
+    public Mono<UUID> getMemberId() {
+        return getUserContext().map(UserContext::getMemberId);
     }
 }

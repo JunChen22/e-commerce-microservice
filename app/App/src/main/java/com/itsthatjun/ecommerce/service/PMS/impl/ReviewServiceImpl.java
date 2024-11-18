@@ -2,13 +2,11 @@ package com.itsthatjun.ecommerce.service.PMS.impl;
 
 import com.itsthatjun.ecommerce.dto.pms.ProductReview;
 import com.itsthatjun.ecommerce.dto.event.pms.PmsReviewEvent;
-import com.itsthatjun.ecommerce.dto.pms.model.ReviewDTO;
+import com.itsthatjun.ecommerce.security.SecurityUtil;
 import com.itsthatjun.ecommerce.service.PMS.ReviewService;
-import com.itsthatjun.ecommerce.service.UMS.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -16,7 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
+
+import java.util.UUID;
 
 import static com.itsthatjun.ecommerce.dto.event.pms.PmsReviewEvent.Type.*;
 import static java.util.logging.Level.FINE;
@@ -26,23 +25,19 @@ public class ReviewServiceImpl implements ReviewService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
-    private final UserServiceImpl userService;
-
     private final WebClient webClient;
 
     private final StreamBridge streamBridge;
 
-    private final Scheduler publishEventScheduler;
+    private final SecurityUtil securityUtil;
 
     private final String PMS_SERVICE_URL = "http://pms/review";
 
     @Autowired
-    public ReviewServiceImpl(UserServiceImpl userService, WebClient webClient, StreamBridge streamBridge,
-                             @Qualifier("publishEventScheduler") Scheduler publishEventScheduler) {
-        this.userService = userService;
+    public ReviewServiceImpl(WebClient webClient, StreamBridge streamBridge, SecurityUtil securityUtil) {
         this.webClient = webClient;
         this.streamBridge = streamBridge;
-        this.publishEventScheduler = publishEventScheduler;
+        this.securityUtil = securityUtil;
     }
 
     @Override
@@ -55,9 +50,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Flux<ProductReview> getProductReviews(int productId) {
-        String url = PMS_SERVICE_URL + "/getAllProductReview/" + productId;
-        LOG.debug("Will call the getDetailReview API on URL: {}", url);
+    public Flux<ProductReview> getProductReviews(String skuCode) {
+        String url = PMS_SERVICE_URL + "/getAllProductReview/" + skuCode;
+        LOG.debug("Will call the getProductReview API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ProductReview.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -65,36 +60,47 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Mono<ProductReview> createProductReview(ProductReview newReview) {
-        return Mono.fromCallable(() -> {
-            int userId = userService.getUserId();
-            sendMessage("review-out-0", new PmsReviewEvent(CREATE_REVIEW, userId, newReview));
-            return newReview;
-        }).subscribeOn(publishEventScheduler);
+        return securityUtil.getJwtToken()
+                .zipWith(securityUtil.getMemberId()) // Combine the JWT and memberId
+                .flatMap(tuple -> {
+                    String jwt = tuple.getT1();
+                    UUID memberId = tuple.getT2();
+                    return sendMessage("review-out-0", new PmsReviewEvent(CREATE_REVIEW, memberId, newReview))
+                            .then(Mono.just(newReview));
+                });
     }
 
     @Override
     public Mono<ProductReview> updateProductReviews(ProductReview newReview) {
-        return Mono.fromCallable(() -> {
-            int userId = userService.getUserId();
-            sendMessage("review-out-0", new PmsReviewEvent(UPDATE_REVIEW, userId, newReview));
-            return newReview;
-        }).subscribeOn(publishEventScheduler);
+        return securityUtil.getJwtToken()
+                .zipWith(securityUtil.getMemberId()) // Combine the JWT and memberId
+                .flatMap(tuple -> {
+                    String jwt = tuple.getT1();
+                    UUID memberId = tuple.getT2();
+                    return sendMessage("review-out-0", new PmsReviewEvent(UPDATE_REVIEW, memberId, newReview))
+                            .then(Mono.just(newReview));
+                });
     }
 
     @Override
-    public Mono<Void> deleteProductReviews(int reviewId) {
-        int userId = userService.getUserId();
-        return Mono.fromRunnable(() -> { // TODO:
-            sendMessage("review-out-0", new PmsReviewEvent(DELETE_REVIEW, userId, null));
-        }).subscribeOn(publishEventScheduler).then();
+    public Mono<Void> deleteProductReviews(String skuCode) {
+        return securityUtil.getJwtToken()
+                .zipWith(securityUtil.getMemberId()) // Combine the JWT and memberId
+                .flatMap(tuple -> {
+                    String jwt = tuple.getT1();
+                    UUID memberId = tuple.getT2();
+                    return sendMessage("review-out-0", new PmsReviewEvent(DELETE_REVIEW, memberId, null))
+                         .then();
+                });
     }
 
-    private void sendMessage(String bindingName, PmsReviewEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event-type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+    private Mono<Void> sendMessage(String bindingName, PmsReviewEvent event) {
+        return Mono.fromRunnable(() -> {
+            LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+            Message message = MessageBuilder.withPayload(event)
+                    .setHeader("event-type", event.getEventType())
+                    .build();
+            streamBridge.send(bindingName, message);
+        });
     }
 }

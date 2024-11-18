@@ -2,7 +2,9 @@ package com.itsthatjun.ecommerce.controller.CMS;
 
 import com.itsthatjun.ecommerce.dto.cms.ArticleInfo;
 import com.itsthatjun.ecommerce.service.CMS.impl.ArticleServiceImpl;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,20 +23,29 @@ public class ContentAggregate {
         this.articleService = articleService;
     }
 
+    @Operation(summary = "Get all articles", description = "Get all articles")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get all articles"),
+            @ApiResponse(responseCode = "404", description = "No articles found")})
     @GetMapping("/listAll")
-    @ApiOperation(value = "Get all articles")
     public Flux<ArticleInfo> listAllArticles() {
         return articleService.listAllArticles();
     }
 
+    @Operation(summary = "Get all articles with pagination", description = "Get all articles with pagination")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get all articles"),
+            @ApiResponse(responseCode = "404", description = "No articles found")})
     @GetMapping("/list")
-    @ApiOperation(value = "Get all articles")
     public Flux<ArticleInfo> listArticles(@RequestParam int page, @RequestParam int size) {
         return articleService.listArticles(page, size);
     }
 
+    @Operation(summary = "Get a article", description = "Get a article based on slug, added delay and fault percentage for circuit breaker testing")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Article retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Article not found")})
     @GetMapping("/{slug}")
-    @ApiOperation(value = "Get a article")
     public Mono<ArticleInfo> getArticle(@PathVariable String slug,
                                         @RequestParam(value = "delay", required = false, defaultValue = "0") int delay,
                                         @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent) {

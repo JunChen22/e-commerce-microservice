@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.oms.OrderParam;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static java.time.ZonedDateTime.now;
 
@@ -16,16 +17,16 @@ public class OmsOrderEvent {
     }
 
     private final Type eventType;
-    private final int userId;
+    private final UUID memberId;
     private final String orderSn;
     private final OrderParam orderParam;  // dto from user to endpoint
     private final String successUrl;
     private final String cancelUrl;
     private final ZonedDateTime eventCreatedAt;
 
-    public OmsOrderEvent(Type eventType, int userId, String orderSn, OrderParam orderParam, String successUrl, String cancelUrl) {
+    public OmsOrderEvent(Type eventType, UUID memberId, String orderSn, OrderParam orderParam, String successUrl, String cancelUrl) {
         this.eventType = eventType;
-        this.userId = userId;
+        this.memberId = memberId;
         this.orderSn = orderSn;
         this.orderParam = orderParam;
         this.successUrl = successUrl;

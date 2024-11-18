@@ -13,6 +13,8 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Component
 public class JwtAuthenticationWebFilter implements WebFilter {
 
@@ -37,7 +39,7 @@ public class JwtAuthenticationWebFilter implements WebFilter {
         if (authHeader != null && authHeader.startsWith(tokenPrefix)) {
             String jwt = getJWTFromHeader(authHeader);
             String name = jwtTokenUtil.getUserNameFromToken(jwt);
-            int userId = jwtTokenUtil.getUserIdFromToken(jwt);
+            UUID userId = jwtTokenUtil.getUserIdFromToken(jwt);
 
             return Mono.justOrEmpty(jwtTokenUtil.validateToken(jwt))
                     .flatMap(isValid -> {

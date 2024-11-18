@@ -12,9 +12,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ArticleInfo extends ArticleDTO implements Serializable {
+public class ArticleInfo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private ArticleDTO article;
 
     /**
      * question and answer

@@ -1,24 +1,48 @@
 package com.itsthatjun.ecommerce.service.PMS;
 
 import com.itsthatjun.ecommerce.dto.pms.ProductReview;
-import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ReviewService {
 
-    @ApiOperation(value = "get detail of a review")
+    /**
+     * Get detail of a review
+     *
+     * @param reviewId
+     * @return
+     */
     Mono<ProductReview> getDetailReview(int reviewId);
 
-    @ApiOperation(value = "get all reviews for a product")
-    Flux<ProductReview> getProductReviews(int productId);
+    /**
+     * Get all reviews for a product
+     *
+     * @param skuCode
+     * @return
+     */
+    Flux<ProductReview> getProductReviews(String skuCode);
 
-    @ApiOperation(value = "create review for a product")
+    /**
+     * Create a review for a product
+     *
+     * @param newReview
+     * @return
+     */
     Mono<ProductReview> createProductReview(ProductReview newReview);
 
-    @ApiOperation(value = "update a review")
+    /**
+     * Update a review
+     *
+     * @param newReview
+     * @return
+     */
     Mono<ProductReview> updateProductReviews(ProductReview newReview);
 
-    @ApiOperation(value = "Get product with page and size")
-    Mono<Void> deleteProductReviews(int reviewId);
+    /**
+     * Delete a review
+     *
+     * @param skuCode
+     * @return
+     */
+    Mono<Void> deleteProductReviews(String skuCode);
 }

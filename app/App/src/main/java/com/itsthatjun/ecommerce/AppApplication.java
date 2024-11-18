@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.scheduler.Scheduler;
@@ -18,26 +19,18 @@ public class AppApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppApplication.class);
 
-    private final Integer threadPoolSize;
-
-    private final Integer taskQueueSize;
-
     // Netflix Ribbon Load Balancer replaced with Spring Cloud Load Balancer
-    private ReactorLoadBalancerExchangeFilterFunction lbFunction;
+    private final ReactorLoadBalancerExchangeFilterFunction lbFunction;
 
     @Autowired
-    public AppApplication(
-            @Value("${app.threadPoolSize:4}") Integer threadPoolSize,
-            @Value("${app.taskQueueSize:100}") Integer taskQueueSize,
-            ReactorLoadBalancerExchangeFilterFunction lbFunction
-    ) {
-        this.threadPoolSize = threadPoolSize;
-        this.taskQueueSize = taskQueueSize;
+    public AppApplication(ReactorLoadBalancerExchangeFilterFunction lbFunction) {
         this.lbFunction = lbFunction;
     }
 
     @Bean
-    public Scheduler publishEventScheduler() {
+    @Lazy       // lazy initialization of the scheduler, only when it's needed for blocking operations
+    public Scheduler publishEventScheduler(@Value("${app.threadPoolSize:4}") Integer threadPoolSize,
+                                           @Value("${app.taskQueueSize:100}") Integer taskQueueSize) {
         LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
         return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
     }

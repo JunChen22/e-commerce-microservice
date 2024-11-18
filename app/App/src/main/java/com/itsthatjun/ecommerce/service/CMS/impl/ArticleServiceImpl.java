@@ -37,7 +37,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Flux<ArticleInfo> listAllArticles() {
         String url = CMS_SERVICE_URL + "/listAll";
-        LOG.debug("Will call the getAllArticle API on URL: {}", url);
+        LOG.debug("Will call the listArticles API on URL: {}", url);
 
        return webClient.get().uri(url).retrieve().bodyToFlux(ArticleInfo.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
@@ -46,7 +46,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Flux<ArticleInfo> listArticles(int page, int size) {
         String url = CMS_SERVICE_URL + "/list" + "?page=" + page + "&size=" + size;
-        LOG.debug("Will call the getArticle API on URL: {}", url);
+        LOG.debug("Will call the listArticles with pagination API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(ArticleInfo.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());

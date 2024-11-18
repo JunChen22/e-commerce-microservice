@@ -12,7 +12,9 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class ProductDetail extends ProductDTO implements Serializable {
+public class ProductDetail implements Serializable {
+
+    private ProductDTO product;
 
     private List<ProductSkuDTO> skuVariants;
 

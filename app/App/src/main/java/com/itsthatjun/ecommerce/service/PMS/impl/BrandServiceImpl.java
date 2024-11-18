@@ -39,7 +39,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Flux<BrandDTO> listBrand(int pageNum, int pageSize) {
         String url = PMS_SERVICE_URL + "/listBrand/" + "?pageNum=" + pageNum + "&pageSize=" + pageSize;
-        LOG.debug("Will call the getAllBrand API on URL: {}", url);
+        LOG.debug("Will call the listBrand API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToFlux(BrandDTO.class)
                 .log(LOG.getName(), FINE).onErrorResume(error -> Flux.empty());
