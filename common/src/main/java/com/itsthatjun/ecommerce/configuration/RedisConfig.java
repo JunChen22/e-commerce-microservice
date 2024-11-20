@@ -3,7 +3,10 @@ package com.itsthatjun.ecommerce.configuration;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.itsthatjun.ecommerce.service.RedisService;
 import com.itsthatjun.ecommerce.service.impl.RedisServiceImpl;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -22,7 +25,12 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
     public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory() {
-        return new LettuceConnectionFactory(); // Lettuce is a scalable thread-safe Redis client
+        //return new LettuceConnectionFactory(); // Lettuce is a scalable thread-safe Redis client
+
+        // Connect to Redis running in Docker on localhost:6379
+        LettuceConnectionFactory factory = new LettuceConnectionFactory("e-com_redis", 6379);
+        factory.afterPropertiesSet(); // Ensure factory initialization
+        return factory;
     }
 
     @Bean
@@ -40,6 +48,10 @@ public class RedisConfig extends CachingConfigurerSupport {
         Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+
+        objectMapper.registerModule(new JavaTimeModule());
+
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,ObjectMapper.DefaultTyping.NON_FINAL);
         serializer.setObjectMapper(objectMapper);

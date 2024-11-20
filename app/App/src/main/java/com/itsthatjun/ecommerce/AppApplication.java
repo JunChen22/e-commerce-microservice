@@ -3,16 +3,12 @@ package com.itsthatjun.ecommerce;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 @SpringBootApplication
 public class AppApplication {
@@ -25,14 +21,6 @@ public class AppApplication {
     @Autowired
     public AppApplication(ReactorLoadBalancerExchangeFilterFunction lbFunction) {
         this.lbFunction = lbFunction;
-    }
-
-    @Bean
-    @Lazy       // lazy initialization of the scheduler, only when it's needed for blocking operations
-    public Scheduler publishEventScheduler(@Value("${app.threadPoolSize:4}") Integer threadPoolSize,
-                                           @Value("${app.taskQueueSize:100}") Integer taskQueueSize) {
-        LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
-        return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
     }
 
     @Bean   // turn all the webclient to load balanced when sending, if there's more than one. it doesn't work with Kubernetes
