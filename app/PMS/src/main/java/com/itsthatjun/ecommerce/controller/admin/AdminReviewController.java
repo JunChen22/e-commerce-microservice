@@ -2,7 +2,9 @@ package com.itsthatjun.ecommerce.controller;
 
 import com.itsthatjun.ecommerce.dto.ProductReview;
 import com.itsthatjun.ecommerce.service.admin.AdminReviewServiceImpl;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +25,12 @@ public class AdminReviewController {
         this.reviewService = reviewService;
     }
 
+    @Operation(summary = "List all reviews for a product",
+            description = "List all reviews for a product by its SKU code")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of reviews of a product"),
+            @ApiResponse(responseCode = "404", description = "Product not found")})
     @GetMapping("/listAllReviewByUser/{useId}")
-    @ApiOperation(value = "list all reviews for a product")
     public Flux<ProductReview> listProductReviewsByUser(@PathVariable int useId) {
         return reviewService.listAllReviewByUser(useId);
     }

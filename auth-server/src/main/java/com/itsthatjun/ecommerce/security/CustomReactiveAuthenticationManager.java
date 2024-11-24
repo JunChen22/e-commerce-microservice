@@ -36,7 +36,6 @@ public class CustomReactiveAuthenticationManager implements ReactiveAuthenticati
                     // Return the authentication token
                     return Mono.just(new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities()));
-
                 });
     }
 }

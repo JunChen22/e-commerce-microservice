@@ -1,10 +1,21 @@
 package com.itsthatjun.ecommerce.security.jwt;
 
+import com.itsthatjun.ecommerce.exception.InvalidJwtTokenException;
 import com.itsthatjun.ecommerce.security.CustomUserDetail;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,64 +23,77 @@ import java.util.Map;
 @Component
 public class JwtTokenUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
+
     @Value("${jwt.secretKey}")
-    private String secret;
+    private String secret;         // Plain text secret
 
     @Value("${jwt.expirationTimeMinute}")
-    private int expiration;
+    private int expiration;          // Access token expiration in minutes
+
+    @Value("${jwt.refreshExpirationTimeMinute}")
+    private int refreshExpiration;  // Refresh token expiration in minutes
 
     @Value("${jwt.issuer}")
     private String issuer;
 
-    public String generateToken(CustomUserDetail userDetails) {
+    public Mono<String> generateToken(CustomUserDetail userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", userDetails.getMemberId());
         claims.put("username", userDetails.getUsername());
-        claims.put("authorities", userDetails.getAuthorities());  // TODO: add getAuthorities maybe, even for members
-        claims.put("iat", new Date());
+        claims.put("authorities", userDetails.getAuthorities());
         claims.put("name", userDetails.getName());
-        claims.put("iss", issuer);
 
-        return Jwts.builder()
-                .setIssuer(issuer)          // IDK why it won't set issuer, need to user claim.put("iss", issuer) instead
-                .setClaims(claims)
-                .setExpiration(generateExpirationDate())
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
+        return generateJwtToken(userDetails, expiration, claims);
     }
 
-    // TODO: add refresh token
-    private boolean isTokenExpired(String token) {
-        Claims claims= getClaimsFromToken(token);
-        Date date = claims.getExpiration();
-        return date.before(new Date());
+    public Mono<String> generateRefreshToken(CustomUserDetail userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", userDetails.getUsername());
+
+        return generateJwtToken(userDetails, refreshExpiration, claims);
     }
 
-    private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000 * 60);
+    private Mono<String> generateJwtToken(CustomUserDetail userDetails, int expirationMinutes, Map<String, Object> claims) {
+        return Mono.fromCallable(() -> Jwts.builder()
+                .setIssuer(issuer)
+                .setSubject(userDetails.getMemberId().toString())
+                .addClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(generateExpirationDate(expirationMinutes))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+                .compact()).subscribeOn(Schedulers.boundedElastic());
     }
 
-    public String getUsernameFromToken(String token) {
-        String username;
+    public Mono<String> getUsernameFromToken(String token) {
+        return Mono.fromCallable(() -> {
+            try {
+                Claims claims = getClaimsFromToken(token);
+                return claims.get("username", String.class);
+            } catch (JwtException e) {
+                logger.error("Error extracting username from token", e);
+                throw new InvalidJwtTokenException("Failed to extract username from token" + e.toString());
+            }
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    private SecretKey getSigningKey() {
+        // Convert the plain text secret into a securely encoded SecretKey
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private Date generateExpirationDate(int expirationMinutes) {
+        return new Date(System.currentTimeMillis() + (long) expirationMinutes * 1000 * 60);
+    }
+
+    public Claims getClaimsFromToken(String token) {
         try {
-            Claims claims = getClaimsFromToken(token);
-            username =  (String) claims.get("userName");
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
-    }
-
-    private Claims getClaimsFromToken(String token) {
-        Claims claims = null;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(secret)
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            System.out.println("unable to get claim");
+            throw new InvalidJwtTokenException("Invalid JWT token " + e.toString());
         }
-        return claims;
     }
 }

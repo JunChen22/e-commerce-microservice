@@ -1,9 +1,11 @@
 package com.itsthatjun.ecommerce.controller;
 
-import com.itsthatjun.ecommerce.model.AdminProductDetail;
+import com.itsthatjun.ecommerce.dto.admin.AdminProductDetail;
 import com.itsthatjun.ecommerce.model.entity.Product;
 import com.itsthatjun.ecommerce.service.admin.AdminProductServiceImpl;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,21 +24,30 @@ public class AdminProductController {
         this.productService = productService;
     }
 
+    @Operation(summary = "List all products", description = "List all products")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of products"),
+            @ApiResponse(responseCode = "404", description = "No product found")})
     @GetMapping("/listAll")
-    @ApiOperation("Get all product")
     public Flux<Product> listAllProduct() {
         return productService.listAllProduct();
     }
 
+    @Operation(summary = "Get product with page and size", description = "Get product with page and size")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of products"),
+            @ApiResponse(responseCode = "404", description = "No product found")})
     @GetMapping("/list")
-    @ApiOperation("Get product with page and size")
-    public Flux<Product> listAllProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
+    public Flux<Product> listProduct(@RequestParam(value = "page", defaultValue = "1") int pageNum,
                                            @RequestParam(value = "size", defaultValue = "5") int pageSize) {
         return productService.listProduct(pageNum, pageSize);
     }
 
+    @Operation(summary = "Get product by id", description = "Get product by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Specific product"),
+            @ApiResponse(responseCode = "404", description = "Product not found")})
     @GetMapping("/{id}")
-    @ApiOperation("Get product by id")
     public Mono<AdminProductDetail> listProduct(@PathVariable int id) {
         return productService.getProductDetail(id);
     }

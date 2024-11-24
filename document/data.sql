@@ -1,17 +1,17 @@
 -- Status Types
 DROP TYPE IF EXISTS account_status_enum CASCADE;
 CREATE TYPE account_status_enum AS ENUM (
-	'active',
-	'suspended',
-	'inactive'
+    'active',
+    'suspended',
+    'inactive'
 );
 
 DROP TYPE IF EXISTS cart_status_enum CASCADE;
 CREATE TYPE cart_status_enum AS ENUM (
-	'active',
-	'abandoned',
-	'completed',
-	'expired'
+    'active',
+    'abandoned',
+    'completed',
+    'expired'
 );
 
 DROP TYPE IF EXISTS lifecycle_status_enum CASCADE;
@@ -24,48 +24,48 @@ CREATE TYPE lifecycle_status_enum AS ENUM (
 
 DROP TYPE IF EXISTS order_status_enum CASCADE;
 CREATE TYPE order_status_enum AS ENUM (
-	'waiting_for_payment',
-	'fulfilling',
-	'sent',
-	'completed',
-	'closed',
-	'invalid'
+    'waiting_for_payment',
+    'fulfilling',
+    'sent',
+    'completed',
+    'closed',
+    'invalid'
 );
 
 DROP TYPE IF EXISTS publish_status_enum CASCADE;
 CREATE TYPE publish_status_enum AS ENUM (
-	'published',
-	'pending',
-	'draft',
-	'paused',
-	'deleted'
+    'published',
+    'pending',
+    'draft',
+    'paused',
+    'deleted'
 );
 
 DROP TYPE IF EXISTS recommendation_status_enum CASCADE;
 CREATE TYPE recommendation_status_enum AS ENUM (
-	'frontpage',
-	'trending',
-	'popular',
-	'recommended',
-	'new_arrival',
-	'seasonal',
-	'flash_sale',
-	'normal',
-	'hidden'
+    'frontpage',
+    'trending',
+    'popular',
+    'recommended',
+    'new_arrival',
+    'seasonal',
+    'flash_sale',
+    'normal',
+    'hidden'
 );
 
 DROP TYPE IF EXISTS return_status_enum CASCADE;
 CREATE TYPE return_status_enum AS ENUM (
-	'waiting_to_be_processed',
-	'returning',
-	'complete',
-	'rejected'
+    'waiting_to_be_processed',
+    'returning',
+    'complete',
+    'rejected'
 );
 
 DROP TYPE IF EXISTS verification_status_enum CASCADE;
 CREATE TYPE verification_status_enum AS ENUM (
-	'verified',
-	'not_verified'
+    'verified',
+    'not_verified'
 );
 
 
@@ -73,8 +73,8 @@ CREATE TYPE verification_status_enum AS ENUM (
 
 DROP TYPE IF EXISTS discount_type_enum CASCADE;
 CREATE TYPE discount_type_enum AS ENUM (
-	'amount',
-	'percent'
+    'amount',
+    'percent'
 );
 
 DROP TYPE IF EXISTS email_template_type_enum CASCADE;
@@ -109,9 +109,9 @@ CREATE TYPE email_template_type_enum AS ENUM (
 
 DROP TYPE IF EXISTS payment_type_enum CASCADE;
 CREATE TYPE payment_type_enum AS ENUM (
-	'credit_card',
-	'paypal',
-	'google_pay'
+    'credit_card',
+    'paypal',
+    'google_pay'
 );
 
 DROP TYPE IF EXISTS platform_type_enum CASCADE;
@@ -133,20 +133,20 @@ CREATE TYPE sales_type_enum AS ENUM (
 
 DROP TYPE IF EXISTS target_type_enum CASCADE;
 CREATE TYPE target_type_enum AS ENUM (
-	'all',
-	'specific_brand',
-	'specific_category',
-	'specific_item'
+    'all',
+    'specific_brand',
+    'specific_category',
+    'specific_item'
 );
 
 DROP TYPE IF EXISTS update_action_type_enum CASCADE;
 CREATE TYPE update_action_type_enum AS ENUM (
-	'create',
-	'update',
-	'delete',
-	'cancel',
-	'closed',
-	'other'
+    'create',
+    'update',
+    'delete',
+    'cancel',
+    'closed',
+    'other'
 );
 
 DROP TYPE IF EXISTS user_activity_type_enum CASCADE;
@@ -165,20 +165,20 @@ CREATE TYPE user_activity_type_enum AS ENUM (
 -- etc
 DROP TYPE IF EXISTS product_condition_enum CASCADE;
 CREATE TYPE product_condition_enum AS ENUM (
-	'new',
-	'used',
-	'refurbished'
+    'new',
+    'used',
+    'refurbished'
 );
 
 DROP TYPE IF EXISTS service_name_enum CASCADE;
 CREATE TYPE service_name_enum AS ENUM (
-	'admin',
-	'cms',
-	'oms',
-	'pms',
-	'sms',
-	'ums',
-	'auth'
+    'admin',
+    'cms',
+    'oms',
+    'pms',
+    'sms',
+    'ums',
+    'auth'
 );
 
 -------------------
@@ -563,7 +563,7 @@ CREATE TABLE product (
     verify_status verification_status_enum default 'not_verified',
     sub_title TEXT,
     cover_picture TEXT,           --  preview picture, for like list all, search all picture when getting specific
-    picture_album INTEGER,           -- collection of picture
+    picture_album_id INTEGER,           -- collection of picture
     description TEXT,
     original_price DECIMAL(10, 2),
     on_sale_status INTEGER DEFAULT 0,  --  0 -> not on sale; 1 -> is on sale; 2 -> flash sale/special sales/clarance/used item
@@ -576,7 +576,6 @@ CREATE TABLE product (
     detail_title TEXT,                -- at the bottom of product with detail title, description and picture
     detail_desc TEXT,
     description_album_id INTEGER,
-    delete_status BOOLEAN DEFAULT FALSE , -- soft delete, 0 -> product not deleted; 1 -> product deleted, record purpose
     publish_status publish_status_enum DEFAULT 'pending',
     lifecycle_status lifecycle_status_enum DEFAULT 'normal',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -585,7 +584,7 @@ CREATE TABLE product (
 );
 
 -- Insert data into the product table
-INSERT INTO product (brand_id, brand_name, name, slug, category_id, category_name, attribute_category_id, sn, sub_title, cover_picture, picture_album, description, original_price, on_sale_status, sale_price, stock, low_stock, unit_sold, weight, keywords, detail_title, detail_desc, description_album_id, publish_status)
+INSERT INTO product (brand_id, brand_name, name, slug, category_id, category_name, attribute_category_id, sn, sub_title, cover_picture, picture_album_id, description, original_price, on_sale_status, sale_price, stock, low_stock, unit_sold, weight, keywords, detail_title, detail_desc, description_album_id, publish_status)
 VALUES
 -- electronics
 (1, 'Apple', 'iPhone 12', 'iphone-12', 15, 'Smartphones', 9, 'SN-123', 'Powerful and sleek', 'iphone12.jpg', 1, 'The iPhone 12 is the latest flagship smartphone from Apple.', 899.99, 0, 899.99, 100, 10, 50, 150, 'Apple, iPhone, smartphone', 'Product Details', 'Explore the amazing features of the iPhone 12.', 2, 'published'),
@@ -1353,7 +1352,7 @@ CREATE TABLE member (
     lifecycle_status lifecycle_status_enum DEFAULT 'normal',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP,
-    platform_type platform_type_enum DEFAULT 'web'   -- where user first created. web user , mobile user
+    platform_type platform_type_enum   -- where user first created. web user , mobile user
 );
 ---------------User  all password is password
 INSERT INTO member (id, username, password, name, phone_number, email, verified_status, platform_type)
@@ -1431,28 +1430,44 @@ CREATE TABLE member_change_log (
     id SERIAL PRIMARY KEY,
     member_id UUID NOT NULL,
     update_action update_action_type_enum NOT NULL,
+    description TEXT,
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_member FOREIGN KEY (member_id) REFERENCES member (id)
 );
 
-INSERT INTO member_change_log (member_id, update_action, operator)
+INSERT INTO member_change_log (member_id, update_action, description, operator)
 VALUES
-('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'update', 'Jun'),
+('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'update', 'update desc', 'Jun'),
 
-('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'create', 'Jun'),
-('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'update', 'Jun'),
-('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'delete', 'Jun'),
+('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'create', 'create desc', 'Jun'),
+('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'update', 'update desc', 'Jun'),
+('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'delete', 'delete desc', 'Jun'),
 
-('bb6604eb-080e-4595-9ae8-32c55cbbb35b', 'create', 'John'),
-('bb6604eb-080e-4595-9ae8-32c55cbbb35b', 'update', 'John'),
-('bb6604eb-080e-4595-9ae8-32c55cbbb35b', 'delete', 'John'),
+('bb6604eb-080e-4595-9ae8-32c55cbbb35b', 'create', 'create desc', 'John'),
+('bb6604eb-080e-4595-9ae8-32c55cbbb35b', 'update', 'update desc', 'John'),
+('bb6604eb-080e-4595-9ae8-32c55cbbb35b', 'delete', 'delete desc', 'John'),
 
-('3bbc1316-f71a-4475-9abe-ccf281acdc0b', 'create', 'Jane'),
-('3bbc1316-f71a-4475-9abe-ccf281acdc0b', 'update', 'Jane'),
-('3bbc1316-f71a-4475-9abe-ccf281acdc0b', 'create', 'Jane'),
+('3bbc1316-f71a-4475-9abe-ccf281acdc0b', 'create', 'create desc', 'Jane'),
+('3bbc1316-f71a-4475-9abe-ccf281acdc0b', 'update', 'update desc', 'Jane'),
+('3bbc1316-f71a-4475-9abe-ccf281acdc0b', 'create', 'create desc', 'Jane'),
 
-('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'update', 'Admin - Jun');
+('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'update', 'update desc', 'Admin - Jun');
+
+DROP TABLE IF EXISTS refresh_tokens;
+CREATE TABLE refresh_tokens (
+    id SERIAL PRIMARY KEY,
+    refresh_token TEXT NOT NULL, -- The refresh token string
+    member_id UUID NOT NULL, -- The ID of the user associated with this token
+    expiry_date TIMESTAMP NOT NULL, -- When the refresh token expires
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- When the token was created
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO refresh_tokens (refresh_token, member_id, expiry_date) VALUES
+('token1-a57f32ad', 'a57f32ad-8ebc-486e-940d-7abb2ece682f', CURRENT_TIMESTAMP + interval '1 week'),
+('token2-bb6604eb', 'bb6604eb-080e-4595-9ae8-32c55cbbb35b', CURRENT_TIMESTAMP + interval '1 week'),
+('token3-3bbc1316', '3bbc1316-f71a-4475-9abe-ccf281acdc0b', CURRENT_TIMESTAMP + interval '1 week');
 
 
 ---------Admin related----------------
@@ -1516,11 +1531,10 @@ DROP TABLE IF EXISTS admin_login_log;
 CREATE TABLE admin_login_log (
     id SERIAL PRIMARY KEY,
     admin_id INTEGER NOT NULL,
-    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- TODO: might add a admin action type enum and change this to activity log instead
     ip_address VARCHAR(20),
-    user_agent INTEGER
+    platform_type platform_type_enum
 );
-
 
 --------------Admin
 -- username : adminacct  password: adminpass      first admin have all permission, second is for order and only have order permission
@@ -1762,39 +1776,40 @@ VALUES
 (3, 39, 1, 'active'),
 (3, 40, 1, 'active');
 
--- user_agent 1 -> pc, 2 -> mobile users
-insert into admin_login_log (admin_id, ip_address, user_agent)
+
+insert into admin_login_log (admin_id, ip_address, platform_type)
 VALUES
-(2, '134.163.118.46', 2),
-(1, '63.34.62.42', 2),
-(1, '135.233.10.69', 1),
-(1, '20.247.202.109', 2),
-(2, '36.98.223.124', 2),
-(3, '173.205.10.223', 1),
-(3, '196.204.187.66', 1),
-(3, '71.116.127.75', 1),
-(3, '150.162.71.34', 1),
-(2, '120.114.34.124', 1),
-(2, '217.211.41.124', 1),
-(2, '123.88.59.30', 2),
-(1, '38.151.187.192', 1),
-(2, '240.177.24.96', 1),
-(1, '21.229.17.241', 2),
-(2, '10.201.14.67', 2),
-(2, '60.94.22.72', 1),
-(1, '31.173.45.239', 1),
-(1, '93.236.87.97', 2),
-(1, '188.250.113.175', 2),
-(2, '218.254.5.254', 1),
-(2, '104.148.201.62', 2),
-(1, '78.116.167.232', 1),
-(3, '235.188.63.46', 1),
-(1, '94.211.177.207', 2),
-(2, '165.173.17.183', 2),
-(2, '124.116.179.206', 1),
-(1, '128.42.207.29', 1),
-(3, '68.210.228.208', 2),
-(2, '165.130.166.222', 1);
+(2, '134.163.118.46', 'ios'),
+(1, '63.34.62.42', 'android'),
+(1, '135.233.10.69', 'web'),
+(1, '20.247.202.109', 'ios'),
+(2, '36.98.223.124', 'ios'),
+(3, '173.205.10.223', 'web'),
+(3, '196.204.187.66', 'web'),
+(3, '71.116.127.75', 'web'),
+(3, '150.162.71.34', 'android'),
+(2, '120.114.34.124', 'web'),
+(2, '217.211.41.124', 'web'),
+(2, '123.88.59.30', 'android'),
+(1, '38.151.187.192', 'web'),
+(2, '240.177.24.96', 'web'),
+(1, '21.229.17.241', 'ios'),
+(2, '10.201.14.67', 'android'),
+(2, '60.94.22.72', 'web'),
+(1, '31.173.45.239', 'web'),
+(1, '93.236.87.97', 'ios'),
+(1, '188.250.113.175', 'ios'),
+(2, '218.254.5.254', 'web'),
+(2, '104.148.201.62', 'android'),
+(1, '78.116.167.232', 'web'),
+(3, '235.188.63.46', 'web'),
+(1, '94.211.177.207', 'ios'),
+(2, '165.173.17.183', 'ios'),
+(2, '124.116.179.206', 'web'),
+(1, '128.42.207.29', 'web'),
+(3, '68.210.228.208', 'ios'),
+(2, '165.130.166.222', 'web');
+
 
 
 --------------------------------------------
@@ -1906,23 +1921,23 @@ VALUES
 -- all the items in one order
 DROP TABLE IF EXISTS order_item;
 CREATE TABLE order_item (
-	id SERIAL PRIMARY KEY,
-	order_id INTEGER NOT NULL,
-	order_sn VARCHAR(64) NOT NULL,
-	product_id INTEGER NOT NULL,
-	product_pic VARCHAR(500) DEFAULT NULL,
-	product_name VARCHAR(200) DEFAULT NULL,
-	product_brand VARCHAR(200) DEFAULT NULL,
-	product_sn VARCHAR(64) DEFAULT NULL,
-	product_price DECIMAL(10, 2) DEFAULT NULL,
-	product_quantity INTEGER DEFAULT NULL,
-	product_sku_id INTEGER DEFAULT NULL,
-	product_sku_code VARCHAR(50) DEFAULT NULL,
-	product_category_id INTEGER DEFAULT NULL,
-	promotion_name VARCHAR(200) DEFAULT NULL,
-	promotion_amount DECIMAL(10, 2) DEFAULT NULL,
-	coupon_amount DECIMAL(10, 2) DEFAULT NULL,               -- the coupon that applied to the product will have it if not just 0
-	real_amount DECIMAL(10, 2) DEFAULT NULL      -- final paying price after sale and coupon.
+    id SERIAL PRIMARY KEY,
+    order_id INTEGER NOT NULL,
+    order_sn VARCHAR(64) NOT NULL,
+    product_id INTEGER NOT NULL,
+    product_pic VARCHAR(500) DEFAULT NULL,
+    product_name VARCHAR(200) DEFAULT NULL,
+    product_brand VARCHAR(200) DEFAULT NULL,
+    product_sn VARCHAR(64) DEFAULT NULL,
+    product_price DECIMAL(10, 2) DEFAULT NULL,
+    product_quantity INTEGER DEFAULT NULL,
+    product_sku_id INTEGER DEFAULT NULL,
+    product_sku_code VARCHAR(50) DEFAULT NULL,
+    product_category_id INTEGER DEFAULT NULL,
+    promotion_name VARCHAR(200) DEFAULT NULL,
+    promotion_amount DECIMAL(10, 2) DEFAULT NULL,
+    coupon_amount DECIMAL(10, 2) DEFAULT NULL,               -- the coupon that applied to the product will have it if not just 0
+    real_amount DECIMAL(10, 2) DEFAULT NULL      -- final paying price after sale and coupon.
 );
 
 INSERT INTO
@@ -1948,9 +1963,9 @@ CREATE TABLE order_change_log (
     id SERIAL PRIMARY KEY,
     order_id INTEGER NOT NULL,
     update_action update_action_type_enum NOT NULL,
-    description VARCHAR(500) NULL DEFAULT NULL,
+    description VARCHAR(500),
     operator VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP NULL DEFAULT NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO order_change_log (order_id, update_action, description, operator)
@@ -1970,36 +1985,36 @@ VALUES
 DROP TABLE IF EXISTS company_address;               -- your(owner) company/warehouses, where product shipping from.
 CREATE TABLE company_address (
     id SERIAL PRIMARY KEY,
-    address_name VARCHAR(200) NULL DEFAULT NULL,
-    send_status INTEGER NULL DEFAULT NULL,            -- does this location send out product. no -> 0 . yes -> 1
-    receive_status INTEGER NULL DEFAULT NULL,         -- does this location receive return item(return center) no -> 0 . yes -> 1
-    receiver_name VARCHAR(64) NULL DEFAULT NULL,
-    receiver_phone VARCHAR(64) NULL DEFAULT NULL,
-    state VARCHAR(64) NULL DEFAULT NULL,
-    city VARCHAR(64) NULL DEFAULT NULL,
-    zip_code VARCHAR(64) NULL DEFAULT NULL,
-    detail_address VARCHAR(200) NULL DEFAULT NULL
+    location_name VARCHAR(200) NOT NULL,
+    send_status BOOLEAN DEFAULT FALSE,                 -- does this location send out product.
+    receive_status BOOLEAN DEFAULT FALSE,              -- does this location receive return item(return center)
+    receiver_name VARCHAR(64) NULL,
+    receiver_phone VARCHAR(15) NULL,
+    state VARCHAR(64) NULL,
+    city VARCHAR(64) NULL,
+    zip_code VARCHAR(10) NULL,
+    detail_address VARCHAR(255) NULL
 );
 
-INSERT INTO company_address(address_name, send_status, receive_status, receiver_name,  receiver_phone, state, city, zip_code, detail_address)
+INSERT INTO company_address(location_name, send_status, receive_status, receiver_name, receiver_phone, state, city, zip_code, detail_address)
 VALUES
-('111 over there send out avenue 2nd floor', 1, 0, 'Jun', 1800000000, 'New York', 'New York', 11220, '222 over there avenue 2nd floor, go through the gate in north east corner to unload'),
-('222 right here return avenue', 0, 1, 'Jun', 1800000000, 'Nevada', 'Las Vegas', 88901, 'Next to the casino'),
-('333 backup warehouse avenue', 1, 1, 'Jun', 1800000000, 'Pennsylvania', 'Philadelphia', 19019, 'Big red sign turn left and ring bell to enter');
+('111 over there send out avenue 2nd floor', TRUE, FALSE, 'Jun', '1800000000', 'New York', 'New York', '11220', '222 over there avenue 2nd floor, go through the gate in north east corner to unload'),
+('222 right here return avenue', FALSE, TRUE, 'Jun', '1800000000', 'Nevada', 'Las Vegas', '88901', 'Next to the casino'),
+('333 backup warehouse avenue', TRUE, TRUE, 'Jun', '1800000000', 'Pennsylvania', 'Philadelphia', '19019', 'Big red sign turn left and ring bell to enter');
 
 
 --- when admin/operator determined if the product can be return, one item(s) return at a time
 DROP TABLE IF EXISTS return_request;
-CREATE TABLE return_request  (
+CREATE TABLE return_request (
     id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL,
     company_address_id INTEGER NOT NULL,                   -- return to you(owner), return center or warehouse
+    order_id INTEGER NOT NULL,                             -- Swapped order_id and company_address_id
     order_sn VARCHAR(64),
     member_id UUID NOT NULL,
     return_quantity INTEGER,                       -- number of items to be returned
     return_name VARCHAR(100),
-    return_phone VARCHAR(100),
-    return_status return_status_enum DEFAULT 'waiting_to_be_processed',                -- return status,  waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
+    return_phone VARCHAR(20),
+    return_status return_status_enum DEFAULT 'waiting_to_be_processed',                -- return status, waiting to process 0, returning(sending) 1, complete 2, rejected(not matching reason) 3
     handle_time TIMESTAMP,                        -- how long to return this item, e.g 2 weeks to return this or return is voided.
     asking_amount DECIMAL(10, 2),
     refunded_amount DECIMAL(10, 2),
@@ -2014,7 +2029,7 @@ CREATE TABLE return_request  (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO return_request (order_id, company_address_id, order_sn, member_id, return_quantity, return_name, return_phone, return_status,
+INSERT INTO return_request (company_address_id, order_id, order_sn, member_id, return_quantity, return_name, return_phone, return_status,
                                  handle_time, asking_amount, reason, description, handle_note, handle_operator, receive_operator,
                                  receive_time, receive_note)
 VALUES
@@ -2276,7 +2291,7 @@ CREATE TABLE coupon_usage_log (
     member_id UUID NOT NULL,
     order_id INTEGER NOT NULL,
     used_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    code VARCHAR(64) NULL DEFAULT NULL
+    code VARCHAR(64) NOT NULL
 );
 
 INSERT INTO coupon_usage_log (coupon_id, member_id, order_id, used_time, code)
@@ -2549,3 +2564,4 @@ VALUES
 -- Other logs
 (6, 'other', 'Minor corrections in template formatting.', 'email_system'),
 (7, 'cancel', 'Cancelled update due to conflicting content revisions.', 'content_manager');
+

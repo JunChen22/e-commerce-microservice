@@ -9,11 +9,17 @@ import java.util.UUID;
 import static java.time.ZonedDateTime.now;
 
 @Getter
-public class UmsLogUpdateEvent {
+public class UmsActivityUpdateEvent {
 
     public enum Type {
         LOG_IN,
-        LOG_OFF
+        LOG_OFF,
+        FAILED_LOGIN,
+        PASSWORD_CHANGE,
+        SESSION_EXPIRED,
+        TWO_FA_SUCCESS,
+        TWO_FA_FAILED,
+        ACCOUNT_LOCKOUT
     }
 
     private final Type eventType;
@@ -21,7 +27,7 @@ public class UmsLogUpdateEvent {
     private final MemberActivityLog loginLog;
     private final ZonedDateTime eventCreatedAt;
 
-    public UmsLogUpdateEvent(Type eventType, UUID memberId, MemberActivityLog loginLog) {
+    public UmsActivityUpdateEvent(Type eventType, UUID memberId, MemberActivityLog loginLog) {
         this.eventType = eventType;
         this.memberId = memberId;
         this.loginLog = loginLog;

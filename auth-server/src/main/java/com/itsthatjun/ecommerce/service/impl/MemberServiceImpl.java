@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.service.impl;
 
-import com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent;
+import com.itsthatjun.ecommerce.dto.event.outgoing.UmsActivityUpdateEvent;
 import com.itsthatjun.ecommerce.enums.type.PlatformType;
 import com.itsthatjun.ecommerce.enums.type.UserActivityType;
 import com.itsthatjun.ecommerce.model.entity.MemberActivityLog;
@@ -19,11 +19,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.UUID;
-
-import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent.Type.LOG_OFF;
-import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsLogUpdateEvent.Type.LOG_IN;
 
 @Service
 public class MemberServiceImpl implements ReactiveUserDetailsService, MemberService {
@@ -45,51 +43,58 @@ public class MemberServiceImpl implements ReactiveUserDetailsService, MemberServ
 
     @Override
     public Mono<UserDetails> findByUsername(String username) throws UsernameNotFoundException {
-        // TODO: Add a check for the user's status (e.g. active, inactive, etc.)
-        //      when no user is found, throw a UsernameNotFoundException
         return memberRepository.findByUsername(username)
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException("User not found: " + username)))
-                .map(CustomUserDetail::new);  // CustomUserDetail should implement UserDetails
+                .map(CustomUserDetail::new);
     }
 
     @Override
-    public Mono<Void> memberLoginLog(UUID memberId) {
+    public Mono<Void> memberActivityLog(UUID memberId, UserActivityType activityType, PlatformType platformType,String ipAddress) {
         MemberActivityLog activityLog = new MemberActivityLog();
         activityLog.setMemberId(memberId);
-        activityLog.setActivity(UserActivityType.LOGIN);
-        activityLog.setIpAddress("127.0.0.1"); // TODO: set the actual IP address
-        activityLog.setPlatformType(PlatformType.WEB);  // TODO: set the actual platform type
+        activityLog.setActivity(activityType);
+        activityLog.setIpAddress(ipAddress);
+        activityLog.setPlatformType(platformType);
 
-        return loginLogRepository.saveLog(activityLog) // Save the new login log
-                .flatMap(savedLog -> 
-                    // Send the log update message after saving the log
-                    sendUmsLogUpdateMessage("authLog-out-0", new UmsLogUpdateEvent(LOG_IN, memberId, savedLog))
-                ).then();
-    }
+        UmsActivityUpdateEvent.Type eventType = mapToEventType(activityType);
 
-    @Override
-    public Mono<Void> memberLogoutLog(UUID memberId) {
-        MemberActivityLog activityLog = new MemberActivityLog();
-        activityLog.setMemberId(memberId);
-        activityLog.setActivity(UserActivityType.LOGOFF);
-        activityLog.setIpAddress("127.0.0.1"); // TODO: set the actual IP address
-        activityLog.setPlatformType(PlatformType.WEB);  // TODO: set the actual platform type
-
-        return loginLogRepository.saveLog(activityLog) // Save the new login log
+        return loginLogRepository.saveLog(activityLog)
                 .flatMap(savedLog ->
-                        // Send the log update message after saving the log
-                        sendUmsLogUpdateMessage("authLog-out-0", new UmsLogUpdateEvent(LOG_OFF, memberId, savedLog))
+                    sendUmsLogUpdateMessage("authLog-out-0", new UmsActivityUpdateEvent(eventType, memberId, savedLog))
                 ).then();
     }
 
-    private Mono<Void> sendUmsLogUpdateMessage(String bindingName, UmsLogUpdateEvent event) {
+    // TODO: upgrade to switch expression, case LOGIN -> UmsActivityUpdateEvent.Type.LOG_IN;,  when upgrade java 17 and/or spring boot 3
+    public UmsActivityUpdateEvent.Type mapToEventType(UserActivityType activityType) {
+        switch (activityType) {
+            case LOGIN:
+                return UmsActivityUpdateEvent.Type.LOG_IN;
+            case LOGOFF:
+                return UmsActivityUpdateEvent.Type.LOG_OFF;
+            case FAILED_LOGIN:
+                return UmsActivityUpdateEvent.Type.FAILED_LOGIN;
+            case PASSWORD_CHANGE:
+                return UmsActivityUpdateEvent.Type.PASSWORD_CHANGE;
+            case SESSION_EXPIRED:
+                return UmsActivityUpdateEvent.Type.SESSION_EXPIRED;
+            case TWO_FA_SUCCESS:
+                return UmsActivityUpdateEvent.Type.TWO_FA_SUCCESS;
+            case TWO_FA_FAILED:
+                return UmsActivityUpdateEvent.Type.TWO_FA_FAILED;
+            case ACCOUNT_LOCKOUT:
+                return UmsActivityUpdateEvent.Type.ACCOUNT_LOCKOUT;
+            default:
+                throw new IllegalArgumentException("Unknown activity type: " + activityType);
+        }
+    }
+
+    private Mono<Void> sendUmsLogUpdateMessage(String bindingName, UmsActivityUpdateEvent event) {
         return Mono.fromRunnable(() -> {
             LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-            System.out.println("sending to binding: " + bindingName);
             Message message = MessageBuilder.withPayload(event)
                     .setHeader("event-type", event.getEventType())
                     .build();
             streamBridge.send(bindingName, message);
-        });
+        }).subscribeOn(Schedulers.boundedElastic()).then();
     }
 }

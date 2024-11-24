@@ -8,11 +8,9 @@ import java.io.Serializable;
 
 @Getter
 @AllArgsConstructor
-public class LoginRequest implements Serializable {
+public class TokenRefreshRequest implements Serializable {
 
-    private final String username;
-
-    private final String password;
+    private final String refreshToken;
 
     private final PlatformType platformType;
 }

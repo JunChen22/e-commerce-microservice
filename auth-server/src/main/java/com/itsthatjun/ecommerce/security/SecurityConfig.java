@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authenticationManager(authenticationManager())
                 .authorizeExchange(exchanges ->
                         exchanges
-                                .pathMatchers(HttpMethod.POST, "/login", "/logoff").permitAll()
+                                .pathMatchers(HttpMethod.POST, "/login", "/logoff", "/refresh").permitAll()
                                 .pathMatchers("/actuator/**").permitAll() // docker's health check will check the health of the service
                                 //.pathMatchers("/**").permitAll() // for testing purposes. All endpoints are open. Remove when needed.
                                 .anyExchange().authenticated()

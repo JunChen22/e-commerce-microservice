@@ -12,18 +12,18 @@ public class CustomResponseEntityExceptionHandler {
     @ExceptionHandler(ArticleException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleArticleException(ArticleException ex) {
-        return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ArticleNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<String> handleArticleNotFoundException(ArticleNotFoundException ex) {
-        return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ArticleSlugAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<String> handleArticleSlugAlreadyExistException(ArticleSlugAlreadyExistException ex) {
-        return new ResponseEntity(ex.getMessage(), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

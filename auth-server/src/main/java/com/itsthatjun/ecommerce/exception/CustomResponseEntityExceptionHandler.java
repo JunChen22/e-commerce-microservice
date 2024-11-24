@@ -11,6 +11,12 @@ public class CustomResponseEntityExceptionHandler {
 
     @ExceptionHandler(PasswordException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> handleJWTTokenException(InvalidJwtTokenException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(PasswordException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<String> handlePasswordException(PasswordException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }

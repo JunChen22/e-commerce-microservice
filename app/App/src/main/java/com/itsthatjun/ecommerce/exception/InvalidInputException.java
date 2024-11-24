@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.exception;
+package com.itsthatjun.ecommerce.exceptions;
 
 public class InvalidInputException {
 }

@@ -19,7 +19,7 @@ public interface MemberRepository extends ReactiveCrudRepository<Member, UUID> {
      */
     @Query("SELECT * FROM member " +
             "WHERE username = :username AND status = 'active' AND lifecycle_status = 'normal'")
-    Mono<Member> findByUsername(String username);
+    Mono<Member> findByUsername(@Param("username") String username);
 
     /**
      * save member
@@ -63,7 +63,8 @@ public interface MemberRepository extends ReactiveCrudRepository<Member, UUID> {
             "WHERE id = :#{#member.id} RETURNING *")
     Mono<Member> updateStatus(@Param("member") Member member);
 
-     /** TODO: delete and soft delete
+    //TODO: delete and soft delete
+     /**
      * Soft delete a member by marking status and lifecycle status
      * @param memberId the ID of the member to soft delete
      * @return a Mono containing the updated member

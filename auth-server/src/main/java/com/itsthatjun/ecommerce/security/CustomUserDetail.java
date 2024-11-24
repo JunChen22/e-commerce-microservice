@@ -12,9 +12,8 @@ import java.util.UUID;
 @Getter
 public class CustomUserDetail implements UserDetails {
 
-    @Getter
     private final Member member;
-    // TODO: add authorities
+
     public CustomUserDetail(Member member) {
         this.member = member;
     }

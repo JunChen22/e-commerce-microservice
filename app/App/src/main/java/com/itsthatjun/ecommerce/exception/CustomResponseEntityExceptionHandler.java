@@ -1,11 +1,6 @@
-package com.itsthatjun.ecommerce.exception;
+package com.itsthatjun.ecommerce.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import reactor.core.publisher.Mono;
 
 @ControllerAdvice
 public class CustomResponseEntityExceptionHandler {
