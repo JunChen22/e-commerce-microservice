@@ -8,18 +8,26 @@ jwt:
   expirationTimeMinute: 150
   issuer: auth-server
 
+
+verification:
+  token:
+    expirationTimeMinute: 10
+    secretKey: JunChen522
+
 spring:
   application:
     name: ums
-  datasource:
-    url: jdbc:postgresql://localhost:5437/userdb
-    driverClassName: org.postgresql.Driver
-    #initialization-mode: always
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5437/userdb
+    username: postgres
+    password: password
+    pool:
+      enabled: true
   data:
     mongodb:
       host: localhost
       port: 27017
-      database: springecommerece
+      database: springecommerce
   redis:
     host: localhost
     port: 6379
@@ -55,13 +63,6 @@ spring.cloud:
         producer:
           required-groups: userEmailGroup
 
-
-# tells spring mybatis mapper's xml(sql) located
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml
-
 redis:
   key:
     prefix:
@@ -76,8 +77,8 @@ spring.config.activate.on-profile: docker
 server.port: 80
 
 spring:
-  datasource:
-    url: jdbc:postgresql://ums-db:5432/userdb
+  r2dbc:
+    url: r2dbc:postgresql://ums-db:5432/userdb
   data:
     mongodb:
       host: mongodb

@@ -13,18 +13,20 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @Component
 public class JwtAuthenticationWebFilter implements WebFilter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JwtAuthenticationWebFilter.class);
+
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Value("${jwt.HEADER_STRING}")
     private String header;
 
     @Value("${jwt.tokenPrefix}")
     private String tokenPrefix;
-
-    private static Logger log = LoggerFactory.getLogger(JwtAuthenticationWebFilter.class);
-
-    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public JwtAuthenticationWebFilter(JwtTokenUtil jwtTokenUtil) {
@@ -36,19 +38,25 @@ public class JwtAuthenticationWebFilter implements WebFilter {
         String authHeader = exchange.getRequest().getHeaders().getFirst(header);
         if (authHeader != null && authHeader.startsWith(tokenPrefix)) {
             String jwt = getJWTFromHeader(authHeader);
-            String name = jwtTokenUtil.getUserNameFromToken(jwt);
-            int userId = jwtTokenUtil.getUserIdFromToken(jwt);
-
-            return Mono.justOrEmpty(jwtTokenUtil.validateToken(jwt))
+            return jwtTokenUtil.validateToken(jwt)
                     .flatMap(isValid -> {
                         if (isValid) {
-                            UserContext userContext = new UserContext(userId, name, jwt);
-                            Authentication authentication = new JwtAuthenticationToken(userContext, null, jwt);
-                            // Set the security context
-                            return chain.filter(exchange)
-                                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+                            return Mono.zip(
+                                    jwtTokenUtil.getUserNameFromToken(jwt),
+                                    jwtTokenUtil.getMemberIdFromToken(jwt)
+                            ).flatMap(tuple -> {
+                                String name = tuple.getT1();
+                                UUID memberId = tuple.getT2();
+
+                                UserContext userContext = new UserContext(memberId, name, jwt);
+                                Authentication authentication = new JwtAuthenticationToken(userContext, null, jwt);
+
+                                // Set the security context
+                                return chain.filter(exchange)
+                                        .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+                            });
                         } else {
-                            log.info("Invalid JWT");
+                            LOG.info("Invalid JWT");
                             return Mono.error(new Exception("Invalid JWT"));
                         }
                     });

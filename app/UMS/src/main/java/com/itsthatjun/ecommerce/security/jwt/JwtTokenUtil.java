@@ -1,13 +1,21 @@
 package com.itsthatjun.ecommerce.security.jwt;
 
 import io.jsonwebtoken.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtTokenUtil {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JwtTokenUtil.class);
 
     @Value("${jwt.secretKey}")
     private String secret;
@@ -15,85 +23,67 @@ public class JwtTokenUtil {
     @Value("${jwt.issuer}")
     private String issuer;
 
-    public boolean validateToken(String token) {
-        try {
+    public Mono<Boolean> validateToken(String token) {
+        return Mono.fromCallable(() -> {
             String tokenIssuer = getIssuerFromToken(token);
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+
+            Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token);
+
             return tokenIssuer.equals(issuer) && !isTokenExpired(token);
-        } catch (SignatureException ex) {
-            System.out.println("Invalid JWT Signature");
-        } catch (MalformedJwtException ex) {
-            System.out.println("Invalid JWT Token");
-        } catch (ExpiredJwtException ex) {
-            System.out.println("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            System.out.println("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            System.out.println("JWT claims string is empty");
-        }
-        return false;
+        }).onErrorResume(ex -> {
+            LOG.error("JWT validation error: {}", ex.getMessage());
+            return Mono.just(false);
+        });
+    }
+
+    private Key getSigningKey() {
+        return new SecretKeySpec(secret.getBytes(), "HmacSHA256");
     }
 
     private boolean isTokenExpired(String token) {
-        Claims claims= getClaimsFromToken(token);
+        Claims claims = getClaimsFromToken(token);
         Date date = claims.getExpiration();
         return date.before(new Date());
     }
 
     public String getIssuerFromToken(String token) {
-        String issuer;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            issuer =  claims.getIssuer();
-        } catch (Exception e) {
-            issuer = null;
-        }
-        return issuer;
+        Claims claims = getClaimsFromToken(token);
+        return claims != null ? claims.getIssuer() : null;
     }
 
-    public String getUserNameFromToken(String token) {
-        String userName;
-        try {
+    public Mono<String>  getNameFromToken(String token) {
+        return Mono.fromCallable(() -> {
             Claims claims = getClaimsFromToken(token);
-            userName = (String) claims.get("username");
-        } catch (Exception e) {
-            userName = null;
-        }
-        return userName;
+            return (String) claims.get("name");
+        });
     }
 
-    public String getNameFromToken(String token) {
-        String name;
-        try {
+    public Mono<String> getUserNameFromToken(String token) {
+        return Mono.fromCallable(() -> {
             Claims claims = getClaimsFromToken(token);
-            name =  (String) claims.get("name");
-        } catch (Exception e) {
-            name = null;
-        }
-        return name;
+            return (String) claims.get("username");
+        });
     }
 
-    public int getUserIdFromToken(String token) {
-        Integer userId;
-        try {
+    public Mono<UUID> getMemberIdFromToken(String token) {
+        return Mono.fromCallable(() -> {
             Claims claims = getClaimsFromToken(token);
-            userId = Integer.valueOf( claims.getSubject());
-        } catch (Exception e) {
-            userId = null;
-        }
-        return (userId != null) ? userId : 0;
+            return UUID.fromString(claims.getSubject()); // Assuming subject is a UUID string
+        });
     }
-
     private Claims getClaimsFromToken(String token) {
-        Claims claims = null;
         try {
-            claims = Jwts.parser()
-                    .setSigningKey(secret)
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey()) // Use the Key object
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            System.out.println("unable to get claim");
+            System.out.println("Unable to get claims");
+            return null;
         }
-        return claims;
     }
 }

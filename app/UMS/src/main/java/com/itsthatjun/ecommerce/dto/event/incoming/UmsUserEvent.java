@@ -4,6 +4,7 @@ import com.itsthatjun.ecommerce.dto.MemberDetail;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static java.time.ZonedDateTime.now;
 
@@ -19,13 +20,13 @@ public class UmsUserEvent {
     }
 
     private final Type eventType;
-    private final Integer userId;
+    private final UUID memberId;
     private final MemberDetail memberDetail;
     private final ZonedDateTime eventCreatedAt;
 
-    public UmsUserEvent(Type eventType, Integer userId, MemberDetail memberDetail) {
+    public UmsUserEvent(Type eventType, UUID memberId, MemberDetail memberDetail) {
         this.eventType = eventType;
-        this.userId = userId;
+        this.memberId = memberId;
         this.memberDetail = memberDetail;
         this.eventCreatedAt = now();
     }

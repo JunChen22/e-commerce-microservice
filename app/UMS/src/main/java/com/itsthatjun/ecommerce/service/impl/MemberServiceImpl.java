@@ -1,35 +1,37 @@
 package com.itsthatjun.ecommerce.service.impl;
 
-import com.itsthatjun.ecommerce.dao.MemberDao;
 import com.itsthatjun.ecommerce.dto.DTOMapper;
 import com.itsthatjun.ecommerce.dto.MemberDetail;
 import com.itsthatjun.ecommerce.dto.UserInfo;
-import com.itsthatjun.ecommerce.dto.admin.AdminMemberDetail;
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsAuthUpdateEvent;
 import com.itsthatjun.ecommerce.dto.event.outgoing.UmsEmailEvent;
 import com.itsthatjun.ecommerce.dto.model.AddressDTO;
-import com.itsthatjun.ecommerce.mbg.mapper.*;
-import com.itsthatjun.ecommerce.mbg.model.*;
+import com.itsthatjun.ecommerce.dto.model.MemberDTO;
+import com.itsthatjun.ecommerce.dto.model.MemberIconDTO;
+import com.itsthatjun.ecommerce.enums.status.AccountStatus;
+import com.itsthatjun.ecommerce.enums.status.LifeCycleStatus;
+import com.itsthatjun.ecommerce.enums.status.VerificationStatus;
+import com.itsthatjun.ecommerce.enums.type.UpdateActionType;
+import com.itsthatjun.ecommerce.exception.MemberNotFoundException;
+import com.itsthatjun.ecommerce.model.entity.*;
+import com.itsthatjun.ecommerce.repository.*;
 import com.itsthatjun.ecommerce.security.SecurityUtil;
 import com.itsthatjun.ecommerce.service.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
-import java.util.List;
+import java.util.UUID;
 
 import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsAuthUpdateEvent.Type.*;
-import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsEmailEvent.Type.ALL_USER;
 import static com.itsthatjun.ecommerce.dto.event.outgoing.UmsEmailEvent.Type.ONE_USER;
 
 @Service
@@ -37,337 +39,212 @@ public class MemberServiceImpl implements MemberService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MemberServiceImpl.class);
 
-    private final MemberMapper memberMapper;
+    private final VerificationServiceImpl verificationService;
 
-    private final MemberIconMapper iconMapper; // TODO: add icon to registration/update
+    private final AddressRepository addressRepository;
 
-    private final MemberLoginLogMapper loginLogMapper;
+    private final MemberChangeLogRepository changeLogRepository;
 
-    private final AddressMapper addressMapper;
+    private final MemberIconRepository iconRepository;
 
-    private final MemberChangeLogMapper logMapper;
+    private final MemberRepository memberRepository;
 
     private final StreamBridge streamBridge;
-
-    private final Scheduler jdbcScheduler;
-
-    private final MemberDao memberDao;
 
     private final DTOMapper dtoMapper;
 
     private final SecurityUtil securityUtil;
 
-    private final RedisServiceImpl redisService;
-
-    //@Value("${redis.key.orderId}")
-    //private String REDIS_KEY_ORDER_ID;
-
-    //@Value("${redis.database}")
-    //private String REDIS_DATABASE;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public MemberServiceImpl(MemberMapper memberMapper, MemberIconMapper iconMapper, MemberLoginLogMapper loginLogMapper,
-                             MemberChangeLogMapper logMapper, AddressMapper addressMapper, StreamBridge streamBridge,
-                             @Qualifier("jdbcScheduler") Scheduler jdbcScheduler, MemberDao memberDao, DTOMapper dtoMapper,
-                             RedisServiceImpl redisService, SecurityUtil securityUtil) {
-        this.memberMapper = memberMapper;
-        this.iconMapper = iconMapper;
-        this.loginLogMapper = loginLogMapper;
-        this.addressMapper = addressMapper;
-        this.logMapper = logMapper;
+    public MemberServiceImpl(VerificationServiceImpl verificationService, AddressRepository addressRepository, MemberChangeLogRepository changeLogRepository,
+                             MemberIconRepository iconRepository, MemberRepository memberRepository, StreamBridge streamBridge,
+                             DTOMapper dtoMapper, SecurityUtil securityUtil, PasswordEncoder passwordEncoder) {
+        this.verificationService = verificationService;
+        this.addressRepository = addressRepository;
+        this.changeLogRepository = changeLogRepository;
+        this.iconRepository = iconRepository;
+        this.memberRepository = memberRepository;
         this.streamBridge = streamBridge;
-        this.jdbcScheduler = jdbcScheduler;
-        this.memberDao = memberDao;
         this.dtoMapper = dtoMapper;
-        this.redisService = redisService;
         this.securityUtil = securityUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public String generateAuthCode(String email) {
-        // TODO: redis and notification
-
-        long AUTH_CODE_DURATION = 600; // 600 seconds or 10 minutes
-        //redisService.set(email, , AUTH_CODE_DURATION);
-
-        return null;
-    }
-
-    @Override
-    public String verifyAuthCode(String telephone, String authCode) {
-        // TODO: redis
-        return null;
-    }
-
-    @Override
-    public Mono<MemberDetail> register(MemberDetail memberDetail) {
-        return Mono.fromCallable(() -> {
-            MemberDetail newMemberDetail = internalRegister(memberDetail);
-            return newMemberDetail;
-        }).subscribeOn(jdbcScheduler);
-    }
-
-    private MemberDetail internalRegister(MemberDetail memberDetail) {
-        Member newMember = dtoMapper.memberDetailToMember(memberDetail);
-        Address address = dtoMapper.addressDTOToAddress(memberDetail.getAddress(), null);
-
-        String newUserName = newMember.getUsername();
-        MemberExample example = new MemberExample();
-        example.createCriteria().andUsernameEqualTo(newUserName);
-        List<Member> existing = memberMapper.selectByExample(example);
-
-        if (!existing.isEmpty()) {
-            System.out.println("existing account");
-            return null; // TODO: make exception for existing account
-        }
-
-        String passWord = newMember.getPassword();
-        newMember.setPassword(passwordEncoder().encode(passWord));
-        newMember.setStatus(1);
-        memberMapper.insert(newMember);
-
-        int newMemberId = newMember.getId();
-
-        address.setMemberId(newMemberId);
-        addressMapper.insert(address);
-
-        createUpdateLog(newMemberId, "create account", "user");
-        sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(NEW_ACCOUNT, newMemberId, newMember));
-
-        return memberDetail;
+    public Mono<Boolean> checkEmail(String email) {
+        return memberRepository.existsByEmail(email);
     }
 
     @Override
     public Mono<MemberDetail> getInfo() {
-        return securityUtil.getUserId()
-                .flatMap(userId ->
-                        Mono.fromCallable(() -> {
-                            MemberDetail memberDetail = memberDao.getUserDetail(userId);
-                            return memberDetail;
-                        }).subscribeOn(jdbcScheduler)
+        return securityUtil.getMemberId()
+                .flatMap(memberId -> memberRepository.findById(memberId)
+                        .switchIfEmpty(Mono.error(new MemberNotFoundException("Member not found: " + memberId)))
+                        .flatMap(this::buildMemberDetail)
                 );
     }
 
+    private Mono<MemberDetail> buildMemberDetail(Member member) {
+        // Wrap the MapStruct mapping in Mono.fromCallable to make it non-blocking
+        Mono<MemberDTO> memberDTOMono = Mono.fromCallable(() -> dtoMapper.memberToMemberDTO(member));
+
+        Mono<AddressDTO> addressMono = addressRepository.findByMemberId(member.getId())
+                .flatMap(address -> Mono.just(dtoMapper.addressToAddressDTO(address)));
+
+        Mono<MemberIconDTO> iconMono = iconRepository.findByMemberId(member.getId())
+                .flatMap(icon -> Mono.just(dtoMapper.memberIconToMemberIconDTO(icon)));
+
+        // Combine the results of the three asynchronous calls
+        return Mono.zip(memberDTOMono, addressMono, iconMono)
+                .map(tuple -> {
+                    MemberDTO memberDTO = tuple.getT1();
+                    AddressDTO addressDTO = tuple.getT2();
+                    MemberIconDTO memberIconDTO = tuple.getT3();
+
+                    // Return the MemberDetail with all the mapped and fetched data
+                    return new MemberDetail(memberDTO, addressDTO, memberIconDTO);
+                });
+    }
+
+    @Transactional
     @Override
-    public Mono<Member> updatePassword(int userId, String newPassword) {
-        return Mono.fromCallable(() -> {
-            Member member = memberMapper.selectByPrimaryKey(userId);
-            String currentPassword = member.getPassword();
-            String newEncodedPassword = passwordEncoder().encode(newPassword);
+    public Mono<MemberDetail> register(MemberDetail memberDetail) {
+        Member newMember = dtoMapper.memberDTOToMember(memberDetail.getMember());
+        Address address = dtoMapper.addressDTOToAddress(memberDetail.getAddress());
+        MemberIcon icon = dtoMapper.memberIconDTOToMemberIcon(memberDetail.getIcon());
 
-            if (passwordEncoder().matches(newPassword, currentPassword)) return member; // TODO: send reminder, same password
+        newMember.setPassword(passwordEncoder.encode(newMember.getPassword()));
+        newMember.setStatus(AccountStatus.ACTIVE);
+        newMember.setLifecycleStatus(LifeCycleStatus.NORMAL);
+        newMember.setVerifiedStatus(VerificationStatus.NOT_VERIFIED);
 
-            member.setPassword(newEncodedPassword);
-            memberMapper.updateByPrimaryKey(member);
+        return memberRepository.saveMember(newMember)
+                .flatMap(member -> {
+                    address.setMemberId(member.getId());
+                    icon.setMemberId(member.getId());
 
-            createUpdateLog(member.getId(), "update account password", "user");
-            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_ACCOUNT_INFO, userId, member));
-            return member;
-        }).subscribeOn(jdbcScheduler);
+                    return Mono.when(
+                            addressRepository.save(address),
+                            iconRepository.save(icon)
+                    ).thenReturn(member); // Ensures chaining continues after saving both address and icon
+                })
+                .flatMap(savedMember -> {
+                    return Mono.when(
+                            createChangeLog(savedMember.getId(), UpdateActionType.CREATE,"create account", "user"),
+                            verificationService.sendEmailVerification(savedMember.getId(), savedMember.getEmail()), // send out email to verify email
+                            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(NEW_ACCOUNT, savedMember.getId(), savedMember))
+                    ).thenReturn(memberDetail); // Final return of the `MemberDetail` object
+                })
+                .doOnError(e -> LOG.error("Error registering new member: {}", e.getMessage()))
+                .onErrorResume(e -> {
+                    // Handle error (rollback, custom message, etc.)
+                    return Mono.error(new RuntimeException("Failed to register member", e));
+                });
     }
 
     @Override
-    public Mono<Member> updateInfo(MemberDetail memberDetail, int userId) {
-        return Mono.fromCallable(() -> {
-            Member member = memberMapper.selectByPrimaryKey(userId);
-            Member updateMember = dtoMapper.memberDetailToMember(memberDetail);
-            updateMember.setId(userId);
+    public Mono<MemberDTO> updatePassword(MemberDTO member, UUID memberId) {
+        return memberRepository.findById(memberId)
+                .flatMap(existingMember -> {
+                    String currentPassword = existingMember.getPassword();
+                    String newPassword = member.getPassword();
 
-            if (!member.getName().equals(updateMember.getName())) {
-                sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_ACCOUNT_INFO, userId, updateMember));
-            }
+                    if (newPassword.equals(currentPassword)) {
+                        return Mono.error(new IllegalArgumentException("New password cannot be the same as the current password"));
+                    }
 
-            memberMapper.updateByPrimaryKeySelective(updateMember);
-            createUpdateLog(member.getId(), "update account information", "user");
+                    String newEncodedPassword = passwordEncoder.encode(newPassword);
+                    existingMember.setPassword(newEncodedPassword);
 
-            return updateMember;
-        }).subscribeOn(jdbcScheduler);
+                    // Create necessary events for sending notifications
+                    UserInfo userInfo = new UserInfo(existingMember.getName(), existingMember.getEmail());
+                    UmsEmailEvent emailEvent = new UmsEmailEvent(ONE_USER, userInfo, "Update password", "user");
+                    UmsAuthUpdateEvent authEvent = new UmsAuthUpdateEvent(UPDATE_ACCOUNT_INFO, memberId, existingMember);
+
+                    // Reactive flow: update password, create change log, send notifications
+                    return memberRepository.updateMemberPassword(existingMember) // Update password reactively
+                            .then(createChangeLog(memberId, UpdateActionType.UPDATE, "update account password", "user"))
+                            .then(sendUserNotificationMessage("umsEmail-out-0", emailEvent))
+                            .then(sendAuthUpdateMessage("authUpdate-out-0", authEvent))
+                            .then(Mono.just(existingMember)); // Return the updated member as Mono
+                })
+                .map(dtoMapper::memberToMemberDTO) // Convert updated member to MemberDTO
+                .doOnError(e -> LOG.error("Error updating password for member {}: {}", memberId, e.getMessage()))
+                .onErrorResume(e -> Mono.error(new RuntimeException("Failed to update password", e))); // Handle errors
     }
 
     @Override
-    public Mono<Address> updateAddress(int userId, AddressDTO addressDTO) {
-        return Mono.fromCallable(() -> {
-            AddressExample addressExample = new AddressExample();
-            addressExample.createCriteria().andMemberIdEqualTo(userId);
-            Address address = addressMapper.selectByExample(addressExample).get(0);
+    public Mono<MemberDTO> updateInfo(MemberDTO member, UUID memberId) {
+        Member updateMember = dtoMapper.memberDTOToMember(member);
+        updateMember.setId(memberId);
 
-            Address newAddress = dtoMapper.addressDTOToAddress(addressDTO, address.getId());
-            addressMapper.updateByPrimaryKeySelective(newAddress);
-
-            createUpdateLog(userId, "update account address", "user");
-            return newAddress;
-        }).subscribeOn(jdbcScheduler);
+        return memberRepository.updateMemberInfo(updateMember)
+                .then(createChangeLog(member.getId(), UpdateActionType.UPDATE,"update account information", "user"))
+                .then(sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_ACCOUNT_INFO, memberId, updateMember)
+                ))
+                .thenReturn(member);
     }
 
     @Override
-    public Mono<Void> deleteAccount(int userId) {
-        return Mono.fromRunnable(() -> {
-            Member member = memberMapper.selectByPrimaryKey(userId);
-            member.setDeleteStatus(1);
-            member.setStatus(0);
-
-            memberMapper.updateByPrimaryKey(member);
-            createUpdateLog(member.getId(), "delete account", "user");
-            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(DELETE_ACCOUNT, userId, member));
-        }).subscribeOn(jdbcScheduler).then();
+    public Mono<AddressDTO> updateAddress(AddressDTO newAddress, UUID memberId) {
+        return memberRepository.findById(memberId)
+                .flatMap(member -> addressRepository.findByMemberId(memberId)
+                        .flatMap(address -> {
+                            Address updatedAddress = dtoMapper.addressDTOToAddress(newAddress);
+                            updatedAddress.setId(address.getId());
+                            updatedAddress.setMemberId(memberId);
+                            return addressRepository.save(updatedAddress);
+                        })
+                        .then(createChangeLog(memberId, UpdateActionType.UPDATE, "update account address", "user"))
+                        .thenReturn(newAddress));
     }
 
     @Override
-    public Mono<Void> createLoginLog(MemberLoginLog loginLog) {
-        return Mono.fromRunnable(
-                () -> loginLogMapper.insert(loginLog)
-        ).subscribeOn(jdbcScheduler).then();
+    public Mono<Void> deleteAccount(UUID memberId) {
+        return memberRepository.findById(memberId)
+                .flatMap(member -> {
+                    UserInfo userInfo = new UserInfo(member.getName(), member.getEmail());
+                    UmsEmailEvent emailEvent = new UmsEmailEvent(ONE_USER, userInfo, "delete user", "user");
+
+                    UmsAuthUpdateEvent authEvent = new UmsAuthUpdateEvent(DELETE_ACCOUNT, memberId, member);
+
+                    return memberRepository.deleteMember(memberId)
+                            .then(createChangeLog(member.getId(), UpdateActionType.DELETE, "delete account", "user"))
+                            .then(sendUserNotificationMessage("umsEmail-out-0", emailEvent))
+                            .then(sendAuthUpdateMessage("authUpdate-out-0", authEvent));
+                })
+                .doOnError(error -> LOG.error("Failed to delete account for member {}: {}", memberId, error.getMessage()))
+                .onErrorResume(error -> Mono.error(new RuntimeException("Account deletion failed", error)));
     }
 
-    // delete - status change, kept for archive
-    // send update to auth to remove it, status change to 0 too
-
-    // status change, kept on database but need to check status for login
-
-    // update info
-    // send update to auth
-
-    // ================= Admin actions ===================
-    @Override
-    public Flux<Member> listAllUser() {
-        return Mono.fromCallable(() -> {
-            List<Member> memberList = memberMapper.selectByExample(new MemberExample());
-            return memberList;
-        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Mono<AdminMemberDetail> getMemberDetailByUserId(int userId) {
-        return Mono.fromCallable(() -> {
-            AdminMemberDetail memberDetail = new AdminMemberDetail();
-            Member member = memberMapper.selectByPrimaryKey(userId);
-            memberDetail.setMember(member);
-
-            AddressExample addressExample = new AddressExample();
-            addressExample.createCriteria().andMemberIdEqualTo(userId);
-            List<Address> addressList = addressMapper.selectByExample(addressExample);
-
-            if (!addressList.isEmpty()) memberDetail.setAddress(addressList.get(0));
-            return memberDetail;
-        }).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Flux<MemberLoginLog> getMemberLoginFrequency(int userId) {
-        return Mono.fromCallable(() -> {
-            MemberLoginLogExample loginLogExample = new MemberLoginLogExample();
-            loginLogExample.createCriteria().andMemberIdEqualTo(userId);
-            List<MemberLoginLog> loginLogList = loginLogMapper.selectByExample(loginLogExample);
-            return loginLogList;
-        }).flatMapMany(Flux::fromIterable).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Mono<Member> createMember(Member newMember, String operator) {
-        return Mono.fromCallable(() -> {
-            String newUserName = newMember.getUsername();
-            MemberExample example = new MemberExample();
-            example.createCriteria().andUsernameEqualTo(newUserName);
-            List<Member> existing = memberMapper.selectByExample(example);
-
-            if (!existing.isEmpty()) {
-                System.out.println("existing account");
-                return null; // TODO: make exception for existing account
-            }
-
-            String passWord = newMember.getPassword();
-            newMember.setPassword(passwordEncoder().encode(passWord));
-            newMember.setStatus(1);
-
-            memberMapper.insert(newMember);
-            int userId = newMember.getId();
-
-            createUpdateLog(userId, "create member", operator);
-            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(NEW_ACCOUNT, userId, newMember));
-            return newMember;
-        }).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Mono<Member> updateMemberInfo(Member updatedMember, String operator) {
-        return Mono.fromCallable(() -> {
-            int userId = updatedMember.getId();
-            memberMapper.updateByPrimaryKeySelective(updatedMember);
-            createUpdateLog(userId, "update member information", operator);
-            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_ACCOUNT_INFO, userId, updatedMember));
-            return updatedMember;
-        }).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Mono<Member> updateMemberStatus(Member updatedMember, String operator) {
-        return Mono.fromCallable(() -> {
-            int userId = updatedMember.getId();
-            memberMapper.updateByPrimaryKeySelective(updatedMember);
-            createUpdateLog(userId, "update member status", operator);
-            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(UPDATE_STATUS, userId, updatedMember));
-            return updatedMember;
-        }).subscribeOn(jdbcScheduler);
-    }
-
-    @Override
-    public Mono<Member> deleteMember(int userId, String operator) {
-        return Mono.fromCallable(() -> {
-            Member member = memberMapper.selectByPrimaryKey(userId);
-            member.setStatus(0);
-            member.setDeleteStatus(1);
-            memberMapper.updateByPrimaryKeySelective(member);
-
-            createUpdateLog(userId, "delete member", operator);
-            sendAuthUpdateMessage("authUpdate-out-0", new UmsAuthUpdateEvent(DELETE_ACCOUNT, userId, member));
-            return member;
-        }).subscribeOn(jdbcScheduler);
-    }
-
-    private void createUpdateLog(int userId, String updateAction, String operator) {
+    private Mono<Void> createChangeLog(UUID memberId, UpdateActionType updateAction, String description, String operator) {
         MemberChangeLog changeLog = new MemberChangeLog();
-        changeLog.setMemberId(userId);
+        changeLog.setMemberId(memberId);
         changeLog.setUpdateAction(updateAction);
+        changeLog.setDescription(description);
         changeLog.setOperator(operator);
-        logMapper.insert(changeLog);
+        return changeLogRepository.saveLog(changeLog).then();
     }
 
-    private PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    private void sendAuthUpdateMessage(String bindingName, UmsAuthUpdateEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event-type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
-    }
-
-    @Override
-    public Mono<Void> sendUserNotification(int userId, String message, String operator) {
+    private Mono<Void> sendUserNotificationMessage(String bindingName, UmsEmailEvent event) {
         return Mono.fromRunnable(() -> {
-            UserInfo userInfo = memberDao.getUserInfo(userId);
-            UmsEmailEvent event = new UmsEmailEvent(ONE_USER, userInfo, message, operator);
-            sendUserNotificationMessage("umsEmail-out-0", event);
-        }).subscribeOn(jdbcScheduler).then();
+            LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+            Message message = MessageBuilder.withPayload(event)
+                    .setHeader("event-type", event.getEventType())
+                    .build();
+            streamBridge.send(bindingName, message);
+        }).subscribeOn(Schedulers.boundedElastic()).then();
     }
 
-    @Override
-    public Mono<Void> sendAllUserNotification(String message, String operator) {
+    private Mono<Void> sendAuthUpdateMessage(String bindingName, UmsAuthUpdateEvent event) {
         return Mono.fromRunnable(() -> {
-            UmsEmailEvent event = new UmsEmailEvent(ALL_USER, null, message, operator);
-            sendUserNotificationMessage("umsEmail-out-0", event);
-        }).subscribeOn(jdbcScheduler).then();
-    }
-
-    private void sendUserNotificationMessage(String bindingName, UmsEmailEvent event) {
-        LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
-        System.out.println("sending to binding: " + bindingName);
-        Message message = MessageBuilder.withPayload(event)
-                .setHeader("event-type", event.getEventType())
-                .build();
-        streamBridge.send(bindingName, message);
+            LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
+            Message message = MessageBuilder.withPayload(event)
+                    .setHeader("event-type", event.getEventType())
+                    .build();
+            streamBridge.send(bindingName, message);
+        }).subscribeOn(Schedulers.boundedElastic()).then();
     }
 }

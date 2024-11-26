@@ -1,30 +1,36 @@
 package com.itsthatjun.ecommerce.dto.model;
 
+import com.itsthatjun.ecommerce.enums.status.VerificationStatus;
+import com.itsthatjun.ecommerce.enums.type.PlatformType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
-@Setter
-public class MemberDTO implements Serializable {
+@AllArgsConstructor
+public class MemberDTO {
 
-    private String username;
+    private final UUID id;
 
-    private String password;
+    private final String username;
 
-    private String name;
+    private final String password;
 
-    private String phoneNumber;
+    private final String name;
 
-    private String email;
+    private final String phoneNumber;
 
-    private Integer emailSubscription;
+    private final String email;
 
-    private Integer status;
+    private final Integer emailSubscription;
 
-    private Date createdAt;
+    private final VerificationStatus verifiedStatus;
 
-    private Date lastLogin;
+    private final LocalDateTime createdAt;
+
+    private final LocalDateTime lastLogin;
+
+    private final PlatformType platformType;
 }

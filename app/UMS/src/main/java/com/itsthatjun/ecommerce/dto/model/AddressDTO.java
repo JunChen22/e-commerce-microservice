@@ -1,24 +1,27 @@
 package com.itsthatjun.ecommerce.dto.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
-@Setter
-public class AddressDTO implements Serializable {
+@AllArgsConstructor
+public class AddressDTO {
 
-    private String receiverName;
+    private final UUID memberId;
 
-    private String phoneNumber;
+    private final String receiverName;
 
-    private String detailAddress;
+    private final String phoneNumber;
 
-    private String city;
+    private final String detailAddress;
 
-    private String state;
+    private final String city;
 
-    private String zipCode;
+    private final String state;
 
+    private final String zipCode;
+
+    private final String note;
 }

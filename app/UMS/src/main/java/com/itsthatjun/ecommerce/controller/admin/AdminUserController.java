@@ -1,7 +1,7 @@
-package com.itsthatjun.ecommerce.controller;
+package com.itsthatjun.ecommerce.controller.admin;
 
-import com.itsthatjun.ecommerce.dto.MemberDetail;
-import com.itsthatjun.ecommerce.service.impl.MemberServiceImpl;
+import com.itsthatjun.ecommerce.dto.admin.AdminMemberDetail;
+import com.itsthatjun.ecommerce.service.admin.AdminMemberServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,15 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/user")
 @Tag(name = "User related", description = "retrieve user information")
-public class UserController {
+public class AdminUserController {
 
-    private final MemberServiceImpl memberService;
+    private final AdminMemberServiceImpl memberService;
 
     @Autowired
-    public UserController(MemberServiceImpl memberService) {
+    public AdminUserController(AdminMemberServiceImpl memberService) {
         this.memberService = memberService;
     }
 
@@ -30,16 +32,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User information retrieved"),
             @ApiResponse(responseCode = "404", description = "User not found")})
     @GetMapping("/getInfo")
-    public Mono<MemberDetail> getInfo() {
-        return memberService.getInfo();
-    }
-
-    @Operation(summary = "Check email", description = "Check if email is already in use")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Email is available"),
-            @ApiResponse(responseCode = "400", description = "Email is already in use")})
-    @GetMapping("/checkEmail")
-    private Mono<Boolean> checkEmail(@RequestParam String email) {
-        return memberService.checkEmail(email);
+    public Mono<AdminMemberDetail> getInfo(@RequestParam UUID memberId) {
+        return memberService.getMemberDetailByMemberId(memberId);
     }
 }

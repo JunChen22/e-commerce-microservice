@@ -3,23 +3,24 @@ package com.itsthatjun.ecommerce.dto;
 import com.itsthatjun.ecommerce.dto.model.AddressDTO;
 import com.itsthatjun.ecommerce.dto.model.MemberDTO;
 import com.itsthatjun.ecommerce.dto.model.MemberIconDTO;
-import com.itsthatjun.ecommerce.dto.model.MemberLoginLogDTO;
-import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.List;
+import java.io.Serializable;
 
 @Getter
-@Setter
-public class MemberDetail extends MemberDTO {
+@AllArgsConstructor
+public class MemberDetail implements Serializable {
 
-    @ApiModelProperty("")
-    private AddressDTO address;
+    private final MemberDTO member;
 
-    @ApiModelProperty("")
-    private MemberIconDTO icon;
+    /**
+     * Member address
+     */
+    private final AddressDTO address;
 
-    @ApiModelProperty("")
-    private List<MemberLoginLogDTO> loginLogList;
+    /**
+     * Member icon
+     */
+    private final MemberIconDTO icon;
 }

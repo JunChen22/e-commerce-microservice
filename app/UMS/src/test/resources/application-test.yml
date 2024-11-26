@@ -11,8 +11,3 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
     com.itsthatjun.ecommerce: DEBUG
-
-mybatis:
-  mapper-locations:
-    - classpath:mapper/*.xml
-    - classpath:dao/*.xml

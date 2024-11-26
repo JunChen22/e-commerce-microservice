@@ -11,7 +11,9 @@ import java.util.List;
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
     private final UserContext userContext;
+
     private final List<GrantedAuthority> authorities;
+
     private final String token;
 
     public JwtAuthenticationToken(UserContext userContext, List<GrantedAuthority> authorities, String token) {

@@ -1,13 +1,15 @@
 package com.itsthatjun.ecommerce.dto.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
-@Setter
-public class MemberIconDTO implements Serializable {
+@AllArgsConstructor
+public class MemberIconDTO {
 
-    private String filename;
+    private final UUID memberId;
+
+    private final String filename;
 }

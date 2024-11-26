@@ -3,6 +3,7 @@ package com.itsthatjun.ecommerce.dto.event.admin;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static java.time.ZonedDateTime.now;
 
@@ -15,14 +16,14 @@ public class UmsAdminEmailEvent {
     }
 
     private final Type eventType;
-    private final Integer userId;
+    private final UUID memberId;
     private final String message;
     private final String operator;
     private final ZonedDateTime eventCreatedAt;
 
-    public UmsAdminEmailEvent(Type eventType, Integer userId, String message, String operator) {
+    public UmsAdminEmailEvent(Type eventType, UUID memberId, String message, String operator) {
         this.eventType = eventType;
-        this.userId = userId;
+        this.memberId = memberId;
         this.message = message;
         this.operator = operator;
         this.eventCreatedAt = now();
