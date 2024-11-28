@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.exceptions;
+package com.itsthatjun.ecommerce.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

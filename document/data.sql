@@ -59,7 +59,9 @@ CREATE TYPE return_status_enum AS ENUM (
     'waiting_to_be_processed',
     'returning',
     'complete',
-    'rejected'
+    'rejected',
+    'invalid',
+    'cancelled'
 );
 
 DROP TYPE IF EXISTS verification_status_enum CASCADE;
@@ -192,7 +194,7 @@ CREATE TABLE brand (
     logo TEXT,
     publish_status publish_status_enum DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO brand(name, slug, logo, publish_status)
@@ -579,7 +581,7 @@ CREATE TABLE product (
     publish_status publish_status_enum DEFAULT 'pending',
     lifecycle_status lifecycle_status_enum DEFAULT 'normal',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
     note TEXT
 );
 
@@ -648,7 +650,7 @@ CREATE TABLE product_sku (    -- all product have one default sku variant
     publish_status publish_status_enum DEFAULT 'pending',
     lifecycle_status lifecycle_status_enum DEFAULT 'normal',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 
@@ -1200,6 +1202,8 @@ VALUES
 DROP TABLE IF EXISTS product_update_log;
 CREATE TABLE product_update_log (
     id SERIAL PRIMARY KEY,
+    update_action update_action_type_enum NOT NULL,
+    description TEXT,
     product_id INTEGER NOT NULL,
     price_old DECIMAL(10, 2) NOT NULL,
     price_new DECIMAL(10, 2) NOT NULL,
@@ -1208,19 +1212,18 @@ CREATE TABLE product_update_log (
     old_stock INTEGER,
     added_stock INTEGER,
     total_stock INTEGER,
-    update_action update_action_type_enum NOT NULL,
     operator VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO product_update_log (product_id, price_old, price_new, sale_price_old, sale_price_new, old_stock, added_stock, total_stock, update_action, operator)
+INSERT INTO product_update_log (update_action, description, product_id, price_old, price_new, sale_price_old, sale_price_new, old_stock, added_stock, total_stock, operator)
 VALUES
-(1, 899.99, 899.99, 899.99, 899.99, 100, 0, 100, 'update', 'jun'),
-(2, 499.99, 499.99, 499.99, 499.99, 50, 0, 50, 'update', 'jun'),
-(3, 249.99, 249.99, 249.99, 249.99, 200, 0, 200, 'update', 'jun'),
-(4, 1099.99, 1099.99, 1099.99, 1099.99, 150, 0, 150, 'update', 'jun'),
-(5, 349.99, 349.99, 349.99, 349.99, 100, 0, 100, 'update', 'jun'),
-(6, 179.99, 179.99, 179.99, 179.99, 250, 0, 250, 'update', 'jun');
+('update', 'Updated product price and stock for product 1', 1, 899.99, 899.99, 899.99, 899.99, 100, 0, 100, 'jun'),
+('update', 'Updated product price and stock for product 2', 2, 499.99, 499.99, 499.99, 499.99, 50, 0, 50, 'jun'),
+('update', 'Updated product price and stock for product 3', 3, 249.99, 249.99, 249.99, 249.99, 200, 0, 200, 'jun'),
+('update', 'Updated product price and stock for product 4', 4, 1099.99, 1099.99, 1099.99, 1099.99, 150, 0, 150, 'jun'),
+('update', 'Updated product price and stock for product 5', 5, 349.99, 349.99, 349.99, 349.99, 100, 0, 100, 'jun'),
+('update', 'Updated product price and stock for product 6', 6, 179.99, 179.99, 179.99, 179.99, 250, 0, 250, 'jun');
 
 
 DROP TABLE IF EXISTS review;
@@ -1238,7 +1241,7 @@ CREATE TABLE review (
     lifecycle_status lifecycle_status_enum DEFAULT 'normal',
     content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
     CONSTRAINT unique_product_member_review UNIQUE (product_id, member_id) -- one review per product per member
 );
 
@@ -1262,7 +1265,7 @@ CREATE TABLE review_album (
     review_id INTEGER NOT NULL,
     pic_count INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO review_album (review_id, pic_count)
@@ -1341,11 +1344,10 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 DROP TABLE IF EXISTS member CASCADE;
 CREATE TABLE member (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),  -- Use UUID as primary key with auto generation
-    username TEXT UNIQUE ,
+    email TEXT UNIQUE NOT NULL,
     password TEXT,
     name TEXT,
     phone_number TEXT,
-    email TEXT UNIQUE NOT NULL,
     email_subscription INTEGER DEFAULT 1,
     status account_status_enum DEFAULT 'active',
     verified_status verification_status_enum DEFAULT 'not_verified',
@@ -1354,12 +1356,13 @@ CREATE TABLE member (
     last_login TIMESTAMP,
     platform_type platform_type_enum   -- where user first created. web user , mobile user
 );
+
 ---------------User  all password is password
-INSERT INTO member (id, username, password, name, phone_number, email, verified_status, platform_type)
+INSERT INTO member (id, email, password, name, phone_number, verified_status, platform_type)
 VALUES
-('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'user1', '$2a$10$PHcLPlJod/fKyjMUsGuSVeVnI0.EKudDleRT9vM9jqCJzL9QvC5Ju', 'Jun', '212-212-2222', 'Jun@gmail.com', 'verified', 'web'),
-('bb6604eb-080e-4595-9ae8-32c55cbbb35b', 'user2', '$2a$10$pSHd2ngUssBZYRlHQQaKu.rb0me5ZAgld0fVASB50vrMslLb8md0a', 'John', '877-393-4448', 'John@gmail.com', 'verified', 'ios'),
-('3bbc1316-f71a-4475-9abe-ccf281acdc0b', 'user3', '$2a$10$xEbGJ1QHr/CZ.ltRIP4A9.K27Sq3HJ4Dh/sN0ssd5GwkaPbjPRW9S', 'Jane', '112-323-1111', 'Jane@gmail.com', 'verified', 'android');
+('a57f32ad-8ebc-486e-940d-7abb2ece682f', 'jun@gmail.com', '$2a$10$PHcLPlJod/fKyjMUsGuSVeVnI0.EKudDleRT9vM9jqCJzL9QvC5Ju', 'Jun', '212-212-2222', 'verified', 'web'),
+('bb6604eb-080e-4595-9ae8-32c55cbbb35b', 'john@gmail.com', '$2a$10$pSHd2ngUssBZYRlHQQaKu.rb0me5ZAgld0fVASB50vrMslLb8md0a', 'John', '877-393-4448', 'verified', 'ios'),
+('3bbc1316-f71a-4475-9abe-ccf281acdc0b', 'jane@gmail.com', '$2a$10$xEbGJ1QHr/CZ.ltRIP4A9.K27Sq3HJ4Dh/sN0ssd5GwkaPbjPRW9S', 'Jane', '112-323-1111', 'verified', 'android');
 
 DROP TABLE IF EXISTS member_icon;
 CREATE TABLE member_icon (
@@ -1386,7 +1389,7 @@ CREATE TABLE address (
     state TEXT,
     zip_code TEXT,
     note TEXT,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
     CONSTRAINT fk_member FOREIGN KEY (member_id) REFERENCES member (id)
 );
 
@@ -1461,7 +1464,7 @@ CREATE TABLE refresh_tokens (
     member_id UUID NOT NULL, -- The ID of the user associated with this token
     expiry_date TIMESTAMP NOT NULL, -- When the refresh token expires
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- When the token was created
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO refresh_tokens (refresh_token, member_id, expiry_date) VALUES
@@ -1474,10 +1477,9 @@ INSERT INTO refresh_tokens (refresh_token, member_id, expiry_date) VALUES
 DROP TABLE IF EXISTS admin CASCADE;
 CREATE TABLE admin (
     id SERIAL PRIMARY KEY, -- TODO: change to UUID, also there might be a change in email table data
-    username TEXT UNIQUE,
+    email TEXT UNIQUE NOT NULL,
     password TEXT,
     icon TEXT,
-    email TEXT UNIQUE NOT NULL,
     name TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP,
@@ -1540,12 +1542,12 @@ CREATE TABLE admin_login_log (
 -- username : adminacct  password: adminpass      first admin have all permission, second is for order and only have order permission
 -- and third admin is for user and have all user permission.
 -- username : devacct   password: devpass
-INSERT INTO admin(username, password, email, name, status)
+INSERT INTO admin(email, password, name, status)
 VALUES
-('adminacct', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'admin@gmail.com', 'jun', 'active'),
-('adminacctorder', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'order@gmail.com', 'jun', 'active'),
-('adminacctuser', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'user@gmail.com', 'jun', 'active'),
-('devacct', '$2a$10$zykJppm18avEb79CGEtFjOIwKlgUJ4BeMFiF8HGjccVMgJ8XTjZpy', 'dev@gmail.com', 'dev', 'active');
+('admin@gmail.com', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'jun', 'active'),
+('order@gmail.com', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'jun', 'active'),
+('user@gmail.com', '$2a$10$c.FVHJ7x9Gedv.StYqdOB.FB1dNVCLBxS76ZbLutbTHwL15hcFGh2', 'jun', 'active'),
+('dev@gmail.com', '$2a$10$zykJppm18avEb79CGEtFjOIwKlgUJ4BeMFiF8HGjccVMgJ8XTjZpy', 'dev', 'active');
 
 INSERT INTO roles (name, description, status)
 VALUES
@@ -1822,7 +1824,7 @@ CREATE TABLE shopping_cart (
     member_id UUID NOT NULL,
     cart_status cart_status_enum DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO shopping_cart (member_id) VALUES
@@ -1841,7 +1843,7 @@ CREATE TABLE cart_item (
     quantity INTEGER CHECK (quantity > 0),
     price DECIMAL(10, 2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO cart_item (cart_id, product_id, product_name, product_sku, product_pic, quantity, price)
@@ -1888,7 +1890,7 @@ CREATE TABLE orders (   -- have to called orders instead of order, or else confl
     comment VARCHAR(200) DEFAULT NULL,        -- comment left customer like "leave the package under the rug"
     admin_note VARCHAR(500) DEFAULT NULL,       -- note left by previous admin stating what's happening
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO orders (member_id, coupon_id, order_sn, total_amount, promotion_amount, coupon_amount, discount_amount, shipping_cost, pay_amount,
@@ -2026,7 +2028,7 @@ CREATE TABLE return_request (
     receive_time TIMESTAMP,
     receive_note VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO return_request (company_address_id, order_id, order_sn, member_id, return_quantity, return_name, return_phone, return_status,
@@ -2118,18 +2120,18 @@ VALUES
 -- articles(Buying Guide, product comparison, other MISC if you're specialized shop),
 -- images(Store as images urls but it will be store somewhere else like Amazon s3),
 -- and video(as in links(youtube private(unlisted or published in your channel) or public video) or store somewhere)
-DROP TABLE IF EXISTS article;
+DROP TABLE IF EXISTS article CASCADE;
 CREATE TABLE article (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) UNIQUE NOT NULL, -- URL-friendly slug
+    slug VARCHAR(255) UNIQUE NOT NULL, -- URL-friendly slug TODO: might need change this since could be same slug but different author
     author_id INTEGER DEFAULT 0,     -- author of the article TODO: could be either admin or member or might just leave name there
     author_name VARCHAR(20) NOT NULL,
     body TEXT NOT NULL,
     publish_status publish_status_enum DEFAULT 'pending',  -- article online status
     lifecycle_status lifecycle_status_enum DEFAULT 'normal',  -- article lifecycle status
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO article (title, slug, author_name, body, publish_status)
@@ -2147,7 +2149,8 @@ CREATE TABLE article_QA (
     question TEXT NOT NULL,
     answer TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP,
+    CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES article(id) ON DELETE CASCADE
 );
 
 INSERT INTO article_QA (article_id, question, answer)
@@ -2165,7 +2168,8 @@ CREATE TABLE article_image (
     article_id INTEGER NOT NULL,
     filename VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP,
+    CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES article(id) ON DELETE CASCADE
 );
 
 INSERT INTO article_image (article_id, filename)
@@ -2183,7 +2187,8 @@ CREATE TABLE article_video (
     article_id INTEGER NOT NULL,
     url VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP,
+    CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES article(id) ON DELETE CASCADE
 );
 
 INSERT INTO article_video (article_id, url)
@@ -2199,7 +2204,8 @@ CREATE TABLE article_change_log (
     update_action update_action_type_enum NOT NULL,
     description TEXT,
     operator VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES article(id)
 );
 
 INSERT INTO article_change_log (article_id, update_action, description, operator)
@@ -2215,6 +2221,37 @@ VALUES
 (9, 'update', 'update desc', 'David Clark'),
 (10, 'create', 'create desc', 'Sarah White');
 
+
+DROP TABLE IF EXISTS article_analytic;
+CREATE TABLE article_analytic (
+    id SERIAL PRIMARY KEY,
+    article_id INTEGER NOT NULL,
+    hour TIMESTAMP NOT NULL,
+    view_count INTEGER DEFAULT 0,  -- TODO: might update the views, likes, shares the article hourly update even to redis
+    like_count INTEGER DEFAULT 0,
+    share_count INTEGER DEFAULT 0,
+    comment_count INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_article FOREIGN KEY (article_id) REFERENCES article(id),
+    UNIQUE (article_id, hour)               -- Prevent duplicate rows for the same hour
+);
+
+INSERT INTO article_analytic (article_id, hour, view_count, like_count, share_count, comment_count)
+VALUES
+-- Hourly data for "Buyer's guide"
+(1, CURRENT_TIMESTAMP - INTERVAL '2 hour', 150, 10, 5, 2),
+(1, CURRENT_TIMESTAMP - INTERVAL '1 hour', 200, 15, 8, 4),
+(1, CURRENT_TIMESTAMP, 250, 20, 12, 6),
+
+-- Hourly data for "Product Comparison"
+(2, CURRENT_TIMESTAMP - INTERVAL '2 hour', 300, 40, 25, 10),
+(2, CURRENT_TIMESTAMP - INTERVAL '1 hour', 400, 60, 35, 15),
+(2, CURRENT_TIMESTAMP, 450, 70, 40, 18),
+
+-- Hourly data for "How to Choose the Right Product"
+(3, CURRENT_TIMESTAMP - INTERVAL '2 hour', 100, 5, 3, 1),
+(3, CURRENT_TIMESTAMP - INTERVAL '1 hour', 150, 10, 5, 3),
+(3, CURRENT_TIMESTAMP, 180, 12, 8, 4);
 
 --------------
 ---  SMS  ----
@@ -2235,10 +2272,13 @@ CREATE TABLE coupon (
     publish_count INTEGER DEFAULT 0,                         -- number of distributed coupons
     used_count INTEGER DEFAULT 0,                            -- number of used coupons
     code VARCHAR(64) NOT NULL UNIQUE,                        -- coupon code (must be unique)
-    publish_status publish_status_enum DEFAULT 'pending',             -- coupon status (active or inactive)
+    publish_status publish_status_enum DEFAULT 'pending',     -- coupon publish status ('published','pending','draft','paused','deleted')
+    lifecycle_status lifecycle_status_enum DEFAULT 'normal',  -- coupon lifecycle status
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
+
+-- also something to do with minimum purchase, if the coupon is $15 off whole order, minimum purchase is $50
 -- TODO: make sure free coupon don't go negative, add a constraint in database level and application/service level
 INSERT INTO coupon (coupon_target, name, discount_type, amount, minimum_purchase, start_time, end_time, count, publish_count, used_count, code, publish_status)
 VALUES
@@ -2254,34 +2294,32 @@ DROP TABLE IF EXISTS coupon_product_relation;
 CREATE TABLE coupon_product_relation (
     id SERIAL PRIMARY KEY,
     coupon_id INTEGER NOT NULL,
-    product_id INTEGER NOT NULL,
-    product_name VARCHAR(100),
-    product_sn VARCHAR(100),
     product_sku_code VARCHAR(100)
 );
 
-INSERT INTO coupon_product_relation (coupon_id, product_id, product_name, product_sn, product_sku_code)
+-- Insert sample data reflecting the new table structure (only coupon_id and product_sku_code)
+INSERT INTO coupon_product_relation (coupon_id, product_sku_code)
 VALUES
 -- $50 off Apple product, '50OFFAPPLE'
-(4, 1, 'iPhone 12', 'SN-123', 'IP12-RED-128'),
-(4, 1, 'iPhone 12', 'SN-123', 'IP12-WHITE-128'),
-(4, 1, 'iPhone 12', 'SN-123', 'IP12-BLACK-128'),
-(4, 2, 'iPhone SE', 'SN-456', 'IPSE-RED-64'),
-(4, 2, 'iPhone SE', 'SN-456', 'IPSE-BLUE-64'),
-(4, 6, 'AirPods Pro', 'SN-234', 'APRO1'),
-(4, 7, 'AirPods 2', 'SN-789', 'APO2'),
-(4, 9, 'iPad Pro', 'SN-901', 'IPPRO'),
-(4, 13, 'MacBook Pro', 'SN-678', 'MBP'),
+(4, 'IP12-RED-128'),
+(4, 'IP12-WHITE-128'),
+(4, 'IP12-BLACK-128'),
+(4, 'IPSE-RED-64'),
+(4, 'IPSE-BLUE-64'),
+(4, 'APRO1'),
+(4, 'APO2'),
+(4, 'IPPRO'),
+(4, 'MBP'),
 
---  60% off shirts, '60OFFSHIRTS'
-(5, 25, 'Nike Dri-FIT T-Shirt', 'SN-002', 'NDFTS'),
-(5, 26, 'Calvin Klein Logo T-Shirt', 'SN-008', 'CKLTS-L'),
-(5, 26, 'Calvin Klein Logo T-Shirt', 'SN-008', 'CKLTS-M'),
-(5, 26, 'Calvin Klein Logo T-Shirt', 'SN-008', 'CKLTS-S'),
-(5, 27, 'Adidas Essential Track Pants', 'SN-005', 'AEPTP'),
+-- 60% off shirts, '60OFFSHIRTS'
+(5, 'NDFTS'),
+(5, 'CKLTS-L'),
+(5, 'CKLTS-M'),
+(5, 'CKLTS-S'),
+(5, 'AEPTP'),
 
 -- 20% off Galaxy S21', '20OFFS21'
-(6, 5, 'Galaxy S21', 'SN-234', 'GS21');
+(6, 'GS21');
 
 
 DROP TABLE IF EXISTS coupon_usage_log;
@@ -2338,7 +2376,7 @@ CREATE TABLE promotion_sale (
     start_time TIMESTAMP,
     end_time TIMESTAMP,         -- TODO: use a scheduler to end the sale
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 -- TODO: does sale stacks?.  and need a way to check discounts time expiration. maybe redis or spring scheduler/task
@@ -2458,7 +2496,7 @@ CREATE TABLE email_templates (
     template_type email_template_type_enum NOT NULL,
     template_text TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP
 );
 
 INSERT INTO email_templates (template_name, template_type, template_text)

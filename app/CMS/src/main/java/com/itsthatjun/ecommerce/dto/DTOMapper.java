@@ -4,23 +4,21 @@ import com.itsthatjun.ecommerce.dto.model.ArticleDTO;
 import com.itsthatjun.ecommerce.dto.model.ImageDTO;
 import com.itsthatjun.ecommerce.dto.model.QaDTO;
 import com.itsthatjun.ecommerce.dto.model.VideoDTO;
-import com.itsthatjun.ecommerce.model.AdminArticleInfo;
+import com.itsthatjun.ecommerce.dto.admin.AdminArticleInfo;
 import com.itsthatjun.ecommerce.model.entity.Article;
 import com.itsthatjun.ecommerce.model.entity.ArticleImage;
 import com.itsthatjun.ecommerce.model.entity.ArticleQa;
 import com.itsthatjun.ecommerce.model.entity.ArticleVideo;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface DTOMapper {
 
-    @Mapping(target = "QA", ignore = true)
-    @Mapping(target = "images", ignore = true)
-    @Mapping(target = "videos", ignore = true)
-    ArticleInfo articleToArticleDTO(Article article);
+    // entity to dto
+
+    ArticleDTO articleToArticleDTO(Article article);
 
     List<ImageDTO> imagesToImageDTOs(List<ArticleImage> articleImages);
 
@@ -28,17 +26,16 @@ public interface DTOMapper {
 
     List<VideoDTO> videosToVideoDTOs(List<ArticleVideo> articleVideos);
 
-    /**
-     * AdminArticleInfo to Article
-     * @param adminArticleInfo
-     * @return
-     */
-    Article adminArticleInfoToArticle(AdminArticleInfo adminArticleInfo);
+
+    // dto to entity
+
+
+    // other mapping
 
     /**
-     * AdminArticleInfo to ArticleDTO
+     * AdminArticleInfo to ArticleDTO, used to update article in redis using message queue
      * @param adminArticleInfo
      * @return
      */
-    ArticleInfo adminArticleInfoToArticleDTO(AdminArticleInfo adminArticleInfo);
+    ArticleInfo adminArticleInfoToArticleInfo (AdminArticleInfo adminArticleInfo);
 }

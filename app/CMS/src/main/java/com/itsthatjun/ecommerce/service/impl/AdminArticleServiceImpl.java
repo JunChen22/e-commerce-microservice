@@ -2,10 +2,14 @@ package com.itsthatjun.ecommerce.service.impl;
 
 import com.itsthatjun.ecommerce.dto.ArticleInfo;
 import com.itsthatjun.ecommerce.dto.DTOMapper;
+import com.itsthatjun.ecommerce.enums.status.LifeCycleStatus;
 import com.itsthatjun.ecommerce.enums.status.PublishStatus;
-import com.itsthatjun.ecommerce.exceptions.ArticleNotFoundException;
-import com.itsthatjun.ecommerce.exceptions.ArticleSlugAlreadyExistException;
-import com.itsthatjun.ecommerce.model.AdminArticleInfo;
+import com.itsthatjun.ecommerce.enums.type.UpdateActionType;
+import com.itsthatjun.ecommerce.exception.ArticleException;
+import com.itsthatjun.ecommerce.exception.InvalidArticleStateException;
+import com.itsthatjun.ecommerce.exception.ArticleNotFoundException;
+import com.itsthatjun.ecommerce.exception.ArticleSlugAlreadyExistException;
+import com.itsthatjun.ecommerce.dto.admin.AdminArticleInfo;
 import com.itsthatjun.ecommerce.dto.event.outgoing.ArticleUpdateEvent;
 import com.itsthatjun.ecommerce.model.entity.*;
 import com.itsthatjun.ecommerce.repository.*;
@@ -68,65 +72,42 @@ public class AdminArticleServiceImpl implements AdminArticleService {
     @Override
     public Flux<AdminArticleInfo> listAllArticles() {
         return articleRepository.findAllByPublishStatus(PublishStatus.PUBLISHED.getValue())
-                .flatMap(article -> {
-                    int articleId = article.getId();
-                    AdminArticleInfo articleInfo = new AdminArticleInfo(article);
-                    Mono<List<ArticleImage>> imagesMono = fetchImagesForArticle(articleId);
-                    Mono<List<ArticleQa>> qaMono = fetchQaForArticle(articleId);
-                    Mono<List<ArticleVideo>> videosMono = fetchVideosForArticle(articleId);
-
-                    return Mono.zip(imagesMono, qaMono, videosMono)
-                            .map(tuple -> {
-                                articleInfo.setImages(tuple.getT1());
-                                articleInfo.setQA(tuple.getT2());
-                                articleInfo.setVideos(tuple.getT3());
-                                return articleInfo;  // Return the populated articleInfo
-                            });
-                })
+                .flatMap(this::buildAdminArticleInfo)
                 .switchIfEmpty(Mono.error(new ArticleNotFoundException("No articles found.")));
     }
 
     @Override
-    public Flux<AdminArticleInfo> listArticles(int page, int size) {
-        int offset = page * size;
-        return articleRepository.findAllByPublishStatusWithPagination(PublishStatus.PUBLISHED.getValue(), offset, size)
-                .flatMap(article -> {
-                    int articleId = article.getId();
-                    AdminArticleInfo articleInfo = new AdminArticleInfo(article);
-                    Mono<List<ArticleImage>> imagesMono = fetchImagesForArticle(articleId);
-                    Mono<List<ArticleQa>> qaMono = fetchQaForArticle(articleId);
-                    Mono<List<ArticleVideo>> videosMono = fetchVideosForArticle(articleId);
-
-                    return Mono.zip(imagesMono, qaMono, videosMono)
-                            .map(tuple -> {
-                                articleInfo.setImages(tuple.getT1());
-                                articleInfo.setQA(tuple.getT2());
-                                articleInfo.setVideos(tuple.getT3());
-                                return articleInfo;  // Return the populated articleInfo
-                            });
-                })
+    public Flux<AdminArticleInfo> listArticles(int pageNum, int pageSize) {
+        int offset = (pageNum - 1) * pageSize;
+        return articleRepository.findAllByPublishStatusWithPagination(PublishStatus.PUBLISHED.getValue(), offset, pageSize)
+                .flatMap(this::buildAdminArticleInfo)
                 .switchIfEmpty(Mono.error(new ArticleNotFoundException("No articles found.")));
     }
 
     @Override
     public Mono<AdminArticleInfo> getArticle(int articleId, int delay, int faultPercent) {
-        return articleRepository.findById(articleId) // find
-                .flatMap(article -> {
-                    AdminArticleInfo articleInfo = new AdminArticleInfo(article);
-                    Mono<List<ArticleImage>> imagesMono = fetchImagesForArticle(articleId);
-                    Mono<List<ArticleQa>> qaMono = fetchQaForArticle(articleId);
-                    Mono<List<ArticleVideo>> videosMono = fetchVideosForArticle(articleId);
-
-                    return Mono.zip(imagesMono, qaMono, videosMono)
-                            .flatMap(tuple -> {
-                                articleInfo.setImages(tuple.getT1());
-                                articleInfo.setQA(tuple.getT2());
-                                articleInfo.setVideos(tuple.getT3());
-                                return throwErrorIfBadLuck(articleInfo, faultPercent); // This now returns Mono<ArticleInfo>
-                            });
-                })
+        return articleRepository.findById(articleId)
+                .flatMap(this::buildAdminArticleInfo)
                 .delayElement(Duration.ofMillis(delay))
+                .flatMap(articleInfo -> throwErrorIfBadLuck(articleInfo, faultPercent)) // simulate error injection
                 .switchIfEmpty(Mono.error(new ArticleNotFoundException("Article not found with id: " + articleId))); // Custom exception handling
+    }
+
+    private Mono<AdminArticleInfo> buildAdminArticleInfo(Article article) {
+        int articleId = article.getId();
+        AdminArticleInfo articleInfo = new AdminArticleInfo();
+        articleInfo.setArticle(article);
+        Mono<List<ArticleImage>> imagesMono = imageRepository.findAllByArticleId(articleId).collectList();
+        Mono<List<ArticleQa>> qaMono = qaRepository.findAllByArticleId(articleId).collectList();
+        Mono<List<ArticleVideo>> videosMono = videoRepository.findAllByArticleId(articleId).collectList();
+
+        return Mono.zip(imagesMono, qaMono, videosMono)
+                .map(tuple -> {
+                    articleInfo.setImages(tuple.getT1());
+                    articleInfo.setQA(tuple.getT2());
+                    articleInfo.setVideos(tuple.getT3());
+                    return articleInfo;
+                });
     }
 
     /*
@@ -148,28 +129,10 @@ public class AdminArticleServiceImpl implements AdminArticleService {
         }
     }
 
-    // Fetch Q&A for the article
-    private Mono<List<ArticleQa>> fetchQaForArticle(int articleId) {
-        return qaRepository.findAllByArticleId(articleId)
-                .collectList();
-    }
-
-    // Fetch images for the article
-    private Mono<List<ArticleImage>> fetchImagesForArticle(int articleId) {
-        return imageRepository.findAllByArticleId(articleId)
-                .collectList();
-    }
-
-    // Fetch videos for the article
-    private Mono<List<ArticleVideo>> fetchVideosForArticle(int articleId) {
-        return videoRepository.findAllByArticleId(articleId)
-                .collectList();
-    }
-
     @Override
     @Transactional
     public Mono<AdminArticleInfo> createArticle(AdminArticleInfo articleInfo, String operator) {
-        String slug = StringUtil.slugify(articleInfo.getTitle());
+        String slug = StringUtil.slugify(articleInfo.getArticle().getTitle());
 
         return articleRepository.findAllBySlug(slug)
                 .hasElements() // Check if slug already exists
@@ -178,14 +141,15 @@ public class AdminArticleServiceImpl implements AdminArticleService {
                         return Mono.error(new ArticleSlugAlreadyExistException("Article with slug already exists: " + slug));
                     }
 
-                    Article articleEntity = dtoMapper.adminArticleInfoToArticle(articleInfo);
+                    Article articleEntity = articleInfo.getArticle();
                     articleEntity.setSlug(slug);
 
-                    return articleRepository.save(articleEntity)
+                    return articleRepository.saveArticle(articleEntity)
                             .flatMap(savedArticle -> {
                                 int articleId = savedArticle.getId();
 
-                                articleInfo.setId(articleId);
+                                articleInfo.getArticle().setId(articleId);
+
                                 articleInfo.getImages().forEach(image -> image.setArticleId(articleId));
                                 articleInfo.getQA().forEach(qa -> qa.setArticleId(articleId));
                                 articleInfo.getVideos().forEach(video -> video.setArticleId(articleId));
@@ -194,13 +158,13 @@ public class AdminArticleServiceImpl implements AdminArticleService {
                                 Mono<Void> saveQa = qaRepository.saveAll(articleInfo.getQA()).then();
                                 Mono<Void> saveVideos = videoRepository.saveAll(articleInfo.getVideos()).then();
 
-                                ArticleInfo articleInfoDTO = dtoMapper.adminArticleInfoToArticleDTO(articleInfo);
+                                ArticleInfo articleInfoDTO = dtoMapper.adminArticleInfoToArticleInfo(articleInfo);
 
                                 return Mono.zip(saveImages, saveQa, saveVideos)
-                                        .then(articleLog(articleId, "create article", operator)) // Log the operation
                                         .then(Mono.fromRunnable(() ->
                                                 sendArticleUpdateMessage(BINDING_NAME, new ArticleUpdateEvent(CREATE, articleInfoDTO))
                                         ))
+                                        .then(createChangeLog(articleId, UpdateActionType.CREATE, operator)) // Log the operation
                                         .thenReturn(articleInfo); // Return the created articleInfo
                             });
                 })
@@ -209,37 +173,37 @@ public class AdminArticleServiceImpl implements AdminArticleService {
 
     @Override
     @Transactional
-    public Mono<AdminArticleInfo> updateArticle(AdminArticleInfo article, String operator) {
-        return articleRepository.findById(article.getId())
-                .switchIfEmpty(Mono.error(new ArticleNotFoundException("Article not found with ID: " + article.getId())))
+    public Mono<AdminArticleInfo> updateArticle(AdminArticleInfo articleInfo, String operator) {
+        return articleRepository.findById(articleInfo.getArticle().getId())
+                .switchIfEmpty(Mono.error(new ArticleNotFoundException("Article not found with ID: " + articleInfo.getArticle().getId())))
                 .flatMap(foundArticle -> {
                     // Map the input article DTO to the entity to be updated
-                    Article updatedArticle = dtoMapper.adminArticleInfoToArticle(article);
+                    Article updatedArticle = articleInfo.getArticle();
                     updatedArticle.setUpdatedAt(LocalDateTime.now());
 
                     // Save the updated article
-                    return articleRepository.save(updatedArticle)
+                    return articleRepository.updateArticle(updatedArticle)
                             .flatMap(savedArticle -> {
                                 int articleId = savedArticle.getId();
 
                                 // Map images, QA, and videos to be saved
-                                Mono<Void> handleImages = handleImages(article.getImages(), articleId);
-                                Mono<Void> handleQA = handleQA(article.getQA(), articleId);
-                                Mono<Void> handleVideos = handleVideos(article.getVideos(), articleId);
+                                Mono<Void> handleImages = handleImages(articleInfo.getImages(), articleId);
+                                Mono<Void> handleQA = handleQA(articleInfo.getQA(), articleId);
+                                Mono<Void> handleVideos = handleVideos(articleInfo.getVideos(), articleId);
 
                                 // Prepare ArticleInfo DTO for update event
-                                ArticleInfo articleInfoDTO = dtoMapper.adminArticleInfoToArticleDTO(article);
+                                ArticleInfo articleInfoDTO = dtoMapper.adminArticleInfoToArticleInfo(articleInfo);
 
                                 // Combine all the operations and proceed with logging and sending the update event
                                 return Mono.zip(handleImages, handleQA, handleVideos)
-                                        .then(articleLog(articleId, "update article", operator)) // Log the update operation
+                                        .then(createChangeLog(articleId, UpdateActionType.UPDATE, operator)) // Log the update operation
                                         .then(Mono.fromRunnable(() ->
                                                 sendArticleUpdateMessage(BINDING_NAME, new ArticleUpdateEvent(UPDATE, articleInfoDTO))
                                         ))
-                                        .thenReturn(article); // Return the updated articleDTO
+                                        .thenReturn(articleInfo); // Return the updated articleDTO
                             });
                 })
-                .doOnError(error -> LOG.error("Failed to update article with ID: {}, error: {}", article.getId(), error.getMessage()))
+                .doOnError(error -> LOG.error("Failed to update article with ID: {}, error: {}", articleInfo.getArticle().getId(), error.getMessage()))
                 .log();
     }
 
@@ -289,34 +253,101 @@ public class AdminArticleServiceImpl implements AdminArticleService {
     }
 
     @Override
+    public Mono<Void> updateStatus(Article updateArticle, String operator) {
+        int articleId = updateArticle.getId();
+        return articleRepository.findById(articleId)
+                .switchIfEmpty(Mono.error(new ArticleNotFoundException("Article not found with ID: " + articleId)))
+                .flatMap(article -> {
+                    if (updateArticle.getPublishStatus().equals(PublishStatus.DELETED) ||
+                            updateArticle.getLifecycleStatus().equals(LifeCycleStatus.SOFT_DELETE)) {
+                        return Mono.error(new InvalidArticleStateException(
+                                "Cannot update article in DELETED or SOFT_DELETE state."));
+                    }
+                    return articleRepository.updateLifecycleAndPublishStatus(updateArticle.getId(),
+                                    updateArticle.getLifecycleStatus().getValue(),
+                                    updateArticle.getPublishStatus().getValue()) // Update both statuses
+                            .flatMap(updatedArticle -> {
+                                ArticleInfo articleInfoDTO = new ArticleInfo();
+                                articleInfoDTO.setArticle(dtoMapper.articleToArticleDTO(updatedArticle));
+                                return sendArticleUpdateMessage(BINDING_NAME, new ArticleUpdateEvent(UPDATE, articleInfoDTO));
+                            })
+                            .then(createChangeLog(articleId, UpdateActionType.UPDATE, operator));
+                })
+                .doOnSuccess(unused -> LOG.info("Successfully updated article with ID: {}, lifecycle status: {}, publish status: {}, by operator: {}",
+                        articleId, updateArticle.getLifecycleStatus(), updateArticle.getPublishStatus(), operator))
+                .doOnError(error -> LOG.error("Failed to update article with ID: {}, attempted lifecycle status: {}, publish status: {}, by operator: {}, error: {}",
+                        articleId, updateArticle.getLifecycleStatus(), updateArticle.getPublishStatus(), operator, error.getMessage()));
+    }
+
+    @Override
+    public Mono<Void> restoreArticle(int articleId, String operator) {
+        return articleRepository.findById(articleId)
+                .switchIfEmpty(Mono.error(new ArticleNotFoundException("Article not found with ID: " + articleId)))
+                .flatMap(article -> {
+                    if (!article.getLifecycleStatus().equals(LifeCycleStatus.SOFT_DELETE)) {
+                        return Mono.error(new InvalidArticleStateException("Article is not in a soft-deleted state."));
+                    }
+                    return articleRepository.updateLifecycleAndPublishStatus(articleId,   // un-delete article but keep it paused
+                                    LifeCycleStatus.NORMAL.getValue(),
+                                    PublishStatus.PAUSED.getValue())
+                            .flatMap(updateArticle -> {
+                                ArticleInfo articleInfoDTO = new ArticleInfo();
+                                articleInfoDTO.setArticle(dtoMapper.articleToArticleDTO(updateArticle));
+                                return sendArticleUpdateMessage(BINDING_NAME, new ArticleUpdateEvent(UPDATE, articleInfoDTO));
+                            })
+                            .then(createChangeLog(articleId, UpdateActionType.UPDATE, operator));
+                })
+                .doOnSuccess(unused -> LOG.debug("Restored article with ID: {}, new status: {}, by operator: {}", articleId, LifeCycleStatus.NORMAL, operator))
+                .doOnError(error -> LOG.error("Restore failed for article ID: {}, operator: {}, error: {}", articleId, operator, error.getMessage()));
+    }
+
+    @Override
     @Transactional
     public Mono<Void> deleteArticle(int articleId, String operator) {
         return articleRepository.findById(articleId)
                 .switchIfEmpty(Mono.error(new ArticleNotFoundException("Article not found with ID: " + articleId)))
+                .flatMap(article -> {
+                    if (article.getLifecycleStatus().equals(LifeCycleStatus.SOFT_DELETE)) {
+                        return Mono.error(new ArticleException("Article is already soft-deleted."));
+                    }
+                    return articleRepository.updateLifecycleAndPublishStatus(articleId,   // Mark as soft delete
+                                    LifeCycleStatus.SOFT_DELETE.getValue(),
+                                    PublishStatus.DELETED.getValue())
+                            .flatMap(updateArticle -> {
+                                ArticleInfo articleInfoDTO = new ArticleInfo();
+                                articleInfoDTO.setArticle(dtoMapper.articleToArticleDTO(updateArticle));
+                                return sendArticleUpdateMessage(BINDING_NAME, new ArticleUpdateEvent(UPDATE, articleInfoDTO));
+                            })
+                            .then(createChangeLog(articleId, UpdateActionType.UPDATE, operator));
+                })
+                .doOnSuccess(unused -> LOG.debug("Soft deleted article with ID: {}, new status: {}, by operator: {}", articleId, LifeCycleStatus.SOFT_DELETE, operator))
+                .doOnError(error -> LOG.error("Soft delete failed for article ID: {}, operator: {}, error: {}", articleId, operator, error.getMessage()));
+    }
+
+    @Override
+    @Transactional
+    public Mono<Void> permanentDeleteArticle(int articleId, String operator) {
+        return articleRepository.findById(articleId)
+                .switchIfEmpty(Mono.error(new ArticleNotFoundException("Article not found with ID: " + articleId)))
                 .flatMap(article ->
-                        // Delete child entities first
-                        qaRepository.deleteByArticleId(article.getId())
-                                .then(imageRepository.deleteByArticleId(article.getId()))
-                                .then(videoRepository.deleteByArticleId(article.getId()))
-                                .then(articleLog(articleId, "delete article", operator))
-                                // Delete the parent article last
-                                .then(articleRepository.delete(article))
-                                // Send the update event after successful deletion
-                                .then(Mono.defer(() -> {
-                                    ArticleInfo articleInfoDTO = dtoMapper.articleToArticleDTO(article);
-                                    return sendArticleUpdateMessage(BINDING_NAME, new ArticleUpdateEvent(DELETE, articleInfoDTO));
-                                }))
+                        articleRepository.deleteArticle(article)
+                            .then(createChangeLog(articleId, UpdateActionType.DELETE, operator))
+                            .then(Mono.defer(() -> {
+                                ArticleInfo articleInfoDTO = new ArticleInfo();
+                                articleInfoDTO.setArticle(dtoMapper.articleToArticleDTO(article));
+                                return sendArticleUpdateMessage(BINDING_NAME, new ArticleUpdateEvent(DELETE, articleInfoDTO));
+                            }))
                 )
                 .doOnSuccess(unused -> LOG.debug("Article deleted with ID: {}, by operator: {}", articleId, operator))
                 .doOnError(error -> LOG.error("Failed to delete article with ID: {}, error: {}", articleId, error.getMessage()));
     }
 
-    private Mono<Void> articleLog(int articleId, String updateAction, String operator) {
+    private Mono<Void> createChangeLog(int articleId, UpdateActionType updateAction, String operator) {
         ArticleChangeLog changeLog = new ArticleChangeLog();
         changeLog.setArticleId(articleId);
         changeLog.setUpdateAction(updateAction);
         changeLog.setOperator(operator);
-        return logRepository.save(changeLog).then();
+        return logRepository.saveLog(changeLog).then();
     }
 
     // sending message to message queue then to App for cache update

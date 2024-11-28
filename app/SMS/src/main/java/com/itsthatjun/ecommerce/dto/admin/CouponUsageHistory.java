@@ -1,7 +1,7 @@
-package com.itsthatjun.ecommerce.model;
+package com.itsthatjun.ecommerce.dto.admin;
 
 import com.itsthatjun.ecommerce.model.entity.Coupon;
-import com.itsthatjun.ecommerce.model.entity.CouponHistory;
+import com.itsthatjun.ecommerce.model.entity.CouponUsageLog;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +16,5 @@ public class UsedCouponHistory implements Serializable {
 
     private int userCount;
 
-    private List<CouponHistory> couponHistoryList;
+    private List<CouponUsageLog> couponUsageLogs;
 }

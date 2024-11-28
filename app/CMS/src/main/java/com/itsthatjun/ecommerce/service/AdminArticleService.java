@@ -1,7 +1,7 @@
 package com.itsthatjun.ecommerce.service;
 
-import com.itsthatjun.ecommerce.dto.ArticleInfo;
-import com.itsthatjun.ecommerce.model.AdminArticleInfo;
+import com.itsthatjun.ecommerce.dto.admin.AdminArticleInfo;
+import com.itsthatjun.ecommerce.model.entity.Article;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -15,11 +15,11 @@ public interface AdminArticleService {
 
     /**
      * list articles with pagination
-     * @param page page number
-     * @param size page size
+     * @param pageNum page number
+     * @param pageSize page size
      * @return list of articles
      */
-    Flux<AdminArticleInfo> listArticles(int page, int size);
+    Flux<AdminArticleInfo> listArticles(int pageNum, int pageSize);
 
     /**
      * get article based on id, added delay and fault percentage for circuit breaker testing
@@ -47,10 +47,34 @@ public interface AdminArticleService {
     Mono<AdminArticleInfo> updateArticle(AdminArticleInfo article, String operator);
 
     /**
+     * update article status, like published, pending, draft, and paused for publish status and banned, archived, and normal, for lifecycle status
+     * @param updateArticle article info
+     * @param operator operator
+     * @return void
+     */
+    Mono<Void> updateStatus(Article updateArticle, String operator);
+
+    /**
+     * restore article from soft delete
+     * @param articleId article id
+     * @param operator operator
+     * @return void
+     */
+    Mono<Void> restoreArticle(int articleId, String operator);
+
+    /**
      * delete article and all of its media content
      * @param articleId article id
      * @param operator operator
      * @return void
      */
     Mono<Void> deleteArticle(int articleId, String operator);
+
+    /**
+     * permanent delete article and all of its media content
+     * @param articleId article id
+     * @param operator operator
+     * @return void
+     */
+    Mono<Void> permanentDeleteArticle(int articleId, String operator);
 }

@@ -23,7 +23,7 @@
         <!-- location of model and mapper will be generated -->
         <javaModelGenerator targetPackage="com.itsthatjun.ecommerce.model.entity" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
-            <property name="modelType" value="flat"/> <!-- Ensures no getter/setter methods -->
+            <property name="modelType" value="flat"/>
         </javaModelGenerator>
 
         <!-- generate the table needed -->
@@ -67,7 +67,17 @@
             <generatedKey column="id" sqlStatement="JDBC" />
             <columnOverride column="id" javaType="java.lang.Integer" />
             <columnOverride column="article_id" javaType="java.lang.Integer" />
+            <columnOverride column="update_action" javaType="com.itsthatjun.ecommerce.enums.type.UpdateActionType" />
             <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+        </table>
+
+        <table tableName="article_analytic">
+            <generatedKey column="id" sqlStatement="JDBC" />
+            <columnOverride column="id" javaType="java.lang.Integer" />
+            <columnOverride column="article_id" javaType="java.lang.Integer" />
+            <columnOverride column="hour" javaType="java.time.LocalDateTime" />
+            <columnOverride column="created_at" javaType="java.time.LocalDateTime" />
+            <columnOverride column="updated_at" javaType="java.time.LocalDateTime" />
         </table>
     </context>
 </generatorConfiguration>

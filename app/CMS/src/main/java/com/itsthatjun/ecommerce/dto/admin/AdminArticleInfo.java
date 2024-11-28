@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.model;
+package com.itsthatjun.ecommerce.dto.admin;
 
 import com.itsthatjun.ecommerce.model.entity.Article;
 import com.itsthatjun.ecommerce.model.entity.ArticleImage;

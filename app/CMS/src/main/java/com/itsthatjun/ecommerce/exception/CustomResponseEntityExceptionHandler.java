@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.exceptions;
+package com.itsthatjun.ecommerce.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +24,12 @@ public class CustomResponseEntityExceptionHandler {
     @ExceptionHandler(ArticleSlugAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<String> handleArticleSlugAlreadyExistException(ArticleSlugAlreadyExistException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidArticleStateException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> handleInvalidArticleStateException(InvalidArticleStateException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 }

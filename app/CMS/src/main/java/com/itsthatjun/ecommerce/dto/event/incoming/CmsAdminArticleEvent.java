@@ -1,6 +1,6 @@
 package com.itsthatjun.ecommerce.dto.event.incoming;
 
-import com.itsthatjun.ecommerce.model.AdminArticleInfo;
+import com.itsthatjun.ecommerce.dto.admin.AdminArticleInfo;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -13,7 +13,10 @@ public class CmsAdminArticleEvent {
     public enum Type {
         CREATE,
         UPDATE,
-        DELETE
+        UPDATE_STATUS,
+        RESTORE_ARTICLE,
+        DELETE,
+        DELETE_PERMANENTLY
     }
 
     private final Type eventType;

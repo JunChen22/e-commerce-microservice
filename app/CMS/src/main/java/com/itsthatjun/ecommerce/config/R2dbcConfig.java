@@ -2,6 +2,7 @@ package com.itsthatjun.ecommerce.config;
 
 import com.itsthatjun.ecommerce.converter.reader.LifeCycleStatusReader;
 import com.itsthatjun.ecommerce.converter.reader.PublishStatusReader;
+import com.itsthatjun.ecommerce.converter.reader.UpdateActionReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -20,6 +21,7 @@ public class R2dbcConfig {
         List<Converter<?, ?>> converters = new ArrayList<>();
         converters.add(new PublishStatusReader());
         converters.add(new LifeCycleStatusReader());
+        converters.add(new UpdateActionReader());
         return new R2dbcCustomConversions(converters);
     }
 }

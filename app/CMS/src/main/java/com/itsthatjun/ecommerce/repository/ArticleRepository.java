@@ -73,4 +73,21 @@ public interface ArticleRepository extends ReactiveCrudRepository<Article, Integ
             "updated_at = CURRENT_TIMESTAMP " +
             "WHERE id = :#{#article.id} RETURNING *")
     Mono<Article> updateArticle(@Param("article") Article article);
+
+    @Query("UPDATE article " +
+            "SET lifecycle_status = CAST(:lifecycleStatus AS lifecycle_status_enum), " +
+            "    publish_status = CAST(:publishStatus AS publish_status_enum) " +
+            "WHERE id = :id " +
+            "RETURNING *")
+    Mono<Article> updateLifecycleAndPublishStatus(@Param("id") Integer articleId,
+                                                  @Param("lifecycleStatus") String lifecycleStatus,
+                                                  @Param("publishStatus") String publishStatus);
+    /**
+     * Delete an article from the database.
+     *
+     * @param article the article to delete
+     * @return a mono that completes when the article is deleted
+     */
+    @Query("DELETE FROM article WHERE id = :article.id")
+    Mono<Void> deleteArticle(Article article);
 }

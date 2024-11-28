@@ -6,7 +6,8 @@ import com.itsthatjun.ecommerce.dto.model.ImageDTO;
 import com.itsthatjun.ecommerce.dto.model.QaDTO;
 import com.itsthatjun.ecommerce.dto.model.VideoDTO;
 import com.itsthatjun.ecommerce.enums.status.PublishStatus;
-import com.itsthatjun.ecommerce.exceptions.ArticleNotFoundException;
+import com.itsthatjun.ecommerce.exception.ArticleNotFoundException;
+import com.itsthatjun.ecommerce.model.entity.Article;
 import com.itsthatjun.ecommerce.repository.ArticleImageRepository;
 import com.itsthatjun.ecommerce.repository.ArticleQARepository;
 import com.itsthatjun.ecommerce.repository.ArticleRepository;
@@ -53,66 +54,24 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Flux<ArticleInfo> listAllArticles() {
         return articleRepository.findAllByPublishStatus(PublishStatus.PUBLISHED.getValue())
-                .flatMap(article -> {
-                    int articleId = article.getId();
-                    ArticleInfo articleInfo = dtoMapper.articleToArticleDTO(article);
-                    Mono<List<ImageDTO>> imagesMono = fetchImagesForArticle(articleId);
-                    Mono<List<QaDTO>> qaMono = fetchQaForArticle(articleId);
-                    Mono<List<VideoDTO>> videosMono = fetchVideosForArticle(articleId);
-
-                    return Mono.zip(imagesMono, qaMono, videosMono)
-                            .map(tuple -> {
-                                articleInfo.setImages(tuple.getT1());
-                                articleInfo.setQA(tuple.getT2());
-                                articleInfo.setVideos(tuple.getT3());
-                                return articleInfo;  // Return the populated articleInfo
-                            });
-                })
+                .flatMap(this::buildArticle)
                 .switchIfEmpty(Mono.error(new ArticleNotFoundException("No articles found."))); // Custom exception handling for empty result
     }
 
     @Override
-    public Flux<ArticleInfo> listArticles(int page, int size) {
-        int offset = page * size;
-        return articleRepository.findAllByPublishStatusWithPagination(PublishStatus.PUBLISHED.getValue(), offset, size)
-                .flatMap(article -> {
-                    int articleId = article.getId();
-                    ArticleInfo articleInfo = dtoMapper.articleToArticleDTO(article);
-                    Mono<List<ImageDTO>> imagesMono = fetchImagesForArticle(articleId);
-                    Mono<List<QaDTO>> qaMono = fetchQaForArticle(articleId);
-                    Mono<List<VideoDTO>> videosMono = fetchVideosForArticle(articleId);
-
-                    return Mono.zip(imagesMono, qaMono, videosMono)
-                            .map(tuple -> {
-                                articleInfo.setImages(tuple.getT1());
-                                articleInfo.setQA(tuple.getT2());
-                                articleInfo.setVideos(tuple.getT3());
-                                return articleInfo;  // Return the populated articleInfo
-                            });
-                })
+    public Flux<ArticleInfo> listArticles(int pageNum, int pageSize) {
+        int offset = (pageNum - 1) * pageSize;
+        return articleRepository.findAllByPublishStatusWithPagination(PublishStatus.PUBLISHED.getValue(), offset, pageSize)
+                .flatMap(this::buildArticle)
                 .switchIfEmpty(Mono.error(new ArticleNotFoundException("No articles found."))); // Custom exception handling for empty result
     }
 
     @Override
     public Mono<ArticleInfo> getArticleBySlug(String slug, int delay, int faultPercent) {
         return articleRepository.findBySlugAndPublishStatus(slug, PublishStatus.PUBLISHED.getValue()) // find
-                .flatMap(article -> {
-                    int articleId = article.getId();
-                    System.out.println("Article ID: " + article.getBody());
-                    ArticleInfo articleInfo = dtoMapper.articleToArticleDTO(article);
-                    Mono<List<ImageDTO>> imagesMono = fetchImagesForArticle(articleId);
-                    Mono<List<QaDTO>> qaMono = fetchQaForArticle(articleId);
-                    Mono<List<VideoDTO>> videosMono = fetchVideosForArticle(articleId);
-
-                    return Mono.zip(imagesMono, qaMono, videosMono)
-                            .flatMap(tuple -> {
-                                articleInfo.setImages(tuple.getT1());
-                                articleInfo.setQA(tuple.getT2());
-                                articleInfo.setVideos(tuple.getT3());
-                                return throwErrorIfBadLuck(articleInfo, faultPercent); // This now returns Mono<ArticleInfo>
-                            });
-                })
-                .delayElement(Duration.ofMillis(delay))
+                .flatMap(this::buildArticle)
+                .delayElement(Duration.ofMillis(delay)) // simulate latency
+                .flatMap(articleInfo -> throwErrorIfBadLuck(articleInfo, faultPercent)) // simulate error injection
                 .switchIfEmpty(Mono.error(new ArticleNotFoundException("Article not found with slug: " + slug))); // Custom exception handling
     }
 
@@ -133,6 +92,23 @@ public class ArticleServiceImpl implements ArticleService {
             LOG.debug("Bad luck, an error occurred, {} >= {}", faultPercent, randomThreshold);
             return Mono.error(new RuntimeException("Something went wrong..."));
         }
+    }
+
+    private Mono<ArticleInfo> buildArticle(Article article) {
+        int articleId = article.getId();
+        ArticleInfo articleInfo = new ArticleInfo();
+        articleInfo.setArticle(dtoMapper.articleToArticleDTO(article));
+        Mono<List<ImageDTO>> imagesMono = fetchImagesForArticle(articleId);
+        Mono<List<QaDTO>> qaMono = fetchQaForArticle(articleId);
+        Mono<List<VideoDTO>> videosMono = fetchVideosForArticle(articleId);
+
+        return Mono.zip(imagesMono, qaMono, videosMono)
+                .map(tuple -> {
+                    articleInfo.setImages(tuple.getT1());
+                    articleInfo.setQA(tuple.getT2());
+                    articleInfo.setVideos(tuple.getT3());
+                    return articleInfo;  // Return the populated articleInfo
+                });
     }
 
     // Fetch Q&A for the article

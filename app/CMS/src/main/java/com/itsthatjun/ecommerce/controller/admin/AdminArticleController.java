@@ -1,4 +1,4 @@
-package com.itsthatjun.ecommerce.controller;
+package com.itsthatjun.ecommerce.controller.admin;
 
 import com.itsthatjun.ecommerce.dto.admin.AdminArticleInfo;
 import com.itsthatjun.ecommerce.service.impl.AdminArticleServiceImpl;

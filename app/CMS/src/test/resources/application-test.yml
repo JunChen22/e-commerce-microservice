@@ -20,7 +20,3 @@ spring.cloud:
       articleMessageProcessor-in-0:
         destination: adminArticle
         group: adminArticleGroup
-
-spring:
-  datasource:
-    driverClassName: org.postgresql.Driver

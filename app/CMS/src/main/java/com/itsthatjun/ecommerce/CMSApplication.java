@@ -15,6 +15,6 @@ public class CMSApplication {
         ConfigurableApplicationContext context = SpringApplication.run(CMSApplication.class, args);
 
         String postgresSqlURL = context.getEnvironment().getProperty("spring.r2dbc.url");
-        LOG.info("Connected to Postgres:" + postgresSqlURL);
+        LOG.info("Connected to Postgres: {}", postgresSqlURL);
     }
 }
